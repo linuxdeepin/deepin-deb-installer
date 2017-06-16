@@ -13,9 +13,9 @@
 *.a
 
 build*/
-*.pro.user*
 *.core
 *.autosave
+*.user*
 # qm file is auto generate from .ts file
 *.qm
 
