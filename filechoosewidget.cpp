@@ -6,9 +6,13 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QDir>
+#include <QPixmap>
+#include <QPainter>
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+
+      m_bgImage(QPixmap(":/images/img.jpg"))
 {
     setAcceptDrops(true);
 }
@@ -46,4 +50,14 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
     }
 
     qDebug() << file_list;
+}
+
+void FileChooseWidget::paintEvent(QPaintEvent *e)
+{
+    QWidget::paintEvent(e);
+
+    const QPoint p = rect().center() - m_bgImage.rect().center();
+
+    QPainter painter(this);
+    painter.drawPixmap(p, m_bgImage);
 }

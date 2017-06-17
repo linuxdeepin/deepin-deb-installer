@@ -2,32 +2,23 @@ cmake_minimum_required(VERSION 3.8)
 
 project(deepin-deb-installer)
 
-# Find includes in corresponding build directories
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS -Wall)
 
-# source files
-set(SOURCE
-    ${SOURCE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/debinstaller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/filechoosewidget.cpp
-   )
+if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+    set(CMAKE_CXX_FLAGS -O3)
+endif ()
 
-# header files
-set(HEADERS
-    ${HEADERS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/debinstaller.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/filechoosewidget.h
-   )
+file(GLOB SRCS "*.h" "*.cpp")
 
 # Find the library
 find_package(Qt5Widgets)
 
 # Tell CMake to create the executable
-add_executable(deepin-deb-installer ${SOURCE} ${HEADERS})
+add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
 
 # Use the module from Qt 5.
 target_link_libraries(deepin-deb-installer Qt5::Widgets)

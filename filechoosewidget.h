@@ -13,6 +13,10 @@ public:
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
+    void paintEvent(QPaintEvent *e);
+
+private:
+    QPixmap m_bgImage;
 };
 
 #endif // FILECHOOSEWIDGET_H
