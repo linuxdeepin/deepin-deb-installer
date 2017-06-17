@@ -49,7 +49,6 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
             file_list << QDir(local_path).entryList(QStringList() << "*.deb", QDir::Files);
     }
 
-    qDebug() << file_list;
     emit packagesSelected(file_list);
 }
 
