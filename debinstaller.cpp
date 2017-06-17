@@ -2,7 +2,8 @@
 #include "filechoosewidget.h"
 
 #include <QKeyEvent>
-#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QScreen>
 
 DebInstaller::DebInstaller(QWidget *parent)
     : QWidget(parent),
@@ -14,6 +15,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 
     setLayout(m_centralLayout);
     resize(800, 600);
+    move(qApp->primaryScreen()->geometry().center() - rect().center());
 }
 
 DebInstaller::~DebInstaller()

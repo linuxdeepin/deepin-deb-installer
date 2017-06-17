@@ -10,6 +10,9 @@ class FileChooseWidget : public QWidget
 public:
     explicit FileChooseWidget(QWidget *parent = nullptr);
 
+signals:
+    void packagesSelected(const QStringList files) const;
+
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);

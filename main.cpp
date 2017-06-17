@@ -1,12 +1,15 @@
 #include "debinstaller.h"
-#include <QApplication>
+
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    DApplication app(argc, argv);
 
     DebInstaller w;
     w.show();
 
-    return a.exec();
+    return app.exec();
 }

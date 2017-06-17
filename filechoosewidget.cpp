@@ -43,13 +43,14 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
         const QString local_path = url.toLocalFile();
         const QFileInfo info(local_path);
 
-        if (info.isFile())
+        if (info.isFile() && info.suffix() == "deb")
             file_list << local_path;
         else if (info.isDir())
             file_list << QDir(local_path).entryList(QStringList() << "*.deb", QDir::Files);
     }
 
     qDebug() << file_list;
+    emit packagesSelected(file_list);
 }
 
 void FileChooseWidget::paintEvent(QPaintEvent *e)
