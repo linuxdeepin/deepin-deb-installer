@@ -10,6 +10,11 @@ class DebPackage : public QObject
 public:
     explicit DebPackage(const QString &filePath, QObject *parent = nullptr);
 
+    const QString path() const { return m_filePath; }
+    const QString name() const { return m_package; }
+    const QString version() const { return m_version; }
+    const QString description() const { return m_description; }
+
 private slots:
     void onProcFinsihed();
 
