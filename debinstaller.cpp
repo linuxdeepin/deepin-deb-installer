@@ -1,6 +1,7 @@
 #include "debinstaller.h"
 #include "filechoosewidget.h"
 #include "debpackage.h"
+#include "singleinstallpage.h"
 
 #include <QKeyEvent>
 #include <QGuiApplication>
@@ -46,4 +47,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
         m_preparedPackages.append(p);
     }
+
+    m_centralLayout->addWidget(new SingleInstallPage);
+    m_centralLayout->setCurrentIndex(1);
 }
