@@ -16,7 +16,7 @@ endif ()
 file(GLOB SRCS "*.h" "*.cpp")
 
 # Find the library
-find_package(PkgConfig)
+find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
 pkg_check_modules(DtkBase REQUIRED dtkbase)
