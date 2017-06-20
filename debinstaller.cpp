@@ -24,7 +24,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     m_centralLayout->addWidget(m_fileChooseWidget);
 
     setLayout(m_centralLayout);
-    resize(800, 600);
+    setFixedSize(480, 380);
     move(qApp->primaryScreen()->geometry().center() - rect().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
@@ -54,6 +54,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_fileListModel->appendPackage(p);
     }
 
-    m_centralLayout->addWidget(new SingleInstallPage);
+    SingleInstallPage *singlePage = new SingleInstallPage;
+    singlePage->setPackage(m_fileListModel->preparedPackages().first());
+
+    m_centralLayout->addWidget(singlePage);
     m_centralLayout->setCurrentIndex(1);
 }
