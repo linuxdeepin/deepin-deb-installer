@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 
-#include <DebFile>
+#include <QApt/DebFile>
 
 class DebListModel : public QAbstractListModel
 {

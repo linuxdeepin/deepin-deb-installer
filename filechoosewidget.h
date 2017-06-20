@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <dlinkbutton.h>
+
 class QPushButton;
 class FileChooseWidget : public QWidget
 {
@@ -24,7 +26,7 @@ private slots:
 
 private:
     QPixmap m_bgImage;
-    QPushButton *m_fileChooseBtn;
+    Dtk::Widget::DLinkButton *m_fileChooseBtn;
 };
 
 #endif // FILECHOOSEWIDGET_H

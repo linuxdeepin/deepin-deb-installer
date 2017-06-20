@@ -9,12 +9,14 @@
 #include <QScreen>
 #include <QDebug>
 
-#include <DebFile>
+#include <QApt/DebFile>
 
 using QApt::DebFile;
 
+DWIDGET_USE_NAMESPACE
+
 DebInstaller::DebInstaller(QWidget *parent)
-    : QWidget(parent),
+    : DWindow(parent),
 
       m_centralLayout(new QStackedLayout),
       m_fileChooseWidget(new FileChooseWidget),
@@ -25,7 +27,8 @@ DebInstaller::DebInstaller(QWidget *parent)
 
     setLayout(m_centralLayout);
     setFixedSize(480, 380);
-    move(qApp->primaryScreen()->geometry().center() - rect().center());
+    setWindowTitle(tr("Deepin Deb Installer"));
+    move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
 }

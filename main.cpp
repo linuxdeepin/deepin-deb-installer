@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion("1.0");
     app.loadTranslator();
+    app.setTheme("light");
 
     DebInstaller w;
     w.show();

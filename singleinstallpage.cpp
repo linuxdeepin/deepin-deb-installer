@@ -1,10 +1,14 @@
 #include "singleinstallpage.h"
 
 #include <QVBoxLayout>
+#include <QDebug>
 
-#include <DebFile>
+#include <QApt/DebFile>
+#include <QApt/Transaction>
 
 using QApt::DebFile;
+using QApt::Backend;
+using QApt::Transaction;
 
 SingleInstallPage::SingleInstallPage(QWidget *parent)
     : QWidget(parent),
@@ -13,19 +17,25 @@ SingleInstallPage::SingleInstallPage(QWidget *parent)
       m_packageName(new QLabel),
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
-      m_installButton(new QPushButton)
+      m_installButton(new QPushButton),
+
+      m_aptBackend(new Backend(this))
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
+    m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_installButton->setText(tr("Install"));
     m_installButton->setFixedWidth(120);
     m_packageDescription->setWordWrap(true);
 
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Package: "));
+    packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
 
     QLabel *packageVersion = new QLabel;
     packageVersion->setText(tr("Version: "));
+    packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     QGridLayout *itemInfoLayout = new QGridLayout;
     itemInfoLayout->addWidget(packageName, 0, 0);
@@ -33,6 +43,7 @@ SingleInstallPage::SingleInstallPage(QWidget *parent)
     itemInfoLayout->addWidget(packageVersion, 1, 0);
     itemInfoLayout->addWidget(m_packageVersion, 1, 1);
     itemInfoLayout->setSpacing(0);
+    itemInfoLayout->setVerticalSpacing(10);
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemLayout = new QHBoxLayout;
@@ -46,6 +57,7 @@ SingleInstallPage::SingleInstallPage(QWidget *parent)
     QVBoxLayout *contentLayout = new QVBoxLayout;
     contentLayout->addStretch();
     contentLayout->addLayout(itemLayout);
+    contentLayout->addSpacing(30);
     contentLayout->addWidget(m_packageDescription);
     contentLayout->addStretch();
     contentLayout->addWidget(m_installButton);
@@ -61,14 +73,34 @@ SingleInstallPage::SingleInstallPage(QWidget *parent)
     centralLayout->setContentsMargins(100, 0, 100, 20);
 
     setLayout(centralLayout);
+
+    connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
 }
 
 void SingleInstallPage::setPackage(QApt::DebFile *package)
 {
-    const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package");
+    m_debFile = package;
+
+    const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
 
     m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
     m_packageDescription->setText(package->longDescription());
+}
+
+void SingleInstallPage::install()
+{
+    Transaction *transaction = m_aptBackend->installFile(*m_debFile);
+    qDebug() << transaction->filePath() << transaction->status();
+
+    connect(transaction, &Transaction::statusChanged, this, &SingleInstallPage::onTransactionStatusChanged);
+    connect(transaction, &Transaction::statusDetailsChanged, this, [this](const QString &str) { qDebug() << str; });
+
+    transaction->run();
+}
+
+void SingleInstallPage::onTransactionStatusChanged(const QApt::TransactionStatus status)
+{
+    qDebug() << status;
 }

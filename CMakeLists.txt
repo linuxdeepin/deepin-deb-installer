@@ -25,5 +25,5 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 
 # Tell CMake to create the executable
 add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
-target_include_directories(deepin-deb-installer PUBLIC /usr/include/QApt ${DtkBase_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(deepin-deb-installer QApt ${DtkBase_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+target_include_directories(deepin-deb-installer PUBLIC ${DtkBase_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
+target_link_libraries(deepin-deb-installer ${QApt_LIBRARIES} ${DtkBase_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES})
