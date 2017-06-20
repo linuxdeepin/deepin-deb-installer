@@ -1,9 +1,9 @@
 #include "debinstaller.h"
 #include "filechoosewidget.h"
 #include "singleinstallpage.h"
+#include "multipleinstallpage.h"
 #include "debinstallworker.h"
 #include "deblistmodel.h"
-#include "multipleinstallpage.h"
 
 #include <QKeyEvent>
 #include <QGuiApplication>
@@ -80,8 +80,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_centralLayout->addWidget(singlePage);
     } else {
         // multiple packages installA
-        MultipleInstallPage *multiplePage = new MultipleInstallPage;
-        multiplePage->setModel(m_fileListModel);
+        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
 
         m_centralLayout->addWidget(multiplePage);
     }
