@@ -1,5 +1,8 @@
 #include "deblistmodel.h"
-#include "debpackage.h"
+
+#include <QDebug>
+
+using QApt::DebFile;
 
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -22,25 +25,25 @@ int DebListModel::rowCount(const QModelIndex &parent) const
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
-    const DebPackage *package = m_preparedPackages[r];
+    const DebFile *package = m_preparedPackages[r];
 
     switch (role)
     {
     case PackageNameRole:
-        return package->name();
+        return package->packageName();
     case PackagePathRole:
-        return package->path();
+        return package->filePath();
     case PackageVersionRole:
         return package->version();
     case PackageDescriptionRole:
-        return package->description();
+        return package->shortDescription();
     default:;
     }
 
     return QVariant();
 }
 
-void DebListModel::appendPackage(DebPackage *package)
+void DebListModel::appendPackage(DebFile *package)
 {
     m_preparedPackages.append(package);
 }

@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QStackedLayout>
 
-class DebPackage;
 class FileChooseWidget;
 class DebInstallWorker;
 class DebListModel;

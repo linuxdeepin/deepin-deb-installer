@@ -1,6 +1,5 @@
 #include "debinstaller.h"
 #include "filechoosewidget.h"
-#include "debpackage.h"
 #include "singleinstallpage.h"
 #include "debinstallworker.h"
 #include "deblistmodel.h"
@@ -9,6 +8,10 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QDebug>
+
+#include <DebFile>
+
+using QApt::DebFile;
 
 DebInstaller::DebInstaller(QWidget *parent)
     : QWidget(parent),
@@ -46,7 +49,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
     for (const auto &package : packages)
     {
-        DebPackage *p = new DebPackage(package);
+        DebFile *p = new DebFile(package);
 
         m_fileListModel->appendPackage(p);
     }

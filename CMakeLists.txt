@@ -18,11 +18,12 @@ file(GLOB SRCS "*.h" "*.cpp")
 # Find the library
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(QApt REQUIRED)
 
 pkg_check_modules(DtkBase REQUIRED dtkbase)
 pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 
 # Tell CMake to create the executable
 add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
-target_include_directories(deepin-deb-installer PUBLIC ${DtkBase_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(deepin-deb-installer ${DtkBase_LIBRARIES} ${DtkWidget_LIBRARIES} Qt5::Widgets)
+target_include_directories(deepin-deb-installer PUBLIC /usr/include/QApt ${DtkBase_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
+target_link_libraries(deepin-deb-installer QApt ${DtkBase_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES})

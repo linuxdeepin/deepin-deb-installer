@@ -1,5 +1,4 @@
 #include "debinstallworker.h"
-#include "debpackage.h"
 
 #include <QDebug>
 
