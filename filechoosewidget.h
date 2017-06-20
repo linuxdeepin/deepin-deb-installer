@@ -19,13 +19,11 @@ signals:
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
-    void paintEvent(QPaintEvent *e);
 
 private slots:
     void chooseFiles();
 
 private:
-    QPixmap m_bgImage;
     Dtk::Widget::DLinkButton *m_fileChooseBtn;
 };
 

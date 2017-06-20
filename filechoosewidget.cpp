@@ -11,23 +11,50 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QFileDialog>
+#include <QLabel>
 
 DWIDGET_USE_NAMESPACE
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
-    : QWidget(parent),
-
-      m_bgImage(QPixmap(":/images/img.jpg"))
+    : QWidget(parent)
 {
+    QLabel *iconImage = new QLabel;
+    iconImage->setFixedSize(140, 140);
+    iconImage->setPixmap(QPixmap(":/images/icon.png"));
+
+    QLabel *dndTips = new QLabel;
+    dndTips->setText(tr("Drag and drop files here"));
+    dndTips->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout *centerWrapLayout = new QVBoxLayout;
+    centerWrapLayout->addWidget(iconImage);
+    centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignHCenter);
+    centerWrapLayout->addSpacing(20);
+    centerWrapLayout->addWidget(dndTips);
+    centerWrapLayout->setSpacing(0);
+    centerWrapLayout->setContentsMargins(0, 0, 0, 15);
+
+    QWidget *centerWidget = new QFrame;
+    centerWidget->setFixedWidth(240);
+    centerWidget->setLayout(centerWrapLayout);
+    centerWidget->setObjectName("CenterWidget");
+    centerWidget->setStyleSheet("#CenterWidget {"
+                                "border:none;"
+                                "border-bottom:2px dashed #eee;"
+                                "}");
+
     m_fileChooseBtn = new DLinkButton;
     m_fileChooseBtn->setText(tr("Choose Package"));
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addStretch();
+    centralLayout->addWidget(centerWidget);
+    centralLayout->setAlignment(centerWidget, Qt::AlignTop | Qt::AlignCenter);
+    centralLayout->addSpacing(20);
     centralLayout->addWidget(m_fileChooseBtn);
     centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignCenter);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 0, 0, 20);
+    centralLayout->setContentsMargins(0, 0, 0, 60);
 
     setLayout(centralLayout);
     setAcceptDrops(true);
@@ -68,16 +95,6 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
     }
 
     emit packagesSelected(file_list);
-}
-
-void FileChooseWidget::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
-
-    const QPoint p = rect().center() - m_bgImage.rect().center();
-
-    QPainter painter(this);
-    painter.drawPixmap(p, m_bgImage);
 }
 
 void FileChooseWidget::chooseFiles()
