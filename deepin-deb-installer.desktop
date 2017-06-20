@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Deepin Package Installer
+Name[zh_CN]=Deepin 软件包安装器
+GenericName=Package Installer
+GenericName[zh_CN]=软件包安装程序
+Comment=Install and view software packages
+Comment[zh_CN]=安装和查看软件包
+Exec=deepin-deb-installer %f
+Icon=deepin-deb-installer
+Terminal=false
+Type=Application
+Categories=System;
+MimeType=application/vnd.debian.binary-package;
+NotShowIn=KDE;
+StartupNotify=true
+Keywords=package;apt;dpkg;install
