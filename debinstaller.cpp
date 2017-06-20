@@ -54,9 +54,21 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     for (const auto &package : packages)
     {
         DebFile *p = new DebFile(package);
+        if (!p->isValid())
+        {
+            qWarning() << "package invalid: " << p->filePath();
+
+            delete p;
+            continue;
+        }
 
         m_fileListModel->appendPackage(p);
     }
+
+    const int packageCount = m_fileListModel->preparedPackages().size();
+    // no packages found
+    if (packageCount == 0)
+        return;
 
     SingleInstallPage *singlePage = new SingleInstallPage;
     singlePage->setPackage(m_fileListModel->preparedPackages().first());
