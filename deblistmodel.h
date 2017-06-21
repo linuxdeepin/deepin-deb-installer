@@ -2,6 +2,7 @@
 #define DEBLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QFuture>
 
 #include <QApt/DebFile>
 #include <QApt/Backend>
@@ -32,7 +33,7 @@ public slots:
     void appendPackage(QApt::DebFile *package);
 
 private:
-    QApt::Backend *m_aptBackend;
+    QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
 };
 

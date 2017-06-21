@@ -2,23 +2,36 @@
 
 #include <QDebug>
 #include <QSize>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QFutureWatcher>
 
 #include <QApt/Package>
 #include <QApt/Backend>
 
-using QApt::DebFile;
-using QApt::Backend;
-using QApt::Package;
+using namespace QApt;
+
+Backend *init_backend()
+{
+    Backend *b = new Backend;
+
+    if (b->init())
+        return b;
+
+    qFatal("%s", b->initErrorMessage().toStdString().c_str());
+    return nullptr;
+}
 
 DebListModel::DebListModel(QObject *parent)
-    : QAbstractListModel(parent),
-
-      m_aptBackend(new Backend(this))
+    : QAbstractListModel(parent)
 {
+    m_backendFuture = QtConcurrent::run(init_backend);
 }
 
 DebListModel::~DebListModel()
 {
+    m_backendFuture.result()->deleteLater();
+
     qDeleteAll(m_preparedPackages);
 }
 
@@ -55,4 +68,10 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 void DebListModel::appendPackage(DebFile *package)
 {
     m_preparedPackages.append(package);
+
+    // test
+    Backend *b = m_backendFuture.result();
+    Package *p = b->package(package->packageName());
+
+    qDebug() << p->installedVersion();
 }
