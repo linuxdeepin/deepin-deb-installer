@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 
 #include <QApt/DebFile>
+#include <QApt/Backend>
 
 class DebListModel : public QAbstractListModel
 {
@@ -31,6 +32,7 @@ public slots:
     void appendPackage(QApt::DebFile *package);
 
 private:
+    QApt::Backend *m_aptBackend;
     QList<QApt::DebFile *> m_preparedPackages;
 };
 

@@ -1,5 +1,6 @@
 #include "multipleinstallpage.h"
 #include "packagelistview.h"
+#include "packageslistdelegate.h"
 
 #include <QVBoxLayout>
 
@@ -9,6 +10,7 @@ MultipleInstallPage::MultipleInstallPage(QAbstractListModel *model, QWidget *par
       m_installButton(new QPushButton)
 {
     m_appsView->setModel(model);
+    m_appsView->setItemDelegate(new PackagesListDelegate);
     m_installButton->setText(tr("Install"));
     m_installButton->setFixedWidth(120);
 

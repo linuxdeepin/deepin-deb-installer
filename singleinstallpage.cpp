@@ -87,6 +87,16 @@ void SingleInstallPage::setPackage(QApt::DebFile *package)
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
     m_packageDescription->setText(package->longDescription());
+
+    //
+    for (const auto &item : package->breaks())
+    {
+        qDebug() << item.size();
+        for (const auto &info : item)
+        {
+            qDebug() << info.packageName();
+        }
+    }
 }
 
 void SingleInstallPage::install()
