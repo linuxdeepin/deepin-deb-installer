@@ -6,7 +6,6 @@
 #include <DWindow>
 
 class FileChooseWidget;
-class DebInstallWorker;
 class DebListModel;
 class DebInstaller : public Dtk::Widget::DWindow
 {
@@ -25,10 +24,10 @@ private slots:
     void onOutputPrinted(const QString &output) const;
 
 private:
+    DebListModel *m_fileListModel;
+
     QStackedLayout *m_centralLayout;
     FileChooseWidget *m_fileChooseWidget;
-    DebInstallWorker *m_installWorker;
-    DebListModel *m_fileListModel;
 };
 
 #endif // DEBINSTALLER_H

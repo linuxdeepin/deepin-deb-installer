@@ -2,7 +2,6 @@
 #include "filechoosewidget.h"
 #include "singleinstallpage.h"
 #include "multipleinstallpage.h"
-#include "debinstallworker.h"
 #include "deblistmodel.h"
 
 #include <QKeyEvent>
@@ -19,10 +18,10 @@ DWIDGET_USE_NAMESPACE
 DebInstaller::DebInstaller(QWidget *parent)
     : DWindow(parent),
 
+      m_fileListModel(new DebListModel(this)),
+
       m_centralLayout(new QStackedLayout),
-      m_fileChooseWidget(new FileChooseWidget),
-      m_installWorker(new DebInstallWorker(this)),
-      m_fileListModel(new DebListModel(this))
+      m_fileChooseWidget(new FileChooseWidget)
 {
     m_centralLayout->addWidget(m_fileChooseWidget);
 
