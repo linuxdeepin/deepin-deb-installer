@@ -39,12 +39,12 @@ public:
         DependsBreak,
     };
 
+    inline const QList<QApt::DebFile *> preparedPackages() const { return m_preparedPackages; }
+
     int packageInstallStatus(const QModelIndex &index);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-
-    const QList<QApt::DebFile *> preparedPackages() const { return m_preparedPackages; }
 
 public slots:
     void installAll();

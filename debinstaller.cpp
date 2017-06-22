@@ -74,8 +74,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     if (packageCount == 1)
     {
         // single package install
-        SingleInstallPage *singlePage = new SingleInstallPage;
-        singlePage->setPackage(m_fileListModel->preparedPackages().first());
+        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
 
         m_centralLayout->addWidget(singlePage);
     } else {

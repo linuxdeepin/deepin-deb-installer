@@ -105,7 +105,7 @@ void DebListModel::installAll()
 
 void DebListModel::installPackage(const QModelIndex &index)
 {
-    Backend *b = m_backendFuture.result();
+//    Backend *b = m_backendFuture.result();
 }
 
 void DebListModel::appendPackage(DebFile *package)

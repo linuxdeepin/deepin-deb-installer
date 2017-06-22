@@ -1,25 +1,26 @@
 #include "singleinstallpage.h"
+#include "deblistmodel.h"
 
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QTimer>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
 using QApt::DebFile;
-using QApt::Backend;
 using QApt::Transaction;
 
-SingleInstallPage::SingleInstallPage(QWidget *parent)
+SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
+
+      m_packagesModel(model),
 
       m_packageIcon(new QLabel),
       m_packageName(new QLabel),
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
-      m_installButton(new QPushButton),
-
-      m_aptBackend(new Backend(this))
+      m_installButton(new QPushButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
@@ -75,11 +76,29 @@ SingleInstallPage::SingleInstallPage(QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
+
+    QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
 
-void SingleInstallPage::setPackage(QApt::DebFile *package)
+void SingleInstallPage::install()
 {
-    m_debFile = package;
+//    Transaction *transaction = m_aptBackend->installFile(*m_debFile);
+//    qDebug() << transaction->filePath() << transaction->status();
+
+//    connect(transaction, &Transaction::statusChanged, this, &SingleInstallPage::onTransactionStatusChanged);
+//    connect(transaction, &Transaction::statusDetailsChanged, this, [this](const QString &str) { qDebug() << str; });
+
+    //    transaction->run();
+}
+
+void SingleInstallPage::appendOutputInfo(const QString &output)
+{
+    qDebug() << output;
+}
+
+void SingleInstallPage::setPackageInfo()
+{
+    DebFile *package = m_packagesModel->preparedPackages().first();
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
 
@@ -87,30 +106,4 @@ void SingleInstallPage::setPackage(QApt::DebFile *package)
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
     m_packageDescription->setText(package->longDescription());
-
-    //
-    for (const auto &item : package->breaks())
-    {
-        qDebug() << item.size();
-        for (const auto &info : item)
-        {
-            qDebug() << info.packageName();
-        }
-    }
-}
-
-void SingleInstallPage::install()
-{
-    Transaction *transaction = m_aptBackend->installFile(*m_debFile);
-    qDebug() << transaction->filePath() << transaction->status();
-
-    connect(transaction, &Transaction::statusChanged, this, &SingleInstallPage::onTransactionStatusChanged);
-    connect(transaction, &Transaction::statusDetailsChanged, this, [this](const QString &str) { qDebug() << str; });
-
-    transaction->run();
-}
-
-void SingleInstallPage::onTransactionStatusChanged(const QApt::TransactionStatus status)
-{
-    qDebug() << status;
 }
