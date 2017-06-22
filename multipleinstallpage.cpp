@@ -1,11 +1,13 @@
 #include "multipleinstallpage.h"
 #include "packagelistview.h"
 #include "packageslistdelegate.h"
+#include "deblistmodel.h"
 
 #include <QVBoxLayout>
 
-MultipleInstallPage::MultipleInstallPage(QAbstractListModel *model, QWidget *parent)
+MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
+      m_debListModel(model),
       m_appsView(new PackagesListView),
       m_installButton(new QPushButton)
 {
@@ -21,4 +23,6 @@ MultipleInstallPage::MultipleInstallPage(QAbstractListModel *model, QWidget *par
     centralLayout->setAlignment(m_installButton, Qt::AlignHCenter);
 
     setLayout(centralLayout);
+
+    connect(m_installButton, &QPushButton::clicked, m_debListModel, &DebListModel::installAll);
 }

@@ -22,6 +22,8 @@ protected:
 private slots:
     void onPackagesSelected(const QStringList &packages);
 
+    void onOutputPrinted(const QString &output) const;
+
 private:
     QStackedLayout *m_centralLayout;
     FileChooseWidget *m_fileChooseWidget;
