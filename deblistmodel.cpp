@@ -35,6 +35,39 @@ DebListModel::~DebListModel()
     qDeleteAll(m_preparedPackages);
 }
 
+int DebListModel::packageInstallStatus(const QModelIndex &index)
+{
+    const int r = index.row();
+
+    if (m_packageInstallStatus.contains(r))
+        return m_packageInstallStatus[r];
+
+    const QString packageName = m_preparedPackages[r]->packageName();
+    Backend *b = m_backendFuture.result();
+    Package *p = b->package(packageName);
+
+    const QString installedVersion = p->installedVersion();
+    if (installedVersion.isEmpty())
+    {
+        m_packageInstallStatus.insert(r, NotInstalled);
+        return NotInstalled;
+    }
+
+    const QString packageVersion = m_preparedPackages[r]->version();
+    const int result = Package::compareVersion(packageVersion, installedVersion);
+
+    int ret;
+    if (result == 0)
+        ret = InstalledSameVersion;
+    else if (result > 0)
+        ret = InstalledLaterVersion;
+    else
+        ret = InstalledEarlierVersion;
+
+    m_packageInstallStatus.insert(r, ret);
+    return ret;
+}
+
 int DebListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -65,13 +98,17 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+void DebListModel::installAll()
+{
+
+}
+
+void DebListModel::installPackage(const QModelIndex &index)
+{
+    Backend *b = m_backendFuture.result();
+}
+
 void DebListModel::appendPackage(DebFile *package)
 {
     m_preparedPackages.append(package);
-
-    // test
-    Backend *b = m_backendFuture.result();
-    Package *p = b->package(package->packageName());
-
-    qDebug() << p->installedVersion();
 }
