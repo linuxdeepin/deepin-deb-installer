@@ -23,7 +23,9 @@ Backend *init_backend()
 }
 
 DebListModel::DebListModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent),
+
+      m_installerStatus(InstallerPrepare)
 {
     m_backendFuture = QtConcurrent::run(init_backend);
 }
@@ -100,15 +102,47 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 void DebListModel::installAll()
 {
+    Q_ASSERT_X(m_installerStatus == InstallerPrepare, Q_FUNC_INFO, "installer status error");
 
-}
+    m_installerStatus = InstallerInstalling;
+    m_opIter = m_preparedPackages.begin();
 
-void DebListModel::installPackage(const QModelIndex &index)
-{
-//    Backend *b = m_backendFuture.result();
+    // start first
+    installNextDeb();
 }
 
 void DebListModel::appendPackage(DebFile *package)
 {
+    Q_ASSERT_X(m_installerStatus == InstallerPrepare, Q_FUNC_INFO, "installer status error");
+
     m_preparedPackages.append(package);
+}
+
+void DebListModel::installNextDeb()
+{
+    Q_ASSERT_X(m_installerStatus == InstallerInstalling, Q_FUNC_INFO, "installer status error");
+
+    // install finished
+    if (m_opIter == m_preparedPackages.end())
+    {
+        qDebug() << "congraulations, install finished !!!";
+
+        m_installerStatus = InstallerFinished;
+        emit installerFinished();
+        return;
+    }
+
+    // fetch next deb
+    DebFile *deb = *m_opIter++;
+
+    qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
+
+    m_currentTransaction = m_backendFuture.result()->installFile(*deb);
+    Transaction *trans = m_currentTransaction.data();
+
+    connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
+    connect(trans, &Transaction::finished, this, &DebListModel::installNextDeb);
+    connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
+
+    trans->run();
 }

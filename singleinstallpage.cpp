@@ -76,12 +76,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::appendOutputInfo);
 
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
 
 void SingleInstallPage::install()
 {
+    m_packagesModel->installAll();
 //    Transaction *transaction = m_aptBackend->installFile(*m_debFile);
 //    qDebug() << transaction->filePath() << transaction->status();
 
