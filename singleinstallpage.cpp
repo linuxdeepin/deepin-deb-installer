@@ -11,6 +11,31 @@
 using QApt::DebFile;
 using QApt::Transaction;
 
+
+const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect)
+{
+    const int textFlag = Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignTop;
+
+    if (rect.contains(fm.boundingRect(rect, textFlag, text)))
+        return text;
+
+    QString str(text + "...");
+
+    while (true)
+    {
+        if (str.size() < 4)
+            break;
+
+        QRect boundingRect = fm.boundingRect(rect, textFlag, str);
+        if (rect.contains(boundingRect))
+            break;
+
+        str.remove(str.size() - 4, 1);
+    }
+
+    return str;
+}
+
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
 
@@ -32,6 +57,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_uninstallButton->setText(tr("Remove"));
     m_reinstallButton->setText(tr("Reinstall"));
     m_packageDescription->setWordWrap(true);
+    m_packageDescription->setMaximumHeight(80);
+    m_packageDescription->setFixedWidth(220);
 
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Package: "));
@@ -106,7 +133,11 @@ void SingleInstallPage::setPackageInfo()
     m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
-    m_packageDescription->setText(package->longDescription());
+
+    // set package description
+    const QRect boundingRect = QRect(0, 0, m_packageDescription->width(), m_packageDescription->maximumHeight());
+    const QFontMetrics fm(m_packageDescription->font());
+    m_packageDescription->setText(holdTextInRect(fm, package->longDescription(), boundingRect));
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
