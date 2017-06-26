@@ -54,3 +54,11 @@ int PackagesManager::packageInstallStatus(const int index)
     m_packageInstallStatus.insert(index, ret);
     return ret;
 }
+
+int PackagesManager::packageDependsStatus(const int index)
+{
+    if (m_packageDependsStatus.contains(index))
+        return m_packageDependsStatus[index];
+
+    return DebListModel::DependsOk;
+}

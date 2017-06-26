@@ -28,6 +28,8 @@ private:
     QLabel *m_packageVersion;
     QLabel *m_packageDescription;
     QPushButton *m_installButton;
+    QPushButton *m_uninstallButton;
+    QPushButton *m_reinstallButton;
 };
 
 #endif // SINGLEINSTALLPAGE_H

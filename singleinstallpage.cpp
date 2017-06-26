@@ -20,14 +20,17 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_packageName(new QLabel),
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
-      m_installButton(new QPushButton)
+      m_installButton(new QPushButton),
+      m_uninstallButton(new QPushButton),
+      m_reinstallButton(new QPushButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_installButton->setText(tr("Install"));
-    m_installButton->setFixedWidth(120);
+    m_uninstallButton->setText(tr("Remove"));
+    m_reinstallButton->setText(tr("Reinstall"));
     m_packageDescription->setWordWrap(true);
 
     QLabel *packageName = new QLabel;
@@ -55,14 +58,22 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemLayout->setSpacing(10);
     itemLayout->setContentsMargins(0, 0, 0, 0);
 
+    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    btnsLayout->addStretch();
+    btnsLayout->addWidget(m_installButton);
+    btnsLayout->addWidget(m_uninstallButton);
+    btnsLayout->addWidget(m_reinstallButton);
+    btnsLayout->addStretch();
+    btnsLayout->setSpacing(30);
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
+
     QVBoxLayout *contentLayout = new QVBoxLayout;
     contentLayout->addStretch();
     contentLayout->addLayout(itemLayout);
     contentLayout->addSpacing(30);
     contentLayout->addWidget(m_packageDescription);
     contentLayout->addStretch();
-    contentLayout->addWidget(m_installButton);
-    contentLayout->setAlignment(m_installButton, Qt::AlignHCenter);
+    contentLayout->addLayout(btnsLayout);
     contentLayout->setSpacing(0);
     contentLayout->setMargin(0);
 
@@ -76,6 +87,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
 
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
@@ -83,13 +95,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 void SingleInstallPage::install()
 {
     m_packagesModel->installAll();
-//    Transaction *transaction = m_aptBackend->installFile(*m_debFile);
-//    qDebug() << transaction->filePath() << transaction->status();
-
-//    connect(transaction, &Transaction::statusChanged, this, &SingleInstallPage::onTransactionStatusChanged);
-//    connect(transaction, &Transaction::statusDetailsChanged, this, [this](const QString &str) { qDebug() << str; });
-
-    //    transaction->run();
 }
 
 void SingleInstallPage::setPackageInfo()
@@ -102,4 +107,13 @@ void SingleInstallPage::setPackageInfo()
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
     m_packageDescription->setText(package->longDescription());
+
+    // package install status
+    const QModelIndex index = m_packagesModel->index(0);
+    const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+
+    const bool installed = installStat != DebListModel::NotInstalled;
+    m_installButton->setVisible(!installed);
+    m_uninstallButton->setVisible(installed);
+    m_reinstallButton->setVisible(installed);
 }

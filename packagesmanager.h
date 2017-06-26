@@ -18,6 +18,7 @@ public:
     explicit PackagesManager(QObject *parent = 0);
 
     int packageInstallStatus(const int index);
+    int packageDependsStatus(const int index);
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
