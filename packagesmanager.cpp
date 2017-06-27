@@ -110,13 +110,15 @@ int PackagesManager::packageDependsStatus(const int index)
     const auto &depends = deb->depends();
     for (auto const &item : depends)
     {
+        int tr = DebListModel::DependsBreak;
         for (auto const &info : item)
         {
             const int r = checkDependsPackageStatus(info);
-            ret = std::max(r, ret);
-            if (ret == DebListModel::DependsBreak)
-                return ret;
+            tr = std::min(r, tr);
         }
+        ret = std::max(tr, ret);
+        if (ret == DebListModel::DependsBreak)
+            return ret;
     }
 
     return ret;
@@ -131,7 +133,10 @@ int PackagesManager::checkDependsPackageStatus(const DependencyInfo &dependencyI
 
     Backend *b = m_backendFuture.result();
     Package *p = b->package(dependencyInfo.packageName());
-    Q_ASSERT_X(p, Q_FUNC_INFO, "package not found.");
+
+    // package not found
+    if (!p)
+        return DebListModel::DependsBreak;
 
     if (dependencyInfo.packageVersion().isEmpty())
         return DebListModel::DependsOk;
