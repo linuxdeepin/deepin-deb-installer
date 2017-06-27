@@ -21,6 +21,9 @@ public:
     int packageDependsStatus(const int index);
 
 private:
+    int checkDependsPackageStatus(const QApt::DependencyInfo &dependencyInfo);
+
+private:
     QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
     QHash<int, int> m_packageInstallStatus;

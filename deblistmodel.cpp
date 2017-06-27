@@ -48,6 +48,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return package->version();
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);
+    case PackageDependsStatusRole:
+        return m_packagesManager->packageDependsStatus(r);
     case PackageDescriptionRole:
         return package->shortDescription();
     case Qt::SizeHintRole:
@@ -103,8 +105,4 @@ void DebListModel::installNextDeb()
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
 
     trans->run();
-}
-
-void DebListModel::fetchPackageInstallStatus(const QModelIndex &index)
-{
 }

@@ -25,6 +25,7 @@ public:
         PackagePathRole,
         PackageDescriptionRole,
         PackageVersionStatusRole,
+        PackageDependsStatusRole,
     };
 
     enum InstallerStatus
@@ -75,7 +76,6 @@ public slots:
 
 private:
     void installNextDeb();
-    void fetchPackageInstallStatus(const QModelIndex &index);
 
 private:
     int m_installerStatus;

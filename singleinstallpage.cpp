@@ -147,4 +147,8 @@ void SingleInstallPage::setPackageInfo()
     m_installButton->setVisible(!installed);
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
+
+    // package depends status
+    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    qDebug() << dependsStat;
 }
