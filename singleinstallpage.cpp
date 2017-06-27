@@ -45,17 +45,21 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_packageName(new QLabel),
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
+      m_tipsLabel(new QLabel),
       m_installButton(new QPushButton),
       m_uninstallButton(new QPushButton),
-      m_reinstallButton(new QPushButton)
+      m_reinstallButton(new QPushButton),
+      m_confirmButton(new QPushButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_installButton->setText(tr("Install"));
     m_uninstallButton->setText(tr("Remove"));
     m_reinstallButton->setText(tr("Reinstall"));
+    m_confirmButton->setText(tr("OK"));
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setMaximumHeight(80);
     m_packageDescription->setFixedWidth(220);
@@ -90,6 +94,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_uninstallButton);
     btnsLayout->addWidget(m_reinstallButton);
+    btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(30);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
@@ -100,6 +105,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     contentLayout->addSpacing(30);
     contentLayout->addWidget(m_packageDescription);
     contentLayout->addStretch();
+    contentLayout->addWidget(m_tipsLabel);
+    contentLayout->addSpacing(15);
     contentLayout->addLayout(btnsLayout);
     contentLayout->setSpacing(0);
     contentLayout->setMargin(0);
@@ -148,7 +155,16 @@ void SingleInstallPage::setPackageInfo()
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
 
+    if (installed)
+        return m_confirmButton->setVisible(false);
+
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    qDebug() << dependsStat;
+    if (dependsStat == DebListModel::DependsBreak)
+    {
+        m_tipsLabel->setText(tr("Broken Dependencies"));
+        m_installButton->setVisible(false);
+        m_reinstallButton->setVisible(false);
+        m_confirmButton->setVisible(true);
+    }
 }

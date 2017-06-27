@@ -27,9 +27,11 @@ private:
     QLabel *m_packageName;
     QLabel *m_packageVersion;
     QLabel *m_packageDescription;
+    QLabel *m_tipsLabel;
     QPushButton *m_installButton;
     QPushButton *m_uninstallButton;
     QPushButton *m_reinstallButton;
+    QPushButton *m_confirmButton;
 };
 
 #endif // SINGLEINSTALLPAGE_H
