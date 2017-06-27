@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QTimer>
+#include <QApplication>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -56,6 +57,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
+    m_tipsLabel->setStyleSheet("QLabel {"
+                               "color: red;"
+                               "}");
+
     m_installButton->setText(tr("Install"));
     m_uninstallButton->setText(tr("Remove"));
     m_reinstallButton->setText(tr("Reinstall"));
@@ -122,6 +127,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
