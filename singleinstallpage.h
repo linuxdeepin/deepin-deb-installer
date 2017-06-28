@@ -15,11 +15,12 @@ class SingleInstallPage : public QWidget
 public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = 0);
 
-private slots:
-    void install();
-
 private:
     void setPackageInfo();
+
+private slots:
+    void install();
+    void uninstallCurrentPackage();
 
 private:
     DebListModel *m_packagesModel;

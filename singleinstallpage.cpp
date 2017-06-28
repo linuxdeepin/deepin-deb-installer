@@ -127,6 +127,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::uninstallCurrentPackage);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
@@ -135,6 +136,11 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 void SingleInstallPage::install()
 {
     m_packagesModel->installAll();
+}
+
+void SingleInstallPage::uninstallCurrentPackage()
+{
+    m_packagesModel->uninstallPackage(0);
 }
 
 void SingleInstallPage::setPackageInfo()
@@ -160,9 +166,10 @@ void SingleInstallPage::setPackageInfo()
     m_installButton->setVisible(!installed);
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
+    m_confirmButton->setVisible(false);
 
     if (installed)
-        return m_confirmButton->setVisible(false);
+        return;
 
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();

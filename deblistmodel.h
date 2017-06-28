@@ -28,11 +28,11 @@ public:
         PackageDependsStatusRole,
     };
 
-    enum InstallerStatus
+    enum WorkerStatus
     {
-        InstallerPrepare,
-        InstallerInstalling,
-        InstallerFinished,
+        WorkerPrepare,
+        WorkerProcessing,
+        WorkerFinished,
     };
 
     enum PackageInstallStatus
@@ -64,21 +64,23 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 signals:
-    void installerStarted() const;
-    void installerFinished() const;
+    void workerStarted() const;
+    void workerFinished() const;
     void appendOutputInfo(const QString &info) const;
     void packageOperationChanged(const QModelIndex &index, int status) const;
     void packageDependsChanged(const QModelIndex &index, int status) const;
 
 public slots:
     void installAll();
+    void uninstallPackage(const int idx);
     void appendPackage(QApt::DebFile *package);
 
 private:
     void installNextDeb();
+    void uninstallFinished();
 
 private:
-    int m_installerStatus;
+    int m_workerStatus;
     PackagesManager *m_packagesManager;
 
     QList<QApt::DebFile *>::iterator m_opIter;
