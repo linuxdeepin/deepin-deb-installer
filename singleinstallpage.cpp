@@ -47,6 +47,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
       m_tipsLabel(new QLabel),
+      m_progress(new QProgressBar),
       m_installButton(new QPushButton),
       m_uninstallButton(new QPushButton),
       m_reinstallButton(new QPushButton),
@@ -60,6 +61,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_tipsLabel->setStyleSheet("QLabel {"
                                "color: red;"
                                "}");
+
+    m_progress->setMinimum(0);
+    m_progress->setMaximum(100);
+    m_progress->setFixedHeight(8);
+    m_progress->setTextVisible(false);
+    m_progress->setVisible(false);
 
     m_installButton->setText(tr("Install"));
     m_uninstallButton->setText(tr("Remove"));
@@ -111,6 +118,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     contentLayout->addWidget(m_packageDescription);
     contentLayout->addStretch();
     contentLayout->addWidget(m_tipsLabel);
+    contentLayout->addWidget(m_progress);
     contentLayout->addSpacing(15);
     contentLayout->addLayout(btnsLayout);
     contentLayout->setSpacing(0);
@@ -130,6 +138,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::uninstallCurrentPackage);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
+    connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::workerFinished);
+    connect(model, &DebListModel::workerStarted, this, &SingleInstallPage::workerStarted);
+    connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
+
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
 
@@ -141,6 +153,29 @@ void SingleInstallPage::install()
 void SingleInstallPage::uninstallCurrentPackage()
 {
     m_packagesModel->uninstallPackage(0);
+}
+
+void SingleInstallPage::workerStarted()
+{
+    m_progress->setVisible(true);
+    m_progress->setValue(0);
+    m_tipsLabel->clear();
+
+    m_installButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_uninstallButton->setVisible(false);
+    m_confirmButton->setVisible(false);
+}
+
+void SingleInstallPage::workerFinished()
+{
+    m_progress->setVisible(false);
+    m_confirmButton->setVisible(true);
+}
+
+void SingleInstallPage::onWorkerProgressChanged(const int progress)
+{
+    m_progress->setValue(progress);
 }
 
 void SingleInstallPage::setPackageInfo()

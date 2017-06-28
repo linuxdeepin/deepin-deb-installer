@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
+#include <QProgressBar>
 
 #include <QApt/DebFile>
 
@@ -22,6 +23,10 @@ private slots:
     void install();
     void uninstallCurrentPackage();
 
+    void workerStarted();
+    void workerFinished();
+    void onWorkerProgressChanged(const int progress);
+
 private:
     DebListModel *m_packagesModel;
     QLabel *m_packageIcon;
@@ -29,6 +34,7 @@ private:
     QLabel *m_packageVersion;
     QLabel *m_packageDescription;
     QLabel *m_tipsLabel;
+    QProgressBar *m_progress;
     QPushButton *m_installButton;
     QPushButton *m_uninstallButton;
     QPushButton *m_reinstallButton;

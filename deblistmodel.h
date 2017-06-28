@@ -68,6 +68,8 @@ public:
 signals:
     void workerStarted() const;
     void workerFinished() const;
+    void workerProgressChanged(const double progress) const;
+    void transactionProgressChanged(const int progress) const;
     void appendOutputInfo(const QString &info) const;
     void packageOperationChanged(const QModelIndex &index, int status) const;
     void packageDependsChanged(const QModelIndex &index, int status) const;

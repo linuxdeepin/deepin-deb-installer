@@ -69,6 +69,8 @@ void DebListModel::installAll()
     m_workerStatus = WorkerProcessing;
     m_opIter = m_packagesManager->m_preparedPackages.begin();
 
+    emit workerStarted();
+
     // start first
     installNextDeb();
 }
@@ -91,6 +93,7 @@ void DebListModel::uninstallPackage(const int idx)
     m_currentTransaction = b->removePackages(QList<Package *> { p });
     Transaction *trans = m_currentTransaction.data();
 
+    connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::finished, this, &DebListModel::uninstallFinished);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
@@ -127,6 +130,7 @@ void DebListModel::installNextDeb()
     m_currentTransaction = m_packagesManager->m_backendFuture.result()->installFile(*deb);
     Transaction *trans = m_currentTransaction.data();
 
+    connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::finished, this, &DebListModel::installNextDeb);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
