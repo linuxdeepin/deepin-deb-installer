@@ -163,13 +163,21 @@ void SingleInstallPage::setPackageInfo()
     const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 
     const bool installed = installStat != DebListModel::NotInstalled;
-    m_installButton->setVisible(!installed);
-    m_uninstallButton->setVisible(installed);
-    m_reinstallButton->setVisible(installed);
+    const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
+    m_installButton->setVisible(!installed || !installedSameVersion);
+    m_uninstallButton->setVisible(installedSameVersion);
+    m_reinstallButton->setVisible(installedSameVersion);
     m_confirmButton->setVisible(false);
 
     if (installed)
+    {
+        if (!installedSameVersion)
+            m_tipsLabel->setText(tr("Other version installed"));
+        else
+            m_tipsLabel->setText(tr("Same version installed"));
+
         return;
+    }
 
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();

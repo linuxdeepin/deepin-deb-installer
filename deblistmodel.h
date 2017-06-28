@@ -23,6 +23,7 @@ public:
         UnusedRole = Qt::UserRole,
         PackageVersionRole,
         PackagePathRole,
+        PackageInstalledVersionRole,
         PackageDescriptionRole,
         PackageVersionStatusRole,
         PackageDependsStatusRole,
@@ -32,6 +33,7 @@ public:
     {
         WorkerPrepare,
         WorkerProcessing,
+        WorkerFailed,
         WorkerFinished,
     };
 

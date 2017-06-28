@@ -19,6 +19,7 @@ public:
 
     int packageInstallStatus(const int index);
     int packageDependsStatus(const int index);
+    const QString packageInstalledVersion(const int index);
 
 private:
     int checkDependsPackageStatus(const QApt::DependencyInfo &dependencyInfo);

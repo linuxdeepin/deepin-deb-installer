@@ -50,6 +50,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageInstallStatus(r);
     case PackageDependsStatusRole:
         return m_packagesManager->packageDependsStatus(r);
+    case PackageInstalledVersionRole:
+        return m_packagesManager->packageInstalledVersion(r);
     case PackageDescriptionRole:
         return package->shortDescription();
     case Qt::SizeHintRole:
@@ -84,6 +86,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     // uninstall
     qDebug() << Q_FUNC_INFO << "starting to remove package: " << p->name();
+    emit workerStarted();
 
     m_currentTransaction = b->removePackages(QList<Package *> { p });
     Transaction *trans = m_currentTransaction.data();

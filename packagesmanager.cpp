@@ -124,6 +124,18 @@ int PackagesManager::packageDependsStatus(const int index)
     return ret;
 }
 
+const QString PackagesManager::packageInstalledVersion(const int index)
+{
+    Q_ASSERT(m_packageInstallStatus.contains(index));
+    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
+             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
+
+    Backend *b = m_backendFuture.result();
+    Package *p = b->package(m_preparedPackages[index]->packageName());
+
+    return p->installedVersion();
+}
+
 int PackagesManager::checkDependsPackageStatus(const DependencyInfo &dependencyInfo)
 {
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
