@@ -1,0 +1,5 @@
+deepin-deb-installer (1.0.0) unstable; urgency=medium
+
+  * Initial release
+
+ -- Deepin Packages Builder <packages@deepin.com>  Thu, 29 Jun 2017 11:33:08 +0800

@@ -1,0 +1,13 @@
+Source: deepin-deb-installer
+Section: utils
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends: debhelper (>= 9), cmake, pkg-config, libqt5widgets5, libqt5concurrent5, libqapt-dev, libdtkbase-dev, libdtkwidget-dev 
+Standards-Version: 3.9.8
+Homepage: https://www.deepin.com/
+
+Package: deepin-deb-installer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: deepin deb installer
+ <insert long description, indented with spaces>
