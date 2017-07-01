@@ -14,10 +14,15 @@ class MultipleInstallPage : public QWidget
 public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = 0);
 
+private slots:
+    void onWorkerStarted();
+    void onWorkerFinshed();
+
 private:
     DebListModel *m_debListModel;
     PackagesListView *m_appsView;
     QPushButton *m_installButton;
+    QPushButton *m_acceptButton;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H
