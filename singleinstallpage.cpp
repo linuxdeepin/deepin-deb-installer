@@ -12,6 +12,7 @@
 using QApt::DebFile;
 using QApt::Transaction;
 
+DWIDGET_USE_NAMESPACE
 
 const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect)
 {
@@ -42,12 +43,16 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
       m_packagesModel(model),
 
+      m_itemInfoWidget(new QWidget),
       m_packageIcon(new QLabel),
       m_packageName(new QLabel),
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
       m_tipsLabel(new QLabel),
       m_progress(new QProgressBar),
+      m_workerInfomation(new QTextEdit),
+      m_showInfoButton(new DLinkButton),
+      m_hideInfoButton(new DLinkButton),
       m_installButton(new QPushButton),
       m_uninstallButton(new QPushButton),
       m_reinstallButton(new QPushButton),
@@ -67,6 +72,16 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_progress->setFixedHeight(8);
     m_progress->setTextVisible(false);
     m_progress->setVisible(false);
+
+    m_showInfoButton->setText(tr("Show Infomation"));
+    m_showInfoButton->setVisible(false);
+    m_hideInfoButton->setText(tr("Hide Infomation"));
+    m_hideInfoButton->setVisible(false);
+    m_workerInfomation->setReadOnly(true);
+    m_workerInfomation->setVisible(false);
+    m_workerInfomation->setStyleSheet("QTextEdit {"
+                                      "color: #2c77ab;"
+                                      "}");
 
     m_installButton->setText(tr("Install"));
     m_uninstallButton->setText(tr("Remove"));
@@ -93,13 +108,19 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemInfoLayout->setVerticalSpacing(10);
     itemInfoLayout->setMargin(0);
 
-    QHBoxLayout *itemLayout = new QHBoxLayout;
-    itemLayout->addStretch();
-    itemLayout->addWidget(m_packageIcon);
-    itemLayout->addLayout(itemInfoLayout);
-    itemLayout->addStretch();
-    itemLayout->setSpacing(10);
-    itemLayout->setContentsMargins(0, 0, 0, 0);
+    QHBoxLayout *itemBlockLayout = new QHBoxLayout;
+    itemBlockLayout->addStretch();
+    itemBlockLayout->addWidget(m_packageIcon);
+    itemBlockLayout->addLayout(itemInfoLayout);
+    itemBlockLayout->addStretch();
+    itemBlockLayout->setSpacing(10);
+    itemBlockLayout->setContentsMargins(0, 0, 0, 0);
+
+    QHBoxLayout *infoBtnsLayout = new QHBoxLayout;
+    infoBtnsLayout->addWidget(m_showInfoButton);
+    infoBtnsLayout->addWidget(m_hideInfoButton);
+    infoBtnsLayout->setSpacing(0);
+    infoBtnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
@@ -111,12 +132,22 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->setSpacing(30);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
+    QVBoxLayout *itemLayout = new QVBoxLayout;
+    itemLayout->addLayout(itemBlockLayout);
+    itemLayout->addWidget(m_packageDescription);
+    itemLayout->setSpacing(30);
+    itemLayout->setMargin(0);
+
+    m_itemInfoWidget->setLayout(itemLayout);
+
     QVBoxLayout *contentLayout = new QVBoxLayout;
     contentLayout->addStretch();
-    contentLayout->addLayout(itemLayout);
-    contentLayout->addSpacing(30);
-    contentLayout->addWidget(m_packageDescription);
+    contentLayout->addWidget(m_itemInfoWidget);
+    contentLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
     contentLayout->addStretch();
+    contentLayout->addSpacing(15);
+    contentLayout->addLayout(infoBtnsLayout);
+    contentLayout->addWidget(m_workerInfomation);
     contentLayout->addWidget(m_tipsLabel);
     contentLayout->addWidget(m_progress);
     contentLayout->addSpacing(15);
@@ -133,13 +164,16 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     setLayout(centralLayout);
 
+    connect(m_showInfoButton, &DLinkButton::clicked, this, &SingleInstallPage::showInfomation);
+    connect(m_hideInfoButton, &DLinkButton::clicked, this, &SingleInstallPage::hideInfomation);
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::uninstallCurrentPackage);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::workerFinished);
-    connect(model, &DebListModel::workerStarted, this, &SingleInstallPage::workerStarted);
+    connect(model, &DebListModel::appendOutputInfo, m_workerInfomation, &QTextEdit::append);
+    connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
+    connect(model, &DebListModel::workerStarted, this, &SingleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
@@ -155,8 +189,25 @@ void SingleInstallPage::uninstallCurrentPackage()
     m_packagesModel->uninstallPackage(0);
 }
 
-void SingleInstallPage::workerStarted()
+void SingleInstallPage::showInfomation()
 {
+    m_showInfoButton->setVisible(false);
+    m_hideInfoButton->setVisible(true);
+    m_workerInfomation->setVisible(true);
+    m_itemInfoWidget->setVisible(false);
+}
+
+void SingleInstallPage::hideInfomation()
+{
+    m_showInfoButton->setVisible(true);
+    m_hideInfoButton->setVisible(false);
+    m_workerInfomation->setVisible(false);
+    m_itemInfoWidget->setVisible(true);
+}
+
+void SingleInstallPage::onWorkerStarted()
+{
+    m_showInfoButton->setVisible(true);
     m_progress->setVisible(true);
     m_progress->setValue(0);
     m_tipsLabel->clear();
@@ -167,7 +218,7 @@ void SingleInstallPage::workerStarted()
     m_confirmButton->setVisible(false);
 }
 
-void SingleInstallPage::workerFinished()
+void SingleInstallPage::onWorkerFinished()
 {
     m_progress->setVisible(false);
     m_confirmButton->setVisible(true);
