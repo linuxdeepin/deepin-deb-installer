@@ -34,7 +34,6 @@ public:
     {
         WorkerPrepare,
         WorkerProcessing,
-        WorkerFailed,
         WorkerFinished,
     };
 
@@ -68,7 +67,7 @@ public:
 
 signals:
     void workerStarted() const;
-    void workerFinished(const QApt::ExitStatus exitStatus) const;
+    void workerFinished() const;
     void workerProgressChanged(const double progress) const;
     void transactionProgressChanged(const int progress) const;
     void appendOutputInfo(const QString &info) const;
@@ -84,7 +83,7 @@ public slots:
 private:
     void onTransactionFinished();
     void installNextDeb();
-    void uninstallFinished(const QApt::ExitStatus exitStatus);
+    void uninstallFinished();
 
 private:
     int m_workerStatus;

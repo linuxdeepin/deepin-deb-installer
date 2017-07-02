@@ -119,9 +119,36 @@ void DebListModel::onTransactionErrorOccurred()
     Transaction *trans = static_cast<Transaction *>(sender());
     trans->deleteLater();
 
-    Q_ASSERT(trans->error());
+    const QApt::ErrorCode e = trans->error();
+    Q_ASSERT(e);
 
-    qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+    // package filaed
+    m_packageOperateStatus[m_operatingIndex] = Failed;
+
+    bool broke = false;
+
+    switch (e)
+    {
+    case InitError:
+    case LockError:
+    case DiskSpaceError:
+    case WorkerDisappeared:
+        broke = true;
+        break;
+
+    case AuthError: /* restart auth */
+        break;
+
+    default:
+        qWarning() << e << trans->errorDetails() << trans->errorString();
+    }
+
+    if (!broke)
+    {
+        installNextDeb();
+    } else {
+        m_workerStatus = WorkerFinished;
+    }
 }
 
 void DebListModel::onTransactionFinished()
@@ -131,6 +158,7 @@ void DebListModel::onTransactionFinished()
     trans->deleteLater();
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    m_packageOperateStatus[m_operatingIndex] = Success;
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
     if (trans->exitStatus())
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
@@ -141,7 +169,7 @@ void DebListModel::onTransactionFinished()
         qDebug() << "congraulations, install finished !!!";
 
         m_workerStatus = WorkerFinished;
-        emit workerFinished(trans->exitStatus());
+        emit workerFinished();
         return;
     }
 
@@ -170,7 +198,7 @@ void DebListModel::installNextDeb()
     trans->run();
 }
 
-void DebListModel::uninstallFinished(const QApt::ExitStatus exitStatus)
+void DebListModel::uninstallFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
 
@@ -178,5 +206,5 @@ void DebListModel::uninstallFinished(const QApt::ExitStatus exitStatus)
 
     m_workerStatus = WorkerFinished;
 
-    emit workerFinished(exitStatus);
+    emit workerFinished();
 }
