@@ -21,6 +21,9 @@ public:
     int packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);
 
+    QApt::DebFile * const package(const int index) const { return m_preparedPackages[index]; }
+    QApt::Backend * const backend() const { return m_backendFuture.result(); }
+
 private:
     int checkDependsPackageStatus(const QApt::DependencyInfo &dependencyInfo);
 

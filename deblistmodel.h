@@ -27,6 +27,7 @@ public:
         PackageDescriptionRole,
         PackageVersionStatusRole,
         PackageDependsStatusRole,
+        PackageOperateStatusRole,
     };
 
     enum WorkerStatus
@@ -67,7 +68,7 @@ public:
 
 signals:
     void workerStarted() const;
-    void workerFinished() const;
+    void workerFinished(const QApt::ExitStatus exitStatus) const;
     void workerProgressChanged(const double progress) const;
     void transactionProgressChanged(const int progress) const;
     void appendOutputInfo(const QString &info) const;
@@ -80,15 +81,18 @@ public slots:
     void appendPackage(QApt::DebFile *package);
 
 private:
+    void onTransactionFinished(const QApt::ExitStatus exitStatus);
     void installNextDeb();
-    void uninstallFinished();
+    void uninstallFinished(const QApt::ExitStatus exitStatus);
 
 private:
     int m_workerStatus;
+    int m_operatingIndex;
     PackagesManager *m_packagesManager;
 
-    QList<QApt::DebFile *>::iterator m_opIter;
     QPointer<QApt::Transaction> m_currentTransaction;
+
+    QHash<int, int> m_packageOperateStatus;
 
 };
 
