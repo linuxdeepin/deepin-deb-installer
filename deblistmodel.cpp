@@ -113,12 +113,27 @@ void DebListModel::appendPackage(DebFile *package)
     m_packagesManager->m_preparedPackages.append(package);
 }
 
-void DebListModel::onTransactionFinished(const ExitStatus exitStatus)
+void DebListModel::onTransactionErrorOccurred()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Transaction *trans = static_cast<Transaction *>(sender());
+    trans->deleteLater();
+
+    Q_ASSERT(trans->error());
+
+    qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+}
+
+void DebListModel::onTransactionFinished()
+{
+    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Transaction *trans = static_cast<Transaction *>(sender());
+    trans->deleteLater();
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    qDebug() << "install" << deb->packageName() << "finished with exit status:" << exitStatus;
+    qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
+    if (trans->exitStatus())
+        qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
 
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
@@ -126,7 +141,7 @@ void DebListModel::onTransactionFinished(const ExitStatus exitStatus)
         qDebug() << "congraulations, install finished !!!";
 
         m_workerStatus = WorkerFinished;
-        emit workerFinished(exitStatus);
+        emit workerFinished(trans->exitStatus());
         return;
     }
 
@@ -150,7 +165,7 @@ void DebListModel::installNextDeb()
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
-    connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
+    connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
 
     trans->run();
 }

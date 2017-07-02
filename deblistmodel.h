@@ -79,9 +79,10 @@ public slots:
     void installAll();
     void uninstallPackage(const int idx);
     void appendPackage(QApt::DebFile *package);
+    void onTransactionErrorOccurred();
 
 private:
-    void onTransactionFinished(const QApt::ExitStatus exitStatus);
+    void onTransactionFinished();
     void installNextDeb();
     void uninstallFinished(const QApt::ExitStatus exitStatus);
 
