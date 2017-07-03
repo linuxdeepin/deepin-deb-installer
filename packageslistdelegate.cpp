@@ -64,6 +64,28 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 //    painter->fillRect(info_rect, Qt::cyan);
     painter->setPen(QColor(80, 80, 80));
     painter->drawText(info_rect, index.data(DebListModel::PackageDescriptionRole).toString(), Qt::AlignLeft | Qt::AlignTop);
+
+    // install status
+    const int install_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+    if (install_stat != DebListModel::Prepare)
+    {
+        QRect install_status_rect = option.rect;
+        install_status_rect.setRight(option.rect.right() - 15);
+        install_status_rect.setLeft(option.rect.right() - 80);
+
+        switch (install_stat)
+        {
+        case DebListModel::Operating:
+            painter->drawText(install_status_rect, "Installing", Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        case DebListModel::Success:
+            painter->drawText(install_status_rect, "Success", Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        default:
+            painter->drawText(install_status_rect, "Failed", Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        }
+    }
 }
 
 QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
