@@ -68,7 +68,7 @@ public:
 signals:
     void workerStarted() const;
     void workerFinished() const;
-    void workerProgressChanged(const double progress) const;
+    void workerProgressChanged(const int progress) const;
     void transactionProgressChanged(const int progress) const;
     void appendOutputInfo(const QString &info) const;
     void packageOperationChanged(const QModelIndex &index, int status) const;
@@ -84,6 +84,7 @@ private:
     void onTransactionFinished();
     void installNextDeb();
     void uninstallFinished();
+    void refreshOperatingPackageStatus(const PackageOperationStatus stat);
 
 private:
     int m_workerStatus;

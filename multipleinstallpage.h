@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include <QPushButton>
+#include <QProgressBar>
 
 class PackagesListView;
 class DebListModel;
@@ -21,6 +22,7 @@ private slots:
 private:
     DebListModel *m_debListModel;
     PackagesListView *m_appsView;
+    QProgressBar *m_installProgress;
     QPushButton *m_installButton;
     QPushButton *m_acceptButton;
 };

@@ -123,7 +123,7 @@ void DebListModel::onTransactionErrorOccurred()
     Q_ASSERT(e);
 
     // package filaed
-    m_packageOperateStatus[m_operatingIndex] = Failed;
+    refreshOperatingPackageStatus(Failed);
 
     bool broke = false;
 
@@ -151,14 +151,26 @@ void DebListModel::onTransactionErrorOccurred()
     }
 }
 
+void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
+{
+    m_packageOperateStatus[m_operatingIndex] = stat;
+
+    const QModelIndex idx = index(m_operatingIndex);
+
+    emit dataChanged(idx, idx);
+}
+
 void DebListModel::onTransactionFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
     trans->deleteLater();
 
+    // report new progress
+    emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    m_packageOperateStatus[m_operatingIndex] = Success;
+    refreshOperatingPackageStatus(Success);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
     if (trans->exitStatus())
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
@@ -183,7 +195,7 @@ void DebListModel::installNextDeb()
 
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    m_packageOperateStatus[m_operatingIndex] = Operating;
+    refreshOperatingPackageStatus(Operating);
 
     qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
 
