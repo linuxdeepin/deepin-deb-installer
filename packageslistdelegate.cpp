@@ -76,12 +76,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         switch (install_stat)
         {
         case DebListModel::Operating:
+            painter->setPen(Qt::black);
             painter->drawText(install_status_rect, "Installing", Qt::AlignVCenter | Qt::AlignRight);
             break;
         case DebListModel::Success:
+            painter->setPen(Qt::green);
             painter->drawText(install_status_rect, "Success", Qt::AlignVCenter | Qt::AlignRight);
             break;
         default:
+            painter->setPen(Qt::red);
             painter->drawText(install_status_rect, "Failed", Qt::AlignVCenter | Qt::AlignRight);
             break;
         }
