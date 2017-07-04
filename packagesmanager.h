@@ -17,6 +17,7 @@ class PackagesManager : public QObject
 public:
     explicit PackagesManager(QObject *parent = 0);
 
+    bool isBackendReady();
     int packageInstallStatus(const int index);
     int packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);

@@ -54,6 +54,11 @@ PackagesManager::PackagesManager(QObject *parent)
     m_backendFuture = QtConcurrent::run(init_backend);
 }
 
+bool PackagesManager::isBackendReady()
+{
+    return m_backendFuture.isFinished();
+}
+
 int PackagesManager::packageInstallStatus(const int index)
 {
     if (m_packageInstallStatus.contains(index))

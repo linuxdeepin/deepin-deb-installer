@@ -21,6 +21,11 @@ DebListModel::DebListModel(QObject *parent)
 {
 }
 
+bool DebListModel::isReady() const
+{
+    return m_packagesManager->isBackendReady();
+}
+
 const QList<DebFile *> DebListModel::preparedPackages() const
 {
     return m_packagesManager->m_preparedPackages;

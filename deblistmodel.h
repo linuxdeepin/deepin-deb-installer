@@ -60,6 +60,7 @@ public:
         Failed,
     };
 
+    bool isReady() const;
     const QList<QApt::DebFile *> preparedPackages() const;
 
     int rowCount(const QModelIndex &parent) const override;

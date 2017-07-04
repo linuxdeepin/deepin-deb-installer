@@ -176,7 +176,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(model, &DebListModel::workerStarted, this, &SingleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
-    QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
+    if (m_packagesModel->isReady())
+        setPackageInfo();
+    else
+        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 }
 
 void SingleInstallPage::install()
@@ -231,6 +234,8 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 
 void SingleInstallPage::setPackageInfo()
 {
+    qApp->processEvents();
+
     DebFile *package = m_packagesModel->preparedPackages().first();
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
