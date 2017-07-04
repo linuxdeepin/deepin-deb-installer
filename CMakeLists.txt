@@ -42,3 +42,4 @@ endif ()
 
 install(TARGETS deepin-deb-installer DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install(FILES deepin-deb-installer.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+install(FILES deepin-deb-installer.applications DESTINATION ${CMAKE_INSTALL_PREFIX}/share/application-registry)

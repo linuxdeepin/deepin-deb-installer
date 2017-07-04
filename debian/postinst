@@ -1,6 +1,6 @@
 #!/bin/sh
 
 # set to default
-xdg-mime default deepin-deb-installer.desktop application/x-deb
+sed -i -E 's/(application\/x-deb=).*$/\1deepin-deb-installer.desktop/' /usr/share/applications/mimeapps.list
 
 exit 0
