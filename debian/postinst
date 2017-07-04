@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# set to default
+xdg-mime default deepin-deb-installer.desktop application/x-deb
+
+exit 0
