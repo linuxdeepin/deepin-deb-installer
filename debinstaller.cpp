@@ -28,7 +28,9 @@ DebInstaller::DebInstaller(QWidget *parent)
     setLayout(m_centralLayout);
     setFixedSize(480, 380);
     setWindowTitle(tr("Deepin Deb Installer"));
-    setWindowIcon(QIcon(":/images/icon.png"));
+    setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
+    setTitleIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(32, 32));
+    setTitle(QString());
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);

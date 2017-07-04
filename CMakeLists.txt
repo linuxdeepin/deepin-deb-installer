@@ -43,6 +43,7 @@ endif ()
 # Install icons
 foreach (ICON_SIZE 16 24 32 48 64 96 128 256)
     install(FILES resources/images/deepin-deb-installer-${ICON_SIZE}px.svg
+            RENAME deepin-deb-installer.svg
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps)
 endforeach ()
 
