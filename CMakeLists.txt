@@ -40,6 +40,12 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
+# Install icons
+foreach (ICON_SIZE 16 24 32 48 64 96 128 256)
+    install(FILES resources/images/deepin-deb-installer-${ICON_SIZE}px.svg
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps)
+endforeach ()
+
 install(TARGETS deepin-deb-installer DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install(FILES deepin-deb-installer.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 install(FILES deepin-deb-installer.applications DESTINATION ${CMAKE_INSTALL_PREFIX}/share/application-registry)
