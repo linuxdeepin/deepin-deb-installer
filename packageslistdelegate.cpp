@@ -42,7 +42,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QString name = index.data(DebListModel::PackageNameRole).toString();
     const QFont old_font = painter->font();
     QFont f = old_font;
-    f.setWeight(500);
+    f.setWeight(QFont::Bold);
     painter->setFont(f);
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name, Qt::AlignLeft | Qt::AlignBottom);
 
@@ -62,7 +62,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     info_rect.setLeft(content_x);
     info_rect.setTop(name_rect.bottom() + 1 + 3);
 //    painter->fillRect(info_rect, Qt::cyan);
-    painter->setPen(QColor(80, 80, 80));
+    painter->setPen(QColor(90, 90, 90));
     painter->drawText(info_rect, index.data(DebListModel::PackageDescriptionRole).toString(), Qt::AlignLeft | Qt::AlignTop);
 
     // install status

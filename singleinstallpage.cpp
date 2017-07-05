@@ -65,14 +65,23 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("QLabel {"
-                               "color: red;"
+                               "color: #ff5a5a;"
                                "}");
 
     m_progress->setMinimum(0);
     m_progress->setMaximum(100);
     m_progress->setFixedHeight(8);
+    m_progress->setFixedWidth(240);
     m_progress->setTextVisible(false);
     m_progress->setVisible(false);
+    m_progress->setStyleSheet("QProgressBar {"
+                              "border: 1px solid rgba(0, 0, 0, .03);"
+                              "border-radius: 4px;"
+                              "background-color: rgba(0, 0, 0, .05);"
+                              "}"
+                              "QProgressBar::chunk {"
+                              "background-color: #378cfa"
+                              "}");
 
     m_showInfoButton->setText(tr("Show Infomation"));
     m_showInfoButton->setVisible(false);
@@ -80,6 +89,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_hideInfoButton->setVisible(false);
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
+    m_workerInfomation->setAcceptDrops(false);
     m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_workerInfomation->setStyleSheet("QTextEdit {"
                                       "color: #2c77ab;"
@@ -90,8 +100,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_installButton->setFixedSize(120, 36);
     m_uninstallButton->setText(tr("Remove"));
     m_uninstallButton->setFixedSize(120, 36);
+    m_uninstallButton->setStyleSheet("QPushButton {"
+                                     "color: #303030;"
+                                     "}");
     m_reinstallButton->setText(tr("Reinstall"));
     m_reinstallButton->setFixedSize(120, 36);
+    m_reinstallButton->setStyleSheet("QPushButton {"
+                                     "color: #303030;"
+                                     "}");
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setFixedSize(120, 36);
     m_confirmButton->setStyleSheet("QPushButton {"
@@ -104,10 +120,16 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Package: "));
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    packageName->setStyleSheet("QLabel {"
+                               "color: #797979;"
+                               "}");
 
     QLabel *packageVersion = new QLabel;
     packageVersion->setText(tr("Version: "));
     packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    packageVersion->setStyleSheet("QLabel {"
+                                  "color: #797979;"
+                                  "}");
 
     QGridLayout *itemInfoLayout = new QGridLayout;
     itemInfoLayout->addWidget(packageName, 0, 0);
@@ -143,34 +165,30 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
+    itemLayout->addSpacing(60);
     itemLayout->addLayout(itemBlockLayout);
+    itemLayout->addSpacing(25);
     itemLayout->addWidget(m_packageDescription);
-    itemLayout->setSpacing(30);
+    itemLayout->addStretch();
     itemLayout->setMargin(0);
+    itemLayout->setSpacing(0);
 
     m_itemInfoWidget->setLayout(itemLayout);
 
-    QVBoxLayout *contentLayout = new QVBoxLayout;
-    contentLayout->addSpacing(60);
-    contentLayout->addWidget(m_itemInfoWidget);
-    contentLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
-    contentLayout->addStretch();
-    contentLayout->addSpacing(15);
-    contentLayout->addLayout(infoBtnsLayout);
-    contentLayout->addWidget(m_workerInfomation);
-    contentLayout->addWidget(m_tipsLabel);
-    contentLayout->addWidget(m_progress);
-    contentLayout->addSpacing(10);
-    contentLayout->addLayout(btnsLayout);
-    contentLayout->setSpacing(0);
-    contentLayout->setMargin(0);
-
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addStretch();
-    centralLayout->addLayout(contentLayout);
-    centralLayout->addStretch();
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addWidget(m_itemInfoWidget);
+    centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
+    centralLayout->addSpacing(15);
+    centralLayout->addLayout(infoBtnsLayout);
+    centralLayout->addWidget(m_workerInfomation);
+    centralLayout->addSpacing(20);
+    centralLayout->addWidget(m_tipsLabel);
+    centralLayout->addWidget(m_progress);
+    centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
+    centralLayout->addSpacing(10);
+    centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(100, 0, 100, 30);
+    centralLayout->setContentsMargins(20, 0, 20, 30);
 
     setLayout(centralLayout);
 

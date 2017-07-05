@@ -25,6 +25,9 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     QLabel *dndTips = new QLabel;
     dndTips->setText(tr("Drag and drop files here"));
     dndTips->setAlignment(Qt::AlignCenter);
+    dndTips->setStyleSheet("QLabel {"
+                           "color: #6a6a6a;"
+                           "}");
 
     QVBoxLayout *centerWrapLayout = new QVBoxLayout;
     centerWrapLayout->addWidget(iconImage);
