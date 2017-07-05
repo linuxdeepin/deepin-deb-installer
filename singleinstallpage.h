@@ -29,11 +29,12 @@ private slots:
     void showInfomation();
     void hideInfomation();
 
-    void onWorkerStarted();
+    void showInfo();
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
 
 private:
+    bool m_workerStarted;
     DebListModel *m_packagesModel;
     QWidget *m_itemInfoWidget;
     QLabel *m_packageIcon;

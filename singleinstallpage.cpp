@@ -41,6 +41,7 @@ const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const 
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
 
+      m_workerStarted(false),
       m_packagesModel(model),
 
       m_itemInfoWidget(new QWidget),
@@ -173,7 +174,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(model, &DebListModel::appendOutputInfo, m_workerInfomation, &QTextEdit::append);
     connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
-    connect(model, &DebListModel::workerStarted, this, &SingleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
     if (m_packagesModel->isReady())
@@ -208,7 +208,7 @@ void SingleInstallPage::hideInfomation()
     m_itemInfoWidget->setVisible(true);
 }
 
-void SingleInstallPage::onWorkerStarted()
+void SingleInstallPage::showInfo()
 {
     m_showInfoButton->setVisible(true);
     m_progress->setVisible(true);
@@ -230,6 +230,12 @@ void SingleInstallPage::onWorkerFinished()
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
     m_progress->setValue(progress);
+
+    if (!m_workerStarted)
+    {
+        m_workerStarted = true;
+        showInfo();
+    }
 }
 
 void SingleInstallPage::setPackageInfo()
