@@ -7,14 +7,14 @@ PackagesListDelegate::PackagesListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
-    m_packageIcon = icon.pixmap(48, 48);
+    m_packageIcon = icon.pixmap(32, 32);
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 //    painter->fillRect(option.rect, Qt::gray);
 
-    const int content_x = 65;
+    const int content_x = 45;
 
     // draw top border
     if (index.row())
@@ -22,7 +22,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const QPoint start(content_x, option.rect.top());
         const QPoint end(option.rect.right() - 10, option.rect.top());
 
-        painter->setPen(QColor(220, 220, 220));
+        painter->setPen(QColor(0, 0, 0, 255 * .05));
         painter->setRenderHint(QPainter::Antialiasing, false);
         painter->drawLine(start, end);
     }
@@ -30,7 +30,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setRenderHint(QPainter::Antialiasing);
 
     // draw package icon
-    const int x = 10;
+    const int x = 5;
     const int y = option.rect.top() + (option.rect.height() - m_packageIcon.height()) / 2;
     painter->drawPixmap(x, y, m_packageIcon);
 
@@ -76,15 +76,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         switch (install_stat)
         {
         case DebListModel::Operating:
-            painter->setPen(Qt::black);
+            painter->setPen(QColor(124, 124, 124));
             painter->drawText(install_status_rect, "Installing", Qt::AlignVCenter | Qt::AlignRight);
             break;
         case DebListModel::Success:
-            painter->setPen(Qt::green);
+            painter->setPen(QColor(65, 117, 5));
             painter->drawText(install_status_rect, "Success", Qt::AlignVCenter | Qt::AlignRight);
             break;
         default:
-            painter->setPen(Qt::red);
+            painter->setPen(QColor(255, 109, 109));
             painter->drawText(install_status_rect, "Failed", Qt::AlignVCenter | Qt::AlignRight);
             break;
         }

@@ -4,6 +4,7 @@
 #include "deblistmodel.h"
 
 #include <QVBoxLayout>
+#include <QLabel>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
@@ -15,10 +16,19 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 {
     m_appsView->setModel(model);
     m_appsView->setItemDelegate(new PackagesListDelegate);
+    m_appsView->setStyleSheet("QListView {"
+                              "border: 1px solid #eee;"
+                              "}");
+
     m_installButton->setText(tr("Install"));
     m_installButton->setFixedWidth(120);
+    m_installButton->setFixedSize(120, 36);
+    m_installButton->setStyleSheet("QPushButton {"
+                                   "color: #2ca7f8;"
+                                   "}");
     m_acceptButton->setText(tr("OK"));
     m_acceptButton->setFixedWidth(120);
+    m_acceptButton->setFixedSize(120, 36);
     m_acceptButton->setVisible(false);
 
     m_installProgress->setMinimum(0);
@@ -34,16 +44,20 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_acceptButton);
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 15);
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *topTips = new QLabel;
+    topTips->setText(tr("Bulk Install"));
+    topTips->setAlignment(Qt::AlignCenter);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-
+    centralLayout->addWidget(topTips);
     centralLayout->addWidget(m_appsView);
     centralLayout->addWidget(m_installProgress);
     centralLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(10);
-    centralLayout->setMargin(0);
+    centralLayout->setContentsMargins(20, 0, 20, 30);
 
     setLayout(centralLayout);
 

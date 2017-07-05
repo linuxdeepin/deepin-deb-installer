@@ -80,14 +80,23 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_hideInfoButton->setVisible(false);
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
+    m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_workerInfomation->setStyleSheet("QTextEdit {"
                                       "color: #2c77ab;"
+                                      "border: 1px solid #eee;"
                                       "}");
 
     m_installButton->setText(tr("Install"));
+    m_installButton->setFixedSize(120, 36);
     m_uninstallButton->setText(tr("Remove"));
+    m_uninstallButton->setFixedSize(120, 36);
     m_reinstallButton->setText(tr("Reinstall"));
+    m_reinstallButton->setFixedSize(120, 36);
     m_confirmButton->setText(tr("OK"));
+    m_confirmButton->setFixedSize(120, 36);
+    m_confirmButton->setStyleSheet("QPushButton {"
+                                   "color: #2ca7f8;"
+                                   "}");
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setMaximumHeight(80);
     m_packageDescription->setFixedWidth(220);
@@ -142,7 +151,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_itemInfoWidget->setLayout(itemLayout);
 
     QVBoxLayout *contentLayout = new QVBoxLayout;
-    contentLayout->addStretch();
+    contentLayout->addSpacing(60);
     contentLayout->addWidget(m_itemInfoWidget);
     contentLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
     contentLayout->addStretch();
@@ -151,7 +160,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     contentLayout->addWidget(m_workerInfomation);
     contentLayout->addWidget(m_tipsLabel);
     contentLayout->addWidget(m_progress);
-    contentLayout->addSpacing(15);
+    contentLayout->addSpacing(10);
     contentLayout->addLayout(btnsLayout);
     contentLayout->setSpacing(0);
     contentLayout->setMargin(0);
@@ -161,7 +170,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     centralLayout->addLayout(contentLayout);
     centralLayout->addStretch();
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(100, 0, 100, 20);
+    centralLayout->setContentsMargins(100, 0, 100, 30);
 
     setLayout(centralLayout);
 
@@ -225,6 +234,13 @@ void SingleInstallPage::onWorkerFinished()
 {
     m_progress->setVisible(false);
     m_confirmButton->setVisible(true);
+    m_confirmButton->setFocus();
+
+    // TODO: success or fail
+    m_tipsLabel->setText(tr("Installed successfully"));
+    m_tipsLabel->setStyleSheet("QLabel {"
+                               "color: #47790c;"
+                               "}");
 }
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
