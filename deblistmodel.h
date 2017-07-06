@@ -63,6 +63,7 @@ public:
 
     bool isReady() const;
     const QList<QApt::DebFile *> preparedPackages() const;
+    QModelIndex first() const;
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;

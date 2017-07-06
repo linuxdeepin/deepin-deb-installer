@@ -231,10 +231,20 @@ void SingleInstallPage::onWorkerFinished()
     m_confirmButton->setFocus();
 
     // TODO: success or fail
-    m_tipsLabel->setText(tr("Installed successfully"));
-    m_tipsLabel->setStyleSheet("QLabel {"
-                               "color: #47790c;"
-                               "}");
+    const QModelIndex index = m_packagesModel->first();
+    const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+
+    if (stat == DebListModel::Success)
+    {
+        m_tipsLabel->setText(tr("Installed successfully"));
+        m_tipsLabel->setStyleSheet("QLabel {"
+                                   "color: #47790c;"
+                                   "}");
+    } else if (stat == DebListModel::Failed) {
+        m_tipsLabel->setText(tr("Install Failed"));
+    } else {
+        Q_UNREACHABLE();
+    }
 }
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)

@@ -52,6 +52,11 @@ const QList<DebFile *> DebListModel::preparedPackages() const
     return m_packagesManager->m_preparedPackages;
 }
 
+QModelIndex DebListModel::first() const
+{
+    return index(0);
+}
+
 int DebListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -145,12 +150,12 @@ void DebListModel::onTransactionErrorOccurred()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
-    trans->deleteLater();
 
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
 
-    qDebug() << Q_FUNC_INFO << e << workerErrorString(e);
+    qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
+    qWarning() << trans->errorDetails() << trans->errorString();
 
     bool broke = false;
 
@@ -167,8 +172,7 @@ void DebListModel::onTransactionErrorOccurred()
     case AuthError: /* restart auth */
         break;
 
-    default:
-        qWarning() << e << trans->errorDetails() << trans->errorString();
+    default:;
     }
 
     if (!broke)
@@ -217,9 +221,14 @@ void DebListModel::onTransactionFinished()
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
 
     if (trans->exitStatus())
+    {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+        emit appendOutputInfo(trans->errorString());
+    }
     else if (m_packageOperateStatus.contains(m_operatingIndex) && m_packageOperateStatus[m_operatingIndex] != Failed)
+    {
         refreshOperatingPackageStatus(Success);
+    }
 
     bumpInstallIndex();
 }
