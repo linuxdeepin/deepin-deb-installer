@@ -100,7 +100,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
                                    "}");
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setMaximumHeight(80);
-    m_packageDescription->setFixedWidth(220);
+    m_packageDescription->setFixedWidth(320);
 
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Package: "));
