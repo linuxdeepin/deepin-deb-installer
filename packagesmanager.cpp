@@ -101,16 +101,6 @@ int PackagesManager::packageDependsStatus(const int index)
 
     int ret = DebListModel::DependsOk;
 
-//    qDebug() << "conflicts:";
-//    const auto &conflicts = deb->conflicts();
-//    for (auto const &item : conflicts)
-//    {
-//        for (auto const &info : item)
-//        {
-//            qDebug() << info.packageName() << info.packageVersion();
-//        }
-//    }
-
     qDebug() << "depends:";
     const auto &depends = deb->depends();
     for (auto const &item : depends)
@@ -123,8 +113,12 @@ int PackagesManager::packageDependsStatus(const int index)
         }
         ret = std::max(tr, ret);
         if (ret == DebListModel::DependsBreak)
-            return ret;
+            break;
     }
+
+    m_packageDependsStatus[index] = ret;
+
+    qDebug() << "result: " << ret;
 
     return ret;
 }
@@ -139,6 +133,38 @@ const QString PackagesManager::packageInstalledVersion(const int index)
     Package *p = b->package(m_preparedPackages[index]->packageName());
 
     return p->installedVersion();
+}
+
+const QStringList PackagesManager::packageAvailableDependsList(const int index)
+{
+    Q_ASSERT(m_packageDependsStatus.contains(index));
+    Q_ASSERT(m_packageDependsStatus[index] == DebListModel::DependsAvailable);
+
+    QStringList availablePackages;
+    Backend *b = m_backendFuture.result();
+    DebFile *deb = m_preparedPackages[index];
+
+    const auto &depends = deb->depends();
+    for (auto const &item : depends)
+    {
+        Package *dep = b->package(item.first().packageName());
+        if (!dep->installedVersion().isEmpty())
+            continue;
+
+        availablePackages << dep->name();
+    }
+
+    return availablePackages;
+}
+
+void PackagesManager::resetPackageDependsStatus(const int index)
+{
+    Q_ASSERT(m_packageDependsStatus.contains(index));
+
+    // reload backend cache
+    Q_ASSERT(m_backendFuture.result()->reloadCache());
+
+    m_packageDependsStatus.remove(index);
 }
 
 int PackagesManager::checkDependsPackageStatus(const DependencyInfo &dependencyInfo)

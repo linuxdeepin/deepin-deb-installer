@@ -12,6 +12,27 @@
 
 using namespace QApt;
 
+const QString workerErrorString(const int e)
+{
+    switch (e)
+    {
+    case InitError:                 return QStringLiteral("InitError");
+    case LockError:                 return QStringLiteral("LockError");
+    case DiskSpaceError:            return QStringLiteral("DiskSpaceError");
+    case FetchError:                return QStringLiteral("FetchError");
+    case CommitError:               return QStringLiteral("CommitError");
+    case AuthError:                 return QStringLiteral("AuthError");
+    case WorkerDisappeared:         return QStringLiteral("WorkerDisappeared");
+    case UntrustedError:            return QStringLiteral("UntrustedError");
+    case DownloadDisallowedError:   return QStringLiteral("DownloadDisallowedError");
+    case NotFoundError:             return QStringLiteral("NotFoundError");
+    case WrongArchError:            return QStringLiteral("WrongArchError");
+    case MarkingError:              return QStringLiteral("MarkingError");
+    }
+
+    return QString("Unknow Error");
+}
+
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent),
 
@@ -57,6 +78,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageDependsStatus(r);
     case PackageInstalledVersionRole:
         return m_packagesManager->packageInstalledVersion(r);
+    case PackageAvailableDependsListRole:
+        return m_packagesManager->packageAvailableDependsList(r);
     case PackageDescriptionRole:
         return package->shortDescription();
     case PackageOperateStatusRole:
@@ -127,6 +150,8 @@ void DebListModel::onTransactionErrorOccurred()
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
 
+    qDebug() << Q_FUNC_INFO << e << workerErrorString(e);
+
     // package filaed
     refreshOperatingPackageStatus(Failed);
 
@@ -138,6 +163,7 @@ void DebListModel::onTransactionErrorOccurred()
     case LockError:
     case DiskSpaceError:
     case WorkerDisappeared:
+    case CommitError:
         broke = true;
         break;
 
@@ -149,11 +175,7 @@ void DebListModel::onTransactionErrorOccurred()
     }
 
     if (!broke)
-    {
         installNextDeb();
-    } else {
-        m_workerStatus = WorkerFinished;
-    }
 }
 
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
@@ -175,10 +197,12 @@ void DebListModel::onTransactionFinished()
     emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    refreshOperatingPackageStatus(Success);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
+
     if (trans->exitStatus())
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+    else if (m_packageOperateStatus.contains(m_operatingIndex) && m_packageOperateStatus[m_operatingIndex] != Failed)
+        refreshOperatingPackageStatus(Success);
 
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
@@ -194,6 +218,28 @@ void DebListModel::onTransactionFinished()
     installNextDeb();
 }
 
+void DebListModel::onDependsInstallTransactionFinished()
+{
+    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Transaction *trans = static_cast<Transaction *>(sender());
+    trans->deleteLater();
+
+    // report new progress
+//    emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+
+    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << trans->exitStatus();
+
+    if (trans->exitStatus())
+        qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+
+    // reset package depends status
+    m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
+
+    // continue install
+    installNextDeb();
+}
+
 void DebListModel::installNextDeb()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
@@ -202,17 +248,36 @@ void DebListModel::installNextDeb()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     refreshOperatingPackageStatus(Operating);
 
-    qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
+    auto * const backend = m_packagesManager->m_backendFuture.result();
+    Transaction *trans = nullptr;
 
-    m_currentTransaction = m_packagesManager->m_backendFuture.result()->installFile(*deb);
-    Transaction *trans = m_currentTransaction.data();
+    // check available dependencies
+    const int dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+    if (dependsStat == DependsAvailable)
+    {
+        const QStringList availableDepends = m_packagesManager->packageAvailableDependsList(m_operatingIndex);
+        for (auto const &p : availableDepends)
+            backend->markPackageForInstall(p);
 
-    connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
-    connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
-    connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
-    connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
+        qDebug() << Q_FUNC_INFO << "install" << deb->packageName() << "dependencies: " << availableDepends;
 
-    trans->run();
+        trans = backend->commitChanges();
+        connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
+        connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
+        connect(trans, &Transaction::finished, this, &DebListModel::onDependsInstallTransactionFinished);
+    } else {
+        qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
+
+        trans = backend->installFile(*deb);
+
+        connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
+        connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
+        connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
+        connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
+    }
+
+    m_currentTransaction = trans;
+    m_currentTransaction->run();
 }
 
 void DebListModel::uninstallFinished()

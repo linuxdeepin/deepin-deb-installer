@@ -4,8 +4,10 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QTimer>
+#include <DLog>
 
 DWIDGET_USE_NAMESPACE
+DUTIL_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +19,9 @@ int main(int argc, char *argv[])
     app.setApplicationVersion("1.0");
     app.loadTranslator();
     app.setTheme("light");
+
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
 
     // command line arguments
     QCommandLineParser parser;

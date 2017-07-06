@@ -27,6 +27,7 @@ public:
         PackageDescriptionRole,
         PackageVersionStatusRole,
         PackageDependsStatusRole,
+        PackageAvailableDependsListRole,
         PackageOperateStatusRole,
     };
 
@@ -83,6 +84,7 @@ public slots:
 
 private:
     void onTransactionFinished();
+    void onDependsInstallTransactionFinished();
     void installNextDeb();
     void uninstallFinished();
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
