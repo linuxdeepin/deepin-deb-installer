@@ -152,9 +152,6 @@ void DebListModel::onTransactionErrorOccurred()
 
     qDebug() << Q_FUNC_INFO << e << workerErrorString(e);
 
-    // package filaed
-    refreshOperatingPackageStatus(Failed);
-
     bool broke = false;
 
     switch (e)
@@ -176,6 +173,8 @@ void DebListModel::onTransactionErrorOccurred()
 
     if (!broke)
         installNextDeb();
+    else
+        refreshOperatingPackageStatus(Failed);
 }
 
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)

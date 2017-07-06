@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>images/icon.png</file>
+        <file>images/arrow_up.png</file>
+        <file>images/arrow_down.png</file>
     </qresource>
 </RCC>

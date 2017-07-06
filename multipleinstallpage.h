@@ -1,10 +1,13 @@
 #ifndef MULTIPLEINSTALLPAGE_H
 #define MULTIPLEINSTALLPAGE_H
 
+#include "infocontrolbutton.h"
+
 #include <QWidget>
 
 #include <QPushButton>
 #include <QProgressBar>
+#include <QTextEdit>
 
 class PackagesListView;
 class DebListModel;
@@ -19,9 +22,14 @@ private slots:
     void onWorkerStarted();
     void onWorkerFinshed();
 
+    void showInfo();
+    void hideInfo();
+
 private:
     DebListModel *m_debListModel;
     PackagesListView *m_appsView;
+    QTextEdit *m_infoArea;
+    InfoControlButton *m_infoControlButton;
     QProgressBar *m_installProgress;
     QPushButton *m_installButton;
     QPushButton *m_acceptButton;

@@ -1,5 +1,6 @@
 #include "singleinstallpage.h"
 #include "deblistmodel.h"
+#include "workerprogress.h"
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -50,10 +51,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_packageVersion(new QLabel),
       m_packageDescription(new QLabel),
       m_tipsLabel(new QLabel),
-      m_progress(new QProgressBar),
+      m_progress(new WorkerProgress),
       m_workerInfomation(new QTextEdit),
-      m_showInfoButton(new DLinkButton),
-      m_hideInfoButton(new DLinkButton),
+      m_infoControlButton(new InfoControlButton),
       m_installButton(new QPushButton),
       m_uninstallButton(new QPushButton),
       m_reinstallButton(new QPushButton),
@@ -68,25 +68,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
                                "color: #ff5a5a;"
                                "}");
 
-    m_progress->setMinimum(0);
-    m_progress->setMaximum(100);
-    m_progress->setFixedHeight(8);
-    m_progress->setFixedWidth(240);
-    m_progress->setTextVisible(false);
     m_progress->setVisible(false);
-    m_progress->setStyleSheet("QProgressBar {"
-                              "border: 1px solid rgba(0, 0, 0, .03);"
-                              "border-radius: 4px;"
-                              "background-color: rgba(0, 0, 0, .05);"
-                              "}"
-                              "QProgressBar::chunk {"
-                              "background-color: #378cfa"
-                              "}");
+    m_infoControlButton->setVisible(false);
 
-    m_showInfoButton->setText(tr("Show Infomation"));
-    m_showInfoButton->setVisible(false);
-    m_hideInfoButton->setText(tr("Hide Infomation"));
-    m_hideInfoButton->setVisible(false);
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
     m_workerInfomation->setAcceptDrops(false);
@@ -94,6 +78,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_workerInfomation->setStyleSheet("QTextEdit {"
                                       "color: #2c77ab;"
                                       "border: 1px solid #eee;"
+                                      "margin: 0 0 20px 0;"
                                       "}");
 
     m_installButton->setText(tr("Install"));
@@ -148,12 +133,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemBlockLayout->setSpacing(10);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
 
-    QHBoxLayout *infoBtnsLayout = new QHBoxLayout;
-    infoBtnsLayout->addWidget(m_showInfoButton);
-    infoBtnsLayout->addWidget(m_hideInfoButton);
-    infoBtnsLayout->setSpacing(0);
-    infoBtnsLayout->setContentsMargins(0, 0, 0, 0);
-
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
@@ -174,14 +153,15 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemLayout->setSpacing(0);
 
     m_itemInfoWidget->setLayout(itemLayout);
+    m_itemInfoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_itemInfoWidget);
     centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
-    centralLayout->addSpacing(15);
-    centralLayout->addLayout(infoBtnsLayout);
+    centralLayout->addStretch();
+    centralLayout->addWidget(m_infoControlButton);
+    centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     centralLayout->addWidget(m_workerInfomation);
-    centralLayout->addSpacing(20);
     centralLayout->addWidget(m_tipsLabel);
     centralLayout->addWidget(m_progress);
     centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
@@ -192,8 +172,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     setLayout(centralLayout);
 
-    connect(m_showInfoButton, &DLinkButton::clicked, this, &SingleInstallPage::showInfomation);
-    connect(m_hideInfoButton, &DLinkButton::clicked, this, &SingleInstallPage::hideInfomation);
+    connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::showInfomation);
+    connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::hideInfomation);
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::uninstallCurrentPackage);
@@ -221,23 +201,19 @@ void SingleInstallPage::uninstallCurrentPackage()
 
 void SingleInstallPage::showInfomation()
 {
-    m_showInfoButton->setVisible(false);
-    m_hideInfoButton->setVisible(true);
     m_workerInfomation->setVisible(true);
     m_itemInfoWidget->setVisible(false);
 }
 
 void SingleInstallPage::hideInfomation()
 {
-    m_showInfoButton->setVisible(true);
-    m_hideInfoButton->setVisible(false);
     m_workerInfomation->setVisible(false);
     m_itemInfoWidget->setVisible(true);
 }
 
 void SingleInstallPage::showInfo()
 {
-    m_showInfoButton->setVisible(true);
+    m_infoControlButton->setVisible(true);
     m_progress->setVisible(true);
     m_progress->setValue(0);
     m_tipsLabel->clear();

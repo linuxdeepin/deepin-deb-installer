@@ -1,6 +1,8 @@
 #ifndef SINGLEINSTALLPAGE_H
 #define SINGLEINSTALLPAGE_H
 
+#include "infocontrolbutton.h"
+
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
@@ -44,8 +46,7 @@ private:
     QLabel *m_tipsLabel;
     QProgressBar *m_progress;
     QTextEdit *m_workerInfomation;
-    Dtk::Widget::DLinkButton *m_showInfoButton;
-    Dtk::Widget::DLinkButton *m_hideInfoButton;
+    InfoControlButton *m_infoControlButton;
     QPushButton *m_installButton;
     QPushButton *m_uninstallButton;
     QPushButton *m_reinstallButton;
