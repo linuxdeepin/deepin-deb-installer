@@ -83,6 +83,7 @@ public slots:
     void onTransactionErrorOccurred();
 
 private:
+    void bumpInstallIndex();
     void onTransactionFinished();
     void onDependsInstallTransactionFinished();
     void installNextDeb();

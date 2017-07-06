@@ -174,7 +174,25 @@ void DebListModel::onTransactionErrorOccurred()
     if (!broke)
         installNextDeb();
     else
-        refreshOperatingPackageStatus(Failed);
+        refreshOperatingPackageStatus(Failed); /* finished slots is execute later. */
+}
+
+void DebListModel::bumpInstallIndex()
+{
+    // install finished
+    if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
+    {
+        qDebug() << "congraulations, install finished !!!";
+
+        m_workerStatus = WorkerFinished;
+        emit workerFinished();
+        emit workerProgressChanged(100);
+        emit transactionProgressChanged(100);
+        return;
+    }
+
+    // install next
+    installNextDeb();
 }
 
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
@@ -203,18 +221,7 @@ void DebListModel::onTransactionFinished()
     else if (m_packageOperateStatus.contains(m_operatingIndex) && m_packageOperateStatus[m_operatingIndex] != Failed)
         refreshOperatingPackageStatus(Success);
 
-    // install finished
-    if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
-    {
-        qDebug() << "congraulations, install finished !!!";
-
-        m_workerStatus = WorkerFinished;
-        emit workerFinished();
-        return;
-    }
-
-    // install next
-    installNextDeb();
+    bumpInstallIndex();
 }
 
 void DebListModel::onDependsInstallTransactionFinished()
@@ -252,8 +259,12 @@ void DebListModel::installNextDeb()
 
     // check available dependencies
     const int dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
-    if (dependsStat == DependsAvailable)
+    if (dependsStat == DependsBreak)
     {
+        refreshOperatingPackageStatus(Failed);
+        bumpInstallIndex();
+        return;
+    } else if (dependsStat == DependsAvailable) {
         const QStringList availableDepends = m_packagesManager->packageAvailableDependsList(m_operatingIndex);
         for (auto const &p : availableDepends)
             backend->markPackageForInstall(p);
