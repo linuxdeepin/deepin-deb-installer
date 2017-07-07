@@ -118,8 +118,9 @@ void DebListModel::uninstallPackage(const int idx)
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
     m_workerStatus = WorkerProcessing;
+    m_operatingIndex = idx;
 
-    DebFile *deb = m_packagesManager->package(idx);
+    DebFile *deb = m_packagesManager->package(m_operatingIndex);
     Backend *b = m_packagesManager->m_backendFuture.result();
     Package *p = b->package(deb->packageName());
     Q_ASSERT(p);
@@ -127,6 +128,8 @@ void DebListModel::uninstallPackage(const int idx)
     // uninstall
     qDebug() << Q_FUNC_INFO << "starting to remove package: " << p->name();
     emit workerStarted();
+
+    refreshOperatingPackageStatus(Operating);
 
     m_currentTransaction = b->removePackages(QList<Package *> { p });
     Transaction *trans = m_currentTransaction.data();
@@ -306,6 +309,7 @@ void DebListModel::uninstallFinished()
     qDebug() << Q_FUNC_INFO;
 
     m_workerStatus = WorkerFinished;
+    refreshOperatingPackageStatus(Success);
 
     emit workerFinished();
 }
