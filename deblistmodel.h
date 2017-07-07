@@ -28,6 +28,7 @@ public:
         PackageVersionStatusRole,
         PackageDependsStatusRole,
         PackageAvailableDependsListRole,
+        PackageFailReasonRole,
         PackageOperateStatusRole,
     };
 
@@ -90,6 +91,7 @@ private:
     void installNextDeb();
     void uninstallFinished();
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
+    QString packageFailedReason(const int idx) const;
 
 private:
     int m_workerStatus;

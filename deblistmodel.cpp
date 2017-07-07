@@ -87,6 +87,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageAvailableDependsList(r);
     case PackageDescriptionRole:
         return package->shortDescription();
+    case PackageFailReasonRole:
+        return packageFailedReason(r);
     case PackageOperateStatusRole:
         if (m_packageOperateStatus.contains(r))
             return m_packageOperateStatus[r];
@@ -209,6 +211,17 @@ void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOper
     const QModelIndex idx = index(m_operatingIndex);
 
     emit dataChanged(idx, idx);
+}
+
+QString DebListModel::packageFailedReason(const int idx) const
+{
+    Q_ASSERT(m_packageOperateStatus.contains(idx));
+    Q_ASSERT(m_packageOperateStatus[idx] == Failed);
+
+    if (m_packagesManager->packageDependsStatus(idx) == DependsBreak)
+        return tr("Dependencies Break");
+
+    return workerErrorString(CommitError);
 }
 
 void DebListModel::onTransactionFinished()

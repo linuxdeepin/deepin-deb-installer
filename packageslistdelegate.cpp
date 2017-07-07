@@ -45,10 +45,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     f.setWeight(QFont::Bold);
     painter->setFont(f);
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name, Qt::AlignLeft | Qt::AlignBottom);
-
+    const QString name_str = painter->fontMetrics().elidedText(name, Qt::ElideRight, 306);
     painter->setPen(Qt::black);
-//    painter->fillRect(name_rect, Qt::red);
-    painter->drawText(name_rect, name, Qt::AlignLeft | Qt::AlignBottom);
+    painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
     painter->setFont(old_font);
 
     // draw package version
@@ -56,14 +55,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QRect version_rect = name_rect;
     version_rect.setLeft(version_x);
     painter->drawText(version_rect, index.data(DebListModel::PackageVersionRole).toString(), Qt::AlignLeft | Qt::AlignBottom);
-
-    // draw package info
-    QRect info_rect = option.rect;
-    info_rect.setLeft(content_x);
-    info_rect.setTop(name_rect.bottom() + 1 + 3);
-//    painter->fillRect(info_rect, Qt::cyan);
-    painter->setPen(QColor(90, 90, 90));
-    painter->drawText(info_rect, index.data(DebListModel::PackageDescriptionRole).toString(), Qt::AlignLeft | Qt::AlignTop);
 
     // install status
     const int install_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
@@ -88,6 +79,21 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             painter->drawText(install_status_rect, "Failed", Qt::AlignVCenter | Qt::AlignRight);
             break;
         }
+    }
+
+    // draw package info
+    QRect info_rect = option.rect;
+    info_rect.setLeft(content_x);
+    info_rect.setTop(name_rect.bottom() + 1 + 3);
+    if (install_stat != DebListModel::Failed)
+    {
+        const QString info_str = painter->fontMetrics().elidedText(index.data(DebListModel::PackageDescriptionRole).toString(), Qt::ElideRight, 306);
+        painter->setPen(QColor(90, 90, 90));
+        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
+    } else {
+        const QString info_str = painter->fontMetrics().elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, 306);
+        painter->setPen(QColor(255, 109, 109));
+        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
     }
 }
 

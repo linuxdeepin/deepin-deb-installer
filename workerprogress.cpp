@@ -12,8 +12,5 @@ WorkerProgress::WorkerProgress(QWidget *parent)
                   "border: 1px solid rgba(0, 0, 0, .03);"
                   "border-radius: 4px;"
                   "background-color: rgba(0, 0, 0, .05);"
-                  "}"
-                  "QProgressBar::chunk {"
-                  "background-color: #378cfa"
                   "}");
 }
