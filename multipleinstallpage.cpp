@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QApplication>
+#include <QPropertyAnimation>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
@@ -15,6 +16,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_infoArea(new QTextEdit),
       m_infoControlButton(new InfoControlButton),
       m_installProgress(new WorkerProgress),
+      m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this)),
       m_installButton(new QPushButton),
       m_acceptButton(new QPushButton)
 {
@@ -83,8 +85,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(model, &DebListModel::workerStarted, this, &MultipleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::workerFinished, this, &MultipleInstallPage::onWorkerFinshed);
+    connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(model, &DebListModel::appendOutputInfo, m_infoArea, &QTextEdit::append);
-    connect(model, &DebListModel::workerProgressChanged, m_installProgress, &QProgressBar::setValue);
 }
 
 void MultipleInstallPage::onWorkerStarted()
@@ -99,6 +101,17 @@ void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
     m_installProgress->setVisible(false);
+}
+
+void MultipleInstallPage::onProgressChanged(const int progress)
+{
+    m_progressAnimation->setEndValue(progress);
+
+    if (m_progressAnimation->state() != QPropertyAnimation::Running)
+    {
+        m_progressAnimation->setStartValue(m_installProgress->value());
+        m_progressAnimation->start();
+    }
 }
 
 void MultipleInstallPage::showInfo()

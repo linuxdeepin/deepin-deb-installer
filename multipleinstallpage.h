@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QProgressBar>
 #include <QTextEdit>
+#include <QPropertyAnimation>
 
 class PackagesListView;
 class DebListModel;
@@ -21,6 +22,7 @@ public:
 private slots:
     void onWorkerStarted();
     void onWorkerFinshed();
+    void onProgressChanged(const int progress);
 
     void showInfo();
     void hideInfo();
@@ -31,6 +33,7 @@ private:
     QTextEdit *m_infoArea;
     InfoControlButton *m_infoControlButton;
     QProgressBar *m_installProgress;
+    QPropertyAnimation *m_progressAnimation;
     QPushButton *m_installButton;
     QPushButton *m_acceptButton;
 };
