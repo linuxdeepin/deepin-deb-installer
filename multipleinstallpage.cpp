@@ -29,6 +29,9 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_installButton->setFixedSize(120, 36);
     m_installButton->setStyleSheet("QPushButton {"
                                    "color: #2ca7f8;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "color: white;"
                                    "}");
     m_acceptButton->setText(tr("OK"));
     m_acceptButton->setFixedWidth(120);
@@ -40,7 +43,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_infoArea->setAcceptDrops(false);
     m_infoArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_infoArea->setStyleSheet("QTextEdit {"
-                              "color: #2c77ab;"
+                              "color: #609dc9;"
                               "border: 1px solid #eee;"
                               "margin: 0 0 20px 0;"
                               "}");
@@ -95,6 +98,7 @@ void MultipleInstallPage::onWorkerStarted()
 void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
+    m_installProgress->setVisible(false);
 }
 
 void MultipleInstallPage::showInfo()

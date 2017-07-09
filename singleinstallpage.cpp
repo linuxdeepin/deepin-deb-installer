@@ -76,9 +76,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_workerInfomation->setAcceptDrops(false);
     m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_workerInfomation->setStyleSheet("QTextEdit {"
-                                      "color: #2c77ab;"
+                                      "color: #609dc9;"
                                       "border: 1px solid #eee;"
-                                      "margin: 0 0 20px 0;"
+                                      "margin: 10px 0 20px 0;"
                                       "}");
 
     m_installButton->setText(tr("Install"));
@@ -97,6 +97,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_confirmButton->setFixedSize(120, 36);
     m_confirmButton->setStyleSheet("QPushButton {"
                                    "color: #2ca7f8;"
+                                   "}"
+                                   "QPushButton:hover {"
+                                   "color: white;"
                                    "}");
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setMaximumHeight(80);
@@ -158,7 +161,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_itemInfoWidget);
     centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
-    centralLayout->addStretch();
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     centralLayout->addWidget(m_workerInfomation);
