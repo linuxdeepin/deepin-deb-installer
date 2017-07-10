@@ -44,8 +44,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QFont f = old_font;
     f.setWeight(QFont::Bold);
     painter->setFont(f);
-    const QRectF name_bounding_rect = painter->boundingRect(name_rect, name, Qt::AlignLeft | Qt::AlignBottom);
     const QString name_str = painter->fontMetrics().elidedText(name, Qt::ElideRight, 306);
+    const QRectF name_bounding_rect = painter->boundingRect(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
     painter->setPen(Qt::black);
     painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
     painter->setFont(old_font);
@@ -54,7 +54,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const int version_x = name_bounding_rect.right() + 8;
     QRect version_rect = name_rect;
     version_rect.setLeft(version_x);
-    painter->drawText(version_rect, index.data(DebListModel::PackageVersionRole).toString(), Qt::AlignLeft | Qt::AlignBottom);
+    version_rect.setRight(option.rect.right() - 85);
+    const QString version = index.data(DebListModel::PackageVersionRole).toString();
+    const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
+    painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);
 
     // install status
     const int install_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();

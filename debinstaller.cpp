@@ -47,7 +47,9 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key())
     {
+#ifdef QT_DEBUG
     case Qt::Key_Escape:        qApp->quit();       break;
+#endif
     default:;
     }
 }
