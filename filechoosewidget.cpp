@@ -43,8 +43,11 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centerWidget->setObjectName("CenterWidget");
     centerWidget->setStyleSheet("#CenterWidget {"
                                 "border:none;"
-                                "border-bottom:2px dashed #eee;"
                                 "}");
+
+    QLabel *split_line = new QLabel;
+    split_line->setPixmap(QPixmap(":/images/split_line.png"));
+    split_line->setAlignment(Qt::AlignCenter);
 
     m_fileChooseBtn = new DLinkButton;
     m_fileChooseBtn->setText(tr("Choose Package"));
@@ -53,6 +56,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centralLayout->addStretch();
     centralLayout->addWidget(centerWidget);
     centralLayout->setAlignment(centerWidget, Qt::AlignTop | Qt::AlignCenter);
+    centralLayout->addWidget(split_line);
     centralLayout->addSpacing(20);
     centralLayout->addWidget(m_fileChooseBtn);
     centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignCenter);
@@ -71,7 +75,11 @@ void FileChooseWidget::dragEnterEvent(QDragEnterEvent *e)
     if (!mime->hasUrls())
         return e->ignore();
 
-    e->accept();
+    for (const auto &item : mime->urls())
+        if (item.path().endsWith(".deb"))
+            return e->accept();
+
+    e->ignore();
 }
 
 void FileChooseWidget::dropEvent(QDropEvent *e)
