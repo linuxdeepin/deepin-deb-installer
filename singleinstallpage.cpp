@@ -187,7 +187,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
-    connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
     if (m_packagesModel->isReady())
@@ -234,6 +233,12 @@ void SingleInstallPage::showInfo()
 void SingleInstallPage::onOutputAvailable(const QString &output)
 {
     m_workerInfomation->append(output.trimmed());
+
+    if (!m_workerStarted)
+    {
+        m_workerStarted = true;
+        showInfo();
+    }
 }
 
 void SingleInstallPage::onWorkerFinished()
@@ -263,11 +268,8 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
     m_progress->setValue(progress);
 
-    if (!m_workerStarted)
-    {
-        m_workerStarted = true;
-        showInfo();
-    }
+    if (progress == m_progress->maximum())
+        QTimer::singleShot(1, this, &SingleInstallPage::onWorkerFinished);
 }
 
 void SingleInstallPage::setPackageInfo()
