@@ -76,8 +76,13 @@ void FileChooseWidget::dragEnterEvent(QDragEnterEvent *e)
         return e->ignore();
 
     for (const auto &item : mime->urls())
-        if (item.path().endsWith(".deb"))
+    {
+        const QFileInfo info(item.path());
+        if (info.isDir())
             return e->accept();
+        if (info.isFile() && info.suffix() == "deb")
+            return e->accept();
+    }
 
     e->ignore();
 }
@@ -102,7 +107,11 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
         if (info.isFile() && info.suffix() == "deb")
             file_list << local_path;
         else if (info.isDir())
-            file_list << QDir(local_path).entryList(QStringList() << "*.deb", QDir::Files);
+        {
+            const auto dir = info.dir();
+            for (auto deb : QDir(local_path).entryList(QStringList() << "*.deb", QDir::Files))
+                file_list << dir.absoluteFilePath(deb);
+        }
     }
 
     emit packagesSelected(file_list);

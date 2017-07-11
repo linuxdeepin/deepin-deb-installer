@@ -22,6 +22,7 @@ public:
 private slots:
     void onWorkerStarted();
     void onWorkerFinshed();
+    void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);
 
     void showInfo();

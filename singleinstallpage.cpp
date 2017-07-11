@@ -83,18 +83,22 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     m_installButton->setText(tr("Install"));
     m_installButton->setFixedSize(120, 36);
+    m_installButton->setVisible(false);
     m_uninstallButton->setText(tr("Remove"));
     m_uninstallButton->setFixedSize(120, 36);
+    m_uninstallButton->setVisible(false);
     m_uninstallButton->setStyleSheet("QPushButton {"
                                      "color: #303030;"
                                      "}");
     m_reinstallButton->setText(tr("Reinstall"));
     m_reinstallButton->setFixedSize(120, 36);
+    m_reinstallButton->setVisible(false);
     m_reinstallButton->setStyleSheet("QPushButton {"
                                      "color: #303030;"
                                      "}");
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setFixedSize(120, 36);
+    m_confirmButton->setVisible(false);
     m_confirmButton->setStyleSheet("QPushButton {"
                                    "color: #2ca7f8;"
                                    "}"
@@ -157,6 +161,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     m_itemInfoWidget->setLayout(itemLayout);
     m_itemInfoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_itemInfoWidget->setVisible(false);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_itemInfoWidget);
@@ -181,7 +186,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::uninstallCurrentPackage);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(model, &DebListModel::appendOutputInfo, m_workerInfomation, &QTextEdit::append);
+    connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
     connect(model, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
@@ -226,6 +231,11 @@ void SingleInstallPage::showInfo()
     m_confirmButton->setVisible(false);
 }
 
+void SingleInstallPage::onOutputAvailable(const QString &output)
+{
+    m_workerInfomation->append(output.trimmed());
+}
+
 void SingleInstallPage::onWorkerFinished()
 {
     m_progress->setVisible(false);
@@ -268,6 +278,7 @@ void SingleInstallPage::setPackageInfo()
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
 
+    m_itemInfoWidget->setVisible(true);
     m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());

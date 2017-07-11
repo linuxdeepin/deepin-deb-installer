@@ -63,7 +63,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         DebFile *p = new DebFile(package);
         if (!p->isValid())
         {
-            qWarning() << "package invalid: " << p->filePath();
+            qWarning() << "package invalid: " << package;
 
             delete p;
             continue;

@@ -81,7 +81,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(model, &DebListModel::workerStarted, this, &MultipleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::workerFinished, this, &MultipleInstallPage::onWorkerFinshed);
     connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
-    connect(model, &DebListModel::appendOutputInfo, m_infoArea, &QTextEdit::append);
+    connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
 }
 
 void MultipleInstallPage::onWorkerStarted()
@@ -96,6 +96,11 @@ void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
     m_installProgress->setVisible(false);
+}
+
+void MultipleInstallPage::onOutputAvailable(const QString &output)
+{
+    m_infoArea->append(output.trimmed());
 }
 
 void MultipleInstallPage::onProgressChanged(const int progress)

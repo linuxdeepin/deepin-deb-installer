@@ -32,6 +32,7 @@ private slots:
     void hideInfomation();
 
     void showInfo();
+    void onOutputAvailable(const QString &output);
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
 
