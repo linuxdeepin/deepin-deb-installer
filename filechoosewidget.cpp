@@ -108,9 +108,8 @@ void FileChooseWidget::dropEvent(QDropEvent *e)
             file_list << local_path;
         else if (info.isDir())
         {
-            const auto dir = info.dir();
-            for (auto deb : QDir(local_path).entryList(QStringList() << "*.deb", QDir::Files))
-                file_list << dir.absoluteFilePath(deb);
+            for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
+                file_list << deb.absoluteFilePath();
         }
     }
 
