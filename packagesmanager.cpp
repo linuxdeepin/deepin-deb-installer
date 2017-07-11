@@ -21,6 +21,19 @@ QString relationName(const RelationType type)
     return QString();
 }
 
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch)
+{
+    const QString format = ":%1";
+
+    if (annotation == "native" || annotation == "any")
+        return QString();
+
+    if (annotation.isEmpty())
+        return format.arg(debArch);
+    else
+        return format.arg(annotation);
+}
+
 bool dependencyVersionMatch(const int result, const RelationType relation)
 {
     switch (relation)
@@ -98,6 +111,7 @@ int PackagesManager::packageDependsStatus(const int index)
         return m_packageDependsStatus[index];
 
     DebFile *deb = m_preparedPackages[index];
+    const QString architecture = deb->architecture();
 
     int ret = DebListModel::DependsOk;
 
@@ -108,7 +122,7 @@ int PackagesManager::packageDependsStatus(const int index)
         int tr = DebListModel::DependsBreak;
         for (auto const &info : item)
         {
-            const int r = checkDependsPackageStatus(info);
+            const int r = checkDependsPackageStatus(architecture, info);
             tr = std::min(r, tr);
         }
         ret = std::max(tr, ret);
@@ -144,14 +158,20 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
     Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[index];
 
+    const QString debArch = deb->architecture();
+
     const auto &depends = deb->depends();
     for (auto const &item : depends)
     {
-        Package *dep = b->package(item.first().packageName());
+        const auto &info = item.first();
+        const QString archAnnotation = info.multiArchAnnotation();
+        const QString arch = resolvMultiArchAnnotation(archAnnotation, debArch);
+
+        Package *dep = b->package(info.packageName() + arch);
         if (!dep->installedVersion().isEmpty())
             continue;
 
-        availablePackages << dep->name();
+        availablePackages << dep->name() + arch;
     }
 
     return availablePackages;
@@ -167,15 +187,18 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
-int PackagesManager::checkDependsPackageStatus(const DependencyInfo &dependencyInfo)
+int PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
 {
+    const QString arch = resolvMultiArchAnnotation(dependencyInfo.multiArchAnnotation(), architecture);
+
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
              << dependencyInfo.packageName()
+             << arch
              << relationName(dependencyInfo.relationType())
              << dependencyInfo.packageVersion();
 
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(dependencyInfo.packageName());
+    Package *p = b->package(dependencyInfo.packageName() + arch);
 
     // package not found
     if (!p)

@@ -29,7 +29,7 @@ public:
     QApt::Backend * const backend() const { return m_backendFuture.result(); }
 
 private:
-    int checkDependsPackageStatus(const QApt::DependencyInfo &dependencyInfo);
+    int checkDependsPackageStatus(const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
