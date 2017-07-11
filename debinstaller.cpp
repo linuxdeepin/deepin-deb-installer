@@ -85,6 +85,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_centralLayout->addWidget(singlePage);
     } else {
         // multiple packages install
+        setTitle(tr("Bulk Install"));
+
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
 
         m_centralLayout->addWidget(multiplePage);

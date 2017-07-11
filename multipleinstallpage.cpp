@@ -60,12 +60,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    QLabel *topTips = new QLabel;
-    topTips->setText(tr("Bulk Install"));
-    topTips->setAlignment(Qt::AlignCenter);
-
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(topTips);
     centralLayout->addWidget(m_appsView);
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
