@@ -311,6 +311,10 @@ void DebListModel::installNextDeb()
         connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
     }
 
+    // NOTE: DO NOT remove this.
+    // see: https://bugs.kde.org/show_bug.cgi?id=382272
+    trans->setLocale(".UTF-8");
+
     m_currentTransaction = trans;
     m_currentTransaction->run();
 }
