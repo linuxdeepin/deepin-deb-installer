@@ -23,15 +23,19 @@ QString relationName(const RelationType type)
 
 QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch)
 {
-    const QString format = ":%1";
-
     if (annotation == "native" || annotation == "any")
         return QString();
 
+    QString arch;
     if (annotation.isEmpty())
-        return format.arg(debArch);
+        arch = debArch;
     else
-        return format.arg(annotation);
+        arch = annotation;
+
+    if (!arch.startsWith(':'))
+        return arch.prepend(':');
+    else
+        return arch;
 }
 
 bool dependencyVersionMatch(const int result, const RelationType relation)
@@ -110,22 +114,38 @@ int PackagesManager::packageDependsStatus(const int index)
     if (m_packageDependsStatus.contains(index))
         return m_packageDependsStatus[index];
 
+//    Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[index];
     const QString architecture = deb->architecture();
 
     int ret = DebListModel::DependsOk;
 
+    // conflicts
+//    qDebug() << "conflicts:";
+//    const auto &conflicts = deb->conflicts();
+//    for (auto const &item : conflicts)
+//    {
+//        const auto conflict_package = item.first();
+//        const auto package_name = conflict_package.packageName() +
+//                                  resolvMultiArchAnnotation(conflict_package.multiArchAnnotation(), architecture);
+
+//        qDebug() << package_name;
+//        Package *p = b->package(package_name);
+//        if (p && p->isInstalled())
+//        {
+//            ret = DebListModel::DependsBreak;
+//            break;
+//        }
+//    }
+
     qDebug() << "depends:";
     const auto &depends = deb->depends();
     for (auto const &item : depends)
     {
-        int tr = DebListModel::DependsBreak;
-        for (auto const &info : item)
-        {
-            const int r = checkDependsPackageStatus(architecture, info);
-            tr = std::min(r, tr);
-        }
-        ret = std::max(tr, ret);
+        const auto &info = item.first();
+        const int r = checkDependsPackageStatus(architecture, info);
+
+        ret = std::max(r, ret);
         if (ret == DebListModel::DependsBreak)
             break;
     }
@@ -202,7 +222,10 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
 
     // package not found
     if (!p)
+    {
+        qDebug() << "depends break because package" << dependencyInfo.packageName() + arch << "not available";
         return DebListModel::DependsBreak;
+    }
 
     if (dependencyInfo.packageVersion().isEmpty())
         return DebListModel::DependsOk;
@@ -216,12 +239,37 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
         if (dependencyVersionMatch(result, relation))
             return DebListModel::DependsOk;
         else
+        {
+            qDebug() << "depends break by" << p->name() << arch << dependencyInfo.packageVersion();
+            qDebug() << "installed version not match" << installedVersion;
             return DebListModel::DependsBreak;
+        }
     } else {
         const int result = Package::compareVersion(p->version(), dependencyInfo.packageVersion());
-        if (dependencyVersionMatch(result, relation))
-            return DebListModel::DependsAvailable;
-        else
+        if (!dependencyVersionMatch(result, relation))
+        {
+            qDebug() << "depends break by" << p->name() << arch << dependencyInfo.packageVersion();
+            qDebug() << "available version not match" << p->version();
             return DebListModel::DependsBreak;
+        }
+
+        // now, package dependencies status is available or break,
+        // time to check depends' dependencies
+        const auto &depends = p->depends();
+        for (auto const &item : depends)
+        {
+            const auto &info = item.first();
+            const QString archAnnotation = info.multiArchAnnotation();
+            const QString arch = resolvMultiArchAnnotation(archAnnotation, p->architecture());
+
+            const int r = checkDependsPackageStatus(arch, info);
+            if (r == DebListModel::DependsBreak)
+            {
+                qDebug() << "depends break by direct depends" << p->name() << arch << dependencyInfo.packageVersion();
+                return DebListModel::DependsBreak;
+            }
+        }
+
+        return DebListModel::DependsAvailable;
     }
 }
