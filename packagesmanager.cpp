@@ -85,14 +85,14 @@ int PackagesManager::packageInstallStatus(const int index)
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName);
 
-    int ret;
+    int ret = DebListModel::NotInstalled;
     do {
+        if (!p)
+            break;
+
         const QString installedVersion = p->installedVersion();
         if (installedVersion.isEmpty())
-        {
-            ret = DebListModel::NotInstalled;
             break;
-        }
 
         const QString packageVersion = m_preparedPackages[index]->version();
         const int result = Package::compareVersion(packageVersion, installedVersion);
