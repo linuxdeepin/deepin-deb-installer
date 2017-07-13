@@ -3,7 +3,7 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-deb-installer]
+[deepin-package-manager]
 file_filter = translations/deepin-deb-installer_<lang>.ts
 source_file = translations/deepin-deb-installer.ts
 source_lang = en
