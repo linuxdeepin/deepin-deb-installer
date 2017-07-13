@@ -42,6 +42,7 @@ const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const 
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent),
 
+      m_operate(Install),
       m_workerStarted(false),
       m_packagesModel(model),
 
@@ -197,11 +198,13 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
 void SingleInstallPage::install()
 {
+    m_operate = Install;
     m_packagesModel->installAll();
 }
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
 }
 
@@ -251,18 +254,23 @@ void SingleInstallPage::onWorkerFinished()
     m_confirmButton->setVisible(true);
     m_confirmButton->setFocus();
 
-    // TODO: success or fail
     const QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
     if (stat == DebListModel::Success)
     {
-        m_tipsLabel->setText(tr("Installed successfully"));
+        if (m_operate == Install)
+            m_tipsLabel->setText(tr("Installed successfully"));
+        else
+            m_tipsLabel->setText(tr("Uninstalled successfully"));
         m_tipsLabel->setStyleSheet("QLabel {"
                                    "color: #47790c;"
                                    "}");
     } else if (stat == DebListModel::Failed) {
-        m_tipsLabel->setText(tr("Install Failed"));
+        if (m_operate == Install)
+            m_tipsLabel->setText(tr("Install Failed"));
+        else
+            m_tipsLabel->setText(tr("Uninstall Failed"));
     } else {
         Q_UNREACHABLE();
     }

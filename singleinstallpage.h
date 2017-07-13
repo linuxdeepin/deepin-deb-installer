@@ -22,6 +22,13 @@ public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = 0);
 
 private:
+    enum Operate
+    {
+        Install,
+        Uninstall,
+    };
+
+private:
     void setPackageInfo();
 
 private slots:
@@ -37,6 +44,7 @@ private slots:
     void onWorkerProgressChanged(const int progress);
 
 private:
+    int m_operate;
     bool m_workerStarted;
     DebListModel *m_packagesModel;
     QWidget *m_itemInfoWidget;
