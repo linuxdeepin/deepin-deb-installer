@@ -71,15 +71,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         {
         case DebListModel::Operating:
             painter->setPen(QColor(124, 124, 124));
-            painter->drawText(install_status_rect, "Installing", Qt::AlignVCenter | Qt::AlignRight);
+            painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
             break;
         case DebListModel::Success:
             painter->setPen(QColor(65, 117, 5));
-            painter->drawText(install_status_rect, "Installed", Qt::AlignVCenter | Qt::AlignRight);
+            painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
             break;
         default:
             painter->setPen(QColor(255, 109, 109));
-            painter->drawText(install_status_rect, "Failed", Qt::AlignVCenter | Qt::AlignRight);
+            painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
             break;
         }
     }
