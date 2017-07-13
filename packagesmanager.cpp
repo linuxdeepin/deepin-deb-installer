@@ -32,7 +32,7 @@ QString resolvMultiArchAnnotation(const QString &annotation, const QString &debA
     else
         arch = annotation;
 
-    if (!arch.startsWith(':'))
+    if (!arch.startsWith(':') && !arch.isEmpty())
         return arch.prepend(':');
     else
         return arch;
@@ -139,6 +139,7 @@ int PackagesManager::packageDependsStatus(const int index)
 //    }
 
     qDebug() << "depends:";
+    qDebug() << "Check for package" << deb->packageName();
     const auto &depends = deb->depends();
     for (auto const &item : depends)
     {
@@ -149,6 +150,7 @@ int PackagesManager::packageDependsStatus(const int index)
         if (ret == DebListModel::DependsBreak)
             break;
     }
+    qDebug() << "Check finished for package" << deb->packageName();
 
     m_packageDependsStatus[index] = ret;
 
@@ -210,20 +212,23 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 int PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
 {
     const QString arch = resolvMultiArchAnnotation(dependencyInfo.multiArchAnnotation(), architecture);
+    const QString package_name = dependencyInfo.packageName();
 
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
-             << dependencyInfo.packageName()
+             << package_name
              << arch
              << relationName(dependencyInfo.relationType())
              << dependencyInfo.packageVersion();
 
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(dependencyInfo.packageName() + arch);
-
+    Package *p = b->package(package_name);
     // package not found
+    if (p && !p->isForeignArch())
+        p = b->package(package_name + arch);
+
     if (!p)
     {
-        qDebug() << "depends break because package" << dependencyInfo.packageName() + arch << "not available";
+        qDebug() << "depends break because package" << package_name + arch << "not available";
         return DebListModel::DependsBreak;
     }
 
@@ -256,11 +261,11 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
         // now, package dependencies status is available or break,
         // time to check depends' dependencies
         const auto &depends = p->depends();
+        qDebug() << "Check for package" << p->name();
         for (auto const &item : depends)
         {
             const auto &info = item.first();
-            const QString archAnnotation = info.multiArchAnnotation();
-            const QString arch = resolvMultiArchAnnotation(archAnnotation, p->architecture());
+            const QString arch = p->isForeignArch() ? QString() : resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture());
 
             const int r = checkDependsPackageStatus(arch, info);
             if (r == DebListModel::DependsBreak)
@@ -269,6 +274,7 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
                 return DebListModel::DependsBreak;
             }
         }
+        qDebug() << "Check finshed for package" << p->name();
 
         return DebListModel::DependsAvailable;
     }
