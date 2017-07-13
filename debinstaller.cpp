@@ -29,7 +29,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 
     setLayout(m_centralLayout);
     setFixedSize(480, 380);
-    setWindowTitle(tr("Deepin Deb Installer"));
+    setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
     setTitleIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
     setTitle(QString());

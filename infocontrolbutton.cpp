@@ -14,7 +14,7 @@ InfoControlButton::InfoControlButton(QWidget *parent)
     m_arrowIcon->setAlignment(Qt::AlignCenter);
     m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
     m_tipsText->setAlignment(Qt::AlignCenter);
-    m_tipsText->setText(tr("Show Information"));
+    m_tipsText->setText(tr("Display installation process"));
     m_tipsText->setStyleSheet("QLabel {"
                               "color: #6a6a6a;"
                               "}");
@@ -48,9 +48,9 @@ void InfoControlButton::onMouseRelease()
     if (!m_expand)
     {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
-        m_tipsText->setText(tr("Show Information"));
+        m_tipsText->setText(tr("Display installation process"));
     } else {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_down.png"));
-        m_tipsText->setText(tr("Hide Information"));
+        m_tipsText->setText(tr("Collapse"));
     }
 }

@@ -50,7 +50,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     split_line->setAlignment(Qt::AlignCenter);
 
     m_fileChooseBtn = new DLinkButton;
-    m_fileChooseBtn->setText(tr("Choose Package"));
+    m_fileChooseBtn->setText(tr("Select File"));
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addStretch();

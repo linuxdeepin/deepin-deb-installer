@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     DApplication app(argc, argv);
     app.setOrganizationName("deepin");
-    app.setApplicationName("deepin-deb-installer");
+    app.setApplicationName("Deepin Package Manager");
     app.setApplicationVersion("1.0");
     app.setProductIcon(QPixmap(":/images/icon.png"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     // command line arguments
     QCommandLineParser parser;
-    parser.setApplicationDescription("Deepin deb package installer.");
+    parser.setApplicationDescription("Deepin deb package manager.");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("filename", QApplication::translate("main", "Deb package path."), "file [file..]");
