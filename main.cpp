@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion("1.0");
     app.setProductIcon(QPixmap(":/images/icon.png"));
-    app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin/");
+    app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setApplicationDescription(QApplication::translate("main", "Deepin Package Manager is used to help users install and remove local software, supports to bulk install."));
     app.loadTranslator();
     app.setTheme("light");
