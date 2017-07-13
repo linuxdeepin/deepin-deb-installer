@@ -234,6 +234,10 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 {
     m_workerInfomation->append(output.trimmed());
 
+    // pump progress
+    if (m_progress->value() < 90)
+        m_progress->setValue(m_progress->value() + 10);
+
     if (!m_workerStarted)
     {
         m_workerStarted = true;
@@ -266,10 +270,13 @@ void SingleInstallPage::onWorkerFinished()
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
+    if (progress < m_progress->value())
+        return;
+
     m_progress->setValue(progress);
 
     if (progress == m_progress->maximum())
-        QTimer::singleShot(1, this, &SingleInstallPage::onWorkerFinished);
+        QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
 }
 
 void SingleInstallPage::setPackageInfo()
