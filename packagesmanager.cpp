@@ -99,7 +99,7 @@ int PackagesManager::packageInstallStatus(const int index)
 
         if (result == 0)
             ret = DebListModel::InstalledSameVersion;
-        else if (result > 0)
+        else if (result < 0)
             ret = DebListModel::InstalledLaterVersion;
         else
             ret = DebListModel::InstalledEarlierVersion;
