@@ -219,7 +219,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
 
     if (m_packagesManager->packageDependsStatus(idx) == DependsBreak)
-        return tr("Dependencies Break");
+        return tr("Broken Dependencies");
 
     return workerErrorString(CommitError);
 }

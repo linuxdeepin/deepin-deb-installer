@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("Deepin deb package manager.");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("filename", QApplication::translate("main", "Deb package path."), "file [file..]");
+    parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
 
     parser.process(app);
 

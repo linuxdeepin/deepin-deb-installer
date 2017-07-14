@@ -268,7 +268,7 @@ void SingleInstallPage::onWorkerFinished()
                                    "}");
     } else if (stat == DebListModel::Failed) {
         if (m_operate == Install)
-            m_tipsLabel->setText(tr("Install Failed"));
+            m_tipsLabel->setText(tr("Installation Failed"));
         else
             m_tipsLabel->setText(tr("Uninstall Failed"));
     } else {
@@ -323,7 +323,7 @@ void SingleInstallPage::setPackageInfo()
         else if (installStat == DebListModel::InstalledEarlierVersion)
             m_tipsLabel->setText(tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         else if (installStat == DebListModel::InstalledLaterVersion)
-            m_tipsLabel->setText(tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_tipsLabel->setText(tr("Newer version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         else
             Q_UNREACHABLE();
 
