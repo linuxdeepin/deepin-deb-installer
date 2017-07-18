@@ -21,9 +21,12 @@ QString relationName(const RelationType type)
     return QString();
 }
 
-QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch)
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType = InvalidMultiArchType)
 {
     if (annotation == "native" || annotation == "any")
+        return QString();
+
+    if (multiArchType == MultiArchForeign)
         return QString();
 
     QString arch;
@@ -76,6 +79,34 @@ bool PackagesManager::isBackendReady()
     return m_backendFuture.isFinished();
 }
 
+bool PackagesManager::isPackageConflict(const QString &arch, Package *package)
+{
+    qDebug() << "check conflict for package" << package->name();
+
+    const bool ret = !isConflictSatisfy(arch, package->conflicts());
+
+    qDebug() << "check conflict finished" << package->name() << bool(ret);
+
+    return ret;
+}
+
+bool PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
+{
+    for (const auto &conflict_list : conflicts)
+    {
+        for (const auto &conflict : conflict_list)
+        {
+            const QString name = conflict.packageName();
+            Package *p = packageWithArch(name, arch);
+
+            if (p && p->isInstalled())
+                return false;
+        }
+    }
+
+    return true;
+}
+
 int PackagesManager::packageInstallStatus(const int index)
 {
     if (m_packageInstallStatus.contains(index))
@@ -121,40 +152,28 @@ int PackagesManager::packageDependsStatus(const int index)
     int ret = DebListModel::DependsOk;
 
     // conflicts
-//    qDebug() << "conflicts:";
-//    const auto &conflicts = deb->conflicts();
-//    for (auto const &item : conflicts)
-//    {
-//        const auto conflict_package = item.first();
-//        const auto package_name = conflict_package.packageName() +
-//                                  resolvMultiArchAnnotation(conflict_package.multiArchAnnotation(), architecture);
-
-//        qDebug() << package_name;
-//        Package *p = b->package(package_name);
-//        if (p && p->isInstalled())
-//        {
-//            ret = DebListModel::DependsBreak;
-//            break;
-//        }
-//    }
-
-    qDebug() << "depends:";
-    qDebug() << "Check for package" << deb->packageName();
-    const auto &depends = deb->depends();
-    for (auto const &item : depends)
+    if (!isConflictSatisfy(architecture, deb->conflicts()))
     {
-        const auto &info = item.first();
-        const int r = checkDependsPackageStatus(architecture, info);
+        qDebug() << "depends break because conflict" << deb->packageName();
+        ret = DebListModel::DependsBreak;
+    } else {
+        qDebug() << "depends:";
+        qDebug() << "Check for package" << deb->packageName();
+        const auto &depends = deb->depends();
+        for (auto const &item : depends)
+        {
+            const auto &info = item.first();
+            const int r = checkDependsPackageStatus(architecture, info);
 
-        ret = std::max(r, ret);
-        if (ret == DebListModel::DependsBreak)
-            break;
+            ret = std::max(r, ret);
+            if (ret == DebListModel::DependsBreak)
+                break;
+        }
     }
-    qDebug() << "Check finished for package" << deb->packageName();
+
+    qDebug() << "Check finished for package" << deb->packageName() << ret;
 
     m_packageDependsStatus[index] = ret;
-
-    qDebug() << "result: " << ret;
 
     return ret;
 }
@@ -211,29 +230,21 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 
 int PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
 {
-    const QString arch = resolvMultiArchAnnotation(dependencyInfo.multiArchAnnotation(), architecture);
     const QString package_name = dependencyInfo.packageName();
 
-    qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
-             << package_name
-             << arch
-             << relationName(dependencyInfo.relationType())
-             << dependencyInfo.packageVersion();
-
-    Backend *b = m_backendFuture.result();
-    Package *p = b->package(package_name);
-
-    const auto multiArchType = p->multiArchType();
-
-    // package not found
-    if (p && multiArchType != MultiArchForeign)
-        p = b->package(package_name + arch);
+    Package *p = packageWithArch(package_name, architecture, dependencyInfo.multiArchAnnotation());
 
     if (!p)
     {
-        qDebug() << "depends break because package" << package_name + arch << "not available";
+        qDebug() << "depends break because package" << package_name << "not available";
         return DebListModel::DependsBreak;
     }
+
+    qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
+             << package_name
+             << p->architecture()
+             << relationName(dependencyInfo.relationType())
+             << dependencyInfo.packageVersion();
 
     if (dependencyInfo.packageVersion().isEmpty())
         return DebListModel::DependsOk;
@@ -248,7 +259,7 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
             return DebListModel::DependsOk;
         else
         {
-            qDebug() << "depends break by" << p->name() << arch << dependencyInfo.packageVersion();
+            qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "installed version not match" << installedVersion;
             return DebListModel::DependsBreak;
         }
@@ -256,19 +267,26 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
         const int result = Package::compareVersion(p->version(), dependencyInfo.packageVersion());
         if (!dependencyVersionMatch(result, relation))
         {
-            qDebug() << "depends break by" << p->name() << arch << dependencyInfo.packageVersion();
+            qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "available version not match" << p->version();
+            return DebListModel::DependsBreak;
+        }
+
+        // let's check conflicts
+        if (isPackageConflict(architecture, p))
+        {
+            qDebug() << "depends break because conflict" << p->name();
             return DebListModel::DependsBreak;
         }
 
         // now, package dependencies status is available or break,
         // time to check depends' dependencies
         const auto &depends = p->depends();
-        qDebug() << "Check for package" << p->name();
+        qDebug() << "Check indirect dependencies for package" << p->name();
         for (auto const &item : depends)
         {
             const auto &info = item.first();
-            const QString arch = p->isForeignArch() ? QString() : resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture());
+            const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(), p->multiArchType());
 
             const int r = checkDependsPackageStatus(arch, info);
             if (r == DebListModel::DependsBreak)
@@ -281,4 +299,19 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
 
         return DebListModel::DependsAvailable;
     }
+}
+
+Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation)
+{
+    Backend *b = m_backendFuture.result();
+    Package *p = b->package(packageName);
+
+    if (!p)
+        return nullptr;
+
+    const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
+    if (!arch.isEmpty())
+        return b->package(packageName + arch);
+
+    return p;
 }

@@ -18,6 +18,8 @@ public:
     explicit PackagesManager(QObject *parent = 0);
 
     bool isBackendReady();
+    bool isPackageConflict(const QString &arch, QApt::Package *package);
+    bool isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
     int packageInstallStatus(const int index);
     int packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);
@@ -30,6 +32,7 @@ public:
 
 private:
     int checkDependsPackageStatus(const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
+    QApt::Package * packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
