@@ -80,7 +80,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);
     case PackageDependsStatusRole:
-        return m_packagesManager->packageDependsStatus(r);
+        return m_packagesManager->packageDependsStatus(r).status;
     case PackageInstalledVersionRole:
         return m_packagesManager->packageInstalledVersion(r);
     case PackageAvailableDependsListRole:
@@ -218,7 +218,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
 
-    if (m_packagesManager->packageDependsStatus(idx) == DependsBreak)
+    if (m_packagesManager->packageDependsStatus(idx).isBreak())
         return tr("Broken Dependencies");
 
     return workerErrorString(CommitError);
@@ -283,13 +283,13 @@ void DebListModel::installNextDeb()
     Transaction *trans = nullptr;
 
     // check available dependencies
-    const int dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
-    if (dependsStat == DependsBreak)
+    const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+    if (dependsStat.isBreak())
     {
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
         return;
-    } else if (dependsStat == DependsAvailable) {
+    } else if (dependsStat.isAvailable()) {
         const QStringList availableDepends = m_packagesManager->packageAvailableDependsList(m_operatingIndex);
         for (auto const &p : availableDepends)
             backend->markPackageForInstall(p);

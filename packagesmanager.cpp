@@ -140,7 +140,7 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
-int PackagesManager::packageDependsStatus(const int index)
+PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index))
         return m_packageDependsStatus[index];
@@ -149,13 +149,13 @@ int PackagesManager::packageDependsStatus(const int index)
     DebFile *deb = m_preparedPackages[index];
     const QString architecture = deb->architecture();
 
-    int ret = DebListModel::DependsOk;
+    PackageDependsStatus ret;
 
     // conflicts
     if (!isConflictSatisfy(architecture, deb->conflicts()))
     {
         qDebug() << "depends break because conflict" << deb->packageName();
-        ret = DebListModel::DependsBreak;
+        ret.status = DebListModel::DependsBreak;
     } else {
         qDebug() << "depends:";
         qDebug() << "Check for package" << deb->packageName();
@@ -163,15 +163,15 @@ int PackagesManager::packageDependsStatus(const int index)
         for (auto const &item : depends)
         {
             const auto &info = item.first();
-            const int r = checkDependsPackageStatus(architecture, info);
+            const auto r = checkDependsPackageStatus(architecture, info);
 
-            ret = std::max(r, ret);
-            if (ret == DebListModel::DependsBreak)
+            ret.max(r);
+            if (ret.isBreak())
                 break;
         }
     }
 
-    qDebug() << "Check finished for package" << deb->packageName() << ret;
+    qDebug() << "Check finished for package" << deb->packageName() << ret.status;
 
     m_packageDependsStatus[index] = ret;
 
@@ -193,7 +193,7 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 const QStringList PackagesManager::packageAvailableDependsList(const int index)
 {
     Q_ASSERT(m_packageDependsStatus.contains(index));
-    Q_ASSERT(m_packageDependsStatus[index] == DebListModel::DependsAvailable);
+    Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
     QStringList availablePackages;
     Backend *b = m_backendFuture.result();
@@ -228,7 +228,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
-int PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
+const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
 {
     const QString package_name = dependencyInfo.packageName();
 
@@ -236,8 +236,8 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
 
     if (!p)
     {
-        qDebug() << "depends break because package" << package_name << "not available";
-        return DebListModel::DependsBreak;
+        qDebug() << "depends break because package" << p->name() << "not available";
+        PackageDependsStatus::ok();
     }
 
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
@@ -247,7 +247,7 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
              << dependencyInfo.packageVersion();
 
     if (dependencyInfo.packageVersion().isEmpty())
-        return DebListModel::DependsOk;
+        return PackageDependsStatus::ok();
 
     const RelationType relation = dependencyInfo.relationType();
     const QString &installedVersion = p->installedVersion();
@@ -256,12 +256,12 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
     {
         const int result = Package::compareVersion(installedVersion, dependencyInfo.packageVersion());
         if (dependencyVersionMatch(result, relation))
-            return DebListModel::DependsOk;
+            return PackageDependsStatus::ok();
         else
         {
             qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "installed version not match" << installedVersion;
-            return DebListModel::DependsBreak;
+            return PackageDependsStatus::_break(p);
         }
     } else {
         const int result = Package::compareVersion(p->version(), dependencyInfo.packageVersion());
@@ -269,14 +269,14 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
         {
             qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "available version not match" << p->version();
-            return DebListModel::DependsBreak;
+            return PackageDependsStatus::_break(p);
         }
 
         // let's check conflicts
         if (isPackageConflict(architecture, p))
         {
             qDebug() << "depends break because conflict" << p->name();
-            return DebListModel::DependsBreak;
+            return PackageDependsStatus::_break(p);
         }
 
         // now, package dependencies status is available or break,
@@ -288,16 +288,16 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
             const auto &info = item.first();
             const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(), p->multiArchType());
 
-            const int r = checkDependsPackageStatus(arch, info);
-            if (r == DebListModel::DependsBreak)
+            const auto r = checkDependsPackageStatus(arch, info);
+            if (r.isBreak())
             {
                 qDebug() << "depends break by direct depends" << p->name() << arch << dependencyInfo.packageVersion();
-                return DebListModel::DependsBreak;
+                return PackageDependsStatus::_break(p);
             }
         }
         qDebug() << "Check finshed for package" << p->name();
 
-        return DebListModel::DependsAvailable;
+        return PackageDependsStatus::available(p);
     }
 }
 
@@ -314,4 +314,58 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         return b->package(packageName + arch);
 
     return p;
+}
+
+PackageDependsStatus PackageDependsStatus::ok()
+{
+    return { DebListModel::DependsOk, nullptr };
+}
+
+PackageDependsStatus PackageDependsStatus::available(Package *p)
+{
+    return { DebListModel::DependsAvailable, p };
+}
+
+PackageDependsStatus PackageDependsStatus::_break(Package *p)
+{
+    return { DebListModel::DependsBreak, p };
+}
+
+PackageDependsStatus::PackageDependsStatus() :
+    PackageDependsStatus(DebListModel::DependsOk, nullptr)
+{
+
+}
+
+PackageDependsStatus::PackageDependsStatus(const int status, Package *package) :
+    status(status),
+    package(package)
+{
+
+}
+
+PackageDependsStatus PackageDependsStatus::operator =(const PackageDependsStatus &other)
+{
+    status = other.status;
+    package = other.package;
+
+    return *this;
+}
+
+PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other)
+{
+    if (other.status > status)
+        *this = other;
+
+    return *this;
+}
+
+bool PackageDependsStatus::isBreak() const
+{
+    return status == DebListModel::DependsBreak;
+}
+
+bool PackageDependsStatus::isAvailable() const
+{
+    return status == DebListModel::DependsAvailable;
 }
