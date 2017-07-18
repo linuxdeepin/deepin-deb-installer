@@ -222,8 +222,11 @@ int PackagesManager::checkDependsPackageStatus(const QString &architecture, cons
 
     Backend *b = m_backendFuture.result();
     Package *p = b->package(package_name);
+
+    const auto multiArchType = p->multiArchType();
+
     // package not found
-    if (p && !p->isForeignArch())
+    if (p && multiArchType != MultiArchForeign)
         p = b->package(package_name + arch);
 
     if (!p)
