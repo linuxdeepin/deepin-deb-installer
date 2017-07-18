@@ -334,7 +334,7 @@ void SingleInstallPage::setPackageInfo()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak)
     {
-        m_tipsLabel->setText(tr("Broken Dependencies"));
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
