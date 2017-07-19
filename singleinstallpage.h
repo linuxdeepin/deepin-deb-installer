@@ -21,6 +21,12 @@ class SingleInstallPage : public QWidget
 public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = 0);
 
+signals:
+    void requestUninstallConfirm() const;
+
+public slots:
+    void uninstallCurrentPackage();
+
 private:
     enum Operate
     {
@@ -33,7 +39,6 @@ private:
 
 private slots:
     void install();
-    void uninstallCurrentPackage();
 
     void showInfomation();
     void hideInfomation();

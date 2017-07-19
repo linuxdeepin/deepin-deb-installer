@@ -7,6 +7,7 @@
 
 class FileChooseWidget;
 class DebListModel;
+class SingleInstallPage;
 class DebInstaller : public Dtk::Widget::DWindow
 {
     Q_OBJECT
@@ -20,8 +21,12 @@ protected:
 
 private slots:
     void onPackagesSelected(const QStringList &packages);
+    void showUninstallConfirmPage();
+    void onUninstallAccepted();
+    void onUninstallCalceled();
 
-    void onOutputPrinted(const QString &output) const;
+private:
+    SingleInstallPage *backToSinglePage();
 
 private:
     DebListModel *m_fileListModel;

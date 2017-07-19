@@ -3,6 +3,7 @@
 #include "singleinstallpage.h"
 #include "multipleinstallpage.h"
 #include "deblistmodel.h"
+#include "uninstallconfirmpage.h"
 
 #include <QKeyEvent>
 #include <QGuiApplication>
@@ -36,7 +37,6 @@ DebInstaller::DebInstaller(QWidget *parent)
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
-    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, &DebInstaller::onOutputPrinted);
 }
 
 DebInstaller::~DebInstaller()
@@ -82,6 +82,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         // single package install
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
 
+        connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
+
         m_centralLayout->addWidget(singlePage);
     } else {
         // multiple packages install
@@ -96,7 +98,39 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     m_centralLayout->setCurrentIndex(1);
 }
 
-void DebInstaller::onOutputPrinted(const QString &output) const
+void DebInstaller::showUninstallConfirmPage()
 {
-    qDebug() << output;
+    Q_ASSERT(m_centralLayout->count() == 2);
+
+    UninstallConfirmPage *p = new UninstallConfirmPage;
+    m_centralLayout->addWidget(p);
+    m_centralLayout->setCurrentIndex(2);
+
+    connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);
+    connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCalceled);
+}
+
+void DebInstaller::onUninstallAccepted()
+{
+    SingleInstallPage *p = backToSinglePage();
+
+    p->uninstallCurrentPackage();
+}
+
+void DebInstaller::onUninstallCalceled()
+{
+    backToSinglePage();
+}
+
+SingleInstallPage *DebInstaller::backToSinglePage()
+{
+    Q_ASSERT(m_centralLayout->count() == 3);
+    QWidget *confirmPage = m_centralLayout->widget(2);
+    m_centralLayout->removeWidget(confirmPage);
+    confirmPage->deleteLater();
+
+    SingleInstallPage *p = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));
+    Q_ASSERT(p);
+
+    return p;
 }
