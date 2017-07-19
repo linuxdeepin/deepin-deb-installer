@@ -226,7 +226,7 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
     if (stat.isBreak())
-        return tr("Broken Dependencies: %1").arg(stat.package->name());
+        return tr("Broken Dependencies: %1").arg(stat.package);
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);

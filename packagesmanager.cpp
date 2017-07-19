@@ -235,7 +235,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
     if (!p)
     {
         qDebug() << "depends break because package" << package_name << "not available";
-        return PackageDependsStatus::_break(p);
+        return PackageDependsStatus::_break(package_name);
     }
 
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
@@ -259,7 +259,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
         {
             qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "installed version not match" << installedVersion;
-            return PackageDependsStatus::_break(p);
+            return PackageDependsStatus::_break(p->name());
         }
     } else {
         const int result = Package::compareVersion(p->version(), dependencyInfo.packageVersion());
@@ -267,14 +267,14 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
         {
             qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "available version not match" << p->version();
-            return PackageDependsStatus::_break(p);
+            return PackageDependsStatus::_break(p->name());
         }
 
         // let's check conflicts
         if (isPackageConflict(architecture, p))
         {
             qDebug() << "depends break because conflict" << p->name();
-            return PackageDependsStatus::_break(p);
+            return PackageDependsStatus::_break(p->name());
         }
 
         // now, package dependencies status is available or break,
@@ -290,12 +290,12 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
             if (r.isBreak())
             {
                 qDebug() << "depends break by direct depends" << p->name() << arch << dependencyInfo.packageVersion();
-                return PackageDependsStatus::_break(p);
+                return PackageDependsStatus::_break(p->name());
             }
         }
         qDebug() << "Check finshed for package" << p->name();
 
-        return PackageDependsStatus::available(p);
+        return PackageDependsStatus::available();
     }
 }
 
@@ -327,26 +327,26 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
 
 PackageDependsStatus PackageDependsStatus::ok()
 {
-    return { DebListModel::DependsOk, nullptr };
+    return { DebListModel::DependsOk, QString() };
 }
 
-PackageDependsStatus PackageDependsStatus::available(Package *p)
+PackageDependsStatus PackageDependsStatus::available()
 {
-    return { DebListModel::DependsAvailable, p };
+    return { DebListModel::DependsAvailable, QString() };
 }
 
-PackageDependsStatus PackageDependsStatus::_break(Package *p)
+PackageDependsStatus PackageDependsStatus::_break(const QString &package)
 {
-    return { DebListModel::DependsBreak, p };
+    return { DebListModel::DependsBreak, package };
 }
 
 PackageDependsStatus::PackageDependsStatus() :
-    PackageDependsStatus(DebListModel::DependsOk, nullptr)
+    PackageDependsStatus(DebListModel::DependsOk, QString())
 {
 
 }
 
-PackageDependsStatus::PackageDependsStatus(const int status, Package *package) :
+PackageDependsStatus::PackageDependsStatus(const int status, const QString &package) :
     status(status),
     package(package)
 {

@@ -11,11 +11,11 @@ class PackageDependsStatus
 {
 public:
     static PackageDependsStatus ok();
-    static PackageDependsStatus available(QApt::Package *p);
-    static PackageDependsStatus _break(QApt::Package *p);
+    static PackageDependsStatus available();
+    static PackageDependsStatus _break(const QString &package);
 
     PackageDependsStatus();
-    PackageDependsStatus(const int status, QApt::Package *package);
+    PackageDependsStatus(const int status, const QString &package);
     PackageDependsStatus operator =(const PackageDependsStatus &other);
 
     PackageDependsStatus max(const PackageDependsStatus &other);
@@ -25,7 +25,7 @@ public:
 
 public:
     int status;
-    QApt::Package *package;
+    QString package;
 };
 
 class DebListModel;
