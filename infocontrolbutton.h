@@ -9,7 +9,7 @@ class InfoControlButton : public QWidget
     Q_OBJECT
 
 public:
-    explicit InfoControlButton(QWidget *parent = 0);
+    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent = 0);
 
 signals:
     void expand();
@@ -23,6 +23,8 @@ private slots:
 
 private:
     bool m_expand;
+    QString m_expandTips;
+    QString m_shrinkTips;
 
     QLabel *m_arrowIcon;
     QLabel *m_tipsText;

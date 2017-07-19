@@ -222,17 +222,32 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     Q_ASSERT(p);
 
     QSet<QString> r { packageName };
+    QQueue<QString> testQueue;
+
     for (const auto &item : p->requiredByList().toSet())
+        testQueue.append(item);
+
+    while (!testQueue.isEmpty())
     {
+        const auto item = testQueue.first();
+        testQueue.pop_front();
+
         if (r.contains(item))
             continue;
 
         Package *p = packageWithArch(item, sysArch);
-
         if (!p || !p->isInstalled())
             continue;
+
         r << item;
-//        r.unite(packageReverseDependsList(item, sysArch));
+
+        // append new reqiureList
+        for (const auto &req : p->requiredByList())
+        {
+            if (r.contains(req) || testQueue.contains(req))
+                continue;
+            testQueue.append(req);
+        }
     }
 
     // remove self

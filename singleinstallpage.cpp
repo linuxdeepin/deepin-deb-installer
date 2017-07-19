@@ -55,7 +55,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_tipsLabel(new QLabel),
       m_progress(new WorkerProgress),
       m_workerInfomation(new QTextEdit),
-      m_infoControlButton(new InfoControlButton),
+      m_infoControlButton(new InfoControlButton(tr("Display installation process"), tr("Collapse"))),
       m_installButton(new QPushButton),
       m_uninstallButton(new QPushButton),
       m_reinstallButton(new QPushButton),

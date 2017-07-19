@@ -4,9 +4,11 @@
 #include <QLabel>
 #include <QPixmap>
 
-InfoControlButton::InfoControlButton(QWidget *parent)
+InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent),
       m_expand(false),
+      m_expandTips(expandTips),
+      m_shrinkTips(shrinkTips),
 
       m_arrowIcon(new QLabel),
       m_tipsText(new QLabel)
@@ -14,7 +16,7 @@ InfoControlButton::InfoControlButton(QWidget *parent)
     m_arrowIcon->setAlignment(Qt::AlignCenter);
     m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
     m_tipsText->setAlignment(Qt::AlignCenter);
-    m_tipsText->setText(tr("Display installation process"));
+    m_tipsText->setText(expandTips);
     m_tipsText->setStyleSheet("QLabel {"
                               "color: #6a6a6a;"
                               "}");
@@ -48,9 +50,9 @@ void InfoControlButton::onMouseRelease()
     if (!m_expand)
     {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
-        m_tipsText->setText(tr("Display installation process"));
+        m_tipsText->setText(m_expandTips);
     } else {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_down.png"));
-        m_tipsText->setText(tr("Collapse"));
+        m_tipsText->setText(m_shrinkTips);
     }
 }
