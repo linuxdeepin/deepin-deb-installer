@@ -26,7 +26,7 @@ InfoControlButton::InfoControlButton(QWidget *parent)
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
-    setFixedSize(120, 25);
+    setFixedSize(200, 25);
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)

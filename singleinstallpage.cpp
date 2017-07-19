@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QApplication>
+#include <QRegularExpression>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -301,9 +302,11 @@ void SingleInstallPage::setPackageInfo()
     m_packageVersion->setText(package->version());
 
     // set package description
+    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
+    const QString description = package->longDescription().replace(multiLine, "\n");
     const QRect boundingRect = QRect(0, 0, m_packageDescription->width(), m_packageDescription->maximumHeight());
     const QFontMetrics fm(m_packageDescription->font());
-    m_packageDescription->setText(holdTextInRect(fm, package->longDescription(), boundingRect));
+    m_packageDescription->setText(holdTextInRect(fm, description, boundingRect));
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
