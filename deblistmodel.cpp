@@ -105,7 +105,7 @@ void DebListModel::installAll()
     m_workerStatus = WorkerProcessing;
     m_operatingIndex = 0;
 
-    emit workerStarted();
+//    emit workerStarted();
 
     // start first
     installNextDeb();
@@ -113,6 +113,7 @@ void DebListModel::installAll()
 
 void DebListModel::uninstallPackage(const int idx)
 {
+    Q_ASSERT(idx == 0);
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
     m_workerStatus = WorkerProcessing;
@@ -125,7 +126,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     // uninstall
     qDebug() << Q_FUNC_INFO << "starting to remove package: " << p->name();
-    emit workerStarted();
+//    emit workerStarted();
 
     refreshOperatingPackageStatus(Operating);
 
@@ -258,7 +259,6 @@ void DebListModel::onDependsInstallTransactionFinished()
     // reset package depends status
     m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
 
-    // record error
     if (ret)
     {
         // record error

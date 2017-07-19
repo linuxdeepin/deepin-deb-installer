@@ -70,7 +70,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 signals:
-    void workerStarted() const;
+//    void workerStarted() const;
     void workerFinished() const;
     void workerProgressChanged(const int progress) const;
     void transactionProgressChanged(const int progress) const;

@@ -269,7 +269,7 @@ void SingleInstallPage::onWorkerFinished()
                                    "}");
     } else if (stat == DebListModel::Failed) {
         if (m_operate == Install)
-            m_tipsLabel->setText(tr("Installation Failed"));
+            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         else
             m_tipsLabel->setText(tr("Uninstall Failed"));
     } else {
@@ -315,7 +315,7 @@ void SingleInstallPage::setPackageInfo()
     const bool installed = installStat != DebListModel::NotInstalled;
     const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
     m_installButton->setVisible(!installed || !installedSameVersion);
-    m_uninstallButton->setVisible(installedSameVersion);
+    m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installedSameVersion);
     m_confirmButton->setVisible(false);
 
