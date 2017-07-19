@@ -171,9 +171,11 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
         }
     }
 
-    qDebug() << "Check finished for package" << deb->packageName() << ret.status;
-
     m_packageDependsStatus[index] = ret;
+
+    qDebug() << "Check finished for package" << deb->packageName() << ret.status;
+    if (ret.status == DebListModel::DependsAvailable)
+        qDebug() << "availble depends:" << packageAvailableDependsList(index);
 
     return ret;
 }
@@ -232,8 +234,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
 
     if (!p)
     {
-        qDebug() << "depends break because package" << p->name() << "not available";
-        PackageDependsStatus::ok();
+        qDebug() << "depends break because package" << package_name << "not available";
+        return PackageDependsStatus::_break(p);
     }
 
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType())
@@ -242,8 +244,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
              << relationName(dependencyInfo.relationType())
              << dependencyInfo.packageVersion();
 
-    if (dependencyInfo.packageVersion().isEmpty())
-        return PackageDependsStatus::ok();
+//    if (dependencyInfo.packageVersion().isEmpty())
+//        return PackageDependsStatus::ok();
 
     const RelationType relation = dependencyInfo.relationType();
     const QString &installedVersion = p->installedVersion();
@@ -302,14 +304,25 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName);
 
-    if (!p)
-        return nullptr;
+    do {
+        if (!p)
+            break;
 
-    const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
-    if (!arch.isEmpty())
-        return b->package(packageName + arch);
+        const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
+        if (!arch.isEmpty())
+            p = b->package(packageName + arch);
+    } while(false);
 
-    return p;
+    if (p)
+        return p;
+
+    qDebug() << "check virtual package providers for package" << packageName << sysArch << annotation;
+    // check virtual package providers
+    for (auto *ap : b->availablePackages())
+        if (ap->providesList().contains(packageName))
+            return packageWithArch(ap->name(), sysArch, annotation);
+
+    return nullptr;
 }
 
 PackageDependsStatus PackageDependsStatus::ok()
