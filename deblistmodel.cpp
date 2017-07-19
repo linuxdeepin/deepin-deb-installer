@@ -162,16 +162,19 @@ void DebListModel::onTransactionErrorOccurred()
     qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
     qWarning() << trans->errorDetails() << trans->errorString();
 
+    if (trans->isCancellable())
+        trans->cancel();
+    delete trans;
+
     if (e == AuthError)
     {
         // reset env
         m_workerStatus = WorkerPrepare;
-        trans->cancel();
-        trans->deleteLater();
         return;
     }
 
-    installNextDeb();
+    refreshOperatingPackageStatus(Failed);
+    bumpInstallIndex();
 
 //    bool broke = false;
 
@@ -238,7 +241,6 @@ void DebListModel::onTransactionFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
-    trans->deleteLater();
 
     // report new progress
     emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
@@ -256,6 +258,8 @@ void DebListModel::onTransactionFinished()
         refreshOperatingPackageStatus(Success);
     }
 
+    delete trans;
+
     bumpInstallIndex();
 }
 
@@ -263,7 +267,6 @@ void DebListModel::onDependsInstallTransactionFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
-    trans->deleteLater();
 
     // report new progress
 //    emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
@@ -277,6 +280,8 @@ void DebListModel::onDependsInstallTransactionFinished()
     // reset package depends status
     m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
 
+    delete trans;
+
     // continue install
     installNextDeb();
 }
@@ -284,6 +289,7 @@ void DebListModel::onDependsInstallTransactionFinished()
 void DebListModel::installNextDeb()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "transaction not clear");
 
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);

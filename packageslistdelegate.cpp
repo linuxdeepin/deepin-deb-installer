@@ -27,7 +27,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->drawLine(start, end);
     }
 
-    painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
     // draw package icon
     const int x = 5;
@@ -42,7 +42,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QString name = index.data(DebListModel::PackageNameRole).toString();
     const QFont old_font = painter->font();
     QFont f = old_font;
-    f.setWeight(QFont::Bold);
+    f.setWeight(QFont::DemiBold);
     painter->setFont(f);
     const QString name_str = painter->fontMetrics().elidedText(name, Qt::ElideRight, 306);
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
