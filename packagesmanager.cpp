@@ -196,7 +196,6 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
     QStringList availablePackages;
-    Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[index];
 
     const QString debArch = deb->architecture();
@@ -205,14 +204,11 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
     for (auto const &item : depends)
     {
         const auto &info = item.first();
-        const QString archAnnotation = info.multiArchAnnotation();
-        const QString arch = resolvMultiArchAnnotation(archAnnotation, debArch);
-
-        Package *dep = b->package(info.packageName() + arch);
+        Package *dep = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
         if (!dep->installedVersion().isEmpty())
             continue;
 
-        availablePackages << dep->name() + arch;
+        availablePackages << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
     }
 
     return availablePackages;
