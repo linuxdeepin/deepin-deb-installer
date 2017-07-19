@@ -8,6 +8,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
       m_icon(new QLabel),
       m_tips(new QLabel),
+      m_infoWrapperWidget(new QWidget),
       m_infoControl(new InfoControlButton(tr("Display related packages"), tr("Collapse"))),
       m_dependsInfomation(new QTextEdit),
       m_cancelBtn(new QPushButton),
@@ -15,9 +16,12 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
 
-    m_icon->setFixedSize(48, 48);
-    m_icon->setPixmap(icon.pixmap(48, 48));
+    m_icon->setFixedSize(64, 64);
+    m_icon->setPixmap(icon.pixmap(64, 64));
     m_tips->setAlignment(Qt::AlignCenter);
+    m_tips->setStyleSheet("QLabel {"
+                          "padding: 20px 0 0 0;"
+                          "}");
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
@@ -30,28 +34,38 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setStyleSheet("QTextEdit {"
                                        "color: #609dc9;"
                                        "border: 1px solid #eee;"
-                                       "margin: 10px 0 20px 0;"
+                                       "margin: 0 0 20px 0;"
                                        "}");
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_cancelBtn);
-    btnsLayout->addStretch();
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
-    btnsLayout->setSpacing(0);
+    btnsLayout->setSpacing(30);
     btnsLayout->setMargin(0);
 
+    QVBoxLayout *centerWrapperLayout = new QVBoxLayout;
+    centerWrapperLayout->addStretch();
+    centerWrapperLayout->addWidget(m_icon);
+    centerWrapperLayout->addSpacing(15);
+    centerWrapperLayout->setAlignment(m_icon, Qt::AlignHCenter);
+    centerWrapperLayout->addWidget(m_tips);
+    centerWrapperLayout->addStretch();
+    centerWrapperLayout->setSpacing(0);
+    centerWrapperLayout->setMargin(0);
+
+    m_infoWrapperWidget->setLayout(centerWrapperLayout);
+
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_icon);
-    centralLayout->setAlignment(m_icon, Qt::AlignHCenter);
-    centralLayout->addWidget(m_tips);
+    centralLayout->addWidget(m_infoWrapperWidget);
     centralLayout->addWidget(m_infoControl);
     centralLayout->setAlignment(m_infoControl, Qt::AlignHCenter);
+    centralLayout->addSpacing(15);
     centralLayout->addWidget(m_dependsInfomation);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
-    centralLayout->setMargin(0);
+    centralLayout->setContentsMargins(20, 0, 20, 30);
 
     setLayout(centralLayout);
 
@@ -76,14 +90,12 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 
 void UninstallConfirmPage::showDetail()
 {
-    m_icon->setVisible(false);
-    m_tips->setVisible(false);
+    m_infoWrapperWidget->setVisible(false);
     m_dependsInfomation->setVisible(true);
 }
 
 void UninstallConfirmPage::hideDetail()
 {
-    m_icon->setVisible(true);
-    m_tips->setVisible(true);
+    m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
 }

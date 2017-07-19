@@ -29,6 +29,7 @@ private slots:
 private:
     QLabel *m_icon;
     QLabel *m_tips;
+    QWidget *m_infoWrapperWidget;
     InfoControlButton *m_infoControl;
     QTextEdit *m_dependsInfomation;
     QPushButton *m_cancelBtn;
