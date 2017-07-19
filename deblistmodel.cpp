@@ -165,7 +165,7 @@ void DebListModel::onTransactionErrorOccurred()
     {
         if (trans->isCancellable())
             trans->cancel();
-        delete trans;
+        trans->deleteLater();
 
         // reset env
         m_workerStatus = WorkerPrepare;
