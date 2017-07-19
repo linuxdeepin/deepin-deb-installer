@@ -162,28 +162,37 @@ void DebListModel::onTransactionErrorOccurred()
     qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
     qWarning() << trans->errorDetails() << trans->errorString();
 
-    bool broke = false;
-
-    switch (e)
+    if (e == AuthError)
     {
-    case InitError:
-    case LockError:
-    case DiskSpaceError:
-    case WorkerDisappeared:
-    case CommitError:
-        broke = true;
-        break;
-
-    case AuthError: /* restart auth */
-        break;
-
-    default:;
+        // reset env
+        m_workerStatus = WorkerPrepare;
+        trans->cancel();
+        trans->deleteLater();
+        return;
     }
 
-    if (!broke)
-        installNextDeb();
-    else
-        refreshOperatingPackageStatus(Failed); /* finished slots is execute later. */
+    installNextDeb();
+
+//    bool broke = false;
+
+//    switch (e)
+//    {
+//    case InitError:
+//    case LockError:
+//    case DiskSpaceError:
+//    case WorkerDisappeared:
+//    case CommitError:
+//    case AuthError:
+//        broke = true;
+//        break;
+
+//    default:;
+//    }
+
+//    if (!broke)
+//        installNextDeb();
+//    else
+//        refreshOperatingPackageStatus(Failed); /* finished slots is execute later. */
 }
 
 void DebListModel::bumpInstallIndex()
@@ -278,7 +287,6 @@ void DebListModel::installNextDeb()
 
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    refreshOperatingPackageStatus(Operating);
 
     auto * const backend = m_packagesManager->m_backendFuture.result();
     Transaction *trans = nullptr;
@@ -316,8 +324,21 @@ void DebListModel::installNextDeb()
     // see: https://bugs.kde.org/show_bug.cgi?id=382272
     trans->setLocale(".UTF-8");
 
+    connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
+
     m_currentTransaction = trans;
     m_currentTransaction->run();
+}
+
+void DebListModel::onTransactionOutput()
+{
+    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Transaction *trans = static_cast<Transaction *>(sender());
+    Q_ASSERT(trans == m_currentTransaction.data());
+
+    refreshOperatingPackageStatus(Operating);
+
+    disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
 }
 
 void DebListModel::uninstallFinished()

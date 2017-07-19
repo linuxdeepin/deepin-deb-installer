@@ -20,7 +20,7 @@ public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = 0);
 
 private slots:
-    void onWorkerStarted();
+//    void onWorkerStarted();
     void onWorkerFinshed();
     void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);

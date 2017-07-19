@@ -78,19 +78,19 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_installButton, &QPushButton::clicked, m_debListModel, &DebListModel::installAll);
     connect(m_acceptButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(model, &DebListModel::workerStarted, this, &MultipleInstallPage::onWorkerStarted);
+//    connect(model, &DebListModel::workerStarted, this, &MultipleInstallPage::onWorkerStarted);
     connect(model, &DebListModel::workerFinished, this, &MultipleInstallPage::onWorkerFinshed);
     connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
 }
 
-void MultipleInstallPage::onWorkerStarted()
-{
-    m_installButton->setVisible(false);
+//void MultipleInstallPage::onWorkerStarted()
+//{
+//    m_installButton->setVisible(false);
 
-    m_installProgress->setVisible(true);
-    m_infoControlButton->setVisible(true);
-}
+//    m_installProgress->setVisible(true);
+//    m_infoControlButton->setVisible(true);
+//}
 
 void MultipleInstallPage::onWorkerFinshed()
 {
@@ -101,6 +101,15 @@ void MultipleInstallPage::onWorkerFinshed()
 void MultipleInstallPage::onOutputAvailable(const QString &output)
 {
     m_infoArea->append(output.trimmed());
+
+    // change to install
+    if (m_installButton->isVisible())
+    {
+        m_installButton->setVisible(false);
+
+        m_installProgress->setVisible(true);
+        m_infoControlButton->setVisible(true);
+    }
 }
 
 void MultipleInstallPage::onProgressChanged(const int progress)

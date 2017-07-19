@@ -86,6 +86,7 @@ public slots:
 
 private:
     void bumpInstallIndex();
+    void onTransactionOutput();
     void onTransactionFinished();
     void onDependsInstallTransactionFinished();
     void installNextDeb();
