@@ -162,19 +162,18 @@ void DebListModel::onTransactionErrorOccurred()
     qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
     qWarning() << trans->errorDetails() << trans->errorString();
 
-    if (trans->isCancellable())
-        trans->cancel();
-    delete trans;
-
     if (e == AuthError)
     {
+        if (trans->isCancellable())
+            trans->cancel();
+        delete trans;
+
         // reset env
         m_workerStatus = WorkerPrepare;
         return;
     }
 
-    refreshOperatingPackageStatus(Failed);
-    bumpInstallIndex();
+    // DO NOT install next, this action will finished and will be install next automatic.
 
 //    bool broke = false;
 
@@ -200,6 +199,8 @@ void DebListModel::onTransactionErrorOccurred()
 
 void DebListModel::bumpInstallIndex()
 {
+    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
+
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
     {
@@ -251,6 +252,7 @@ void DebListModel::onTransactionFinished()
     if (trans->exitStatus())
     {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+        refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
     else if (m_packageOperateStatus.contains(m_operatingIndex) && m_packageOperateStatus[m_operatingIndex] != Failed)
@@ -289,7 +291,7 @@ void DebListModel::onDependsInstallTransactionFinished()
 void DebListModel::installNextDeb()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
-    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "transaction not clear");
+    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
