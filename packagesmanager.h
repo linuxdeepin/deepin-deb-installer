@@ -45,6 +45,7 @@ public:
     PackageDependsStatus packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);
     const QStringList packageAvailableDependsList(const int index);
+    const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
     void resetPackageDependsStatus(const int index);
 

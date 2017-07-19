@@ -63,16 +63,16 @@ int DebListModel::rowCount(const QModelIndex &parent) const
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
-    const DebFile *package = m_packagesManager->package(r);
+    const DebFile *deb = m_packagesManager->package(r);
 
     switch (role)
     {
     case PackageNameRole:
-        return package->packageName();
+        return deb->packageName();
     case PackagePathRole:
-        return package->filePath();
+        return deb->filePath();
     case PackageVersionRole:
-        return package->version();
+        return deb->version();
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);
     case PackageDependsStatusRole:
@@ -81,8 +81,10 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageInstalledVersion(r);
     case PackageAvailableDependsListRole:
         return m_packagesManager->packageAvailableDependsList(r);
+    case PackageReverseDependsListRole:
+        return m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     case PackageDescriptionRole:
-        return package->shortDescription();
+        return deb->shortDescription();
     case PackageFailReasonRole:
         return packageFailedReason(r);
     case PackageOperateStatusRole:

@@ -102,7 +102,12 @@ void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
 
+    const QModelIndex index = m_fileListModel->first();
+
     UninstallConfirmPage *p = new UninstallConfirmPage;
+    p->setPackage(index.data().toString());
+    p->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList());
+
     m_centralLayout->addWidget(p);
     m_centralLayout->setCurrentIndex(2);
 

@@ -216,6 +216,31 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
     return availablePackages;
 }
 
+const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
+{
+    Package *p = packageWithArch(packageName, sysArch);
+    Q_ASSERT(p);
+
+    QSet<QString> r { packageName };
+    for (const auto &item : p->requiredByList().toSet())
+    {
+        if (r.contains(item))
+            continue;
+
+        Package *p = packageWithArch(item, sysArch);
+
+        if (!p || !p->isInstalled())
+            continue;
+        r << item;
+//        r.unite(packageReverseDependsList(item, sysArch));
+    }
+
+    // remove self
+    r.remove(packageName);
+
+    return r.toList();
+}
+
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
     Q_ASSERT(m_packageDependsStatus.contains(index));

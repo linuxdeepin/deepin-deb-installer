@@ -30,6 +30,7 @@ public:
         PackageAvailableDependsListRole,
         PackageFailReasonRole,
         PackageOperateStatusRole,
+        PackageReverseDependsListRole,
     };
 
     enum WorkerStatus
