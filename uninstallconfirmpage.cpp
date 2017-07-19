@@ -70,8 +70,7 @@ void UninstallConfirmPage::setPackage(const QString &name)
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
-    qDebug() << requiredList;
-
+    m_infoControl->setVisible(!requiredList.isEmpty());
     m_dependsInfomation->setText(requiredList.join(", "));
 }
 

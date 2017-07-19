@@ -221,7 +221,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     Package *p = packageWithArch(packageName, sysArch);
     Q_ASSERT(p);
 
-    QSet<QString> r { packageName };
+    QSet<QString> ret { packageName };
     QQueue<QString> testQueue;
 
     for (const auto &item : p->requiredByList().toSet())
@@ -232,28 +232,28 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         const auto item = testQueue.first();
         testQueue.pop_front();
 
-        if (r.contains(item))
+        if (ret.contains(item))
             continue;
 
         Package *p = packageWithArch(item, sysArch);
         if (!p || !p->isInstalled())
             continue;
 
-        r << item;
+        ret << item;
 
-        // append new reqiureList
-        for (const auto &req : p->requiredByList())
+        // append new reqiure list
+        for (const auto &r : p->requiredByList())
         {
-            if (r.contains(req) || testQueue.contains(req))
+            if (ret.contains(r) || testQueue.contains(r))
                 continue;
-            testQueue.append(req);
+            testQueue.append(r);
         }
     }
 
     // remove self
-    r.remove(packageName);
+    ret.remove(packageName);
 
-    return r.toList();
+    return ret.toList();
 }
 
 void PackagesManager::resetPackageDependsStatus(const int index)
