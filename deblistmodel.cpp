@@ -6,6 +6,7 @@
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QApplication>
 
 #include <QApt/Package>
 #include <QApt/Backend>
@@ -16,21 +17,16 @@ const QString workerErrorString(const int e)
 {
     switch (e)
     {
-    case InitError:                 return QStringLiteral("InitError");
-    case LockError:                 return QStringLiteral("LockError");
-    case DiskSpaceError:            return QStringLiteral("DiskSpaceError");
-    case FetchError:                return QStringLiteral("FetchError");
-    case CommitError:               return QStringLiteral("CommitError");
-    case AuthError:                 return QStringLiteral("AuthError");
-    case WorkerDisappeared:         return QStringLiteral("WorkerDisappeared");
-    case UntrustedError:            return QStringLiteral("UntrustedError");
-    case DownloadDisallowedError:   return QStringLiteral("DownloadDisallowedError");
-    case NotFoundError:             return QStringLiteral("NotFoundError");
-    case WrongArchError:            return QStringLiteral("WrongArchError");
-    case MarkingError:              return QStringLiteral("MarkingError");
+    case FetchError:
+    case DownloadDisallowedError:
+        return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
+    case NotFoundError:
+        return QApplication::translate("DebListModel", "Installation failed, please check updates in Control Center");
+    case DiskSpaceError:
+        return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     }
 
-    return QString("Unknow Error");
+    return QApplication::translate("DebListModel", "Installation Failed");
 }
 
 DebListModel::DebListModel(QObject *parent)
@@ -174,27 +170,6 @@ void DebListModel::onTransactionErrorOccurred()
     }
 
     // DO NOT install next, this action will finished and will be install next automatic.
-
-//    bool broke = false;
-
-//    switch (e)
-//    {
-//    case InitError:
-//    case LockError:
-//    case DiskSpaceError:
-//    case WorkerDisappeared:
-//    case CommitError:
-//    case AuthError:
-//        broke = true;
-//        break;
-
-//    default:;
-//    }
-
-//    if (!broke)
-//        installNextDeb();
-//    else
-//        refreshOperatingPackageStatus(Failed); /* finished slots is execute later. */
 }
 
 void DebListModel::bumpInstallIndex()
@@ -234,8 +209,9 @@ QString DebListModel::packageFailedReason(const int idx) const
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
+    Q_ASSERT(m_packageFailReason.contains(idx));
 
-    return workerErrorString(CommitError);
+    return workerErrorString(m_packageFailReason[idx]);
 }
 
 void DebListModel::onTransactionFinished()
@@ -252,6 +228,7 @@ void DebListModel::onTransactionFinished()
     if (trans->exitStatus())
     {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+        m_packageFailReason[m_operatingIndex] = trans->error();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
@@ -270,22 +247,33 @@ void DebListModel::onDependsInstallTransactionFinished()
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
 
-    // report new progress
-//    emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+    const auto ret = trans->exitStatus();
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << trans->exitStatus();
+    qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << ret;
 
-    if (trans->exitStatus())
+    if (ret)
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
 
     // reset package depends status
     m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
 
+    // record error
+    if (ret)
+    {
+        // record error
+        m_packageFailReason[m_operatingIndex] = trans->error();
+        refreshOperatingPackageStatus(Failed);
+        emit appendOutputInfo(trans->errorString());
+    }
+
     delete trans;
 
-    // continue install
-    installNextDeb();
+    // check current operate exit status to install or install next
+    if (ret)
+        bumpInstallIndex();
+    else
+        installNextDeb();
 }
 
 void DebListModel::installNextDeb()

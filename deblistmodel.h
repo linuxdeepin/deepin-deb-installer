@@ -102,7 +102,7 @@ private:
     QPointer<QApt::Transaction> m_currentTransaction;
 
     QHash<int, int> m_packageOperateStatus;
-
+    QHash<int, int> m_packageFailReason;
 };
 
 #endif // DEBLISTMODEL_H
