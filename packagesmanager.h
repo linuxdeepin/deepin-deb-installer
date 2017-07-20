@@ -23,6 +23,9 @@ public:
     PackageDependsStatus operator =(const PackageDependsStatus &other);
 
     PackageDependsStatus max(const PackageDependsStatus &other);
+    PackageDependsStatus maxEq(const PackageDependsStatus &other);
+    PackageDependsStatus min(const PackageDependsStatus &other);
+    PackageDependsStatus minEq(const PackageDependsStatus &other);
 
     bool isBreak() const;
     bool isAvailable() const;
@@ -49,7 +52,9 @@ public:
     int packageInstallStatus(const int index);
     PackageDependsStatus packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);
-    const QStringList packageAvailableDependsList(const int index);
+    const QStringList packageAvailableDepends(const int index);
+    const QSet<QString> packageCandidateChoose(const QString &debArch, const QList<QApt::DependencyItem> &dependsList);
+    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QApt::DependencyItem &candidateItem);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
     void resetPackageDependsStatus(const int index);

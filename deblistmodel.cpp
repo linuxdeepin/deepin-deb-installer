@@ -80,7 +80,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageInstalledVersionRole:
         return m_packagesManager->packageInstalledVersion(r);
     case PackageAvailableDependsListRole:
-        return m_packagesManager->packageAvailableDependsList(r);
+        return m_packagesManager->packageAvailableDepends(r);
     case PackageReverseDependsListRole:
         return m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     case PackageDescriptionRole:
@@ -215,6 +215,8 @@ QString DebListModel::packageFailedReason(const int idx) const
         const auto conflict = m_packagesManager->packageConflictStat(idx);
         if (!conflict.is_ok())
             return tr("Conflicts: %1").arg(conflict.unwrap());
+
+        Q_UNREACHABLE();
     }
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
@@ -304,7 +306,9 @@ void DebListModel::installNextDeb()
         bumpInstallIndex();
         return;
     } else if (dependsStat.isAvailable()) {
-        const QStringList availableDepends = m_packagesManager->packageAvailableDependsList(m_operatingIndex);
+        Q_ASSERT_X(m_packageOperateStatus[m_operatingIndex] == Prepare, Q_FUNC_INFO, "package operate status error when start install availble dependencies");
+
+        const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
         for (auto const &p : availableDepends)
             backend->markPackageForInstall(p);
 
