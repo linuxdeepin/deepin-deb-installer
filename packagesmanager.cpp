@@ -106,7 +106,26 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             const QString name = conflict.packageName();
             Package *p = packageWithArch(name, arch);
 
-            if (p && p->isInstalled())
+            if (!p || !p->isInstalled())
+                continue;
+
+            const QString conflict_version = conflict.packageVersion();
+            const QString installed_version = p->installedVersion();
+            const auto type = conflict.relationType();
+            const auto result = Package::compareVersion(installed_version, conflict_version);
+
+            // not match, ok
+            if (!dependencyVersionMatch(result, type))
+                continue;
+
+            // test package
+            const QString mirror_version = p->availableVersion();
+            if (mirror_version == installed_version)
+                continue;
+
+            // mirror version is also break
+            const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
+            if (dependencyVersionMatch(mirror_result, type))
                 return ConflictResult::err(name);
         }
     }
@@ -204,7 +223,7 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
     Q_ASSERT(m_packageDependsStatus.contains(index));
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
-    QStringList availablePackages;
+    QSet<QString> availablePackages;
     DebFile *deb = m_preparedPackages[index];
 
     const QString debArch = deb->architecture();
@@ -220,7 +239,9 @@ const QStringList PackagesManager::packageAvailableDependsList(const int index)
         availablePackages << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
     }
 
-    return availablePackages;
+    // TODO: check upgrade from conflicts
+
+    return availablePackages.toList();
 }
 
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
@@ -304,6 +325,18 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
             return PackageDependsStatus::ok();
         else
         {
+            const QString &mirror_version = p->availableVersion();
+            if (mirror_version != installedVersion)
+            {
+                const auto mirror_result = Package::compareVersion(mirror_version, dependencyInfo.packageVersion());
+
+                if (dependencyVersionMatch(mirror_result, relation))
+                {
+                    qDebug() << "availble by upgrade package" << p->name() << p->architecture() << "from" << installedVersion << "to" << mirror_version;
+                    return PackageDependsStatus::available();
+                }
+            }
+
             qDebug() << "depends break by" << p->name() << p->architecture() << dependencyInfo.packageVersion();
             qDebug() << "installed version not match" << installedVersion;
             return PackageDependsStatus::_break(p->name());
