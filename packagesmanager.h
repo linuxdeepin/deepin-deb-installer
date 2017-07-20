@@ -1,11 +1,15 @@
 #ifndef PACKAGESMANAGER_H
 #define PACKAGESMANAGER_H
 
+#include "result.h"
+
 #include <QObject>
 #include <QFuture>
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
+
+typedef Result<QString> ConflictResult;
 
 class PackageDependsStatus
 {
@@ -39,8 +43,9 @@ public:
     explicit PackagesManager(QObject *parent = 0);
 
     bool isBackendReady();
-    bool isPackageConflict(const QString &arch, QApt::Package *package);
-    bool isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
+    const ConflictResult packageConflictStat(const int index);
+    const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
+    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
     int packageInstallStatus(const int index);
     PackageDependsStatus packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);

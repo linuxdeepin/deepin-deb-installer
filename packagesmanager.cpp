@@ -79,18 +79,25 @@ bool PackagesManager::isBackendReady()
     return m_backendFuture.isFinished();
 }
 
-bool PackagesManager::isPackageConflict(const QString &arch, Package *package)
+const ConflictResult PackagesManager::packageConflictStat(const int index)
+{
+    auto *p = m_preparedPackages[index];
+
+    return isConflictSatisfy(p->architecture(), p->conflicts());
+}
+
+const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Package *package)
 {
     qDebug() << "check conflict for package" << package->name();
 
-    const bool ret = !isConflictSatisfy(arch, package->conflicts());
+    const auto ret = isConflictSatisfy(arch, package->conflicts());
 
-    qDebug() << "check conflict finished" << package->name() << bool(ret);
+    qDebug() << "check finished, conflict is satisfy:" << package->name() << bool(ret.is_ok());
 
     return ret;
 }
 
-bool PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
+const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
 {
     for (const auto &conflict_list : conflicts)
     {
@@ -100,11 +107,11 @@ bool PackagesManager::isConflictSatisfy(const QString &arch, const QList<Depende
             Package *p = packageWithArch(name, arch);
 
             if (p && p->isInstalled())
-                return false;
+                return ConflictResult::err(name);
         }
     }
 
-    return true;
+    return ConflictResult::ok(QString());
 }
 
 int PackagesManager::packageInstallStatus(const int index)
@@ -152,7 +159,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     PackageDependsStatus ret;
 
     // conflicts
-    if (!isConflictSatisfy(architecture, deb->conflicts()))
+    if (!isConflictSatisfy(architecture, deb->conflicts()).is_ok())
     {
         qDebug() << "depends break because conflict" << deb->packageName();
         ret.status = DebListModel::DependsBreak;
@@ -311,7 +318,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
         }
 
         // let's check conflicts
-        if (isPackageConflict(architecture, p))
+        if (!isConflictSatisfy(architecture, p).is_ok())
         {
             qDebug() << "depends break because conflict" << p->name();
             return PackageDependsStatus::_break(p->name());

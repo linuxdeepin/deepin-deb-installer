@@ -208,7 +208,14 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
     if (stat.isBreak())
-        return tr("Broken Dependencies: %1").arg(stat.package);
+    {
+        if (!stat.package.isEmpty())
+            return tr("Broken Dependencies: %1").arg(stat.package);
+
+        const auto conflict = m_packagesManager->packageConflictStat(idx);
+        if (!conflict.is_ok())
+            return tr("Conflicts: %1").arg(conflict.unwrap());
+    }
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
