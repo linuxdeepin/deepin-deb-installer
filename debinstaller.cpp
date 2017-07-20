@@ -37,6 +37,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
+    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [=](const QString &output) { qDebug() << output.trimmed(); });
 }
 
 DebInstaller::~DebInstaller()
