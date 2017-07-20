@@ -21,6 +21,17 @@ QString relationName(const RelationType type)
     return QString();
 }
 
+bool isArchMatches(const QString &sysArch, const QString &packageArch, const int multiArchType)
+{
+    if (sysArch == "all" || sysArch == "any")
+        return true;
+
+    if (multiArchType == MultiArchForeign)
+        return true;
+
+    return sysArch == packageArch;
+}
+
 QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType = InvalidMultiArchType)
 {
     if (annotation == "native" || annotation == "any")
@@ -111,7 +122,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
             qDebug() << "conflicts package installed: " << arch << p->name() << p->architecture() << p->multiArchTypeString();
             // arch error, conflicts
-            if (p->architecture() != arch/* && p->multiArchType() != MultiArchForeign*/)
+            if (!isArchMatches(arch, p->architecture(), p->multiArchType()))
                 return ConflictResult::err(name);
 
             const QString conflict_version = conflict.packageVersion();
