@@ -291,7 +291,8 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
-    Q_ASSERT(m_packageDependsStatus.contains(index));
+    if (!m_packageDependsStatus.contains(index))
+        return;
 
     // reload backend cache
     Q_ASSERT(m_backendFuture.result()->reloadCache());
