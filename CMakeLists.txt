@@ -14,9 +14,10 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 
     # generate qm files
     execute_process(COMMAND bash "translate_generation.sh"
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
+# Sources files
 file(GLOB SRCS "*.h" "*.cpp")
 
 # Find the library

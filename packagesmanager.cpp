@@ -23,11 +23,13 @@ QString relationName(const RelationType type)
 
 bool isArchMatches(const QString &sysArch, const QString &packageArch, const int multiArchType)
 {
+    Q_UNUSED(multiArchType);
+
     if (sysArch == "all" || sysArch == "any")
         return true;
 
-    if (multiArchType == MultiArchForeign)
-        return true;
+//    if (multiArchType == MultiArchForeign)
+//        return true;
 
     return sysArch == packageArch;
 }
