@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     DApplication app(argc, argv);
     app.setOrganizationName("deepin");
-    app.setApplicationName("Deepin Package Manager");
+    app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion("1.0");
     app.setProductIcon(QPixmap(":/images/icon.png"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");

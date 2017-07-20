@@ -11,6 +11,10 @@ set(CMAKE_CXX_FLAGS -Wall)
 
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
     set(CMAKE_CXX_FLAGS -O3)
+
+    # generate qm files
+    execute_process(COMMAND bash "translate_generation.sh"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
 file(GLOB SRCS "*.h" "*.cpp")
@@ -39,6 +43,11 @@ target_link_libraries(deepin-deb-installer
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
+
+# Install qm files
+file(GLOB QM_FILES "translations/*.qm")
+install(FILES ${QM_FILES}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-deb-installer/translations)
 
 # Install icons
 foreach (ICON_SIZE 16 24 32 48 64 96 128 256)
