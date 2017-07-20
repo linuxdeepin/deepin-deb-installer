@@ -265,9 +265,6 @@ void DebListModel::onDependsInstallTransactionFinished()
     if (ret)
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
 
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
-
     if (ret)
     {
         // record error
@@ -295,6 +292,9 @@ void DebListModel::installNextDeb()
 
     auto * const backend = m_packagesManager->m_backendFuture.result();
     Transaction *trans = nullptr;
+
+    // reset package depends status
+    m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);

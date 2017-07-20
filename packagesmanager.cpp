@@ -109,6 +109,11 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             if (!p || !p->isInstalled())
                 continue;
 
+            qDebug() << "conflicts package installed: " << arch << p->name() << p->architecture() << p->multiArchTypeString();
+            // arch error, conflicts
+            if (p->architecture() != arch/* && p->multiArchType() != MultiArchForeign*/)
+                return ConflictResult::err(name);
+
             const QString conflict_version = conflict.packageVersion();
             const QString installed_version = p->installedVersion();
             const auto type = conflict.relationType();
