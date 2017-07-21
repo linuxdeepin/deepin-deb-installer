@@ -4,12 +4,12 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="32"/>
+        <location filename="../debinstaller.cpp" line="33"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="88"/>
+        <location filename="../debinstaller.cpp" line="91"/>
         <source>Bulk Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17,8 +17,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <source>Broken Dependencies</source>
+        <location filename="../deblistmodel.cpp" line="22"/>
+        <source>Installation failed, please check your network connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="24"/>
+        <source>Installation failed, please check updates in Control Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="26"/>
+        <source>Installation failed, insufficient disk space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="29"/>
+        <source>Installation Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="213"/>
+        <source>Broken Dependencies: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="217"/>
+        <source>Conflicts: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -36,28 +61,24 @@
     </message>
 </context>
 <context>
-    <name>InfoControlButton</name>
+    <name>MultipleInstallPage</name>
     <message>
-        <location filename="../infocontrolbutton.cpp" line="17"/>
-        <location filename="../infocontrolbutton.cpp" line="51"/>
+        <location filename="../multipleinstallpage.cpp" line="18"/>
         <source>Display installation process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../infocontrolbutton.cpp" line="54"/>
+        <location filename="../multipleinstallpage.cpp" line="18"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MultipleInstallPage</name>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="29"/>
+        <location filename="../multipleinstallpage.cpp" line="30"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="38"/>
+        <location filename="../multipleinstallpage.cpp" line="39"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,73 +104,97 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="85"/>
+        <location filename="../singleinstallpage.cpp" line="58"/>
+        <source>Display installation process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="58"/>
+        <source>Collapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="86"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="88"/>
+        <location filename="../singleinstallpage.cpp" line="89"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="94"/>
+        <location filename="../singleinstallpage.cpp" line="95"/>
         <source>Reinstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="100"/>
+        <location filename="../singleinstallpage.cpp" line="101"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="114"/>
+        <location filename="../singleinstallpage.cpp" line="115"/>
         <source>Package: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="121"/>
+        <location filename="../singleinstallpage.cpp" line="122"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="263"/>
+        <location filename="../singleinstallpage.cpp" line="264"/>
         <source>Installed successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="265"/>
+        <location filename="../singleinstallpage.cpp" line="266"/>
         <source>Uninstalled successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="271"/>
-        <source>Installation Failed</source>
+        <location filename="../singleinstallpage.cpp" line="327"/>
+        <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="326"/>
-        <source>Newer version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="273"/>
+        <location filename="../singleinstallpage.cpp" line="274"/>
         <source>Uninstall Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
-        <source>Earlier version installed: %1</source>
+        <location filename="../uninstallconfirmpage.cpp" line="12"/>
+        <source>Display related packages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="337"/>
-        <source>Broken Dependencies</source>
+        <location filename="../uninstallconfirmpage.cpp" line="12"/>
+        <source>Collapse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uninstallconfirmpage.cpp" line="25"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uninstallconfirmpage.cpp" line="27"/>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uninstallconfirmpage.cpp" line="80"/>
+        <source>Are you sure to uninstall %1?
+All dependencies will also be removed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

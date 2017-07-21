@@ -323,13 +323,8 @@ void SingleInstallPage::setPackageInfo()
     {
         if (installedSameVersion)
             m_tipsLabel->setText(tr("Same version installed"));
-        else if (installStat == DebListModel::InstalledEarlierVersion)
-            m_tipsLabel->setText(tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-        else if (installStat == DebListModel::InstalledLaterVersion)
-            m_tipsLabel->setText(tr("Newer version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         else
-            Q_UNREACHABLE();
-
+            m_tipsLabel->setText(tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         return;
     }
 
