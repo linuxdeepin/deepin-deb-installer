@@ -1,6 +1,8 @@
 #include "singleinstallpage.h"
 #include "deblistmodel.h"
 #include "workerprogress.h"
+#include "widgets/bluebutton.h"
+#include "widgets/graybutton.h"
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -56,10 +58,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_progress(new WorkerProgress),
       m_workerInfomation(new QTextEdit),
       m_infoControlButton(new InfoControlButton(tr("Display installation process"), tr("Collapse"))),
-      m_installButton(new QPushButton),
-      m_uninstallButton(new QPushButton),
-      m_reinstallButton(new QPushButton),
-      m_confirmButton(new QPushButton)
+      m_installButton(new BlueButton),
+      m_uninstallButton(new GrayButton),
+      m_reinstallButton(new GrayButton),
+      m_confirmButton(new BlueButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
@@ -84,29 +86,13 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
                                       "}");
 
     m_installButton->setText(tr("Install"));
-    m_installButton->setFixedSize(120, 36);
     m_installButton->setVisible(false);
     m_uninstallButton->setText(tr("Remove"));
-    m_uninstallButton->setFixedSize(120, 36);
     m_uninstallButton->setVisible(false);
-    m_uninstallButton->setStyleSheet("QPushButton {"
-                                     "color: #303030;"
-                                     "}");
     m_reinstallButton->setText(tr("Reinstall"));
-    m_reinstallButton->setFixedSize(120, 36);
     m_reinstallButton->setVisible(false);
-    m_reinstallButton->setStyleSheet("QPushButton {"
-                                     "color: #303030;"
-                                     "}");
     m_confirmButton->setText(tr("OK"));
-    m_confirmButton->setFixedSize(120, 36);
     m_confirmButton->setVisible(false);
-    m_confirmButton->setStyleSheet("QPushButton {"
-                                   "color: #2ca7f8;"
-                                   "}"
-                                   "QPushButton:hover {"
-                                   "color: white;"
-                                   "}");
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setMaximumHeight(80);
     m_packageDescription->setFixedWidth(320);
@@ -314,9 +300,9 @@ void SingleInstallPage::setPackageInfo()
 
     const bool installed = installStat != DebListModel::NotInstalled;
     const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
-    m_installButton->setVisible(!installed || !installedSameVersion);
+    m_installButton->setVisible(!installed);
     m_uninstallButton->setVisible(installed);
-    m_reinstallButton->setVisible(installedSameVersion);
+    m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
 
     if (installed)

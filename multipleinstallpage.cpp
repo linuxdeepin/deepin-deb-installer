@@ -3,6 +3,7 @@
 #include "packageslistdelegate.h"
 #include "deblistmodel.h"
 #include "workerprogress.h"
+#include "widgets/bluebutton.h"
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -18,8 +19,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_infoControlButton(new InfoControlButton(tr("Display installation process"), tr("Collapse"))),
       m_installProgress(new WorkerProgress),
       m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this)),
-      m_installButton(new QPushButton),
-      m_acceptButton(new QPushButton)
+      m_installButton(new BlueButton),
+      m_acceptButton(new BlueButton)
 {
     m_appsView->setModel(model);
     m_appsView->setItemDelegate(new PackagesListDelegate);
@@ -28,17 +29,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
                               "}");
 
     m_installButton->setText(tr("Install"));
-    m_installButton->setFixedWidth(120);
-    m_installButton->setFixedSize(120, 36);
-    m_installButton->setStyleSheet("QPushButton {"
-                                   "color: #2ca7f8;"
-                                   "}"
-                                   "QPushButton:hover {"
-                                   "color: white;"
-                                   "}");
     m_acceptButton->setText(tr("OK"));
-    m_acceptButton->setFixedWidth(120);
-    m_acceptButton->setFixedSize(120, 36);
     m_acceptButton->setVisible(false);
 
     m_infoArea->setReadOnly(true);
@@ -121,7 +112,10 @@ void MultipleInstallPage::onProgressChanged(const int progress)
 
     // finished
     if (progress == 100)
+    {
+        onOutputAvailable(QString());
         QTimer::singleShot(m_progressAnimation->duration(), this, &MultipleInstallPage::onWorkerFinshed);
+    }
 }
 
 void MultipleInstallPage::showInfo()

@@ -18,7 +18,7 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
 endif ()
 
 # Sources files
-file(GLOB SRCS "*.h" "*.cpp")
+file(GLOB SRCS "*.h" "*.cpp" "widgets/*.h" "widgets/*.cpp")
 
 # Find the library
 find_package(PkgConfig REQUIRED)
