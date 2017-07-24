@@ -60,6 +60,7 @@ private:
     QLabel *m_tipsLabel;
     QProgressBar *m_progress;
     QTextEdit *m_workerInfomation;
+    QWidget *m_strengthWidget;
     InfoControlButton *m_infoControlButton;
     QPushButton *m_installButton;
     QPushButton *m_uninstallButton;

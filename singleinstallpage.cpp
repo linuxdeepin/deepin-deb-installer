@@ -57,6 +57,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_tipsLabel(new QLabel),
       m_progress(new WorkerProgress),
       m_workerInfomation(new QTextEdit),
+      m_strengthWidget(new QWidget),
       m_infoControlButton(new InfoControlButton(tr("Display installation process"), tr("Collapse"))),
       m_installButton(new BlueButton),
       m_uninstallButton(new GrayButton),
@@ -78,11 +79,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
     m_workerInfomation->setAcceptDrops(false);
-    m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_workerInfomation->setFixedHeight(210);
+    m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_workerInfomation->setStyleSheet("QTextEdit {"
                                       "color: #609dc9;"
                                       "border: 1px solid #eee;"
-                                      "margin: 10px 0 20px 0;"
+                                      "margin: 10px 0 0px 0;"
                                       "}");
 
     m_installButton->setText(tr("Install"));
@@ -94,8 +96,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
-    m_packageDescription->setMaximumHeight(80);
+    m_packageDescription->setFixedHeight(72);
     m_packageDescription->setFixedWidth(320);
+    m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Package: "));
@@ -139,9 +142,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(60);
+    itemLayout->addSpacing(48);
     itemLayout->addLayout(itemBlockLayout);
-    itemLayout->addSpacing(25);
+    itemLayout->addSpacing(20);
     itemLayout->addWidget(m_packageDescription);
     itemLayout->addStretch();
     itemLayout->setMargin(0);
@@ -151,12 +154,16 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_itemInfoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_itemInfoWidget->setVisible(false);
 
+    m_strengthWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_strengthWidget->setVisible(false);
+
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_itemInfoWidget);
     centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     centralLayout->addWidget(m_workerInfomation);
+    centralLayout->addWidget(m_strengthWidget);
     centralLayout->addWidget(m_tipsLabel);
     centralLayout->addWidget(m_progress);
     centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
@@ -198,12 +205,14 @@ void SingleInstallPage::uninstallCurrentPackage()
 void SingleInstallPage::showInfomation()
 {
     m_workerInfomation->setVisible(true);
+    m_strengthWidget->setVisible(true);
     m_itemInfoWidget->setVisible(false);
 }
 
 void SingleInstallPage::hideInfomation()
 {
     m_workerInfomation->setVisible(false);
+    m_strengthWidget->setVisible(false);
     m_itemInfoWidget->setVisible(true);
 }
 
@@ -238,6 +247,8 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 void SingleInstallPage::onWorkerFinished()
 {
     m_progress->setVisible(false);
+    m_uninstallButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
     m_confirmButton->setVisible(true);
     m_confirmButton->setFocus();
 
