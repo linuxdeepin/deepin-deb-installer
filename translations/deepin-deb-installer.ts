@@ -38,12 +38,8 @@
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="213"/>
-        <source>Broken Dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../deblistmodel.cpp" line="217"/>
-        <source>Conflicts: %1</source>
+        <source>Broken Dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -63,22 +59,22 @@
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="18"/>
+        <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Display installation process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="18"/>
+        <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="30"/>
+        <location filename="../multipleinstallpage.cpp" line="31"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="39"/>
+        <location filename="../multipleinstallpage.cpp" line="32"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -104,67 +100,67 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="58"/>
+        <location filename="../singleinstallpage.cpp" line="60"/>
         <source>Display installation process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="58"/>
+        <location filename="../singleinstallpage.cpp" line="60"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="86"/>
+        <location filename="../singleinstallpage.cpp" line="88"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="89"/>
+        <location filename="../singleinstallpage.cpp" line="90"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="95"/>
+        <location filename="../singleinstallpage.cpp" line="92"/>
         <source>Reinstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="101"/>
+        <location filename="../singleinstallpage.cpp" line="94"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="115"/>
+        <location filename="../singleinstallpage.cpp" line="101"/>
         <source>Package: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="122"/>
+        <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="264"/>
+        <location filename="../singleinstallpage.cpp" line="250"/>
         <source>Installed successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="266"/>
+        <location filename="../singleinstallpage.cpp" line="252"/>
         <source>Uninstalled successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="327"/>
+        <location filename="../singleinstallpage.cpp" line="313"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="274"/>
+        <location filename="../singleinstallpage.cpp" line="260"/>
         <source>Uninstall Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="325"/>
+        <location filename="../singleinstallpage.cpp" line="311"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>

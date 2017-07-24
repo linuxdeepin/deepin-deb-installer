@@ -214,7 +214,8 @@ QString DebListModel::packageFailedReason(const int idx) const
 
         const auto conflict = m_packagesManager->packageConflictStat(idx);
         if (!conflict.is_ok())
-            return tr("Conflicts: %1").arg(conflict.unwrap());
+            return tr("Broken Dependencies: %1").arg(conflict.unwrap());
+//            return tr("Conflicts: %1").arg(conflict.unwrap());
 
         Q_UNREACHABLE();
     }
