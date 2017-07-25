@@ -16,7 +16,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_debListModel(model),
       m_appsView(new PackagesListView),
       m_infoArea(new QTextEdit),
-      m_infoControlButton(new InfoControlButton(tr("Display installation process"), tr("Collapse"))),
+      m_infoControlButton(new InfoControlButton(tr("Display details"), tr("Collapse"))),
       m_installProgress(new WorkerProgress),
       m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this)),
       m_installButton(new BlueButton),

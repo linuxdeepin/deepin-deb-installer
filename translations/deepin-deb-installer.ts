@@ -60,12 +60,12 @@
     <name>MultipleInstallPage</name>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
-        <source>Display installation process</source>
+        <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
-        <source>Collapse</source>
+        <source>Display details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
