@@ -212,23 +212,28 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     } else {
         qDebug() << "depends:";
         qDebug() << "Check for package" << deb->packageName();
-        const auto &depends = deb->depends();
-        for (auto const &candidate_list : depends)
-        {
-            if (candidate_list.isEmpty())
-                continue;
+//        const auto &depends = deb->depends();
 
-            PackageDependsStatus tr = PackageDependsStatus::_break(QString());
-            for (auto const &info : candidate_list)
-            {
-                const auto r = checkDependsPackageStatus(QSet<QString>(), architecture, info);
-                tr = tr.minEq(r);
-            }
+        QSet<QString> choose_set;
+        choose_set << deb->packageName();
+        ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
 
-            ret.maxEq(tr);
-            if (ret.isBreak())
-                break;
-        }
+//        for (auto const &candidate_list : depends)
+//        {
+//            if (candidate_list.isEmpty())
+//                continue;
+
+//            PackageDependsStatus tr = PackageDependsStatus::_break(QString());
+//            for (auto const &info : candidate_list)
+//            {
+//                const auto r = checkDependsPackageStatus(choose_set, architecture, info);
+//                tr = tr.minEq(r);
+//            }
+
+//            ret.maxEq(tr);
+//            if (ret.isBreak())
+//                break;
+//        }
     }
 
     if (ret.isBreak())
@@ -264,22 +269,20 @@ const QStringList PackagesManager::packageAvailableDepends(const int index)
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
     DebFile *deb = m_preparedPackages[index];
+    QSet<QString> choose_set;
     const QString debArch = deb->architecture();
     const auto &depends = deb->depends();
-    const auto availablePackages = packageCandidateChoose(debArch, depends);
+    packageCandidateChoose(choose_set, debArch, depends);
 
     // TODO: check upgrade from conflicts
 
-    return availablePackages.toList();
+    return choose_set.toList();
 }
 
-const QSet<QString> PackagesManager::packageCandidateChoose(const QString &debArch, const QList<DependencyItem> &dependsList)
+void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QList<DependencyItem> &dependsList)
 {
-    QSet<QString> choose_set;
     for (auto const &candidate_list : dependsList)
-        packageCandidateChoose(choose_set, debArch, candidate_list);
-
-    return choose_set;
+        packageCandidateChoose(choosed_set, debArch, candidate_list);
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const DependencyItem &candidateList)
@@ -297,7 +300,19 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             return;
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok())
+        {
+            qDebug() << "conflict error in choose candidate" << dep->name();
             continue;
+        }
+
+        // pass if break
+        QSet<QString> set = choosed_set;
+        const auto stat = checkDependsPackageStatus(set, dep->architecture(), dep->depends());
+        if (stat.isBreak())
+        {
+            qDebug() << "depends error in choose candidate" << dep->name();
+            continue;
+        }
 
         choosed = true;
         const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
@@ -305,7 +320,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             break;
 
         choosed_set << choosed_name;
-        choosed_set.unite(packageCandidateChoose(debArch, dep->depends()));
+        packageCandidateChoose(choosed_set, debArch, dep->depends());
         break;
     }
 
@@ -366,7 +381,39 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
-const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> choosed_set, const QString &architecture, const DependencyInfo &dependencyInfo)
+const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const QList<DependencyItem> &depends)
+{
+    PackageDependsStatus ret = PackageDependsStatus::ok();
+
+    for (const auto &candicate_list : depends)
+    {
+        const auto r = checkDependsPackageStatus(choosed_set, architecture, candicate_list);
+        ret.maxEq(r);
+
+        if (ret.isBreak())
+            break;
+    }
+
+    return ret;
+}
+
+const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const DependencyItem &candicate)
+{
+    PackageDependsStatus ret = PackageDependsStatus::_break(QString());
+
+    for (const auto &info : candicate)
+    {
+        const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
+        ret.minEq(r);
+
+        if (!ret.isBreak())
+            break;
+    }
+
+    return ret;
+}
+
+const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const DependencyInfo &dependencyInfo)
 {
     const QString package_name = dependencyInfo.packageName();
 
@@ -434,24 +481,43 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         }
 
         // now, package dependencies status is available or break,
-        // time to check depends' dependencies
-        const auto &depends = p->depends();
-        qDebug() << "Check indirect dependencies for package" << p->name();
-        for (auto const &item : depends)
-        {
-            const auto &info = item.first();
-            const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(), p->multiArchType());
-
-            const auto r = checkDependsPackageStatus(choosed_set, arch, info);
-            if (r.isBreak())
-            {
-                qDebug() << "depends break by direct depends" << p->name() << arch << dependencyInfo.packageVersion();
-                return PackageDependsStatus::_break(p->name());
-            }
-        }
-        qDebug() << "Check finshed for package" << p->name();
-
+        // time to check depends' dependencies, but first, we need
+        // to add this package to choose list
         choosed_set << p->name();
+
+        qDebug() << "Check indirect dependencies for package" << p->name();
+
+        const auto r = checkDependsPackageStatus(choosed_set, p->architecture(), p->depends());
+        if (r.isBreak())
+        {
+            choosed_set.remove(p->name());
+            qDebug() << "depends break by direct depends" << p->name() << p->architecture() << r.package;
+            return PackageDependsStatus::_break(p->name());
+        }
+
+//        const auto &depends = p->depends();
+//        for (auto const &item : depends)
+//        {
+//            PackageDependsStatus rs = PackageDependsStatus::_break(QString());
+//            for (auto const &info : item)
+//            {
+//                const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(), p->multiArchType());
+
+//                const auto r = checkDependsPackageStatus(choosed_set, arch, info);
+//                rs.minEq(r);
+//            }
+
+//            if (rs.isBreak())
+//            {
+//                // we are break, remove self
+//                choosed_set.remove(p->name());
+
+//                qDebug() << "depends break by direct depends" << p->name() << p->architecture() << dependencyInfo.packageVersion();
+//                return PackageDependsStatus::_break(p->name());
+//            }
+//        }
+
+        qDebug() << "Check finshed for package" << p->name();
 
         return PackageDependsStatus::available();
     }

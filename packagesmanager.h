@@ -53,7 +53,7 @@ public:
     PackageDependsStatus packageDependsStatus(const int index);
     const QString packageInstalledVersion(const int index);
     const QStringList packageAvailableDepends(const int index);
-    const QSet<QString> packageCandidateChoose(const QString &debArch, const QList<QApt::DependencyItem> &dependsList);
+    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QList<QApt::DependencyItem> &dependsList);
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QApt::DependencyItem &candidateItem);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
@@ -63,7 +63,9 @@ public:
     QApt::Backend * const backend() const { return m_backendFuture.result(); }
 
 private:
-    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> choosed_set,const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,const QString &architecture, const QList<QApt::DependencyItem> &depends);
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,const QString &architecture, const QApt::DependencyItem &candicate);
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
     QApt::Package * packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
 
 private:
