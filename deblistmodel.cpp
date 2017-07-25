@@ -122,23 +122,30 @@ void DebListModel::uninstallPackage(const int idx)
     m_operatingIndex = idx;
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    Backend *b = m_packagesManager->m_backendFuture.result();
-    Package *p = b->package(deb->packageName());
-    Q_ASSERT(p);
 
+    const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
+    Backend *b = m_packagesManager->m_backendFuture.result();
+    for (const auto &r : rdepends)
+        b->markPackageForRemoval(r);
+    b->markPackageForRemoval(deb->packageName());
+
+//    Package *p = b->package(deb->packageName());
+//    Package *p = b->commitChanges();
     // uninstall
-    qDebug() << Q_FUNC_INFO << "starting to remove package: " << p->name();
+    qDebug() << Q_FUNC_INFO << "starting to remove package: " << deb->packageName() << rdepends;
 //    emit workerStarted();
 
     refreshOperatingPackageStatus(Operating);
 
-    m_currentTransaction = b->removePackages(QList<Package *> { p });
-    Transaction *trans = m_currentTransaction.data();
+//    m_currentTransaction = b->removePackages(QList<Package *> { p });
+    Transaction *trans = b->commitChanges();
 
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::finished, this, &DebListModel::uninstallFinished);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
+
+    m_currentTransaction = trans;
 
     trans->run();
 }

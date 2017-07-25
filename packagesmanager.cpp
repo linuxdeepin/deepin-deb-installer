@@ -335,6 +335,9 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         if (!p || !p->isInstalled())
             continue;
 
+        if (p->recommendsList().contains(packageName))
+            continue;
+
         ret << item;
 
         // append new reqiure list
