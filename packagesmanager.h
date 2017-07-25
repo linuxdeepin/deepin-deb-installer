@@ -63,7 +63,7 @@ public:
     QApt::Backend * const backend() const { return m_backendFuture.result(); }
 
 private:
-    const PackageDependsStatus checkDependsPackageStatus(const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> choosed_set,const QString &architecture, const QApt::DependencyInfo &dependencyInfo);
     QApt::Package * packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
 
 private:

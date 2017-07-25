@@ -221,7 +221,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             PackageDependsStatus tr = PackageDependsStatus::_break(QString());
             for (auto const &info : candidate_list)
             {
-                const auto r = checkDependsPackageStatus(architecture, info);
+                const auto r = checkDependsPackageStatus(QSet<QString>(), architecture, info);
                 tr = tr.minEq(r);
             }
 
@@ -366,7 +366,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
-const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QString &architecture, const DependencyInfo &dependencyInfo)
+const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> choosed_set, const QString &architecture, const DependencyInfo &dependencyInfo)
 {
     const QString package_name = dependencyInfo.packageName();
 
@@ -422,6 +422,10 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
             return PackageDependsStatus::_break(p->name());
         }
 
+        // is that already choosed?
+        if (choosed_set.contains(p->name()))
+            return PackageDependsStatus::ok();
+
         // let's check conflicts
         if (!isConflictSatisfy(architecture, p).is_ok())
         {
@@ -438,7 +442,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
             const auto &info = item.first();
             const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(), p->multiArchType());
 
-            const auto r = checkDependsPackageStatus(arch, info);
+            const auto r = checkDependsPackageStatus(choosed_set, arch, info);
             if (r.isBreak())
             {
                 qDebug() << "depends break by direct depends" << p->name() << arch << dependencyInfo.packageVersion();
@@ -446,6 +450,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(const QStr
             }
         }
         qDebug() << "Check finshed for package" << p->name();
+
+        choosed_set << p->name();
 
         return PackageDependsStatus::available();
     }
