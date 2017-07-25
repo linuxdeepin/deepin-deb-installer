@@ -46,6 +46,7 @@ public:
     explicit PackagesManager(QObject *parent = 0);
 
     bool isBackendReady();
+    bool isArchError(const int idx);
     const ConflictResult packageConflictStat(const int index);
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);

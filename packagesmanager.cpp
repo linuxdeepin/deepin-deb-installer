@@ -96,6 +96,14 @@ bool PackagesManager::isBackendReady()
     return m_backendFuture.isFinished();
 }
 
+bool PackagesManager::isArchError(const int idx)
+{
+    Backend *b = m_backendFuture.result();
+    DebFile *deb = m_preparedPackages[idx];
+
+    return !b->architectures().contains(deb->architecture());
+}
+
 const ConflictResult PackagesManager::packageConflictStat(const int index)
 {
     auto *p = m_preparedPackages[index];
@@ -198,7 +206,9 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     if (m_packageDependsStatus.contains(index))
         return m_packageDependsStatus[index];
 
-//    Backend *b = m_backendFuture.result();
+    if (isArchError(index))
+        return PackageDependsStatus::_break(QString());
+
     DebFile *deb = m_preparedPackages[index];
     const QString architecture = deb->architecture();
 

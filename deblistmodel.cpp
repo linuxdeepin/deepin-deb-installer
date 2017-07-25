@@ -219,6 +219,9 @@ QString DebListModel::packageFailedReason(const int idx) const
         if (!stat.package.isEmpty())
             return tr("Broken Dependencies: %1").arg(stat.package);
 
+        if (m_packagesManager->isArchError(idx))
+            return tr("Unmatched package architecture");
+
         const auto conflict = m_packagesManager->packageConflictStat(idx);
         if (!conflict.is_ok())
             return tr("Broken Dependencies: %1").arg(conflict.unwrap());
