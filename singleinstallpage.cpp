@@ -167,7 +167,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     centralLayout->addWidget(m_tipsLabel);
     centralLayout->addWidget(m_progress);
     centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
-    centralLayout->addSpacing(10);
+    centralLayout->addSpacing(7);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(20, 0, 20, 30);

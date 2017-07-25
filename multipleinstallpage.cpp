@@ -23,11 +23,11 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_acceptButton(new BlueButton)
 {
     m_appsView->setModel(model);
-    m_appsView->setFixedHeight(230);
+    m_appsView->setFixedHeight(231);
     m_appsView->setItemDelegate(new PackagesListDelegate);
     m_appsView->setStyleSheet("QListView {"
                               "border: 1px solid #eee;"
-                              "margin: 30px 0 0 0;"
+                              "margin: 31px 0 0 0;"
                               "}");
 
     m_installButton->setText(tr("Install"));
@@ -59,9 +59,9 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoArea);
+    centralLayout->addStretch();
     centralLayout->addWidget(m_installProgress);
     centralLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
-    centralLayout->addStretch();
     centralLayout->addLayout(btnsLayout);
     centralLayout->setContentsMargins(20, 0, 20, 30);
 

@@ -103,6 +103,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 void DebListModel::installAll()
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus != WorkerPrepare)
+        return;
 
     m_workerStatus = WorkerProcessing;
     m_operatingIndex = 0;
