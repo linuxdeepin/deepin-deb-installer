@@ -257,7 +257,9 @@ void DebListModel::onTransactionFinished()
         refreshOperatingPackageStatus(Success);
     }
 
-    delete trans;
+//    delete trans;
+    trans->deleteLater();
+    m_currentTransaction = nullptr;
 
     bumpInstallIndex();
 }
@@ -283,7 +285,9 @@ void DebListModel::onDependsInstallTransactionFinished()
         emit appendOutputInfo(trans->errorString());
     }
 
-    delete trans;
+//    delete trans;
+    trans->deleteLater();
+    m_currentTransaction = nullptr;
 
     // check current operate exit status to install or install next
     if (ret)
