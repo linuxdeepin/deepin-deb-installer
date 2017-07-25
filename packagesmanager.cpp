@@ -361,7 +361,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
         return;
 
     // reload backend cache
-    Q_ASSERT(m_backendFuture.result()->reloadCache());
+    m_backendFuture.result()->reloadCache();
 
     m_packageDependsStatus.remove(index);
 }
