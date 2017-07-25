@@ -37,9 +37,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="220"/>
-        <location filename="../deblistmodel.cpp" line="224"/>
+        <location filename="../deblistmodel.cpp" line="222"/>
+        <location filename="../deblistmodel.cpp" line="229"/>
         <source>Broken Dependencies: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="225"/>
+        <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -197,7 +202,12 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="22"/>
+        <location filename="../main.cpp" line="20"/>
+        <source>Deepin Package Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="23"/>
         <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
         <translation type="unfinished"></translation>
     </message>
