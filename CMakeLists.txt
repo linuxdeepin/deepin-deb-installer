@@ -26,7 +26,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(QApt REQUIRED)
 
-pkg_check_modules(DtkBase REQUIRED dtkbase)
+pkg_check_modules(DtkBase REQUIRED)
 pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 
 # Tell CMake to create the executable
