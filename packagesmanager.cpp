@@ -104,7 +104,7 @@ bool PackagesManager::isArchError(const int idx)
     const QString arch = deb->architecture();
 
     if (arch == "all" || arch == "any")
-        return true;
+        return false;
 
     return !b->architectures().contains(deb->architecture());
 }
