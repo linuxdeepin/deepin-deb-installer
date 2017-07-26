@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion("1.0");
-    app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
-    app.setProductIcon(QPixmap(":/images/icon.png"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
-    app.setApplicationDescription(QApplication::translate("main", "Deepin Package Manager is used to help users install and remove local software, supports to bulk install."));
+    app.setProductIcon(QPixmap(":/images/icon.png"));
     app.loadTranslator();
+    app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
+    app.setApplicationDescription(QApplication::translate("main", "Deepin Package Manager is used to help users install and remove local software, supports to bulk install."));
     app.setTheme("light");
 
     DLogManager::registerConsoleAppender();
