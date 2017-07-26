@@ -35,10 +35,15 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="213"/>
-        <location filename="../deblistmodel.cpp" line="217"/>
+        <location filename="../deblistmodel.cpp" line="222"/>
+        <location filename="../deblistmodel.cpp" line="229"/>
         <source>Broken Dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="225"/>
+        <source>Unmatched package architecture</source>
+        <translation>软件包架构不匹配</translation>
     </message>
 </context>
 <context>
@@ -58,21 +63,21 @@
     <name>MultipleInstallPage</name>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
-        <source>Display installation process</source>
-        <translation>显示安装进程</translation>
-    </message>
-    <message>
-        <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="31"/>
+        <location filename="../multipleinstallpage.cpp" line="19"/>
+        <source>Display details</source>
+        <translation>显示详细信息</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="33"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="32"/>
+        <location filename="../multipleinstallpage.cpp" line="34"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -98,67 +103,67 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="60"/>
-        <source>Display installation process</source>
-        <translation>显示安装进程</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="60"/>
+        <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="88"/>
+        <location filename="../singleinstallpage.cpp" line="61"/>
+        <source>Display details</source>
+        <translation>显示详细信息</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="90"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="90"/>
+        <location filename="../singleinstallpage.cpp" line="92"/>
         <source>Remove</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="92"/>
+        <location filename="../singleinstallpage.cpp" line="94"/>
         <source>Reinstall</source>
         <translation>重新安装</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="94"/>
+        <location filename="../singleinstallpage.cpp" line="96"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="101"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Package: </source>
         <translation>软件包：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="108"/>
+        <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="250"/>
+        <location filename="../singleinstallpage.cpp" line="261"/>
         <source>Installed successfully</source>
         <translation>安装成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="252"/>
+        <location filename="../singleinstallpage.cpp" line="263"/>
         <source>Uninstalled successfully</source>
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="313"/>
+        <location filename="../singleinstallpage.cpp" line="324"/>
         <source>Other version installed: %1</source>
         <translation>已安装其他版本：%1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="260"/>
+        <location filename="../singleinstallpage.cpp" line="271"/>
         <source>Uninstall Failed</source>
         <translation>卸载失败</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="311"/>
+        <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
@@ -196,9 +201,14 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="22"/>
+        <location filename="../main.cpp" line="20"/>
+        <source>Deepin Package Manager</source>
+        <translation>深度软件包管理器</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="23"/>
         <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
-        <translation>深度软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装</translation>
+        <translation>深度软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
 </context>
 </TS>

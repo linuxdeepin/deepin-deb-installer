@@ -35,9 +35,14 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="213"/>
-        <location filename="../deblistmodel.cpp" line="217"/>
+        <location filename="../deblistmodel.cpp" line="222"/>
+        <location filename="../deblistmodel.cpp" line="229"/>
         <source>Broken Dependencies: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="225"/>
+        <source>Unmatched package architecture</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -58,21 +63,21 @@
     <name>MultipleInstallPage</name>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
-        <source>Display installation process</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="31"/>
+        <location filename="../multipleinstallpage.cpp" line="19"/>
+        <source>Display details</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="33"/>
         <source>Install</source>
         <translation>התקנה</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="32"/>
+        <location filename="../multipleinstallpage.cpp" line="34"/>
         <source>OK</source>
         <translation>אישור</translation>
     </message>
@@ -98,67 +103,67 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="60"/>
-        <source>Display installation process</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="60"/>
+        <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="88"/>
+        <location filename="../singleinstallpage.cpp" line="61"/>
+        <source>Display details</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="90"/>
         <source>Install</source>
         <translation>התקנה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="90"/>
+        <location filename="../singleinstallpage.cpp" line="92"/>
         <source>Remove</source>
         <translation>הסרה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="92"/>
+        <location filename="../singleinstallpage.cpp" line="94"/>
         <source>Reinstall</source>
         <translation>התקנה מחדש</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="94"/>
+        <location filename="../singleinstallpage.cpp" line="96"/>
         <source>OK</source>
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="101"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Package: </source>
         <translation>חבילה:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="108"/>
+        <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>גרסה:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="250"/>
+        <location filename="../singleinstallpage.cpp" line="261"/>
         <source>Installed successfully</source>
         <translation>הותקן בהצלחה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="252"/>
+        <location filename="../singleinstallpage.cpp" line="263"/>
         <source>Uninstalled successfully</source>
         <translation>הוסר בהצלחה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="313"/>
+        <location filename="../singleinstallpage.cpp" line="324"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="260"/>
+        <location filename="../singleinstallpage.cpp" line="271"/>
         <source>Uninstall Failed</source>
         <translation>ההסרה נכשלה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="311"/>
+        <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Same version installed</source>
         <translation>הותקנה אותה הגרסה</translation>
     </message>
@@ -195,7 +200,12 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="22"/>
+        <location filename="../main.cpp" line="20"/>
+        <source>Deepin Package Manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="23"/>
         <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
         <translation>מנהל החבילות של Deeping משמש לצורך סיוע למשתמשים להתקנה ולהסרה של תכנה מקומית, עם תמיכה בהתקנה קבוצתית.</translation>
     </message>
