@@ -142,7 +142,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(48);
+    itemLayout->addSpacing(60);
     itemLayout->addLayout(itemBlockLayout);
     itemLayout->addSpacing(20);
     itemLayout->addWidget(m_packageDescription);
@@ -167,7 +167,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     centralLayout->addWidget(m_tipsLabel);
     centralLayout->addWidget(m_progress);
     centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
-    centralLayout->addSpacing(7);
+    centralLayout->addSpacing(10);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(20, 0, 20, 30);
