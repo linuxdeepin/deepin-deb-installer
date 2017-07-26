@@ -194,7 +194,7 @@
         <location filename="../uninstallconfirmpage.cpp" line="80"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>您确定要卸载XXX吗？
+        <translation>您确定要卸载%1 吗？
 所有依赖也会被一起移除</translation>
     </message>
 </context>
