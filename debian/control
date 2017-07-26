@@ -10,4 +10,4 @@ Package: deepin-deb-installer
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: deepin deb installer
- <insert long description, indented with spaces>
+ Deepin Package Manager is used to help users install and remove local software, supports to bulk install.

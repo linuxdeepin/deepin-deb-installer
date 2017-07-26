@@ -101,6 +101,11 @@ bool PackagesManager::isArchError(const int idx)
     Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[idx];
 
+    const QString arch = deb->architecture();
+
+    if (arch == "all" || arch == "any")
+        return true;
+
     return !b->architectures().contains(deb->architecture());
 }
 
