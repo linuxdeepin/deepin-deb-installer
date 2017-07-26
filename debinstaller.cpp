@@ -12,13 +12,15 @@
 
 #include <QApt/DebFile>
 
+#include <dtitlebar.h>
+
 using QApt::DebFile;
 
 DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
-    : DWindow(parent),
-
+    : DMainWindow(parent),
+      m_widget(new QWidget()),
       m_fileListModel(new DebListModel(this)),
 
       m_centralLayout(new QStackedLayout),
@@ -28,13 +30,16 @@ DebInstaller::DebInstaller(QWidget *parent)
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    setLayout(m_centralLayout);
     setFixedSize(480, 380);
+    this->titleBar()->setWindowFlags(Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
-    setTitleIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
-    setTitle(QString());
+    setCentralWidget(m_widget);
+    //setTitleIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
+    //setTitle(QString());
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
+
+    m_widget->setLayout(m_centralLayout);
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [=](const QString &output) { qDebug() << output.trimmed(); });
@@ -88,7 +93,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_centralLayout->addWidget(singlePage);
     } else {
         // multiple packages install
-        setTitle(tr("Bulk Install"));
+        //setTitle(tr("Bulk Install"));
 
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
 

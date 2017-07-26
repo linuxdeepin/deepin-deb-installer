@@ -3,12 +3,12 @@
 
 #include <QStackedLayout>
 
-#include <DWindow>
+#include <DMainWindow>
 
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
-class DebInstaller : public Dtk::Widget::DWindow
+class DebInstaller : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
 
@@ -29,6 +29,7 @@ private:
     SingleInstallPage *backToSinglePage();
 
 private:
+    QWidget *m_widget;
     DebListModel *m_fileListModel;
 
     QStackedLayout *m_centralLayout;
