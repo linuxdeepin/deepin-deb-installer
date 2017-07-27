@@ -310,6 +310,13 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (!dep)
             continue;
 
+        const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+        if (choosed_set.contains(choosed_name))
+        {
+            choosed = true;
+            break;
+        }
+
         // TODO: upgrade?
         if (!dep->installedVersion().isEmpty())
             return;
@@ -322,6 +329,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 
         // pass if break
         QSet<QString> set = choosed_set;
+        set << choosed_name;
         const auto stat = checkDependsPackageStatus(set, dep->architecture(), dep->depends());
         if (stat.isBreak())
         {
@@ -330,10 +338,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         }
 
         choosed = true;
-        const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-        if (choosed_set.contains(choosed_name))
-            break;
-
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, dep->depends());
         break;
@@ -558,7 +562,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     qDebug() << "check virtual package providers for package" << packageName << sysArch << annotation;
     // check virtual package providers
     for (auto *ap : b->availablePackages())
-        if (ap->providesList().contains(packageName))
+        if (ap->name() != packageName && ap->providesList().contains(packageName))
             return packageWithArch(ap->name(), sysArch, annotation);
 
     return nullptr;
