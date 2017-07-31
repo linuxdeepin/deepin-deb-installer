@@ -299,8 +299,9 @@ void SingleInstallPage::setPackageInfo()
     m_packageVersion->setText(package->version());
 
     // set package description
-    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
-    const QString description = package->longDescription().replace(multiLine, "\n");
+//    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
+//    const QString description = package->longDescription().replace(multiLine, "\n");
+    const QString description = package->longDescription();
     const QRect boundingRect = QRect(0, 0, m_packageDescription->width(), m_packageDescription->maximumHeight());
     const QFontMetrics fm(m_packageDescription->font());
     m_packageDescription->setText(holdTextInRect(fm, description, boundingRect));
