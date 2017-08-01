@@ -4,12 +4,12 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="42"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="98"/>
         <source>Bulk Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -52,7 +52,7 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
+        <source>Drag and drop file here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -135,11 +135,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
@@ -155,7 +150,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,7 +160,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,13 +202,13 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="27"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
+        <location filename="../main.cpp" line="28"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

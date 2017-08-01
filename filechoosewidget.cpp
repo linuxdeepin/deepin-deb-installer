@@ -23,7 +23,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     iconImage->setPixmap(QPixmap(":/images/icon.png"));
 
     QLabel *dndTips = new QLabel;
-    dndTips->setText(tr("Drag and drop files here"));
+    dndTips->setText(tr("Drag and drop file here"));
     dndTips->setAlignment(Qt::AlignCenter);
     dndTips->setStyleSheet("QLabel {"
                            "color: #6a6a6a;"

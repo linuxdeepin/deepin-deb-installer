@@ -101,7 +101,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     QLabel *packageName = new QLabel;
-    packageName->setText(tr("Package: "));
+    packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     packageName->setStyleSheet("QLabel {"
                                "color: #797979;"
