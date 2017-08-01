@@ -7,7 +7,11 @@
 #include <DLog>
 
 DWIDGET_USE_NAMESPACE
+#ifdef DUTIL_USE_NAMESPACE
+DUTIL_USE_NAMESPACE
+#else
 DCORE_USE_NAMESPACE
+#endif
 
 int main(int argc, char *argv[])
 {

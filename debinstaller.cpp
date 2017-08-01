@@ -12,12 +12,14 @@
 
 #include <QApt/DebFile>
 
+#include <DTitlebar>
+
 using QApt::DebFile;
 
 DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
-    : DWindow(parent),
+    : DMainWindow(parent),
 
       m_fileListModel(new DebListModel(this)),
 
@@ -28,12 +30,17 @@ DebInstaller::DebInstaller(QWidget *parent)
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    setLayout(m_centralLayout);
+    QWidget *wrapWidget = new QWidget;
+    wrapWidget->setLayout(m_centralLayout);
+
+    DTitlebar *tb = titlebar();
+    tb->setIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
+    tb->setTitle(QString());
+
+    setCentralWidget(wrapWidget);
     setFixedSize(480, 380);
     setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
-    setTitleIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
-    setTitle(QString());
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
@@ -88,7 +95,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_centralLayout->addWidget(singlePage);
     } else {
         // multiple packages install
-        setTitle(tr("Bulk Install"));
+        titlebar()->setTitle(tr("Bulk Install"));
 
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
 
