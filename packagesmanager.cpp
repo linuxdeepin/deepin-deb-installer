@@ -179,8 +179,9 @@ int PackagesManager::packageInstallStatus(const int index)
         return m_packageInstallStatus[index];
 
     const QString packageName = m_preparedPackages[index]->packageName();
+    const QString packageArch = m_preparedPackages[index]->architecture();
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(packageName);
+    Package *p = b->package(packageName + ":" + packageArch);
 
     int ret = DebListModel::NotInstalled;
     do {
