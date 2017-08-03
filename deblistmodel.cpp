@@ -13,6 +13,20 @@
 
 using namespace QApt;
 
+bool isDpkgRunning()
+{
+    QProcess proc;
+    proc.start("ps", QStringList() << "-e" << "-o" << "comm");
+    proc.waitForFinished();
+
+    const QString output = proc.readAllStandardOutput();
+    for (const auto &item : output.split('\n'))
+        if (item == "dpkg")
+            return true;
+
+    return false;
+}
+
 const QString workerErrorString(const int e)
 {
     switch (e)
@@ -305,6 +319,13 @@ void DebListModel::installNextDeb()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
+
+    if (isDpkgRunning())
+    {
+        qDebug() << "dpkg running, waitting...";
+        QTimer::singleShot(1000 * 5, this, &DebListModel::installNextDeb);
+        return;
+    }
 
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
