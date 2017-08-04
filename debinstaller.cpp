@@ -36,6 +36,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));
     tb->setTitle(QString());
+    tb->setWindowFlags(tb->windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     setCentralWidget(wrapWidget);
     setFixedSize(480, 380);
