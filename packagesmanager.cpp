@@ -118,7 +118,7 @@ const ConflictResult PackagesManager::packageConflictStat(const int index)
 
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Package *package)
 {
-    qDebug() << "check conflict for package" << package->name();
+    qDebug() << "check conflict for package" << package->name() << arch;
 
     const auto ret = isConflictSatisfy(arch, package->conflicts());
 
@@ -134,7 +134,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
         for (const auto &conflict : conflict_list)
         {
             const QString name = conflict.packageName();
-            Package *p = packageWithArch(name, arch);
+            Package *p = packageWithArch(name, arch, conflict.multiArchAnnotation());
 
             if (!p || !p->isInstalled())
                 continue;
@@ -545,16 +545,20 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation)
 {
+    qDebug() << "package with arch" << packageName << sysArch << annotation;
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(packageName);
+    Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
 
     do {
+        if (!p)
+            p = b->package(packageName);
         if (!p)
             break;
 
         const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
-        if (!arch.isEmpty())
-            p = b->package(packageName + arch);
+//        if (!arch.isEmpty())
+        // reset to check foreign arch
+        p = b->package(packageName + arch);
     } while(false);
 
     if (p)

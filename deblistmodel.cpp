@@ -143,17 +143,12 @@ void DebListModel::uninstallPackage(const int idx)
     Backend *b = m_packagesManager->m_backendFuture.result();
     for (const auto &r : rdepends)
         b->markPackageForRemoval(r);
-    b->markPackageForRemoval(deb->packageName());
+    b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());
 
-//    Package *p = b->package(deb->packageName());
-//    Package *p = b->commitChanges();
     // uninstall
     qDebug() << Q_FUNC_INFO << "starting to remove package: " << deb->packageName() << rdepends;
-//    emit workerStarted();
 
     refreshOperatingPackageStatus(Operating);
-
-//    m_currentTransaction = b->removePackages(QList<Package *> { p });
     Transaction *trans = b->commitChanges();
 
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
