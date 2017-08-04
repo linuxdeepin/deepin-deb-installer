@@ -153,6 +153,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
+    connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
     connect(trans, &Transaction::finished, this, &DebListModel::uninstallFinished);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
 
@@ -184,6 +185,8 @@ void DebListModel::onTransactionErrorOccurred()
         if (trans->isCancellable())
             trans->cancel();
         trans->deleteLater();
+
+        qDebug() << "reset env to prepare";
 
         // reset env
         m_workerStatus = WorkerPrepare;
