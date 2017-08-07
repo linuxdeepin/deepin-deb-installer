@@ -23,12 +23,13 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_arrowIcon);
+    centralLayout->addStretch();
     centralLayout->addWidget(m_tipsText);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
-    setFixedSize(200, 25);
+    setFixedSize(200, 30);
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
