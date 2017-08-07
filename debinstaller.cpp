@@ -45,6 +45,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
+    connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [=](const QString &output) { qDebug() << output.trimmed(); });
 }
 
@@ -134,6 +135,11 @@ void DebInstaller::onUninstallAccepted()
 void DebInstaller::onUninstallCalceled()
 {
     backToSinglePage();
+}
+
+void DebInstaller::onAuthing(const bool authing)
+{
+    setEnabled(!authing);
 }
 
 SingleInstallPage *DebInstaller::backToSinglePage()

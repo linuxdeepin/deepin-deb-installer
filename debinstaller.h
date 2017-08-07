@@ -24,6 +24,7 @@ private slots:
     void showUninstallConfirmPage();
     void onUninstallAccepted();
     void onUninstallCalceled();
+    void onAuthing(const bool authing);
 
 private:
     SingleInstallPage *backToSinglePage();

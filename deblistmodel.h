@@ -72,6 +72,7 @@ public:
 
 signals:
 //    void workerStarted() const;
+    void lockForAuth(const bool lock) const;
     void workerFinished() const;
     void workerProgressChanged(const int progress) const;
     void transactionProgressChanged(const int progress) const;
@@ -84,6 +85,7 @@ public slots:
     void uninstallPackage(const int idx);
     void appendPackage(QApt::DebFile *package);
     void onTransactionErrorOccurred();
+    void onTransactionStatusChanged(QApt::TransactionStatus stat);
 
 private:
     void bumpInstallIndex();

@@ -153,6 +153,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
+    connect(trans, &Transaction::statusChanged, this, &DebListModel::onTransactionStatusChanged);
     connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
     connect(trans, &Transaction::finished, this, &DebListModel::uninstallFinished);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
@@ -189,11 +190,26 @@ void DebListModel::onTransactionErrorOccurred()
         qDebug() << "reset env to prepare";
 
         // reset env
+        emit lockForAuth(false);
         m_workerStatus = WorkerPrepare;
         return;
     }
 
     // DO NOT install next, this action will finished and will be install next automatic.
+}
+
+void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
+{
+    switch (stat)
+    {
+    case TransactionStatus::AuthenticationStatus:
+        emit lockForAuth(true);
+        break;
+    case TransactionStatus::WaitingStatus:
+        emit lockForAuth(false);
+        break;
+    default:;
+    }
 }
 
 void DebListModel::bumpInstallIndex()
@@ -351,8 +367,6 @@ void DebListModel::installNextDeb()
         qDebug() << Q_FUNC_INFO << "install" << deb->packageName() << "dependencies: " << availableDepends;
 
         trans = backend->commitChanges();
-        connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
-        connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
         connect(trans, &Transaction::finished, this, &DebListModel::onDependsInstallTransactionFinished);
     } else {
         qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
@@ -360,16 +374,17 @@ void DebListModel::installNextDeb()
         trans = backend->installFile(*deb);
 
         connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
-        connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
         connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
-        connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
     }
 
     // NOTE: DO NOT remove this.
     // see: https://bugs.kde.org/show_bug.cgi?id=382272
     trans->setLocale(".UTF-8");
 
+    connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
+    connect(trans, &Transaction::statusChanged, this, &DebListModel::onTransactionStatusChanged);
+    connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
 
     m_currentTransaction = trans;
     m_currentTransaction->run();
