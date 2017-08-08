@@ -84,7 +84,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_workerInfomation->setStyleSheet("QTextEdit {"
                                       "color: #609dc9;"
                                       "border: 1px solid #eee;"
-                                      "margin: 10px 0 0px 0;"
+                                      "margin: 6px 0 0px 0;"
                                       "}");
 
     m_installButton->setText(tr("Install"));
@@ -96,7 +96,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
-    m_packageDescription->setFixedHeight(72);
+    m_packageDescription->setFixedHeight(50);
     m_packageDescription->setFixedWidth(320);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 

@@ -32,6 +32,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 
     QWidget *wrapWidget = new QWidget;
     wrapWidget->setLayout(m_centralLayout);
+//    wrapWidget->setStyleSheet("background-color: red;");
 
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer").pixmap(24, 24));

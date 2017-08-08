@@ -22,6 +22,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
                               "}");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addSpacing(2);
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addStretch();
     centralLayout->addWidget(m_tipsText);
@@ -29,7 +30,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
-    setFixedSize(200, 30);
+    setFixedSize(200, 33);
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
@@ -52,8 +53,10 @@ void InfoControlButton::onMouseRelease()
     {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
         m_tipsText->setText(m_expandTips);
+        setFixedSize(200, 33);
     } else {
         m_arrowIcon->setPixmap(QPixmap(":/images/arrow_down.png"));
         m_tipsText->setText(m_shrinkTips);
+        setFixedSize(200, 28);
     }
 }
