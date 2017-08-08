@@ -9,6 +9,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QDebug>
+#include <QProcess>
 
 #include <QApt/DebFile>
 
@@ -61,6 +62,9 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 #ifdef QT_DEBUG
     case Qt::Key_Escape:        qApp->quit();       break;
 #endif
+    case Qt::Key_F1:
+        QProcess::startDetached("dman", QStringList() << "deepin-package-manager");
+        break;
     default:;
     }
 }
