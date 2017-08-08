@@ -43,18 +43,22 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
+# install manual files
+install(DIRECTORY dmanual/
+        DESTINATION share/dman/deepin-package-manager)
+
 # Install qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-deb-installer/translations)
+        DESTINATION share/deepin-deb-installer/translations)
 
 # Install icons
 foreach (ICON_SIZE 16 24 32 48 64 96 128 256)
     install(FILES resources/images/deepin-deb-installer-${ICON_SIZE}px.svg
             RENAME deepin-deb-installer.svg
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps)
+            DESTINATION share/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps)
 endforeach ()
 
-install(TARGETS deepin-deb-installer DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install(FILES deepin-deb-installer.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
-install(FILES deepin-deb-installer.applications DESTINATION ${CMAKE_INSTALL_PREFIX}/share/application-registry)
+install(TARGETS deepin-deb-installer DESTINATION bin)
+install(FILES deepin-deb-installer.desktop DESTINATION share/applications)
+install(FILES deepin-deb-installer.applications DESTINATION share/application-registry)
