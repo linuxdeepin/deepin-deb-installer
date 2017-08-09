@@ -60,14 +60,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);
 
     // install status
-    const int install_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    if (install_stat != DebListModel::Prepare)
+    const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+    if (operate_stat != DebListModel::Prepare)
     {
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 15);
         install_status_rect.setLeft(option.rect.right() - 80);
 
-        switch (install_stat)
+        switch (operate_stat)
         {
         case DebListModel::Operating:
             painter->setPen(QColor(124, 124, 124));
@@ -85,19 +85,32 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     }
 
     // draw package info
+    QString info_str;
     QRect info_rect = option.rect;
     info_rect.setLeft(content_x);
     info_rect.setTop(name_rect.bottom() + 1 + 3);
-    if (install_stat != DebListModel::Failed)
+
+    const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+    if (operate_stat == DebListModel::Failed)
     {
-        const QString info_str = painter->fontMetrics().elidedText(index.data(DebListModel::PackageDescriptionRole).toString(), Qt::ElideRight, 306);
-        painter->setPen(QColor(90, 90, 90));
-        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
-    } else {
-        const QString info_str = painter->fontMetrics().elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, 306);
+        info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         painter->setPen(QColor(255, 109, 109));
-        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
+    } else if (install_stat != DebListModel::NotInstalled) {
+        if (install_stat == DebListModel::InstalledSameVersion)
+        {
+            info_str = tr("Same version installed");
+            painter->setPen(QColor(65, 117, 5));
+        } else {
+            info_str = tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+            painter->setPen(QColor(255, 109, 109));
+        }
+    } else {
+        info_str = index.data(DebListModel::PackageDescriptionRole).toString();
+        painter->setPen(QColor(90, 90, 90));
     }
+
+    info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
+    painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
 }
 
 QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
