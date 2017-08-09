@@ -19,7 +19,7 @@
 - 使用鼠标双击deb包，深度软件包管理器会自动启动并准备安装该软件包。
 - 从启动器中点击应用图标，深度软件包管理器启动后可以选择文件或者直接将deb包拖拽到界面上。
 
-![1|run](png/run.png)
+![0|run](png/run.png)
 
 ### 安装
 
@@ -33,7 +33,7 @@
 4.  如果弹出授权窗口，请输入密码授权。
 5.  安装过程中可以点击 ![arrowdown_icon](icon/arrowdown_icon.svg)或![arrowup_icon](icon/arrowup_icon.svg)展开或收起安装进程信息。
 6.  安装成功之后，点击 **完成**。
-  ![1|single](png/single.png)
+  ![0|single](png/single.png)
 
 >![notes](icon/notes.svg):深度软件包管理器会自动检测您的安装包，如果本地已经安装过该应用，会显示已安装和准备安装的版本信息，此时可以选择 **卸载** 或 **重新安装** 操作。
 
@@ -49,7 +49,7 @@
 - 批量安装时按钮只显示 **安装** 按钮。本地已安装其他版本的软件包执行安装操作，本地已安装相同版本的软件包执行重新安装操作。
 
 
-![1|mult](png/mult.png)
+![0|mult](png/mult.png)
 
 
 #### 无法安装
@@ -62,7 +62,7 @@
 - 依赖关系不满足。
 
 
-![1|cant](png/cant.png)
+![0|cant](png/cant.png)
 
 
 ### 卸载
@@ -76,7 +76,7 @@
 5. 请注意界面上的卸载提示，然后点击 **确认卸载**。
 6. 卸载成功后点击 **确定**。
 
-![1|uninstall](png/uninstall.png)
+![0|uninstall](png/uninstall.png)
 
 > ![attention](icon/attention.svg):卸载某些应用可能会对系统或其他软件产生影响，请谨慎操作。
 
