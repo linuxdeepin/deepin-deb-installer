@@ -4,12 +4,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="42"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="98"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17,33 +22,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,6 +104,16 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="82"/>
         <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -202,12 +217,12 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="27"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="28"/>
+        <location filename="../main.cpp" line="29"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
         <translation type="unfinished"></translation>
     </message>
