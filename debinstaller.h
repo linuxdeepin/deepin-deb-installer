@@ -26,6 +26,8 @@ private slots:
     void onUninstallCalceled();
     void onAuthing(const bool authing);
 
+    void showHelp();
+
 private:
     SingleInstallPage *backToSinglePage();
 
