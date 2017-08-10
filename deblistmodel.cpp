@@ -181,10 +181,11 @@ void DebListModel::onTransactionErrorOccurred()
     qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
     qWarning() << trans->errorDetails() << trans->errorString();
 
+    if (trans->isCancellable())
+        trans->cancel();
+
     if (e == AuthError)
     {
-        if (trans->isCancellable())
-            trans->cancel();
         trans->deleteLater();
 
         qDebug() << "reset env to prepare";
@@ -196,6 +197,7 @@ void DebListModel::onTransactionErrorOccurred()
     }
 
     // DO NOT install next, this action will finished and will be install next automatic.
+    trans->setProperty("exitStatus", QApt::ExitFailed);
 }
 
 void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
@@ -271,6 +273,9 @@ void DebListModel::onTransactionFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
+
+    // prevent next signal
+    disconnect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
 
     // report new progress
     emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
