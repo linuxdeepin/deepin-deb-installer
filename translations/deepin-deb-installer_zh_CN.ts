@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation>深度软件包管理器</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
@@ -15,33 +20,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
         <translation>安装失败，请检查您的网络连接</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
         <translation>安装失败，请在控制中心检查更新</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>安装失败，磁盘空间不足</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
@@ -50,7 +55,7 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
+        <source>Drag and drop file here</source>
         <translation>拖拽软件包到此</translation>
     </message>
     <message>
@@ -99,6 +104,16 @@
         <source>Failed</source>
         <translation>安装失败</translation>
     </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation>已安装相同版本</translation>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
+        <translation>已安装其他版本：%1</translation>
+    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -133,11 +148,6 @@
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation>软件包：</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>版本：</translation>
@@ -153,7 +163,7 @@
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
         <translation>已安装其他版本：%1</translation>
     </message>
@@ -163,7 +173,12 @@
         <translation>卸载失败</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation>名称：</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
@@ -201,13 +216,13 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
         <translation>深度软件包管理器</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
+        <location filename="../main.cpp" line="29"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
         <translation>深度软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
 </context>

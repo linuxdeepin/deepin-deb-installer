@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation>مدير حزم ديبين</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
         <translation>حجم التثبيت</translation>
     </message>
@@ -15,33 +20,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"/>
     </message>
@@ -50,8 +55,8 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
-        <translation>اسحب الملفات وأفلتها هنا</translation>
+        <source>Drag and drop file here</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
@@ -99,6 +104,16 @@
         <source>Failed</source>
         <translation>فشل</translation>
     </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -133,11 +148,6 @@
         <translation>موافق</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation>الحزمة :</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>الإصدار :</translation>
@@ -153,7 +163,7 @@
         <translation>تم إلغاء التثبيت بنجاح</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"/>
     </message>
@@ -163,7 +173,12 @@
         <translation>فشل إزالة التثبيت</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation>الإصدار نفسه مثبت</translation>
     </message>
@@ -200,13 +215,13 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
+        <location filename="../main.cpp" line="29"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
         <translation type="unfinished"/>
     </message>
 </context>

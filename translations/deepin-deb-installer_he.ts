@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation>מנהל החבילות של Deepin</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
         <translation>התקנה קבוצתית</translation>
     </message>
@@ -15,48 +20,48 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
-        <translation type="unfinished"/>
+        <translation>ההתקנה נכשלה, נא לבדוק את החיבור שלך לרשת</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation type="unfinished"/>
+        <translation>ההתקנה נכשלה, נא לבדוק אם יש עדכונים במרכז הבקרה</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation type="unfinished"/>
+        <translation>ההתקנה נכשלה, אין מספיק מקום בכונן</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation>ההתקנה נכשלה</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>תלויות פגומות: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"/>
+        <translation>ארכיטקטורת החבילה אינה תואמת</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
-        <translation>יש לגרור ולשחרר לכאן קבצים</translation>
+        <source>Drag and drop file here</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Select File</source>
-        <translation>בחירת קוב.</translation>
+        <translation>בחירת קובץ</translation>
     </message>
 </context>
 <context>
@@ -64,12 +69,12 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>צמצום</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>הצגת פרטים</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="33"/>
@@ -99,18 +104,28 @@
         <source>Failed</source>
         <translation>נכשל</translation>
     </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>צמצום</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>הצגת פרטים</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="90"/>
@@ -133,11 +148,6 @@
         <translation>אישור</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation>חבילה:</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>גרסה:</translation>
@@ -153,9 +163,9 @@
         <translation>הוסר בהצלחה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>גרסה אחר מותקנת: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="271"/>
@@ -163,7 +173,12 @@
         <translation>ההסרה נכשלה</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation>הותקנה אותה הגרסה</translation>
     </message>
@@ -173,41 +188,42 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Display related packages</source>
-        <translation type="unfinished"/>
+        <translation>הצגת חבילות קשורות</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>צמצום</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="25"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>ביטול</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="27"/>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>אישור</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="80"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>להסיר את %1?
+כל התלויות יוסרו גם כן.</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>מנהל החבילות של Deepin</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
-        <translation>מנהל החבילות של Deeping משמש לצורך סיוע למשתמשים להתקנה ולהסרה של תכנה מקומית, עם תמיכה בהתקנה קבוצתית.</translation>
+        <location filename="../main.cpp" line="29"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

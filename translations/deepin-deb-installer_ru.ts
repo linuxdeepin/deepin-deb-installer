@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation>Менеджер Пакетов Deepin</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
         <translation>Массовая Установка</translation>
     </message>
@@ -15,33 +20,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Установка не удалась, проверьте ваше интернет подключение</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
         <translation>Установка не удалась, пожалуйста проверьте обновление в Центре Управления</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Установка не удалась, недостаточно места на диске</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
         <translation>Установка Не Удалась</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
         <translation>Разорванные Зависимости: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
         <translation>Архитектура пакета не соответствует</translation>
     </message>
@@ -50,13 +55,13 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
-        <translation>Перетащите файлы сюда</translation>
+        <source>Drag and drop file here</source>
+        <translation>Перетащите файл сюда</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Select File</source>
-        <translation>Выберете Файл</translation>
+        <translation>Выберите Файл</translation>
     </message>
 </context>
 <context>
@@ -64,7 +69,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
-        <translation>Крах</translation>
+        <translation>Свернуть</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
@@ -99,13 +104,23 @@
         <source>Failed</source>
         <translation>Не удалось</translation>
     </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation>Крах</translation>
+        <translation>Свернуть</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
@@ -133,11 +148,6 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation>Пакет:</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>Версия:</translation>
@@ -153,7 +163,7 @@
         <translation>Удаление успешно завершено</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
         <translation>Другая версия установлена: %1</translation>
     </message>
@@ -163,7 +173,12 @@
         <translation>Удаление Не удалось</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation>Наименование:</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation>Эта версия уже установлена</translation>
     </message>
@@ -178,7 +193,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Collapse</source>
-        <translation>Крах</translation>
+        <translation>Свернуть</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="25"/>
@@ -201,14 +216,14 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
         <translation>Менеджер Пакетов Deepin</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
-        <translation>Пакетный Менеджер Deepin используется для помощи пользователям в установке и удалении программного обеспечения, с поддержкой массовой установки.</translation>
+        <location filename="../main.cpp" line="29"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
+        <translation>Менеджер Пакетов Deepin используется для помощи пользователям в установке и удалении программного обеспечения, с поддержкой массовой установки.</translation>
     </message>
 </context>
 </TS>

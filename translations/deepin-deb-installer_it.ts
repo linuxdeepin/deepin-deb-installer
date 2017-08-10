@@ -2,61 +2,66 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="33"/>
+        <location filename="../debinstaller.cpp" line="39"/>
+        <source>Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
         <translation>Deepin Package Manager</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="91"/>
+        <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
-        <translation>Installazione massiva</translation>
+        <translation>Installazione di massa</translation>
     </message>
 </context>
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="22"/>
+        <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Installazione fallita, controlla la connessione ad internet.</translation>
+        <translation>Installazione fallita, controlla la connessione ad internet</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="24"/>
+        <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Installazione fallita, controlla gli aggiornamenti dal Control Center.</translation>
+        <translation>Installazione fallita, controlla gli aggiornamenti dal Control Center</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="26"/>
+        <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Installazione fallita, spazio libero insufficiente.</translation>
+        <translation>Installazione fallita, spazio libero insufficiente</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="29"/>
+        <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
         <translation>Installazione fallita</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="222"/>
-        <location filename="../deblistmodel.cpp" line="229"/>
+        <location filename="../deblistmodel.cpp" line="250"/>
+        <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
         <translation>Dipendenza danneggiata: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="225"/>
+        <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
-        <translation>Architettura pacchetti non corrispondente</translation>
+        <translation>Architettura pacchetti non compatibile</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
-        <source>Drag and drop files here</source>
-        <translation>Trascina i files qui</translation>
+        <source>Drag and drop file here</source>
+        <translation>Trascina qui i file da installare </translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Select File</source>
-        <translation>Seleziona i files</translation>
+        <translation>Seleziona i file manualmente</translation>
     </message>
 </context>
 <context>
@@ -64,7 +69,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
-        <translation>Collassa</translation>
+        <translation>Non mostrare i dettagli</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
@@ -99,18 +104,28 @@
         <source>Failed</source>
         <translation>Fallita</translation>
     </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <source>Other version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation>Collassa</translation>
+        <translation>Non mostrare i dettagli</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Display details</source>
-        <translation>Visualizza dettagli</translation>
+        <translation>Visualizza i dettagli</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="90"/>
@@ -133,11 +148,6 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
-        <source>Package: </source>
-        <translation>Pacchetto:</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
         <translation>Versione:</translation>
@@ -153,9 +163,9 @@
         <translation>Disinstallazione riuscita</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="324"/>
+        <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
-        <translation>Versione installata differente: %1</translation>
+        <translation>Differente versione installata: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="271"/>
@@ -163,7 +173,12 @@
         <translation>Disinstallazione fallita</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="322"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
+        <source>Name: </source>
+        <translation>Nome:</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
         <translation>Medesima versione già installata</translation>
     </message>
@@ -178,7 +193,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Collapse</source>
-        <translation>Collassa</translation>
+        <translation>Non mostrare i dettagli</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="25"/>
@@ -201,14 +216,14 @@ Tutte le dipendenze saranno rimosse</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="20"/>
+        <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
         <translation>Gestore Pacchetti di Deepin</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="23"/>
-        <source>Deepin Package Manager is used to help users install and remove local software, supports to bulk install.</source>
-        <translation>Deepin Package Manager è utile per installare e rimuovere software in locale, supporta inoltre l&apos;installazione massiva.
+        <location filename="../main.cpp" line="29"/>
+        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
+        <translation>Deepin Package Manager é un&apos;utile applicazione che aiuta ad installare e rimuovere le applicazioni locali, supportandone l&apos;installazione di massa.
 Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>

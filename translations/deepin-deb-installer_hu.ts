@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="39"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Segítség</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Gestor de paquetes Deepin</translation>
+        <translation>Deepin Csomag Kezelő</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
-        <translation>Instalación en lote</translation>
+        <translation>Csoportos telepítés</translation>
     </message>
 </context>
 <context>
@@ -22,33 +22,33 @@
     <message>
         <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Error en la instalación, comprueba tu conexión de red</translation>
+        <translation>Telepítés sikertelen, kérem ellenőrizze a hálózati kapcsolatot</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Error en la instalación: compruebe las actualizaciones en el Centro de Control</translation>
+        <translation>Telepítés sikertelen, kérem ellenőrizze a frissítéseket a Vezérlőpultban</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Error de instalación, espacio insuficiente en disco</translation>
+        <translation>Telepítés sikertelen, nincs elég hely a lemezen</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
-        <translation>Instalación fallida</translation>
+        <translation>Telepítés sikertelen</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="250"/>
         <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Dependencias rotas: %1</translation>
+        <translation>Hibás függőségek: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"/>
+        <translation>Nem megfelelő csomag architektúra</translation>
     </message>
 </context>
 <context>
@@ -56,12 +56,12 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>Húzzon egy fájlt ide</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Select File</source>
-        <translation>Seleccionar archivo</translation>
+        <translation>Fájl kiválasztása</translation>
     </message>
 </context>
 <context>
@@ -69,22 +69,22 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Összecsuk</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Részletek megjelenítése</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="33"/>
         <source>Install</source>
-        <translation>Instalar</translation>
+        <translation>Telepítés</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="34"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -92,27 +92,27 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="74"/>
         <source>Installing</source>
-        <translation>Instalando</translation>
+        <translation>Telepítés</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="78"/>
         <source>Installed</source>
-        <translation>Instalado</translation>
+        <translation>Telepítve</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="82"/>
         <source>Failed</source>
-        <translation>Ha fallado</translation>
+        <translation>Sikertelen</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="101"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>Ez a verzió már telepítve van</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="104"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Más verzió telepítve: %1</translation>
     </message>
 </context>
 <context>
@@ -120,67 +120,67 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Összecsuk</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Részletek megjelenítése</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="90"/>
         <source>Install</source>
-        <translation>Instalar</translation>
+        <translation>Telepítés</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="92"/>
         <source>Remove</source>
-        <translation>Remover</translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="94"/>
         <source>Reinstall</source>
-        <translation>Reinstalar</translation>
+        <translation>Újratelepítés</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="96"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
-        <translation>Versión:</translation>
+        <translation>Verzió:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="261"/>
         <source>Installed successfully</source>
-        <translation>Instalación exitosa</translation>
+        <translation>Sikeresen telepítve</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="263"/>
         <source>Uninstalled successfully</source>
-        <translation>Desinstalación exitosa</translation>
+        <translation>Sikertelen telepítés</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
-        <translation>Otra versión instalada: %1</translation>
+        <translation>Más verzió telepítve: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="271"/>
         <source>Uninstall Failed</source>
-        <translation>Desinstalación fallida</translation>
+        <translation>Eltávolítás sikertelen</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Name: </source>
-        <translation type="unfinished"/>
+        <translation>Név:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
-        <translation>La misma versión está instalada</translation>
+        <translation>Ez a verzió már telepítve van</translation>
     </message>
 </context>
 <context>
@@ -188,29 +188,29 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Display related packages</source>
-        <translation>Mostrar paquetes relacionados</translation>
+        <translation>Kapcsolódó csomagok megjelenítése</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Összecsuk</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="25"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Mégse</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="27"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Megerősítés</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="80"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>¿Está seguro de desinstalar %1?
-Todas las dependencias también se eliminarán</translation>
+        <translation>Biztosan eltávolítja ezt %1 ?
+A csomag minden függősége eltávolításra kerül</translation>
     </message>
 </context>
 <context>
@@ -218,12 +218,12 @@ Todas las dependencias también se eliminarán</translation>
     <message>
         <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Csomag Kezelő</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="29"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>A Deepin Csomag Kezelő egy alkalmazás ami segít a felhasználónak a szoftverek telepítésében és eltávolításában. Támogatja a csoportos telepítést</translation>
     </message>
 </context>
 </TS>

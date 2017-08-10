@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -9,12 +9,12 @@
     <message>
         <location filename="../debinstaller.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Gestor de paquetes Deepin</translation>
+        <translation>Deepin Мениджър на пакети</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="111"/>
         <source>Bulk Install</source>
-        <translation>Instalación en lote</translation>
+        <translation>Групова инсталация</translation>
     </message>
 </context>
 <context>
@@ -22,33 +22,33 @@
     <message>
         <location filename="../deblistmodel.cpp" line="36"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Error en la instalación, comprueba tu conexión de red</translation>
+        <translation>Инсталацията е неуспешна, моля, проверете вашата връзка към мрежата</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="38"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Error en la instalación: compruebe las actualizaciones en el Centro de Control</translation>
+        <translation>Инсталацията е неуспешна, моля, проверете за обновление в контролния център</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="40"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Error de instalación, espacio insuficiente en disco</translation>
+        <translation>Инсталацията е неуспешна, няма достатъчно място на диска</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="43"/>
         <source>Installation Failed</source>
-        <translation>Instalación fallida</translation>
+        <translation>Инсталацията е неуспешна</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="250"/>
         <location filename="../deblistmodel.cpp" line="257"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Dependencias rotas: %1</translation>
+        <translation>Счупени зависимости: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="253"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"/>
+        <translation>Неподходяща архитектура на пакета</translation>
     </message>
 </context>
 <context>
@@ -56,12 +56,12 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="26"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>Издърпайте и поставете файла тук</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Select File</source>
-        <translation>Seleccionar archivo</translation>
+        <translation>Избор на файл</translation>
     </message>
 </context>
 <context>
@@ -69,22 +69,22 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Сриване</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="19"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Показване на подробности</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="33"/>
         <source>Install</source>
-        <translation>Instalar</translation>
+        <translation>Инсталиране</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="34"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>ОК</translation>
     </message>
 </context>
 <context>
@@ -92,17 +92,17 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="74"/>
         <source>Installing</source>
-        <translation>Instalando</translation>
+        <translation>Инсталиране</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="78"/>
         <source>Installed</source>
-        <translation>Instalado</translation>
+        <translation>Инсталирано</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="82"/>
         <source>Failed</source>
-        <translation>Ha fallado</translation>
+        <translation>Неуспешно</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="101"/>
@@ -120,67 +120,67 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Сриване</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Показване на подробности</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="90"/>
         <source>Install</source>
-        <translation>Instalar</translation>
+        <translation>Инсталиране</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="92"/>
         <source>Remove</source>
-        <translation>Remover</translation>
+        <translation>Премахване</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="94"/>
         <source>Reinstall</source>
-        <translation>Reinstalar</translation>
+        <translation>Преинсталиране</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="96"/>
         <source>OK</source>
-        <translation>Aceptar</translation>
+        <translation>ОК</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="111"/>
         <source>Version: </source>
-        <translation>Versión:</translation>
+        <translation>Версия:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="261"/>
         <source>Installed successfully</source>
-        <translation>Instalación exitosa</translation>
+        <translation>Инсталирането е успешно</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="263"/>
         <source>Uninstalled successfully</source>
-        <translation>Desinstalación exitosa</translation>
+        <translation>Деинсталирането е успешно</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="325"/>
         <source>Other version installed: %1</source>
-        <translation>Otra versión instalada: %1</translation>
+        <translation>Инсталирана е друга версия: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="271"/>
         <source>Uninstall Failed</source>
-        <translation>Desinstalación fallida</translation>
+        <translation>Деинсталирането е неуспешно</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Name: </source>
-        <translation type="unfinished"/>
+        <translation>Име:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="323"/>
         <source>Same version installed</source>
-        <translation>La misma versión está instalada</translation>
+        <translation>Същата версия е инсталирана</translation>
     </message>
 </context>
 <context>
@@ -188,29 +188,29 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Display related packages</source>
-        <translation>Mostrar paquetes relacionados</translation>
+        <translation>Покажи свързаните пакети</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="12"/>
         <source>Collapse</source>
-        <translation>Colapso</translation>
+        <translation>Сриване</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="25"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="27"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Потвърждение</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="80"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>¿Está seguro de desinstalar %1?
-Todas las dependencias también se eliminarán</translation>
+        <translation>Сигурен ли сте, че искате да деинсталирате %1?
+Всички зависимости също ще бъдат премахнати</translation>
     </message>
 </context>
 <context>
@@ -218,12 +218,12 @@ Todas las dependencias también se eliminarán</translation>
     <message>
         <location filename="../main.cpp" line="28"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Инсталатор на пакети</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="29"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Deepin Инсталатор на пакети е приложение, което помага на потребителите да инсталират и премахват софтуер. Поддържа и групова инсталация.</translation>
     </message>
 </context>
 </TS>
