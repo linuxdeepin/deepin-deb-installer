@@ -16,10 +16,6 @@ public:
 signals:
     void packagesSelected(const QStringList files) const;
 
-protected:
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
-
 private slots:
     void chooseFiles();
 

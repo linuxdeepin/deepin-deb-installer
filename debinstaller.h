@@ -2,6 +2,7 @@
 #define DEBINSTALLER_H
 
 #include <QStackedLayout>
+#include <QPointer>
 
 #include <DMainWindow>
 
@@ -18,6 +19,8 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent *e);
 
 private slots:
     void onPackagesSelected(const QStringList &packages);
@@ -32,6 +35,7 @@ private:
     SingleInstallPage *backToSinglePage();
 
 private:
+    QPointer<QWidget> m_lastPage;
     DebListModel *m_fileListModel;
 
     QStackedLayout *m_centralLayout;

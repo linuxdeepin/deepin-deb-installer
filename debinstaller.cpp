@@ -11,6 +11,10 @@
 #include <QDebug>
 #include <QProcess>
 #include <QAction>
+#include <QDragEnterEvent>
+#include <QFileInfo>
+#include <QMimeData>
+#include <QDir>
 
 #include <QApt/DebFile>
 
@@ -48,6 +52,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     tb->setMenu(titleMenu);
 
     setCentralWidget(wrapWidget);
+    setAcceptDrops(true);
     setFixedSize(480, 380);
     setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
@@ -75,10 +80,55 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
+{
+    auto * const mime = e->mimeData();
+    if (!mime->hasUrls())
+        return e->ignore();
+
+    for (const auto &item : mime->urls())
+    {
+        const QFileInfo info(item.path());
+        if (info.isDir())
+            return e->accept();
+        if (info.isFile() && info.suffix() == "deb")
+            return e->accept();
+    }
+
+    e->ignore();
+}
+
+void DebInstaller::dropEvent(QDropEvent *e)
+{
+    auto * const mime = e->mimeData();
+    if (!mime->hasUrls())
+        return e->ignore();
+
+    e->accept();
+
+    // find .deb files
+    QStringList file_list;
+    for (const auto &url : mime->urls())
+    {
+        if (!url.isLocalFile())
+            continue;
+        const QString local_path = url.toLocalFile();
+        const QFileInfo info(local_path);
+
+        if (info.isFile() && info.suffix() == "deb")
+            file_list << local_path;
+        else if (info.isDir())
+        {
+            for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
+                file_list << deb.absoluteFilePath();
+        }
+    }
+
+    onPackagesSelected(file_list);
+}
+
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    Q_ASSERT(m_fileListModel->preparedPackages().isEmpty());
-
     for (const auto &package : packages)
     {
         DebFile *p = new DebFile(package);
@@ -93,6 +143,10 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_fileListModel->appendPackage(p);
     }
 
+    // clear widgets if needed
+    if (!m_lastPage.isNull())
+        m_lastPage->deleteLater();
+
     const int packageCount = m_fileListModel->preparedPackages().size();
     // no packages found
     if (packageCount == 0)
@@ -102,6 +156,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     {
         // single package install
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        m_lastPage = singlePage;
 
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
@@ -111,6 +166,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         titlebar()->setTitle(tr("Bulk Install"));
 
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+        m_lastPage = multiplePage;
 
         m_centralLayout->addWidget(multiplePage);
     }

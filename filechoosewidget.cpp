@@ -64,56 +64,8 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centralLayout->setContentsMargins(0, 0, 0, 60);
 
     setLayout(centralLayout);
-    setAcceptDrops(true);
 
     connect(m_fileChooseBtn, &QPushButton::clicked, this, &FileChooseWidget::chooseFiles);
-}
-
-void FileChooseWidget::dragEnterEvent(QDragEnterEvent *e)
-{
-    auto * const mime = e->mimeData();
-    if (!mime->hasUrls())
-        return e->ignore();
-
-    for (const auto &item : mime->urls())
-    {
-        const QFileInfo info(item.path());
-        if (info.isDir())
-            return e->accept();
-        if (info.isFile() && info.suffix() == "deb")
-            return e->accept();
-    }
-
-    e->ignore();
-}
-
-void FileChooseWidget::dropEvent(QDropEvent *e)
-{
-    auto * const mime = e->mimeData();
-    if (!mime->hasUrls())
-        return e->ignore();
-
-    e->accept();
-
-    // find .deb files
-    QStringList file_list;
-    for (const auto &url : mime->urls())
-    {
-        if (!url.isLocalFile())
-            continue;
-        const QString local_path = url.toLocalFile();
-        const QFileInfo info(local_path);
-
-        if (info.isFile() && info.suffix() == "deb")
-            file_list << local_path;
-        else if (info.isDir())
-        {
-            for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
-                file_list << deb.absoluteFilePath();
-        }
-    }
-
-    emit packagesSelected(file_list);
 }
 
 void FileChooseWidget::chooseFiles()
@@ -126,8 +78,6 @@ void FileChooseWidget::chooseFiles()
         return;
 
     const QStringList selected_files = dialog.selectedFiles();
-
-    qDebug() << selected_files;
 
     emit packagesSelected(selected_files);
 }

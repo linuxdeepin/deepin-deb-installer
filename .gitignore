@@ -18,6 +18,7 @@ build*/
 *.user*
 # qm file is auto generate from .ts file
 *.qm
+.vscode/
 
 # vim tmp file
 *.swp
