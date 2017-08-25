@@ -62,7 +62,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_installButton(new BlueButton),
       m_uninstallButton(new GrayButton),
       m_reinstallButton(new GrayButton),
-      m_confirmButton(new BlueButton)
+      m_confirmButton(new GrayButton),
+      m_backButton(new GrayButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
@@ -95,6 +96,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_reinstallButton->setVisible(false);
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setVisible(false);
+    m_backButton->setText(tr("Back"));
+    m_backButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setFixedHeight(50);
     m_packageDescription->setFixedWidth(320);
@@ -136,6 +139,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_uninstallButton);
     btnsLayout->addWidget(m_reinstallButton);
+    btnsLayout->addWidget(m_backButton);
     btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(30);
@@ -227,6 +231,7 @@ void SingleInstallPage::showInfo()
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_confirmButton->setVisible(false);
+    m_backButton->setVisible(false);
 }
 
 void SingleInstallPage::onOutputAvailable(const QString &output)
@@ -249,6 +254,7 @@ void SingleInstallPage::onWorkerFinished()
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
+    m_backButton->setVisible(true);
     m_confirmButton->setVisible(true);
     m_confirmButton->setFocus();
 
@@ -316,6 +322,7 @@ void SingleInstallPage::setPackageInfo()
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
+    m_backButton->setVisible(false);
 
     if (installed)
     {
@@ -334,5 +341,6 @@ void SingleInstallPage::setPackageInfo()
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
     }
 }

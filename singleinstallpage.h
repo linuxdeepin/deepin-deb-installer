@@ -66,6 +66,7 @@ private:
     QPushButton *m_uninstallButton;
     QPushButton *m_reinstallButton;
     QPushButton *m_confirmButton;
+    QPushButton *m_backButton;
 };
 
 #endif // SINGLEINSTALLPAGE_H
