@@ -156,6 +156,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     {
         // single package install
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         m_lastPage = singlePage;
 
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
@@ -212,6 +213,15 @@ void DebInstaller::onAuthing(const bool authing)
 void DebInstaller::showHelp()
 {
     QProcess::startDetached("dman", QStringList() << "deepin-package-manager");
+}
+
+void DebInstaller::reset()
+{
+    Q_ASSERT(m_centralLayout->count() == 2);
+    Q_ASSERT(!m_lastPage.isNull());
+
+    m_lastPage->deleteLater();
+    m_centralLayout->setCurrentIndex(0);
 }
 
 SingleInstallPage *DebInstaller::backToSinglePage()

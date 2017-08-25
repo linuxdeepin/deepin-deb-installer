@@ -22,6 +22,7 @@ public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = 0);
 
 signals:
+    void back() const;
     void requestUninstallConfirm() const;
 
 public slots:

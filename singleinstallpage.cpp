@@ -183,6 +183,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
+    connect(m_backButton, &QPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);

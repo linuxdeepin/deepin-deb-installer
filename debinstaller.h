@@ -30,6 +30,7 @@ private slots:
     void onAuthing(const bool authing);
 
     void showHelp();
+    void reset();
 
 private:
     SingleInstallPage *backToSinglePage();
