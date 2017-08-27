@@ -93,6 +93,7 @@ signals:
 public slots:
     void installAll();
     void uninstallPackage(const int idx);
+    void removePackage(const int idx);
     void appendPackage(QApt::DebFile *package);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);

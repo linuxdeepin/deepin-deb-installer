@@ -172,6 +172,13 @@ void DebListModel::uninstallPackage(const int idx)
     trans->run();
 }
 
+void DebListModel::removePackage(const int idx)
+{
+    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+
+    m_packagesManager->removePackage(idx);
+}
+
 void DebListModel::appendPackage(DebFile *package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");

@@ -206,7 +206,8 @@ void DebInstaller::reset()
 
 void DebInstaller::removePackage(const int index)
 {
-    qDebug() << index;
+    m_fileListModel->removePackage(index);
+    refreshInstallPage();
 }
 
 void DebInstaller::refreshInstallPage()
