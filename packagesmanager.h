@@ -67,6 +67,7 @@ public:
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QApt::DependencyItem &candidateItem);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
+    void reset();
     void resetPackageDependsStatus(const int index);
 
     QApt::DebFile * const package(const int index) const { return m_preparedPackages[index]; }

@@ -399,6 +399,14 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     return ret.toList();
 }
 
+void PackagesManager::reset()
+{
+    m_preparedPackages.clear();
+    m_packageInstallStatus.clear();
+    m_packageDependsStatus.clear();
+    m_backendFuture.result()->reloadCache();
+}
+
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
     if (!m_packageDependsStatus.contains(index))

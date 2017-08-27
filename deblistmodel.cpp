@@ -223,6 +223,16 @@ void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
     }
 }
 
+void DebListModel::reset()
+{
+    Q_ASSERT_X(m_workerStatus == WorkerFinished, Q_FUNC_INFO, "worker status error");
+
+    m_workerStatus = WorkerPrepare;
+    m_operatingIndex = 0;
+
+    m_packagesManager->reset();
+}
+
 void DebListModel::bumpInstallIndex()
 {
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");

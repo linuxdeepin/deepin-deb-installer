@@ -229,6 +229,7 @@ void DebInstaller::reset()
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
 
+    m_fileListModel->reset();
     m_lastPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
 }

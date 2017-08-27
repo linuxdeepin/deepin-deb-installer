@@ -72,6 +72,7 @@ public:
         Failed,
     };
 
+    void reset();
     bool isReady() const;
     const QList<QApt::DebFile *> preparedPackages() const;
     QModelIndex first() const;
