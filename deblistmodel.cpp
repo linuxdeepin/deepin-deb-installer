@@ -176,7 +176,7 @@ void DebListModel::appendPackage(DebFile *package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    m_packagesManager->m_preparedPackages.append(package);
+    m_packagesManager->appendPackage(package);
 }
 
 void DebListModel::onTransactionErrorOccurred()

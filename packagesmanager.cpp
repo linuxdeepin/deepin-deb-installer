@@ -418,6 +418,27 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
+void PackagesManager::removePackage(const int index)
+{
+    DebFile *deb = m_preparedPackages[index];
+    const auto md5 = deb->md5Sum();
+
+    m_appendedPackagesMd5.remove(md5);
+    m_preparedPackages.removeAt(index);
+    m_packageInstallStatus.clear();
+    m_packageDependsStatus.clear();
+}
+
+void PackagesManager::appendPackage(DebFile *debPackage)
+{
+    const auto md5 = debPackage->md5Sum();
+    if (m_appendedPackagesMd5.contains(md5))
+        return;
+
+    m_preparedPackages << debPackage;
+    m_appendedPackagesMd5 << md5;
+}
+
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const QList<DependencyItem> &depends)
 {
     PackageDependsStatus ret = PackageDependsStatus::ok();

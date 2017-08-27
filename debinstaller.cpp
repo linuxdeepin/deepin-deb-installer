@@ -152,37 +152,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         m_fileListModel->appendPackage(p);
     }
 
-    // clear widgets if needed
-    if (!m_lastPage.isNull())
-        m_lastPage->deleteLater();
-
-    const int packageCount = m_fileListModel->preparedPackages().size();
-    // no packages found
-    if (packageCount == 0)
-        return;
-
-    if (packageCount == 1)
-    {
-        // single package install
-        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
-        connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
-        m_lastPage = singlePage;
-
-        connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
-
-        m_centralLayout->addWidget(singlePage);
-    } else {
-        // multiple packages install
-        titlebar()->setTitle(tr("Bulk Install"));
-
-        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
-        m_lastPage = multiplePage;
-
-        m_centralLayout->addWidget(multiplePage);
-    }
-
-    // switch to new page.
-    m_centralLayout->setCurrentIndex(1);
+    refreshInstallPage();
 }
 
 void DebInstaller::showUninstallConfirmPage()
@@ -232,6 +202,47 @@ void DebInstaller::reset()
     m_fileListModel->reset();
     m_lastPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
+}
+
+void DebInstaller::removePackage(const int index)
+{
+    qDebug() << index;
+}
+
+void DebInstaller::refreshInstallPage()
+{
+    // clear widgets if needed
+    if (!m_lastPage.isNull())
+        m_lastPage->deleteLater();
+
+    const int packageCount = m_fileListModel->preparedPackages().size();
+    // no packages found
+    if (packageCount == 0)
+        return;
+
+    if (packageCount == 1)
+    {
+        // single package install
+        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
+        connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
+
+        m_lastPage = singlePage;
+        m_centralLayout->addWidget(singlePage);
+    } else {
+        // multiple packages install
+        titlebar()->setTitle(tr("Bulk Install"));
+
+        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+        connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
+        connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
+
+        m_lastPage = multiplePage;
+        m_centralLayout->addWidget(multiplePage);
+    }
+
+    // switch to new page.
+    m_centralLayout->setCurrentIndex(1);
 }
 
 SingleInstallPage *DebInstaller::backToSinglePage()

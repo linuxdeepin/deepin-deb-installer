@@ -28,11 +28,15 @@ class MultipleInstallPage : public QWidget
 public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = 0);
 
+signals:
+    void back() const;
+    void requestRemovePackage(const int index) const;
+
 private slots:
-//    void onWorkerStarted();
     void onWorkerFinshed();
     void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);
+    void onItemClicked(const QModelIndex &index);
 
     void showInfo();
     void hideInfo();
@@ -46,6 +50,7 @@ private:
     QPropertyAnimation *m_progressAnimation;
     QPushButton *m_installButton;
     QPushButton *m_acceptButton;
+    QPushButton *m_backButton;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

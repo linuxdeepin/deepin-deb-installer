@@ -13,6 +13,7 @@
 #include "deblistmodel.h"
 #include "workerprogress.h"
 #include "widgets/bluebutton.h"
+#include "widgets/graybutton.h"
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -29,7 +30,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_installProgress(new WorkerProgress),
       m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this)),
       m_installButton(new BlueButton),
-      m_acceptButton(new BlueButton)
+      m_acceptButton(new GrayButton),
+      m_backButton(new GrayButton)
 {
     m_appsView->setModel(model);
     m_appsView->setFixedHeight(213);
@@ -42,6 +44,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_installButton->setText(tr("Install"));
     m_acceptButton->setText(tr("OK"));
     m_acceptButton->setVisible(false);
+    m_backButton->setText(tr("Back"));
+    m_backButton->setVisible(false);
 
     m_infoArea->setReadOnly(true);
     m_infoArea->setVisible(false);
@@ -60,7 +64,9 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
+    btnsLayout->addWidget(m_backButton);
     btnsLayout->addWidget(m_acceptButton);
+    btnsLayout->setSpacing(10);
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -81,25 +87,19 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::hideInfo);
     connect(m_installButton, &QPushButton::clicked, m_debListModel, &DebListModel::installAll);
+    connect(m_backButton, &QPushButton::clicked, this, &MultipleInstallPage::back);
     connect(m_acceptButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
-//    connect(model, &DebListModel::workerStarted, this, &MultipleInstallPage::onWorkerStarted);
-//    connect(model, &DebListModel::workerFinished, this, &MultipleInstallPage::onWorkerFinshed);
+    connect(m_appsView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
+
     connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
 }
 
-//void MultipleInstallPage::onWorkerStarted()
-//{
-//    m_installButton->setVisible(false);
-
-//    m_installProgress->setVisible(true);
-//    m_infoControlButton->setVisible(true);
-//}
-
 void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
+    m_backButton->setVisible(true);
     m_installProgress->setVisible(false);
 }
 
@@ -129,6 +129,13 @@ void MultipleInstallPage::onProgressChanged(const int progress)
         onOutputAvailable(QString());
         QTimer::singleShot(m_progressAnimation->duration(), this, &MultipleInstallPage::onWorkerFinshed);
     }
+}
+
+void MultipleInstallPage::onItemClicked(const QModelIndex &index)
+{
+    const int r = index.row();
+
+    emit requestRemovePackage(r);
 }
 
 void MultipleInstallPage::showInfo()

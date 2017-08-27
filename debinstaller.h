@@ -40,8 +40,10 @@ private slots:
 
     void showHelp();
     void reset();
+    void removePackage(const int index);
 
 private:
+    void refreshInstallPage();
     SingleInstallPage *backToSinglePage();
 
 private:

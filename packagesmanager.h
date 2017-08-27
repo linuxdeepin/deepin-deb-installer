@@ -69,6 +69,8 @@ public:
 
     void reset();
     void resetPackageDependsStatus(const int index);
+    void removePackage(const int index);
+    void appendPackage(QApt::DebFile *debPackage);
 
     QApt::DebFile * const package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend * const backend() const { return m_backendFuture.result(); }
@@ -84,6 +86,7 @@ private:
     QList<QApt::DebFile *> m_preparedPackages;
     QHash<int, int> m_packageInstallStatus;
     QHash<int, PackageDependsStatus> m_packageDependsStatus;
+    QSet<QByteArray> m_appendedPackagesMd5;
 };
 
 #endif // PACKAGESMANAGER_H
