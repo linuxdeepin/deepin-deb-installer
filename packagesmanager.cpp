@@ -404,6 +404,7 @@ void PackagesManager::reset()
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
+    m_appendedPackagesMd5.clear();
     m_backendFuture.result()->reloadCache();
 }
 
