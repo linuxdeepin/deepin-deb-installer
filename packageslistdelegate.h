@@ -19,12 +19,17 @@ class PackagesListDelegate : public QAbstractItemDelegate
 public:
     explicit PackagesListDelegate(QObject *parent = 0);
 
+public slots:
+    void setCurrentIndex(const QModelIndex &idx);
+
 private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
     QPixmap m_packageIcon;
+    QPixmap m_removeIcon;
+    QModelIndex m_currentIdx;
 };
 
 #endif // PACKAGESLISTDELEGATE_H

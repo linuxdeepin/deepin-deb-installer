@@ -33,9 +33,11 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
       m_acceptButton(new GrayButton),
       m_backButton(new GrayButton)
 {
+    PackagesListDelegate *delegate = new PackagesListDelegate;
+
     m_appsView->setModel(model);
     m_appsView->setFixedHeight(213);
-    m_appsView->setItemDelegate(new PackagesListDelegate);
+    m_appsView->setItemDelegate(delegate);
     m_appsView->setStyleSheet("QListView {"
                               "border: 1px solid #eee;"
                               "margin: 30px 0 2px 0;"
@@ -91,6 +93,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_acceptButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
+    connect(m_appsView, &PackagesListView::entered, delegate, &PackagesListDelegate::setCurrentIndex);
 
     connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);

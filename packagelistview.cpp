@@ -15,4 +15,5 @@ PackagesListView::PackagesListView(QWidget *parent)
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(NoSelection);
     setAutoScroll(false);
+    setMouseTracking(true);
 }

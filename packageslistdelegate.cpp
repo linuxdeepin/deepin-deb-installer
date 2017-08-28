@@ -17,6 +17,7 @@ PackagesListDelegate::PackagesListDelegate(QObject *parent)
 {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
     m_packageIcon = icon.pixmap(32, 32);
+    m_removeIcon = QPixmap(":/images/active_tab_close_normal.png");
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -91,6 +92,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
             break;
         }
+    } else if (m_currentIdx == index) {
+        // draw remove icon
+        const int x = option.rect.right() - m_removeIcon.width() - 10;
+        const int y = option.rect.top() + (option.rect.height() - m_removeIcon.height()) / 2;
+        painter->drawPixmap(x, y, m_removeIcon);
     }
 
     // draw package info
@@ -127,4 +133,9 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(option);
 
     return index.data(Qt::SizeHintRole).toSize();
+}
+
+void PackagesListDelegate::setCurrentIndex(const QModelIndex &idx)
+{
+    m_currentIdx = idx;
 }
