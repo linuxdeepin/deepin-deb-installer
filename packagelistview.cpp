@@ -17,3 +17,10 @@ PackagesListView::PackagesListView(QWidget *parent)
     setAutoScroll(false);
     setMouseTracking(true);
 }
+
+void PackagesListView::leaveEvent(QEvent *e)
+{
+    QListView::leaveEvent(e);
+
+    emit entered(QModelIndex());
+}

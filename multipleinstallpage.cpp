@@ -93,7 +93,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_acceptButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
-    connect(m_appsView, &PackagesListView::entered, delegate, &PackagesListDelegate::setCurrentIndex);
+    connect(m_appsView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);

@@ -90,6 +90,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
+    case ItemIsCurrentRole:
+        return m_currentIdx == index;
     case PackageNameRole:
         return deb->packageName();
     case PackagePathRole:
@@ -442,4 +444,16 @@ void DebListModel::uninstallFinished()
     refreshOperatingPackageStatus(Success);
 
     emit workerFinished();
+}
+
+void DebListModel::setCurrentIndex(const QModelIndex &idx)
+{
+    if (m_currentIdx == idx)
+        return;
+
+    const QModelIndex index = m_currentIdx;
+    m_currentIdx = idx;
+
+    emit dataChanged(index, index);
+    emit dataChanged(m_currentIdx, m_currentIdx);
 }

@@ -18,6 +18,9 @@ class PackagesListView : public QListView
 
 public:
     explicit PackagesListView(QWidget *parent = 0);
+
+protected:
+    void leaveEvent(QEvent *e);
 };
 
 #endif // PACKAGESLISTVIEW_H

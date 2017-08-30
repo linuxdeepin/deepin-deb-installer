@@ -30,6 +30,7 @@ public:
     {
         PackageNameRole = Qt::DisplayRole,
         UnusedRole = Qt::UserRole,
+        ItemIsCurrentRole,
         PackageVersionRole,
         PackagePathRole,
         PackageInstalledVersionRole,
@@ -91,6 +92,7 @@ signals:
     void packageDependsChanged(const QModelIndex &index, int status) const;
 
 public slots:
+    void setCurrentIndex(const QModelIndex &idx);
     void installAll();
     void uninstallPackage(const int idx);
     void removePackage(const int idx);
@@ -111,6 +113,7 @@ private:
 private:
     int m_workerStatus;
     int m_operatingIndex;
+    QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
 
     QPointer<QApt::Transaction> m_currentTransaction;

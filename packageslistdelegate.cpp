@@ -92,7 +92,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
             break;
         }
-    } else if (m_currentIdx == index) {
+    } else if (index.data(DebListModel::ItemIsCurrentRole).toBool()) {
         // draw remove icon
         const int x = option.rect.right() - m_removeIcon.width() - 10;
         const int y = option.rect.top() + (option.rect.height() - m_removeIcon.height()) / 2;
@@ -133,9 +133,4 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(option);
 
     return index.data(Qt::SizeHintRole).toSize();
-}
-
-void PackagesListDelegate::setCurrentIndex(const QModelIndex &idx)
-{
-    m_currentIdx = idx;
 }
