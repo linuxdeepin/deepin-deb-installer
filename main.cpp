@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     DApplication app(argc, argv);
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
-    app.setApplicationVersion("1.0");
+    app.setApplicationVersion("1.1");
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QPixmap(":/images/icon.png"));
 //    app.loadTranslator(QList<QLocale>() << QLocale("zh_CN"));

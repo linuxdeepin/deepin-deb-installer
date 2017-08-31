@@ -4,17 +4,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="39"/>
+        <location filename="../debinstaller.cpp" line="52"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="52"/>
+        <location filename="../debinstaller.cpp" line="66"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="111"/>
+        <location filename="../debinstaller.cpp" line="235"/>
         <source>Bulk Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,33 +22,33 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="36"/>
+        <location filename="../deblistmodel.cpp" line="45"/>
         <source>Installation failed, please check your network connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="38"/>
+        <location filename="../deblistmodel.cpp" line="47"/>
         <source>Installation failed, please check updates in Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="40"/>
+        <location filename="../deblistmodel.cpp" line="49"/>
         <source>Installation failed, insufficient disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="43"/>
+        <location filename="../deblistmodel.cpp" line="52"/>
         <source>Installation Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="250"/>
-        <location filename="../deblistmodel.cpp" line="257"/>
+        <location filename="../deblistmodel.cpp" line="280"/>
+        <location filename="../deblistmodel.cpp" line="287"/>
         <source>Broken Dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="253"/>
+        <location filename="../deblistmodel.cpp" line="283"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,12 +56,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../filechoosewidget.cpp" line="26"/>
+        <location filename="../filechoosewidget.cpp" line="35"/>
         <source>Drag and drop file here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="53"/>
+        <location filename="../filechoosewidget.cpp" line="62"/>
         <source>Select File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -69,50 +69,55 @@
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="19"/>
+        <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="19"/>
+        <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Display details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="33"/>
+        <location filename="../multipleinstallpage.cpp" line="46"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="34"/>
+        <location filename="../multipleinstallpage.cpp" line="47"/>
         <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="49"/>
+        <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="74"/>
+        <location filename="../packageslistdelegate.cpp" line="84"/>
         <source>Installing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="78"/>
+        <location filename="../packageslistdelegate.cpp" line="88"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="82"/>
+        <location filename="../packageslistdelegate.cpp" line="92"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="101"/>
+        <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="104"/>
+        <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,67 +125,72 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="61"/>
+        <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="61"/>
+        <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Display details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="90"/>
+        <location filename="../singleinstallpage.cpp" line="100"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="92"/>
+        <location filename="../singleinstallpage.cpp" line="102"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="94"/>
+        <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Reinstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="96"/>
+        <location filename="../singleinstallpage.cpp" line="106"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="111"/>
+        <location filename="../singleinstallpage.cpp" line="108"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="123"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="261"/>
+        <location filename="../singleinstallpage.cpp" line="277"/>
         <source>Installed successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="263"/>
+        <location filename="../singleinstallpage.cpp" line="279"/>
         <source>Uninstalled successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="325"/>
+        <location filename="../singleinstallpage.cpp" line="342"/>
         <source>Other version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="271"/>
+        <location filename="../singleinstallpage.cpp" line="287"/>
         <source>Uninstall Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="104"/>
+        <location filename="../singleinstallpage.cpp" line="116"/>
         <source>Name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="323"/>
+        <location filename="../singleinstallpage.cpp" line="340"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,27 +198,27 @@
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="12"/>
+        <location filename="../uninstallconfirmpage.cpp" line="21"/>
         <source>Display related packages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="12"/>
+        <location filename="../uninstallconfirmpage.cpp" line="21"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="25"/>
+        <location filename="../uninstallconfirmpage.cpp" line="34"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="27"/>
+        <location filename="../uninstallconfirmpage.cpp" line="36"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="80"/>
+        <location filename="../uninstallconfirmpage.cpp" line="89"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
         <translation type="unfinished"></translation>
@@ -217,12 +227,12 @@ All dependencies will also be removed</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="28"/>
+        <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="29"/>
+        <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
         <translation type="unfinished"></translation>
     </message>
