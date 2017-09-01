@@ -239,6 +239,8 @@ void DebListModel::reset()
     m_workerStatus = WorkerPrepare;
     m_operatingIndex = 0;
 
+    m_packageOperateStatus.clear();
+    m_packageFailReason.clear();
     m_packagesManager->reset();
 }
 

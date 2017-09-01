@@ -199,6 +199,7 @@ void DebInstaller::reset()
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
 
+    titlebar()->setTitle(QString());
     m_fileListModel->reset();
     m_lastPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
@@ -224,6 +225,8 @@ void DebInstaller::refreshInstallPage()
     if (packageCount == 1)
     {
         // single package install
+        titlebar()->setTitle(QString());
+
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
