@@ -136,6 +136,9 @@ void MultipleInstallPage::onProgressChanged(const int progress)
 
 void MultipleInstallPage::onItemClicked(const QModelIndex &index)
 {
+    if (!m_debListModel->isWorkerPrepare())
+        return;
+
     const int r = index.row();
 
     emit requestRemovePackage(r);

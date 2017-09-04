@@ -30,6 +30,7 @@ public:
     {
         PackageNameRole = Qt::DisplayRole,
         UnusedRole = Qt::UserRole,
+        WorkerIsPrepareRole,
         ItemIsCurrentRole,
         PackageVersionRole,
         PackagePathRole,
@@ -75,6 +76,7 @@ public:
 
     void reset();
     bool isReady() const;
+    bool isWorkerPrepare() const { return m_workerStatus == WorkerPrepare; }
     const QList<QApt::DebFile *> preparedPackages() const;
     QModelIndex first() const;
 

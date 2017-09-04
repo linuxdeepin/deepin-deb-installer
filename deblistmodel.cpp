@@ -90,6 +90,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
+    case WorkerIsPrepareRole:
+        return isWorkerPrepare();
     case ItemIsCurrentRole:
         return m_currentIdx == index;
     case PackageNameRole:
