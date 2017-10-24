@@ -34,14 +34,20 @@
 #include <QFileDialog>
 #include <QLabel>
 
+#include <DSvgRenderer>
+
 DWIDGET_USE_NAMESPACE
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
 {
+    const auto ratio = devicePixelRatioF();
+    QPixmap iconPix = DSvgRenderer::render(":/images/icon.svg", QSize(140, 140) * ratio);
+    iconPix.setDevicePixelRatio(ratio);
+
     QLabel *iconImage = new QLabel;
     iconImage->setFixedSize(140, 140);
-    iconImage->setPixmap(QPixmap(":/images/icon.png"));
+    iconImage->setPixmap(iconPix);
 
     QLabel *dndTips = new QLabel;
     dndTips->setText(tr("Drag and drop file here"));
@@ -67,7 +73,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
                                 "}");
 
     QLabel *split_line = new QLabel;
-    split_line->setPixmap(QPixmap(":/images/split_line.png"));
+    split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setAlignment(Qt::AlignCenter);
 
     m_fileChooseBtn = new DLinkButton;

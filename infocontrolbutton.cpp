@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
+#include <QIcon>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent),
@@ -35,7 +36,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
       m_tipsText(new QLabel)
 {
     m_arrowIcon->setAlignment(Qt::AlignCenter);
-    m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
+    m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(21, 8));
     m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setText(expandTips);
     m_tipsText->setStyleSheet("QLabel {"
@@ -72,11 +73,11 @@ void InfoControlButton::onMouseRelease()
 
     if (!m_expand)
     {
-        m_arrowIcon->setPixmap(QPixmap(":/images/arrow_up.png"));
+        m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(21, 8));
         m_tipsText->setText(m_expandTips);
         setFixedSize(200, 33);
     } else {
-        m_arrowIcon->setPixmap(QPixmap(":/images/arrow_down.png"));
+        m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(21, 8));
         m_tipsText->setText(m_shrinkTips);
         setFixedSize(200, 28);
     }

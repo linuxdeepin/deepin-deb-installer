@@ -320,9 +320,10 @@ void SingleInstallPage::setPackageInfo()
     DebFile *package = m_packagesModel->preparedPackages().first();
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
+    const QPixmap iconPix = icon.pixmap(m_packageIcon->size());
 
     m_itemInfoWidget->setVisible(true);
-    m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
+    m_packageIcon->setPixmap(iconPix);
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());
 

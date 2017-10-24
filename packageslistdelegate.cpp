@@ -23,13 +23,19 @@
 #include "deblistmodel.h"
 
 #include <QPainter>
+#include <QApplication>
+#include <DSvgRenderer>
+
+DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
+    const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
-    m_removeIcon = QPixmap(":/images/active_tab_close_normal.png");
+    m_removeIcon = DSvgRenderer::render(":/images/active_tab_close_normal.svg", QSize(16, 16) * ratio);
+    m_removeIcon.setDevicePixelRatio(ratio);
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -53,7 +59,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // draw package icon
     const int x = 5;
-    const int y = option.rect.top() + (option.rect.height() - m_packageIcon.height()) / 2;
+    const int y = option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2;
     painter->drawPixmap(x, y, m_packageIcon);
 
     // draw package name
@@ -107,8 +113,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     } else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
                index.data(DebListModel::ItemIsCurrentRole).toBool()) {
         // draw remove icon
-        const int x = option.rect.right() - m_removeIcon.width() - 10;
-        const int y = option.rect.top() + (option.rect.height() - m_removeIcon.height()) / 2;
+        const int x = option.rect.right() - m_removeIcon.width() / m_removeIcon.devicePixelRatio() - 10;
+        const int y = option.rect.top() + (option.rect.height() - m_removeIcon.height() / m_removeIcon.devicePixelRatio()) / 2;
         painter->drawPixmap(x, y, m_removeIcon);
     }
 

@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/icon.png</file>
-        <file>images/arrow_up.png</file>
-        <file>images/arrow_down.png</file>
-        <file>images/split_line.png</file>
-        <file>images/active_tab_close_press.png</file>
-        <file>images/active_tab_close_normal.png</file>
-        <file>images/active_tab_close_hover.png</file>
+        <file>images/active_tab_close_hover.svg</file>
+        <file>images/active_tab_close_normal.svg</file>
+        <file>images/active_tab_close_press.svg</file>
+        <file>images/arrow_down.svg</file>
+        <file>images/arrow_up.svg</file>
+        <file>images/icon.svg</file>
+        <file>images/split_line.svg</file>
     </qresource>
 </RCC>
