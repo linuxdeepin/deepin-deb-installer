@@ -27,7 +27,7 @@
     <message>
         <location filename="../deblistmodel.cpp" line="47"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Установка не удалась, пожалуйста проверьте обновление в Центре Управления</translation>
+        <translation>Установка не удалась, пожалуйста проверьте обновления в Центре Управления</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="49"/>
@@ -43,12 +43,12 @@
         <location filename="../deblistmodel.cpp" line="280"/>
         <location filename="../deblistmodel.cpp" line="287"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Разорванные Зависимости: %1</translation>
+        <translation>Нарушенные Зависимости: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="283"/>
         <source>Unmatched package architecture</source>
-        <translation>Архитектура пакета не соответствует</translation>
+        <translation>Архитектура пакета некорректна</translation>
     </message>
 </context>
 <context>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="287"/>
         <source>Uninstall Failed</source>
-        <translation>Удаление Не удалось</translation>
+        <translation>Удалить Не удалось</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="116"/>

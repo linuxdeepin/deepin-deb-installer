@@ -9,7 +9,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="66"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Paket Yöneticisi</translation>
+        <translation>Deepin Paket Yönetici</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
@@ -22,12 +22,12 @@
     <message>
         <location filename="../deblistmodel.cpp" line="45"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Kurulum başarısız oldu, lütfen ağ bağlantınızı kontrol edin.</translation>
+        <translation>Kurulum başarısız oldu, lütfen ağ bağlantınızı kontrol ediniz.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="47"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Kurulum başarısız oldu, lütfen Kontrol Merkezinde güncellemeleri  kontrol edin</translation>
+        <translation>Kurulum başarısız oldu, lütfen Kontrol Merkezinde güncelleştirmeleri  kontrol ediniz</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="49"/>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="35"/>
         <source>Drag and drop file here</source>
-        <translation>Dosyayı buraya sürükleyip ve bırakın</translation>
+        <translation>Dosyayı buraya sürükleyip ve bırakınız</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="62"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Geri</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Geri</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -228,12 +228,12 @@ Tüm bağımlılıklar da kaldırılacaktır</translation>
     <message>
         <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Paket Yöneticisi</translation>
+        <translation>Deepin Paket Yönetici</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin Paket Yöneticisi, kullanıcıların yerel yazılımı yüklemesine ve kaldırmasına yardımcı olan, toplu kurulumu destekleyen bir uygulamadır.</translation>
+        <translation>Deepin Paket Yönetici, kullanıcıların yerel yazılımı yüklemesine ve kaldırmasına yardımcı olan, toplu kurulumu destekleyen bir uygulamadır.</translation>
     </message>
 </context>
 </TS>

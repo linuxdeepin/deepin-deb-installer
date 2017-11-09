@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Zpět</translation>
     </message>
 </context>
 <context>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
-        <translation>Tato verze byla již nainstalována</translation>
+        <translation>Stejná verze již byla nainstalována</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Zpět</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>

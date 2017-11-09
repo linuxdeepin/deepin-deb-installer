@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="52"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>עזרה</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="66"/>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="35"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>ניתן לגרור לכאן קבצים</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="62"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>חזרה</translation>
     </message>
 </context>
 <context>
@@ -112,12 +112,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>אותה הגרסה מותקנת</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>גרסה אחרת מותקנת: %1</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>חזרה</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="116"/>
         <source>Name: </source>
-        <translation type="unfinished"/>
+        <translation>שם:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="340"/>

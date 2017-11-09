@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atrás</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atrás</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -228,12 +228,12 @@ Todas las dependencias también se eliminarán</translation>
     <message>
         <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Package Manager</translation>
+        <translation>Gestor de paquetes Deepin</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin Package Manager es una aplicación para ayudar a los usuarios a agregar y quitar software local, soporta instalación en lote.</translation>
+        <translation>El Gestor de paquetes Deepin es una aplicación para ayudar a los usuarios a agregar y quitar software local, soporta instalación en lote.</translation>
     </message>
 </context>
 </TS>

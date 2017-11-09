@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Anterior</translation>
     </message>
 </context>
 <context>
@@ -130,7 +130,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Display details</source>
-        <translation>Mostrar detalhes</translation>
+        <translation>Exibir detalhes</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="100"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Anterior</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>

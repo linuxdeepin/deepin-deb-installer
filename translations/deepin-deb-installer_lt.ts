@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="52"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Žinynas</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="66"/>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
         <source>Bulk Install</source>
-        <translation type="unfinished"/>
+        <translation>Masinis įdiegimas</translation>
     </message>
 </context>
 <context>
@@ -27,7 +27,7 @@
     <message>
         <location filename="../deblistmodel.cpp" line="47"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegimas nepavyko, prašome patikrinti atnaujinimus Valdymo centre</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="49"/>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="62"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti failą</translation>
     </message>
 </context>
 <context>
@@ -69,17 +69,17 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Suskleisti</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti išsamiau</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="46"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegti</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="47"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atgal</translation>
     </message>
 </context>
 <context>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="88"/>
         <source>Installed</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegta</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="92"/>
@@ -112,12 +112,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegta ta pati versija</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegta kita versija: %1</translation>
     </message>
 </context>
 <context>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Suskleisti</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti išsamiau</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="100"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atgal</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -165,12 +165,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="277"/>
         <source>Installed successfully</source>
-        <translation type="unfinished"/>
+        <translation>Sėkmingai įdiegta</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="279"/>
         <source>Uninstalled successfully</source>
-        <translation type="unfinished"/>
+        <translation>Sėkmingai pašalinta</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="342"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="116"/>
         <source>Name: </source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas: </translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="340"/>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="21"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Suskleisti</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="34"/>
@@ -233,7 +233,7 @@ Tuo pačiu bus pašalintos ir visos priklausomybės</translation>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Deepin paketų tvarkytuvė yra programa, naudojama padėti naudotojams įdiegti ir šalinti vietinę programinę įrangą, ši programa palaiko masinį įdiegimą.</translation>
     </message>
 </context>
 </TS>

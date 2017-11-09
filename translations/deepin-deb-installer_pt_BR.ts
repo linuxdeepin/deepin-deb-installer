@@ -9,7 +9,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="66"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Package Manager</translation>
+        <translation>Gerenciador de Pacotes do Deepin</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
@@ -48,7 +48,7 @@
     <message>
         <location filename="../deblistmodel.cpp" line="283"/>
         <source>Unmatched package architecture</source>
-        <translation>Arquitetura de pacotes incomparáveis</translation>
+        <translation>Arquitetura de pacotes incompatíveis</translation>
     </message>
 </context>
 <context>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Voltar</translation>
     </message>
 </context>
 <context>
@@ -112,12 +112,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
-        <translation>Mesma versão instalada</translation>
+        <translation>A mesma versão está instalada</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Other version installed: %1</source>
-        <translation>Outra versão instalada: %1</translation>
+        <translation>Outra versão está instalada: %1</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Voltar</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -228,12 +228,12 @@ Todas as dependências também serão removidas</translation>
     <message>
         <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Package Manager</translation>
+        <translation>Gerenciador de Pacotes do Deepin</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin Package Manager é um aplicativo usado para ajudar os usuários a instalar e remover o software local, e suporta a instalação em massa.</translation>
+        <translation>O Gerenciador de Pacotes do Deepin é um aplicativo usado para ajudar os usuários a instalar e remover aplicativos locais e suporta a instalação em massa.</translation>
     </message>
 </context>
 </TS>

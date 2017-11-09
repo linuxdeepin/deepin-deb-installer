@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Indietro</translation>
     </message>
 </context>
 <context>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Reinstall</source>
-        <translation>Reinstalla</translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="106"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Indietro</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>

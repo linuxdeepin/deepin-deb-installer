@@ -89,7 +89,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="49"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Tilbage</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="108"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Tilbage</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
@@ -233,7 +233,7 @@ Alle afhængigheder vil også blive fjernet</translation>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin-pakkehåndtering er et program som hjælper brugere med at installere og fjerne lokal software og som understøtter masseinstallation.</translation>
+        <translation>Deepin pakkehåndtering er et program som hjælper brugere med at installere og fjerne lokal software og som understøtter masseinstallation.</translation>
     </message>
 </context>
 </TS>
