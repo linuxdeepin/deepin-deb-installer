@@ -9,7 +9,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="66"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin - Gestor de Pacotes</translation>
+        <translation>Deepin Package Manager</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
@@ -228,12 +228,12 @@ Também serão removidas todas as dependências</translation>
     <message>
         <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin - Gestor de Pacotes</translation>
+        <translation>Deepin Package Manager</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin - Gestor de Pacotes, é uma aplicação utilizada para ajudar os utilizadores a instalar e remover software local, suporta instalações em massa.</translation>
+        <translation>O Deepin Package Manager é uma aplicação utilizada para ajudar os utilizadores a instalar e remover software local, suporta instalações em massa.</translation>
     </message>
 </context>
 </TS>

@@ -14,7 +14,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
         <source>Bulk Install</source>
-        <translation type="unfinished"/>
+        <translation>Масова інсталяція</translation>
     </message>
 </context>
 <context>
@@ -22,33 +22,33 @@
     <message>
         <location filename="../deblistmodel.cpp" line="45"/>
         <source>Installation failed, please check your network connection</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалося встановити, перевірте підключення до мережі</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="47"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалося встановити, перевірте оновлення в Центрі керування</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="49"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation type="unfinished"/>
+        <translation>Помилка встановлення, недостатньо місця на диску</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="52"/>
         <source>Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалося встановити</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="280"/>
         <location filename="../deblistmodel.cpp" line="287"/>
         <source>Broken Dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>Поламані залежності: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="283"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"/>
+        <translation>Неперевершена архітектура пакету</translation>
     </message>
 </context>
 <context>
@@ -56,12 +56,12 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="35"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>Перетягніть файл сюди</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="62"/>
         <source>Select File</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати Файл</translation>
     </message>
 </context>
 <context>
@@ -69,17 +69,17 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Згорнути</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="29"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Покзати деталі</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="46"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Встановити</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="47"/>
@@ -97,27 +97,27 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="84"/>
         <source>Installing</source>
-        <translation type="unfinished"/>
+        <translation>Встановлення</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="88"/>
         <source>Installed</source>
-        <translation type="unfinished"/>
+        <translation>Встановлено</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="92"/>
         <source>Failed</source>
-        <translation type="unfinished"/>
+        <translation>Помилка</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="116"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>Одна і та сама версія встановлена</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Інша версія встановлена: %1</translation>
     </message>
 </context>
 <context>
@@ -125,27 +125,27 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Згорнути</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="70"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Покзати деталі</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="100"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Встановити</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="102"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="104"/>
         <source>Reinstall</source>
-        <translation type="unfinished"/>
+        <translation>Перевстановити</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="106"/>
@@ -165,22 +165,22 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="277"/>
         <source>Installed successfully</source>
-        <translation type="unfinished"/>
+        <translation>Встановлено успішно</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="279"/>
         <source>Uninstalled successfully</source>
-        <translation type="unfinished"/>
+        <translation>Видалено успішно</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="342"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Інша версія встановлена: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="287"/>
         <source>Uninstall Failed</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалося видалити </translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="116"/>
@@ -190,7 +190,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="340"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>Одна і та сама версія встановлена</translation>
     </message>
 </context>
 <context>
@@ -198,12 +198,12 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="21"/>
         <source>Display related packages</source>
-        <translation type="unfinished"/>
+        <translation>Покзати пов&apos;язані пакети</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="21"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Згорнути</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="34"/>
@@ -213,13 +213,14 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="36"/>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>Підтвердити</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="89"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені що хочете видалити %1?
+Всі залежності також будуть видалені</translation>
     </message>
 </context>
 <context>
@@ -227,12 +228,12 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="37"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>Менеджер пакунків Deepin</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Менеджер пакунків Deepin - це програма, яка допомагає користувачам встановлювати та видаляти локальне програмне забезпечення, підтримує масові установки.</translation>
     </message>
 </context>
 </TS>

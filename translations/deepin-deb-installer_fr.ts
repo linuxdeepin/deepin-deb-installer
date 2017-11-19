@@ -14,7 +14,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="235"/>
         <source>Bulk Install</source>
-        <translation>Installation Massive</translation>
+        <translation>Installation Multiple</translation>
     </message>
 </context>
 <context>
@@ -233,7 +233,7 @@ Toutes les dépendances seront également supprimées</translation>
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Le Gestionnaire de Paquets de Deepin est une application pour aider les utilisateurs à installer et désinstaller des logiciels locaux, supportant l&apos;installation massive.</translation>
+        <translation>Le Gestionnaire de Paquets de Deepin est une application pour aider les utilisateurs à gérer les logiciels installés, il supporte également l&apos;installation multiple.</translation>
     </message>
 </context>
 </TS>
