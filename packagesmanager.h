@@ -70,6 +70,7 @@ public:
     bool isArchError(const int idx);
     const ConflictResult packageConflictStat(const int index);
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
+    const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion, const QString &packageArch);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
     int packageInstallStatus(const int index);
     PackageDependsStatus packageDependsStatus(const int index);

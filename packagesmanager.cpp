@@ -24,6 +24,7 @@
 
 #include <QtConcurrent>
 #include <QSet>
+#include <QPair>
 
 using namespace QApt;
 
@@ -141,11 +142,66 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 {
     qDebug() << "check conflict for package" << package->name() << arch;
 
-    const auto ret = isConflictSatisfy(arch, package->conflicts());
+    const auto ret_installed = isInstalledConflict(package->name(), package->version(), package->architecture());
+    if (!ret_installed.is_ok())
+        return ret_installed;
 
-    qDebug() << "check finished, conflict is satisfy:" << package->name() << bool(ret.is_ok());
+    qDebug() << "check conflict for local installed package is ok.";
 
-    return ret;
+    const auto ret_package = isConflictSatisfy(arch, package->conflicts());
+
+    qDebug() << "check finished, conflict is satisfy:" << package->name() << bool(ret_package.is_ok());
+
+    return ret_package;
+}
+
+const ConflictResult PackagesManager::isInstalledConflict(const QString &packageName, const QString &packageVersion, const QString &packageArch)
+{
+    static QList<QPair<QString, DependencyInfo>> sysConflicts;
+
+    if (sysConflicts.isEmpty())
+    {
+        Backend *b = m_backendFuture.result();
+        for (Package *p : b->availablePackages())
+        {
+            if (!p->isInstalled())
+                continue;
+            const auto &conflicts = p->conflicts();
+            if (conflicts.isEmpty())
+                continue;
+
+            for (const auto &conflict_list : conflicts)
+                for (const auto &conflict : conflict_list)
+                    sysConflicts << QPair<QString, DependencyInfo>(p->name(), conflict);
+        }
+    }
+
+    for (const auto &info : sysConflicts)
+    {
+        const auto &conflict = info.second;
+        const auto &pkgName = conflict.packageName();
+        const auto &pkgVersion = conflict.packageVersion();
+        const auto &pkgArch = conflict.multiArchAnnotation();
+
+        if (pkgName != packageName)
+            continue;
+
+        qDebug() << pkgName << pkgVersion << pkgArch;
+
+        // pass if arch not match
+        if (!pkgArch.isEmpty() && pkgArch != packageArch && pkgArch != "any" && pkgArch != "native")
+            continue;
+
+        if (pkgVersion.isEmpty())
+            return ConflictResult::err(info.first);
+
+        const int relation = Package::compareVersion(packageVersion, conflict.packageVersion());
+        // match, so is bad
+        if (dependencyVersionMatch(relation, conflict.relationType()))
+            return ConflictResult::err(info.first);
+    }
+
+    return ConflictResult::ok(QString());
 }
 
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
@@ -242,35 +298,27 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     // conflicts
-    if (!isConflictSatisfy(architecture, deb->conflicts()).is_ok())
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
+
+    if (!debConflitsResult.is_ok())
     {
         qDebug() << "depends break because conflict" << deb->packageName();
+        ret.package = debConflitsResult.unwrap();
         ret.status = DebListModel::DependsBreak;
     } else {
-        qDebug() << "depends:";
-        qDebug() << "Check for package" << deb->packageName();
-//        const auto &depends = deb->depends();
-
-        QSet<QString> choose_set;
-        choose_set << deb->packageName();
-        ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
-
-//        for (auto const &candidate_list : depends)
-//        {
-//            if (candidate_list.isEmpty())
-//                continue;
-
-//            PackageDependsStatus tr = PackageDependsStatus::_break(QString());
-//            for (auto const &info : candidate_list)
-//            {
-//                const auto r = checkDependsPackageStatus(choose_set, architecture, info);
-//                tr = tr.minEq(r);
-//            }
-
-//            ret.maxEq(tr);
-//            if (ret.isBreak())
-//                break;
-//        }
+        const ConflictResult localConflictsResult = isInstalledConflict(deb->packageName(), deb->version(), architecture);
+        if (!localConflictsResult.is_ok())
+        {
+            qDebug() << "depends break because conflict with local package" << deb->packageName();
+            ret.package = localConflictsResult.unwrap();
+            ret.status = DebListModel::DependsBreak;
+        } else {
+            qDebug() << "depends:";
+            qDebug() << "Check for package" << deb->packageName();
+            QSet<QString> choose_set;
+            choose_set << deb->packageName();
+            ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
+        }
     }
 
     if (ret.isBreak())
