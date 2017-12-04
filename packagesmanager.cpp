@@ -611,16 +611,34 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         if (choosed_set.contains(p->name()))
             return PackageDependsStatus::ok();
 
-        // is that already provide by another package?
-        Backend *b = m_backendFuture.result();
-        for (auto *ap : b->availablePackages())
-            if (ap->providesList().contains(p->name()))
-                return PackageDependsStatus::ok();
-
         // let's check conflicts
         if (!isConflictSatisfy(architecture, p).is_ok())
         {
-            qDebug() << "depends break because conflict" << p->name();
+            qDebug() << "depends break because conflict, ready to find providers" << p->name();
+
+            Backend *b = m_backendFuture.result();
+            for (auto *ap : b->availablePackages())
+            {
+                if (!ap->providesList().contains(p->name()))
+                    continue;
+
+                // is that already provide by another package?
+                if (ap->isInstalled())
+                {
+                    qDebug() << "find a exist provider: " << ap->name();
+                    return PackageDependsStatus::ok();
+                }
+
+                // provider is ok, switch to provider.
+                if (isConflictSatisfy(architecture, ap).is_ok())
+                {
+                    qDebug() << "switch to depends a new provider: " << ap->name();
+                    choosed_set << ap->name();
+                    return PackageDependsStatus::ok();
+                }
+            }
+
+            qDebug() << "providers not found, still break: " << p->name();
             return PackageDependsStatus::_break(p->name());
         }
 
