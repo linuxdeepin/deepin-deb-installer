@@ -611,6 +611,24 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         if (choosed_set.contains(p->name()))
             return PackageDependsStatus::ok();
 
+        // check arch conflicts
+        if (p->multiArchType() == MultiArchSame)
+        {
+            Backend *b = backend();
+            for (const auto &arch : b->architectures())
+            {
+                if (arch == p->architecture())
+                    continue;
+
+                Package *tp = b->package(p->name() + ":" + arch);
+                if (tp && tp->isInstalled())
+                {
+                    qDebug() << "multi arch installed: " << p->name() << p->version() << p->architecture() << "with" << tp->name() << tp->version() << tp->architecture();
+                    return PackageDependsStatus::_break(p->name() + ":" + p->architecture());
+                }
+            }
+        }
+
         // let's check conflicts
         if (!isConflictSatisfy(architecture, p).is_ok())
         {
