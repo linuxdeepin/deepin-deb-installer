@@ -61,16 +61,10 @@ DebInstaller::DebInstaller(QWidget *parent)
     wrapWidget->setLayout(m_centralLayout);
 //    wrapWidget->setStyleSheet("background-color: red;");
 
-    QAction *helpAction = new QAction(tr("Help"), this);
-
-    QMenu *titleMenu = new QMenu;
-    titleMenu->addAction(helpAction);
-
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle(QString());
     tb->setWindowFlags(tb->windowFlags() & ~Qt::WindowMaximizeButtonHint);
-    tb->setMenu(titleMenu);
 
     setCentralWidget(wrapWidget);
     setAcceptDrops(true);
@@ -79,7 +73,6 @@ DebInstaller::DebInstaller(QWidget *parent)
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
-    connect(helpAction, &QAction::triggered, this, &DebInstaller::showHelp);
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [=](const QString &output) { qDebug() << output.trimmed(); });
@@ -96,7 +89,6 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 #ifdef QT_DEBUG
     case Qt::Key_Escape:        qApp->quit();       break;
 #endif
-    case Qt::Key_F1:            showHelp();         break;
     default:;
     }
 }
@@ -199,11 +191,6 @@ void DebInstaller::onUninstallCalceled()
 void DebInstaller::onAuthing(const bool authing)
 {
     setEnabled(!authing);
-}
-
-void DebInstaller::showHelp()
-{
-    QProcess::startDetached("dman", QStringList() << "deepin-package-manager");
 }
 
 void DebInstaller::reset()

@@ -50,7 +50,6 @@ private slots:
     void onUninstallCalceled();
     void onAuthing(const bool authing);
 
-    void showHelp();
     void reset();
     void removePackage(const int index);
 

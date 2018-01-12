@@ -45,10 +45,6 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
-# install manual files
-install(DIRECTORY dmanual/
-        DESTINATION share/dman/deepin-package-manager)
-
 # Install qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
