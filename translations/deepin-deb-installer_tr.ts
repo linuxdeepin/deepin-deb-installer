@@ -219,7 +219,7 @@
         <location filename="../uninstallconfirmpage.cpp" line="89"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz ?
+        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz?
 Tüm bağımlılıklar da kaldırılacaktır</translation>
     </message>
 </context>
