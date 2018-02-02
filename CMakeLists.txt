@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(deepin-deb-installer)
+set(VERSION 1.2.2)
+
+project(deepin-deb-installer VERSION ${VERSION})
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
@@ -19,6 +21,8 @@ else ()
     set(CMAKE_CXX_COMPILER "clang++")
 endif ()
 
+configure_file(environments.h.in environments.h @ONLY)
+
 # Sources files
 file(GLOB SRCS "*.h" "*.cpp" "widgets/*.h" "widgets/*.cpp")
 
@@ -32,7 +36,7 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 
 # Tell CMake to create the executable
 add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
-target_include_directories(deepin-deb-installer PUBLIC ${DtkWidget_INCLUDE_DIRS})
+target_include_directories(deepin-deb-installer PUBLIC ${DtkWidget_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
 target_link_libraries(deepin-deb-installer
     QApt
     ${DtkWidget_LIBRARIES}
