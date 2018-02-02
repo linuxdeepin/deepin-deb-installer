@@ -64,7 +64,9 @@ DebInstaller::DebInstaller(QWidget *parent)
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle(QString());
+#if DTK_VERSION >= 0x02000600
     tb->setBackgroundTransparent(true);
+#endif
 
     setCentralWidget(wrapWidget);
     setAcceptDrops(true);
