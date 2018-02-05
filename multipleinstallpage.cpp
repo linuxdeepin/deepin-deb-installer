@@ -56,7 +56,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
                               "}");
 
     m_installButton->setText(tr("Install"));
-    m_acceptButton->setText(tr("OK"));
+    m_acceptButton->setText(tr("Done"));
     m_acceptButton->setVisible(false);
     m_backButton->setText(tr("Back"));
     m_backButton->setVisible(false);

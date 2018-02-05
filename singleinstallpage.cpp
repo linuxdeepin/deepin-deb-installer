@@ -84,7 +84,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_uninstallButton(new GrayButton),
       m_reinstallButton(new GrayButton),
       m_confirmButton(new GrayButton),
-      m_backButton(new GrayButton)
+      m_backButton(new GrayButton),
+      m_doneButton(new BlueButton)
 {
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
@@ -119,6 +120,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_confirmButton->setVisible(false);
     m_backButton->setText(tr("Back"));
     m_backButton->setVisible(false);
+    m_doneButton->setText(tr("Done"));
+    m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
     m_packageDescription->setFixedHeight(50);
     m_packageDescription->setFixedWidth(320);
@@ -162,6 +165,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addWidget(m_reinstallButton);
     btnsLayout->addWidget(m_backButton);
     btnsLayout->addWidget(m_confirmButton);
+    btnsLayout->addWidget(m_doneButton);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(30);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
@@ -206,6 +210,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
     connect(m_backButton, &QPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
+    connect(m_doneButton, &QPushButton::clicked, qApp, &QApplication::quit);
 
     connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
@@ -253,6 +258,7 @@ void SingleInstallPage::showInfo()
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_confirmButton->setVisible(false);
+    m_doneButton->setVisible(false);
     m_backButton->setVisible(false);
 }
 
@@ -277,14 +283,15 @@ void SingleInstallPage::onWorkerFinished()
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
-    m_confirmButton->setVisible(true);
-    m_confirmButton->setFocus();
 
     const QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
     if (stat == DebListModel::Success)
     {
+        m_doneButton->setVisible(true);
+        m_doneButton->setFocus();
+
         if (m_operate == Install)
             m_tipsLabel->setText(tr("Installed successfully"));
         else
@@ -293,6 +300,9 @@ void SingleInstallPage::onWorkerFinished()
                                    "color: #47790c;"
                                    "}");
     } else if (stat == DebListModel::Failed) {
+        m_confirmButton->setVisible(true);
+        m_confirmButton->setFocus();
+
         if (m_operate == Install)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         else
@@ -345,6 +355,7 @@ void SingleInstallPage::setPackageInfo()
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
+    m_doneButton->setVisible(false);
     m_backButton->setVisible(false);
 
     if (installed)
