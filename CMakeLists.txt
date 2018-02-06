@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.7)
 
-set(VERSION 1.2.2)
+if (NOT DEFINED VERSION)
+    set(VERSION 1.2.2)
+endif ()
 
-project(deepin-deb-installer VERSION ${VERSION})
+project(deepin-deb-installer)
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
