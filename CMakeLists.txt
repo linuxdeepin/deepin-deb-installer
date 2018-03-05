@@ -33,8 +33,7 @@ find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(QApt REQUIRED)
-
-pkg_check_modules(DtkWidget REQUIRED dtkwidget)
+find_package(DtkWidget REQUIRED)
 
 # Tell CMake to create the executable
 add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
@@ -55,6 +54,10 @@ endif ()
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
         DESTINATION share/deepin-deb-installer/translations)
+
+# install manual files
+install(DIRECTORY dmanual/
+        DESTINATION share/dman/deepin-deb-installer)
 
 # Install icons
 foreach (ICON_SIZE 16 24 32 48 64 96 128 256)
