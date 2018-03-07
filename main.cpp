@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    qDebug() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
+
     // command line arguments
     QCommandLineParser parser;
     parser.setApplicationDescription("Deepin deb package manager.");
