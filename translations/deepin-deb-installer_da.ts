@@ -79,7 +79,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Færdig</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Færdig</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="138"/>
