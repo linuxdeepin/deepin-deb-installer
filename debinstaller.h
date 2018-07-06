@@ -39,9 +39,10 @@ public:
     ~DebInstaller();
 
 protected:
-    void keyPressEvent(QKeyEvent *e);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
+    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
+    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
     void onPackagesSelected(const QStringList &packages);

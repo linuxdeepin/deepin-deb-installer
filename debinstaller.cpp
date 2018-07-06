@@ -142,6 +142,11 @@ void DebInstaller::dropEvent(QDropEvent *e)
     onPackagesSelected(file_list);
 }
 
+void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
+{
+    e->accept();
+}
+
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     for (const auto &package : packages)
