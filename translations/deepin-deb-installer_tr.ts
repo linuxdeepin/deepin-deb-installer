@@ -4,12 +4,12 @@
     <message>
         <location filename="../debinstaller.cpp" line="74"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Paket Yönetici</translation>
+        <translation>Deepin Paket Yöneticisi</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="239"/>
         <source>Bulk Install</source>
-        <translation>Toplu Yükleme</translation>
+        <translation>Toplu Kurulum</translation>
     </message>
 </context>
 <context>
@@ -17,33 +17,33 @@
     <message>
         <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Kurulum başarısız oldu, lütfen ağ bağlantınızı kontrol ediniz.</translation>
+        <translation>Kurulum tamamlanamadı, lütfen ağ bağlantınızı denetleyin</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Kurulum başarısız oldu, lütfen Kontrol Merkezinde güncelleştirmeleri  kontrol ediniz</translation>
+        <translation>Kurulum tamamlanamadı, lütfen Kontrol Merkezinden güncellemeleri denetleyin</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Kurulum başarısız, yetersiz disk alanı</translation>
+        <translation>Kurulum tamamlanamadı, disk alanı yetersiz</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="64"/>
         <source>Installation Failed</source>
-        <translation>Yükleme başarısız</translation>
+        <translation>Kurulum tamamlanamadı</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Kırık Bağımlılıklar: %1</translation>
+        <translation>Kopuk Bağımlılıklar: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>
         <source>Unmatched package architecture</source>
-        <translation>Benzersiz paket mimarisi</translation>
+        <translation>Paket mimarisi uyumsuz</translation>
     </message>
 </context>
 <context>
@@ -51,12 +51,12 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Drag and drop file here</source>
-        <translation>Dosyayı buraya sürükleyip ve bırakınız</translation>
+        <translation>Dosyayı sürükleyip buraya bırakın</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="80"/>
         <source>Select File</source>
-        <translation>Dosya Seç</translation>
+        <translation>Dosya Seçin</translation>
     </message>
 </context>
 <context>
@@ -64,17 +64,17 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Collapse</source>
-        <translation>Çöküş</translation>
+        <translation>Daralt</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Display details</source>
-        <translation>Ayrıntıları göster</translation>
+        <translation>Ayrıntıları görüntüle</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="58"/>
         <source>Install</source>
-        <translation>Yükle</translation>
+        <translation>Kur</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
@@ -92,12 +92,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="102"/>
         <source>Installing</source>
-        <translation>Yükleniyor</translation>
+        <translation>Kuruluyor</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="106"/>
         <source>Installed</source>
-        <translation>Yüklendi</translation>
+        <translation>Kuruldu</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="110"/>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="135"/>
         <source>Same version installed</source>
-        <translation>Aynı sürüm yüklendi</translation>
+        <translation>Aynı sürüm kurulmuş</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="138"/>
         <source>Other version installed: %1</source>
-        <translation>Diğer sürüm yüklendi: %1</translation>
+        <translation>Başka bir sürüm kurulmuş: %1</translation>
     </message>
 </context>
 <context>
@@ -120,17 +120,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="82"/>
         <source>Collapse</source>
-        <translation>Çöküş</translation>
+        <translation>Daralt</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="82"/>
         <source>Display details</source>
-        <translation>Ayrıntıları göster</translation>
+        <translation>Ayrıntıları görüntüle</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="113"/>
         <source>Install</source>
-        <translation>Yükle</translation>
+        <translation>Kur</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="115"/>
@@ -140,12 +140,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="117"/>
         <source>Reinstall</source>
-        <translation>Tekrar yükle</translation>
+        <translation>Yeniden kur</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="119"/>
         <source>OK</source>
-        <translation>TAMAM</translation>
+        <translation>Tamam</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="121"/>
@@ -165,32 +165,32 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="296"/>
         <source>Installed successfully</source>
-        <translation>Başarıyla yüklendi</translation>
+        <translation>Kuruldu</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="298"/>
         <source>Uninstalled successfully</source>
-        <translation>Başarıyla kaldırıldı</translation>
+        <translation>Kaldırıldı</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="366"/>
         <source>Other version installed: %1</source>
-        <translation>Diğer sürüm yüklü: % 1</translation>
+        <translation>Başka bir sürüm kurulmuş: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="309"/>
         <source>Uninstall Failed</source>
-        <translation>Kaldırma Başarısız Oldu</translation>
+        <translation>Kaldırılamadı</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="131"/>
         <source>Name: </source>
-        <translation>İsim: </translation>
+        <translation>Ad: </translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="364"/>
         <source>Same version installed</source>
-        <translation>Aynı sürüm yüklü</translation>
+        <translation>Aynı sürüm kurulmuş</translation>
     </message>
 </context>
 <context>
@@ -198,29 +198,29 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="33"/>
         <source>Display related packages</source>
-        <translation>İlgili paketleri göster</translation>
+        <translation>İlgili paketleri görüntüle</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation>Çöküş</translation>
+        <translation>Daralt</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="46"/>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="48"/>
         <source>Confirm</source>
-        <translation>Doğrula</translation>
+        <translation>Onayla</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz?
-Tüm bağımlılıklar da kaldırılacaktır</translation>
+        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?
+Tüm bağımlılıklar da kaldırılacak</translation>
     </message>
 </context>
 <context>
@@ -228,12 +228,12 @@ Tüm bağımlılıklar da kaldırılacaktır</translation>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Paket Yönetici</translation>
+        <translation>Deepin Paket Yöneticisi</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin Paket Yönetici, kullanıcıların yerel yazılımı yüklemesine ve kaldırmasına yardımcı olan, toplu kurulumu destekleyen bir uygulamadır.</translation>
+        <translation>Deepin Paket Yöneticisi, kullanıcıların yerel uygulamaları kurup kaldırmasını sağlayan ve toplu kurulum özelliği olan bir uygulamadır.</translation>
     </message>
 </context>
 </TS>

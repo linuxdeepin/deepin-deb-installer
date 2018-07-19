@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="74"/>
         <source>Deepin Package Manager</source>
-        <translation>Gerenciador de Pacotes do Deepin</translation>
+        <translation>Gerenciador de Pacotes</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="239"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation>Terminado</translation>
+        <translation>Concluído</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
         <source>Done</source>
-        <translation>Terminado</translation>
+        <translation>Concluído</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="138"/>
@@ -228,12 +228,12 @@ Todas as dependências também serão removidas</translation>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Gerenciador de Pacotes do Deepin</translation>
+        <translation>Gerenciador de Pacotes</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>O Gerenciador de Pacotes do Deepin é um aplicativo usado para ajudar os usuários a instalar e remover aplicativos locais e suporta a instalação em massa.</translation>
+        <translation>O Gerenciador de Pacotes é um aplicativo usado para ajudar os usuários a instalar e remover aplicativos locais e suporta a instalação em massa.</translation>
     </message>
 </context>
 </TS>

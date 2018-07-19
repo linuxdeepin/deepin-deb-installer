@@ -9,7 +9,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="239"/>
         <source>Bulk Install</source>
-        <translation>Instalação em massa</translation>
+        <translation>Instalação em Volume</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Dependências não satisfeitas: %1</translation>
+        <translation>Dependências com problemas: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Concluído</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Concluído</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="138"/>
