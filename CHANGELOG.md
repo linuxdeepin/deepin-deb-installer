@@ -1,3 +1,13 @@
+<a name="1.2.5"></a>
+### 1.2.5 (2018-07-20)
+
+
+#### Bug Fixes
+
+*   have prohibit drag and drop icons ([32668a8a](https://github.com/linuxdeepin/deepin-deb-installer/commit/32668a8aa9911cf81028668effba0ecd22479f94))
+
+
+
 <a name="1.2.4"></a>
 ## 1.2.4 (2018-03-13)
 
