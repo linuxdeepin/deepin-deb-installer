@@ -110,7 +110,19 @@
 
 即使不改变目前的依赖解析及软件包安装逻辑，这个问题也是可以解决的。在 apt 中修改包的属性，将它的安装原因改为依赖安装即可，不过目前还没有实现。
 
-# 为 libqapt 打补丁
+# libqapt
+
+## 简介
+
+libqapt 是 qapt 的一个库，qapt 是像 gdebi 一样的一个 deb 安装程序。它底层使用了 `libapt-pkg` 进行一些仓库的访问。本身实现了以调用 dpkg 命令为基础的软件包安装逻辑。
+
+libqapt-runtime 是这个库中实现权限操作的后端，它会注册一个 system-dbus 提供服务。libqapt 中相应的权限操作都通过 RPC 方式与此后端通信。
+
+## Debug
+
+libqapt 本身是一个 C++ 项目，很容易编译安装，可以直接下载源码通过加日志、GDB 等方式进行调试。要注意的是可能需要在调试时修改代码禁止或者放宽某些超时操作。在调试 runtime 的时候要确保当前运行的不是旧版本 runtime。
+
+## 为 libqapt 打补丁
 
 在开发过程中，发现了数个 `libqapt` 的 bug。为了快速解决问题，现在已经给 `libqapt` 打了以下几个补丁，在上游的新版本推送后，应该积极维护这些补丁列表。
 
@@ -119,3 +131,7 @@
 - 0001-fix-old-error-not-clear.patch 修复 libqapt 在重复使用 dpkg 命令时，相应的类没有清理旧错误信息。
 - ~~0001-Fix-install-transaction-timeout.patch 修复 libqapt 在安装时超时信息设置错误导致安装失败。~~ __上游已经合并__
 
+# 参考资料
+- libqapt
+	- [sources](https://github.com/KDE/libqapt)
+	- [online doc](https://api.kde.org/extragear-api/sysadmin-apidocs/libqapt/html/index.html)
