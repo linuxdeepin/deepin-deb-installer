@@ -30,7 +30,6 @@
 #include <QDir>
 #include <QPixmap>
 #include <QPainter>
-#include <QPushButton>
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QLabel>
@@ -52,9 +51,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     QLabel *dndTips = new QLabel;
     dndTips->setText(tr("Drag and drop file here"));
     dndTips->setAlignment(Qt::AlignCenter);
-    dndTips->setStyleSheet("QLabel {"
-                           "color: #6a6a6a;"
-                           "}");
+    dndTips->setObjectName("DNDTips");
 
     QVBoxLayout *centerWrapLayout = new QVBoxLayout;
     centerWrapLayout->addWidget(iconImage);
@@ -68,15 +65,14 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centerWidget->setFixedWidth(240);
     centerWidget->setLayout(centerWrapLayout);
     centerWidget->setObjectName("CenterWidget");
-    centerWidget->setStyleSheet("#CenterWidget {"
-                                "border:none;"
-                                "}");
 
     QLabel *split_line = new QLabel;
-    split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+    split_line->setObjectName("SplitLine");
+    //split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setAlignment(Qt::AlignCenter);
 
     m_fileChooseBtn = new DLinkButton;
+    m_fileChooseBtn->setObjectName("FileChooseButton");
     m_fileChooseBtn->setText(tr("Select File"));
 
     QVBoxLayout *centralLayout = new QVBoxLayout;

@@ -27,7 +27,6 @@
 
 #include <dlinkbutton.h>
 
-class QPushButton;
 class FileChooseWidget : public QWidget
 {
     Q_OBJECT

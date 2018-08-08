@@ -25,6 +25,12 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <DSvgRenderer>
+
+#define THEME_DARK "dark"
+#define THEME_LIGHT "light"
+
+DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
@@ -42,13 +48,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     const int content_x = 45;
 
+    const QString &theme = m_qsettings.value("theme").toString();
+
     // draw top border
     if (index.row())
     {
         const QPoint start(content_x, option.rect.top());
         const QPoint end(option.rect.right() - 10, option.rect.top());
 
-        painter->setPen(QColor(0, 0, 0, 255 * .05));
+        painter->setPen(theme == THEME_LIGHT ? QColor(0, 0, 0, 255 * .05) : QColor(255, 255, 255, 255 * 0.05));
         painter->setRenderHint(QPainter::Antialiasing, false);
         painter->drawLine(start, end);
     }
@@ -68,11 +76,13 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QString name = index.data(DebListModel::PackageNameRole).toString();
     const QFont old_font = painter->font();
     QFont f = old_font;
-    f.setWeight(QFont::DemiBold);
+    if (theme == THEME_LIGHT) {
+        f.setWeight(QFont::DemiBold);
+    }
     painter->setFont(f);
     const QString name_str = painter->fontMetrics().elidedText(name, Qt::ElideRight, 306);
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
-    painter->setPen(Qt::black);
+    painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#efefef"));
     painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
     painter->setFont(old_font);
 
@@ -83,6 +93,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     version_rect.setRight(option.rect.right() - 85);
     const QString version = index.data(DebListModel::PackageVersionRole).toString();
     const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
+    painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#929292"));
     painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);
 
     // install status

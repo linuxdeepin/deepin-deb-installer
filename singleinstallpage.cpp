@@ -114,6 +114,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
       m_backButton(new GrayButton),
       m_doneButton(new BlueButton)
 {
+    m_packageName->setObjectName("PackageName");
+    m_packageVersion->setObjectName("PackageVersion");
+    m_infoControlButton->setObjectName("InfoControlButton");
+    m_workerInfomation->setObjectName("WorkerInformation");
+    m_packageDescription->setObjectName("PackageDescription");
+
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
@@ -131,11 +137,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_workerInfomation->setAcceptDrops(false);
     m_workerInfomation->setFixedHeight(210);
     m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_workerInfomation->setStyleSheet("QTextEdit {"
-                                      "color: #609dc9;"
-                                      "border: 1px solid #eee;"
-                                      "margin: 6px 0 0px 0;"
-                                      "}");
 
     m_installButton->setText(tr("Install"));
     m_installButton->setVisible(false);
@@ -157,16 +158,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    packageName->setStyleSheet("QLabel {"
-                               "color: #797979;"
-                               "}");
+    packageName->setObjectName("PackageNameTitle");
 
     QLabel *packageVersion = new QLabel;
     packageVersion->setText(tr("Version: "));
     packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    packageVersion->setStyleSheet("QLabel {"
-                                  "color: #797979;"
-                                  "}");
+    packageVersion->setObjectName("PackageVersionTitle");
 
     QGridLayout *itemInfoLayout = new QGridLayout;
     itemInfoLayout->addWidget(packageName, 0, 0);

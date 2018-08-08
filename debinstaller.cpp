@@ -41,27 +41,34 @@
 
 #include <DTitlebar>
 #include <DRecentManager>
+#include <DThemeManager>
 
 using QApt::DebFile;
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+#define THEME_DARK "dark"
+#define THEME_LIGHT "light"
+
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent),
 
       m_fileListModel(new DebListModel(this)),
-
+      m_fileChooseWidget(new FileChooseWidget),
       m_centralLayout(new QStackedLayout),
-      m_fileChooseWidget(new FileChooseWidget)
+      m_qsettings(new QSettings(this)),
+      m_tbMenu(new QMenu(this)),
+      m_darkThemeAction(new QAction(tr("Dark Theme"), this))
 {
+    m_fileChooseWidget->setObjectName("FileChooseWidget");
+
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
     QWidget *wrapWidget = new QWidget;
     wrapWidget->setLayout(m_centralLayout);
-//    wrapWidget->setStyleSheet("background-color: red;");
 
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
@@ -69,6 +76,11 @@ DebInstaller::DebInstaller(QWidget *parent)
 #if DTK_VERSION >= 0x02000600
     tb->setBackgroundTransparent(true);
 #endif
+    tb->setMenu(m_tbMenu);
+    m_tbMenu->addAction(m_darkThemeAction);
+    m_tbMenu->addSeparator();
+
+    m_darkThemeAction->setCheckable(true);
 
     setCentralWidget(wrapWidget);
     setAcceptDrops(true);
@@ -80,10 +92,39 @@ DebInstaller::DebInstaller(QWidget *parent)
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [=](const QString &output) { qDebug() << output.trimmed(); });
+    connect(m_darkThemeAction, &QAction::toggled, this, &DebInstaller::toggleDarkTheme);
+
+    reloadTheme();
 }
 
 DebInstaller::~DebInstaller()
 {
+}
+
+void DebInstaller::toggleDarkTheme(bool checked)
+{
+    m_qsettings->setValue("theme", checked ? THEME_DARK : THEME_LIGHT);
+    reloadTheme();
+}
+
+void DebInstaller::reloadTheme()
+{
+    QString theme = m_qsettings->value("theme").toString();
+    if (theme.isEmpty()) {
+        theme = THEME_LIGHT;
+        m_qsettings->setValue("theme", THEME_LIGHT);
+    }
+
+    m_darkThemeAction->setChecked(theme == THEME_DARK);
+
+    QFile themeFile(theme == THEME_DARK ? ":/theme/dark/dark.qss" : ":/theme/light/light.qss");
+    if (!themeFile.open(QFile::ReadOnly)) {
+        qDebug() << "theme file not find!" << themeFile.fileName();
+    }
+
+    setStyleSheet(themeFile.readAll());
+
+    DThemeManager::instance()->setTheme(theme);
 }
 
 void DebInstaller::keyPressEvent(QKeyEvent *e)
@@ -241,6 +282,7 @@ void DebInstaller::refreshInstallPage()
         titlebar()->setTitle(QString());
 
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        singlePage->setObjectName("SingleInstallPage");
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
@@ -251,6 +293,8 @@ void DebInstaller::refreshInstallPage()
         titlebar()->setTitle(tr("Bulk Install"));
 
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+        multiplePage->setObjectName("MultipleInstallPage");
+
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
         connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
 

@@ -7,5 +7,8 @@
         <file>images/arrow_up.svg</file>
         <file>images/icon.svg</file>
         <file>images/split_line.svg</file>
+        <file>images/split_line_dark.svg</file>
+        <file>theme/dark/dark.qss</file>
+        <file>theme/light/light.qss</file>
     </qresource>
 </RCC>

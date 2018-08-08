@@ -1,0 +1,70 @@
+GrayButton {
+    color: #303030;
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: 4px;
+}
+
+GrayButton:hover {
+    color: white;
+    background-color: qlineargradient(x1:0 y1:0, x2:0 y2:1, stop:0 #8ccfff, stop:1 #4bb8ff);
+}
+
+GrayButton:pressed {
+    background-color: qlineargradient(x1:0 y1:0, x2:0 y2:1, stop:0 #0b8cff, stop:1 #0aa1ff);
+}
+
+#FileChooseWidget #DNDTips {
+    color: #6a6a6a;
+}
+
+#FileChooseWidget #SplitLine {
+    qproperty-pixmap: url(":/images/split_line.svg");
+}
+
+#FileChooseWidget #FileChooseButton {
+}
+
+#SingleInstallPage #InfoControlButton #TipsText {
+    color: #6a6a6a;
+}
+
+#SingleInstallPage #WorkerInformation {
+    color: #609dc9;
+    border: 1px solid #eee;
+    margin: 6px 0 0px 0;
+}
+
+#SingleInstallPage #PackageName {
+    color: black;
+}
+
+#SingleInstallPage #PackageNameTitle {
+    color: #797979;
+}
+
+#SingleInstallPage #PackageVersion {
+    color: black;
+}
+
+#SingleInstallPage #PackageVersionTitle {
+    color: #797979;
+}
+
+#SingleInstallPage #PackageDescription {
+    color: black;
+}
+
+#MultipleInstallPage #AppsView {
+    border: 1px solid #eee;
+    margin: 30px 0 2px 0;
+}
+
+#MultipleInstallPage #InfoArea {
+    color: #609dc9;
+    border: 1px solid #eee;
+    margin: 2px 0 0 0;
+}
+
+#MultipleInstallPage #InfoControlButton #TipsText {
+    color: #6a6a6a;
+}

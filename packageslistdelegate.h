@@ -23,6 +23,7 @@
 #define PACKAGESLISTDELEGATE_H
 
 #include <QAbstractItemDelegate>
+#include <QSettings>
 
 class PackagesListDelegate : public QAbstractItemDelegate
 {
@@ -38,6 +39,7 @@ private:
 private:
     QPixmap m_packageIcon;
     QPixmap m_removeIcon;
+    QSettings m_qsettings;
 };
 
 #endif // PACKAGESLISTDELEGATE_H

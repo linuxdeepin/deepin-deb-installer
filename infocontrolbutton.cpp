@@ -39,9 +39,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(21, 8));
     m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setText(expandTips);
-    m_tipsText->setStyleSheet("QLabel {"
-                              "color: #6a6a6a;"
-                              "}");
+
+    m_tipsText->setObjectName("TipsText");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addSpacing(2);

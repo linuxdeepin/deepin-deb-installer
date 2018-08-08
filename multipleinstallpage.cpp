@@ -47,13 +47,13 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 {
     PackagesListDelegate *delegate = new PackagesListDelegate;
 
+    m_appsView->setObjectName("AppsView");
+    m_infoArea->setObjectName("InfoArea");
+    m_infoControlButton->setObjectName("InfoControlButton");
+
     m_appsView->setModel(model);
     m_appsView->setFixedHeight(213);
     m_appsView->setItemDelegate(delegate);
-    m_appsView->setStyleSheet("QListView {"
-                              "border: 1px solid #eee;"
-                              "margin: 30px 0 2px 0;"
-                              "}");
 
     m_installButton->setText(tr("Install"));
     m_acceptButton->setText(tr("Done"));
@@ -66,11 +66,6 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_infoArea->setAcceptDrops(false);
     m_infoArea->setFixedHeight(186);
     m_infoArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_infoArea->setStyleSheet("QTextEdit {"
-                              "color: #609dc9;"
-                              "border: 1px solid #eee;"
-                              "margin: 2px 0 0 0;"
-                              "}");
 
     m_infoControlButton->setVisible(false);
     m_installProgress->setVisible(false);

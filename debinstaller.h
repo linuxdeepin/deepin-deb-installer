@@ -24,6 +24,7 @@
 
 #include <QStackedLayout>
 #include <QPointer>
+#include <QSettings>
 
 #include <DMainWindow>
 
@@ -45,6 +46,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
+    void toggleDarkTheme(bool checked);
+    void reloadTheme();
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
     void onUninstallAccepted();
@@ -59,11 +62,15 @@ private:
     SingleInstallPage *backToSinglePage();
 
 private:
-    QPointer<QWidget> m_lastPage;
     DebListModel *m_fileListModel;
+    FileChooseWidget *m_fileChooseWidget;
 
     QStackedLayout *m_centralLayout;
-    FileChooseWidget *m_fileChooseWidget;
+    QSettings *m_qsettings;
+    QMenu *m_tbMenu;
+    QAction *m_darkThemeAction;
+
+    QPointer<QWidget> m_lastPage;
 };
 
 #endif // DEBINSTALLER_H

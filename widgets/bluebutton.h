@@ -23,8 +23,11 @@
 #define BLUEBUTTON_H
 
 #include <QPushButton>
+#include <DSuggestButton>
 
-class BlueButton : public QPushButton
+DWIDGET_USE_NAMESPACE
+
+class BlueButton : public DSuggestButton
 {
     Q_OBJECT
 

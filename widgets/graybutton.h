@@ -23,8 +23,11 @@
 #define GRAYBUTTON_H
 
 #include <QPushButton>
+#include <DSuggestButton>
 
-class GrayButton : public QPushButton
+DWIDGET_USE_NAMESPACE
+
+class GrayButton : public DSuggestButton
 {
     Q_OBJECT
 
