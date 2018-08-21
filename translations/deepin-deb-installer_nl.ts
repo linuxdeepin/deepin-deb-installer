@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="74"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Pakketbeheerder</translation>
+        <translation>Deepin Pakketbeheer</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="239"/>
@@ -17,17 +17,17 @@
     <message>
         <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Installatie mislukt, controleer alstublieft uw netwerkverbinding</translation>
+        <translation>Installatie mislukt; controleer je netwerkverbinding.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Installatie mislukt, controleer updates in het Controlecentrum</translation>
+        <translation>Installatie mislukt; controleer op updates in het Configuratiecentrum.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Installatie mislukt, onvoldoende schijfruimte</translation>
+        <translation>Installatie mislukt; onvoldoende schijfruimte.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="64"/>
@@ -51,7 +51,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Drag and drop file here</source>
-        <translation>Bestanden slepen en hier neerzetten</translation>
+        <translation>Versleep een bestand hierheen</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="80"/>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Collapse</source>
-        <translation>Samenvouwen</translation>
+        <translation>Inklappen</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
@@ -120,7 +120,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="82"/>
         <source>Collapse</source>
-        <translation>Samenvouwen</translation>
+        <translation>Inklappen</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="82"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="119"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Oké</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="121"/>
@@ -165,12 +165,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="296"/>
         <source>Installed successfully</source>
-        <translation>Succesvol geïnstalleerd</translation>
+        <translation>Geïnstalleerd</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="298"/>
         <source>Uninstalled successfully</source>
-        <translation>Succesvol verwijderd</translation>
+        <translation>Verwijderd</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="366"/>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation>Samenvouwen</translation>
+        <translation>Inklappen</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="46"/>
@@ -219,8 +219,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Weet u zeker dat u %1 wilt verwijderen?
-Alle bestanden die hier afhankelijk van zijn worden ook verwijderd</translation>
+        <translation>Weet je zeker dat je %1 wilt verwijderen?
+Alle afhankelijkheden worden eveneens verwijderd</translation>
     </message>
 </context>
 <context>
@@ -228,12 +228,12 @@ Alle bestanden die hier afhankelijk van zijn worden ook verwijderd</translation>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin Pakketbeheerder</translation>
+        <translation>Deepin Pakketbeheer</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin Pakketbeheerder is een applicatie die gebruikers helpt bij het installeren en verwijderen van lokale software. Daarnaast ondersteunt het ook de mogelijkheid om meedere installaties tegelijkertijd uit te voeren.</translation>
+        <translation>Deepin Pakketbeheer is een applicatie die gebruikers helpt bij het installeren en verwijderen van lokale software, zowel één voor één als meerdere tegelijk.</translation>
     </message>
 </context>
 </TS>

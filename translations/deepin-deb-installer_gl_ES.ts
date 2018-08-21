@@ -51,7 +51,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="53"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>Arrastrar ficheiros aquí</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="80"/>
@@ -79,12 +79,12 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Feito</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Volver</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="135"/>
         <source>Same version installed</source>
-        <translation type="unfinished"/>
+        <translation>Mesma versión instalada</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="138"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Outra versión instalada: %1</translation>
     </message>
 </context>
 <context>
@@ -150,12 +150,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="121"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Volver</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="123"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Feito</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="138"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="131"/>
         <source>Name: </source>
-        <translation type="unfinished"/>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="364"/>
@@ -233,7 +233,7 @@ Eliminaranse tódalas dependencias</translation>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>O xestor de paquetes empregase para axudar aos usuarios a instalar e eliminar software local, tamén soporta a instalación en bloque.</translation>
     </message>
 </context>
 </TS>
