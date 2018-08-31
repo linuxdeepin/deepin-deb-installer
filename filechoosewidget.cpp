@@ -20,6 +20,7 @@
  */
 
 #include "filechoosewidget.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QDragEnterEvent>
@@ -34,15 +35,13 @@
 #include <QFileDialog>
 #include <QLabel>
 
-#include <DSvgRenderer>
-
 DWIDGET_USE_NAMESPACE
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
 {
     const auto ratio = devicePixelRatioF();
-    QPixmap iconPix = DSvgRenderer::render(":/images/icon.svg", QSize(140, 140) * ratio);
+    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(140, 140));
     iconPix.setDevicePixelRatio(ratio);
 
     QLabel *iconImage = new QLabel;

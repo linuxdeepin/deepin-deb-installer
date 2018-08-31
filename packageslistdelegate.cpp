@@ -21,12 +21,10 @@
 
 #include "packageslistdelegate.h"
 #include "deblistmodel.h"
+#include "utils.h"
 
 #include <QPainter>
 #include <QApplication>
-#include <DSvgRenderer>
-
-DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
@@ -34,7 +32,7 @@ PackagesListDelegate::PackagesListDelegate(QObject *parent)
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
     const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
-    m_removeIcon = DSvgRenderer::render(":/images/active_tab_close_normal.svg", QSize(16, 16) * ratio);
+    m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
     m_removeIcon.setDevicePixelRatio(ratio);
 }
 
