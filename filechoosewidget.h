@@ -23,6 +23,7 @@
 #define FILECHOOSEWIDGET_H
 
 #include <QWidget>
+#include <QSettings>
 
 #include <dlinkbutton.h>
 
@@ -42,6 +43,7 @@ private slots:
 
 private:
     Dtk::Widget::DLinkButton *m_fileChooseBtn;
+    QSettings m_settings;
 };
 
 #endif // FILECHOOSEWIDGET_H

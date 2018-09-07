@@ -38,7 +38,8 @@
 DWIDGET_USE_NAMESPACE
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+    m_settings("deepin", "deepin-deb-install")
 {
     const auto ratio = devicePixelRatioF();
     QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(140, 140));
@@ -96,11 +97,23 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 
 void FileChooseWidget::chooseFiles()
 {
+    QString historyDir = m_settings.value("history_dir").toString();
+
+    if (historyDir.isEmpty()) {
+        historyDir = QDir::homePath();
+    }
+
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setNameFilter("Debian Pakcage Files (*.deb)");
+    dialog.setDirectory(historyDir);
 
-    if (dialog.exec() != QDialog::Accepted)
+    const int mode = dialog.exec();
+
+    // save the directory string to config file.
+    m_settings.setValue("history_dir", dialog.directoryUrl().toLocalFile());
+
+    if (mode != QDialog::Accepted)
         return;
 
     const QStringList selected_files = dialog.selectedFiles();
