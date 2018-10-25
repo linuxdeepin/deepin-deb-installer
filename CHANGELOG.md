@@ -1,3 +1,13 @@
+<a name="1.2.6"></a>
+### 1.2.6 (2018-10-25)
+
+
+#### Features
+
+* **file_dialog:**  save history folder. ([9116f168](https://github.com/linuxdeepin/deepin-deb-installer/commit/9116f1688758627894192d08f5e08ef769eedba4))
+
+
+
 <a name="1.2.5"></a>
 ### 1.2.5 (2018-07-20)
 
