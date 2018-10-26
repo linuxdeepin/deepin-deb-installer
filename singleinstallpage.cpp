@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QRegularExpression>
+#include <QTextLayout>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -39,28 +40,54 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect)
+const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
 {
-    const int textFlag = Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignTop;
+    QFontMetrics fm(font);
+    QTextLayout layout(text);
 
-    if (rect.contains(fm.boundingRect(rect, textFlag, text)))
-        return text;
+    layout.setFont(font);
 
-    QString str(text + "...");
+    QStringList lines;
+    QTextOption &text_option = *const_cast<QTextOption*>(&layout.textOption());
 
-    while (true)
-    {
-        if (str.size() < 4)
+    text_option.setWrapMode(QTextOption::WordWrap);
+    text_option.setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+    layout.beginLayout();
+
+    QTextLine line = layout.createLine();
+    int height = 0;
+    int lineHeight = fm.height();
+
+    while (line.isValid()) {
+        height += lineHeight;
+
+        if (height + lineHeight > size.height()) {
+            const QString &end_str = fm.elidedText(text.mid(line.textStart()), Qt::ElideRight, size.width());
+
+            layout.endLayout();
+            layout.setText(end_str);
+
+            text_option.setWrapMode(QTextOption::NoWrap);
+            layout.beginLayout();
+            line = layout.createLine();
+            line.setLineWidth(size.width() - 1);
+            text = end_str;
+        } else {
+            line.setLineWidth(size.width());
+        }
+
+        lines.append(text.mid(line.textStart(), line.textLength()));
+
+        if (height + lineHeight > size.height())
             break;
 
-        QRect boundingRect = fm.boundingRect(rect, textFlag, str);
-        if (rect.contains(boundingRect))
-            break;
-
-        str.remove(str.size() - 4, 1);
+        line = layout.createLine();
     }
 
-    return str;
+    layout.endLayout();
+
+    return lines.join("");
 }
 
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
@@ -341,9 +368,8 @@ void SingleInstallPage::setPackageInfo()
 //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
 //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = package->longDescription();
-    const QRect boundingRect = QRect(0, 0, m_packageDescription->width(), m_packageDescription->maximumHeight());
-    const QFontMetrics fm(m_packageDescription->font());
-    m_packageDescription->setText(holdTextInRect(fm, description, boundingRect));
+    const QSize boundingSize = QSize(m_packageDescription->width(), m_packageDescription->maximumHeight());
+    m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
