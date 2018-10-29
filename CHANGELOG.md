@@ -1,3 +1,9 @@
+<a name="1.2.7"></a>
+## 1.2.7 (2018-10-29)
+
+*   refactor: optimize the calculation of text areas ([10eee1d8](https://github.com/linuxdeepin/deepin-deb-installer/commit/10eee1d846ee6ada6f736f1950ff99078fa83ed4))
+
+
 <a name="1.2.6"></a>
 ### 1.2.6 (2018-10-25)
 
