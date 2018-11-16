@@ -40,9 +40,11 @@
 #include <QApt/DebFile>
 
 #include <DTitlebar>
+#include <DRecentManager>
 
 using QApt::DebFile;
 
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
@@ -159,6 +161,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             delete p;
             continue;
         }
+
+        DRecentData data;
+        data.appName = "Deepin Deb Installer";
+        data.appExec = "deepin-deb-installer";
+        DRecentManager::addItem(package, data);
 
         m_fileListModel->appendPackage(p);
     }
