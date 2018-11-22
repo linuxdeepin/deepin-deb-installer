@@ -8,3 +8,9 @@ file_filter = translations/deepin-deb-installer_<lang>.ts
 source_file = translations/deepin-deb-installer.ts
 source_lang = en
 type = QT
+
+[deepin-package-manager.deepin-deb-installer_desktop]
+file_filter = translations/desktop/desktop_<lang>.ts
+source_file = translations/desktop/desktop.ts
+source_lang = en
+type = QT

@@ -13,3 +13,5 @@ Categories=System;
 MimeType=application/vnd.debian.binary-package;application/x-deb;
 StartupNotify=true
 Keywords=package;apt;dpkg;install
+GenericName=Package Manager
+X-Deepin-Vendor=deepin
