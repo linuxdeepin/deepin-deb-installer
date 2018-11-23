@@ -1,3 +1,14 @@
+<a name="1.2.9"></a>
+### 1.2.9 (2018-11-23)
+
+
+#### Features
+
+*   add genericName ([676b441c](https://github.com/linuxdeepin/deepin-deb-installer/commit/676b441c13051a28a962116bb4f9db5abced3d99))
+*   support the recent file spec. ([2c736215](https://github.com/linuxdeepin/deepin-deb-installer/commit/2c7362153eb2ea70a860a65a4ba70b870d0174bb))
+
+
+
 <a name="1.2.8"></a>
 ## 1.2.7 (2018-11-01)
 
