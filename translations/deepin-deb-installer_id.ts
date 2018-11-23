@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="74"/>
+        <location filename="../debinstaller.cpp" line="62"/>
+        <source>Dark Theme</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="88"/>
         <source>Deepin Package Manager</source>
         <translation>Manajer Paket Deepin</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="239"/>
+        <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
         <translation>Instal Jumlah Besar</translation>
     </message>
@@ -49,12 +54,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../filechoosewidget.cpp" line="53"/>
+        <location filename="../filechoosewidget.cpp" line="52"/>
         <source>Drag and drop file here</source>
         <translation>Seret dan lepas berkas di sini</translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="80"/>
+        <location filename="../filechoosewidget.cpp" line="76"/>
         <source>Select File</source>
         <translation>Pilih Berkas</translation>
     </message>
@@ -90,27 +95,27 @@
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="102"/>
+        <location filename="../packageslistdelegate.cpp" line="111"/>
         <source>Installing</source>
         <translation>Menginstal</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="106"/>
+        <location filename="../packageslistdelegate.cpp" line="115"/>
         <source>Installed</source>
         <translation>Diinstal</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="110"/>
+        <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Failed</source>
         <translation>Gagal</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="135"/>
+        <location filename="../packageslistdelegate.cpp" line="144"/>
         <source>Same version installed</source>
         <translation>Versi sama diinstal</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="138"/>
+        <location filename="../packageslistdelegate.cpp" line="147"/>
         <source>Other version installed: %1</source>
         <translation>Versi lain diinstal: %1</translation>
     </message>
@@ -118,77 +123,77 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="82"/>
+        <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Collapse</source>
         <translation>Jatuhkan</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="82"/>
+        <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Display details</source>
         <translation>Tampilkan detail</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="113"/>
+        <location filename="../singleinstallpage.cpp" line="141"/>
         <source>Install</source>
         <translation>Instal</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="115"/>
+        <location filename="../singleinstallpage.cpp" line="143"/>
         <source>Remove</source>
         <translation>Hapus</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="117"/>
+        <location filename="../singleinstallpage.cpp" line="145"/>
         <source>Reinstall</source>
         <translation>Instal ulang</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="119"/>
+        <location filename="../singleinstallpage.cpp" line="147"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="121"/>
+        <location filename="../singleinstallpage.cpp" line="149"/>
         <source>Back</source>
         <translation>Kembali</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="123"/>
+        <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="138"/>
+        <location filename="../singleinstallpage.cpp" line="164"/>
         <source>Version: </source>
         <translation>Versi:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="296"/>
+        <location filename="../singleinstallpage.cpp" line="320"/>
         <source>Installed successfully</source>
         <translation>Instal berhasil</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="298"/>
+        <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Uninstalled successfully</source>
         <translation>Lepas berhasil</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="366"/>
+        <location filename="../singleinstallpage.cpp" line="389"/>
         <source>Other version installed: %1</source>
         <translation>Versi lain diinstal: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="309"/>
+        <location filename="../singleinstallpage.cpp" line="333"/>
         <source>Uninstall Failed</source>
         <translation>Lepaskan gagal</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="131"/>
+        <location filename="../singleinstallpage.cpp" line="159"/>
         <source>Name: </source>
         <translation>Nama:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="364"/>
+        <location filename="../singleinstallpage.cpp" line="387"/>
         <source>Same version installed</source>
         <translation>Versi sama diinstal</translation>
     </message>

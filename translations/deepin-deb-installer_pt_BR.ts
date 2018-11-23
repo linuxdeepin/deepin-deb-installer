@@ -2,12 +2,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="74"/>
+        <location filename="../debinstaller.cpp" line="62"/>
+        <source>Dark Theme</source>
+        <translation>Tema Escuro</translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="88"/>
         <source>Deepin Package Manager</source>
         <translation>Gerenciador de Pacotes</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="239"/>
+        <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
         <translation>Instalação em massa</translation>
     </message>
@@ -49,12 +54,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../filechoosewidget.cpp" line="53"/>
+        <location filename="../filechoosewidget.cpp" line="52"/>
         <source>Drag and drop file here</source>
         <translation>Arraste e solte o arquivo aqui</translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="80"/>
+        <location filename="../filechoosewidget.cpp" line="76"/>
         <source>Select File</source>
         <translation>Selecionar arquivo</translation>
     </message>
@@ -90,27 +95,27 @@
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="102"/>
+        <location filename="../packageslistdelegate.cpp" line="111"/>
         <source>Installing</source>
         <translation>Instalando</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="106"/>
+        <location filename="../packageslistdelegate.cpp" line="115"/>
         <source>Installed</source>
         <translation>Instalado</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="110"/>
+        <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Failed</source>
         <translation>Falhou</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="135"/>
+        <location filename="../packageslistdelegate.cpp" line="144"/>
         <source>Same version installed</source>
         <translation>A mesma versão está instalada</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="138"/>
+        <location filename="../packageslistdelegate.cpp" line="147"/>
         <source>Other version installed: %1</source>
         <translation>Outra versão está instalada: %1</translation>
     </message>
@@ -118,77 +123,77 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="82"/>
+        <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Collapse</source>
         <translation>Ocultar detalhes</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="82"/>
+        <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Display details</source>
         <translation>Exibir detalhes</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="113"/>
+        <location filename="../singleinstallpage.cpp" line="141"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="115"/>
+        <location filename="../singleinstallpage.cpp" line="143"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="117"/>
+        <location filename="../singleinstallpage.cpp" line="145"/>
         <source>Reinstall</source>
         <translation>Reinstalar</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="119"/>
+        <location filename="../singleinstallpage.cpp" line="147"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="121"/>
+        <location filename="../singleinstallpage.cpp" line="149"/>
         <source>Back</source>
         <translation>Voltar</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="123"/>
+        <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
         <translation>Concluído</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="138"/>
+        <location filename="../singleinstallpage.cpp" line="164"/>
         <source>Version: </source>
         <translation>Versão:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="296"/>
+        <location filename="../singleinstallpage.cpp" line="320"/>
         <source>Installed successfully</source>
         <translation>Instalado com sucesso</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="298"/>
+        <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Uninstalled successfully</source>
         <translation>Desinstalado com sucesso</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="366"/>
+        <location filename="../singleinstallpage.cpp" line="389"/>
         <source>Other version installed: %1</source>
         <translation>Outra versão instalada: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="309"/>
+        <location filename="../singleinstallpage.cpp" line="333"/>
         <source>Uninstall Failed</source>
         <translation>Falha na desinstalação</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="131"/>
+        <location filename="../singleinstallpage.cpp" line="159"/>
         <source>Name: </source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="364"/>
+        <location filename="../singleinstallpage.cpp" line="387"/>
         <source>Same version installed</source>
         <translation>Mesma versão instalada</translation>
     </message>
