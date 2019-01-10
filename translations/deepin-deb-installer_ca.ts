@@ -14,7 +14,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
-        <translation>Instal·lació en bloc</translation>
+        <translation>Instal·lació massiva</translation>
     </message>
 </context>
 <context>

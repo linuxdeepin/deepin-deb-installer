@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark Theme</source>
-        <translation type="unfinished"/>
+        <translation>Tema scuro</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>

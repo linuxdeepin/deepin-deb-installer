@@ -4,17 +4,17 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark Theme</source>
-        <translation type="unfinished"/>
+        <translation>暗色主題</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin 軟體管理器</translation>
+        <translation>Deepin 軟體包管理器</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
-        <translation>批量安裝</translation>
+        <translation>批次安裝</translation>
     </message>
 </context>
 <context>
@@ -43,7 +43,7 @@
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation>缺少的依賴軟體：%1</translation>
+        <translation>缺少依賴軟體：%1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="52"/>
         <source>Drag and drop file here</source>
-        <translation>拖拽檔案到此</translation>
+        <translation>拖曳檔案到此</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="76"/>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Collapse</source>
-        <translation>隱藏細節</translation>
+        <translation>隱藏</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Display details</source>
-        <translation>顯示細節</translation>
+        <translation>顯示詳細資訊</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="58"/>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Collapse</source>
-        <translation>隱藏細節</translation>
+        <translation>隱藏</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Display details</source>
-        <translation>顯示細節</translation>
+        <translation>顯示詳細資訊</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="141"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="145"/>
         <source>Reinstall</source>
-        <translation>重新安裝</translation>
+        <translation>重裝</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="147"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="164"/>
@@ -175,7 +175,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Uninstalled successfully</source>
-        <translation>移除成功</translation>
+        <translation>解除安裝成功</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="389"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="333"/>
         <source>Uninstall Failed</source>
-        <translation>移除失敗</translation>
+        <translation>解除安裝失敗</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="159"/>
@@ -224,7 +224,7 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>確定移除 %1？
+        <translation>確定解除安裝 %1？
 所有依賴的軟體也會移除</translation>
     </message>
 </context>
@@ -233,12 +233,12 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Deepin 軟體管理器</translation>
+        <translation>Deepin 軟體包管理器</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin 軟體管理器能協助使用者安裝與移除電腦上的軟體，並支援批量安裝。</translation>
+        <translation>Deepin 軟體包管理器能協助使用者安裝與移除電腦上的軟體。支援批次安裝。</translation>
     </message>
 </context>
 </TS>

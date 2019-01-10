@@ -4,17 +4,17 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark Theme</source>
-        <translation type="unfinished"/>
+        <translation>Tume teema</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>Deepin pakihaldur</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
-        <translation type="unfinished"/>
+        <translation>Hulgi paigaldamine</translation>
     </message>
 </context>
 <context>
@@ -22,33 +22,33 @@
     <message>
         <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
-        <translation type="unfinished"/>
+        <translation>Paigaldamine ebaõnnestus. Palun kontroli internetiühendust</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation type="unfinished"/>
+        <translation>Paigaldamine ebaõnnestus. Palun vaata juhtpaneelilt uuendusi.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation type="unfinished"/>
+        <translation>Paigaldamine ebaõnnestus, kettal pole piisavalt vaba ruumi</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="64"/>
         <source>Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation>Paigaldamine ebaõnnestus</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>Lahendamata sõltuvused: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"/>
+        <translation>Sobimatu paki arhidektuur</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="52"/>
         <source>Drag and drop file here</source>
-        <translation type="unfinished"/>
+        <translation>Lohista failid siia</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="76"/>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Sulge</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Näita üksikasju</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="58"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="147"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Teine versioon on juba paigaldatud: %1</translation>
     </message>
 </context>
 <context>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Sulge</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Display details</source>
-        <translation type="unfinished"/>
+        <translation>Näita üksikasju</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="141"/>
@@ -170,17 +170,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="320"/>
         <source>Installed successfully</source>
-        <translation type="unfinished"/>
+        <translation>Paigaldatud</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Uninstalled successfully</source>
-        <translation type="unfinished"/>
+        <translation>Eemaldatud</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="389"/>
         <source>Other version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Teine versioon on juba paigaldatud: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="333"/>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="33"/>
         <source>Display related packages</source>
-        <translation type="unfinished"/>
+        <translation>Näita seotud pakke</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation type="unfinished"/>
+        <translation>Sulge</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="46"/>
@@ -224,7 +224,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Oled sa kindel, et soovid %1 eemaldada?
+Ka kõik selle sõltuvused eemaldatakse</translation>
     </message>
 </context>
 <context>
@@ -232,12 +233,12 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation type="unfinished"/>
+        <translation>Deepin pakihaldur</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Deepin pakihaldur on rakendus, millega kasutajad saavad arvutisse tarkvara paigaldada ja seda sealt eemaldada. Toetab ka hulgipaigaldamist.</translation>
     </message>
 </context>
 </TS>

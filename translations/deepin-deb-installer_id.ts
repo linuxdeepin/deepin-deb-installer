@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark Theme</source>
-        <translation type="unfinished"/>
+        <translation>Tema Gelap</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Selesai</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Selesai</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="164"/>

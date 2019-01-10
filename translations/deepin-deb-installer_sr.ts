@@ -145,12 +145,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="145"/>
         <source>Reinstall</source>
-        <translation>Понови</translation>
+        <translation>Инсталирај</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="147"/>
         <source>OK</source>
-        <translation>У РЕДУ</translation>
+        <translation>У реду</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="149"/>
