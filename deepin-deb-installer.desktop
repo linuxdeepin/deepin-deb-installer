@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=System;
 Comment=Deepin Package Manager is used to help users install and remove local package, supports bulk install.
-Exec=deepin-deb-installer %f
+Exec=deepin-deb-installer %F
 GenericName=Package Manager
 Icon=deepin-deb-installer
 MimeType=application/vnd.debian.binary-package;application/x-deb;
