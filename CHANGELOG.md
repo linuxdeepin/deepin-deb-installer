@@ -1,3 +1,13 @@
+<a name="1.3.1"></a>
+## 1.3.1 (2019-03-27)
+
+
+#### Bug Fixes
+
+*   only one file be passed when select multiple files in DFM and open with deb installer ([43b8e6b5](https://github.com/linuxdeepin/deepin-deb-installer/commit/43b8e6b5e988e4e84b26f95b9d34652fd60ac42c))
+
+
+
 <a name="1.3.0"></a>
 ## 1.3.0 (2019-01-24)
 
