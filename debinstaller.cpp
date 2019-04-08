@@ -59,7 +59,7 @@ DebInstaller::DebInstaller(QWidget *parent)
       m_centralLayout(new QStackedLayout),
       m_qsettings(new QSettings(this)),
       m_tbMenu(new QMenu(this)),
-      m_darkThemeAction(new QAction(tr("Dark Theme"), this))
+      m_darkThemeAction(new QAction(tr("Dark theme"), this))
 {
     m_fileChooseWidget->setObjectName("FileChooseWidget");
 
