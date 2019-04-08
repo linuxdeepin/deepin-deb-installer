@@ -98,7 +98,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
-    QString tips(tr("Are you sure to uninstall %1?\nAll dependencies will also be removed"));
+    QString tips(tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed"));
 
     m_tips->setText(tips.arg(name));
 }
