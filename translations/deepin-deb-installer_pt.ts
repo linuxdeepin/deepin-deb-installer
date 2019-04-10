@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>Tema Escuro</translation>
+        <source>Dark theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -27,12 +27,12 @@
     <message>
         <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>A instalação falhou, por favor, verifique as atualizações no &apos;Centro de Controlo&apos;</translation>
+        <translation>A instalação falhou, por favor, verifique as atualizações no Centro de Controlo</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Instalação falhou, espaço insuficiente em disco</translation>
+        <translation>Instalação falhou, espaço insuficiente no disco</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="64"/>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Collapse</source>
-        <translation>Ocultar</translation>
+        <translation>Colapso</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="41"/>
         <source>Display details</source>
-        <translation>Mostrar detalhes</translation>
+        <translation>Exibir detalhes</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="58"/>
@@ -222,10 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Tem a certeza que deseja desinstalar %1?
-Também serão removidas todas as dependências</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,8 +236,8 @@ Também serão removidas todas as dependências</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>O Deepin Package Manager é uma aplicação utilizada para ajudar os utilizadores a instalar e remover software local, suporta instalações em massa.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

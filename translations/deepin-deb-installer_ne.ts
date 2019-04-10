@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>डार्क थिम</translation>
+        <source>Dark theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -222,9 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>के तपाईँ% 1 लाई अनस्टल गर्न निश्चित हुनुहुन्छ? सबै निर्भरताहरू हटाइनेछ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -236,8 +236,8 @@ All dependencies will also be removed</source>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>डिपिन प्याकेज प्रबन्धकले अनुप्रयोग प्रयोग गरी स्थानीय सफ्टवेयर स्थापना गर्न र हटाउन मद्दत पुर्याउनका लागि प्रयोग गरी बल्क स्थापना समर्थन गर्दछ।</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
