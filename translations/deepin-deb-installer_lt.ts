@@ -3,7 +3,7 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
+        <source>Dark theme</source>
         <translation>Tamsi tema</translation>
     </message>
     <message>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>Ar tikrai norite pašalinti %1?
 Tuo pačiu bus pašalintos ir visos priklausomybės</translation>
@@ -237,8 +237,8 @@ Tuo pačiu bus pašalintos ir visos priklausomybės</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Deepin paketų tvarkytuvė yra programa, naudojama padėti naudotojams įdiegti ir šalinti vietinę programinę įrangą, ši programa palaiko masinį įdiegimą.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation>Deepin paketų tvarkytuvė yra naudojama padėti naudotojams įdiegti ir šalinti vietinius paketus, ši programa palaiko masinį įdiegimą.</translation>
     </message>
 </context>
 </TS>

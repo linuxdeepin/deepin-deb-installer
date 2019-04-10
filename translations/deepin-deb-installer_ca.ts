@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>Tema fosc</translation>
+        <source>Dark theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -222,10 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Segur que voleu desinstal·lar %1?
-També se n&apos;eliminaran totes les dependències.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,8 +236,8 @@ També se n&apos;eliminaran totes les dependències.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>El Gestor de paquets del Deepin és una aplicació usada per ajudar els usuaris a instal·lar i eliminar programari local. Admet instal·lacions en bloc.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

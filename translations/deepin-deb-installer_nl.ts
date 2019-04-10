@@ -3,7 +3,7 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
+        <source>Dark theme</source>
         <translation>Donker thema</translation>
     </message>
     <message>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>Weet je zeker dat je %1 wilt verwijderen?
 Alle afhankelijkheden worden eveneens verwijderd</translation>
@@ -237,7 +237,7 @@ Alle afhankelijkheden worden eveneens verwijderd</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
         <translation>Deepin Pakketbeheer is een applicatie die gebruikers helpt bij het installeren en verwijderen van lokale software, zowel één voor één als meerdere tegelijk.</translation>
     </message>
 </context>
