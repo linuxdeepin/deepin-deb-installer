@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>Tema Escuro</translation>
+        <source>Dark theme</source>
+        <translation>Tema escuro</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -222,10 +222,10 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Deseja desinstalar %1?
-Todas as dependências também serão removidas</translation>
+        <translation>Quer realmente desinstalar %1?
+Todas as dependências serão também excluídas</translation>
     </message>
 </context>
 <context>
@@ -237,8 +237,8 @@ Todas as dependências também serão removidas</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>O Gerenciador de Pacotes é um aplicativo usado para ajudar os usuários a instalar e remover aplicativos locais e suporta a instalação em massa.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation>O Deepin Package Manager é usado para ajudar os usuários a instalar e remover pacotes locais, suportando a instalação em massa.</translation>
     </message>
 </context>
 </TS>

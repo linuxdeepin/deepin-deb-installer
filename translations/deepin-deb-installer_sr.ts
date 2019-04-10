@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>Тамна тема</translation>
+        <source>Dark theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="76"/>
         <source>Select File</source>
-        <translation>Одабери датотеку</translation>
+        <translation>Изабери датотеку</translation>
     </message>
 </context>
 <context>
@@ -222,10 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Заиста желите да уклоните %1?
-Све зависности биће уклоњене заједно</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,8 +236,8 @@ All dependencies will also be removed</source>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Дипин Управник Пакета је програм који помаже корисницима око инсталације и уклањања локалног софтвера. Подржава групну инсталацију.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

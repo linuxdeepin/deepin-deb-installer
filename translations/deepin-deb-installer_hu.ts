@@ -3,7 +3,7 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
+        <source>Dark theme</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -22,12 +22,12 @@
     <message>
         <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Telepítés sikertelen, kérem ellenőrizze a hálózati kapcsolatot</translation>
+        <translation>Telepítés sikertelen, kérlek ellenőrizd a hálózati kapcsolatot</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check updates in Control Center</source>
-        <translation>Telepítés sikertelen, kérem ellenőrizze a frissítéseket a Vezérlőpultban</translation>
+        <translation>Telepítés sikertelen, kérlek ellenőrizd a frissítéseket a Vezérlőpultban</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Sikerült</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Sikerült.</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="164"/>
@@ -222,10 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Biztosan eltávolítja ezt %1 ?
-A csomag minden függősége eltávolításra kerül</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,8 +236,8 @@ A csomag minden függősége eltávolításra kerül</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>A Deepin csomagkezelő alkalmazás segít a felhasználónak a szoftverek telepítésében és eltávolításában. Támogatja a csoportos telepítést is.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -3,8 +3,8 @@
     <name>DebInstaller</name>
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
-        <source>Dark Theme</source>
-        <translation>Tmavý vzhled</translation>
+        <source>Dark theme</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -222,10 +222,9 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
-        <source>Are you sure to uninstall %1?
+        <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Jste si jistý, že chcete odinstalovat %1?
-Budou odstraněny i všechny závislosti</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -237,8 +236,8 @@ Budou odstraněny i všechny závislosti</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>
-        <source>Deepin Package Manager is an application used to help users install and remove local software, supports bulk install.</source>
-        <translation>Správce balíčků se používá k pomoci uživatelům instalovat a odebírat místní programové vybavení, podporuje hromadnou instalaci.</translation>
+        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
