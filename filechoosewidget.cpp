@@ -101,7 +101,7 @@ void FileChooseWidget::chooseFiles()
 
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setNameFilter("Debian Pakcage Files (*.deb)");
+    dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);
 
     const int mode = dialog.exec();
