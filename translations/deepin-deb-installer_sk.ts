@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark theme</source>
-        <translation type="unfinished"/>
+        <translation>Tmavá téma</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -224,7 +224,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Naozaj chcete odinštalovať %1?
+Všetky závislosti budú tiež odstránené</translation>
     </message>
 </context>
 <context>
@@ -237,7 +238,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Aplikácia Deepin Správca balíčkov slúži na pomoc používateľom pri inštalácii a odstraňovaní lokálnych balíčkov, podporuje hromadnú inštaláciu.</translation>
     </message>
 </context>
 </TS>

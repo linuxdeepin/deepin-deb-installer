@@ -43,7 +43,7 @@
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Dépendances cassées: : %1</translation>
+        <translation>Dépendances cassées : %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>

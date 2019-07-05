@@ -9,12 +9,12 @@
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
         <source>Deepin Package Manager</source>
-        <translation>Gerenciador de Pacotes</translation>
+        <translation>Deepin Gerenciador de Pacotes</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
-        <translation>Instalação em massa</translation>
+        <translation>Instalação em Massa</translation>
     </message>
 </context>
 <context>
@@ -32,23 +32,23 @@
     <message>
         <location filename="../deblistmodel.cpp" line="61"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Falha na instalação, espaço em disco insuficiente</translation>
+        <translation>Falha na instalação, espaço insuficiente em disco</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="64"/>
         <source>Installation Failed</source>
-        <translation>Falha na instalação.</translation>
+        <translation>Falha na Instalação.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="296"/>
         <location filename="../deblistmodel.cpp" line="303"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Dependências quebradas: %1</translation>
+        <translation>Dependências Quebradas: %1</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="299"/>
         <source>Unmatched package architecture</source>
-        <translation>Arquitetura de pacotes incompatíveis</translation>
+        <translation>Arquitetura de pacote incompatível</translation>
     </message>
 </context>
 <context>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="76"/>
         <source>Select File</source>
-        <translation>Selecionar arquivo</translation>
+        <translation>Selecione o Arquivo</translation>
     </message>
 </context>
 <context>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="144"/>
         <source>Same version installed</source>
-        <translation>A mesma versão está instalada</translation>
+        <translation>Versão já instalada</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="147"/>
@@ -180,12 +180,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="389"/>
         <source>Other version installed: %1</source>
-        <translation>Outra versão instalada: %1</translation>
+        <translation>Outra versão está instalada: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="333"/>
         <source>Uninstall Failed</source>
-        <translation>Falha na desinstalação</translation>
+        <translation>Falha na Desinstalação</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="159"/>
@@ -195,7 +195,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="387"/>
         <source>Same version installed</source>
-        <translation>Mesma versão instalada</translation>
+        <translation>Versão já instalada</translation>
     </message>
 </context>
 <context>
@@ -224,8 +224,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Quer realmente desinstalar %1?
-Todas as dependências serão também excluídas</translation>
+        <translation>Deseja desinstalar %1?
+Todas as dependências serão removidas</translation>
     </message>
 </context>
 <context>
@@ -233,7 +233,7 @@ Todas as dependências serão também excluídas</translation>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Deepin Package Manager</source>
-        <translation>Gerenciador de Pacotes</translation>
+        <translation>Deepin Gerenciador de Pacotes</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="53"/>

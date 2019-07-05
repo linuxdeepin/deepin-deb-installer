@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark theme</source>
-        <translation type="unfinished"/>
+        <translation>暗色主題</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -224,7 +224,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>確定解除安裝 %1？
+也會移除所有依賴</translation>
     </message>
 </context>
 <context>
@@ -237,7 +238,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Deepin 軟體包管理器用來協助使用者安裝及移除本機軟體包，支援批次安裝。</translation>
     </message>
 </context>
 </TS>
