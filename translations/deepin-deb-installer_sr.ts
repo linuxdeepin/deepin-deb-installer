@@ -4,7 +4,7 @@
     <message>
         <location filename="../debinstaller.cpp" line="62"/>
         <source>Dark theme</source>
-        <translation type="unfinished"/>
+        <translation>Тамна тема</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="115"/>
         <source>Installed</source>
-        <translation>Инсталиран</translation>
+        <translation>Инсталирано</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
@@ -170,12 +170,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="320"/>
         <source>Installed successfully</source>
-        <translation>Успешно инсталиран</translation>
+        <translation>Успешно инсталирано</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="322"/>
         <source>Uninstalled successfully</source>
-        <translation>Успешно уклоњен</translation>
+        <translation>Успешно уклоњено</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="389"/>
@@ -224,7 +224,8 @@
         <location filename="../uninstallconfirmpage.cpp" line="101"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Заиста желите да уклоните %1?
+Све зависности биће уклоњене такође</translation>
     </message>
 </context>
 <context>
@@ -237,7 +238,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="unfinished"/>
+        <translation>Дипин Управник Пакета је програм који помаже корисницима при инсталирању и уклањању локалног софтвера. Подржава групну инсталацију.</translation>
     </message>
 </context>
 </TS>

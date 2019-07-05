@@ -61,7 +61,7 @@
     <message>
         <location filename="../filechoosewidget.cpp" line="76"/>
         <source>Select File</source>
-        <translation>Dosya Seçin</translation>
+        <translation>Dosya Seç</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="119"/>
         <source>Failed</source>
-        <translation>Başarısız oldu</translation>
+        <translation>Başarısız</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="144"/>
         <source>Same version installed</source>
-        <translation>Aynı sürüm kurulmuş</translation>
+        <translation>Aynı sürüm kurulu</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="147"/>
@@ -195,7 +195,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="387"/>
         <source>Same version installed</source>
-        <translation>Aynı sürüm kurulmuş</translation>
+        <translation>Aynı sürüm kurulu</translation>
     </message>
 </context>
 <context>
