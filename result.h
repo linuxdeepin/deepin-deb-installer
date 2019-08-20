@@ -23,8 +23,7 @@
 #define RESULT_H
 
 template <typename T>
-class Result
-{
+class Result {
 public:
     static Result<T> ok(const T &value);
     static Result<T> err(const T &value);
@@ -40,23 +39,18 @@ private:
 };
 
 template <typename T>
-Result<T> Result<T>::ok(const T &value)
-{
-    return { true, value };
+Result<T> Result<T>::ok(const T &value) {
+    return {true, value};
 }
 
 template <typename T>
-Result<T> Result<T>::err(const T &value)
-{
-    return { false, value };
+Result<T> Result<T>::err(const T &value) {
+    return {false, value};
 }
 
 template <typename T>
 Result<T>::Result(const bool stat, const T &value)
-    : m_ok(stat),
-      m_value(value)
-{
+    : m_ok(stat)
+    , m_value(value) {}
 
-}
-
-#endif // RESULT_H
+#endif  // RESULT_H

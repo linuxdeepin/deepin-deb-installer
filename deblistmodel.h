@@ -26,20 +26,18 @@
 #include <QFuture>
 #include <QPointer>
 
-#include <QApt/DebFile>
 #include <QApt/Backend>
+#include <QApt/DebFile>
 #include <QApt/Transaction>
 
 class PackagesManager;
-class DebListModel : public QAbstractListModel
-{
+class DebListModel : public QAbstractListModel {
     Q_OBJECT
 
 public:
     explicit DebListModel(QObject *parent = 0);
 
-    enum PackageRole
-    {
+    enum PackageRole {
         PackageNameRole = Qt::DisplayRole,
         UnusedRole = Qt::UserRole,
         WorkerIsPrepareRole,
@@ -56,30 +54,26 @@ public:
         PackageReverseDependsListRole,
     };
 
-    enum WorkerStatus
-    {
+    enum WorkerStatus {
         WorkerPrepare,
         WorkerProcessing,
         WorkerFinished,
     };
 
-    enum PackageInstallStatus
-    {
+    enum PackageInstallStatus {
         NotInstalled,
         InstalledSameVersion,
         InstalledEarlierVersion,
         InstalledLaterVersion,
     };
 
-    enum PackageDependsStatus
-    {
+    enum PackageDependsStatus {
         DependsOk,
         DependsAvailable,
         DependsBreak,
     };
 
-    enum PackageOperationStatus
-    {
+    enum PackageOperationStatus {
         Prepare,
         Operating,
         Success,
@@ -96,7 +90,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 signals:
-//    void workerStarted() const;
+    //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
     void workerFinished() const;
     void workerProgressChanged(const int progress) const;
@@ -136,4 +130,4 @@ private:
     QHash<int, int> m_packageFailReason;
 };
 
-#endif // DEBLISTMODEL_H
+#endif  // DEBLISTMODEL_H

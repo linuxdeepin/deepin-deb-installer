@@ -24,8 +24,7 @@
 
 #include <QListView>
 
-class PackagesListView : public QListView
-{
+class PackagesListView : public QListView {
     Q_OBJECT
 
 public:
@@ -35,4 +34,4 @@ protected:
     void leaveEvent(QEvent *e);
 };
 
-#endif // PACKAGESLISTVIEW_H
+#endif  // PACKAGESLISTVIEW_H

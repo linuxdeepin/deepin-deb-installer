@@ -23,11 +23,11 @@
 #include "environments.h"
 
 #include <DApplication>
+#include <DLog>
+#include <DTitlebar>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QTimer>
-#include <DLog>
-
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
@@ -35,8 +35,9 @@ DUTIL_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 #endif
 
-int main(int argc, char *argv[])
-{
+#define RECENT_PATH QDir::homePath() + "/.local/share/recently-used.xbel"
+
+int main(int argc, char *argv[]) {
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
@@ -45,12 +46,15 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(VERSION);
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon(":/images/icon.svg"));
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    // app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
-//    app.loadTranslator(QList<QLocale>() << QLocale("zh_CN"));
-    app.loadTranslator();
+    app.loadTranslator(QList<QLocale>() << QLocale("zh_CN"));
+    // app.loadTranslator();
     app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
-    app.setApplicationDescription(QApplication::translate("main", "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
+    app.setApplicationDescription(QApplication::translate(
+        "main",
+        "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
+    //    app.setStyle("chameleon");
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
@@ -67,6 +71,7 @@ int main(int argc, char *argv[])
     parser.process(app);
 
     const QStringList file_list = parser.positionalArguments();
+
     qDebug() << file_list;
 
     DebInstaller w;

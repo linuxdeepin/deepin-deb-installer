@@ -22,13 +22,12 @@
 #ifndef FILECHOOSEWIDGET_H
 #define FILECHOOSEWIDGET_H
 
-#include <QWidget>
 #include <QSettings>
+#include <QWidget>
 
 #include <dlinkbutton.h>
 
-class FileChooseWidget : public QWidget
-{
+class FileChooseWidget : public QWidget {
     Q_OBJECT
 
 public:
@@ -45,4 +44,4 @@ private:
     QSettings m_settings;
 };
 
-#endif // FILECHOOSEWIDGET_H
+#endif  // FILECHOOSEWIDGET_H

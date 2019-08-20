@@ -21,16 +21,16 @@
 
 #include "singleinstallpage.h"
 #include "deblistmodel.h"
-#include "workerprogress.h"
 #include "widgets/bluebutton.h"
 #include "widgets/graybutton.h"
+#include "workerprogress.h"
 
-#include <QVBoxLayout>
-#include <QDebug>
-#include <QTimer>
 #include <QApplication>
+#include <QDebug>
 #include <QRegularExpression>
 #include <QTextLayout>
+#include <QTimer>
+#include <QVBoxLayout>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -40,15 +40,14 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
-{
+const QString holdTextInRect(const QFont &font, QString text, const QSize &size) {
     QFontMetrics fm(font);
     QTextLayout layout(text);
 
     layout.setFont(font);
 
     QStringList lines;
-    QTextOption &text_option = *const_cast<QTextOption*>(&layout.textOption());
+    QTextOption &text_option = *const_cast<QTextOption *>(&layout.textOption());
 
     text_option.setWrapMode(QTextOption::WordWrap);
     text_option.setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -79,8 +78,7 @@ const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
 
         lines.append(text.mid(line.textStart(), line.textLength()));
 
-        if (height + lineHeight > size.height())
-            break;
+        if (height + lineHeight > size.height()) break;
 
         line = layout.createLine();
     }
@@ -91,29 +89,26 @@ const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
 }
 
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
-    : QWidget(parent),
-
-      m_operate(Install),
-      m_workerStarted(false),
-      m_packagesModel(model),
-
-      m_itemInfoWidget(new QWidget),
-      m_packageIcon(new QLabel),
-      m_packageName(new QLabel),
-      m_packageVersion(new QLabel),
-      m_packageDescription(new QLabel),
-      m_tipsLabel(new QLabel),
-      m_progress(new WorkerProgress),
-      m_workerInfomation(new QTextEdit),
-      m_strengthWidget(new QWidget),
-      m_infoControlButton(new InfoControlButton(tr("Display details"), tr("Collapse"))),
-      m_installButton(new BlueButton),
-      m_uninstallButton(new GrayButton),
-      m_reinstallButton(new GrayButton),
-      m_confirmButton(new GrayButton),
-      m_backButton(new GrayButton),
-      m_doneButton(new BlueButton)
-{
+    : QWidget(parent)
+    , m_operate(Install)
+    , m_workerStarted(false)
+    , m_packagesModel(model)
+    , m_itemInfoWidget(new QWidget)
+    , m_packageIcon(new QLabel)
+    , m_packageName(new QLabel)
+    , m_packageVersion(new QLabel)
+    , m_packageDescription(new QLabel)
+    , m_tipsLabel(new QLabel)
+    , m_progress(new WorkerProgress)
+    , m_workerInfomation(new QTextEdit)
+    , m_strengthWidget(new QWidget)
+    , m_infoControlButton(new InfoControlButton(tr("Display details"), tr("Collapse")))
+    , m_installButton(new BlueButton)
+    , m_uninstallButton(new GrayButton)
+    , m_reinstallButton(new GrayButton)
+    , m_confirmButton(new GrayButton)
+    , m_backButton(new GrayButton)
+    , m_doneButton(new BlueButton) {
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -125,9 +120,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setStyleSheet("QLabel {"
-                               "color: #ff5a5a;"
-                               "}");
+    m_tipsLabel->setStyleSheet(
+        "QLabel {"
+        "color: #ff5a5a;"
+        "}");
 
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
@@ -175,7 +171,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
-    itemBlockLayout->addStretch();
+    itemBlockLayout->setSpacing(112);
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
     itemBlockLayout->addStretch();
@@ -245,34 +241,29 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 }
 
-void SingleInstallPage::install()
-{
+void SingleInstallPage::install() {
     m_operate = Install;
     m_packagesModel->installAll();
 }
 
-void SingleInstallPage::uninstallCurrentPackage()
-{
+void SingleInstallPage::uninstallCurrentPackage() {
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
 }
 
-void SingleInstallPage::showInfomation()
-{
+void SingleInstallPage::showInfomation() {
     m_workerInfomation->setVisible(true);
     m_strengthWidget->setVisible(true);
     m_itemInfoWidget->setVisible(false);
 }
 
-void SingleInstallPage::hideInfomation()
-{
+void SingleInstallPage::hideInfomation() {
     m_workerInfomation->setVisible(false);
     m_strengthWidget->setVisible(false);
     m_itemInfoWidget->setVisible(true);
 }
 
-void SingleInstallPage::showInfo()
-{
+void SingleInstallPage::showInfo() {
     m_infoControlButton->setVisible(true);
     m_progress->setVisible(true);
     m_progress->setValue(0);
@@ -286,33 +277,28 @@ void SingleInstallPage::showInfo()
     m_backButton->setVisible(false);
 }
 
-void SingleInstallPage::onOutputAvailable(const QString &output)
-{
+void SingleInstallPage::onOutputAvailable(const QString &output) {
     m_workerInfomation->append(output.trimmed());
 
     // pump progress
-    if (m_progress->value() < 90)
-        m_progress->setValue(m_progress->value() + 10);
+    if (m_progress->value() < 90) m_progress->setValue(m_progress->value() + 10);
 
-    if (!m_workerStarted)
-    {
+    if (!m_workerStarted) {
         m_workerStarted = true;
         showInfo();
     }
 }
 
-void SingleInstallPage::onWorkerFinished()
-{
+void SingleInstallPage::onWorkerFinished() {
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_backButton->setVisible(true);
+    //    m_backButton->setVisible(true);
 
     const QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
-    if (stat == DebListModel::Success)
-    {
+    if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
 
@@ -320,9 +306,10 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Installed successfully"));
         else
             m_tipsLabel->setText(tr("Uninstalled successfully"));
-        m_tipsLabel->setStyleSheet("QLabel {"
-                                   "color: #47790c;"
-                                   "}");
+        m_tipsLabel->setStyleSheet(
+            "QLabel {"
+            "color: #47790c;"
+            "}");
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
@@ -336,19 +323,15 @@ void SingleInstallPage::onWorkerFinished()
     }
 }
 
-void SingleInstallPage::onWorkerProgressChanged(const int progress)
-{
-    if (progress < m_progress->value())
-        return;
+void SingleInstallPage::onWorkerProgressChanged(const int progress) {
+    if (progress < m_progress->value()) return;
 
     m_progress->setValue(progress);
 
-    if (progress == m_progress->maximum())
-        QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
+    if (progress == m_progress->maximum()) QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
 }
 
-void SingleInstallPage::setPackageInfo()
-{
+void SingleInstallPage::setPackageInfo() {
     qApp->processEvents();
 
     DebFile *package = m_packagesModel->preparedPackages().first();
@@ -362,8 +345,8 @@ void SingleInstallPage::setPackageInfo()
     m_packageVersion->setText(package->version());
 
     // set package description
-//    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
-//    const QString description = package->longDescription().replace(multiLine, "\n");
+    //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
+    //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = package->longDescription();
     const QSize boundingSize = QSize(m_packageDescription->width(), m_packageDescription->maximumHeight());
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
@@ -381,23 +364,22 @@ void SingleInstallPage::setPackageInfo()
     m_doneButton->setVisible(false);
     m_backButton->setVisible(false);
 
-    if (installed)
-    {
+    if (installed) {
         if (installedSameVersion)
             m_tipsLabel->setText(tr("Same version installed"));
         else
-            m_tipsLabel->setText(tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_tipsLabel->setText(tr("Other version installed: %1")
+                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         return;
     }
 
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    if (dependsStat == DebListModel::DependsBreak)
-    {
+    if (dependsStat == DebListModel::DependsBreak) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
+        //        m_backButton->setVisible(true);
     }
 }

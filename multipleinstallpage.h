@@ -26,15 +26,14 @@
 
 #include <QWidget>
 
-#include <QPushButton>
 #include <QProgressBar>
-#include <QTextEdit>
 #include <QPropertyAnimation>
+#include <QPushButton>
+#include <QTextEdit>
 
 class PackagesListView;
 class DebListModel;
-class MultipleInstallPage : public QWidget
-{
+class MultipleInstallPage : public QWidget {
     Q_OBJECT
 
 public:
@@ -65,4 +64,4 @@ private:
     QPushButton *m_backButton;
 };
 
-#endif // MULTIPLEINSTALLPAGE_H
+#endif  // MULTIPLEINSTALLPAGE_H

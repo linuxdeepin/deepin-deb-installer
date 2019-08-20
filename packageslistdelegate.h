@@ -25,8 +25,7 @@
 #include <QAbstractItemDelegate>
 #include <QSettings>
 
-class PackagesListDelegate : public QAbstractItemDelegate
-{
+class PackagesListDelegate : public QAbstractItemDelegate {
     Q_OBJECT
 
 public:
@@ -42,4 +41,4 @@ private:
     QSettings m_qsettings;
 };
 
-#endif // PACKAGESLISTDELEGATE_H
+#endif  // PACKAGESLISTDELEGATE_H

@@ -23,9 +23,9 @@
 #include "deblistmodel.h"
 #include "utils.h"
 
-#include <QPainter>
-#include <QApplication>
 #include <DSvgRenderer>
+#include <QApplication>
+#include <QPainter>
 
 #define THEME_DARK "dark"
 #define THEME_LIGHT "light"
@@ -33,8 +33,7 @@
 DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
-{
+    : QAbstractItemDelegate(parent) {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
     const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
@@ -42,17 +41,16 @@ PackagesListDelegate::PackagesListDelegate(QObject *parent)
     m_removeIcon.setDevicePixelRatio(ratio);
 }
 
-void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-//    painter->fillRect(option.rect, Qt::gray);
+void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                 const QModelIndex &index) const {
+    //    painter->fillRect(option.rect, Qt::gray);
 
     const int content_x = 45;
 
     const QString &theme = m_qsettings.value("theme").toString();
 
     // draw top border
-    if (index.row())
-    {
+    if (index.row()) {
         const QPoint start(content_x, option.rect.top());
         const QPoint end(option.rect.right() - 10, option.rect.top());
 
@@ -65,7 +63,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // draw package icon
     const int x = 5;
-    const int y = option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2;
+    const int y =
+        option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2;
     painter->drawPixmap(x, y, m_packageIcon);
 
     // draw package name
@@ -98,32 +97,31 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // install status
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    if (operate_stat != DebListModel::Prepare)
-    {
+    if (operate_stat != DebListModel::Prepare) {
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 15);
         install_status_rect.setLeft(option.rect.right() - 80);
 
-        switch (operate_stat)
-        {
-        case DebListModel::Operating:
-            painter->setPen(QColor(124, 124, 124));
-            painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
-        case DebListModel::Success:
-            painter->setPen(QColor(65, 117, 5));
-            painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
-        default:
-            painter->setPen(QColor(255, 109, 109));
-            painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
+        switch (operate_stat) {
+            case DebListModel::Operating:
+                painter->setPen(QColor(124, 124, 124));
+                painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            case DebListModel::Success:
+                painter->setPen(QColor(65, 117, 5));
+                painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            default:
+                painter->setPen(QColor(255, 109, 109));
+                painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
         }
     } else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
                index.data(DebListModel::ItemIsCurrentRole).toBool()) {
         // draw remove icon
         const int x = option.rect.right() - m_removeIcon.width() / m_removeIcon.devicePixelRatio() - 10;
-        const int y = option.rect.top() + (option.rect.height() - m_removeIcon.height() / m_removeIcon.devicePixelRatio()) / 2;
+        const int y =
+            option.rect.top() + (option.rect.height() - m_removeIcon.height() / m_removeIcon.devicePixelRatio()) / 2;
         painter->drawPixmap(x, y, m_removeIcon);
     }
 
@@ -134,17 +132,16 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     info_rect.setTop(name_rect.bottom() + 1 + 3);
 
     const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-    if (operate_stat == DebListModel::Failed)
-    {
+    if (operate_stat == DebListModel::Failed) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         painter->setPen(QColor(255, 109, 109));
     } else if (install_stat != DebListModel::NotInstalled) {
-        if (install_stat == DebListModel::InstalledSameVersion)
-        {
+        if (install_stat == DebListModel::InstalledSameVersion) {
             info_str = tr("Same version installed");
             painter->setPen(QColor(65, 117, 5));
         } else {
-            info_str = tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+            info_str =
+                tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             painter->setPen(QColor(255, 109, 109));
         }
     } else {
@@ -156,8 +153,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
 }
 
-QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
+QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
     Q_UNUSED(option);
 
     return index.data(Qt::SizeHintRole).toSize();

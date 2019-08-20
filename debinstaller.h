@@ -22,17 +22,16 @@
 #ifndef DEBINSTALLER_H
 #define DEBINSTALLER_H
 
-#include <QStackedLayout>
 #include <QPointer>
 #include <QSettings>
+#include <QStackedLayout>
 
 #include <DMainWindow>
 
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
-class DebInstaller : public Dtk::Widget::DMainWindow
-{
+class DebInstaller : public Dtk::Widget::DMainWindow {
     Q_OBJECT
 
 public:
@@ -73,4 +72,4 @@ private:
     QPointer<QWidget> m_lastPage;
 };
 
-#endif // DEBINSTALLER_H
+#endif  // DEBINSTALLER_H

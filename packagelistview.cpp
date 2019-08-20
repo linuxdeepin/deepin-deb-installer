@@ -22,16 +22,14 @@
 #include "packagelistview.h"
 
 PackagesListView::PackagesListView(QWidget *parent)
-    : QListView(parent)
-{
+    : QListView(parent) {
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(NoSelection);
-    setAutoScroll(false);
+    setAutoScroll(true);
     setMouseTracking(true);
 }
 
-void PackagesListView::leaveEvent(QEvent *e)
-{
+void PackagesListView::leaveEvent(QEvent *e) {
     QListView::leaveEvent(e);
 
     emit entered(QModelIndex());

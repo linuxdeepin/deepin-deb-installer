@@ -24,13 +24,12 @@
 
 #include "infocontrolbutton.h"
 
-#include <QWidget>
-#include <QPushButton>
 #include <QLabel>
+#include <QPushButton>
 #include <QTextEdit>
+#include <QWidget>
 
-class UninstallConfirmPage : public QWidget
-{
+class UninstallConfirmPage : public QWidget {
     Q_OBJECT
 
 public:
@@ -56,4 +55,4 @@ private:
     QPushButton *m_cancelBtn;
     QPushButton *m_confirmBtn;
 };
-#endif // UNINSTALLCONFIRMPAGE_H
+#endif  // UNINSTALLCONFIRMPAGE_H

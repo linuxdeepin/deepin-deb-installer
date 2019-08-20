@@ -10,5 +10,6 @@
         <file>images/split_line_dark.svg</file>
         <file>theme/dark/dark.qss</file>
         <file>theme/light/light.qss</file>
+        <file>images/logo.svg</file>
     </qresource>
 </RCC>

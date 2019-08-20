@@ -1,18 +1,6 @@
 [Desktop Entry]
 Categories=System;
 Comment=Deepin Package Manager is used to help users install and remove local package, supports bulk install.
-Exec=deepin-deb-installer %F
-GenericName=Package Manager
-Icon=deepin-deb-installer
-MimeType=application/vnd.debian.binary-package;application/x-deb;
-Name=Deepin Package Manager
-StartupNotify=true
-Terminal=false
-Type=Application
-X-Deepin-Vendor=deepin
-
-# Translations:
-# Do not manually modify!
 Comment[bg]=Deepin Мениджър на пакети се използва, за да помогне на потребителите да инсталират и премахват локален пакет, поддръжка на групово инсталиране.
 Comment[ca]=El Gestor de paquets del Deepin s'usa per ajudar els usuaris a instal·lar i eliminar paquets locals. Admet la instal·lació massiva.
 Comment[cs]=Správce balíčků se používá k pomoci uživatelům instalovat a odebírat místní balíčky, podporuje hromadnou instalaci.
@@ -30,7 +18,7 @@ Comment[ko]=Deepin 패키지 관리자는 사용자가 로컬 패키지를 설�
 Comment[lt]=Deepin paketų tvarkytuvė yra naudojama padėti naudotojams įdiegti ir šalinti vietinius paketus, ši programa palaiko masinį įdiegimą.
 Comment[mn]=Деепин Багц Зохицуулагч нь хэрэглэгчдэд програм суулгах устгахад туслахаас гадна бүлэг суулгалтыг дэмждэг.
 Comment[ms]=Pengurus Pakej Deepin digunakan digunakan untuk bantu pengguna memasang dan membuang perisian setempat, selain itu ia menyokong pemasangan secara pukal.
-Comment[ne]=डिपिन प्याकेज प्रबन्धक, प्याकेज फाइल स्थापना र स्थापना रद्द गर्न प्रयोग हुन्छ 
+Comment[ne]=डिपिन प्याकेज प्रबन्धक, प्याकेज फाइल स्थापना र स्थापना रद्द गर्न प्रयोग हुन्छ
 Comment[nl]=Deepin Pakketbeheer is een applicatie die gebruikers helpt bij het installeren en verwijderen van lokale software, zowel één voor één als meerdere tegelijk.
 Comment[pl]=Zarządzanie pakietami Deepin pomaga użytkownikom instalować i usuwać lokalne pakiety, obsługuje instalację zbiorczą.
 Comment[pt]=O Deepin Package Manager é uma aplicação utilizada para ajudar os utilizadores a instalar e remover pacotes locais, suporta instalações em massa.
@@ -43,6 +31,8 @@ Comment[tr]=Deepin Paket Yöneticisi, kullanıcıların yerel uygulamaları kuru
 Comment[uk]=Засіб керування пакунками Deepin використовується для полегшення встановлення і вилучення локальних пакунків користувачем. Передбачено підтримку пакетного встановлення.
 Comment[zh_CN]=深度软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。
 Comment[zh_TW]=Deepin 軟體包管理器用來幫助使用者安裝和移除本機軟體包。支援批次安裝。
+Exec=deepin-deb-installer %F
+GenericName=Package Manager
 GenericName[ast]=Xestor de paquetes
 GenericName[bg]=Мениджър на пакети
 GenericName[ca]=Gestor de paquets
@@ -76,6 +66,9 @@ GenericName[tr]=Paket Yöneticisi
 GenericName[uk]=Керування пакунками
 GenericName[zh_CN]=软件包管理器
 GenericName[zh_TW]=軟體包管理器
+Icon=deepin-deb-installer
+MimeType=application/vnd.debian.binary-package;application/x-deb;
+Name=Deepin Package Manager
 Name[ast]=Deepin Package Manager
 Name[bg]=Deepin Мениджър на пакети
 Name[ca]=Gestor de paquets del Deepin
@@ -107,6 +100,9 @@ Name[sq]=Përgjegjësi Deepin i Paketave
 Name[sr]=Дипин Управник Пакета
 Name[tr]=Deepin Paket Yöneticisi
 Name[uk]=Керування пакунками Deepin
-Name[zh_CN]=深度软件包管理器
+Name[zh_CN]=软件包管理器
 Name[zh_TW]=Deepin 軟體包管理器
-
+StartupNotify=true
+Terminal=false
+Type=Application
+X-Deepin-Vendor=user-custom

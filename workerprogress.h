@@ -24,12 +24,11 @@
 
 #include <QProgressBar>
 
-class WorkerProgress : public QProgressBar
-{
+class WorkerProgress : public QProgressBar {
     Q_OBJECT
 
 public:
     explicit WorkerProgress(QWidget *parent = 0);
 };
 
-#endif // WORKERPROGRESS_H
+#endif  // WORKERPROGRESS_H

@@ -24,19 +24,18 @@
 
 #include "infocontrolbutton.h"
 
-#include <QWidget>
 #include <QLabel>
-#include <QPushButton>
 #include <QProgressBar>
+#include <QPushButton>
 #include <QTextEdit>
+#include <QWidget>
 
 #include <QApt/DebFile>
 
 #include <dlinkbutton.h>
 
 class DebListModel;
-class SingleInstallPage : public QWidget
-{
+class SingleInstallPage : public QWidget {
     Q_OBJECT
 
 public:
@@ -50,8 +49,7 @@ public slots:
     void uninstallCurrentPackage();
 
 private:
-    enum Operate
-    {
+    enum Operate {
         Install,
         Uninstall,
     };
@@ -92,4 +90,4 @@ private:
     QPushButton *m_doneButton;
 };
 
-#endif // SINGLEINSTALLPAGE_H
+#endif  // SINGLEINSTALLPAGE_H

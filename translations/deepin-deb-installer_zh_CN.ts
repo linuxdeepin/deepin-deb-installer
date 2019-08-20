@@ -54,12 +54,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../filechoosewidget.cpp" line="52"/>
+        <location filename="../filechoosewidget.cpp" line="55"/>
         <source>Drag and drop file here</source>
-        <translation>拖拽软件包到此</translation>
+        <translation>拖拽安装包到此</translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="76"/>
+        <location filename="../filechoosewidget.cpp" line="79"/>
         <source>Select File</source>
         <translation>选择文件</translation>
     </message>
@@ -79,17 +79,17 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="58"/>
         <source>Install</source>
-        <translation>安装</translation>
+        <translation>安 装</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="59"/>
         <source>Done</source>
-        <translation>完成</translation>
+        <translation>完 成</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="61"/>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation>返 回</translation>
     </message>
 </context>
 <context>
@@ -130,17 +130,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="109"/>
         <source>Display details</source>
-        <translation>显示详细信息</translation>
+        <translation>显示安装进程</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="141"/>
         <source>Install</source>
-        <translation>安装</translation>
+        <translation>安 装</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="143"/>
         <source>Remove</source>
-        <translation>卸载</translation>
+        <translation>卸 载</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="145"/>
@@ -150,17 +150,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="147"/>
         <source>OK</source>
-        <translation>确定</translation>
+        <translation>确 定</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="149"/>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation>返 回</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="151"/>
         <source>Done</source>
-        <translation>完成</translation>
+        <translation>完 成</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="164"/>
@@ -190,7 +190,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="159"/>
         <source>Name: </source>
-        <translation>名称：</translation>
+        <translation>软件包：</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="387"/>

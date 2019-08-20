@@ -22,11 +22,10 @@
 #include "bluebutton.h"
 
 BlueButton::BlueButton(QWidget *parent)
-    : DSuggestButton(parent)
-{
+    : DSuggestButton(parent) {
     setFixedSize(120, 36);
 
-    //setStyleSheet("BlueButton {"
+    // setStyleSheet("BlueButton {"
     //              "color: #2ca7f8;"
     //              "border: 1px solid #2ca7f8;"
     //              "border-radius: 4px;"
