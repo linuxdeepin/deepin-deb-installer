@@ -40,7 +40,8 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-const QString holdTextInRect(const QFont &font, QString text, const QSize &size) {
+const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
+{
     QFontMetrics fm(font);
     QTextLayout layout(text);
 
@@ -108,7 +109,13 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_reinstallButton(new GrayButton)
     , m_confirmButton(new GrayButton)
     , m_backButton(new GrayButton)
-    , m_doneButton(new BlueButton) {
+    , m_doneButton(new BlueButton)
+{
+//    QFont font = QFont("SourceHanSansSC-Normal");
+//    font.setPixelSize(12);
+    //setFont(font);
+    const QFont font_const = this->font();
+    QFont font_use =  font_const;
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -116,14 +123,13 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(64, 64);
+    m_packageIcon->setFixedSize(60, 60);
+    font_use.setPixelSize(14);
+    m_packageName->setFont(font_use);
+    m_packageVersion->setFont(font_use);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setStyleSheet(
-        "QLabel {"
-        "color: #ff5a5a;"
-        "}");
 
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
@@ -147,17 +153,24 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_doneButton->setText(tr("Done"));
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
-    m_packageDescription->setFixedHeight(50);
-    m_packageDescription->setFixedWidth(320);
+
+    m_packageDescription->setFixedHeight(80);
+    m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    font_use.setPixelSize(12);
+    m_packageDescription->setFont(font_use);
 
     QLabel *packageName = new QLabel;
     packageName->setText(tr("Name: "));
+    font_use.setPixelSize(14);
+    packageName->setFont(font_use);
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
     QLabel *packageVersion = new QLabel;
     packageVersion->setText(tr("Version: "));
+    font_use.setPixelSize(14);
+    packageVersion->setFont(font_use);
     packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
@@ -167,7 +180,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     itemInfoLayout->addWidget(packageVersion, 1, 0);
     itemInfoLayout->addWidget(m_packageVersion, 1, 1);
     itemInfoLayout->setSpacing(0);
-    itemInfoLayout->setVerticalSpacing(10);
+    itemInfoLayout->setVerticalSpacing(0);
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
@@ -241,29 +254,34 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 }
 
-void SingleInstallPage::install() {
+void SingleInstallPage::install()
+{
     m_operate = Install;
     m_packagesModel->installAll();
 }
 
-void SingleInstallPage::uninstallCurrentPackage() {
+void SingleInstallPage::uninstallCurrentPackage()
+{
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
 }
 
-void SingleInstallPage::showInfomation() {
+void SingleInstallPage::showInfomation()
+{
     m_workerInfomation->setVisible(true);
     m_strengthWidget->setVisible(true);
     m_itemInfoWidget->setVisible(false);
 }
 
-void SingleInstallPage::hideInfomation() {
+void SingleInstallPage::hideInfomation()
+{
     m_workerInfomation->setVisible(false);
     m_strengthWidget->setVisible(false);
     m_itemInfoWidget->setVisible(true);
 }
 
-void SingleInstallPage::showInfo() {
+void SingleInstallPage::showInfo()
+{
     m_infoControlButton->setVisible(true);
     m_progress->setVisible(true);
     m_progress->setValue(0);
@@ -277,7 +295,8 @@ void SingleInstallPage::showInfo() {
     m_backButton->setVisible(false);
 }
 
-void SingleInstallPage::onOutputAvailable(const QString &output) {
+void SingleInstallPage::onOutputAvailable(const QString &output)
+{
     m_workerInfomation->append(output.trimmed());
 
     // pump progress
@@ -289,7 +308,8 @@ void SingleInstallPage::onOutputAvailable(const QString &output) {
     }
 }
 
-void SingleInstallPage::onWorkerFinished() {
+void SingleInstallPage::onWorkerFinished()
+{
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -302,14 +322,18 @@ void SingleInstallPage::onWorkerFinished() {
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
 
-        if (m_operate == Install)
+        if (m_operate == Install) {
             m_tipsLabel->setText(tr("Installed successfully"));
-        else
+            QPalette pe;
+            pe.setColor(QPalette::WindowText, QColor("#47790C"));
+            m_tipsLabel->setPalette(pe);
+        } else {
             m_tipsLabel->setText(tr("Uninstalled successfully"));
-        m_tipsLabel->setStyleSheet(
-            "QLabel {"
-            "color: #47790c;"
-            "}");
+            QPalette pe;
+            pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
+            m_tipsLabel->setPalette(pe);
+        }
+
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
@@ -323,7 +347,8 @@ void SingleInstallPage::onWorkerFinished() {
     }
 }
 
-void SingleInstallPage::onWorkerProgressChanged(const int progress) {
+void SingleInstallPage::onWorkerProgressChanged(const int progress)
+{
     if (progress < m_progress->value()) return;
 
     m_progress->setValue(progress);
@@ -331,7 +356,8 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress) {
     if (progress == m_progress->maximum()) QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
 }
 
-void SingleInstallPage::setPackageInfo() {
+void SingleInstallPage::setPackageInfo()
+{
     qApp->processEvents();
 
     DebFile *package = m_packagesModel->preparedPackages().first();
@@ -365,11 +391,16 @@ void SingleInstallPage::setPackageInfo() {
     m_backButton->setVisible(false);
 
     if (installed) {
-        if (installedSameVersion)
+        if (installedSameVersion) {
             m_tipsLabel->setText(tr("Same version installed"));
+            QPalette pe;
+            pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
+            m_tipsLabel->setPalette(pe);
+        }
+
         else
             m_tipsLabel->setText(tr("Other version installed: %1")
-                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         return;
     }
 
@@ -377,6 +408,9 @@ void SingleInstallPage::setPackageInfo() {
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
+        m_tipsLabel->setPalette(pe);
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);

@@ -26,14 +26,15 @@
 
 #include <QWidget>
 
-#include <QProgressBar>
-#include <QPropertyAnimation>
 #include <QPushButton>
+#include <QProgressBar>
 #include <QTextEdit>
+#include <QPropertyAnimation>
 
 class PackagesListView;
 class DebListModel;
-class MultipleInstallPage : public QWidget {
+class MultipleInstallPage : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -42,6 +43,7 @@ public:
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
+    void hideAutoBarTitle();
 
 private slots:
     void onWorkerFinshed();
@@ -51,6 +53,9 @@ private slots:
 
     void showInfo();
     void hideInfo();
+
+    void onAutoScrollInstallList(int opIndex);
+
 
 private:
     DebListModel *m_debListModel;
@@ -62,6 +67,7 @@ private:
     QPushButton *m_installButton;
     QPushButton *m_acceptButton;
     QPushButton *m_backButton;
+
 };
 
-#endif  // MULTIPLEINSTALLPAGE_H
+#endif // MULTIPLEINSTALLPAGE_H

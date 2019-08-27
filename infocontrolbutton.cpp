@@ -21,25 +21,31 @@
 
 #include "infocontrolbutton.h"
 
-#include <QIcon>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
-#include <QVBoxLayout>
+#include <QIcon>
+#include <QPalette>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
-    : QWidget(parent)
-    , m_expand(false)
-    , m_expandTips(expandTips)
-    , m_shrinkTips(shrinkTips)
-    ,
+    : QWidget(parent),
+      m_expand(false),
+      m_expandTips(expandTips),
+      m_shrinkTips(shrinkTips),
+      m_arrowIcon(new QLabel),
+      m_tipsText(new QLabel),
+      m_font(QFont("SourceHanSansSC-Normal"))
+{
 
-    m_arrowIcon(new QLabel)
-    , m_tipsText(new QLabel) {
+    m_font.setPixelSize(12);
+    QPalette pe;
+    pe.setColor(QPalette::WindowText, QColor("#0082FA"));
     m_arrowIcon->setAlignment(Qt::AlignCenter);
-    m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(21, 8));
+    m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(18, 7));//21.8
     m_tipsText->setAlignment(Qt::AlignCenter);
+    m_tipsText->setFont(m_font);
     m_tipsText->setText(expandTips);
-
+    m_tipsText->setPalette(pe);
     m_tipsText->setObjectName("TipsText");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
@@ -54,13 +60,15 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     setFixedSize(200, 33);
 }
 
-void InfoControlButton::mouseReleaseEvent(QMouseEvent *e) {
+void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
+{
     QWidget::mouseReleaseEvent(e);
 
     onMouseRelease();
 }
 
-void InfoControlButton::onMouseRelease() {
+void InfoControlButton::onMouseRelease()
+{
     if (m_expand)
         emit shrink();
     else

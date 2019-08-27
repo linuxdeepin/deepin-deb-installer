@@ -35,7 +35,8 @@
 #include <dlinkbutton.h>
 
 class DebListModel;
-class SingleInstallPage : public QWidget {
+class SingleInstallPage : public QWidget
+{
     Q_OBJECT
 
 public:

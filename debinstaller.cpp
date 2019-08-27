@@ -55,12 +55,13 @@ DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     ,
 
-    m_fileListModel(new DebListModel(this))
+      m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout)
     , m_qsettings(new QSettings(this))
     , m_tbMenu(new QMenu(this))
-    , m_darkThemeAction(new QAction(tr("Dark theme"), this)) {
+    , m_darkThemeAction(new QAction(tr("Dark theme"), this))
+{
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
@@ -96,7 +97,9 @@ DebInstaller::DebInstaller(QWidget *parent)
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this,
-            [=](const QString &output) { qDebug() << output.trimmed(); });
+    [ = ](const QString & output) {
+        qDebug() << output.trimmed();
+    });
     connect(m_darkThemeAction, &QAction::toggled, this, &DebInstaller::toggleDarkTheme);
 
     reloadTheme();
@@ -104,12 +107,14 @@ DebInstaller::DebInstaller(QWidget *parent)
 
 DebInstaller::~DebInstaller() {}
 
-void DebInstaller::toggleDarkTheme(bool checked) {
+void DebInstaller::toggleDarkTheme(bool checked)
+{
     m_qsettings->setValue("theme", checked ? THEME_DARK : THEME_LIGHT);
     reloadTheme();
 }
 
-void DebInstaller::reloadTheme() {
+void DebInstaller::reloadTheme()
+{
     QString theme = m_qsettings->value("theme").toString();
     if (theme.isEmpty()) {
         theme = THEME_LIGHT;
@@ -123,23 +128,26 @@ void DebInstaller::reloadTheme() {
         qDebug() << "theme file not find!" << themeFile.fileName();
     }
 
-    setStyleSheet(themeFile.readAll());
+    //setStyleSheet(themeFile.readAll());
 
     DThemeManager::instance()->setTheme(theme);
 }
 
-void DebInstaller::keyPressEvent(QKeyEvent *e) {
+void DebInstaller::keyPressEvent(QKeyEvent *e)
+{
     switch (e->key()) {
 #ifdef QT_DEBUG
-        case Qt::Key_Escape:
-            qApp->quit();
-            break;
+    case Qt::Key_Escape:
+        qApp->quit();
+        break;
 #endif
-        default:;
+    default:
+        ;
     }
 }
 
-void DebInstaller::dragEnterEvent(QDragEnterEvent *e) {
+void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
+{
     auto *const mime = e->mimeData();
     if (!mime->hasUrls()) return e->ignore();
 
@@ -152,7 +160,8 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e) {
     e->ignore();
 }
 
-void DebInstaller::dropEvent(QDropEvent *e) {
+void DebInstaller::dropEvent(QDropEvent *e)
+{
     auto *const mime = e->mimeData();
     if (!mime->hasUrls()) return e->ignore();
 
@@ -176,9 +185,13 @@ void DebInstaller::dropEvent(QDropEvent *e) {
     onPackagesSelected(file_list);
 }
 
-void DebInstaller::dragMoveEvent(QDragMoveEvent *e) { e->accept(); }
+void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
+{
+    e->accept();
+}
 
-void DebInstaller::onPackagesSelected(const QStringList &packages) {
+void DebInstaller::onPackagesSelected(const QStringList &packages)
+{
     for (const auto &package : packages) {
         DebFile *p = new DebFile(package);
         if (!p->isValid()) {
@@ -199,7 +212,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages) {
     refreshInstallPage();
 }
 
-void DebInstaller::showUninstallConfirmPage() {
+void DebInstaller::showUninstallConfirmPage()
+{
     Q_ASSERT(m_centralLayout->count() == 2);
 
     const QModelIndex index = m_fileListModel->first();
@@ -215,17 +229,25 @@ void DebInstaller::showUninstallConfirmPage() {
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCalceled);
 }
 
-void DebInstaller::onUninstallAccepted() {
+void DebInstaller::onUninstallAccepted()
+{
     SingleInstallPage *p = backToSinglePage();
 
     p->uninstallCurrentPackage();
 }
 
-void DebInstaller::onUninstallCalceled() { backToSinglePage(); }
+void DebInstaller::onUninstallCalceled()
+{
+    backToSinglePage();
+}
 
-void DebInstaller::onAuthing(const bool authing) { setEnabled(!authing); }
+void DebInstaller::onAuthing(const bool authing)
+{
+    setEnabled(!authing);
+}
 
-void DebInstaller::reset() {
+void DebInstaller::reset()
+{
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
 
@@ -235,12 +257,14 @@ void DebInstaller::reset() {
     m_centralLayout->setCurrentIndex(0);
 }
 
-void DebInstaller::removePackage(const int index) {
+void DebInstaller::removePackage(const int index)
+{
     m_fileListModel->removePackage(index);
     refreshInstallPage();
 }
 
-void DebInstaller::refreshInstallPage() {
+void DebInstaller::refreshInstallPage()
+{
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
 
@@ -277,7 +301,8 @@ void DebInstaller::refreshInstallPage() {
     m_centralLayout->setCurrentIndex(1);
 }
 
-SingleInstallPage *DebInstaller::backToSinglePage() {
+SingleInstallPage *DebInstaller::backToSinglePage()
+{
     Q_ASSERT(m_centralLayout->count() == 3);
     QWidget *confirmPage = m_centralLayout->widget(2);
     m_centralLayout->removeWidget(confirmPage);

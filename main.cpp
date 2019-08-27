@@ -37,7 +37,8 @@ DCORE_USE_NAMESPACE
 
 #define RECENT_PATH QDir::homePath() + "/.local/share/recently-used.xbel"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
@@ -52,9 +53,9 @@ int main(int argc, char *argv[]) {
     // app.loadTranslator();
     app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
     app.setApplicationDescription(QApplication::translate(
-        "main",
-        "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
-    //    app.setStyle("chameleon");
+                                      "main",
+                                      "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
+    app.setStyle("chameleon");
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();

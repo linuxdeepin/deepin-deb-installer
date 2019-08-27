@@ -22,41 +22,42 @@
 #include "deblistmodel.h"
 #include "packagesmanager.h"
 
+#include <QApplication>
 #include <QDebug>
-#include <QSize>
-#include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
-#include <QApplication>
+#include <QSize>
+#include <QtConcurrent>
 
-#include <QApt/Package>
 #include <QApt/Backend>
+#include <QApt/Package>
 
 using namespace QApt;
 
 bool isDpkgRunning()
 {
     QProcess proc;
-    proc.start("ps", QStringList() << "-e" << "-o" << "comm");
+    proc.start("ps", QStringList() << "-e"
+               << "-o"
+               << "comm");
     proc.waitForFinished();
 
     const QString output = proc.readAllStandardOutput();
     for (const auto &item : output.split('\n'))
-        if (item == "dpkg")
-            return true;
+        if (item == "dpkg") return true;
 
     return false;
 }
 
 const QString workerErrorString(const int e)
 {
-    switch (e)
-    {
+    switch (e) {
     case FetchError:
     case DownloadDisallowedError:
         return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
     case NotFoundError:
-        return QApplication::translate("DebListModel", "Installation failed, please check updates in Control Center");
+        return QApplication::translate("DebListModel",
+                                       "Installation failed, please check updates in Control Center");
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     }
@@ -65,13 +66,9 @@ const QString workerErrorString(const int e)
 }
 
 DebListModel::DebListModel(QObject *parent)
-    : QAbstractListModel(parent),
-
-      m_workerStatus(WorkerPrepare),
-
-      m_packagesManager(new PackagesManager(this))
-{
-}
+    : QAbstractListModel(parent)
+    , m_workerStatus(WorkerPrepare)
+    , m_packagesManager(new PackagesManager(this)) {}
 
 bool DebListModel::isReady() const
 {
@@ -100,8 +97,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     const int r = index.row();
     const DebFile *deb = m_packagesManager->package(r);
 
-    switch (role)
-    {
+    switch (role) {
     case WorkerIsPrepareRole:
         return isWorkerPrepare();
     case ItemIsCurrentRole:
@@ -133,7 +129,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             return Prepare;
     case Qt::SizeHintRole:
         return QSize(0, 60);
-    default:;
+    default:
+        ;
     }
 
     return QVariant();
@@ -142,13 +139,12 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 void DebListModel::installAll()
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
-    if (m_workerStatus != WorkerPrepare)
-        return;
+    if (m_workerStatus != WorkerPrepare) return;
 
     m_workerStatus = WorkerProcessing;
     m_operatingIndex = 0;
 
-//    emit workerStarted();
+    //    emit workerStarted();
 
     // start first
     installNextDeb();
@@ -166,8 +162,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (const auto &r : rdepends)
-        b->markPackageForRemoval(r);
+    for (const auto &r : rdepends) b->markPackageForRemoval(r);
     b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());
 
     // uninstall
@@ -213,11 +208,9 @@ void DebListModel::onTransactionErrorOccurred()
     qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
     qWarning() << trans->errorDetails() << trans->errorString();
 
-    if (trans->isCancellable())
-        trans->cancel();
+    if (trans->isCancellable()) trans->cancel();
 
-    if (e == AuthError)
-    {
+    if (e == AuthError) {
         trans->deleteLater();
 
         qDebug() << "reset env to prepare";
@@ -234,16 +227,21 @@ void DebListModel::onTransactionErrorOccurred()
 
 void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
 {
-    switch (stat)
-    {
+    switch (stat) {
     case TransactionStatus::AuthenticationStatus:
         emit lockForAuth(true);
         break;
     case TransactionStatus::WaitingStatus:
         emit lockForAuth(false);
         break;
-    default:;
+    default:
+        ;
     }
+}
+
+int DebListModel::getInstallFileSize()
+{
+    return m_packagesManager->m_preparedPackages.size();
 }
 
 void DebListModel::reset()
@@ -263,8 +261,7 @@ void DebListModel::bumpInstallIndex()
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     // install finished
-    if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size())
-    {
+    if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congraulations, install finished !!!";
 
         m_workerStatus = WorkerFinished;
@@ -274,13 +271,15 @@ void DebListModel::bumpInstallIndex()
         return;
     }
 
+    emit onChangeOperateIndex(m_operatingIndex);
+
     // install next
     installNextDeb();
 }
 
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
 {
-    m_packageOperateStatus[m_operatingIndex] = stat;
+    m_packageOperateStatus[m_operatingIndex] = stat;  //将失败包的索引和状态修改保存,用于更新
 
     const QModelIndex idx = index(m_operatingIndex);
 
@@ -290,18 +289,14 @@ void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOper
 QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
-    if (stat.isBreak())
-    {
-        if (!stat.package.isEmpty())
-            return tr("Broken Dependencies: %1").arg(stat.package);
+    if (stat.isBreak()) {
+        if (!stat.package.isEmpty()) return tr("Broken Dependencies: %1").arg(stat.package);
 
-        if (m_packagesManager->isArchError(idx))
-            return tr("Unmatched package architecture");
+        if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
 
         const auto conflict = m_packagesManager->packageConflictStat(idx);
-        if (!conflict.is_ok())
-            return tr("Broken Dependencies: %1").arg(conflict.unwrap());
-//            return tr("Conflicts: %1").arg(conflict.unwrap());
+        if (!conflict.is_ok()) return tr("Broken Dependencies: %1").arg(conflict.unwrap());
+        //            return tr("Conflicts: %1").arg(conflict.unwrap());
 
         Q_UNREACHABLE();
     }
@@ -327,19 +322,17 @@ void DebListModel::onTransactionFinished()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
 
-    if (trans->exitStatus())
-    {
+    if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
         m_packageFailReason[m_operatingIndex] = trans->error();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
-    }
-    else if (m_packageOperateStatus.contains(m_operatingIndex) && m_packageOperateStatus[m_operatingIndex] != Failed)
-    {
+    } else if (m_packageOperateStatus.contains(m_operatingIndex) &&
+               m_packageOperateStatus[m_operatingIndex] != Failed) {
         refreshOperatingPackageStatus(Success);
     }
 
-//    delete trans;
+    //    delete trans;
     trans->deleteLater();
     m_currentTransaction = nullptr;
 
@@ -356,18 +349,16 @@ void DebListModel::onDependsInstallTransactionFinished()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << ret;
 
-    if (ret)
-        qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
+    if (ret) qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
 
-    if (ret)
-    {
+    if (ret) {
         // record error
         m_packageFailReason[m_operatingIndex] = trans->error();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
 
-//    delete trans;
+    //    delete trans;
     trans->deleteLater();
     m_currentTransaction = nullptr;
 
@@ -383,8 +374,7 @@ void DebListModel::installNextDeb()
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
-    if (isDpkgRunning())
-    {
+    if (isDpkgRunning()) {
         qDebug() << "dpkg running, waitting...";
         QTimer::singleShot(1000 * 5, this, &DebListModel::installNextDeb);
         return;
@@ -393,7 +383,7 @@ void DebListModel::installNextDeb()
     // fetch next deb
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
 
-    auto * const backend = m_packagesManager->m_backendFuture.result();
+    auto *const backend = m_packagesManager->m_backendFuture.result();
     Transaction *trans = nullptr;
 
     // reset package depends status
@@ -401,17 +391,16 @@ void DebListModel::installNextDeb()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
-    if (dependsStat.isBreak())
-    {
+    if (dependsStat.isBreak()) {
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
         return;
     } else if (dependsStat.isAvailable()) {
-        Q_ASSERT_X(m_packageOperateStatus[m_operatingIndex] == Prepare, Q_FUNC_INFO, "package operate status error when start install availble dependencies");
+        Q_ASSERT_X(m_packageOperateStatus[m_operatingIndex] == Prepare, Q_FUNC_INFO,
+                   "package operate status error when start install availble dependencies");
 
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
-        for (auto const &p : availableDepends)
-            backend->markPackageForInstall(p);
+        for (auto const &p : availableDepends) backend->markPackageForInstall(p);
 
         qDebug() << Q_FUNC_INFO << "install" << deb->packageName() << "dependencies: " << availableDepends;
 
@@ -464,8 +453,7 @@ void DebListModel::uninstallFinished()
 
 void DebListModel::setCurrentIndex(const QModelIndex &idx)
 {
-    if (m_currentIdx == idx)
-        return;
+    if (m_currentIdx == idx) return;
 
     const QModelIndex index = m_currentIdx;
     m_currentIdx = idx;

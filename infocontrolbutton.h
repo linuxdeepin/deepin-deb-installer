@@ -22,10 +22,12 @@
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
 
-#include <QLabel>
 #include <QWidget>
+#include <QLabel>
+#include <QPen>
 
-class InfoControlButton : public QWidget {
+class InfoControlButton : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -48,6 +50,8 @@ private:
 
     QLabel *m_arrowIcon;
     QLabel *m_tipsText;
+
+    QFont m_font;
 };
 
-#endif  // INFOCONTROLBUTTON_H
+#endif // INFOCONTROLBUTTON_H

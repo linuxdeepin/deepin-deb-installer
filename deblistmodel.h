@@ -31,7 +31,8 @@
 #include <QApt/Transaction>
 
 class PackagesManager;
-class DebListModel : public QAbstractListModel {
+class DebListModel : public QAbstractListModel
+{
     Q_OBJECT
 
 public:
@@ -68,9 +69,9 @@ public:
     };
 
     enum PackageDependsStatus {
-        DependsOk,
+        DependsOk,  //依赖满足
         DependsAvailable,
-        DependsBreak,
+        DependsBreak,  //依赖不满足
     };
 
     enum PackageOperationStatus {
@@ -82,7 +83,10 @@ public:
 
     void reset();
     bool isReady() const;
-    bool isWorkerPrepare() const { return m_workerStatus == WorkerPrepare; }
+    bool isWorkerPrepare() const
+    {
+        return m_workerStatus == WorkerPrepare;
+    }
     const QList<QApt::DebFile *> preparedPackages() const;
     QModelIndex first() const;
 
@@ -99,6 +103,8 @@ signals:
     void packageOperationChanged(const QModelIndex &index, int status) const;
     void packageDependsChanged(const QModelIndex &index, int status) const;
 
+    void onChangeOperateIndex(int opIndex);
+
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
     void installAll();
@@ -107,6 +113,9 @@ public slots:
     void appendPackage(QApt::DebFile *package);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
+
+public:
+    int getInstallFileSize();
 
 private:
     void bumpInstallIndex();

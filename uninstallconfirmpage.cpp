@@ -32,16 +32,17 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_infoControl(new InfoControlButton(tr("Display related packages"), tr("Collapse")))
     , m_dependsInfomation(new QTextEdit)
     , m_cancelBtn(new QPushButton)
-    , m_confirmBtn(new QPushButton) {
+    , m_confirmBtn(new QPushButton)
+{
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
 
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
     m_tips->setAlignment(Qt::AlignCenter);
-    m_tips->setStyleSheet(
-        "QLabel {"
-        "padding: 20px 0 0 0;"
-        "}");
+//    m_tips->setStyleSheet(
+//        "QLabel {"
+//        "padding: 20px 0 0 0;"
+//        "}");
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
@@ -51,12 +52,12 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_dependsInfomation->setStyleSheet(
-        "QTextEdit {"
-        "color: #609dc9;"
-        "border: 1px solid #eee;"
-        "margin: 0 0 20px 0;"
-        "}");
+//    m_dependsInfomation->setStyleSheet(
+//        "QTextEdit {"
+//        "color: #609dc9;"
+//        "border: 1px solid #eee;"
+//        "margin: 0 0 20px 0;"
+//        "}");
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
@@ -96,23 +97,27 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::hideDetail);
 }
 
-void UninstallConfirmPage::setPackage(const QString &name) {
+void UninstallConfirmPage::setPackage(const QString &name)
+{
     QString tips(tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed"));
 
     m_tips->setText(tips.arg(name));
 }
 
-void UninstallConfirmPage::setRequiredList(const QStringList &requiredList) {
+void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
+{
     m_infoControl->setVisible(!requiredList.isEmpty());
     m_dependsInfomation->setText(requiredList.join(", "));
 }
 
-void UninstallConfirmPage::showDetail() {
+void UninstallConfirmPage::showDetail()
+{
     m_infoWrapperWidget->setVisible(false);
     m_dependsInfomation->setVisible(true);
 }
 
-void UninstallConfirmPage::hideDetail() {
+void UninstallConfirmPage::hideDetail()
+{
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
 }

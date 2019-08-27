@@ -38,53 +38,50 @@ DWIDGET_USE_NAMESPACE
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
-    , m_settings("deepin", "deepin-deb-install") {
-    setWindowFlags(Qt::FramelessWindowHint | windowFlags());
+    , m_settings("deepin", "deepin-deb-install")
+{
     const auto ratio = devicePixelRatioF();
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(480, 380);
-    // icon
+
     QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(123, 109));
     iconPix.setDevicePixelRatio(ratio);
     QLabel *iconImage = new QLabel;
-    iconImage->setFixedSize(123, 109);
+    iconImage->setFixedSize(160, 160);
+    iconImage->setAlignment(Qt::AlignCenter);
     iconImage->setPixmap(iconPix);
 
-    // Label 拖拽文字
     QLabel *dndTips = new QLabel;
     dndTips->setText(tr("Drag and drop file here"));
-    dndTips->setAlignment(Qt::AlignCenter);
+    dndTips->setAlignment(Qt::AlignHCenter);
     dndTips->setObjectName("DNDTips");
 
     QVBoxLayout *centerWrapLayout = new QVBoxLayout;
     centerWrapLayout->addWidget(iconImage);
     centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignHCenter);
-    centerWrapLayout->addSpacing(32);
-    centerWrapLayout->addWidget(dndTips);
+    centerWrapLayout->addSpacing(7);
+    centerWrapLayout->addWidget(dndTips, Qt::AlignHCenter);
     centerWrapLayout->setSpacing(0);
-    centerWrapLayout->setContentsMargins(0, 0, 0, 15);
+    centerWrapLayout->setContentsMargins(0, 0, 0, 0);
 
     QWidget *centerWidget = new QFrame;
     centerWidget->setFixedWidth(270);
+
     centerWidget->setLayout(centerWrapLayout);
     centerWidget->setObjectName("CenterWidget");
-
-    // Label 虚线
     QLabel *split_line = new QLabel;
     split_line->setObjectName("SplitLine");
     split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setAlignment(Qt::AlignCenter);
 
-    // button 选择文件
     m_fileChooseBtn = new DLinkButton;
     m_fileChooseBtn->setObjectName("FileChooseButton");
     m_fileChooseBtn->setText(tr("Select File"));
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addStretch();
+    centralLayout->addSpacing(42);
     centralLayout->addWidget(centerWidget);
     centralLayout->setAlignment(centerWidget, Qt::AlignTop | Qt::AlignCenter);
-    centralLayout->addSpacing(16);  //文字和虚线的空隙
+    centralLayout->addSpacing(16);
     centralLayout->addWidget(split_line);
     centralLayout->addSpacing(17);
     centralLayout->addWidget(m_fileChooseBtn);
@@ -96,7 +93,8 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     connect(m_fileChooseBtn, &QPushButton::clicked, this, &FileChooseWidget::chooseFiles);
 }
 
-void FileChooseWidget::chooseFiles() {
+void FileChooseWidget::chooseFiles()
+{
     QString historyDir = m_settings.value("history_dir").toString();
 
     if (historyDir.isEmpty()) {
