@@ -68,7 +68,10 @@ const QString workerErrorString(const int e)
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_workerStatus(WorkerPrepare)
-    , m_packagesManager(new PackagesManager(this)) {}
+    , m_packagesManager(new PackagesManager(this)) {
+
+     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
+}
 
 bool DebListModel::isReady() const
 {
@@ -95,6 +98,7 @@ int DebListModel::rowCount(const QModelIndex &parent) const
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
+
     const DebFile *deb = m_packagesManager->package(r);
 
     switch (role) {
@@ -143,6 +147,7 @@ void DebListModel::installAll()
 
     m_workerStatus = WorkerProcessing;
     m_operatingIndex = 0;
+    m_InitRowStatus = false;
 
     //    emit workerStarted();
 
@@ -216,7 +221,9 @@ void DebListModel::onTransactionErrorOccurred()
         qDebug() << "reset env to prepare";
 
         // reset env
+
         emit lockForAuth(false);
+
         m_workerStatus = WorkerPrepare;
         return;
     }
@@ -237,6 +244,7 @@ void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
     default:
         ;
     }
+
 }
 
 int DebListModel::getInstallFileSize()
@@ -419,6 +427,12 @@ void DebListModel::installNextDeb()
     // see: https://bugs.kde.org/show_bug.cgi?id=382272
     trans->setLocale(".UTF-8");
 
+    if(!m_InitRowStatus)
+    {
+        connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+        m_InitRowStatus = true;
+    }
+
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
     connect(trans, &Transaction::statusChanged, this, &DebListModel::onTransactionStatusChanged);
@@ -460,4 +474,73 @@ void DebListModel::setCurrentIndex(const QModelIndex &idx)
 
     emit dataChanged(index, index);
     emit dataChanged(m_currentIdx, m_currentIdx);
+}
+void DebListModel::initRowStatus()
+{
+    for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)
+    {
+        m_operatingIndex = i;
+        refreshOperatingPackageStatus(Waiting);
+    }
+    m_operatingIndex = 0;
+
+    Transaction *trans = static_cast<Transaction *>(sender());
+    Q_ASSERT(trans == m_currentTransaction.data());
+    disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+}
+void DebListModel::upWrongStatusRow()
+{return;
+    Q_ASSERT(m_packageOperateStatus.size() == m_packagesManager->m_preparedPackages.size());
+    Q_ASSERT(m_packageOperateStatus.size() != 0);
+
+    QList<QApt::DebFile *> listTempDebFile;
+    listTempDebFile.clear();
+    QApt::DebFile * tempDebFile;
+
+    QList<int> tempListStatus;
+    tempListStatus.clear();
+
+    int iIndex = 0;
+    for(int i = 0; i < m_packageOperateStatus.size(); i++)
+    {
+        tempDebFile = m_packagesManager->m_preparedPackages.at(i);
+        if(m_packageOperateStatus[i] == Failed)
+        {
+            listTempDebFile.insert(iIndex, tempDebFile);
+            tempListStatus.insert(iIndex, Failed);
+            iIndex++;
+        }
+        else
+        {
+            listTempDebFile.append(tempDebFile);
+            tempListStatus.append(m_packageOperateStatus[i]);
+        }
+    }
+
+
+    QList<int> tempListFailReason;
+    tempListFailReason.clear();
+
+    QHashIterator<int, int> ipackageFailReason(m_packageFailReason);
+     while (ipackageFailReason.hasNext()) {
+         ipackageFailReason.next();
+         tempListFailReason.append(ipackageFailReason.value());
+     }
+
+    m_packagesManager->m_preparedPackages.clear();
+    m_packageOperateStatus.clear();
+    m_packageFailReason.clear();
+
+    for(int i = 0; i < tempListFailReason.size(); i++)
+        m_packageFailReason[i] = tempListFailReason[i];
+
+    for(int i = 0; i < listTempDebFile.size(); i++)
+    {
+        m_packageOperateStatus[i] = tempListStatus[i];
+        m_packagesManager->m_preparedPackages.append(listTempDebFile.at(i));
+    }
+
+    const QModelIndex idx = index(0);
+    const QModelIndex idx2 = index(m_packageOperateStatus.size() - 1);
+    emit dataChanged(idx, idx2);
 }

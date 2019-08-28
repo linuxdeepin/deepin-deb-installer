@@ -38,6 +38,12 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(QApt REQUIRED)
 find_package(DtkWidget REQUIRED)
 
+#find_package(Qt5LinguistTools)
+#SET(Lang_files ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/XXX.ts)
+#QT5_CREATE_TRANSLATION(LangSrcs ${Lang_files})
+#add_executable(${target}  WIN32 ${sources} ${headers} ${LangSrcs} )
+
+
 # Tell CMake to create the executable
 add_executable(deepin-deb-installer ${SRCS} resources/resources.qrc)
 target_include_directories(deepin-deb-installer PUBLIC ${DtkWidget_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
@@ -68,3 +74,5 @@ endforeach ()
 install(TARGETS deepin-deb-installer DESTINATION bin)
 install(FILES deepin-deb-installer.desktop DESTINATION share/applications)
 install(FILES deepin-deb-installer.applications DESTINATION share/application-registry)
+
+

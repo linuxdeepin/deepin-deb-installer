@@ -190,3 +190,5 @@ DISTFILES += \
 
 RESOURCES += \
     resources/resources.qrc
+
+TRANSLATIONS += ./deepin-deb-installer_zh_CN.ts

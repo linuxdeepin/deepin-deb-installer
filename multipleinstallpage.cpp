@@ -113,7 +113,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
-//    m_backButton->setVisible(true);
+    m_backButton->setVisible(true);
     m_installProgress->setVisible(false);
 }
 
@@ -145,9 +145,9 @@ void MultipleInstallPage::onProgressChanged(const int progress)
 
 void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
 {
-    if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize() - 1) {
+    if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
         QModelIndex currIndex = m_debListModel->index(opIndex);
-        m_appsView->scrollTo(currIndex);
+        m_appsView->scrollTo(currIndex, QAbstractItemView::PositionAtCenter);
     }
 }
 

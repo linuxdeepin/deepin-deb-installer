@@ -33,11 +33,12 @@
 DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
-{
+    : QAbstractItemDelegate(parent) {
+
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
     const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
+
     m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
     m_removeIcon.setDevicePixelRatio(ratio);
 }
@@ -68,8 +69,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     // draw package icon
     const int x = 5;
     const int y =
-        option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2;
-    painter->drawPixmap(x, y - 5, m_packageIcon);
+
+        option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2 - 4;
+    painter->drawPixmap(x, y, m_packageIcon);
+
 
     // draw package name
     QRect name_rect = option.rect;
@@ -81,7 +84,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QFont f = old_font;
     if (theme == THEME_LIGHT) {
         f.setWeight(QFont::DemiBold);
-
     }
 
     f.setPixelSize(14);
@@ -90,9 +92,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
     painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#efefef"));
     painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
-    painter->setFont(old_font);
 
     // draw package version
+    QFont font_version = old_font;
+    font_version.setPixelSize(12);
+    painter->setFont(font_version);
     const int version_x = name_bounding_rect.right() + 8;
     QRect version_rect = name_rect;
     version_rect.setLeft(version_x);
@@ -115,18 +119,22 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         font_use.setPixelSize(11);
         painter->setFont(font_use);
         switch (operate_stat) {
-        case DebListModel::Operating:
-            painter->setPen(QColor(124, 124, 124));
-            painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
-        case DebListModel::Success:
-            painter->setPen(QColor(65, 117, 5));
-            painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
-        default:
-            painter->setPen(QColor(255, 109, 109));
-            painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-            break;
+            case DebListModel::Operating:
+                painter->setPen(QColor(124, 124, 124));
+                painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            case DebListModel::Success:
+                painter->setPen(QColor(65, 117, 5));
+                painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            case DebListModel::Waiting:
+                painter->setPen(QColor(124, 124, 124));
+                painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            default:
+                painter->setPen(QColor(255, 109, 109));
+                painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
         }
     } else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
                index.data(DebListModel::ItemIsCurrentRole).toBool()) {
@@ -141,7 +149,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QString info_str;
     QRect info_rect = option.rect;
     info_rect.setLeft(content_x);
-    info_rect.setTop(name_rect.bottom() /*+ 1 + 3*/);
+    info_rect.setTop(name_rect.bottom());
 
     const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
     if (operate_stat == DebListModel::Failed) {
@@ -161,10 +169,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setPen(QColor(90, 90, 90));
     }
 
+    QFont font_packageInfo = old_font;
+    font_packageInfo.setPixelSize(12);
+    painter->setFont(font_packageInfo);
     info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
     font_use.setPixelSize(12);
     painter->setFont(font_use);
     painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
+
 }
 
 QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

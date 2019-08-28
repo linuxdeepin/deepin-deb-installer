@@ -53,15 +53,13 @@ DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
-    ,
-
-      m_fileListModel(new DebListModel(this))
+    , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout)
     , m_qsettings(new QSettings(this))
     , m_tbMenu(new QMenu(this))
-    , m_darkThemeAction(new QAction(tr("Dark theme"), this))
-{
+    , m_darkThemeAction(new QAction(tr("Dark theme"), this)) {
+
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);

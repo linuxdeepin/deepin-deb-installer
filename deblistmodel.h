@@ -79,6 +79,7 @@ public:
         Operating,
         Success,
         Failed,
+        Waiting,
     };
 
     void reset();
@@ -114,6 +115,8 @@ public slots:
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
 
+private slots:
+    void upWrongStatusRow();
 public:
     int getInstallFileSize();
 
@@ -126,7 +129,7 @@ private:
     void uninstallFinished();
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
     QString packageFailedReason(const int idx) const;
-
+    void initRowStatus();
 private:
     int m_workerStatus;
     int m_operatingIndex;
@@ -137,6 +140,7 @@ private:
 
     QHash<int, int> m_packageOperateStatus;
     QHash<int, int> m_packageFailReason;
+    bool m_InitRowStatus;
 };
 
 #endif  // DEBLISTMODEL_H

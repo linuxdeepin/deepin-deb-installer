@@ -11,7 +11,7 @@
     <message>
         <location filename="debinstaller.cpp" line="93"/>
         <source>Deepin Package Manager</source>
-        <translation>深度软件包安装器</translation>
+        <translation>深度软件包管理器</translation>
     </message>
     <message>
         <location filename="debinstaller.cpp" line="265"/>
@@ -76,7 +76,7 @@
     <message>
         <location filename="multipleinstallpage.cpp" line="40"/>
         <source>Display details</source>
-        <translation>显示详细安装进程</translation>
+        <translation>显示详细信息</translation>
     </message>
     <message>
         <location filename="multipleinstallpage.cpp" line="56"/>
@@ -240,12 +240,12 @@ All dependencies will also be removed</source>
     <message>
         <location filename="main.cpp" line="53"/>
         <source>Deepin Package Manager</source>
-        <translation>深度软件包安装器</translation>
+        <translation>深度软件包管理器</translation>
     </message>
     <message>
         <location filename="main.cpp" line="54"/>
         <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation>深度软件包安装器用于帮助用户安装和卸载本地软件包，支持批量安装。</translation>
+        <translation>深度软件包管理器用于帮助用户安装和卸载本地软件包，支持批量安装。</translation>
     </message>
 </context>
 </TS>

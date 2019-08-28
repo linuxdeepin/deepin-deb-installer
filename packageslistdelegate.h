@@ -25,6 +25,7 @@
 #include <QAbstractItemDelegate>
 #include <QSettings>
 
+
 class PackagesListDelegate : public QAbstractItemDelegate {
     Q_OBJECT
 

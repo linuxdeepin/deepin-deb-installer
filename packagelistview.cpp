@@ -20,7 +20,7 @@
  */
 
 #include "packagelistview.h"
-
+#include <QPainter>
 PackagesListView::PackagesListView(QWidget *parent)
     : QListView(parent) {
     setVerticalScrollMode(ScrollPerPixel);

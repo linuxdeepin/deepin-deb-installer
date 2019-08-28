@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(VERSION);
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon(":/images/icon.svg"));
-    // app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    //app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator(QList<QLocale>() << QLocale("zh_CN"));
     // app.loadTranslator();

@@ -28,7 +28,7 @@ class PackagesListView : public QListView {
     Q_OBJECT
 
 public:
-    explicit PackagesListView(QWidget *parent = 0);
+    explicit PackagesListView(QWidget *parent = nullptr);
 
 protected:
     void leaveEvent(QEvent *e);

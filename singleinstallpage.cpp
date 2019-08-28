@@ -109,13 +109,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_reinstallButton(new GrayButton)
     , m_confirmButton(new GrayButton)
     , m_backButton(new GrayButton)
-    , m_doneButton(new BlueButton)
-{
-//    QFont font = QFont("SourceHanSansSC-Normal");
-//    font.setPixelSize(12);
-    //setFont(font);
+    , m_doneButton(new BlueButton) {
+
     const QFont font_const = this->font();
-    QFont font_use =  font_const;
+    QFont font_use = font_const;
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -123,12 +120,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(60, 60);
+    m_packageIcon->setFixedSize(42, 52);
     font_use.setPixelSize(14);
-    m_packageName->setFont(font_use);
-    m_packageVersion->setFont(font_use);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    m_packageName->setFont(font_use);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_packageVersion->setFont(font_use);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 
     m_progress->setVisible(false);
@@ -155,7 +152,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageDescription->setWordWrap(true);
 
     m_packageDescription->setFixedHeight(80);
-    m_packageDescription->setFixedWidth(270);
+    font_use.setPixelSize(12);
+    m_packageDescription->setFont(font_use);
+    m_packageDescription->setFixedWidth(320);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     font_use.setPixelSize(12);
     m_packageDescription->setFont(font_use);
@@ -200,7 +199,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addWidget(m_doneButton);
     btnsLayout->addStretch();
-    btnsLayout->setSpacing(30);
+    btnsLayout->setSpacing(0);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
@@ -313,7 +312,7 @@ void SingleInstallPage::onWorkerFinished()
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    //    m_backButton->setVisible(true);
+    m_backButton->setVisible(true);
 
     const QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
@@ -414,6 +413,6 @@ void SingleInstallPage::setPackageInfo()
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
-        //        m_backButton->setVisible(true);
+        //m_backButton->setVisible(true);
     }
 }
