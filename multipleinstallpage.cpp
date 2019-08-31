@@ -107,7 +107,6 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
 
     connect(model, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
-
 }
 
 void MultipleInstallPage::onWorkerFinshed()
@@ -148,6 +147,11 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
     if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
         QModelIndex currIndex = m_debListModel->index(opIndex);
         m_appsView->scrollTo(currIndex, QAbstractItemView::PositionAtCenter);
+    }
+    else if(opIndex == -1)//to top
+    {
+        QModelIndex currIndex = m_debListModel->index(0);
+        m_appsView->scrollTo(currIndex);
     }
 }
 

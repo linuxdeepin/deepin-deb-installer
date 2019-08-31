@@ -311,6 +311,8 @@ QString DebListModel::packageFailedReason(const int idx) const
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
+    if(!m_packageFailReason.contains(idx))
+        qDebug()<<"ggy"<<m_packageFailReason.size()<<idx;
     Q_ASSERT(m_packageFailReason.contains(idx));
 
     return workerErrorString(m_packageFailReason[idx]);
@@ -489,58 +491,88 @@ void DebListModel::initRowStatus()
     disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
 }
 void DebListModel::upWrongStatusRow()
-{return;
-    Q_ASSERT(m_packageOperateStatus.size() == m_packagesManager->m_preparedPackages.size());
-    Q_ASSERT(m_packageOperateStatus.size() != 0);
-
-    QList<QApt::DebFile *> listTempDebFile;
-    listTempDebFile.clear();
-    QApt::DebFile * tempDebFile;
-
-    QList<int> tempListStatus;
-    tempListStatus.clear();
-
+{   
+    QList<int> listWrongIndex;
     int iIndex = 0;
-    for(int i = 0; i < m_packageOperateStatus.size(); i++)
+
+    //find wrong index
+    QMapIterator<int, int> iteratorpackageOperateStatus(m_packageOperateStatus);
+    QList<int> listpackageOperateStatus;
+    while(iteratorpackageOperateStatus.hasNext())
     {
-        tempDebFile = m_packagesManager->m_preparedPackages.at(i);
-        if(m_packageOperateStatus[i] == Failed)
+        iteratorpackageOperateStatus.next();
+        if(iteratorpackageOperateStatus.value() == Failed)
         {
-            listTempDebFile.insert(iIndex, tempDebFile);
-            tempListStatus.insert(iIndex, Failed);
-            iIndex++;
+            listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key() );
+            listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());
         }
+        else if(iteratorpackageOperateStatus.value() == Success)
+            listpackageOperateStatus.append( iteratorpackageOperateStatus.value() );
         else
-        {
-            listTempDebFile.append(tempDebFile);
-            tempListStatus.append(m_packageOperateStatus[i]);
-        }
+            return;
     }
+    if(listWrongIndex.size() == 0)
+        return;
 
-
-    QList<int> tempListFailReason;
-    tempListFailReason.clear();
-
-    QHashIterator<int, int> ipackageFailReason(m_packageFailReason);
-     while (ipackageFailReason.hasNext()) {
-         ipackageFailReason.next();
-         tempListFailReason.append(ipackageFailReason.value());
-     }
-
-    m_packagesManager->m_preparedPackages.clear();
-    m_packageOperateStatus.clear();
-    m_packageFailReason.clear();
-
-    for(int i = 0; i < tempListFailReason.size(); i++)
-        m_packageFailReason[i] = tempListFailReason[i];
-
-    for(int i = 0; i < listTempDebFile.size(); i++)
+    //change  m_preparedPackages, m_packageOperateStatus sort.
+    QList<QApt::DebFile *> listTempDebFile;
+    iIndex = 0;
+    for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)
     {
-        m_packageOperateStatus[i] = tempListStatus[i];
-        m_packagesManager->m_preparedPackages.append(listTempDebFile.at(i));
+        m_packageOperateStatus[i] = listpackageOperateStatus[i];
+        if( listWrongIndex.contains(i) )
+            listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i] );
+        else
+            listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);
     }
+    m_packagesManager->m_preparedPackages = listTempDebFile;
 
-    const QModelIndex idx = index(0);
-    const QModelIndex idx2 = index(m_packageOperateStatus.size() - 1);
-    emit dataChanged(idx, idx2);
+    //change  m_packageFailReason sort.
+    QMap<int,int> mappackageFailReason;
+    QMapIterator<int, int> IteratorpackageFailReason(m_packageFailReason);
+    while (IteratorpackageFailReason.hasNext()) {
+         IteratorpackageFailReason.next();
+         int iIndexTemp = listWrongIndex.indexOf( IteratorpackageFailReason.key() );
+         mappackageFailReason[iIndexTemp] = IteratorpackageFailReason.value();
+    }
+    m_packageFailReason.clear();
+    m_packageFailReason = mappackageFailReason;
+
+    //change  m_packageInstallStatus sort.
+    QMapIterator<int, int> MapIteratorpackageInstallStatus(m_packagesManager->m_packageInstallStatus);
+    QList<int> listpackageInstallStatus;
+    iIndex = 0;
+    while(MapIteratorpackageInstallStatus.hasNext())
+    {
+        MapIteratorpackageInstallStatus.next();
+        if( listWrongIndex.contains( MapIteratorpackageInstallStatus.key()) )
+            listpackageInstallStatus.insert( iIndex++, MapIteratorpackageInstallStatus.value() );
+        else
+            listpackageInstallStatus.append(MapIteratorpackageInstallStatus.value());
+    }
+    for(int i = 0; i < listpackageInstallStatus.size(); i++)
+        m_packagesManager->m_packageInstallStatus[i] = listpackageInstallStatus[i];
+
+    //change  m_packageDependsStatus sort.
+    QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
+    QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
+    iIndex = 0;
+    while(MapIteratorpackageDependsStatus.hasNext())
+    {
+        MapIteratorpackageDependsStatus.next();
+        if( listWrongIndex.contains( MapIteratorpackageDependsStatus.key()) )
+            listpackageDependsStatus.insert( iIndex++, MapIteratorpackageDependsStatus.value() );
+        else
+            listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
+    }
+    for(int i = 0; i < listpackageDependsStatus.size(); i++)
+        m_packagesManager->m_packageDependsStatus[i] = listpackageDependsStatus[i];
+
+    //update view
+    const QModelIndex idxStart = index(0);
+    const QModelIndex idxEnd = index(m_packageOperateStatus.size() - 1);
+    emit dataChanged(idxStart, idxEnd);
+
+    //update scroll
+    emit onChangeOperateIndex(-1);
 }

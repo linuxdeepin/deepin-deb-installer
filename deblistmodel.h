@@ -138,8 +138,8 @@ private:
 
     QPointer<QApt::Transaction> m_currentTransaction;
 
-    QHash<int, int> m_packageOperateStatus;
-    QHash<int, int> m_packageFailReason;
+    QMap<int, int> m_packageOperateStatus;
+    QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
 };
 

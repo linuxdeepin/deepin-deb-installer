@@ -9,11 +9,7 @@ Name=Deepin Package Manager
 StartupNotify=true
 Terminal=false
 Type=Application
-<<<<<<< Updated upstream
 X-Deepin-Vendor=deepin
-=======
-X-Deepin-Vendor=user-custom
->>>>>>> Stashed changes
 
 # Translations:
 # Do not manually modify!
@@ -45,13 +41,8 @@ Comment[sq]=Përgjegjësi Deepin i Paketave përdoret për t’i ndihmuar përdo
 Comment[sr]=Дипин Управник Пакета је програм који помаже корисницима при инсталирању и уклањању локалног софтвера. Подржава групну инсталацију.
 Comment[tr]=Deepin Paket Yöneticisi, kullanıcıların yerel uygulamaları kurup kaldırmasını sağlayan ve toplu kurulum özelliği olan bir uygulamadır.
 Comment[uk]=Засіб керування пакунками Deepin використовується для полегшення встановлення і вилучення локальних пакунків користувачем. Передбачено підтримку пакетного встановлення.
-<<<<<<< Updated upstream
-Comment[zh_CN]=深度软件包安装器用于帮助用户安装和卸载本地软件，支持批量安装。
-Comment[zh_TW]=Deepin 軟體包安裝器用來幫助使用者安裝和移除本機軟體包。支援批次安裝。
-=======
 Comment[zh_CN]=深度软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。
 Comment[zh_TW]=Deepin 軟體包管理器用來幫助使用者安裝和移除本機軟體包。支援批次安裝。
->>>>>>> Stashed changes
 GenericName[ast]=Xestor de paquetes
 GenericName[bg]=Мениджър на пакети
 GenericName[ca]=Gestor de paquets
@@ -83,13 +74,8 @@ GenericName[sq]=Përgjegjës Paketash
 GenericName[sr]=Управник Пакета
 GenericName[tr]=Paket Yöneticisi
 GenericName[uk]=Керування пакунками
-<<<<<<< Updated upstream
-GenericName[zh_CN]=软件包安装器
-GenericName[zh_TW]=軟體包安裝器
-=======
 GenericName[zh_CN]=软件包管理器
 GenericName[zh_TW]=軟體包管理器
->>>>>>> Stashed changes
 Name[ast]=Deepin Package Manager
 Name[bg]=Deepin Мениджър на пакети
 Name[ca]=Gestor de paquets del Deepin
@@ -121,11 +107,6 @@ Name[sq]=Përgjegjësi Deepin i Paketave
 Name[sr]=Дипин Управник Пакета
 Name[tr]=Deepin Paket Yöneticisi
 Name[uk]=Керування пакунками Deepin
-<<<<<<< Updated upstream
-Name[zh_CN]=深度软件包安装器
-Name[zh_TW]=Deepin 軟體包安裝器
-=======
 Name[zh_CN]=深度软件包管理器
 Name[zh_TW]=Deepin 軟體包管理器
->>>>>>> Stashed changes
 

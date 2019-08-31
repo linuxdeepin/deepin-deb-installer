@@ -32,28 +32,33 @@
 
 typedef Result<QString> ConflictResult;
 
-class PackageDependsStatus {
-public:
-    static PackageDependsStatus ok();
-    static PackageDependsStatus available();
-    static PackageDependsStatus _break(const QString &package);
+namespace  PackagesManagerDependsStatus{
 
-    PackageDependsStatus();
-    PackageDependsStatus(const int status, const QString &package);
-    PackageDependsStatus operator=(const PackageDependsStatus &other);
+    class PackageDependsStatus {
+    public:
+        static PackageDependsStatus ok();
+        static PackageDependsStatus available();
+        static PackageDependsStatus _break(const QString &package);
 
-    PackageDependsStatus max(const PackageDependsStatus &other);
-    PackageDependsStatus maxEq(const PackageDependsStatus &other);
-    PackageDependsStatus min(const PackageDependsStatus &other);
-    PackageDependsStatus minEq(const PackageDependsStatus &other);
+        PackageDependsStatus();
+        PackageDependsStatus(const int status, const QString &package);
+        PackageDependsStatus operator=(const PackageDependsStatus &other);
 
-    bool isBreak() const;
-    bool isAvailable() const;
+        PackageDependsStatus max(const PackageDependsStatus &other);
+        PackageDependsStatus maxEq(const PackageDependsStatus &other);
+        PackageDependsStatus min(const PackageDependsStatus &other);
+        PackageDependsStatus minEq(const PackageDependsStatus &other);
 
-public:
-    int status;
-    QString package;
-};
+        bool isBreak() const;
+        bool isAvailable() const;
+
+    public:
+        int status;
+        QString package;
+    };
+}
+
+using namespace  PackagesManagerDependsStatus;
 
 class DebListModel;
 class PackagesManager : public QObject {
@@ -102,8 +107,8 @@ private:
 private:
     QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
-    QHash<int, int> m_packageInstallStatus;
-    QHash<int, PackageDependsStatus> m_packageDependsStatus;
+    QMap<int, int> m_packageInstallStatus;
+    QMap<int, PackageDependsStatus> m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;
 };
 
