@@ -21,7 +21,7 @@
 
 #include "bluebutton.h"
 
-BlueButton::BlueButton(QWidget *parent)
+BlueButton::BlueButton(DWidget *parent)
     : DSuggestButton(parent) {
     setFixedSize(120, 36);
 

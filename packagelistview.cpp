@@ -21,16 +21,20 @@
 
 #include "packagelistview.h"
 #include <QPainter>
-PackagesListView::PackagesListView(QWidget *parent)
-    : QListView(parent) {
+#include <DListView>
+#include <DWidget>
+
+PackagesListView::PackagesListView(DWidget *parent)
+    : DListView(parent) {
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(NoSelection);
     setAutoScroll(true);
     setMouseTracking(true);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 void PackagesListView::leaveEvent(QEvent *e) {
-    QListView::leaveEvent(e);
+    DListView::leaveEvent(e);
 
     emit entered(QModelIndex());
 }

@@ -89,27 +89,27 @@ const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
     return lines.join("");
 }
 
-SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
-    : QWidget(parent)
+SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
+    : DWidget(parent)
     , m_operate(Install)
     , m_workerStarted(false)
     , m_packagesModel(model)
-    , m_itemInfoWidget(new QWidget)
-    , m_packageIcon(new QLabel)
-    , m_packageName(new QLabel)
-    , m_packageVersion(new QLabel)
-    , m_packageDescription(new QLabel)
-    , m_tipsLabel(new QLabel)
+    , m_itemInfoWidget(new DWidget)
+    , m_packageIcon(new DLabel)
+    , m_packageName(new DLabel)
+    , m_packageVersion(new DLabel)
+    , m_packageDescription(new DLabel)
+    , m_tipsLabel(new DLabel)
     , m_progress(new WorkerProgress)
-    , m_workerInfomation(new QTextEdit)
-    , m_strengthWidget(new QWidget)
-    , m_infoControlButton(new InfoControlButton(tr("Display details"), tr("Collapse")))
-    , m_installButton(new BlueButton)
-    , m_uninstallButton(new GrayButton)
-    , m_reinstallButton(new GrayButton)
-    , m_confirmButton(new GrayButton)
-    , m_backButton(new GrayButton)
-    , m_doneButton(new BlueButton) {
+    , m_workerInfomation(new DTextEdit)
+    , m_strengthWidget(new DWidget)
+    , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
+    , m_installButton(new DPushButton)
+    , m_uninstallButton(new DPushButton)
+    , m_reinstallButton(new DPushButton)
+    , m_confirmButton(new DPushButton)
+    , m_backButton(new DPushButton)
+    , m_doneButton(new DPushButton) {
 
     const QFont font_const = this->font();
     QFont font_use = font_const;
@@ -120,7 +120,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(42, 52);
+    m_packageIcon->setFixedSize(60, 70);
     font_use.setPixelSize(14);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageName->setFont(font_use);
@@ -131,6 +131,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
 
+    font_use.setPixelSize(11);
+    m_workerInfomation->setFont(font_use);
+    m_workerInfomation->setTextColor(QColor("#609DC8"));
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
     m_workerInfomation->setAcceptDrops(false);
@@ -151,6 +154,13 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
 
+    m_installButton->setFixedSize(120,36);
+    m_uninstallButton->setFixedSize(120,36);
+    m_reinstallButton->setFixedSize(120,36);
+    m_confirmButton->setFixedSize(120,36);
+    m_backButton->setFixedSize(120,36);
+    m_doneButton->setFixedSize(120,36);
+
     m_packageDescription->setFixedHeight(80);
     font_use.setPixelSize(12);
     m_packageDescription->setFont(font_use);
@@ -159,14 +169,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     font_use.setPixelSize(12);
     m_packageDescription->setFont(font_use);
 
-    QLabel *packageName = new QLabel;
+    DLabel *packageName = new DLabel;
     packageName->setText(tr("Name: "));
     font_use.setPixelSize(14);
     packageName->setFont(font_use);
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
-    QLabel *packageVersion = new QLabel;
+    DLabel *packageVersion = new DLabel;
     packageVersion->setText(tr("Version: "));
     font_use.setPixelSize(14);
     packageVersion->setFont(font_use);
@@ -237,12 +247,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::showInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::hideInfomation);
-    connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
-    connect(m_reinstallButton, &QPushButton::clicked, this, &SingleInstallPage::install);
-    connect(m_uninstallButton, &QPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
-    connect(m_backButton, &QPushButton::clicked, this, &SingleInstallPage::back);
-    connect(m_confirmButton, &QPushButton::clicked, qApp, &QApplication::quit);
-    connect(m_doneButton, &QPushButton::clicked, qApp, &QApplication::quit);
+    connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
+    connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
+    connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
+    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
     connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
@@ -261,6 +271,7 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    m_infoControlButton->setShowText(tr("Display uninstall details"));
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
 }
@@ -309,24 +320,29 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
+    QFont font = this->font();
+    font.setPixelSize(12);
+    m_tipsLabel->setFont(font);
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
 
-    const QModelIndex index = m_packagesModel->first();
-    const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+   QModelIndex index = m_packagesModel->first();
+   const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
 
         if (m_operate == Install) {
+            m_infoControlButton->setShowText(tr("Display install details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             QPalette pe;
             pe.setColor(QPalette::WindowText, QColor("#47790C"));
             m_tipsLabel->setPalette(pe);
         } else {
+            m_infoControlButton->setShowText(tr("Display uninstall details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
             QPalette pe;
             pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
@@ -336,11 +352,16 @@ void SingleInstallPage::onWorkerFinished()
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
+        m_tipsLabel->setPalette(pe);
 
         if (m_operate == Install)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         else
+        {
             m_tipsLabel->setText(tr("Uninstall Failed"));
+        }
     } else {
         Q_UNREACHABLE();
     }
@@ -387,7 +408,7 @@ void SingleInstallPage::setPackageInfo()
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
-    m_backButton->setVisible(false);
+    m_backButton->setVisible(true);
 
     if (installed) {
         if (installedSameVersion) {
@@ -413,6 +434,6 @@ void SingleInstallPage::setPackageInfo()
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
-        //m_backButton->setVisible(true);
+        m_backButton->setVisible(true);
     }
 }

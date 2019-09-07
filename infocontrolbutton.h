@@ -22,17 +22,18 @@
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
 
-#include <QWidget>
-#include <QLabel>
+#include <DWidget>
+#include <DLabel>
 #include <QPen>
-
-class InfoControlButton : public QWidget
+DWIDGET_USE_NAMESPACE
+class InfoControlButton : public DWidget
 {
     Q_OBJECT
 
 public:
-    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent = 0);
+    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent = 0);
 
+    void setShowText(const QString text);
 signals:
     void expand();
     void shrink();
@@ -48,8 +49,8 @@ private:
     QString m_expandTips;
     QString m_shrinkTips;
 
-    QLabel *m_arrowIcon;
-    QLabel *m_tipsText;
+    DLabel *m_arrowIcon;
+    DLabel *m_tipsText;
 
     QFont m_font;
 };

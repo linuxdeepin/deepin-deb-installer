@@ -22,9 +22,8 @@
 #ifndef BLUEBUTTON_H
 #define BLUEBUTTON_H
 
-#include <QPushButton>
 #include <DSuggestButton>
-
+#include <DWidget>
 DWIDGET_USE_NAMESPACE
 
 class BlueButton : public DSuggestButton
@@ -32,7 +31,7 @@ class BlueButton : public DSuggestButton
     Q_OBJECT
 
 public:
-    explicit BlueButton(QWidget *parent = 0);
+    explicit BlueButton(DWidget *parent = 0);
 };
 
 #endif // BLUEBUTTON_H

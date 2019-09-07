@@ -22,18 +22,17 @@
 #include "infocontrolbutton.h"
 
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QPixmap>
 #include <QIcon>
 #include <QPalette>
 
-InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
-    : QWidget(parent),
+InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent)
+    : DWidget(parent),
       m_expand(false),
       m_expandTips(expandTips),
       m_shrinkTips(shrinkTips),
-      m_arrowIcon(new QLabel),
-      m_tipsText(new QLabel),
+      m_arrowIcon(new DLabel),
+      m_tipsText(new DLabel),
       m_font(QFont("SourceHanSansSC-Normal"))
 {
 
@@ -62,7 +61,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    QWidget::mouseReleaseEvent(e);
+    DWidget::mouseReleaseEvent(e);
 
     onMouseRelease();
 }
@@ -85,4 +84,9 @@ void InfoControlButton::onMouseRelease()
         m_tipsText->setText(m_shrinkTips);
         setFixedSize(200, 28);
     }
+}
+void InfoControlButton::setShowText(const QString text)
+{
+    m_expandTips = text;
+    m_tipsText->setText(m_expandTips);
 }

@@ -24,17 +24,18 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
-    : QWidget(parent)
-    , m_icon(new QLabel)
-    , m_tips(new QLabel)
-    , m_infoWrapperWidget(new QWidget)
+UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
+    : DWidget(parent)
+    , m_icon(new DLabel)
+    , m_tips(new DLabel)
+    , m_infoWrapperWidget(new DWidget)
     , m_infoControl(new InfoControlButton(tr("Display related packages"), tr("Collapse")))
-    , m_dependsInfomation(new QTextEdit)
-    , m_cancelBtn(new QPushButton)
-    , m_confirmBtn(new QPushButton)
+    , m_dependsInfomation(new DTextEdit)
+    , m_cancelBtn(new DPushButton)
+    , m_confirmBtn(new DPushButton)
 {
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
+
 
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
@@ -91,8 +92,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     setLayout(centralLayout);
 
-    connect(m_cancelBtn, &QPushButton::clicked, this, &UninstallConfirmPage::canceled);
-    connect(m_confirmBtn, &QPushButton::clicked, this, &UninstallConfirmPage::accepted);
+    connect(m_cancelBtn, &DPushButton::clicked, this, &UninstallConfirmPage::canceled);
+    connect(m_confirmBtn, &DPushButton::clicked, this, &UninstallConfirmPage::accepted);
     connect(m_infoControl, &InfoControlButton::expand, this, &UninstallConfirmPage::showDetail);
     connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::hideDetail);
 }

@@ -24,21 +24,21 @@
 
 #include "infocontrolbutton.h"
 
-#include <QWidget>
+#include <DWidget>
 
-#include <QPushButton>
-#include <QProgressBar>
-#include <QTextEdit>
+#include <DPushButton>
+#include <DProgressBar>
+#include <DTextEdit>
 #include <QPropertyAnimation>
 
 class PackagesListView;
 class DebListModel;
-class MultipleInstallPage : public QWidget
+class MultipleInstallPage : public DWidget
 {
     Q_OBJECT
 
 public:
-    explicit MultipleInstallPage(DebListModel *model, QWidget *parent = 0);
+    explicit MultipleInstallPage(DebListModel *model, DWidget *parent = 0);
 
 signals:
     void back() const;
@@ -55,7 +55,7 @@ private slots:
     void hideInfo();
 
     void onAutoScrollInstallList(int opIndex);
-
+    void hiddenCancelButton();
 
 private:
     DebListModel *m_debListModel;
@@ -64,9 +64,9 @@ private:
     InfoControlButton *m_infoControlButton;
     QProgressBar *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
-    QPushButton *m_installButton;
-    QPushButton *m_acceptButton;
-    QPushButton *m_backButton;
+    DPushButton *m_installButton;
+    DPushButton *m_acceptButton;
+    DPushButton *m_backButton;
 
 };
 

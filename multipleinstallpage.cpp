@@ -30,23 +30,26 @@
 #include <DTitlebar>
 
 #include <QApplication>
-#include <QLabel>
+#include <DLabel>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QVBoxLayout>
-MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
-    : QWidget(parent)
+MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
+    : DWidget(parent)
     , m_debListModel(model)
     , m_appsView(new PackagesListView)
-    , m_infoArea(new QTextEdit)
-    , m_infoControlButton(new InfoControlButton(tr("Display details"), tr("Collapse")))
+    , m_infoArea(new DTextEdit)
+    , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
     , m_installProgress(new WorkerProgress)
     , m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this))
-    , m_installButton(new BlueButton)
-    , m_acceptButton(new GrayButton)
-    , m_backButton(new GrayButton)
+    , m_installButton(new DPushButton)
+    , m_acceptButton(new DPushButton)
+    , m_backButton(new DPushButton)
 {
     PackagesListDelegate *delegate = new PackagesListDelegate;
+
+    const QFont font_const = this->font();
+    QFont font_use = font_const;
 
     m_appsView->setObjectName("AppsView");
     m_infoArea->setObjectName("InfoArea");
@@ -56,16 +59,23 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_appsView->setFixedSize(460, 186);
     m_appsView->setItemDelegate(delegate);
 
+    m_installButton->setFixedSize(120, 36);
+    m_acceptButton->setFixedSize(120, 36);
+    m_backButton->setFixedSize(120, 36);
+
     m_installButton->setText(tr("Install"));
     m_acceptButton->setText(tr("Done"));
     m_acceptButton->setVisible(false);
     m_backButton->setText(tr("Back"));
-    m_backButton->setVisible(false);
+    m_backButton->setVisible(true);
 
+    font_use.setPixelSize(11);
+    m_infoArea->setFont(font_use);
+    m_infoArea->setTextColor(QColor("#609DC8"));
     m_infoArea->setReadOnly(true);
     m_infoArea->setVisible(false);
     m_infoArea->setAcceptDrops(false);
-    m_infoArea->setFixedSize(419, 180);
+    m_infoArea->setFixedSize(460, 200);
     m_infoArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_infoControlButton->setVisible(false);
@@ -96,9 +106,10 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::hideInfo);
-    connect(m_installButton, &QPushButton::clicked, m_debListModel, &DebListModel::installAll);
-    connect(m_backButton, &QPushButton::clicked, this, &MultipleInstallPage::back);
-    connect(m_acceptButton, &QPushButton::clicked, qApp, &QApplication::quit);
+    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::installAll);
+    connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::hiddenCancelButton);
+    connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
+    connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
     connect(m_appsView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
@@ -176,4 +187,8 @@ void MultipleInstallPage::hideInfo()
     m_appsView->setVisible(true);
     m_infoArea->setVisible(false);
     emit hideAutoBarTitle();
+}
+void MultipleInstallPage::hiddenCancelButton()
+{
+     m_backButton->setVisible(false);
 }

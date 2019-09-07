@@ -22,13 +22,13 @@
 #ifndef PACKAGESLISTVIEW_H
 #define PACKAGESLISTVIEW_H
 
-#include <QListView>
-
-class PackagesListView : public QListView {
+#include <DListView>
+#include <DWidget>
+DWIDGET_USE_NAMESPACE
+class PackagesListView : public DListView {
     Q_OBJECT
-
 public:
-    explicit PackagesListView(QWidget *parent = nullptr);
+    explicit PackagesListView(DWidget *parent = nullptr);
 
 protected:
     void leaveEvent(QEvent *e);

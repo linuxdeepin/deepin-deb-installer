@@ -141,6 +141,7 @@ private:
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
+
 };
 
 #endif  // DEBLISTMODEL_H

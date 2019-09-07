@@ -24,16 +24,16 @@
 
 #include "infocontrolbutton.h"
 
-#include <QLabel>
-#include <QPushButton>
-#include <QTextEdit>
-#include <QWidget>
+#include <DLabel>
+#include <DPushButton>
+#include <DTextEdit>
+#include <DWidget>
 
-class UninstallConfirmPage : public QWidget {
+class UninstallConfirmPage : public DWidget {
     Q_OBJECT
 
 public:
-    explicit UninstallConfirmPage(QWidget *parent = 0);
+    explicit UninstallConfirmPage(DWidget *parent = 0);
 
     void setPackage(const QString &name);
     void setRequiredList(const QStringList &requiredList);
@@ -47,12 +47,12 @@ private slots:
     void hideDetail();
 
 private:
-    QLabel *m_icon;
-    QLabel *m_tips;
-    QWidget *m_infoWrapperWidget;
+    DLabel *m_icon;
+    DLabel *m_tips;
+    DWidget *m_infoWrapperWidget;
     InfoControlButton *m_infoControl;
-    QTextEdit *m_dependsInfomation;
-    QPushButton *m_cancelBtn;
-    QPushButton *m_confirmBtn;
+    DTextEdit *m_dependsInfomation;
+    DPushButton *m_cancelBtn;
+    DPushButton *m_confirmBtn;
 };
 #endif  // UNINSTALLCONFIRMPAGE_H

@@ -27,30 +27,30 @@
 #include <QDragEnterEvent>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QLabel>
+#include <DLabel>
 #include <QMimeData>
 #include <QPainter>
 #include <QPixmap>
 #include <QUrl>
 #include <QVBoxLayout>
 
-DWIDGET_USE_NAMESPACE
 
-FileChooseWidget::FileChooseWidget(QWidget *parent)
-    : QWidget(parent)
+
+FileChooseWidget::FileChooseWidget(DWidget *parent)
+    : DWidget(parent)
     , m_settings("deepin", "deepin-deb-install")
 {
     const auto ratio = devicePixelRatioF();
     setFocusPolicy(Qt::ClickFocus);
 
-    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(123, 109));
+    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(160, 160));
     iconPix.setDevicePixelRatio(ratio);
-    QLabel *iconImage = new QLabel;
+    DLabel *iconImage = new DLabel;
     iconImage->setFixedSize(160, 160);
     iconImage->setAlignment(Qt::AlignCenter);
     iconImage->setPixmap(iconPix);
 
-    QLabel *dndTips = new QLabel;
+    DLabel *dndTips = new DLabel;
     dndTips->setText(tr("Drag and drop file here"));
     dndTips->setAlignment(Qt::AlignHCenter);
     dndTips->setObjectName("DNDTips");
@@ -63,17 +63,18 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centerWrapLayout->setSpacing(0);
     centerWrapLayout->setContentsMargins(0, 0, 0, 0);
 
-    QWidget *centerWidget = new QFrame;
+    DWidget *centerWidget = new DFrame;
     centerWidget->setFixedWidth(270);
 
     centerWidget->setLayout(centerWrapLayout);
     centerWidget->setObjectName("CenterWidget");
-    QLabel *split_line = new QLabel;
+    DLabel *split_line = new DLabel;
     split_line->setObjectName("SplitLine");
     split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setAlignment(Qt::AlignCenter);
 
-    m_fileChooseBtn = new DLinkButton;
+    m_fileChooseBtn = new DPushButton;
+    m_fileChooseBtn->setFixedSize(120,36);
     m_fileChooseBtn->setObjectName("FileChooseButton");
     m_fileChooseBtn->setText(tr("Select File"));
 
@@ -90,7 +91,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centralLayout->setContentsMargins(0, 0, 0, 60);
 
     setLayout(centralLayout);
-    connect(m_fileChooseBtn, &QPushButton::clicked, this, &FileChooseWidget::chooseFiles);
+    connect(m_fileChooseBtn, &DPushButton::clicked, this, &FileChooseWidget::chooseFiles);
 }
 
 void FileChooseWidget::chooseFiles()

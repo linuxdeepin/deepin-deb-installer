@@ -24,23 +24,21 @@
 
 #include "infocontrolbutton.h"
 
-#include <QLabel>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QTextEdit>
-#include <QWidget>
+#include <DLabel>
+#include <DProgressBar>
+#include <DPushButton>
+#include <DTextEdit>
+#include <DWidget>
 
 #include <QApt/DebFile>
 
-#include <dlinkbutton.h>
-
 class DebListModel;
-class SingleInstallPage : public QWidget
+class SingleInstallPage : public DWidget
 {
     Q_OBJECT
 
 public:
-    explicit SingleInstallPage(DebListModel *model, QWidget *parent = 0);
+    explicit SingleInstallPage(DebListModel *model, DWidget *parent = 0);
 
 signals:
     void back() const;
@@ -73,22 +71,23 @@ private:
     int m_operate;
     bool m_workerStarted;
     DebListModel *m_packagesModel;
-    QWidget *m_itemInfoWidget;
-    QLabel *m_packageIcon;
-    QLabel *m_packageName;
-    QLabel *m_packageVersion;
-    QLabel *m_packageDescription;
-    QLabel *m_tipsLabel;
-    QProgressBar *m_progress;
-    QTextEdit *m_workerInfomation;
-    QWidget *m_strengthWidget;
+    DWidget *m_itemInfoWidget;
+    DLabel *m_packageIcon;
+    DLabel *m_packageName;
+    DLabel *m_packageVersion;
+    DLabel *m_packageDescription;
+    DLabel *m_tipsLabel;
+    DProgressBar *m_progress;
+    DTextEdit *m_workerInfomation;
+    DWidget *m_strengthWidget;
     InfoControlButton *m_infoControlButton;
-    QPushButton *m_installButton;
-    QPushButton *m_uninstallButton;
-    QPushButton *m_reinstallButton;
-    QPushButton *m_confirmButton;
-    QPushButton *m_backButton;
-    QPushButton *m_doneButton;
+    DPushButton *m_installButton;
+    DPushButton *m_uninstallButton;
+    DPushButton *m_reinstallButton;
+    DPushButton *m_confirmButton;
+    DPushButton *m_backButton;
+    DPushButton *m_doneButton;
+
 };
 
 #endif  // SINGLEINSTALLPAGE_H

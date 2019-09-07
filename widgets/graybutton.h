@@ -22,9 +22,8 @@
 #ifndef GRAYBUTTON_H
 #define GRAYBUTTON_H
 
-#include <QPushButton>
 #include <DSuggestButton>
-
+#include <DWidget>
 DWIDGET_USE_NAMESPACE
 
 class GrayButton : public DSuggestButton
@@ -32,7 +31,7 @@ class GrayButton : public DSuggestButton
     Q_OBJECT
 
 public:
-    explicit GrayButton(QWidget *parent = 0);
+    explicit GrayButton(DWidget *parent = 0);
 };
 
 #endif // GRAYBUTTON_H

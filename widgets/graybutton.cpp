@@ -21,7 +21,7 @@
 
 #include "graybutton.h"
 
-GrayButton::GrayButton(QWidget *parent)
+GrayButton::GrayButton(DWidget *parent)
     : DSuggestButton(parent) {
     setFixedSize(120, 36);
 

@@ -23,15 +23,13 @@
 #define FILECHOOSEWIDGET_H
 
 #include <QSettings>
-#include <QWidget>
-
-#include <dlinkbutton.h>
-
-class FileChooseWidget : public QWidget {
+#include <DPushButton>
+DWIDGET_USE_NAMESPACE
+class FileChooseWidget : public DWidget {
     Q_OBJECT
 
 public:
-    explicit FileChooseWidget(QWidget *parent = nullptr);
+    explicit FileChooseWidget(DWidget *parent = nullptr);
 
 signals:
     void packagesSelected(const QStringList files) const;
@@ -40,7 +38,7 @@ private slots:
     void chooseFiles();
 
 private:
-    Dtk::Widget::DLinkButton *m_fileChooseBtn;
+    DPushButton *m_fileChooseBtn;
     QSettings m_settings;
 };
 

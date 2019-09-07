@@ -22,13 +22,14 @@
 #ifndef WORKERPROGRESS_H
 #define WORKERPROGRESS_H
 
-#include <QProgressBar>
-
-class WorkerProgress : public QProgressBar {
+#include <DProgressBar>
+#include <DWidget>
+DWIDGET_USE_NAMESPACE
+class WorkerProgress : public DProgressBar {
     Q_OBJECT
 
 public:
-    explicit WorkerProgress(QWidget *parent = 0);
+    explicit WorkerProgress(DWidget *parent = 0);
 };
 
 #endif  // WORKERPROGRESS_H
