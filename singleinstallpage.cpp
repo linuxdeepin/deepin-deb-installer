@@ -120,7 +120,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(60, 70);
+    m_packageIcon->setFixedSize(80, 90);
     font_use.setPixelSize(14);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageName->setFont(font_use);
@@ -265,6 +265,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
 
 void SingleInstallPage::install()
 {
+    m_backButton->setVisible(false);
+    m_installButton->setVisible(false);
+
     m_operate = Install;
     m_packagesModel->installAll();
 }
@@ -272,6 +275,10 @@ void SingleInstallPage::install()
 void SingleInstallPage::uninstallCurrentPackage()
 {
     m_infoControlButton->setShowText(tr("Display uninstall details"));
+    m_backButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_uninstallButton->setVisible(false);
+
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
 }

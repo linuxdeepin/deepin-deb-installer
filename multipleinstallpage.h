@@ -62,7 +62,7 @@ private:
     PackagesListView *m_appsView;
     QTextEdit *m_infoArea;
     InfoControlButton *m_infoControlButton;
-    QProgressBar *m_installProgress;
+    DProgressBar *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;

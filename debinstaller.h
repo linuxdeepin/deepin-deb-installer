@@ -27,7 +27,8 @@
 #include <QStackedLayout>
 
 #include <DMainWindow>
-
+#include <DWidget>
+DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
@@ -35,7 +36,7 @@ class DebInstaller : public Dtk::Widget::DMainWindow {
     Q_OBJECT
 
 public:
-    DebInstaller(QWidget *parent = nullptr);
+    DebInstaller(DWidget *parent = nullptr);
     virtual ~DebInstaller();
 
 protected:
@@ -45,7 +46,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
-    void toggleDarkTheme(bool checked);
+    void toggleDarkTheme();
+    void toggleLightTheme();
     void reloadTheme();
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
@@ -66,10 +68,10 @@ private:
 
     QStackedLayout *m_centralLayout;
     QSettings *m_qsettings;
-    QMenu *m_tbMenu;
+    DMenu *m_tbMenu;
     QAction *m_darkThemeAction;
 
-    QPointer<QWidget> m_lastPage;
+    QPointer<DWidget> m_lastPage;
 };
 
 #endif  // DEBINSTALLER_H

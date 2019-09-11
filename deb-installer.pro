@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets concurrent
+QT       += core gui widgets concurrent dtkwidget
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,7 +12,7 @@ TARGET = deepin-deb-installer
 TEMPLATE = app
 LIBS += -L /usr/lib
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget libqapt
+PKGCONFIG +=  libqapt
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -191,4 +191,4 @@ DISTFILES += \
 RESOURCES += \
     resources/resources.qrc
 
-TRANSLATIONS += ./deepin-deb-installer_zh_CN.ts
+TRANSLATIONS += ./translations/deepin-deb-installer_zh_CN.ts

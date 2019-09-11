@@ -25,6 +25,7 @@
 #include "multipleinstallpage.h"
 #include "singleinstallpage.h"
 #include "uninstallconfirmpage.h"
+#include "utils.h"
 
 #include <QAction>
 #include <QDebug>
@@ -36,40 +37,42 @@
 #include <QMimeData>
 #include <QProcess>
 #include <QScreen>
-
+#include <QStyleFactory>
 #include <QApt/DebFile>
 
 #include <DRecentManager>
 #include <DThemeManager>
 #include <DTitlebar>
-#include "utils.h"
+#include <DApplication>
 using QApt::DebFile;
 
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-#define THEME_DARK "dark"
-#define THEME_LIGHT "light"
+#define THEME_DARK 2 //"dark"
+#define THEME_LIGHT 1 //"light"
 
-DebInstaller::DebInstaller(QWidget *parent)
+DebInstaller::DebInstaller(DWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout)
     , m_qsettings(new QSettings(this))
     , m_tbMenu(new QMenu(this))
-    , m_darkThemeAction(new QAction(tr("Dark theme"), this)) {
+    , m_darkThemeAction(new QAction(tr("Theme"), this)) {
+
+    QFont font = this->font();
 
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    QWidget *wrapWidget = new QWidget;
+    DWidget *wrapWidget = new DWidget;
     wrapWidget->setLayout(m_centralLayout);
 
     const auto ratio = devicePixelRatioF();
-    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(123, 109));
+    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
     iconPix.setDevicePixelRatio(ratio);
 
     DTitlebar *tb = titlebar();
@@ -78,16 +81,9 @@ DebInstaller::DebInstaller(QWidget *parent)
 #if DTK_VERSION >= 0x02000600
     tb->setBackgroundTransparent(true);
 #endif
-    tb->setMenu(m_tbMenu);
-    m_tbMenu->addAction(m_darkThemeAction);
-    m_tbMenu->addSeparator();
-
-    m_darkThemeAction->setCheckable(true);
-
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
-    setWindowRadius(18);  //待注释代码，圆角 18px
     setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
@@ -98,37 +94,51 @@ DebInstaller::DebInstaller(QWidget *parent)
     [ = ](const QString & output) {
         qDebug() << output.trimmed();
     });
-    connect(m_darkThemeAction, &QAction::toggled, this, &DebInstaller::toggleDarkTheme);
 
     reloadTheme();
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::paletteTypeChanged,
+                         [this] (DGuiApplicationHelper::ColorType type) {
+            qDebug() << "Update Theme type:" << type;
+            //Save theme value
+            m_qsettings->setValue("theme", type);
+        });
 }
 
 DebInstaller::~DebInstaller() {}
 
-void DebInstaller::toggleDarkTheme(bool checked)
+void DebInstaller::toggleDarkTheme()
 {
-    m_qsettings->setValue("theme", checked ? THEME_DARK : THEME_LIGHT);
-    reloadTheme();
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::DarkType;
+    DGuiApplicationHelper::instance()->setPaletteType(colorType);
 }
-
+void DebInstaller::toggleLightTheme()
+{
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::LightType;
+    DGuiApplicationHelper::instance()->setPaletteType(colorType);
+}
 void DebInstaller::reloadTheme()
 {
-    QString theme = m_qsettings->value("theme").toString();
-    if (theme.isEmpty()) {
-        theme = THEME_LIGHT;
+    int theme = m_qsettings->value("theme").toInt();
+    if (theme == 0) {
+        theme = 1;
         m_qsettings->setValue("theme", THEME_LIGHT);
     }
 
-    m_darkThemeAction->setChecked(theme == THEME_DARK);
+    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::UnknownType;
+    if(theme == 1)
+        colorType = DGuiApplicationHelper::ColorType::LightType;
+    else if(theme == 2)
+        colorType = DGuiApplicationHelper::ColorType::DarkType;
 
-    QFile themeFile(theme == THEME_DARK ? ":/theme/dark/dark.qss" : ":/theme/light/light.qss");
-    if (!themeFile.open(QFile::ReadOnly)) {
-        qDebug() << "theme file not find!" << themeFile.fileName();
-    }
+    DGuiApplicationHelper::instance()->setPaletteType(colorType);
+//    QFile themeFile(theme == THEME_DARK ? ":/theme/dark/dark.qss" : ":/theme/light/light.qss");
+//    if (!themeFile.open(QFile::ReadOnly)) {
+//        qDebug() << "theme file not find!" << themeFile.fileName();
+//    }
 
     //setStyleSheet(themeFile.readAll());
 
-    DThemeManager::instance()->setTheme(theme);
+    //DThemeManager::instance()->setTheme(theme);
 }
 
 void DebInstaller::keyPressEvent(QKeyEvent *e)
@@ -302,7 +312,7 @@ void DebInstaller::refreshInstallPage()
 SingleInstallPage *DebInstaller::backToSinglePage()
 {
     Q_ASSERT(m_centralLayout->count() == 3);
-    QWidget *confirmPage = m_centralLayout->widget(2);
+    DWidget *confirmPage = m_centralLayout->widget(2);
     m_centralLayout->removeWidget(confirmPage);
     confirmPage->deleteLater();
 

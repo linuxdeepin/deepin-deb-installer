@@ -44,7 +44,8 @@ bool isDpkgRunning()
 
     const QString output = proc.readAllStandardOutput();
     for (const auto &item : output.split('\n'))
-        if (item == "dpkg") return true;
+        if (item == "dpkg")
+            return true;
 
     return false;
 }
@@ -61,7 +62,6 @@ const QString workerErrorString(const int e)
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     }
-
     return QApplication::translate("DebListModel", "Installation Failed");
 }
 
@@ -254,7 +254,7 @@ int DebListModel::getInstallFileSize()
 
 void DebListModel::reset()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerFinished, Q_FUNC_INFO, "worker status error");
+    //Q_ASSERT_X(m_workerStatus == WorkerFinished, Q_FUNC_INFO, "worker status error");
 
     m_workerStatus = WorkerPrepare;
     m_operatingIndex = 0;
