@@ -40,6 +40,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     QPalette pe;
     pe.setColor(QPalette::WindowText, QColor("#0082FA"));
     m_arrowIcon->setAlignment(Qt::AlignCenter);
+    const int theme = m_qsettings.value("theme").toInt();
     m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(18, 7));//21.8
     m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setFont(m_font);
@@ -74,6 +75,8 @@ void InfoControlButton::onMouseRelease()
         emit expand();
 
     m_expand = !m_expand;
+
+    const int theme = m_qsettings.value("theme").toInt();
 
     if (!m_expand) {
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(21, 8));

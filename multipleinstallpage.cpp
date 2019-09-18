@@ -132,8 +132,8 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
     m_infoArea->append(output.trimmed());
 
     // change to install
-    if (m_installButton->isVisible()) {
-        m_installButton->setVisible(false);
+    if (!m_installButton->isVisible()) {
+        //m_installButton->setVisible(false);
 
         m_installProgress->setVisible(true);
         m_infoControlButton->setVisible(true);
@@ -191,4 +191,10 @@ void MultipleInstallPage::hideInfo()
 void MultipleInstallPage::hiddenCancelButton()
 {
      m_backButton->setVisible(false);
+     m_installButton->setVisible(false);
+}
+void MultipleInstallPage::afterGetAutherFalse()
+{
+    m_backButton->setVisible(true);
+    m_installButton->setVisible(true);
 }

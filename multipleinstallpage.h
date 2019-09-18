@@ -40,6 +40,7 @@ class MultipleInstallPage : public DWidget
 public:
     explicit MultipleInstallPage(DebListModel *model, DWidget *parent = 0);
 
+    void afterGetAutherFalse();
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets concurrent dtkwidget
+QT       += core gui widgets concurrent dtkwidget dtkgui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

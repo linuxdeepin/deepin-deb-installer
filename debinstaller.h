@@ -57,6 +57,8 @@ private slots:
 
     void reset();
     void removePackage(const int index);
+    void changeDragFlag();
+    void showHiddenButton();
 
 private:
     void refreshInstallPage();
@@ -72,6 +74,7 @@ private:
     QAction *m_darkThemeAction;
 
     QPointer<DWidget> m_lastPage;
+    int m_dragflag;
 };
 
 #endif  // DEBINSTALLER_H

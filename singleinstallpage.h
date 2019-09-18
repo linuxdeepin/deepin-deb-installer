@@ -40,6 +40,8 @@ class SingleInstallPage : public DWidget
 public:
     explicit SingleInstallPage(DebListModel *model, DWidget *parent = 0);
 
+    void afterGetAutherFalse();
+
 signals:
     void back() const;
     void requestUninstallConfirm() const;
@@ -51,6 +53,7 @@ private:
     enum Operate {
         Install,
         Uninstall,
+        Reinstall
     };
 
 private:
@@ -58,6 +61,7 @@ private:
 
 private slots:
     void install();
+    void reinstall();
 
     void showInfomation();
     void hideInfomation();

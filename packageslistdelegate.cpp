@@ -27,8 +27,8 @@
 #include <QApplication>
 #include <QPainter>
 
-#define THEME_DARK "dark"
-#define THEME_LIGHT "light"
+#define THEME_DARK 2//"dark"
+#define THEME_LIGHT 1//"light"
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,7 +52,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     const int content_x = 45;
 
-    const QString &theme = m_qsettings.value("theme").toString();
+    const int &theme = m_qsettings.value("theme").toInt();
 
     // draw top border
     if (index.row()) {
@@ -69,7 +69,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     // draw package icon
     const int x = 5;
     const int y =
-
         option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2 - 4;
     painter->drawPixmap(x, y, m_packageIcon);
 
@@ -139,7 +138,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     } else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
                index.data(DebListModel::ItemIsCurrentRole).toBool()) {
         // draw remove icon
-        const int x = option.rect.right() - m_removeIcon.width() / m_removeIcon.devicePixelRatio() - 10;
+        const int x = option.rect.right() - m_removeIcon.width() / m_removeIcon.devicePixelRatio() - 18;
         const int y =
             option.rect.top() + (option.rect.height() - m_removeIcon.height() / m_removeIcon.devicePixelRatio()) / 2;
         painter->drawPixmap(x, y, m_removeIcon);

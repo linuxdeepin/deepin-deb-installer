@@ -221,7 +221,7 @@ void DebListModel::onTransactionErrorOccurred()
         qDebug() << "reset env to prepare";
 
         // reset env
-
+        emit AuthCancel();
         emit lockForAuth(false);
 
         m_workerStatus = WorkerPrepare;

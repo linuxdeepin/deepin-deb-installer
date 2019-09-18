@@ -248,7 +248,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::showInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::hideInfomation);
     connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::install);
-    connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::install);
+    connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::reinstall);
     connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
     connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
@@ -262,7 +262,18 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     else
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 }
+void SingleInstallPage::reinstall()
+{
+    m_backButton->setVisible(false);
+    m_installButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_uninstallButton->setVisible(false);
 
+    m_operate = Reinstall;
+    m_packagesModel->installAll();
+
+
+}
 void SingleInstallPage::install()
 {
     m_backButton->setVisible(false);
@@ -342,7 +353,7 @@ void SingleInstallPage::onWorkerFinished()
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
 
-        if (m_operate == Install) {
+        if (m_operate == Install || m_operate == Reinstall) {
             m_infoControlButton->setShowText(tr("Display install details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             QPalette pe;
@@ -363,7 +374,7 @@ void SingleInstallPage::onWorkerFinished()
         pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
         m_tipsLabel->setPalette(pe);
 
-        if (m_operate == Install)
+        if (m_operate == Install || m_operate == Reinstall)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         else
         {
@@ -442,5 +453,25 @@ void SingleInstallPage::setPackageInfo()
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
+    }
+}
+void SingleInstallPage::afterGetAutherFalse()
+{
+    if( m_operate == Install)
+    {
+        m_backButton->setVisible(true);
+        m_installButton->setVisible(true);
+    }
+    else if(m_operate == Uninstall)
+    {
+        m_backButton->setVisible(true);
+        m_reinstallButton->setVisible(true);
+        m_uninstallButton->setVisible(true);
+    }
+    else if(m_operate == Reinstall)
+    {
+        m_backButton->setVisible(true);
+        m_reinstallButton->setVisible(true);
+        m_uninstallButton->setVisible(true);
     }
 }

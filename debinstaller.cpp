@@ -73,6 +73,7 @@ DebInstaller::DebInstaller(DWidget *parent)
 
     const auto ratio = devicePixelRatioF();
     QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
+    iconPix.scaled(10, 10);
     iconPix.setDevicePixelRatio(ratio);
 
     DTitlebar *tb = titlebar();
@@ -102,6 +103,9 @@ DebInstaller::DebInstaller(DWidget *parent)
             //Save theme value
             m_qsettings->setValue("theme", type);
         });
+    connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
+    connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
+    m_dragflag = -1;
 }
 
 DebInstaller::~DebInstaller() {}
@@ -156,6 +160,9 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 
 void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
 {
+    if(m_dragflag == 0)
+        return;
+
     auto *const mime = e->mimeData();
     if (!mime->hasUrls()) return e->ignore();
 
@@ -259,6 +266,7 @@ void DebInstaller::reset()
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
 
+    m_dragflag = -1;
     titlebar()->setTitle(QString());
     m_fileListModel->reset();
     m_lastPage->deleteLater();
@@ -291,6 +299,7 @@ void DebInstaller::refreshInstallPage()
 
         m_lastPage = singlePage;
         m_centralLayout->addWidget(singlePage);
+        m_dragflag = 0;
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
@@ -303,6 +312,7 @@ void DebInstaller::refreshInstallPage()
 
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
+        m_dragflag = 1;
     }
 
     // switch to new page.
@@ -320,4 +330,21 @@ SingleInstallPage *DebInstaller::backToSinglePage()
     Q_ASSERT(p);
 
     return p;
+}
+void DebInstaller::changeDragFlag()
+{
+    m_dragflag = 0;
+}
+void DebInstaller::showHiddenButton()
+{
+    if(m_dragflag == 0)
+    {
+        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage*>(m_lastPage);
+        singlePage->afterGetAutherFalse();
+    }
+    else if(m_dragflag == 1)
+    {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage*>(m_lastPage);
+        multiplePage->afterGetAutherFalse();
+    }
 }

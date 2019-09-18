@@ -105,6 +105,7 @@ signals:
     void packageDependsChanged(const QModelIndex &index, int status) const;
 
     void onChangeOperateIndex(int opIndex);
+    void AuthCancel();
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
