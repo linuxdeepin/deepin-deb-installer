@@ -68,6 +68,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // draw package icon
     const int x = 5;
+    int a = option.rect.top();
+    a = option.rect.height();
+
     const int y =
         option.rect.top() + (option.rect.height() - m_packageIcon.height() / m_packageIcon.devicePixelRatio()) / 2 - 4;
     painter->drawPixmap(x, y, m_packageIcon);

@@ -67,7 +67,12 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     m_acceptButton->setText(tr("Done"));
     m_acceptButton->setVisible(false);
     m_backButton->setText(tr("Back"));
-    m_backButton->setVisible(true);
+    m_backButton->setVisible(false);
+
+    font_use.setPixelSize(14);
+    m_installButton->setFont(font_use);
+    m_acceptButton->setFont(font_use);
+    m_backButton->setFont(font_use);
 
     font_use.setPixelSize(11);
     m_infoArea->setFont(font_use);
@@ -123,7 +128,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
 void MultipleInstallPage::onWorkerFinshed()
 {
     m_acceptButton->setVisible(true);
-    m_backButton->setVisible(true);
+    //m_backButton->setVisible(true);
     m_installProgress->setVisible(false);
 }
 
@@ -190,11 +195,11 @@ void MultipleInstallPage::hideInfo()
 }
 void MultipleInstallPage::hiddenCancelButton()
 {
-     m_backButton->setVisible(false);
+     //m_backButton->setVisible(false);
      m_installButton->setVisible(false);
 }
 void MultipleInstallPage::afterGetAutherFalse()
 {
-    m_backButton->setVisible(true);
+    //m_backButton->setVisible(true);
     m_installButton->setVisible(true);
 }

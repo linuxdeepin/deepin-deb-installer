@@ -45,31 +45,38 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
 
     QFont font = this->font();
 
-    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(162, 162));
+    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(160, 160));
     iconPix.setDevicePixelRatio(ratio);
     DLabel *iconImage = new DLabel;
-    iconImage->setFixedSize(162, 162);
+    iconImage->setFixedSize(160, 160);
     iconImage->setAlignment(Qt::AlignCenter);
     iconImage->setPixmap(iconPix);
-
+#ifdef SHOWBORDER
+    iconImage->setStyleSheet("QLabel{border:1px solid black;}");
+#endif
     DLabel *dndTips = new DLabel;
     dndTips->setText(tr("Drag and drop file here"));
     dndTips->setAlignment(Qt::AlignHCenter);
     dndTips->setObjectName("DNDTips");
     font.setPixelSize(12);
     dndTips->setFont(font);
-
+    dndTips->setFixedHeight(15);
+#ifdef SHOWBORDER
+    dndTips->setStyleSheet("QLabel{border:1px solid black;}");
+#endif
     QVBoxLayout *centerWrapLayout = new QVBoxLayout;
     centerWrapLayout->addWidget(iconImage);
     centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignHCenter);
-    centerWrapLayout->addSpacing(22);
+    centerWrapLayout->addSpacing(28);
     centerWrapLayout->addWidget(dndTips, Qt::AlignHCenter);
     centerWrapLayout->setSpacing(0);
     centerWrapLayout->setContentsMargins(0, 0, 0, 0);
 
     DWidget *centerWidget = new DFrame;
     centerWidget->setFixedWidth(270);
-
+#ifdef SHOWBORDER
+centerWidget->setStyleSheet("QWidget{border:1px solid black;}");
+#endif
     centerWidget->setLayout(centerWrapLayout);
     centerWidget->setObjectName("CenterWidget");
     DLabel *split_line = new DLabel;
@@ -88,14 +95,16 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     m_fileChooseBtn->setFlat(true);
     font.setPixelSize(12);
     m_fileChooseBtn->setFont(font);
-
+#ifdef SHOWBORDER
+    m_fileChooseBtn->setStyleSheet("QPushButton{border:1px solid black;}");
+#endif
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->addSpacing(42);
+    centralLayout->addSpacing(32);
     centralLayout->addWidget(centerWidget);
     centralLayout->setAlignment(centerWidget, Qt::AlignTop | Qt::AlignCenter);
     centralLayout->addSpacing(17);
     centralLayout->addWidget(split_line);
-    centralLayout->addSpacing(6);
+    centralLayout->addSpacing(12);
     centralLayout->addWidget(m_fileChooseBtn);
     centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignCenter);
     centralLayout->setSpacing(0);

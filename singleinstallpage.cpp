@@ -120,13 +120,23 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(80, 90);
+    m_packageIcon->setFixedSize(62, 72);
     font_use.setPixelSize(14);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageName->setFont(font_use);
     m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_packageVersion->setFont(font_use);
+    font_use.setPixelSize(12);
+    m_tipsLabel->setFont(font_use);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
+//#define SHOWBORDER
+#ifdef SHOWBORDER
+    m_packageName->setStyleSheet("QLabel{border: 1px solid black;}");
+    m_packageVersion->setStyleSheet("QLabel{border: 1px solid black;}");
+    m_workerInfomation->setStyleSheet("QLabel{border: 1px solid black;}");
+    m_packageDescription->setStyleSheet("QLabel{border: 1px solid red;}");
+    m_packageIcon->setStyleSheet("QLabel{border: 1px solid black;}");
+#endif
 
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
@@ -160,11 +170,18 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_confirmButton->setFixedSize(120,36);
     m_backButton->setFixedSize(120,36);
     m_doneButton->setFixedSize(120,36);
+    font_use.setPixelSize(14);
+    m_installButton->setFont(font_use);
+    m_uninstallButton->setFont(font_use);
+    m_reinstallButton->setFont(font_use);
+    m_confirmButton->setFont(font_use);
+    m_backButton->setFont(font_use);
+    m_doneButton->setFont(font_use);
 
     m_packageDescription->setFixedHeight(80);
     font_use.setPixelSize(12);
     m_packageDescription->setFont(font_use);
-    m_packageDescription->setFixedWidth(320);
+    m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     font_use.setPixelSize(12);
     m_packageDescription->setFont(font_use);
@@ -182,7 +199,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     packageVersion->setFont(font_use);
     packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
-
+#ifdef SHOWBORDER
+    packageName->setStyleSheet("QLabel{border: 1px solid black;}");
+    packageVersion->setStyleSheet("QLabel{border: 1px solid black;}");
+#endif
     QGridLayout *itemInfoLayout = new QGridLayout;
     itemInfoLayout->addWidget(packageName, 0, 0);
     itemInfoLayout->addWidget(m_packageName, 0, 1);
@@ -209,11 +229,11 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addWidget(m_doneButton);
     btnsLayout->addStretch();
-    btnsLayout->setSpacing(0);
+    btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(45);
+    itemLayout->addSpacing(35);
     itemLayout->addLayout(itemBlockLayout);
     itemLayout->addSpacing(20);
     itemLayout->addWidget(m_packageDescription);
@@ -241,7 +261,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     centralLayout->addSpacing(8);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(20, 0, 20, 30);
+    centralLayout->setContentsMargins(10, 0, 10, 30);
 
     setLayout(centralLayout);
 
@@ -338,9 +358,6 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
-    QFont font = this->font();
-    font.setPixelSize(12);
-    m_tipsLabel->setFont(font);
     m_progress->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -402,7 +419,7 @@ void SingleInstallPage::setPackageInfo()
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
     const QPixmap iconPix = icon.pixmap(m_packageIcon->size());
-
+    iconPix.scaled(42,52,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_itemInfoWidget->setVisible(true);
     m_packageIcon->setPixmap(iconPix);
     m_packageName->setText(package->packageName());
@@ -426,7 +443,7 @@ void SingleInstallPage::setPackageInfo()
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
-    m_backButton->setVisible(true);
+    //m_backButton->setVisible(true);
 
     if (installed) {
         if (installedSameVersion) {
@@ -459,18 +476,18 @@ void SingleInstallPage::afterGetAutherFalse()
 {
     if( m_operate == Install)
     {
-        m_backButton->setVisible(true);
+        //m_backButton->setVisible(true);
         m_installButton->setVisible(true);
     }
     else if(m_operate == Uninstall)
     {
-        m_backButton->setVisible(true);
+        //m_backButton->setVisible(true);
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }
     else if(m_operate == Reinstall)
     {
-        m_backButton->setVisible(true);
+        //m_backButton->setVisible(true);
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }

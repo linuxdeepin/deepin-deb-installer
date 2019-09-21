@@ -73,10 +73,10 @@ DebInstaller::DebInstaller(DWidget *parent)
 
     const auto ratio = devicePixelRatioF();
     QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
-    iconPix.scaled(10, 10);
     iconPix.setDevicePixelRatio(ratio);
 
     DTitlebar *tb = titlebar();
+    tb->setFixedHeight(50);
     tb->setIcon(QIcon(iconPix));
     tb->setTitle(QString());
 #if DTK_VERSION >= 0x02000600
@@ -299,7 +299,7 @@ void DebInstaller::refreshInstallPage()
 
         m_lastPage = singlePage;
         m_centralLayout->addWidget(singlePage);
-        m_dragflag = 0;
+        m_dragflag = 2;
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
@@ -333,11 +333,12 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 }
 void DebInstaller::changeDragFlag()
 {
+    repaint();
     m_dragflag = 0;
 }
 void DebInstaller::showHiddenButton()
 {
-    if(m_dragflag == 0)
+    if(m_dragflag == 2)
     {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage*>(m_lastPage);
         singlePage->afterGetAutherFalse();

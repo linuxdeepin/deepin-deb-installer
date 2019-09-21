@@ -132,7 +132,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         else
             return Prepare;
     case Qt::SizeHintRole:
-        return QSize(0, 60);
+        return QSize(0, 48);
     default:
         ;
     }

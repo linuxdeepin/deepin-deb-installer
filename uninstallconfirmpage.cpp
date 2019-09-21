@@ -44,6 +44,12 @@ UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
 //        "QLabel {"
 //        "padding: 20px 0 0 0;"
 //        "}");
+    QFont font = this->font();
+    font.setPixelSize(14);
+    m_cancelBtn->setFont(font);
+    m_confirmBtn->setFont(font);
+    m_dependsInfomation->setFont(font);
+
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
