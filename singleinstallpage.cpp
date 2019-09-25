@@ -120,13 +120,15 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
-    m_packageIcon->setFixedSize(62, 72);
+    m_packageIcon->setFixedSize(64, 64);
     font_use.setPixelSize(14);
+    font_use.setWeight(QFont::Normal);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_packageName->setFont(font_use);
-    m_packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_packageVersion->setFont(font_use);
     font_use.setPixelSize(12);
+    font_use.setWeight(QFont::Normal);
     m_tipsLabel->setFont(font_use);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 //#define SHOWBORDER
@@ -171,6 +173,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_backButton->setFixedSize(120,36);
     m_doneButton->setFixedSize(120,36);
     font_use.setPixelSize(14);
+    font_use.setWeight(QFont::Medium);
     m_installButton->setFont(font_use);
     m_uninstallButton->setFont(font_use);
     m_reinstallButton->setFont(font_use);
@@ -178,17 +181,17 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_backButton->setFont(font_use);
     m_doneButton->setFont(font_use);
 
-    m_packageDescription->setFixedHeight(80);
-    font_use.setPixelSize(12);
-    m_packageDescription->setFont(font_use);
+    m_packageDescription->setFixedHeight(70);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     font_use.setPixelSize(12);
+    font_use.setWeight(QFont::Normal);
     m_packageDescription->setFont(font_use);
 
     DLabel *packageName = new DLabel;
     packageName->setText(tr("Name: "));
     font_use.setPixelSize(14);
+    font_use.setWeight(QFont::Medium);
     packageName->setFont(font_use);
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
@@ -196,8 +199,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     DLabel *packageVersion = new DLabel;
     packageVersion->setText(tr("Version: "));
     font_use.setPixelSize(14);
+    font_use.setWeight(QFont::Medium);
     packageVersion->setFont(font_use);
-    packageVersion->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 #ifdef SHOWBORDER
     packageName->setStyleSheet("QLabel{border: 1px solid black;}");
@@ -213,7 +217,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
-    itemBlockLayout->setSpacing(112);
+   // itemBlockLayout->setSpacing(112);
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
     itemBlockLayout->addStretch();
@@ -248,7 +252,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_strengthWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_strengthWidget->setVisible(false);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_itemInfoWidget);
     centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoControlButton);
@@ -316,6 +320,7 @@ void SingleInstallPage::uninstallCurrentPackage()
 
 void SingleInstallPage::showInfomation()
 {
+    centralLayout->setContentsMargins(20, 0, 20, 30);
     m_workerInfomation->setVisible(true);
     m_strengthWidget->setVisible(true);
     m_itemInfoWidget->setVisible(false);
@@ -323,6 +328,7 @@ void SingleInstallPage::showInfomation()
 
 void SingleInstallPage::hideInfomation()
 {
+    centralLayout->setContentsMargins(10, 0, 10, 30);
     m_workerInfomation->setVisible(false);
     m_strengthWidget->setVisible(false);
     m_itemInfoWidget->setVisible(true);
@@ -418,8 +424,9 @@ void SingleInstallPage::setPackageInfo()
     DebFile *package = m_packagesModel->preparedPackages().first();
 
     const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
-    const QPixmap iconPix = icon.pixmap(m_packageIcon->size());
-    iconPix.scaled(42,52,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    QPixmap iconPix = icon.pixmap(m_packageIcon->size());
+
     m_itemInfoWidget->setVisible(true);
     m_packageIcon->setPixmap(iconPix);
     m_packageName->setText(package->packageName());

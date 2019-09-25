@@ -28,13 +28,14 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QTimer>
+#include <DApplicationSettings>
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #else
 DCORE_USE_NAMESPACE
 #endif
-
+#include "utils.h"
 #define RECENT_PATH QDir::homePath() + "/.local/share/recently-used.xbel"
 
 int main(int argc, char *argv[])
@@ -55,8 +56,13 @@ int main(int argc, char *argv[])
     app.setApplicationDescription(QApplication::translate(
                                       "main",
                                       "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
-    app.setStyle("chameleon");
 
+    QFont btnFont = Utils::loadFontFamilyFromFiles(":/font/SourceHanSansCN-Medium.ttf");
+    app.setFont(btnFont);
+
+    DApplicationSettings settings;
+
+    //app.setStyle("chameleon");
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 

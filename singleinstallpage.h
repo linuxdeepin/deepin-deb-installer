@@ -92,6 +92,7 @@ private:
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
 
+     QVBoxLayout *centralLayout;
 };
 
 #endif  // SINGLEINSTALLPAGE_H

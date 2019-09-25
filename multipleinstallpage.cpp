@@ -46,7 +46,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     , m_acceptButton(new DPushButton)
     , m_backButton(new DPushButton)
 {
-    PackagesListDelegate *delegate = new PackagesListDelegate;
+    PackagesListDelegate *delegate = new PackagesListDelegate(m_appsView);
 
     const QFont font_const = this->font();
     QFont font_use = font_const;
@@ -80,7 +80,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     m_infoArea->setReadOnly(true);
     m_infoArea->setVisible(false);
     m_infoArea->setAcceptDrops(false);
-    m_infoArea->setFixedSize(460, 200);
+    m_infoArea->setFixedHeight(200);
     m_infoArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_infoControlButton->setVisible(false);
@@ -95,7 +95,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_appsView, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
@@ -106,7 +106,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     centralLayout->addLayout(btnsLayout);
 
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(10, 0, 10, 30);
+    centralLayout->setContentsMargins(10, 11, 10, 30);
     setLayout(centralLayout);
 
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
@@ -161,8 +161,8 @@ void MultipleInstallPage::onProgressChanged(const int progress)
 void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
 {
     if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
-        QModelIndex currIndex = m_debListModel->index(opIndex);
-        m_appsView->scrollTo(currIndex, QAbstractItemView::PositionAtCenter);
+        QModelIndex currIndex = m_debListModel->index(opIndex - 1);
+        m_appsView->scrollTo(currIndex, QAbstractItemView::PositionAtTop);
     }
     else if(opIndex == -1)//to top
     {
@@ -182,6 +182,7 @@ void MultipleInstallPage::onItemClicked(const QModelIndex &index)
 
 void MultipleInstallPage::showInfo()
 {
+    centralLayout->setContentsMargins(20, 0, 20, 30);
     m_appsView->setVisible(false);
     m_infoArea->setVisible(true);
     emit hideAutoBarTitle();
@@ -189,6 +190,7 @@ void MultipleInstallPage::showInfo()
 
 void MultipleInstallPage::hideInfo()
 {
+    centralLayout->setContentsMargins(10, 0, 10, 30);
     m_appsView->setVisible(true);
     m_infoArea->setVisible(false);
     emit hideAutoBarTitle();

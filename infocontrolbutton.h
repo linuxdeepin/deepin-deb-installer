@@ -26,6 +26,7 @@
 #include <DLabel>
 #include <QPen>
 #include <QSettings>
+#include <QVBoxLayout>
 DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
@@ -58,6 +59,8 @@ private:
     QFont m_font;
 
     QSettings m_qsettings;
+
+    QVBoxLayout *centralLayout;
 };
 
 #endif // INFOCONTROLBUTTON_H

@@ -35,6 +35,8 @@
 #include <QGuiApplication>
 #include <QKeyEvent>
 #include <QMimeData>
+#include <QStatusBar>
+#include <QLayout>
 #include <QProcess>
 #include <QScreen>
 #include <QStyleFactory>
@@ -70,6 +72,10 @@ DebInstaller::DebInstaller(DWidget *parent)
 
     DWidget *wrapWidget = new DWidget;
     wrapWidget->setLayout(m_centralLayout);
+//#define SHOWBORDER
+#ifdef SHOWBORDER
+    wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
+#endif
 
     const auto ratio = devicePixelRatioF();
     QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
@@ -78,10 +84,13 @@ DebInstaller::DebInstaller(DWidget *parent)
     DTitlebar *tb = titlebar();
     tb->setFixedHeight(50);
     tb->setIcon(QIcon(iconPix));
-    tb->setTitle(QString());
+    tb->setTitle("");
 #if DTK_VERSION >= 0x02000600
     tb->setBackgroundTransparent(true);
 #endif
+    font.setPixelSize(14);
+    font.setWeight(QFont::Medium);
+    tb->setFont(font);
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
@@ -96,54 +105,12 @@ DebInstaller::DebInstaller(DWidget *parent)
         qDebug() << output.trimmed();
     });
 
-    reloadTheme();
-    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::paletteTypeChanged,
-                         [this] (DGuiApplicationHelper::ColorType type) {
-            qDebug() << "Update Theme type:" << type;
-            //Save theme value
-            m_qsettings->setValue("theme", type);
-        });
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
     m_dragflag = -1;
 }
 
 DebInstaller::~DebInstaller() {}
-
-void DebInstaller::toggleDarkTheme()
-{
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::DarkType;
-    DGuiApplicationHelper::instance()->setPaletteType(colorType);
-}
-void DebInstaller::toggleLightTheme()
-{
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::LightType;
-    DGuiApplicationHelper::instance()->setPaletteType(colorType);
-}
-void DebInstaller::reloadTheme()
-{
-    int theme = m_qsettings->value("theme").toInt();
-    if (theme == 0) {
-        theme = 1;
-        m_qsettings->setValue("theme", THEME_LIGHT);
-    }
-
-    DGuiApplicationHelper::ColorType colorType = DGuiApplicationHelper::ColorType::UnknownType;
-    if(theme == 1)
-        colorType = DGuiApplicationHelper::ColorType::LightType;
-    else if(theme == 2)
-        colorType = DGuiApplicationHelper::ColorType::DarkType;
-
-    DGuiApplicationHelper::instance()->setPaletteType(colorType);
-//    QFile themeFile(theme == THEME_DARK ? ":/theme/dark/dark.qss" : ":/theme/light/light.qss");
-//    if (!themeFile.open(QFile::ReadOnly)) {
-//        qDebug() << "theme file not find!" << themeFile.fileName();
-//    }
-
-    //setStyleSheet(themeFile.readAll());
-
-    //DThemeManager::instance()->setTheme(theme);
-}
 
 void DebInstaller::keyPressEvent(QKeyEvent *e)
 {

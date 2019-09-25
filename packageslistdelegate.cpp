@@ -24,8 +24,10 @@
 #include "utils.h"
 
 #include <DSvgRenderer>
+#include <DPalette>
 #include <QApplication>
 #include <QPainter>
+#include <DStyleHelper>
 
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
@@ -41,14 +43,18 @@ PackagesListDelegate::PackagesListDelegate(QObject *parent)
 
     m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
     m_removeIcon.setDevicePixelRatio(ratio);
+
+    m_view= reinterpret_cast<PackagesListView*>(parent);
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
     //    painter->fillRect(option.rect, Qt::gray);
-    QFont originfont = painter->font();
-    QFont font_use = originfont;
+    QFont font = painter->font();
+
+    DStyleHelper styleHelper;
+    QColor fillColor;
 
     const int content_x = 45;
 
@@ -92,7 +98,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setFont(f);
     const QString name_str = painter->fontMetrics().elidedText(name, Qt::ElideRight, 306);
     const QRectF name_bounding_rect = painter->boundingRect(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
-    painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#efefef"));
+
+    fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText);
+    painter->setPen(fillColor);
     painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
 
     // draw package version
@@ -106,8 +114,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QString version = index.data(DebListModel::PackageVersionRole).toString();
     const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
     painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#929292"));
-    font_use.setPixelSize(12);
-    painter->setFont(font_use);
+    font.setPixelSize(12);
+    painter->setFont(font);
     painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);
 
 
@@ -118,8 +126,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         install_status_rect.setRight(option.rect.right() - 15);
         install_status_rect.setLeft(option.rect.right() - 80);
 
-        font_use.setPixelSize(11);
-        painter->setFont(font_use);
+        font.setPixelSize(11);
+        painter->setFont(font);
         switch (operate_stat) {
             case DebListModel::Operating:
                 painter->setPen(QColor(124, 124, 124));
@@ -175,8 +183,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     font_packageInfo.setPixelSize(12);
     painter->setFont(font_packageInfo);
     info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
-    font_use.setPixelSize(12);
-    painter->setFont(font_use);
+    font.setPixelSize(12);
+    painter->setFont(font);
     painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
 
 }

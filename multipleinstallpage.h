@@ -68,6 +68,7 @@ private:
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;
     DPushButton *m_backButton;
+    QVBoxLayout *centralLayout;
 
 };
 

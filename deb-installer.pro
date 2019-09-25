@@ -40,7 +40,8 @@ SOURCES += \
         uninstallconfirmpage.cpp \
         widgets/bluebutton.cpp \
         widgets/graybutton.cpp \
-        workerprogress.cpp
+        workerprogress.cpp \
+    utils.cpp
 
 HEADERS += \
     debinstaller.h \

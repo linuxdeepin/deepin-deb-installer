@@ -24,7 +24,7 @@
 
 #include <QAbstractItemDelegate>
 #include <QSettings>
-
+#include "packagelistview.h"
 
 class PackagesListDelegate : public QAbstractItemDelegate {
     Q_OBJECT
@@ -40,6 +40,7 @@ private:
     QPixmap m_packageIcon;
     QPixmap m_removeIcon;
     QSettings m_qsettings;
+    PackagesListView *m_view;
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

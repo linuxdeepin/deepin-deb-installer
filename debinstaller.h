@@ -26,6 +26,7 @@
 #include <QSettings>
 #include <QStackedLayout>
 
+
 #include <DMainWindow>
 #include <DWidget>
 DWIDGET_USE_NAMESPACE
@@ -46,9 +47,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
-    void toggleDarkTheme();
-    void toggleLightTheme();
-    void reloadTheme();
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
     void onUninstallAccepted();

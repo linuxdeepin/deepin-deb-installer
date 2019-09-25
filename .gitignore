@@ -22,3 +22,12 @@ build*/
 
 # vim tmp file
 *.swp
+.deepin-deb-installer.desktop.swj
+.deepin-deb-installer.desktop.swm
+debian/.debhelper/
+debian/deepin-deb-installer.debhelper.log
+debian/deepin-deb-installer.substvars
+debian/deepin-deb-installer/
+debian/files
+obj-x86_64-linux-gnu/
+resources/images/icon22.svg

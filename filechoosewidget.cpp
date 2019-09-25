@@ -44,71 +44,77 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
 
     QFont font = this->font();
+    QPalette palette;
+    QColor color("#0066EC");
 
     QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(160, 160));
     iconPix.setDevicePixelRatio(ratio);
     DLabel *iconImage = new DLabel;
     iconImage->setFixedSize(160, 160);
-    iconImage->setAlignment(Qt::AlignCenter);
     iconImage->setPixmap(iconPix);
+
 #ifdef SHOWBORDER
     iconImage->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
-    DLabel *dndTips = new DLabel;
+    DLabel *dndTips = new DLabel(this);
     dndTips->setText(tr("Drag and drop file here"));
-    dndTips->setAlignment(Qt::AlignHCenter);
     dndTips->setObjectName("DNDTips");
     font.setPixelSize(12);
+    font.setWeight(QFont::Normal);
     dndTips->setFont(font);
     dndTips->setFixedHeight(15);
+    color.setNamedColor("#6A6A6A");
+    palette = dndTips->palette();
+    palette.setColor(QPalette::WindowText, color);
+    dndTips->setPalette(palette);
+
 #ifdef SHOWBORDER
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
-    QVBoxLayout *centerWrapLayout = new QVBoxLayout;
-    centerWrapLayout->addWidget(iconImage);
-    centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignHCenter);
-    centerWrapLayout->addSpacing(28);
-    centerWrapLayout->addWidget(dndTips, Qt::AlignHCenter);
-    centerWrapLayout->setSpacing(0);
-    centerWrapLayout->setContentsMargins(0, 0, 0, 0);
 
-    DWidget *centerWidget = new DFrame;
-    centerWidget->setFixedWidth(270);
-#ifdef SHOWBORDER
-centerWidget->setStyleSheet("QWidget{border:1px solid black;}");
-#endif
-    centerWidget->setLayout(centerWrapLayout);
-    centerWidget->setObjectName("CenterWidget");
     DLabel *split_line = new DLabel;
     split_line->setObjectName("SplitLine");
     split_line->setPixmap(QPixmap(":/images/split_line.svg"));
-    split_line->setAlignment(Qt::AlignCenter);
+    split_line->setFixedHeight(3);
 
     m_fileChooseBtn = new DPushButton;
-    QColor color("#0066EC");
-    QPalette palette = m_fileChooseBtn->palette();
+    color.setNamedColor("#0066EC");
+    palette = m_fileChooseBtn->palette();
     palette.setColor(QPalette::ButtonText, color);
     m_fileChooseBtn->setPalette(palette);
-    m_fileChooseBtn->setFixedSize(100, 28);
+    m_fileChooseBtn->setFixedHeight(28);
     m_fileChooseBtn->setObjectName("FileChooseButton");
     m_fileChooseBtn->setText(tr("Select File"));
     m_fileChooseBtn->setFlat(true);
     font.setPixelSize(12);
+    font.setWeight(QFont::Normal);
     m_fileChooseBtn->setFont(font);
 #ifdef SHOWBORDER
     m_fileChooseBtn->setStyleSheet("QPushButton{border:1px solid black;}");
 #endif
+
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addSpacing(32);
-    centralLayout->addWidget(centerWidget);
-    centralLayout->setAlignment(centerWidget, Qt::AlignTop | Qt::AlignCenter);
-    centralLayout->addSpacing(17);
+    centralLayout->addWidget(iconImage);
+    centralLayout->setAlignment(iconImage, Qt::AlignHCenter);
+
+    centralLayout->addSpacing(7);
+    centralLayout->addWidget(dndTips);
+    centralLayout->setAlignment(dndTips, Qt::AlignHCenter);
+
+    centralLayout->addSpacing(16);
     centralLayout->addWidget(split_line);
-    centralLayout->addSpacing(12);
+    centralLayout->setAlignment(split_line, Qt::AlignHCenter);
+
+    centralLayout->addSpacing(14);
     centralLayout->addWidget(m_fileChooseBtn);
-    centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignCenter);
+    centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignHCenter);
+    centralLayout->addStretch();
+
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 0, 0, 60);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
+
+
 
     setLayout(centralLayout);
     connect(m_fileChooseBtn, &DPushButton::clicked, this, &FileChooseWidget::chooseFiles);

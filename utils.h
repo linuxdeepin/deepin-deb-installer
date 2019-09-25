@@ -1,21 +1,45 @@
-#include <QApplication>
-#include <QImageReader>
-#include <QPixmap>
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     rekols <rekols@foxmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-namespace Utils {
-static QPixmap renderSVG(const QString &path, const QSize &size) {
-    QImageReader reader;
-    QPixmap pixmap;
-    reader.setFileName(path);
-    if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
-        reader.setScaledSize(size * ratio);
-        pixmap = QPixmap::fromImage(reader.read());
-        pixmap.setDevicePixelRatio(ratio);
-    } else {
-        pixmap.load(path);
-    }
-    return pixmap;
-}
+#ifndef UTILS_H
+#define UTILS_H
 
-}  // namespace Utils
+#include <QObject>
+#include <QHash>
+
+class Utils : public QObject
+{
+    Q_OBJECT
+
+public:
+    Utils(QObject *parent = nullptr);
+    ~Utils();
+
+    static QHash<QString, QPixmap> m_imgCacheHash;
+    static QHash<QString, QString> m_fontNameCache;
+
+    static QString getQssContent(const QString &filePath);
+    static QString getConfigPath();
+    static bool isFontMimeType(const QString &filePath);
+    static QString suffixList();
+    static QPixmap renderSVG(const QString &filePath, const QSize &size);
+    static QString loadFontFamilyFromFiles(const QString &fontFileName);
+};
+
+#endif

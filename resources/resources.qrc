@@ -11,5 +11,6 @@
         <file>theme/dark/dark.qss</file>
         <file>theme/light/light.qss</file>
         <file>images/logo.svg</file>
+        <file>font/SourceHanSansCN-Medium.ttf</file>
     </qresource>
 </RCC>
