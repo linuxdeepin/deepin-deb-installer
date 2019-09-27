@@ -48,9 +48,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_tipsText->setObjectName("TipsText");
 
     centralLayout = new QVBoxLayout;
-    centralLayout->addStretch();
     centralLayout->addWidget(m_arrowIcon);
-    centralLayout->addSpacing(6);
     centralLayout->addWidget(m_tipsText);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(0, 0, 0, 0);
@@ -77,35 +75,22 @@ void InfoControlButton::onMouseRelease()
 
     const int theme = m_qsettings.value("theme").toInt();
 
-    delete centralLayout;
+    centralLayout->removeWidget(m_arrowIcon);
+    centralLayout->removeWidget(m_tipsText);
 
     if (!m_expand) {
 
-        centralLayout = new QVBoxLayout;
-        centralLayout->addStretch();
         centralLayout->addWidget(m_arrowIcon);
-        centralLayout->addSpacing(6);
         centralLayout->addWidget(m_tipsText);
-        centralLayout->setSpacing(0);
-        centralLayout->setContentsMargins(0, 0, 0, 0);
-        setLayout(centralLayout);
 
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
         m_tipsText->setText(m_expandTips);
-        setFixedSize(200, 33);
     } else {
-
-        centralLayout = new QVBoxLayout;
-        centralLayout->addStretch();
         centralLayout->addWidget(m_tipsText);
         centralLayout->addWidget(m_arrowIcon);
-        centralLayout->setSpacing(0);
-        centralLayout->setContentsMargins(0, 0, 0, 0);
-        setLayout(centralLayout);
 
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
         m_tipsText->setText(m_shrinkTips);
-        setFixedSize(200, 33);
     }
 }
 void InfoControlButton::setShowText(const QString text)
