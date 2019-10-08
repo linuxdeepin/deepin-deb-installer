@@ -46,7 +46,6 @@ SOURCES += \
 HEADERS += \
     debinstaller.h \
     deblistmodel.h \
-    environments.h \
     filechoosewidget.h \
     infocontrolbutton.h \
     multipleinstallpage.h \

@@ -20,7 +20,6 @@
  */
 
 #include "debinstaller.h"
-#include "environments.h"
 
 #include <DApplication>
 #include <DLog>
@@ -45,7 +44,8 @@ int main(int argc, char *argv[])
     DApplication app(argc, argv);
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
-    app.setApplicationVersion(VERSION);
+    //app.setApplicationVersion(VERSION);
+    app.setApplicationVersion(DApplication::buildVersion("2019-10-08"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon(":/images/icon.svg"));
     //app.setAttribute(Qt::AA_UseHighDpiPixmaps);
