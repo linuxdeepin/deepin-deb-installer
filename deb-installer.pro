@@ -38,8 +38,6 @@ SOURCES += \
         packagesmanager.cpp \
         singleinstallpage.cpp \
         uninstallconfirmpage.cpp \
-        widgets/bluebutton.cpp \
-        widgets/graybutton.cpp \
         workerprogress.cpp \
     utils.cpp
 
@@ -56,8 +54,6 @@ HEADERS += \
     singleinstallpage.h \
     uninstallconfirmpage.h \
     utils.h \
-    widgets/bluebutton.h \
-    widgets/graybutton.h \
     workerprogress.h
 
 FORMS +=

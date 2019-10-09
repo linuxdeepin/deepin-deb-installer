@@ -23,8 +23,6 @@
 #include "deblistmodel.h"
 #include "packagelistview.h"
 #include "packageslistdelegate.h"
-#include "widgets/bluebutton.h"
-#include "widgets/graybutton.h"
 #include "workerprogress.h"
 
 #include <DTitlebar>
@@ -106,7 +104,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     centralLayout->addLayout(btnsLayout);
 
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(10, 11, 10, 30);
+    centralLayout->setContentsMargins(10, 16, 10, 30);
     setLayout(centralLayout);
 
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);

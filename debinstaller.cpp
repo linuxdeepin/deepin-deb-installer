@@ -51,15 +51,11 @@ using QApt::DebFile;
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-#define THEME_DARK 2 //"dark"
-#define THEME_LIGHT 1 //"light"
-
 DebInstaller::DebInstaller(DWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout)
-    , m_qsettings(new QSettings(this))
     , m_tbMenu(new QMenu(this))
     , m_darkThemeAction(new QAction(tr("Theme"), this)) {
 

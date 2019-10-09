@@ -67,7 +67,6 @@ private:
     FileChooseWidget *m_fileChooseWidget;
 
     QStackedLayout *m_centralLayout;
-    QSettings *m_qsettings;
     DMenu *m_tbMenu;
     QAction *m_darkThemeAction;
 

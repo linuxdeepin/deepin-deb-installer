@@ -65,7 +65,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const QPoint start(content_x, option.rect.top());
         const QPoint end(option.rect.right() - 10, option.rect.top());
 
-        painter->setPen(theme == THEME_LIGHT ? QColor(0, 0, 0, 255 * .05) : QColor(255, 255, 255, 255 * 0.05));
+        fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Button);
+        painter->setPen(fillColor);
         painter->setRenderHint(QPainter::Antialiasing, false);
         painter->drawLine(start, end);
     }
@@ -114,6 +115,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const QString version = index.data(DebListModel::PackageVersionRole).toString();
     const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
     painter->setPen(theme == THEME_LIGHT ? Qt::black : QColor("#929292"));
+    //fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::ButtonText);
+    //painter->setPen(fillColor);
     font.setPixelSize(12);
     painter->setFont(font);
     painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);

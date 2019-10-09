@@ -36,10 +36,11 @@ signals:
 
 private slots:
     void chooseFiles();
-
+    void themeChanged();
 private:
     DPushButton *m_fileChooseBtn;
     QSettings m_settings;
+    DLabel *split_line;
 };
 
 #endif  // FILECHOOSEWIDGET_H

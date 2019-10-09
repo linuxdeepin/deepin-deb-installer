@@ -33,8 +33,8 @@
 #include <QPixmap>
 #include <QUrl>
 #include <QVBoxLayout>
-
-
+#include <DApplicationHelper>
+#include <DStyleHelper>
 
 FileChooseWidget::FileChooseWidget(DWidget *parent)
     : DWidget(parent)
@@ -44,8 +44,7 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
 
     QFont font = this->font();
-    QPalette palette;
-    QColor color("#0066EC");
+    DPalette palette;
 
     QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(160, 160));
     iconPix.setDevicePixelRatio(ratio);
@@ -63,25 +62,29 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     font.setWeight(QFont::Normal);
     dndTips->setFont(font);
     dndTips->setFixedHeight(15);
-    color.setNamedColor("#6A6A6A");
-    palette = dndTips->palette();
-    palette.setColor(QPalette::WindowText, color);
+    palette = DApplicationHelper::instance()->palette(dndTips);
+    palette.setBrush(DPalette::Button, palette.color(DPalette::Button));
     dndTips->setPalette(palette);
 
 #ifdef SHOWBORDER
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
-
-    DLabel *split_line = new DLabel;
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    split_line = new DLabel;
     split_line->setObjectName("SplitLine");
-    split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+    if(themeType == DGuiApplicationHelper::LightType)
+        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+    else if(themeType == DGuiApplicationHelper::DarkType)
+        split_line->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+    else
+        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setFixedHeight(3);
 
     m_fileChooseBtn = new DPushButton;
-    color.setNamedColor("#0066EC");
-    palette = m_fileChooseBtn->palette();
-    palette.setColor(QPalette::ButtonText, color);
+    palette = DApplicationHelper::instance()->palette(m_fileChooseBtn);
+    palette.setColor(DPalette::ButtonText, palette.color(DPalette::Highlight));
     m_fileChooseBtn->setPalette(palette);
+
     m_fileChooseBtn->setFixedHeight(28);
     m_fileChooseBtn->setObjectName("FileChooseButton");
     m_fileChooseBtn->setText(tr("Select File"));
@@ -114,10 +117,11 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
-
-
     setLayout(centralLayout);
     connect(m_fileChooseBtn, &DPushButton::clicked, this, &FileChooseWidget::chooseFiles);
+
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+                        this, &FileChooseWidget::themeChanged);
 }
 
 void FileChooseWidget::chooseFiles()
@@ -143,4 +147,16 @@ void FileChooseWidget::chooseFiles()
     const QStringList selected_files = dialog.selectedFiles();
 
     emit packagesSelected(selected_files);
+}
+void FileChooseWidget::themeChanged()
+{
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+
+    if(themeType == DGuiApplicationHelper::LightType)
+        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+    else if(themeType == DGuiApplicationHelper::DarkType)
+        split_line->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+    else
+        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+
 }

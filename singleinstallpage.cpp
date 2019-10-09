@@ -21,8 +21,6 @@
 
 #include "singleinstallpage.h"
 #include "deblistmodel.h"
-#include "widgets/bluebutton.h"
-#include "widgets/graybutton.h"
 #include "workerprogress.h"
 
 #include <QApplication>
@@ -34,7 +32,8 @@
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
-
+#include <DStyleHelper>
+#include <DApplicationHelper>
 using QApt::DebFile;
 using QApt::Transaction;
 
@@ -60,7 +59,7 @@ const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
     int lineHeight = fm.height();
 
     while (line.isValid()) {
-        height += lineHeight;
+        height += lineHeight + 5;
 
         if (height + lineHeight > size.height()) {
             const QString &end_str = fm.elidedText(text.mid(line.textStart()), Qt::ElideRight, size.width());
@@ -187,6 +186,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     font_use.setPixelSize(12);
     font_use.setWeight(QFont::Normal);
     m_packageDescription->setFont(font_use);
+    DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
+    palette.setBrush(DPalette::ToolTipText, palette.color(DPalette::ItemBackground));
+    m_packageDescription->setPalette(palette);
 
     DLabel *packageName = new DLabel;
     packageName->setText(tr("Name: "));
@@ -372,6 +374,7 @@ void SingleInstallPage::onWorkerFinished()
    QModelIndex index = m_packagesModel->first();
    const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
+   DPalette palette;
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
@@ -385,17 +388,19 @@ void SingleInstallPage::onWorkerFinished()
         } else {
             m_infoControlButton->setShowText(tr("Display uninstall details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
-            QPalette pe;
-            pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
-            m_tipsLabel->setPalette(pe);
+
+            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+            m_tipsLabel->setPalette(palette);
         }
 
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
-        QPalette pe;
-        pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
-        m_tipsLabel->setPalette(pe);
+
+        palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+        palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+        m_tipsLabel->setPalette(palette);
 
         if (m_operate == Install || m_operate == Reinstall)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
@@ -452,12 +457,14 @@ void SingleInstallPage::setPackageInfo()
     m_doneButton->setVisible(false);
     //m_backButton->setVisible(true);
 
+    DPalette palette;
     if (installed) {
         if (installedSameVersion) {
             m_tipsLabel->setText(tr("Same version installed"));
-            QPalette pe;
-            pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
-            m_tipsLabel->setPalette(pe);
+
+            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+            m_tipsLabel->setPalette(palette);
         }
 
         else
@@ -469,10 +476,11 @@ void SingleInstallPage::setPackageInfo()
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak) {
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        QPalette pe;
-        pe.setColor(QPalette::WindowText, QColor("#FF5A5A"));
-        m_tipsLabel->setPalette(pe);
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());        
+        palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+        palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+        m_tipsLabel->setPalette(palette);
+
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);

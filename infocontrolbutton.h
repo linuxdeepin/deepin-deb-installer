@@ -47,6 +47,7 @@ protected:
 
 private slots:
     void onMouseRelease();
+    void themeChanged();
 
 private:
     bool m_expand;
@@ -57,9 +58,6 @@ private:
     DLabel *m_tipsText;
 
     QFont m_font;
-
-    QSettings m_qsettings;
-
     QVBoxLayout *centralLayout;
 };
 
