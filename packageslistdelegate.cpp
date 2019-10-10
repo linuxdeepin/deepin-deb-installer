@@ -102,7 +102,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText);
     painter->setPen(fillColor);
-    painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignBottom);
+    painter->drawText(name_rect, name_str, Qt::AlignLeft | Qt::AlignVCenter);
 
     // draw package version
     QFont font_version = old_font;
@@ -119,7 +119,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     //painter->setPen(fillColor);
     font.setPixelSize(12);
     painter->setFont(font);
-    painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignBottom);
+    painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
 
     // install status

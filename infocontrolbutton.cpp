@@ -58,7 +58,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
-    centralLayout->setSpacing(5);
+    centralLayout->setSpacing(10);
     centralLayout->setContentsMargins(0, 0, 0, 5);
 
     setLayout(centralLayout);

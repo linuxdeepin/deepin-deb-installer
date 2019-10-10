@@ -41,7 +41,7 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     , m_settings("deepin", "deepin-deb-install")
 {
     const auto ratio = devicePixelRatioF();
-    setFocusPolicy(Qt::ClickFocus);
+    //setFocusPolicy(Qt::ClickFocus);
 
     QFont font = this->font();
     DPalette palette;

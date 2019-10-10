@@ -377,7 +377,6 @@ void SingleInstallPage::onWorkerFinished()
    DPalette palette;
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
-        m_doneButton->setFocus();
 
         if (m_operate == Install || m_operate == Reinstall) {
             m_infoControlButton->setShowText(tr("Display install details"));
@@ -396,7 +395,6 @@ void SingleInstallPage::onWorkerFinished()
 
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
-        m_confirmButton->setFocus();
 
         palette = DApplicationHelper::instance()->palette(m_tipsLabel);
         palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
