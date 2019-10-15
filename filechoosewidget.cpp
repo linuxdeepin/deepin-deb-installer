@@ -41,7 +41,7 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     , m_settings("deepin", "deepin-deb-install")
 {
     const auto ratio = devicePixelRatioF();
-    //setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::ClickFocus);
 
     QFont font = this->font();
     DPalette palette;
@@ -92,6 +92,7 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     font.setPixelSize(12);
     font.setWeight(QFont::Normal);
     m_fileChooseBtn->setFont(font);
+    m_fileChooseBtn->setFocusPolicy(Qt::ClickFocus);
 #ifdef SHOWBORDER
     m_fileChooseBtn->setStyleSheet("QPushButton{border:1px solid black;}");
 #endif

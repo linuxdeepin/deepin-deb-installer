@@ -54,6 +54,8 @@ UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
     m_confirmBtn->setFixedSize(120, 36);
+    m_confirmBtn->setFocusPolicy(Qt::ClickFocus);
+    m_cancelBtn->setFocusPolicy(Qt::ClickFocus);
 
     m_dependsInfomation->setReadOnly(true);
     m_dependsInfomation->setVisible(false);

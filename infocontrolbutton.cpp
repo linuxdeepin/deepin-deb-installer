@@ -58,8 +58,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
-    centralLayout->setSpacing(10);
-    centralLayout->setContentsMargins(0, 0, 0, 5);
+    centralLayout->setSpacing(8);
+    centralLayout->setContentsMargins(0, 5, 0, 5);
 
     setLayout(centralLayout);
     //setFixedSize(200, 31);
@@ -110,10 +110,15 @@ void InfoControlButton::onMouseRelease()
         m_tipsText->setText(m_shrinkTips);
     }
 }
-void InfoControlButton::setShowText(const QString text)
+void InfoControlButton::setExpandTips(const QString text)
 {
     m_expandTips = text;
     m_tipsText->setText(m_expandTips);
+}
+void InfoControlButton::setShrinkTips(const QString text)
+{
+    m_shrinkTips = text;
+    m_tipsText->setText(m_shrinkTips);
 }
 void InfoControlButton::themeChanged()
 {

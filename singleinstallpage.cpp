@@ -148,7 +148,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
     m_workerInfomation->setAcceptDrops(false);
-    m_workerInfomation->setFixedHeight(210);
+    m_workerInfomation->setFixedHeight(200);
     m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_installButton->setText(tr("Install"));
@@ -179,6 +179,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_confirmButton->setFont(font_use);
     m_backButton->setFont(font_use);
     m_doneButton->setFont(font_use);
+    m_uninstallButton->setFocusPolicy(Qt::ClickFocus);
+    m_reinstallButton->setFocusPolicy(Qt::ClickFocus);
+    m_installButton->setFocusPolicy(Qt::ClickFocus);
 
     m_packageDescription->setFixedHeight(70);
     m_packageDescription->setFixedWidth(270);
@@ -287,6 +290,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
         setPackageInfo();
     else
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
+
+    m_upDown = true;
 }
 void SingleInstallPage::reinstall()
 {
@@ -297,8 +302,6 @@ void SingleInstallPage::reinstall()
 
     m_operate = Reinstall;
     m_packagesModel->installAll();
-
-
 }
 void SingleInstallPage::install()
 {
@@ -311,7 +314,7 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
-    m_infoControlButton->setShowText(tr("Display uninstall details"));
+    m_infoControlButton->setExpandTips(tr("Display uninstall details"));
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
@@ -322,6 +325,7 @@ void SingleInstallPage::uninstallCurrentPackage()
 
 void SingleInstallPage::showInfomation()
 {
+    m_upDown = false;
     centralLayout->setContentsMargins(20, 0, 20, 30);
     m_workerInfomation->setVisible(true);
     m_strengthWidget->setVisible(true);
@@ -330,6 +334,7 @@ void SingleInstallPage::showInfomation()
 
 void SingleInstallPage::hideInfomation()
 {
+    m_upDown = true;
     centralLayout->setContentsMargins(10, 0, 10, 30);
     m_workerInfomation->setVisible(false);
     m_strengthWidget->setVisible(false);
@@ -371,21 +376,21 @@ void SingleInstallPage::onWorkerFinished()
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
 
-   QModelIndex index = m_packagesModel->first();
-   const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+    QModelIndex index = m_packagesModel->first();
+    const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
-   DPalette palette;
+    DPalette palette;
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
 
         if (m_operate == Install || m_operate == Reinstall) {
-            m_infoControlButton->setShowText(tr("Display install details"));
+            m_infoControlButton->setExpandTips(tr("Display install details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             QPalette pe;
             pe.setColor(QPalette::WindowText, QColor("#47790C"));
             m_tipsLabel->setPalette(pe);
         } else {
-            m_infoControlButton->setShowText(tr("Display uninstall details"));
+            m_infoControlButton->setExpandTips(tr("Display uninstall details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
 
             palette = DApplicationHelper::instance()->palette(m_tipsLabel);
@@ -409,6 +414,9 @@ void SingleInstallPage::onWorkerFinished()
     } else {
         Q_UNREACHABLE();
     }
+
+    if(!m_upDown)
+        m_infoControlButton->setShrinkTips(tr("Collapse"));
 }
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)

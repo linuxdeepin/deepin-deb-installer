@@ -37,7 +37,8 @@ class InfoControlButton : public DWidget
 public:
     explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent = 0);
 
-    void setShowText(const QString text);
+    void setShrinkTips(const QString text);
+    void setExpandTips(const QString text);
 signals:
     void expand();
     void shrink();

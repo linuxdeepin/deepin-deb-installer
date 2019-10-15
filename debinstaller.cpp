@@ -68,6 +68,7 @@ DebInstaller::DebInstaller(DWidget *parent)
 
     DWidget *wrapWidget = new DWidget;
     wrapWidget->setLayout(m_centralLayout);
+
 //#define SHOWBORDER
 #ifdef SHOWBORDER
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");

@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QTimer>
+#include <QSharedMemory>
 #include <DApplicationSettings>
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
@@ -37,15 +38,22 @@ DCORE_USE_NAMESPACE
 #include "utils.h"
 #define RECENT_PATH QDir::homePath() + "/.local/share/recently-used.xbel"
 
+#define DAPPLICATION_XSTRING(s) DAPPLICATION_STRING(s)
+#define DAPPLICATION_STRING(s) #s
+
 int main(int argc, char *argv[])
 {
+    QSharedMemory sm("deb-installer");
+    if(sm.attach())
+        return 0;
+    sm.create(1);
+
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
-    //app.setApplicationVersion(VERSION);
-    app.setApplicationVersion(DApplication::buildVersion("2019-10-10"));
+    app.setApplicationVersion(DApplication::buildVersion("2019-10-15"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon(":/images/icon.svg"));
     //app.setAttribute(Qt::AA_UseHighDpiPixmaps);

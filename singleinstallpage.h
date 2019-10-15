@@ -74,6 +74,7 @@ private slots:
 private:
     int m_operate;
     bool m_workerStarted;
+    bool m_upDown;
     DebListModel *m_packagesModel;
     DWidget *m_itemInfoWidget;
     DLabel *m_packageIcon;
@@ -92,7 +93,7 @@ private:
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
 
-     QVBoxLayout *centralLayout;
+    QVBoxLayout *centralLayout;
 };
 
 #endif  // SINGLEINSTALLPAGE_H
