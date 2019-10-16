@@ -51,9 +51,11 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     else
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
     m_tipsText->setAlignment(Qt::AlignCenter);
+    m_font.setWeight(QFont::Normal);
     m_tipsText->setFont(m_font);
     m_tipsText->setText(expandTips);
     m_tipsText->setObjectName("TipsText");
+
 
     centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_arrowIcon);
