@@ -62,9 +62,9 @@ FORMS +=
 #!system($$PWD/translate_generation.sh): error("Failed to generate translation")
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+#qnx: target.path = /tmp/$${TARGET}/bin
+#else: unix:!android: target.path = /opt/$${TARGET}/bin
+#!isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
     deepin-deb-installer.applications \
@@ -189,3 +189,25 @@ RESOURCES += \
     resources/resources.qrc
 
 TRANSLATIONS += ./translations/deepin-deb-installer_zh_CN.ts
+
+
+
+isEmpty(BINDIR):BINDIR=/usr/bin
+isEmpty(APPDIR):APPDIR=/usr/share/applications
+isEmpty(APPREGDIR):APPREGDIR=/usr/share/application-registry
+isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-deb-installer
+
+target.path = $$INSTROOT$$BINDIR
+desktop.path = $$INSTROOT$$APPDIR
+desktop.files = $$PWD/deepin-deb-installer.desktop
+
+applications.path = $$INSTROOT$$APPREGDIR
+applications.files = $$PWD/deepin-deb-installer.applications
+
+translations.path = /usr/share/deepin-deb-installer/translations
+translations.files = $$PWD/translations/*.qm
+
+icon_files.path = /usr/share/icons/hicolor/scalable/apps
+icon_files.files = $$PWD/resources/images/deepin-deb-installer-*px.svg
+
+INSTALLS += target desktop applications translations icon_files

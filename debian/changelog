@@ -1,5 +1,5 @@
-deepin-deb-installer (2019.10.09) unstable; urgency=medium
+deepin-deb-installer (2019.10.17) unstable; urgency=medium
 
-  * Initial release
+  * Initial Release.
 
- -- Deepin Packages Builder <packages@deepin.com>  Thu, 29 Jun 2017 11:33:08 +0800
+ -- Deepin Packages Builder <packages@deepin.com>  Wed, 11 Oct 2017 17:38:35 +0800
