@@ -59,7 +59,7 @@ DebInstaller::DebInstaller(DWidget *parent)
     , m_tbMenu(new QMenu(this))
     , m_darkThemeAction(new QAction(tr("Theme"), this)) {
 
-    QFont font = this->font();
+//    setWindowOpacity(0.6);
 
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
@@ -78,6 +78,9 @@ DebInstaller::DebInstaller(DWidget *parent)
     QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
     iconPix.setDevicePixelRatio(ratio);
 
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 14, QFont::Medium);
+
     DTitlebar *tb = titlebar();
     tb->setFixedHeight(50);
     tb->setIcon(QIcon(iconPix));
@@ -85,8 +88,6 @@ DebInstaller::DebInstaller(DWidget *parent)
 #if DTK_VERSION >= 0x02000600
     tb->setBackgroundTransparent(true);
 #endif
-    font.setPixelSize(14);
-    font.setWeight(QFont::Medium);
     tb->setFont(font);
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件

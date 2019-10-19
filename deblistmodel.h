@@ -36,7 +36,7 @@ class DebListModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit DebListModel(QObject *parent = 0);
+    explicit DebListModel(QObject *parent = nullptr);
 
     enum PackageRole {
         PackageNameRole = Qt::DisplayRole,

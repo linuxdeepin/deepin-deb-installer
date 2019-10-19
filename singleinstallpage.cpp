@@ -22,6 +22,7 @@
 #include "singleinstallpage.h"
 #include "deblistmodel.h"
 #include "workerprogress.h"
+#include "utils.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -110,8 +111,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_backButton(new DPushButton)
     , m_doneButton(new DPushButton) {
 
-    const QFont font_const = this->font();
-    QFont font_use = font_const;
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    QString pkgFontFamily1 = Utils::loadFontFamilyByType(Utils::DefautFont);
+
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -120,21 +123,27 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
 
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
-    font_use.setPixelSize(14);
-    font_use.setWeight(QFont::Normal);
+
+    QFont pkgFont1 = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
+    QFont pkgFont2 = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
+    qDebug() << pkgFont1.family();
+    qDebug() << pkgFont2.family();
+    DPalette pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
+    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
+    m_packageName->setPalette(pkgPalette);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    m_packageName->setFont(font_use);
+    m_packageName->setFont(pkgFont1);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    m_packageVersion->setFont(font_use);
-    font_use.setPixelSize(12);
-    font_use.setWeight(QFont::Normal);
-    m_tipsLabel->setFont(font_use);
+    m_packageVersion->setFont(pkgFont2);
+
+    QFont tipFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
+    m_tipsLabel->setFont(tipFont);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 //#define SHOWBORDER
 #ifdef SHOWBORDER
-    m_packageName->setStyleSheet("QLabel{border: 1px solid black;}");
-    m_packageVersion->setStyleSheet("QLabel{border: 1px solid black;}");
-    m_workerInfomation->setStyleSheet("QLabel{border: 1px solid black;}");
+    m_packageName->setStyleSheet("QLabel{border: 1px solid blue;}");
+    m_packageVersion->setStyleSheet("QLabel{border: 1px solid yellow;}");
+    m_workerInfomation->setStyleSheet("QLabel{border: 1px solid purple;}");
     m_packageDescription->setStyleSheet("QLabel{border: 1px solid red;}");
     m_packageIcon->setStyleSheet("QLabel{border: 1px solid black;}");
 #endif
@@ -142,8 +151,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
 
-    font_use.setPixelSize(11);
-    m_workerInfomation->setFont(font_use);
+    QFont infoFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 11, QFont::Normal);
+    m_workerInfomation->setFont(infoFont);
     m_workerInfomation->setTextColor(QColor("#609DC8"));
     m_workerInfomation->setReadOnly(true);
     m_workerInfomation->setVisible(false);
@@ -165,52 +174,48 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
 
+
+    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     m_installButton->setFixedSize(120,36);
     m_uninstallButton->setFixedSize(120,36);
     m_reinstallButton->setFixedSize(120,36);
     m_confirmButton->setFixedSize(120,36);
     m_backButton->setFixedSize(120,36);
     m_doneButton->setFixedSize(120,36);
-    font_use.setPixelSize(14);
-    font_use.setWeight(QFont::Medium);
-    m_installButton->setFont(font_use);
-    m_uninstallButton->setFont(font_use);
-    m_reinstallButton->setFont(font_use);
-    m_confirmButton->setFont(font_use);
-    m_backButton->setFont(font_use);
-    m_doneButton->setFont(font_use);
+    m_installButton->setFont(btnFont);
+    m_uninstallButton->setFont(btnFont);
+    m_reinstallButton->setFont(btnFont);
+    m_confirmButton->setFont(btnFont);
+    m_backButton->setFont(btnFont);
+    m_doneButton->setFont(btnFont);
     m_uninstallButton->setFocusPolicy(Qt::ClickFocus);
     m_reinstallButton->setFocusPolicy(Qt::ClickFocus);
     m_installButton->setFocusPolicy(Qt::ClickFocus);
 
+    QFont descFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
     m_packageDescription->setFixedHeight(70);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    font_use.setPixelSize(12);
-    font_use.setWeight(QFont::Normal);
-    m_packageDescription->setFont(font_use);
+    m_packageDescription->setFont(descFont);
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::ToolTipText, palette.color(DPalette::ItemBackground));
     m_packageDescription->setPalette(palette);
 
+    QFont lblFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     DLabel *packageName = new DLabel;
     packageName->setText(tr("Name: "));
-    font_use.setPixelSize(14);
-    font_use.setWeight(QFont::Medium);
-    packageName->setFont(font_use);
+    packageName->setFont(lblFont);
     packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
     DLabel *packageVersion = new DLabel;
     packageVersion->setText(tr("Version: "));
-    font_use.setPixelSize(14);
-    font_use.setWeight(QFont::Medium);
-    packageVersion->setFont(font_use);
+    packageVersion->setFont(lblFont);
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 #ifdef SHOWBORDER
-    packageName->setStyleSheet("QLabel{border: 1px solid black;}");
-    packageVersion->setStyleSheet("QLabel{border: 1px solid black;}");
+    packageName->setStyleSheet("QLabel{border: 1px solid blue;}");
+    packageVersion->setStyleSheet("QLabel{border: 1px solid red;}");
 #endif
     QGridLayout *itemInfoLayout = new QGridLayout;
     itemInfoLayout->addWidget(packageName, 0, 0);
@@ -219,14 +224,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     itemInfoLayout->addWidget(m_packageVersion, 1, 1);
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setVerticalSpacing(0);
+    itemInfoLayout->setHorizontalSpacing(0);
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
-   // itemBlockLayout->setSpacing(112);
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
     itemBlockLayout->addStretch();
-    itemBlockLayout->setSpacing(10);
+    itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
@@ -244,7 +249,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     QVBoxLayout *itemLayout = new QVBoxLayout;
     itemLayout->addSpacing(35);
     itemLayout->addLayout(itemBlockLayout);
-    itemLayout->addSpacing(20);
+    itemLayout->addSpacing(28);
     itemLayout->addWidget(m_packageDescription);
     itemLayout->addStretch();
     itemLayout->setMargin(0);
@@ -258,6 +263,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_strengthWidget->setVisible(false);
 
     centralLayout = new QVBoxLayout;
+    centralLayout->addSpacing(10);
     centralLayout->addWidget(m_itemInfoWidget);
     centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoControlButton);

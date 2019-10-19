@@ -31,6 +31,12 @@ public:
     Utils(QObject *parent = nullptr);
     ~Utils();
 
+    enum FontType {
+        SourceHanSansMedium,
+        SourceHanSansNormal,
+        DefautFont
+    };
+
     static QHash<QString, QPixmap> m_imgCacheHash;
     static QHash<QString, QString> m_fontNameCache;
 
@@ -39,7 +45,8 @@ public:
     static bool isFontMimeType(const QString &filePath);
     static QString suffixList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
-    static QString loadFontFamilyFromFiles(const QString &fontFileName);
+    static QString loadFontFamilyByType(FontType fontType);
+    static QFont loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight);
 };
 
 #endif

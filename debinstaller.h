@@ -38,7 +38,7 @@ class DebInstaller : public Dtk::Widget::DMainWindow {
 
 public:
     DebInstaller(DWidget *parent = nullptr);
-    virtual ~DebInstaller();
+    virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
 protected:
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;

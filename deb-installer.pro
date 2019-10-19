@@ -40,7 +40,7 @@ SOURCES += \
         singleinstallpage.cpp \
         uninstallconfirmpage.cpp \
         workerprogress.cpp \
-    utils.cpp
+        utils.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -54,8 +54,8 @@ HEADERS += \
     result.h \
     singleinstallpage.h \
     uninstallconfirmpage.h \
-    utils.h \
-    workerprogress.h
+    workerprogress.h \
+    utils.h
 
 FORMS +=
 

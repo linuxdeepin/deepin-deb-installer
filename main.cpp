@@ -65,9 +65,6 @@ int main(int argc, char *argv[])
                                       "main",
                                       "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
 
-    QFont btnFont = Utils::loadFontFamilyFromFiles(":/font/SourceHanSansCN-Medium.ttf");
-    app.setFont(btnFont);
-
     DApplicationSettings settings;
 
     //app.setStyle("chameleon");
