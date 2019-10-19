@@ -124,17 +124,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    QFont pkgFont1 = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
-    QFont pkgFont2 = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
-    qDebug() << pkgFont1.family();
-    qDebug() << pkgFont2.family();
+    QFont pkgFont = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
     DPalette pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
     pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
     m_packageName->setPalette(pkgPalette);
     m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    m_packageName->setFont(pkgFont1);
+    m_packageName->setFont(pkgFont);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    m_packageVersion->setFont(pkgFont2);
+    m_packageVersion->setFont(pkgFont);
 
     QFont tipFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
     m_tipsLabel->setFont(tipFont);

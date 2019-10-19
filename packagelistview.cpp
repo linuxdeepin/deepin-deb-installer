@@ -32,8 +32,7 @@ PackagesListView::PackagesListView(DWidget *parent)
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    setBackgroundRole(QPalette::Base);
-    setAutoFillBackground(true);
+    setAutoFillBackground(false);
 }
 
 void PackagesListView::leaveEvent(QEvent *e) {

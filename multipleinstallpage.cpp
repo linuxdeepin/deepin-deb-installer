@@ -24,6 +24,7 @@
 #include "packagelistview.h"
 #include "packageslistdelegate.h"
 #include "workerprogress.h"
+#include "droundbgframe.h"
 
 #include <DTitlebar>
 
@@ -49,13 +50,21 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     const QFont font_const = this->font();
     QFont font_use = font_const;
 
+    DRoundBgFrame *bgFrame = new DRoundBgFrame;
+    bgFrame->setFixedSize(460, 186);
+    QHBoxLayout *appsViewLayout = new QHBoxLayout(bgFrame);
+    appsViewLayout->setSpacing(0);
+    appsViewLayout->setContentsMargins(0, 0, 0, 0);
+    bgFrame->setLayout(appsViewLayout);
+
     m_appsView->setObjectName("AppsView");
     m_infoArea->setObjectName("InfoArea");
     m_infoControlButton->setObjectName("InfoControlButton");
 
     m_appsView->setModel(model);
-    m_appsView->setFixedSize(460, 186);
+    m_appsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);;
     m_appsView->setItemDelegate(delegate);
+    appsViewLayout->addWidget(m_appsView);
 
     m_installButton->setFixedSize(120, 36);
     m_acceptButton->setFixedSize(120, 36);
@@ -94,7 +103,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_appsView, Qt::AlignHCenter);
+    centralLayout->addWidget(bgFrame, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoControlButton);
     centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     centralLayout->addWidget(m_infoArea, Qt::AlignHCenter);

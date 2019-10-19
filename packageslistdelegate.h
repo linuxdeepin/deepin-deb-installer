@@ -22,15 +22,15 @@
 #ifndef PACKAGESLISTDELEGATE_H
 #define PACKAGESLISTDELEGATE_H
 
-#include <QAbstractItemDelegate>
+#include <DStyledItemDelegate>
 #include <QSettings>
 #include "packagelistview.h"
 
-class PackagesListDelegate : public QAbstractItemDelegate {
+class PackagesListDelegate : public DStyledItemDelegate {
     Q_OBJECT
 
 public:
-    explicit PackagesListDelegate(QObject *parent = 0);
+    explicit PackagesListDelegate(QAbstractItemView *parent = nullptr);
 
 private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -41,6 +41,7 @@ private:
     QPixmap m_removeIcon;
     QSettings m_qsettings;
     PackagesListView *m_view;
+    QAbstractItemView *m_parentView;
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

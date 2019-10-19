@@ -40,7 +40,8 @@ SOURCES += \
         singleinstallpage.cpp \
         uninstallconfirmpage.cpp \
         workerprogress.cpp \
-        utils.cpp
+        utils.cpp \
+        droundbgframe.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -55,7 +56,8 @@ HEADERS += \
     singleinstallpage.h \
     uninstallconfirmpage.h \
     workerprogress.h \
-    utils.h
+    utils.h \
+    droundbgframe.h
 
 FORMS +=
 
