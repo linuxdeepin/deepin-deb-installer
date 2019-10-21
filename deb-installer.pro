@@ -42,7 +42,8 @@ SOURCES += \
         workerprogress.cpp \
         utils.cpp \
         droundbgframe.cpp \
-    	installprocessinfoview.cpp
+    	installprocessinfoview.cpp \
+    	choosefilebutton.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -59,7 +60,8 @@ HEADERS += \
     workerprogress.h \
     utils.h \
     droundbgframe.h \
-    installprocessinfoview.h
+    installprocessinfoview.h \
+    choosefilebutton.h
 
 FORMS +=
 

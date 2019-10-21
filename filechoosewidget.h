@@ -22,9 +22,13 @@
 #ifndef FILECHOOSEWIDGET_H
 #define FILECHOOSEWIDGET_H
 
+#include "choosefilebutton.h"
+
 #include <QSettings>
 #include <DPushButton>
+
 DWIDGET_USE_NAMESPACE
+
 class FileChooseWidget : public DWidget {
     Q_OBJECT
 
@@ -38,7 +42,7 @@ private slots:
     void chooseFiles();
     void themeChanged();
 private:
-    DPushButton *m_fileChooseBtn;
+    ChooseFileButton *m_chooseFileBtn;
     QSettings m_settings;
     DLabel *split_line;
 };

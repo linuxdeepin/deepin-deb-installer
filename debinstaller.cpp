@@ -296,11 +296,13 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 
     return p;
 }
+
 void DebInstaller::changeDragFlag()
 {
     repaint();
     m_dragflag = 0;
 }
+
 void DebInstaller::showHiddenButton()
 {
     if(m_dragflag == 2)

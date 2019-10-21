@@ -80,19 +80,13 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
         split_line->setPixmap(QPixmap(":/images/split_line.svg"));
     split_line->setFixedHeight(3);
 
-    m_fileChooseBtn = new DPushButton;
-    palette = DApplicationHelper::instance()->palette(m_fileChooseBtn);
-    palette.setColor(DPalette::ButtonText, palette.color(DPalette::Highlight));
-    m_fileChooseBtn->setPalette(palette);
+    m_chooseFileBtn = new ChooseFileButton;
 
-    m_fileChooseBtn->setFixedHeight(28);
-    m_fileChooseBtn->setObjectName("FileChooseButton");
-    m_fileChooseBtn->setText(tr("Select File"));
-    m_fileChooseBtn->setFlat(true);
-    m_fileChooseBtn->setFont(font);
-    m_fileChooseBtn->setFocusPolicy(Qt::ClickFocus);
+    m_chooseFileBtn->setFixedHeight(28);
+    m_chooseFileBtn->setObjectName("FileChooseButton");
+    m_chooseFileBtn->setText(tr("Select File"));
 #ifdef SHOWBORDER
-    m_fileChooseBtn->setStyleSheet("QPushButton{border:1px solid black;}");
+    m_chooseFileBtn->setStyleSheet("QPushButton{border:1px solid black;}");
 #endif
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
@@ -109,15 +103,15 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     centralLayout->setAlignment(split_line, Qt::AlignHCenter);
 
     centralLayout->addSpacing(11);
-    centralLayout->addWidget(m_fileChooseBtn);
-    centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignHCenter);
+    centralLayout->addWidget(m_chooseFileBtn);
+    centralLayout->setAlignment(m_chooseFileBtn, Qt::AlignHCenter);
     centralLayout->addStretch();
 
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
-    connect(m_fileChooseBtn, &DPushButton::clicked, this, &FileChooseWidget::chooseFiles);
+    connect(m_chooseFileBtn, &ChooseFileButton::clicked, this, &FileChooseWidget::chooseFiles);
 
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
                         this, &FileChooseWidget::themeChanged);
@@ -147,6 +141,7 @@ void FileChooseWidget::chooseFiles()
 
     emit packagesSelected(selected_files);
 }
+
 void FileChooseWidget::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
