@@ -94,37 +94,86 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_operate(Install)
     , m_workerStarted(false)
     , m_packagesModel(model)
-    , m_itemInfoWidget(new DWidget)
+    , m_contentFrame(new DFrame)
+    , m_itemInfoFrame(new DFrame)
     , m_packageIcon(new DLabel)
     , m_packageName(new DLabel)
     , m_packageVersion(new DLabel)
     , m_packageDescription(new DLabel)
     , m_tipsLabel(new DLabel)
     , m_progress(new WorkerProgress)
-    , m_workerInfomation(new DTextEdit)
-    , m_strengthWidget(new DWidget)
+    , m_installProcessView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
     , m_installButton(new DPushButton)
     , m_uninstallButton(new DPushButton)
     , m_reinstallButton(new DPushButton)
     , m_confirmButton(new DPushButton)
     , m_backButton(new DPushButton)
-    , m_doneButton(new DPushButton) {
+    , m_doneButton(new DPushButton)
+    , m_contentLayout(new QVBoxLayout(m_contentFrame))
+    , m_centralLayout(new QVBoxLayout(this)) {
 
+    initUI();
+}
+
+void SingleInstallPage::initUI()
+{
+    initContentLayout();
+    initPkgInfoView();
+    initPkgInstallProcessView();
+    initConnections();
+
+    if (m_packagesModel->isReady())
+        setPackageInfo();
+    else
+        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
+
+    m_upDown = true;
+}
+
+void SingleInstallPage::initContentLayout()
+{
+    m_contentLayout->setSpacing(0);
+    m_contentLayout->setContentsMargins(20, 0, 20, 30);
+    m_contentFrame->setLayout(m_contentLayout);
+    m_centralLayout->addWidget(m_contentFrame);
+
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);
+    this->setLayout(m_centralLayout);
+
+//#define SHOWBGCOLOR
+#ifdef SHOWBGCOLOR
+    m_contentFrame->setStyleSheet("QFrame{background: cyan}");
+#endif
+}
+
+void SingleInstallPage::initPkgInfoView()
+{
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    QString pkgFontFamily1 = Utils::loadFontFamilyByType(Utils::DefautFont);
+    QString pkgFontFamily = Utils::loadFontFamilyByType(Utils::DefautFont);
 
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
-    m_infoControlButton->setObjectName("InfoControlButton");
-    m_workerInfomation->setObjectName("WorkerInformation");
-    m_packageDescription->setObjectName("PackageDescription");
 
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    QFont pkgFont = Utils::loadFontBySizeAndWeight(pkgFontFamily1, 14, QFont::Light);
+    QFont lblFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
+    DLabel *packageName = new DLabel;
+    packageName->setText(tr("Name: "));
+    packageName->setFont(lblFont);
+    packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    packageName->setObjectName("PackageNameTitle");
+
+    DLabel *packageVersion = new DLabel;
+    packageVersion->setText(tr("Version: "));
+    packageVersion->setFont(lblFont);
+    packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    packageVersion->setObjectName("PackageVersionTitle");
+
+    QFont pkgFont = Utils::loadFontBySizeAndWeight(pkgFontFamily, 14, QFont::Light);
     DPalette pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
     pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
     m_packageName->setPalette(pkgPalette);
@@ -133,29 +182,74 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_packageVersion->setFont(pkgFont);
 
+    QGridLayout *itemInfoLayout = new QGridLayout;
+    itemInfoLayout->addWidget(packageName, 0, 0);
+    itemInfoLayout->addWidget(m_packageName, 0, 1);
+    itemInfoLayout->addWidget(packageVersion, 1, 0);
+    itemInfoLayout->addWidget(m_packageVersion, 1, 1);
+    itemInfoLayout->setSpacing(0);
+    itemInfoLayout->setVerticalSpacing(0);
+    itemInfoLayout->setHorizontalSpacing(0);
+    itemInfoLayout->setMargin(0);
+
+    QHBoxLayout *itemBlockLayout = new QHBoxLayout;
+    itemBlockLayout->addWidget(m_packageIcon);
+    itemBlockLayout->addLayout(itemInfoLayout);
+    itemBlockLayout->addStretch();
+    itemBlockLayout->setSpacing(0);
+    itemBlockLayout->setContentsMargins(0, 0, 0, 0);
+
+    QVBoxLayout *itemLayout = new QVBoxLayout;
+    itemLayout->addSpacing(10);
+    itemLayout->addSpacing(35);
+    itemLayout->addLayout(itemBlockLayout);
+    itemLayout->addSpacing(28);
+    itemLayout->addWidget(m_packageDescription);
+    itemLayout->addStretch();
+    itemLayout->setMargin(0);
+    itemLayout->setSpacing(0);
+
+    m_itemInfoFrame->setLayout(itemLayout);
+    m_itemInfoFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_itemInfoFrame->setVisible(false);
+
+    m_contentLayout->addWidget(m_itemInfoFrame);
+    m_contentLayout->setAlignment(m_itemInfoFrame, Qt::AlignHCenter);
+
+#ifdef SHOWBGCOLOR
+    packageName->setStyleSheet("{background: blue;}");
+    packageVersion->setStyleSheet("{background: red;}");
+    m_itemInfoFrame->setStyleSheet("{background: yellow;}");
+    m_packageName->setStyleSheet("QLabel{background: blue;}");
+    m_packageVersion->setStyleSheet("QLabel{background: yellow;}");
+    m_packageDescription->setStyleSheet("QLabel{background: orange;}");
+    m_packageIcon->setStyleSheet("QLabel{background: brown;}");
+#endif
+}
+
+void SingleInstallPage::initPkgInstallProcessView()
+{
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+
+    m_infoControlButton->setObjectName("InfoControlButton");
+    m_installProcessView->setObjectName("WorkerInformation");
+    m_packageDescription->setObjectName("PackageDescription");
+
     QFont tipFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
     m_tipsLabel->setFont(tipFont);
+    m_tipsLabel->setFixedHeight(18);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
-//#define SHOWBORDER
-#ifdef SHOWBORDER
-    m_packageName->setStyleSheet("QLabel{border: 1px solid blue;}");
-    m_packageVersion->setStyleSheet("QLabel{border: 1px solid yellow;}");
-    m_workerInfomation->setStyleSheet("QLabel{border: 1px solid purple;}");
-    m_packageDescription->setStyleSheet("QLabel{border: 1px solid red;}");
-    m_packageIcon->setStyleSheet("QLabel{border: 1px solid black;}");
-#endif
 
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
 
-    QFont infoFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 11, QFont::Normal);
-    m_workerInfomation->setFont(infoFont);
-    m_workerInfomation->setTextColor(QColor("#609DC8"));
-    m_workerInfomation->setReadOnly(true);
-    m_workerInfomation->setVisible(false);
-    m_workerInfomation->setAcceptDrops(false);
-    m_workerInfomation->setFixedHeight(200);
-    m_workerInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QFont infomationFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 11, QFont::Normal);
+    m_installProcessView->setFont(infomationFont);
+    m_installProcessView->setVisible(false);
+    m_installProcessView->setAcceptDrops(false);
+    m_installProcessView->setFixedHeight(200);
+    m_installProcessView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_installButton->setText(tr("Install"));
     m_installButton->setVisible(false);
@@ -170,7 +264,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     m_doneButton->setText(tr("Done"));
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
-
 
     QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     m_installButton->setFixedSize(120,36);
@@ -198,39 +291,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     palette.setBrush(DPalette::ToolTipText, palette.color(DPalette::ItemBackground));
     m_packageDescription->setPalette(palette);
 
-    QFont lblFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
-    DLabel *packageName = new DLabel;
-    packageName->setText(tr("Name: "));
-    packageName->setFont(lblFont);
-    packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    packageName->setObjectName("PackageNameTitle");
-
-    DLabel *packageVersion = new DLabel;
-    packageVersion->setText(tr("Version: "));
-    packageVersion->setFont(lblFont);
-    packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    packageVersion->setObjectName("PackageVersionTitle");
-#ifdef SHOWBORDER
-    packageName->setStyleSheet("QLabel{border: 1px solid blue;}");
-    packageVersion->setStyleSheet("QLabel{border: 1px solid red;}");
-#endif
-    QGridLayout *itemInfoLayout = new QGridLayout;
-    itemInfoLayout->addWidget(packageName, 0, 0);
-    itemInfoLayout->addWidget(m_packageName, 0, 1);
-    itemInfoLayout->addWidget(packageVersion, 1, 0);
-    itemInfoLayout->addWidget(m_packageVersion, 1, 1);
-    itemInfoLayout->setSpacing(0);
-    itemInfoLayout->setVerticalSpacing(0);
-    itemInfoLayout->setHorizontalSpacing(0);
-    itemInfoLayout->setMargin(0);
-
-    QHBoxLayout *itemBlockLayout = new QHBoxLayout;
-    itemBlockLayout->addWidget(m_packageIcon);
-    itemBlockLayout->addLayout(itemInfoLayout);
-    itemBlockLayout->addStretch();
-    itemBlockLayout->setSpacing(0);
-    itemBlockLayout->setContentsMargins(0, 0, 0, 0);
-
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
@@ -243,40 +303,28 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(35);
-    itemLayout->addLayout(itemBlockLayout);
-    itemLayout->addSpacing(28);
-    itemLayout->addWidget(m_packageDescription);
-    itemLayout->addStretch();
-    itemLayout->setMargin(0);
-    itemLayout->setSpacing(0);
+    m_contentLayout->addWidget(m_infoControlButton);
+    m_contentLayout->addWidget(m_installProcessView);
+    m_contentLayout->addWidget(m_tipsLabel);
+    m_contentLayout->addWidget(m_progress);
+    m_contentLayout->setAlignment(m_progress, Qt::AlignHCenter);
+    m_contentLayout->addSpacing(8);
+    m_contentLayout->addLayout(btnsLayout);
 
-    m_itemInfoWidget->setLayout(itemLayout);
-    m_itemInfoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_itemInfoWidget->setVisible(false);
+#ifdef SHOWBGCOLOR
+    m_tipsLabel->setStyleSheet("QLabel{background: gray}");
+    m_infoControlButton->setStyleSheet("QFrame{background: purple}");
+    m_installButton->setStyleSheet("QPushButton{background: blue}");
+    m_uninstallButton->setStyleSheet("QPushButton{background: yellow}");
+    m_reinstallButton->setStyleSheet("QPushButton{background: purple}");
+    m_backButton->setStyleSheet("QPushButton{background: brown}");
+    m_confirmButton->setStyleSheet("QPushButton{background: pink}");
+    m_doneButton->setStyleSheet("QPushButton{background: cyan}");
+#endif
+}
 
-    m_strengthWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_strengthWidget->setVisible(false);
-
-    centralLayout = new QVBoxLayout;
-    centralLayout->addSpacing(10);
-    centralLayout->addWidget(m_itemInfoWidget);
-    centralLayout->setAlignment(m_itemInfoWidget, Qt::AlignHCenter);
-    centralLayout->addWidget(m_infoControlButton);
-    centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
-    centralLayout->addWidget(m_workerInfomation);
-    centralLayout->addWidget(m_strengthWidget);
-    centralLayout->addWidget(m_tipsLabel);
-    centralLayout->addWidget(m_progress);
-    centralLayout->setAlignment(m_progress, Qt::AlignHCenter);
-    centralLayout->addSpacing(8);
-    centralLayout->addLayout(btnsLayout);
-    centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(10, 0, 10, 30);
-
-    setLayout(centralLayout);
-
+void SingleInstallPage::initConnections()
+{
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::showInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::hideInfomation);
     connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::install);
@@ -286,16 +334,10 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
     connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(model, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
-    connect(model, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
-
-    if (m_packagesModel->isReady())
-        setPackageInfo();
-    else
-        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
-
-    m_upDown = true;
+    connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
+    connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 }
+
 void SingleInstallPage::reinstall()
 {
     m_backButton->setVisible(false);
@@ -329,19 +371,15 @@ void SingleInstallPage::uninstallCurrentPackage()
 void SingleInstallPage::showInfomation()
 {
     m_upDown = false;
-    centralLayout->setContentsMargins(20, 0, 20, 30);
-    m_workerInfomation->setVisible(true);
-    m_strengthWidget->setVisible(true);
-    m_itemInfoWidget->setVisible(false);
+    m_installProcessView->setVisible(true);
+    m_itemInfoFrame->setVisible(false);
 }
 
 void SingleInstallPage::hideInfomation()
 {
     m_upDown = true;
-    centralLayout->setContentsMargins(10, 0, 10, 30);
-    m_workerInfomation->setVisible(false);
-    m_strengthWidget->setVisible(false);
-    m_itemInfoWidget->setVisible(true);
+    m_installProcessView->setVisible(false);
+    m_itemInfoFrame->setVisible(true);
 }
 
 void SingleInstallPage::showInfo()
@@ -361,7 +399,7 @@ void SingleInstallPage::showInfo()
 
 void SingleInstallPage::onOutputAvailable(const QString &output)
 {
-    m_workerInfomation->append(output.trimmed());
+    m_installProcessView->appendText(output.trimmed());
 
     // pump progress
     if (m_progress->value() < 90) m_progress->setValue(m_progress->value() + 10);
@@ -441,7 +479,7 @@ void SingleInstallPage::setPackageInfo()
 
     QPixmap iconPix = icon.pixmap(m_packageIcon->size());
 
-    m_itemInfoWidget->setVisible(true);
+    m_itemInfoFrame->setVisible(true);
     m_packageIcon->setPixmap(iconPix);
     m_packageName->setText(package->packageName());
     m_packageVersion->setText(package->version());

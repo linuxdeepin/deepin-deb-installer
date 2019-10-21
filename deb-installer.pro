@@ -41,7 +41,8 @@ SOURCES += \
         uninstallconfirmpage.cpp \
         workerprogress.cpp \
         utils.cpp \
-        droundbgframe.cpp
+        droundbgframe.cpp \
+    	installprocessinfoview.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -57,7 +58,8 @@ HEADERS += \
     uninstallconfirmpage.h \
     workerprogress.h \
     utils.h \
-    droundbgframe.h
+    droundbgframe.h \
+    installprocessinfoview.h
 
 FORMS +=
 

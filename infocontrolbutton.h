@@ -22,20 +22,23 @@
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
 
-#include <DWidget>
-#include <DLabel>
 #include <QPen>
 #include <QSettings>
 #include <QVBoxLayout>
+
+#include <DFrame>
+#include <DLabel>
+
 DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
-class InfoControlButton : public DWidget
+
+class InfoControlButton : public DFrame
 {
     Q_OBJECT
 
 public:
-    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent = 0);
+    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent = nullptr);
 
     void setShrinkTips(const QString text);
     void setExpandTips(const QString text);
@@ -58,7 +61,6 @@ private:
     DLabel *m_arrowIcon;
     DLabel *m_tipsText;
 
-    QFont m_font;
     QVBoxLayout *centralLayout;
 };
 

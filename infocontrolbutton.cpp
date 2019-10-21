@@ -20,6 +20,7 @@
  */
 
 #include "infocontrolbutton.h"
+#include "utils.h"
 
 #include <QVBoxLayout>
 #include <QPixmap>
@@ -27,20 +28,20 @@
 
 #include <DStyleHelper>
 #include <DApplicationHelper>
+
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent)
-    : DWidget(parent),
+    : DFrame(parent),
       m_expand(false),
       m_expandTips(expandTips),
       m_shrinkTips(shrinkTips),
       m_arrowIcon(new DLabel),
       m_tipsText(new DLabel)
 {
+    int bottomSpace = 0;
+    setFixedHeight(28+bottomSpace);
 
-    m_font.setPixelSize(12);
-
-    DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
-    palette.setColor(DPalette::WindowText, palette.color(DPalette::Highlight));
-    m_tipsText->setPalette(palette);
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QFont font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);
@@ -50,24 +51,32 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));//21.8
     else
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
-    m_tipsText->setAlignment(Qt::AlignCenter);
-    m_font.setWeight(QFont::Normal);
-    m_tipsText->setFont(m_font);
-    m_tipsText->setText(expandTips);
-    m_tipsText->setObjectName("TipsText");
+    m_arrowIcon->setFixedHeight(13);
 
+    DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
+    palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
+    m_tipsText->setPalette(palette);
+    m_tipsText->setAlignment(Qt::AlignCenter);
+    m_tipsText->setFont(font);
+    m_tipsText->setText(expandTips);
+    m_tipsText->setFixedHeight(15);
 
     centralLayout = new QVBoxLayout;
+    centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 0, 0, bottomSpace);
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
-    centralLayout->setSpacing(8);
-    centralLayout->setContentsMargins(0, 5, 0, 5);
 
     setLayout(centralLayout);
-    //setFixedSize(200, 31);
 
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
                         this, &InfoControlButton::themeChanged);
+
+//#define SHOWBGCOLOR
+#ifdef SHOWBGCOLOR
+    m_tipsText->setStyleSheet("QLabel{background: cyan;}");
+    m_arrowIcon->setStyleSheet("QLabel{background: red;}");
+#endif
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
@@ -112,16 +121,19 @@ void InfoControlButton::onMouseRelease()
         m_tipsText->setText(m_shrinkTips);
     }
 }
+
 void InfoControlButton::setExpandTips(const QString text)
 {
     m_expandTips = text;
     m_tipsText->setText(m_expandTips);
 }
+
 void InfoControlButton::setShrinkTips(const QString text)
 {
     m_shrinkTips = text;
     m_tipsText->setText(m_shrinkTips);
 }
+
 void InfoControlButton::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();

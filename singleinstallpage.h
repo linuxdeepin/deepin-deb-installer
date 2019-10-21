@@ -23,12 +23,14 @@
 #define SINGLEINSTALLPAGE_H
 
 #include "infocontrolbutton.h"
+#include "installprocessinfoview.h"
 
 #include <DLabel>
 #include <DProgressBar>
 #include <DPushButton>
 #include <DTextEdit>
 #include <DWidget>
+#include <DFrame>
 
 #include <QApt/DebFile>
 
@@ -38,7 +40,7 @@ class SingleInstallPage : public DWidget
     Q_OBJECT
 
 public:
-    explicit SingleInstallPage(DebListModel *model, DWidget *parent = 0);
+    explicit SingleInstallPage(DebListModel *model, DWidget *parent = nullptr);
 
     void afterGetAutherFalse();
 
@@ -57,6 +59,12 @@ private:
     };
 
 private:
+    void initUI();
+    void initContentLayout();
+    void initPkgInfoView();
+    void initPkgInstallProcessView();
+    void initConnections();
+
     void setPackageInfo();
 
 private slots:
@@ -76,15 +84,15 @@ private:
     bool m_workerStarted;
     bool m_upDown;
     DebListModel *m_packagesModel;
-    DWidget *m_itemInfoWidget;
+    DFrame *m_contentFrame;
+    DFrame *m_itemInfoFrame;
     DLabel *m_packageIcon;
     DLabel *m_packageName;
     DLabel *m_packageVersion;
     DLabel *m_packageDescription;
     DLabel *m_tipsLabel;
     DProgressBar *m_progress;
-    DTextEdit *m_workerInfomation;
-    DWidget *m_strengthWidget;
+    InstallProcessInfoView *m_installProcessView;
     InfoControlButton *m_infoControlButton;
     DPushButton *m_installButton;
     DPushButton *m_uninstallButton;
@@ -93,7 +101,8 @@ private:
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
 
-    QVBoxLayout *centralLayout;
+    QVBoxLayout *m_contentLayout;
+    QVBoxLayout *m_centralLayout;
 };
 
 #endif  // SINGLEINSTALLPAGE_H
