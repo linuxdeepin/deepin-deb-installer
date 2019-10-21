@@ -23,13 +23,15 @@
 #define MULTIPLEINSTALLPAGE_H
 
 #include "infocontrolbutton.h"
+#include "droundbgframe.h"
+#include "installprocessinfoview.h"
+
+#include <QPropertyAnimation>
 
 #include <DWidget>
-
 #include <DPushButton>
 #include <DProgressBar>
 #include <DTextEdit>
-#include <QPropertyAnimation>
 
 class PackagesListView;
 class DebListModel;
@@ -38,7 +40,7 @@ class MultipleInstallPage : public DWidget
     Q_OBJECT
 
 public:
-    explicit MultipleInstallPage(DebListModel *model, DWidget *parent = 0);
+    explicit MultipleInstallPage(DebListModel *model, DWidget *parent = nullptr);
 
     void afterGetAutherFalse();
 signals:
@@ -59,17 +61,20 @@ private slots:
     void hiddenCancelButton();
 
 private:
+    void initUI();
+    void initConnections();
+
     DebListModel *m_debListModel;
-    PackagesListView *m_appsView;
-    QTextEdit *m_infoArea;
+    PackagesListView *m_appsListView;
+    DRoundBgFrame *m_appsListViewBgFrame;
+    InstallProcessInfoView *m_installProcessInfoView;
     InfoControlButton *m_infoControlButton;
     DProgressBar *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;
     DPushButton *m_backButton;
-    QVBoxLayout *centralLayout;
-
+    QVBoxLayout *m_centralLayout;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

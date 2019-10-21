@@ -24,47 +24,50 @@
 #include "packagelistview.h"
 #include "packageslistdelegate.h"
 #include "workerprogress.h"
-#include "droundbgframe.h"
-
-#include <DTitlebar>
 
 #include <QApplication>
-#include <DLabel>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QVBoxLayout>
+
+#include <DLabel>
+#include <DTitlebar>
+
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     : DWidget(parent)
     , m_debListModel(model)
-    , m_appsView(new PackagesListView)
-    , m_infoArea(new DTextEdit)
+    , m_appsListView(new PackagesListView)
+    , m_appsListViewBgFrame(new DRoundBgFrame(this))
+    , m_installProcessInfoView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
     , m_installProgress(new WorkerProgress)
     , m_progressAnimation(new QPropertyAnimation(m_installProgress, "value", this))
     , m_installButton(new DPushButton)
     , m_acceptButton(new DPushButton)
     , m_backButton(new DPushButton)
+    , m_centralLayout(new QVBoxLayout)
 {
-    PackagesListDelegate *delegate = new PackagesListDelegate(m_appsView);
+    initUI();
+    initConnections();
+}
+
+void MultipleInstallPage::initUI()
+{
+    PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
     const QFont font_const = this->font();
     QFont font_use = font_const;
 
-    DRoundBgFrame *bgFrame = new DRoundBgFrame;
-    bgFrame->setFixedSize(460, 186);
-    QHBoxLayout *appsViewLayout = new QHBoxLayout(bgFrame);
+    m_appsListViewBgFrame->setFixedSize(460, 186);
+    QHBoxLayout *appsViewLayout = new QHBoxLayout;
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
-    bgFrame->setLayout(appsViewLayout);
+    m_appsListViewBgFrame->setLayout(appsViewLayout);
 
-    m_appsView->setObjectName("AppsView");
-    m_infoArea->setObjectName("InfoArea");
-    m_infoControlButton->setObjectName("InfoControlButton");
-
-    m_appsView->setModel(model);
-    m_appsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);;
-    m_appsView->setItemDelegate(delegate);
-    appsViewLayout->addWidget(m_appsView);
+    m_appsListView->setModel(m_debListModel);
+    m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);;
+    m_appsListView->setItemDelegate(delegate);
+    appsViewLayout->addWidget(m_appsListView);
 
     m_installButton->setFixedSize(120, 36);
     m_acceptButton->setFixedSize(120, 36);
@@ -82,13 +85,11 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     m_backButton->setFont(font_use);
 
     font_use.setPixelSize(11);
-    m_infoArea->setFont(font_use);
-    m_infoArea->setTextColor(QColor("#609DC8"));
-    m_infoArea->setReadOnly(true);
-    m_infoArea->setVisible(false);
-    m_infoArea->setAcceptDrops(false);
-    m_infoArea->setFixedHeight(200);
-    m_infoArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_installProcessInfoView->setFont(font_use);
+    m_installProcessInfoView->setVisible(false);
+    m_installProcessInfoView->setAcceptDrops(false);
+    m_installProcessInfoView->setFixedHeight(200);
+    m_installProcessInfoView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_infoControlButton->setVisible(false);
     m_installProgress->setVisible(false);
@@ -102,20 +103,22 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(bgFrame, Qt::AlignHCenter);
-    centralLayout->addWidget(m_infoControlButton);
-    centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
-    centralLayout->addWidget(m_infoArea, Qt::AlignHCenter);
-    centralLayout->addStretch();
-    centralLayout->addWidget(m_installProgress);
-    centralLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
-    centralLayout->addLayout(btnsLayout);
+    m_centralLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);
+    m_centralLayout->addWidget(m_infoControlButton);
+    m_centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
+    m_centralLayout->addWidget(m_installProcessInfoView);
+    m_centralLayout->addStretch();
+    m_centralLayout->addWidget(m_installProgress);
+    m_centralLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
+    m_centralLayout->addLayout(btnsLayout);
 
-    centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(10, 16, 10, 30);
-    setLayout(centralLayout);
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setContentsMargins(10, 16, 10, 30);
+    setLayout(m_centralLayout);
+}
 
+void MultipleInstallPage::initConnections()
+{
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::hideInfo);
     connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::installAll);
@@ -123,13 +126,13 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(m_appsView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
-    connect(m_appsView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
+    connect(m_appsListView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
+    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
-    connect(model, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
-    connect(model, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
+    connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
+    connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
 
-    connect(model, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
+    connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
 }
 
 void MultipleInstallPage::onWorkerFinshed()
@@ -141,7 +144,7 @@ void MultipleInstallPage::onWorkerFinshed()
 
 void MultipleInstallPage::onOutputAvailable(const QString &output)
 {
-    m_infoArea->append(output.trimmed());
+    m_installProcessInfoView->appendText(output.trimmed());
 
     // change to install
     if (!m_installButton->isVisible()) {
@@ -169,12 +172,12 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
 {
     if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
         QModelIndex currIndex = m_debListModel->index(opIndex - 1);
-        m_appsView->scrollTo(currIndex, QAbstractItemView::PositionAtTop);
+        m_appsListView->scrollTo(currIndex, QAbstractItemView::PositionAtTop);
     }
     else if(opIndex == -1)//to top
     {
         QModelIndex currIndex = m_debListModel->index(0);
-        m_appsView->scrollTo(currIndex);
+        m_appsListView->scrollTo(currIndex);
     }
 }
 
@@ -189,17 +192,19 @@ void MultipleInstallPage::onItemClicked(const QModelIndex &index)
 
 void MultipleInstallPage::showInfo()
 {
-    centralLayout->setContentsMargins(20, 0, 20, 30);
-    m_appsView->setVisible(false);
-    m_infoArea->setVisible(true);
+    m_centralLayout->setContentsMargins(20, 0, 20, 30);
+    m_appsListViewBgFrame->setVisible(false);
+    m_appsListView->setVisible(false);
+    m_installProcessInfoView->setVisible(true);
     emit hideAutoBarTitle();
 }
 
 void MultipleInstallPage::hideInfo()
 {
-    centralLayout->setContentsMargins(10, 0, 10, 30);
-    m_appsView->setVisible(true);
-    m_infoArea->setVisible(false);
+    m_centralLayout->setContentsMargins(10, 16, 10, 30);
+    m_appsListViewBgFrame->setVisible(true);
+    m_appsListView->setVisible(true);
+    m_installProcessInfoView->setVisible(false);
     emit hideAutoBarTitle();
 }
 void MultipleInstallPage::hiddenCancelButton()
