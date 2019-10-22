@@ -117,19 +117,19 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             painter->setFont(Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium));
             switch (operate_stat) {
                 case DebListModel::Operating:
-                    painter->setPen(QColor(124, 124, 124));
+                    painter->setPen(QColor("#7C7C7C"));
                     painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 case DebListModel::Success:
-                    painter->setPen(QColor(65, 117, 5));
+                    painter->setPen(QColor("#417505"));
                     painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 case DebListModel::Waiting:
-                    painter->setPen(QColor(124, 124, 124));
+                    painter->setPen(QColor("#7C7C7C"));
                     painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 default:
-                    painter->setPen(QColor(255, 109, 109));
+                    painter->setPen(QColor("#FF6D6D"));
                     painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
             }
@@ -150,24 +150,24 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setTop(name_rect.bottom()+2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+        penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         if (operate_stat == DebListModel::Failed) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            painter->setPen(QColor(255, 109, 109));
+            penColor = QColor("#FF6D6D");
         } else if (install_stat != DebListModel::NotInstalled) {
             if (install_stat == DebListModel::InstalledSameVersion) {
                 info_str = tr("Same version installed");
-                painter->setPen(QColor(65, 117, 5));
+//                penColor = QColor("#417505");
             } else {
                 info_str =
                     tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-                painter->setPen(QColor(255, 109, 109));
+//                penColor = QColor("#FF6D6D");
             }
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
-            QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
-            painter->setPen(QPen(penColor));
         }
 
+        painter->setPen(QPen(penColor));
         painter->setFont(Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight));
         info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
         painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
