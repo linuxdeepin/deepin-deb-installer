@@ -24,6 +24,7 @@
 #include "packagelistview.h"
 #include "packageslistdelegate.h"
 #include "workerprogress.h"
+#include "utils.h"
 
 #include <QApplication>
 #include <QPropertyAnimation>
@@ -55,8 +56,8 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    const QFont font_const = this->font();
-    QFont font_use = font_const;
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
 
     m_appsListViewBgFrame->setFixedSize(460, 186);
     QHBoxLayout *appsViewLayout = new QHBoxLayout;
@@ -79,13 +80,10 @@ void MultipleInstallPage::initUI()
     m_backButton->setText(tr("Back"));
     m_backButton->setVisible(false);
 
-    font_use.setPixelSize(14);
-    m_installButton->setFont(font_use);
-    m_acceptButton->setFont(font_use);
-    m_backButton->setFont(font_use);
+    m_installButton->setFont(btnFont);
+    m_acceptButton->setFont(btnFont);
+    m_backButton->setFont(btnFont);
 
-    font_use.setPixelSize(11);
-    m_installProcessInfoView->setFont(font_use);
     m_installProcessInfoView->setVisible(false);
     m_installProcessInfoView->setAcceptDrops(false);
     m_installProcessInfoView->setFixedHeight(200);

@@ -29,7 +29,7 @@ class WorkerProgress : public DProgressBar {
     Q_OBJECT
 
 public:
-    explicit WorkerProgress(DWidget *parent = 0);
+    explicit WorkerProgress(DWidget *parent = nullptr);
 };
 
 #endif  // WORKERPROGRESS_H

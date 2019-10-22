@@ -41,7 +41,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     setFixedHeight(28+bottomSpace);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QFont font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
+    QFont font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);

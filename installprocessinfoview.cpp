@@ -1,7 +1,10 @@
 #include "installprocessinfoview.h"
 #include "droundbgframe.h"
+#include "utils.h"
 
 #include <QVBoxLayout>
+
+#include <DApplicationHelper>
 
 InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
     : DFrame(parent)
@@ -12,23 +15,37 @@ InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
 
 void InstallProcessInfoView::initUI()
 {
-    QColor infomationTextColor = QColor("#609DC8");
-
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
     bgFrame->setFixedSize(440, 200);
 
     QVBoxLayout *editLayout = new QVBoxLayout;
     editLayout->setSpacing(0);
-    editLayout->setContentsMargins(0, 0, 0, 0);
+    editLayout->setContentsMargins(5, 1, 0, 5);
     bgFrame->setLayout(editLayout);
 
     editLayout->addWidget(m_editor);
 
-    m_editor->setTextColor(infomationTextColor);
+    QString textFont = Utils::loadFontFamilyByType(Utils::DefautFont);
+    QFont infomationFont = Utils::loadFontBySizeAndWeight(textFont, 11, QFont::Normal);
+    m_editor->setFont(infomationFont);
+
+    DPalette pa = DApplicationHelper::instance()->palette(m_editor);
+    pa.setColor(DPalette::Text, QColor("#609DC8")); //pa.color(DPalette::TextTips)
+    m_editor->setPalette(pa);
+
     m_editor->setReadOnly(true);
     m_editor->setFrameShape(QFrame::NoFrame);
     m_editor->viewport()->setBackgroundRole(QPalette::Background);
     m_editor->viewport()->setAutoFillBackground(false);
+
+    QTextCursor textCursor = m_editor->textCursor();
+    QTextBlockFormat textBlockFormat;
+    //设置行高
+    textBlockFormat.setLineHeight(18, QTextBlockFormat::FixedHeight);
+    //设置行间距
+    textBlockFormat.setBottomMargin(1);
+    textCursor.setBlockFormat(textBlockFormat);
+    m_editor->setTextCursor(textCursor);
 }
 
 void InstallProcessInfoView::appendText(QString text)

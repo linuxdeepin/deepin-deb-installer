@@ -244,8 +244,6 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_progress->setVisible(false);
     m_infoControlButton->setVisible(false);
 
-    QFont infomationFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 11, QFont::Normal);
-    m_installProcessView->setFont(infomationFont);
     m_installProcessView->setVisible(false);
     m_installProcessView->setAcceptDrops(false);
     m_installProcessView->setFixedHeight(200);
@@ -527,7 +525,7 @@ void SingleInstallPage::setPackageInfo()
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak) {
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());        
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         palette = DApplicationHelper::instance()->palette(m_tipsLabel);
         palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
         m_tipsLabel->setPalette(palette);
