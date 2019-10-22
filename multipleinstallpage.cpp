@@ -37,6 +37,7 @@
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     : DWidget(parent)
     , m_debListModel(model)
+    , m_contentFrame(new DFrame(this))
     , m_appsListView(new PackagesListView)
     , m_appsListViewBgFrame(new DRoundBgFrame(this))
     , m_installProcessInfoView(new InstallProcessInfoView)
@@ -46,10 +47,29 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     , m_installButton(new DPushButton)
     , m_acceptButton(new DPushButton)
     , m_backButton(new DPushButton)
+    , m_contentLayout(new QVBoxLayout)
     , m_centralLayout(new QVBoxLayout)
 {
+    initContentLayout();
     initUI();
     initConnections();
+}
+
+void MultipleInstallPage::initContentLayout()
+{
+    m_contentLayout->setSpacing(0);
+    m_contentLayout->setContentsMargins(10, 13, 10, 30);
+    m_contentFrame->setLayout(m_contentLayout);
+    m_centralLayout->addWidget(m_contentFrame);
+
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);
+    this->setLayout(m_centralLayout);
+
+//#define SHOWBGCOLOR
+#ifdef SHOWBGCOLOR
+    m_contentFrame->setStyleSheet("QFrame{background: cyan}");
+#endif
 }
 
 void MultipleInstallPage::initUI()
@@ -84,6 +104,10 @@ void MultipleInstallPage::initUI()
     m_acceptButton->setFont(btnFont);
     m_backButton->setFont(btnFont);
 
+    m_installButton->setFocusPolicy(Qt::NoFocus);
+    m_acceptButton->setFocusPolicy(Qt::NoFocus);
+    m_backButton->setFocusPolicy(Qt::NoFocus);
+
     m_installProcessInfoView->setVisible(false);
     m_installProcessInfoView->setAcceptDrops(false);
     m_installProcessInfoView->setFixedHeight(200);
@@ -101,18 +125,15 @@ void MultipleInstallPage::initUI()
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_centralLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);
-    m_centralLayout->addWidget(m_infoControlButton);
-    m_centralLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
-    m_centralLayout->addWidget(m_installProcessInfoView);
-    m_centralLayout->addStretch();
-    m_centralLayout->addWidget(m_installProgress);
-    m_centralLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
-    m_centralLayout->addLayout(btnsLayout);
-
-    m_centralLayout->setSpacing(0);
-    m_centralLayout->setContentsMargins(10, 16, 10, 30);
-    setLayout(m_centralLayout);
+    m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);
+    m_contentLayout->addWidget(m_infoControlButton);
+    m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
+    m_contentLayout->addWidget(m_installProcessInfoView);
+    m_contentLayout->addSpacing(38);
+    m_contentLayout->addWidget(m_installProgress);
+    m_contentLayout->addStretch();
+    m_contentLayout->setAlignment(m_installProgress, Qt::AlignHCenter);
+    m_contentLayout->addLayout(btnsLayout);
 }
 
 void MultipleInstallPage::initConnections()
@@ -190,7 +211,7 @@ void MultipleInstallPage::onItemClicked(const QModelIndex &index)
 
 void MultipleInstallPage::showInfo()
 {
-    m_centralLayout->setContentsMargins(20, 0, 20, 30);
+    m_contentLayout->setContentsMargins(10, 0, 10, 30);
     m_appsListViewBgFrame->setVisible(false);
     m_appsListView->setVisible(false);
     m_installProcessInfoView->setVisible(true);
@@ -199,7 +220,7 @@ void MultipleInstallPage::showInfo()
 
 void MultipleInstallPage::hideInfo()
 {
-    m_centralLayout->setContentsMargins(10, 16, 10, 30);
+    m_contentLayout->setContentsMargins(10, 13, 10, 30);
     m_appsListViewBgFrame->setVisible(true);
     m_appsListView->setVisible(true);
     m_installProcessInfoView->setVisible(false);

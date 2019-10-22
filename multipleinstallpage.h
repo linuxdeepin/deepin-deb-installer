@@ -61,10 +61,12 @@ private slots:
     void hiddenCancelButton();
 
 private:
+    void initContentLayout();
     void initUI();
     void initConnections();
 
     DebListModel *m_debListModel;
+    DFrame *m_contentFrame;
     PackagesListView *m_appsListView;
     DRoundBgFrame *m_appsListViewBgFrame;
     InstallProcessInfoView *m_installProcessInfoView;
@@ -74,6 +76,8 @@ private:
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;
     DPushButton *m_backButton;
+
+    QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
 };
 
