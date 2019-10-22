@@ -44,7 +44,7 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 12, QFont::ExtraLight);
 
     const auto ratio = devicePixelRatioF();
-    setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::NoFocus);
 
     DPalette palette;
 

@@ -38,7 +38,7 @@ PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     , m_parentView(parent)
 {
 
-    const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
+    const QIcon icon = QIcon::fromTheme("application-x-deb");
     const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
 

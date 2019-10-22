@@ -20,6 +20,7 @@
  */
 
 #include "uninstallconfirmpage.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -34,59 +35,57 @@ UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
     , m_cancelBtn(new DPushButton)
     , m_confirmBtn(new DPushButton)
 {
-    const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
-
+    const QIcon icon = QIcon::fromTheme("application-x-deb");
 
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
+
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    m_tips->setFont(Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Normal));
     m_tips->setAlignment(Qt::AlignCenter);
-//    m_tips->setStyleSheet(
-//        "QLabel {"
-//        "padding: 20px 0 0 0;"
-//        "}");
+
     QFont font = this->font();
     font.setPixelSize(14);
     m_cancelBtn->setFont(font);
     m_confirmBtn->setFont(font);
     m_dependsInfomation->setFont(font);
 
+    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
     m_confirmBtn->setFixedSize(120, 36);
-    m_confirmBtn->setFocusPolicy(Qt::ClickFocus);
-    m_cancelBtn->setFocusPolicy(Qt::ClickFocus);
+    m_confirmBtn->setFocusPolicy(Qt::NoFocus);
+    m_cancelBtn->setFocusPolicy(Qt::NoFocus);
+    m_cancelBtn->setFont(btnFont);
+    m_confirmBtn->setFont(btnFont);
 
     m_dependsInfomation->setReadOnly(true);
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    m_dependsInfomation->setStyleSheet(
-//        "QTextEdit {"
-//        "color: #609dc9;"
-//        "border: 1px solid #eee;"
-//        "margin: 0 0 20px 0;"
-//        "}");
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
+    btnsLayout->setSpacing(0);
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_cancelBtn);
+    btnsLayout->addSpacing(20);
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
-    btnsLayout->setSpacing(30);
-    btnsLayout->setMargin(0);
 
-    QVBoxLayout *centerWrapperLayout = new QVBoxLayout;
-    centerWrapperLayout->addStretch();
-    centerWrapperLayout->addWidget(m_icon);
-    centerWrapperLayout->addSpacing(15);
-    centerWrapperLayout->setAlignment(m_icon, Qt::AlignHCenter);
-    centerWrapperLayout->addWidget(m_tips);
-    centerWrapperLayout->addStretch();
-    centerWrapperLayout->setSpacing(0);
-    centerWrapperLayout->setMargin(0);
+    QVBoxLayout *contentLayout = new QVBoxLayout;
+    contentLayout->setSpacing(0);
+    contentLayout->setContentsMargins(0, 0, 0, 0);
+    contentLayout->addStretch();
+    contentLayout->addWidget(m_icon);
+    contentLayout->addSpacing(15);
+    contentLayout->setAlignment(m_icon, Qt::AlignHCenter);
+    contentLayout->addWidget(m_tips);
+    contentLayout->addStretch();
 
-    m_infoWrapperWidget->setLayout(centerWrapperLayout);
+    m_infoWrapperWidget->setLayout(contentLayout);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_infoWrapperWidget);

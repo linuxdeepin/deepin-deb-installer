@@ -278,9 +278,12 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_confirmButton->setFont(btnFont);
     m_backButton->setFont(btnFont);
     m_doneButton->setFont(btnFont);
-    m_uninstallButton->setFocusPolicy(Qt::ClickFocus);
-    m_reinstallButton->setFocusPolicy(Qt::ClickFocus);
-    m_installButton->setFocusPolicy(Qt::ClickFocus);
+    m_installButton->setFocusPolicy(Qt::NoFocus);
+    m_uninstallButton->setFocusPolicy(Qt::NoFocus);
+    m_reinstallButton->setFocusPolicy(Qt::NoFocus);
+    m_confirmButton->setFocusPolicy(Qt::NoFocus);
+    m_backButton->setFocusPolicy(Qt::NoFocus);
+    m_doneButton->setFocusPolicy(Qt::NoFocus);
 
     QFont descFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
     m_packageDescription->setFixedHeight(70);
@@ -305,6 +308,7 @@ void SingleInstallPage::initPkgInstallProcessView()
 
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(m_progress);
     m_contentLayout->setAlignment(m_progress, Qt::AlignHCenter);
@@ -475,7 +479,7 @@ void SingleInstallPage::setPackageInfo()
 
     DebFile *package = m_packagesModel->preparedPackages().first();
 
-    const QIcon icon = QIcon::fromTheme("application-vnd.debian.binary-package", QIcon::fromTheme("debian-swirl"));
+    const QIcon icon = QIcon::fromTheme("application-x-deb");
 
     QPixmap iconPix = icon.pixmap(m_packageIcon->size());
 
