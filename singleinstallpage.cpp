@@ -453,9 +453,9 @@ void SingleInstallPage::onWorkerFinished()
         if (m_operate == Install || m_operate == Reinstall) {
             m_infoControlButton->setExpandTips(tr("Display install details"));
             m_tipsLabel->setText(tr("Installed successfully"));
-            QPalette pe;
-            pe.setColor(QPalette::WindowText, QColor("#47790C"));
-            m_tipsLabel->setPalette(pe);
+            palette = DebApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setColor(QPalette::WindowText, palette.color(DPalette::DarkLively));
+            m_tipsLabel->setPalette(palette);
         } else {
             m_infoControlButton->setExpandTips(tr("Display uninstall details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));

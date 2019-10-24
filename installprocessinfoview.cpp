@@ -29,8 +29,8 @@ void InstallProcessInfoView::initUI()
     QFont infomationFont = Utils::loadFontBySizeAndWeight(textFont, 11, QFont::Normal);
     m_editor->setFont(infomationFont);
 
-    DPalette pa = DApplicationHelper::instance()->palette(m_editor);
-    pa.setColor(DPalette::Text, QColor("#609DC8")); //pa.color(DPalette::TextTips)
+    DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
+    pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));
     m_editor->setPalette(pa);
 
     m_editor->setReadOnly(true);
@@ -55,5 +55,14 @@ void InstallProcessInfoView::appendText(QString text)
 
 InstallProcessInfoView::~InstallProcessInfoView()
 {
+}
+
+void InstallProcessInfoView::paintEvent(QPaintEvent *event)
+{
+    DFrame::paintEvent(event);
+
+    DPalette pa = DebApplicationHelper::instance()->palette(this);
+    pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));
+    m_editor->setPalette(pa);
 }
 

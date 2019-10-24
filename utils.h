@@ -22,6 +22,31 @@
 
 #include <QObject>
 #include <QHash>
+#include <QWidget>
+
+#include <DPalette>
+#include <DApplicationHelper>
+
+DWIDGET_USE_NAMESPACE
+
+class DebApplicationHelper : public DGuiApplicationHelper
+{
+    Q_OBJECT
+
+public:
+    static DebApplicationHelper *instance();
+
+    DPalette standardPalette(DGuiApplicationHelper::ColorType type) const;
+    DPalette palette(const QWidget *widget, const QPalette &base = QPalette()) const;
+    void setPalette(QWidget *widget, const DPalette &palette);
+    void resetPalette(QWidget *widget);
+
+private:
+    DebApplicationHelper();
+    ~DebApplicationHelper() override;
+
+    bool eventFilter(QObject *watched, QEvent *event) override;
+};
 
 class Utils : public QObject
 {

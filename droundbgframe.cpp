@@ -1,4 +1,5 @@
 #include "droundbgframe.h"
+#include "utils.h"
 
 #include <QPainter>
 #include <DApplicationHelper>
@@ -15,7 +16,7 @@ void DRoundBgFrame::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    DPalette pa = DApplicationHelper::instance()->palette(this);
+    DPalette pa = DebApplicationHelper::instance()->palette(this);
     QPainterPath painterPath;
 
     if(m_hasFrameBorder) {

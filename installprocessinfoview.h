@@ -18,6 +18,9 @@ public:
 
     void appendText(QString text);
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     void initUI();
 

@@ -56,7 +56,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
         const int content_x = 46;
-        DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
 
         //绘制分割线
         QRect lineRect;
@@ -113,22 +112,23 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
 
+            DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);;
             painter->setFont(Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium));
             switch (operate_stat) {
                 case DebListModel::Operating:
-                    painter->setPen(QColor("#7C7C7C"));
+                    painter->setPen(QPen(pa.color(DPalette::TextLively)));
                     painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 case DebListModel::Success:
-                    painter->setPen(QColor("#417505"));
+                    painter->setPen(QPen(pa.color(DPalette::LightLively)));
                     painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 case DebListModel::Waiting:
-                    painter->setPen(QColor("#7C7C7C"));
+                    painter->setPen(QPen(pa.color(DPalette::TextLively)));
                     painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
                 default:
-                    painter->setPen(QColor("#FF6D6D"));
+                    painter->setPen(QPen(pa.color(DPalette::TextWarning)));
                     painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
             }
@@ -149,18 +149,18 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setTop(name_rect.bottom()+2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+        DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
+        pa = DebApplicationHelper::instance()->palette(m_parentView);
         if (operate_stat == DebListModel::Failed) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            penColor = QColor("#FF6D6D");
+            penColor = pa.color(DPalette::TextWarning);
         } else if (install_stat != DebListModel::NotInstalled) {
             if (install_stat == DebListModel::InstalledSameVersion) {
                 info_str = tr("Same version installed");
-//                penColor = QColor("#417505");
             } else {
                 info_str =
                     tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-//                penColor = QColor("#FF6D6D");
             }
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
