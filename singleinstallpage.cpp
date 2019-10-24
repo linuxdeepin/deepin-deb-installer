@@ -40,53 +40,71 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-const QString holdTextInRect(const QFont &font, QString text, const QSize &size)
+const QString holdTextInRect(const QFont &font, QString srcText, const QSize &size)
 {
+    qDebug() << srcText;
+    QString text;
+    QString tempText;
+    int totalHeight = size.height();
+    int lineWidth = size.width()-12;
+
     QFontMetrics fm(font);
-    QTextLayout layout(text);
 
-    layout.setFont(font);
-
-    QStringList lines;
-    QTextOption &text_option = *const_cast<QTextOption *>(&layout.textOption());
-
-    text_option.setWrapMode(QTextOption::WordWrap);
-    text_option.setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
-    layout.beginLayout();
-
-    QTextLine line = layout.createLine();
-    int height = 0;
+    int calcHeight = 0;
     int lineHeight = fm.height();
+    int lineSpace = 0;
+    int lineCount = (totalHeight - lineSpace) / lineHeight;
+    int prevLineCharIndex = 0;
+    for(int charIndex=0; charIndex<srcText.size() && lineCount >=0; ++charIndex)
+    {
+        int fmWidth = fm.horizontalAdvance(tempText);
+        if(fmWidth > lineWidth)
+        {
+            calcHeight += lineHeight+3;
+            if (calcHeight + lineHeight > totalHeight) {
+                QString endString = srcText.mid(prevLineCharIndex);
+                const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
+                text += endText;
 
-    while (line.isValid()) {
-        height += lineHeight + 5;
+                lineCount = 0;
+                break;
+            }
 
-        if (height + lineHeight > size.height()) {
-            const QString &end_str = fm.elidedText(text.mid(line.textStart()), Qt::ElideRight, size.width());
+            QChar currChar = tempText.at(tempText.length()-1);
+            QChar nextChar = srcText.at(srcText.indexOf(tempText)+tempText.length());
+            if(currChar.isLetter() && nextChar.isLetter())
+            {
+                tempText += '-';
+            }
+            fmWidth = fm.horizontalAdvance(tempText);
+            if (fmWidth > size.width()) {
+                --charIndex;
+                --prevLineCharIndex;
+                tempText = tempText.remove(tempText.length()-2, 1);
+            }
+            text += tempText;
 
-            layout.endLayout();
-            layout.setText(end_str);
+            --lineCount;
+            if(lineCount > 0)
+            {
+                text += "\n";
+            }
+            tempText = srcText.at(charIndex);
 
-            text_option.setWrapMode(QTextOption::NoWrap);
-            layout.beginLayout();
-            line = layout.createLine();
-            line.setLineWidth(size.width() - 1);
-            text = end_str;
-        } else {
-            line.setLineWidth(size.width());
+            prevLineCharIndex = charIndex;
         }
-
-        lines.append(text.mid(line.textStart(), line.textLength()));
-
-        if (height + lineHeight > size.height()) break;
-
-        line = layout.createLine();
+        else
+        {
+            tempText += srcText.at(charIndex);
+        }
     }
 
-    layout.endLayout();
+    if (lineCount > 0)
+    {
+        text += tempText;
+    }
 
-    return lines.join("");
+    return text;
 }
 
 SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
@@ -111,8 +129,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_backButton(new DPushButton)
     , m_doneButton(new DPushButton)
     , m_contentLayout(new QVBoxLayout(m_contentFrame))
-    , m_centralLayout(new QVBoxLayout(this)) {
-
+    , m_centralLayout(new QVBoxLayout(this))
+{
     initUI();
 }
 
@@ -193,18 +211,25 @@ void SingleInstallPage::initPkgInfoView()
     itemInfoLayout->setMargin(0);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
+    itemBlockLayout->addStretch();
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
     itemBlockLayout->addStretch();
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
 
+    QHBoxLayout *packageDescLayout = new QHBoxLayout;
+    packageDescLayout->addStretch();
+    packageDescLayout->addWidget(m_packageDescription);
+    packageDescLayout->addStretch();
+    packageDescLayout->setSpacing(0);
+    packageDescLayout->setContentsMargins(0, 0, 0, 0);
+
     QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(10);
-    itemLayout->addSpacing(35);
+    itemLayout->addSpacing(40);
     itemLayout->addLayout(itemBlockLayout);
     itemLayout->addSpacing(28);
-    itemLayout->addWidget(m_packageDescription);
+    itemLayout->addLayout(packageDescLayout);
     itemLayout->addStretch();
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
@@ -214,12 +239,11 @@ void SingleInstallPage::initPkgInfoView()
     m_itemInfoFrame->setVisible(false);
 
     m_contentLayout->addWidget(m_itemInfoFrame);
-    m_contentLayout->setAlignment(m_itemInfoFrame, Qt::AlignHCenter);
 
 #ifdef SHOWBGCOLOR
     packageName->setStyleSheet("{background: blue;}");
     packageVersion->setStyleSheet("{background: red;}");
-    m_itemInfoFrame->setStyleSheet("{background: yellow;}");
+    m_itemInfoFrame->setStyleSheet("QFrame{background: green;}");
     m_packageName->setStyleSheet("QLabel{background: blue;}");
     m_packageVersion->setStyleSheet("QLabel{background: yellow;}");
     m_packageDescription->setStyleSheet("QLabel{background: orange;}");

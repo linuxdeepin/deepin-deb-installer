@@ -20,22 +20,25 @@
  */
 
 #include "debinstaller.h"
+#include "utils.h"
 
-#include <DApplication>
-#include <DLog>
-#include <DTitlebar>
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QTimer>
 #include <QSharedMemory>
+
 #include <DApplicationSettings>
+#include <DApplication>
+#include <DLog>
+#include <DTitlebar>
+
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #else
 DCORE_USE_NAMESPACE
 #endif
-#include "utils.h"
+
 #define RECENT_PATH QDir::homePath() + "/.local/share/recently-used.xbel"
 
 #define DAPPLICATION_XSTRING(s) DAPPLICATION_STRING(s)
@@ -45,7 +48,9 @@ int main(int argc, char *argv[])
 {
     QSharedMemory sm("deb-installer");
     if(sm.attach())
+    {
         return 0;
+    }
     sm.create(1);
 
     DApplication::loadDXcbPlugin();
@@ -67,7 +72,6 @@ int main(int argc, char *argv[])
 
     DApplicationSettings settings;
 
-    //app.setStyle("chameleon");
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
@@ -91,7 +95,9 @@ int main(int argc, char *argv[])
 
     // select files from args
     if (!file_list.isEmpty())
+    {
         QMetaObject::invokeMethod(&w, "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, file_list));
+    }
 
     return app.exec();
 }
