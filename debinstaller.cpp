@@ -56,11 +56,16 @@ DebInstaller::DebInstaller(DWidget *parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout)
-    , m_tbMenu(new QMenu(this))
-    , m_darkThemeAction(new QAction(tr("Theme"), this)) {
+    , m_dragflag(-1)
+{
+    initUI();
+    initConnections();
+}
 
-//    setWindowOpacity(0.6);
+DebInstaller::~DebInstaller() {}
 
+void DebInstaller::initUI()
+{
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
@@ -82,20 +87,20 @@ DebInstaller::DebInstaller(DWidget *parent)
     QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 14, QFont::Medium);
 
     DTitlebar *tb = titlebar();
-    tb->setFixedHeight(50);
     tb->setIcon(QIcon(iconPix));
     tb->setTitle("");
-#if DTK_VERSION >= 0x02000600
-    tb->setBackgroundTransparent(true);
-#endif
     tb->setFont(font);
+
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
     setWindowTitle(tr("Deepin Package Manager"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
+}
 
+void DebInstaller::initConnections()
+{
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this,
@@ -105,10 +110,7 @@ DebInstaller::DebInstaller(DWidget *parent)
 
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
-    m_dragflag = -1;
 }
-
-DebInstaller::~DebInstaller() {}
 
 void DebInstaller::keyPressEvent(QKeyEvent *e)
 {

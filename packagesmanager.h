@@ -67,7 +67,7 @@ class PackagesManager : public QObject {
     friend class DebListModel;
 
 public:
-    explicit PackagesManager(QObject *parent = 0);
+    explicit PackagesManager(QObject *parent = nullptr);
 
     bool isBackendReady();
     bool isArchError(const int idx);
@@ -91,8 +91,8 @@ public:
     void removePackage(const int index);
     void appendPackage(QApt::DebFile *debPackage);
 
-    QApt::DebFile *const package(const int index) const { return m_preparedPackages[index]; }
-    QApt::Backend *const backend() const { return m_backendFuture.result(); }
+    QApt::DebFile * package(const int index) const { return m_preparedPackages[index]; }
+    QApt::Backend * backend() const { return m_backendFuture.result(); }
 
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,

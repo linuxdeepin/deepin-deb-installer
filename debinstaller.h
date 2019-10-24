@@ -59,6 +59,8 @@ private slots:
     void showHiddenButton();
 
 private:
+    void initUI();
+    void initConnections();
     void refreshInstallPage();
     SingleInstallPage *backToSinglePage();
 
@@ -67,8 +69,6 @@ private:
     FileChooseWidget *m_fileChooseWidget;
 
     QStackedLayout *m_centralLayout;
-    DMenu *m_tbMenu;
-    QAction *m_darkThemeAction;
 
     QPointer<DWidget> m_lastPage;
     int m_dragflag;
