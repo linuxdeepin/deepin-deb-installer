@@ -91,20 +91,19 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const QString elided_pkg_name = painter->fontMetrics().elidedText(pkg_name, Qt::ElideRight, 306);
         const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
 
-        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText);
-        painter->setPen(penColor);
+        painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText));
         painter->drawText(name_rect, pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
         // draw package version
         QRect version_rect = name_rect;
-        const int version_x = static_cast<int>(name_bounding_rect.right()) + 8;
-        const int version_y = version_rect.top()+2;
+        const int version_x = static_cast<int>(name_bounding_rect.right()) + 10;
+        const int version_y = version_rect.top();
         version_rect.setLeft(version_x);
         version_rect.setTop(version_y);
         version_rect.setRight(option.rect.right() - 85);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
         const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
-        painter->setPen(penColor);
+        painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText));
         painter->setFont(Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light));
         painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -150,7 +149,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setTop(name_rect.bottom()+2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-        penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
+        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         if (operate_stat == DebListModel::Failed) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = QColor("#FF6D6D");
