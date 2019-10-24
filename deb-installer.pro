@@ -146,7 +146,6 @@ TRANSLATIONS += $$PWD/translations/deepin-deb-installer_zh_CN.ts
 
 # Automating generation .qm files from .ts files
 !system($$PWD/translate_generation.sh): error("Failed to generate translation")
-!system($$PWD/translate_ts2desktop.sh): error("Failed to generate translation")
 
 isEmpty(BINDIR):BINDIR=/usr/bin
 isEmpty(APPDIR):APPDIR=/usr/share/applications
