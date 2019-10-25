@@ -57,14 +57,14 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
 #ifdef SHOWBORDER
     iconImage->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
-    DLabel *dndTips = new DLabel(this);
-    dndTips->setText(tr("Drag and drop file here"));
-    dndTips->setObjectName("DNDTips");
-    dndTips->setFont(font);
-    dndTips->setFixedHeight(15);
-    palette = DApplicationHelper::instance()->palette(dndTips);
-    palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
-    dndTips->setPalette(palette);
+    m_dndTips = new DLabel(this);
+    m_dndTips->setText(tr("Drag and drop file here"));
+    m_dndTips->setObjectName("DNDTips");
+    m_dndTips->setFont(font);
+    m_dndTips->setFixedHeight(15);
+    palette = DebApplicationHelper::instance()->palette(m_dndTips);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
+    m_dndTips->setPalette(palette);
 
 #ifdef SHOWBORDER
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");
@@ -95,8 +95,8 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     centralLayout->setAlignment(iconImage, Qt::AlignHCenter);
 
     centralLayout->addSpacing(8);
-    centralLayout->addWidget(dndTips);
-    centralLayout->setAlignment(dndTips, Qt::AlignHCenter);
+    centralLayout->addWidget(m_dndTips);
+    centralLayout->setAlignment(m_dndTips, Qt::AlignHCenter);
 
     centralLayout->addSpacing(16);
     centralLayout->addWidget(split_line);
@@ -142,6 +142,15 @@ void FileChooseWidget::chooseFiles()
     emit packagesSelected(selected_files);
 }
 
+void FileChooseWidget::paintEvent(QPaintEvent *event)
+{
+    DWidget::paintEvent(event);
+
+    DPalette palette = DebApplicationHelper::instance()->palette(m_dndTips);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
+    m_dndTips->setPalette(palette);
+}
+
 void FileChooseWidget::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
@@ -152,5 +161,4 @@ void FileChooseWidget::themeChanged()
         split_line->setPixmap(QPixmap(":/images/split_line_dark.svg"));
     else
         split_line->setPixmap(QPixmap(":/images/split_line.svg"));
-
 }

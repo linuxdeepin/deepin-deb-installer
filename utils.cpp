@@ -185,7 +185,7 @@ static QColor light_qpalette[QPalette::NColorRoles] {
     QColor(0, 0, 0, CAST_INT(0.03 * 255)),          //AlternateBase
     Qt::white,                                      //NoRole
     QColor(255, 255, 255, CAST_INT(0.8 * 255)),     //ToolTipBase
-    Qt::black                                       //ToolTipText
+    QColor("#526A7F")                               //ToolTipText -- changed origin is Qt::black
 };
 
 static QColor dark_qpalette[QPalette::NColorRoles] {
@@ -208,7 +208,7 @@ static QColor dark_qpalette[QPalette::NColorRoles] {
     QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //AlternateBase
     Qt::black,                                      //NoRole
     QColor(45, 45, 45, CAST_INT(0.8 * 255)),        //ToolTipBase
-    QColor("#c0c6d4")                               //ToolTipText
+    QColor("#6D7C88")                               //ToolTipText -- changed origin is #c0c6d4
 };
 
 static QColor light_dpalette[DPalette::NColorTypes] {

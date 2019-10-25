@@ -26,14 +26,13 @@
 #include <QSettings>
 #include <QVBoxLayout>
 
-#include <DFrame>
 #include <DLabel>
 
 DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
 
-class InfoControlButton : public DFrame
+class InfoControlButton : public DWidget
 {
     Q_OBJECT
 

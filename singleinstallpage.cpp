@@ -112,8 +112,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_operate(Install)
     , m_workerStarted(false)
     , m_packagesModel(model)
-    , m_contentFrame(new DFrame)
-    , m_itemInfoFrame(new DFrame)
+    , m_contentFrame(new DWidget)
+    , m_itemInfoFrame(new DWidget)
     , m_packageIcon(new DLabel)
     , m_packageName(new DLabel)
     , m_packageVersion(new DLabel)
@@ -191,7 +191,7 @@ void SingleInstallPage::initPkgInfoView()
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
-    QFont pkgFont = Utils::loadFontBySizeAndWeight(pkgFontFamily, 14, QFont::Light);
+    QFont pkgFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Light);
     DPalette pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
     pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
     m_packageName->setPalette(pkgPalette);

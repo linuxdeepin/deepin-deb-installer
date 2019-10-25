@@ -37,7 +37,7 @@
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     : DWidget(parent)
     , m_debListModel(model)
-    , m_contentFrame(new DFrame(this))
+    , m_contentFrame(new DWidget(this))
     , m_appsListView(new PackagesListView)
     , m_appsListViewBgFrame(new DRoundBgFrame(this))
     , m_installProcessInfoView(new InstallProcessInfoView)

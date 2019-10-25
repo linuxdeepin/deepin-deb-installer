@@ -30,7 +30,7 @@
 #include <DApplicationHelper>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent)
-    : DFrame(parent),
+    : DWidget(parent),
       m_expand(false),
       m_expandTips(expandTips),
       m_shrinkTips(shrinkTips),

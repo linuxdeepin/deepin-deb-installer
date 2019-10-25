@@ -150,8 +150,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
         DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
-        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
+//        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         pa = DebApplicationHelper::instance()->palette(m_parentView);
+        QColor penColor = pa.color(DPalette::ToolTipText);
         if (operate_stat == DebListModel::Failed) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);

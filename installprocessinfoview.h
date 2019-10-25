@@ -4,12 +4,11 @@
 #include <QPainter>
 #include <QPaintEvent>
 
-#include <DFrame>
 #include <DTextEdit>
 
 DWIDGET_USE_NAMESPACE
 
-class InstallProcessInfoView : public DFrame
+class InstallProcessInfoView : public DWidget
 {
     Q_OBJECT
 public:

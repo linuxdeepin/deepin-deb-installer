@@ -30,7 +30,6 @@
 #include <DPushButton>
 #include <DTextEdit>
 #include <DWidget>
-#include <DFrame>
 
 #include <QApt/DebFile>
 
@@ -84,8 +83,8 @@ private:
     bool m_workerStarted;
     bool m_upDown;
     DebListModel *m_packagesModel;
-    DFrame *m_contentFrame;
-    DFrame *m_itemInfoFrame;
+    DWidget *m_contentFrame;
+    DWidget *m_itemInfoFrame;
     DLabel *m_packageIcon;
     DLabel *m_packageName;
     DLabel *m_packageVersion;

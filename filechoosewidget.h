@@ -37,6 +37,8 @@ public:
 
 signals:
     void packagesSelected(const QStringList files) const;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 private slots:
     void chooseFiles();
@@ -45,6 +47,7 @@ private:
     ChooseFileButton *m_chooseFileBtn;
     QSettings m_settings;
     DLabel *split_line;
+    DLabel *m_dndTips;
 };
 
 #endif  // FILECHOOSEWIDGET_H

@@ -7,7 +7,7 @@
 #include <DApplicationHelper>
 
 InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
-    : DFrame(parent)
+    : DWidget(parent)
     , m_editor(new DTextEdit)
 {
     initUI();
@@ -59,7 +59,7 @@ InstallProcessInfoView::~InstallProcessInfoView()
 
 void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 {
-    DFrame::paintEvent(event);
+    DWidget::paintEvent(event);
 
     DPalette pa = DebApplicationHelper::instance()->palette(this);
     pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));

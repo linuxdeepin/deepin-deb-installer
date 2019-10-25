@@ -66,7 +66,7 @@ private:
     void initConnections();
 
     DebListModel *m_debListModel;
-    DFrame *m_contentFrame;
+    DWidget *m_contentFrame;
     PackagesListView *m_appsListView;
     DRoundBgFrame *m_appsListViewBgFrame;
     InstallProcessInfoView *m_installProcessInfoView;

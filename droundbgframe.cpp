@@ -5,7 +5,7 @@
 #include <DApplicationHelper>
 
 DRoundBgFrame::DRoundBgFrame(QWidget* parent, bool hasFrameBoarder)
-    :DFrame (parent)
+    :DWidget (parent)
     , m_hasFrameBorder(hasFrameBoarder)
 {
 }

@@ -1,11 +1,11 @@
 #ifndef DROUNDBGFRAME_H
 #define DROUNDBGFRAME_H
 
-#include <DFrame>
+#include <DWidget>
 
 DWIDGET_USE_NAMESPACE
 
-class DRoundBgFrame : public DFrame
+class DRoundBgFrame : public DWidget
 {
 public:
     DRoundBgFrame(QWidget* parent = nullptr, bool hasFrameBorder=false);
