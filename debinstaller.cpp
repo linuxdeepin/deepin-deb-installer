@@ -66,6 +66,9 @@ DebInstaller::~DebInstaller() {}
 
 void DebInstaller::initUI()
 {
+    //隐藏标题栏下的阴影
+    setTitlebarShadowEnabled(false);
+
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
@@ -90,6 +93,7 @@ void DebInstaller::initUI()
     tb->setIcon(QIcon(iconPix));
     tb->setTitle("");
     tb->setFont(font);
+    tb->setAutoFillBackground(false);
 
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
