@@ -180,43 +180,82 @@ void SingleInstallPage::initPkgInfoView()
 
     QFont lblFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     DLabel *packageName = new DLabel;
+    DPalette pkgPalette = DApplicationHelper::instance()->palette(packageName);
+    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
+    packageName->setPalette(pkgPalette);
+    packageName->setFixedHeight(20);
     packageName->setText(tr("Name: "));
     packageName->setFont(lblFont);
-    packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
     DLabel *packageVersion = new DLabel;
+    pkgPalette = DApplicationHelper::instance()->palette(packageVersion);
+    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
+    packageVersion->setPalette(pkgPalette);
+    packageVersion->setFixedHeight(20);
     packageVersion->setText(tr("Version: "));
     packageVersion->setFont(lblFont);
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
     QFont pkgFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Light);
-    DPalette pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
+    pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
     pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
     m_packageName->setPalette(pkgPalette);
-    m_packageName->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    m_packageName->setFixedHeight(20);
+    m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_packageName->setFont(pkgFont);
+    pkgPalette = DApplicationHelper::instance()->palette(m_packageVersion);
+    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
+    m_packageVersion->setPalette(pkgPalette);
+    m_packageVersion->setFixedHeight(20);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_packageVersion->setFont(pkgFont);
 
-    QGridLayout *itemInfoLayout = new QGridLayout;
-    itemInfoLayout->addWidget(packageName, 0, 0);
-    itemInfoLayout->addWidget(m_packageName, 0, 1);
-    itemInfoLayout->addWidget(packageVersion, 1, 0);
-    itemInfoLayout->addWidget(m_packageVersion, 1, 1);
+    QVBoxLayout *packageNameVLayout = new QVBoxLayout;
+    packageNameVLayout->setSpacing(0);
+    packageNameVLayout->setContentsMargins(0, 0, 0, 0);
+    packageNameVLayout->addSpacing(4);
+    packageNameVLayout->addWidget(packageName);
+
+    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout;
+    pkgNameValueLayout->setSpacing(0);
+    pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
+    pkgNameValueLayout->addSpacing(4+4);
+    pkgNameValueLayout->addWidget(m_packageName);
+
+    QHBoxLayout *pkgNameLayout = new QHBoxLayout;
+    pkgNameLayout->setSpacing(0);
+    pkgNameLayout->setContentsMargins(0, 0, 0, 0);
+    pkgNameLayout->addSpacing(2);
+    pkgNameLayout->addLayout(packageNameVLayout);
+    pkgNameLayout->addLayout(pkgNameValueLayout);
+    pkgNameLayout->addStretch();
+
+    QHBoxLayout *pkgVersionLayout = new QHBoxLayout;
+    pkgVersionLayout->setSpacing(0);
+    pkgVersionLayout->setContentsMargins(0, 0, 0, 0);
+    pkgVersionLayout->addSpacing(2);
+    pkgVersionLayout->addWidget(packageVersion);
+    pkgVersionLayout->addWidget(m_packageVersion);
+    pkgVersionLayout->addStretch();
+
+    QVBoxLayout *itemInfoLayout = new QVBoxLayout;
     itemInfoLayout->setSpacing(0);
-    itemInfoLayout->setVerticalSpacing(0);
-    itemInfoLayout->setHorizontalSpacing(0);
-    itemInfoLayout->setMargin(0);
+    itemInfoLayout->setContentsMargins(0, 0, 0, 0);
+    itemInfoLayout->addLayout(pkgNameLayout);
+    itemInfoLayout->addLayout(pkgVersionLayout);
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
-    itemBlockLayout->addStretch();
-    itemBlockLayout->addWidget(m_packageIcon);
-    itemBlockLayout->addLayout(itemInfoLayout);
-    itemBlockLayout->addStretch();
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
+    itemBlockLayout->addSpacing(112-20-10);
+    itemBlockLayout->addWidget(m_packageIcon);
+    itemBlockLayout->addLayout(itemInfoLayout);
+
+    DWidget *itemInfoWidget = new DWidget(this);
+    itemInfoWidget->setLayout(itemBlockLayout);
 
     QHBoxLayout *packageDescLayout = new QHBoxLayout;
     packageDescLayout->addStretch();
@@ -227,7 +266,7 @@ void SingleInstallPage::initPkgInfoView()
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
     itemLayout->addSpacing(40);
-    itemLayout->addLayout(itemBlockLayout);
+    itemLayout->addWidget(itemInfoWidget);
     itemLayout->addSpacing(28);
     itemLayout->addLayout(packageDescLayout);
     itemLayout->addStretch();
@@ -533,16 +572,18 @@ void SingleInstallPage::setPackageInfo()
     DPalette palette;
     if (installed) {
         if (installedSameVersion) {
-            m_tipsLabel->setText(tr("Same version installed"));
-
             palette = DApplicationHelper::instance()->palette(m_tipsLabel);
             palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
             m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setText(tr("Same version installed"));
         }
-
-        else
+        else {
+            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+            m_tipsLabel->setPalette(palette);
             m_tipsLabel->setText(tr("Other version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+        }
         return;
     }
 
