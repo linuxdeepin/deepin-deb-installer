@@ -119,6 +119,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_packageVersion(new DLabel)
     , m_packageDescription(new DLabel)
     , m_tipsLabel(new DLabel)
+    , m_progressFrame(new DWidget)
     , m_progress(new WorkerProgress)
     , m_installProcessView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
@@ -265,7 +266,7 @@ void SingleInstallPage::initPkgInfoView()
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout;
-    itemLayout->addSpacing(40);
+    itemLayout->addSpacing(45);
     itemLayout->addWidget(itemInfoWidget);
     itemLayout->addSpacing(28);
     itemLayout->addLayout(packageDescLayout);
@@ -304,7 +305,7 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_tipsLabel->setFixedHeight(18);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 
-    m_progress->setVisible(false);
+    m_progressFrame->setVisible(false);
     m_infoControlButton->setVisible(false);
 
     m_installProcessView->setVisible(false);
@@ -347,13 +348,17 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_doneButton->setFocusPolicy(Qt::NoFocus);
 
     QFont descFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
-    m_packageDescription->setFixedHeight(70);
+    m_packageDescription->setFixedHeight(54+10);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_packageDescription->setFont(descFont);
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::ToolTipText, palette.color(DPalette::ItemBackground));
     m_packageDescription->setPalette(palette);
+
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
+    btnsFrameLayout->setSpacing(0);
+    btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
     btnsLayout->addStretch();
@@ -367,17 +372,32 @@ void SingleInstallPage::initPkgInstallProcessView()
     btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
+    QVBoxLayout *progressLayout = new QVBoxLayout;
+    progressLayout->setSpacing(0);
+    progressLayout->setContentsMargins(0, 8, 0, 0);
+    progressLayout->addWidget(m_progress);
+    progressLayout->setAlignment(m_progress, Qt::AlignHCenter);
+    m_progressFrame->setLayout(progressLayout);
+    m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    DWidget *btnsFrame = new DWidget;
+    btnsFrame->setFixedHeight(m_installButton->maximumHeight());
+    btnsFrameLayout->addWidget(m_progressFrame);
+    btnsFrameLayout->addStretch();
+    btnsFrameLayout->addLayout(btnsLayout);
+    btnsFrame->setLayout(btnsFrameLayout);
+
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addWidget(m_progress);
-    m_contentLayout->setAlignment(m_progress, Qt::AlignHCenter);
     m_contentLayout->addSpacing(8);
-    m_contentLayout->addLayout(btnsLayout);
+    m_contentLayout->addWidget(btnsFrame);
 
 #ifdef SHOWBGCOLOR
+    m_progressFrame->setStyleSheet("QFrame{background:blue}");
     m_tipsLabel->setStyleSheet("QLabel{background: gray}");
+    btnsFrame->setStyleSheet("QFrame{background:red}");
     m_infoControlButton->setStyleSheet("QFrame{background: purple}");
     m_installButton->setStyleSheet("QPushButton{background: blue}");
     m_uninstallButton->setStyleSheet("QPushButton{background: yellow}");
@@ -450,7 +470,7 @@ void SingleInstallPage::hideInfomation()
 void SingleInstallPage::showInfo()
 {
     m_infoControlButton->setVisible(true);
-    m_progress->setVisible(true);
+    m_progressFrame->setVisible(true);
     m_progress->setValue(0);
     m_tipsLabel->clear();
 
@@ -477,7 +497,7 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
-    m_progress->setVisible(false);
+    m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
@@ -553,7 +573,7 @@ void SingleInstallPage::setPackageInfo()
     //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
     //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = package->longDescription();
-    const QSize boundingSize = QSize(m_packageDescription->width(), m_packageDescription->maximumHeight());
+    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
     // package install status

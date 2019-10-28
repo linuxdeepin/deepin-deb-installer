@@ -90,6 +90,7 @@ private:
     DLabel *m_packageVersion;
     DLabel *m_packageDescription;
     DLabel *m_tipsLabel;
+    DWidget *m_progressFrame;
     DProgressBar *m_progress;
     InstallProcessInfoView *m_installProcessView;
     InfoControlButton *m_infoControlButton;

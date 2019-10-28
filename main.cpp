@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
     app.setProductIcon(QIcon(":/images/icon.svg"));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
-    app.loadTranslator(QList<QLocale>() << QLocale("zh_CN"));
-    // app.loadTranslator();
+    app.loadTranslator();
     app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
     app.setApplicationDescription(QApplication::translate(
                                       "main",

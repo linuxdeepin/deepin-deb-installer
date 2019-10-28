@@ -71,6 +71,7 @@ private:
     DRoundBgFrame *m_appsListViewBgFrame;
     InstallProcessInfoView *m_installProcessInfoView;
     InfoControlButton *m_infoControlButton;
+    DWidget *m_processFrame;
     DProgressBar *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
     DPushButton *m_installButton;

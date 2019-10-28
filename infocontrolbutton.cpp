@@ -30,27 +30,29 @@
 #include <DApplicationHelper>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent)
-    : DWidget(parent),
-      m_expand(false),
-      m_expandTips(expandTips),
-      m_shrinkTips(shrinkTips),
-      m_arrowIcon(new DLabel),
-      m_tipsText(new DLabel)
+    : DWidget(parent)
+    , m_expand(false)
+    , m_expandTips(expandTips)
+    , m_shrinkTips(shrinkTips)
+    , m_arrowIcon(new DLabel)
+    , m_tipsText(new DLabel)
 {
-    int bottomSpace = 0;
-    setFixedHeight(28+bottomSpace);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QFont font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);
-    if(themeType == DGuiApplicationHelper::LightType)
+    if(themeType == DGuiApplicationHelper::LightType) {
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
-    else if(themeType == DGuiApplicationHelper::DarkType)
+    }
+    else if(themeType == DGuiApplicationHelper::DarkType) {
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));//21.8
-    else
+    }
+    else {
         m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
+    }
     m_arrowIcon->setFixedHeight(13);
 
     DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
@@ -62,8 +64,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_tipsText->setFixedHeight(15);
 
     centralLayout = new QVBoxLayout;
-    centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 0, 0, bottomSpace);
+    centralLayout->setSpacing(5);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
 
@@ -88,10 +90,11 @@ void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
 
 void InfoControlButton::onMouseRelease()
 {
-    if (m_expand)
+    if (m_expand) {
         emit shrink();
-    else
+    } else {
         emit expand();
+    }
 
     m_expand = !m_expand;
 
@@ -100,24 +103,32 @@ void InfoControlButton::onMouseRelease()
     centralLayout->removeWidget(m_arrowIcon);
     centralLayout->removeWidget(m_tipsText);
     if (!m_expand) {
+        centralLayout->setSpacing(5);
         centralLayout->addWidget(m_arrowIcon);
         centralLayout->addWidget(m_tipsText);
-        if(themeType == DGuiApplicationHelper::LightType)
+        if(themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
-        else if(themeType == DGuiApplicationHelper::DarkType)
+        }
+        else if(themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));
-        else
+        }
+        else {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+        }
         m_tipsText->setText(m_expandTips);
     } else {
+        centralLayout->setSpacing(0);
         centralLayout->addWidget(m_tipsText);
         centralLayout->addWidget(m_arrowIcon);
-        if(themeType == DGuiApplicationHelper::LightType)
+        if(themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
-        else if(themeType == DGuiApplicationHelper::DarkType)
+        }
+        else if(themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down_dark.svg").pixmap(25, 8));
-        else
+        }
+        else {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
+        }
         m_tipsText->setText(m_shrinkTips);
     }
 }
@@ -137,22 +148,25 @@ void InfoControlButton::setShrinkTips(const QString text)
 void InfoControlButton::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(m_expand)
-    {
-        if(themeType == DGuiApplicationHelper::LightType)
+    if(m_expand) {
+        if(themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
-        else if(themeType == DGuiApplicationHelper::DarkType)
+        }
+        else if(themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down_dark.svg").pixmap(25, 8));
-        else
+        }
+        else {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
-    }
-    else
-    {
-        if(themeType == DGuiApplicationHelper::LightType)
+        }
+    } else {
+        if(themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
-        else if(themeType == DGuiApplicationHelper::DarkType)
+        }
+        else if(themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));
-        else
+        }
+        else {
             m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+        }
     }
 }
