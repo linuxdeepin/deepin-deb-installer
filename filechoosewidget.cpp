@@ -73,11 +73,11 @@ FileChooseWidget::FileChooseWidget(DWidget *parent)
     split_line = new DLabel;
     split_line->setObjectName("SplitLine");
     if(themeType == DGuiApplicationHelper::LightType)
-        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
     else if(themeType == DGuiApplicationHelper::DarkType)
-        split_line->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
     else
-        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
     split_line->setFixedHeight(3);
 
     m_chooseFileBtn = new ChooseFileButton;
@@ -156,9 +156,9 @@ void FileChooseWidget::themeChanged()
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
     if(themeType == DGuiApplicationHelper::LightType)
-        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
     else if(themeType == DGuiApplicationHelper::DarkType)
-        split_line->setPixmap(QPixmap(":/images/split_line_dark.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
     else
-        split_line->setPixmap(QPixmap(":/images/split_line.svg"));
+        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
 }

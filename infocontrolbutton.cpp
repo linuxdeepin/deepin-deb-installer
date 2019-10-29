@@ -45,13 +45,13 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);
     if(themeType == DGuiApplicationHelper::LightType) {
-        m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
+        m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
     }
     else if(themeType == DGuiApplicationHelper::DarkType) {
-        m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));//21.8
+        m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
     }
     else {
-        m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));//21.8
+        m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
     }
     m_arrowIcon->setFixedHeight(13);
 
@@ -107,13 +107,13 @@ void InfoControlButton::onMouseRelease()
         centralLayout->addWidget(m_arrowIcon);
         centralLayout->addWidget(m_tipsText);
         if(themeType == DGuiApplicationHelper::LightType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
         else if(themeType == DGuiApplicationHelper::DarkType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
         }
         else {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
         m_tipsText->setText(m_expandTips);
     } else {
@@ -121,13 +121,13 @@ void InfoControlButton::onMouseRelease()
         centralLayout->addWidget(m_tipsText);
         centralLayout->addWidget(m_arrowIcon);
         if(themeType == DGuiApplicationHelper::LightType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
         else if(themeType == DGuiApplicationHelper::DarkType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down_dark.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down_dark.svg", QSize(25, 8)));
         }
         else {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
         m_tipsText->setText(m_shrinkTips);
     }
@@ -150,23 +150,23 @@ void InfoControlButton::themeChanged()
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     if(m_expand) {
         if(themeType == DGuiApplicationHelper::LightType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
         else if(themeType == DGuiApplicationHelper::DarkType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down_dark.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down_dark.svg", QSize(25, 8)));
         }
         else {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_down.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
     } else {
         if(themeType == DGuiApplicationHelper::LightType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
         else if(themeType == DGuiApplicationHelper::DarkType) {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up_dark.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
         }
         else {
-            m_arrowIcon->setPixmap(QIcon(":/images/arrow_up.svg").pixmap(25, 8));
+            m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
     }
 }

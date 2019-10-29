@@ -23,6 +23,8 @@
 #include "deblistmodel.h"
 #include "utils.h"
 
+#include <QPixmap>
+
 #include <DSvgRenderer>
 #include <DPalette>
 #include <DStyleHelper>
@@ -37,10 +39,10 @@ PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
 {
-
     const QIcon icon = QIcon::fromTheme("application-x-deb");
     const auto ratio = qApp->devicePixelRatio();
     m_packageIcon = icon.pixmap(32, 32);
+    m_packageIcon.setDevicePixelRatio(ratio);
 
     m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
     m_removeIcon.setDevicePixelRatio(ratio);
@@ -73,6 +75,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         // draw package icon
         const int x = 6;
         int y = bg_rect.y()+7;
+
         painter->drawPixmap(x, y, m_packageIcon);
 
         // draw package name
