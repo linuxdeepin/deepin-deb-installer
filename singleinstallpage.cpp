@@ -115,8 +115,8 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
     , m_contentFrame(new DWidget)
     , m_itemInfoFrame(new DWidget)
     , m_packageIcon(new DLabel)
-    , m_packageName(new DLabel)
-    , m_packageVersion(new DLabel)
+    , m_packageName(new DebInfoLabel)
+    , m_packageVersion(new DebInfoLabel)
     , m_packageDescription(new DLabel)
     , m_tipsLabel(new DLabel)
     , m_progressFrame(new DWidget)
@@ -200,16 +200,12 @@ void SingleInstallPage::initPkgInfoView()
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
-    QFont pkgFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Light);
-    pkgPalette = DApplicationHelper::instance()->palette(m_packageName);
-    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
-    m_packageName->setPalette(pkgPalette);
+    QFont pkgFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::ExtraLight);
+    m_packageName->setCustomPalette(DPalette::Dark);
     m_packageName->setFixedHeight(20);
     m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_packageName->setFont(pkgFont);
-    pkgPalette = DApplicationHelper::instance()->palette(m_packageVersion);
-    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
-    m_packageVersion->setPalette(pkgPalette);
+    m_packageVersion->setCustomPalette(DPalette::Dark);
     m_packageVersion->setFixedHeight(20);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_packageVersion->setFont(pkgFont);

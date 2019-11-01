@@ -24,6 +24,7 @@
 
 #include "infocontrolbutton.h"
 #include "installprocessinfoview.h"
+#include "debinfolabel.h"
 
 #include <DLabel>
 #include <DProgressBar>
@@ -86,8 +87,8 @@ private:
     DWidget *m_contentFrame;
     DWidget *m_itemInfoFrame;
     DLabel *m_packageIcon;
-    DLabel *m_packageName;
-    DLabel *m_packageVersion;
+    DebInfoLabel *m_packageName;
+    DebInfoLabel *m_packageVersion;
     DLabel *m_packageDescription;
     DLabel *m_tipsLabel;
     DWidget *m_progressFrame;

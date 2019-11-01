@@ -170,7 +170,7 @@ static QColor light_qpalette[QPalette::NColorRoles] {
     QColor("#e5e5e5"),                              //Button
     QColor("#e6e6e6"),                              //Light
     QColor("#e5e5e5"),                              //Midlight
-    QColor("#e3e3e3"),                              //Dark
+    QColor("#001A2E"),                              //Dark  -- changed origin is #e3e3e3
     QColor("#e4e4e4"),                              //Mid
     QColor("#414d68"),                              //Text
     Qt::black,                                      //BrightText
@@ -193,7 +193,7 @@ static QColor dark_qpalette[QPalette::NColorRoles] {
     QColor("#444444"),                              //Button
     QColor("#484848"),                              //Light
     QColor("#474747"),                              //Midlight
-    QColor("#414141"),                              //Dark
+    QColor("#C0C6D4"),                              //Dark      -- changed origin is #414141
     QColor("#434343"),                              //Mid
     QColor("#c0c6d4"),                              //Text
     Qt::white,                                      //BrightText

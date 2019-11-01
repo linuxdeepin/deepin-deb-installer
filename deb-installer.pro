@@ -41,7 +41,8 @@ SOURCES += \
     utils.cpp \
     droundbgframe.cpp \
     installprocessinfoview.cpp \
-    choosefilebutton.cpp
+    choosefilebutton.cpp \
+    debinfolabel.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -59,7 +60,8 @@ HEADERS += \
     utils.h \
     droundbgframe.h \
     installprocessinfoview.h \
-    choosefilebutton.h
+    choosefilebutton.h \
+    debinfolabel.h
 
 DISTFILES += \
     deepin-deb-installer.applications \
