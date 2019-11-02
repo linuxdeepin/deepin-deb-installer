@@ -43,6 +43,12 @@ DWIDGET_USE_NAMESPACE
 const QString holdTextInRect(const QFont &font, QString srcText, const QSize &size)
 {
     qDebug() << srcText;
+
+    bool bFlag = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (bFlag) {
+        return srcText;
+    }
+
     QString text;
     QString tempText;
     int totalHeight = size.height();

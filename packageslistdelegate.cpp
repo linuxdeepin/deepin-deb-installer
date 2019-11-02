@@ -89,12 +89,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
         QString defaultFontFamily = Utils::loadFontFamilyByType(Utils::DefautFont);
 
-        painter->setFont(Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium));
-        const QString elided_pkg_name = painter->fontMetrics().elidedText(pkg_name, Qt::ElideRight, 306);
+        QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
+        QFontMetrics fontMetric(pkg_name_font);
+        painter->setFont(pkg_name_font);
+        const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
+        qDebug() << elided_pkg_name << endl;
         const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
 
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText));
-        painter->drawText(name_rect, pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
+        painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
         // draw package version
         QRect version_rect = name_rect;
@@ -103,10 +106,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         version_rect.setLeft(version_x);
         version_rect.setTop(version_y);
         version_rect.setRight(option.rect.right() - 85);
+        QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
+        QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
-        const QString version_str = painter->fontMetrics().elidedText(version, Qt::ElideRight, version_rect.width());
+        const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, bg_rect.width()-m_packageIcon.width()-240);
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText));
-        painter->setFont(Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light));
+        painter->setFont(version_font);
         painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
         // install status
