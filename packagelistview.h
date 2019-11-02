@@ -22,16 +22,44 @@
 #ifndef PACKAGESLISTVIEW_H
 #define PACKAGESLISTVIEW_H
 
-#include <DListView>
+#include <QMouseEvent>
+
+#include <DMenu>
 #include <DWidget>
+#include <DListView>
+
 DWIDGET_USE_NAMESPACE
+
 class PackagesListView : public DListView {
     Q_OBJECT
 public:
     explicit PackagesListView(DWidget *parent = nullptr);
 
+signals:
+    void onShowContextMenu(QModelIndex index);
+    void onItemRemoveClicked(QModelIndex index);
+
 protected:
     void leaveEvent(QEvent *e);
+
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
+
+private:
+    bool m_bLeftMouse;
+    QModelIndex m_currModelIndex;
+    DMenu *m_rightMenu {nullptr};
+
+    void initUI();
+    void initConnections();
+    void initRightContextMenu();
+    void initShortcuts();
+
+private slots:
+    void onListViewShowContextMenu(QModelIndex index);
+    void onRightMenuDeleteAction();
 };
 
 #endif  // PACKAGESLISTVIEW_H

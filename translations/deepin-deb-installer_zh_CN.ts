@@ -106,6 +106,14 @@
     </message>
 </context>
 <context>
+    <name>PackagesListView</name>
+    <message>
+        <location filename="../packageslistview.cpp" line="161"/>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+</context>
+<context>
     <name>PackagesListDelegate</name>
     <message>
         <location filename="../packageslistdelegate.cpp" line="124"/>

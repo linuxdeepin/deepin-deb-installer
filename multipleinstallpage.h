@@ -52,7 +52,7 @@ private slots:
     void onWorkerFinshed();
     void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);
-    void onItemClicked(const QModelIndex &index);
+    void onItemRequestRemoveClicked(const QModelIndex &index);
 
     void showInfo();
     void hideInfo();

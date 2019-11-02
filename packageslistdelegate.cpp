@@ -93,7 +93,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFontMetrics fontMetric(pkg_name_font);
         painter->setFont(pkg_name_font);
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
-        qDebug() << elided_pkg_name << endl;
         const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
 
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText));

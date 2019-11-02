@@ -277,8 +277,6 @@ DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &ba
 {
     Q_UNUSED(base)
 
-    qDebug() << "DebApplicationHelper::palette" << endl;
-
     DPalette palette;
 
     do {

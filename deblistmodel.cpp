@@ -477,6 +477,7 @@ void DebListModel::setCurrentIndex(const QModelIndex &idx)
     emit dataChanged(index, index);
     emit dataChanged(m_currentIdx, m_currentIdx);
 }
+
 void DebListModel::initRowStatus()
 {
     for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)

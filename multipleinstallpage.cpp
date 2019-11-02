@@ -165,7 +165,7 @@ void MultipleInstallPage::initConnections()
     connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(m_appsListView, &PackagesListView::clicked, this, &MultipleInstallPage::onItemClicked);
+    connect(m_appsListView, &PackagesListView::onItemRemoveClicked, this, &MultipleInstallPage::onItemRequestRemoveClicked);
     connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
@@ -220,7 +220,7 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
     }
 }
 
-void MultipleInstallPage::onItemClicked(const QModelIndex &index)
+void MultipleInstallPage::onItemRequestRemoveClicked(const QModelIndex &index)
 {
     if (!m_debListModel->isWorkerPrepare()) return;
 
