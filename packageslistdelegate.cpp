@@ -139,15 +139,16 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                     painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
                     break;
             }
-        } else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
-                   index.data(DebListModel::ItemIsCurrentRole).toBool()) {
-            int icon_width = static_cast<int>(m_removeIcon.width() / m_removeIcon.devicePixelRatio());
-            int icon_height = static_cast<int>(m_removeIcon.height() / m_removeIcon.devicePixelRatio());
-            // draw remove icon
-            const int x = option.rect.right() - icon_width - 18;
-            const int y = option.rect.top() + (option.rect.height() - icon_height) / 2;
-            painter->drawPixmap(x, y, m_removeIcon);
         }
+//        else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
+//                   index.data(DebListModel::ItemIsCurrentRole).toBool()) {
+//            int icon_width = static_cast<int>(m_removeIcon.width() / m_removeIcon.devicePixelRatio());
+//            int icon_height = static_cast<int>(m_removeIcon.height() / m_removeIcon.devicePixelRatio());
+//            // draw remove icon
+//            const int x = option.rect.right() - icon_width - 18;
+//            const int y = option.rect.top() + (option.rect.height() - icon_height) / 2;
+//            painter->drawPixmap(x, y, m_removeIcon);
+//        }
 
         // draw package info
         QString info_str;

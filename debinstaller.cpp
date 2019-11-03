@@ -82,15 +82,15 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
-    const auto ratio = devicePixelRatioF();
-    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
-    iconPix.setDevicePixelRatio(ratio);
+//    const auto ratio = devicePixelRatioF();
+//    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
+//    iconPix.setDevicePixelRatio(ratio);
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 14, QFont::Medium);
 
     DTitlebar *tb = titlebar();
-    tb->setIcon(QIcon(iconPix));
+    tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle("");
     tb->setFont(font);
     tb->setAutoFillBackground(false);

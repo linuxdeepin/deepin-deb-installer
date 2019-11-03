@@ -33,8 +33,6 @@ PackagesListView::PackagesListView(DWidget *parent)
     initUI();
     initConnections();
     initRightContextMenu();
-
-    initShortcuts();
 }
 
 void PackagesListView::initUI()
@@ -57,24 +55,20 @@ void PackagesListView::initConnections()
             Qt::ConnectionType::QueuedConnection);
 }
 
-void PackagesListView::initShortcuts()
-{
-}
-
 void PackagesListView::leaveEvent(QEvent *e) {
     DListView::leaveEvent(e);
 
     emit entered(QModelIndex());
 }
 
-QRect getIconRect(QRect visualRect)
-{
-    int icon_width = 30;
-    int icon_height = 30;
-    const int x = visualRect.right() - icon_width - 18;
-    const int y = visualRect.top() + (visualRect.height() - icon_height) / 2;
-    return QRect(x, y, icon_width, icon_height);
-}
+//QRect getIconRect(QRect visualRect)
+//{
+//    int icon_width = 22;
+//    int icon_height = 22;
+//    const int x = visualRect.right() - icon_width - 30;
+//    const int y = visualRect.top() + (visualRect.height() - icon_height) / 2;
+//    return QRect(x, y, icon_width, icon_height);
+//}
 
 void PackagesListView::mouseMoveEvent(QMouseEvent *event)
 {
@@ -101,14 +95,14 @@ void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 
     DListView::mouseReleaseEvent(event);
 
-    QPoint clickPoint = event->pos();
-    QModelIndex modelIndex = indexAt(clickPoint);
-    QRect rect = visualRect(modelIndex);
-    QRect removeIconRect = getIconRect(rect);
+//    QPoint clickPoint = event->pos();
+//    QModelIndex modelIndex = indexAt(clickPoint);
+//    QRect rect = visualRect(modelIndex);
+//    QRect removeIconRect = getIconRect(rect);
 
-    if (removeIconRect.contains(clickPoint)) {
-        emit onItemRemoveClicked(modelIndex);
-    }
+//    if (removeIconRect.contains(clickPoint)) {
+//        emit onItemRemoveClicked(modelIndex);
+//    }
 }
 
 void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
@@ -125,14 +119,14 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
 
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu) {
-
+    if (nullptr == m_rightMenu)
+    {
         m_rightMenu = new DMenu(this);
 
         //给右键菜单添加快捷键Delete
         QAction *deleteAction = new QAction(tr("Delete"), this);
         deleteAction->setShortcuts(QKeySequence::Delete);
-        deleteAction->setShortcutContext(Qt::WidgetShortcut);
+        deleteAction->setShortcutContext(Qt::WindowShortcut);
 
         QShortcut *menuShortcut = new QShortcut(QKeySequence::Delete, m_rightMenu);
         menuShortcut->setContext(Qt::WindowShortcut);

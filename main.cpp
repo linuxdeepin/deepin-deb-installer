@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion(DApplication::buildVersion("3.0"));
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
-    app.setProductIcon(QIcon(":/images/icon.svg"));
+    app.setProductIcon(QIcon::fromTheme("deepin-deb-installer"));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator();

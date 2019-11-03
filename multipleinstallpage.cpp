@@ -166,7 +166,7 @@ void MultipleInstallPage::initConnections()
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsListView, &PackagesListView::onItemRemoveClicked, this, &MultipleInstallPage::onItemRequestRemoveClicked);
-    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
+//    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
