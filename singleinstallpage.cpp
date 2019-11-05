@@ -33,8 +33,11 @@
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
+
 #include <DStyleHelper>
 #include <DApplicationHelper>
+
+
 using QApt::DebFile;
 using QApt::Transaction;
 
@@ -574,7 +577,7 @@ void SingleInstallPage::setPackageInfo()
     // set package description
     //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
     //    const QString description = package->longDescription().replace(multiLine, "\n");
-    const QString description = package->longDescription();
+    const QString description = Utils::fromSpecialEncoding(package->longDescription());
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 

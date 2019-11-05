@@ -34,6 +34,7 @@
 #include <QPixmap>
 #include <QFile>
 #include <QFontDatabase>
+#include <QTextCodec>
 
 QHash<QString, QPixmap> Utils::m_imgCacheHash;
 QHash<QString, QString> Utils::m_fontNameCache;
@@ -156,6 +157,27 @@ QFont Utils::loadFontBySizeAndWeight(QString fontFamily,int fontSize, int fontWe
     font.setWeight(fontWeight);
 
     return font;
+}
+
+QString Utils::fromSpecialEncoding(const QString &inputStr)
+{
+    qDebug() << "inputStr is:" << inputStr << endl;
+    bool bFlag = inputStr.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (bFlag) {
+        return inputStr;
+    }
+
+    QTextCodec *codec = QTextCodec::codecForName("utf-8");
+    if (codec)
+    {
+        QString unicodeStr =  codec->toUnicode(inputStr.toLatin1());
+        qDebug() << "convert to unicode:" << unicodeStr << endl;
+        return unicodeStr;
+    }
+    else
+    {
+        return inputStr;
+    }
 }
 
 DebApplicationHelper *DebApplicationHelper::instance()

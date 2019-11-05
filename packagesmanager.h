@@ -89,7 +89,7 @@ public:
     void reset();
     void resetPackageDependsStatus(const int index);
     void removePackage(const int index);
-    void appendPackage(QApt::DebFile *debPackage);
+    bool appendPackage(QApt::DebFile *debPackage);
 
     QApt::DebFile * package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend * backend() const { return m_backendFuture.result(); }

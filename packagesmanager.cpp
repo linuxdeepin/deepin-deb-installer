@@ -455,12 +455,14 @@ void PackagesManager::removePackage(const int index) {
     m_packageDependsStatus.clear();
 }
 
-void PackagesManager::appendPackage(DebFile *debPackage) {
+bool PackagesManager::appendPackage(DebFile *debPackage) {
     const auto md5 = debPackage->md5Sum();
-    if (m_appendedPackagesMd5.contains(md5)) return;
+    if (m_appendedPackagesMd5.contains(md5)) return false;
 
     m_preparedPackages << debPackage;
     m_appendedPackagesMd5 << md5;
+
+    return true;
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,

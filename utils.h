@@ -72,6 +72,7 @@ public:
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
     static QString loadFontFamilyByType(FontType fontType);
     static QFont loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight);
+    static QString fromSpecialEncoding(const QString &inputStr);
 };
 
 #endif

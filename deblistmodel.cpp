@@ -21,6 +21,7 @@
 
 #include "deblistmodel.h"
 #include "packagesmanager.h"
+#include "utils.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -123,7 +124,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageReverseDependsListRole:
         return m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     case PackageDescriptionRole:
-        return deb->shortDescription();
+        return Utils::fromSpecialEncoding(deb->shortDescription());
     case PackageFailReasonRole:
         return packageFailedReason(r);
     case PackageOperateStatusRole:
@@ -195,11 +196,11 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);
 }
 
-void DebListModel::appendPackage(DebFile *package)
+bool DebListModel::appendPackage(DebFile *package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    m_packagesManager->appendPackage(package);
+    return m_packagesManager->appendPackage(package);
 }
 
 void DebListModel::onTransactionErrorOccurred()

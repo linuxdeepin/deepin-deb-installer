@@ -192,7 +192,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         data.appExec = "deepin-deb-installer";
         DRecentManager::addItem(package, data);
 
-        m_fileListModel->appendPackage(p);
+        if (!m_fileListModel->appendPackage(p)) {
+            qWarning() << "package is Exist! ";
+        }
     }
 
     refreshInstallPage();
