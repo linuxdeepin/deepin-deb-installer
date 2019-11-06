@@ -28,6 +28,11 @@
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="200"/>
+        <source>Already Added</source>
+        <translation>已添加</translation>
+    </message>
 </context>
 <context>
     <name>DebListModel</name>

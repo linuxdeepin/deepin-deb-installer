@@ -43,9 +43,10 @@
 #include <QApt/DebFile>
 
 #include <DRecentManager>
-#include <DThemeManager>
+#include <DMessageManager>
 #include <DTitlebar>
 #include <DApplication>
+
 using QApt::DebFile;
 
 DCORE_USE_NAMESPACE
@@ -131,7 +132,7 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 
 void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
 {
-    if(m_dragflag == 0)
+    if (m_dragflag == 0)
         return;
 
     auto *const mime = e->mimeData();
@@ -194,6 +195,10 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
         if (!m_fileListModel->appendPackage(p)) {
             qWarning() << "package is Exist! ";
+
+            DFloatingMessage *msg = new DFloatingMessage;
+            msg->setMessage(tr("Already Added"));
+            DMessageManager::instance()->sendMessage(this, msg);
         }
     }
 
@@ -313,14 +318,11 @@ void DebInstaller::changeDragFlag()
 
 void DebInstaller::showHiddenButton()
 {
-    if(m_dragflag == 2)
-    {
-        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage*>(m_lastPage);
+    if (m_dragflag == 2) {
+        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->afterGetAutherFalse();
-    }
-    else if(m_dragflag == 1)
-    {
-        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage*>(m_lastPage);
+    } else if (m_dragflag == 1) {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->afterGetAutherFalse();
     }
 }
