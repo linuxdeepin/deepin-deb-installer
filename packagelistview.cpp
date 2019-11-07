@@ -145,7 +145,7 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     DMenu *rightMenu = m_rightMenu;
 
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    if (DebListModel::Success == operate_stat || DebListModel::Waiting == operate_stat) {
+    if (DebListModel::Success == operate_stat || DebListModel::Operating == operate_stat) {
         return;
     }
 
