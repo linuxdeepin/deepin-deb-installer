@@ -5,17 +5,17 @@
     <name>desktop</name>
     <message>
         <location filename="Desktop Entry]Name" line="0"/>
-        <source>Deepin Package Manager</source>
-        <translation>深度软件包安装器</translation>
+        <source>Deepin Deb Installer</source>
+        <translation>软件包安装器</translation>
     </message>
     <message>
         <location filename="Desktop Entry]Comment" line="0"/>
-        <source>Deepin Package Manager is used to help users install and remove local package, supports bulk install.</source>
+        <source>Deepin Deb Installer is used to help users install and remove local package, supports bulk install.</source>
         <translation>深度软件包安装器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
     <message>
         <location filename="Desktop Entry]GenericName" line="0"/>
-        <source>Package Manager</source>
+        <source>Deb Installer</source>
         <translation>软件包安装器</translation>
     </message>
 </context>

@@ -64,10 +64,11 @@ int main(int argc, char *argv[])
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
     app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator();
-    app.setProductName(QApplication::translate("main", "Deepin Package Manager"));
+    app.setProductName(QApplication::translate("main", "Deepin Deb Installer"));
+    app.setApplicationDisplayName(QApplication::translate("main", "Deepin Deb Installer"));
     app.setApplicationDescription(QApplication::translate(
                                       "main",
-                                      "Deepin Package Manager is used to help users install and remove local packages, supporting bulk install."));
+                                      "Deepin Deb Installer is used to help users install and remove local packages, supporting bulk install."));
 
     DApplicationSettings settings;
 

@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="101"/>
-        <source>Deepin Package Manager</source>
-        <translation>深度软件包安装器</translation>
+        <source>Deepin Deb Installer</source>
+        <translation>软件包安装器</translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="299"/>
@@ -278,13 +278,13 @@ unusable</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.cpp" line="54"/>
-        <source>Deepin Package Manager</source>
-        <translation>深度软件包安装器</translation>
+        <location filename="../main.cpp" line="67"/>
+        <source>Deepin Deb Installer</source>
+        <translation>软件包安装器</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="55"/>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <location filename="../main.cpp" line="69"/>
+        <source>Deepin Deb Installer is used to help users install and remove local packages, supporting bulk install.</source>
         <translation>深度软件包安装器用于帮助用户安装和卸载本地软件包，支持批量安装。</translation>
     </message>
 </context>
