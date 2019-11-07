@@ -211,9 +211,9 @@ void DebInstaller::showUninstallConfirmPage()
 
     const QModelIndex index = m_fileListModel->first();
 
-    UninstallConfirmPage *p = new UninstallConfirmPage;
-    p->setPackage(index.data().toString());
+    UninstallConfirmPage *p = new UninstallConfirmPage(this);
     p->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList());
+    p->setPackage(index.data().toString());
 
     m_centralLayout->addWidget(p);
     m_centralLayout->setCurrentIndex(2);

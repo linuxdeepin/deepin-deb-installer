@@ -266,6 +266,14 @@ All dependencies will also be removed</source>
         <translation>您确定要卸载%1 吗？
 所有依赖也会被一起移除</translation>
     </message>
+    <message>
+        <location filename="../uninstallconfirmpage.cpp" line="103"/>
+        <source>Are you sure you want to uninstall %1?
+Uninstalling this software may cause other dependent software
+unusable</source>
+        <translation>您确定要卸载%1吗？
+卸载此软件可能会导致其他有依赖关系的软件无法使用</translation>
+    </message>
 </context>
 <context>
     <name>main</name>

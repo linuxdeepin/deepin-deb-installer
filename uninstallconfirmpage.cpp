@@ -107,14 +107,23 @@ UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
-    QString tips(tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed"));
+    QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
+    if(!m_requiredList.isEmpty()) {
+        tips = tr("Are you sure you want to uninstall %1?\nUninstalling this software may cause other dependent software\nunusable");
+    }
 
     m_tips->setText(tips.arg(name));
 }
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
-    m_infoControl->setVisible(!requiredList.isEmpty());
+    m_requiredList = requiredList;
+    if (!requiredList.isEmpty()) {
+        m_infoControl->setVisible(true);
+    }
+    else {
+        m_infoControl->setVisible(false);
+    }
     m_dependsInfomation->setText(requiredList.join(", "));
 }
 

@@ -33,7 +33,7 @@ class UninstallConfirmPage : public DWidget {
     Q_OBJECT
 
 public:
-    explicit UninstallConfirmPage(DWidget *parent = 0);
+    explicit UninstallConfirmPage(DWidget *parent = nullptr);
 
     void setPackage(const QString &name);
     void setRequiredList(const QStringList &requiredList);
@@ -54,5 +54,7 @@ private:
     DTextEdit *m_dependsInfomation;
     DPushButton *m_cancelBtn;
     DPushButton *m_confirmBtn;
+
+    QStringList m_requiredList;
 };
 #endif  // UNINSTALLCONFIRMPAGE_H
