@@ -55,7 +55,8 @@ void PackagesListView::initConnections()
             Qt::ConnectionType::QueuedConnection);
 }
 
-void PackagesListView::leaveEvent(QEvent *e) {
+void PackagesListView::leaveEvent(QEvent *e)
+{
     DListView::leaveEvent(e);
 
     emit entered(QModelIndex());
@@ -119,8 +120,7 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
 
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu)
-    {
+    if (nullptr == m_rightMenu) {
         m_rightMenu = new DMenu(this);
 
         //给右键菜单添加快捷键Delete
@@ -143,6 +143,11 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
+
+    const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+    if (DebListModel::Success == operate_stat || DebListModel::Waiting == operate_stat) {
+        return;
+    }
 
     //在当前鼠标位置显示右键菜单
     rightMenu->exec(QCursor::pos());
