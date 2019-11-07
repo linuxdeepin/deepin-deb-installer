@@ -47,15 +47,14 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
 {
     qDebug() << srcText;
 
-    bool bFlag = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
-    if (bFlag) {
-        return srcText;
-    }
+    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
 
     QString text;
     QString tempText;
     int totalHeight = size.height();
-    int lineWidth = size.width()-12;
+    int lineWidth = size.width() - 12;
+
+    int offset = bContainsChinese ? font.pixelSize() : 0;
 
     QFontMetrics fm(font);
 
@@ -64,12 +63,10 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
     int lineSpace = 0;
     int lineCount = (totalHeight - lineSpace) / lineHeight;
     int prevLineCharIndex = 0;
-    for(int charIndex=0; charIndex<srcText.size() && lineCount >=0; ++charIndex)
-    {
+    for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
         int fmWidth = fm.horizontalAdvance(tempText);
-        if(fmWidth > lineWidth)
-        {
-            calcHeight += lineHeight+3;
+        if (fmWidth > lineWidth - offset) {
+            calcHeight += lineHeight + 3;
             if (calcHeight + lineHeight > totalHeight) {
                 QString endString = srcText.mid(prevLineCharIndex);
                 const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
@@ -79,37 +76,34 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
                 break;
             }
 
-            QChar currChar = tempText.at(tempText.length()-1);
-            QChar nextChar = srcText.at(srcText.indexOf(tempText)+tempText.length());
-            if(currChar.isLetter() && nextChar.isLetter())
-            {
-                tempText += '-';
-            }
-            fmWidth = fm.horizontalAdvance(tempText);
-            if (fmWidth > size.width()) {
-                --charIndex;
-                --prevLineCharIndex;
-                tempText = tempText.remove(tempText.length()-2, 1);
+            if (!bContainsChinese) {
+                QChar currChar = tempText.at(tempText.length() - 1);
+                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
+                if (currChar.isLetter() && nextChar.isLetter()) {
+                    tempText += '-';
+                }
+                fmWidth = fm.horizontalAdvance(tempText);
+                if (fmWidth > size.width()) {
+                    --charIndex;
+                    --prevLineCharIndex;
+                    tempText = tempText.remove(tempText.length() - 2, 1);
+                }
             }
             text += tempText;
 
             --lineCount;
-            if(lineCount > 0)
-            {
+            if (lineCount > 0) {
                 text += "\n";
             }
             tempText = srcText.at(charIndex);
 
             prevLineCharIndex = charIndex;
-        }
-        else
-        {
+        } else {
             tempText += srcText.at(charIndex);
         }
     }
 
-    if (lineCount > 0)
-    {
+    if (lineCount > 0) {
         text += tempText;
     }
 
@@ -353,7 +347,7 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_doneButton->setFocusPolicy(Qt::NoFocus);
 
     QFont descFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
-    m_packageDescription->setFixedHeight(54+10);
+    m_packageDescription->setFixedHeight(73);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_packageDescription->setFont(descFont);
@@ -578,7 +572,7 @@ void SingleInstallPage::setPackageInfo()
     //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
     //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = Utils::fromSpecialEncoding(package->longDescription());
-    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
+    const QSize boundingSize = QSize(m_packageDescription->width(), 72);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
     // package install status
