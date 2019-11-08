@@ -52,6 +52,7 @@ private slots:
     void onUninstallAccepted();
     void onUninstallCalceled();
     void onAuthing(const bool authing);
+    void onNewAppOpen();
 
     void reset();
     void removePackage(const int index);

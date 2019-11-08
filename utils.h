@@ -27,6 +27,8 @@
 #include <DPalette>
 #include <DApplicationHelper>
 
+#define dApp (static_cast<DApplication *>(QCoreApplication::instance()))
+
 DWIDGET_USE_NAMESPACE
 
 class DebApplicationHelper : public DGuiApplicationHelper

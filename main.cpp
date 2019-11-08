@@ -46,13 +46,6 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    QSharedMemory sm("deb-installer");
-    if(sm.attach())
-    {
-        return 0;
-    }
-    sm.create(1);
-
     DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
@@ -69,6 +62,12 @@ int main(int argc, char *argv[])
     app.setApplicationDescription(QApplication::translate(
                                       "main",
                                       "Deepin Deb Installer is used to help users install and remove local packages, supporting bulk install."));
+
+    qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
+    if(!app.setSingleInstance(app.applicationName(), DApplication::UserScope))
+    {
+        exit(0);
+    }
 
     DApplicationSettings settings;
 
