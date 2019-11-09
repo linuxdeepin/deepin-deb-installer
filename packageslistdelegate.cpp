@@ -39,13 +39,8 @@ PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
 {
-    const QIcon icon = QIcon::fromTheme("application-x-deb");
-    const auto ratio = qApp->devicePixelRatio();
-    m_packageIcon = icon.pixmap(32, 32);
-    m_packageIcon.setDevicePixelRatio(ratio);
-
-    m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
-    m_removeIcon.setDevicePixelRatio(ratio);
+//    m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
+//    m_removeIcon.setDevicePixelRatio(ratio);
 
     m_view= reinterpret_cast<PackagesListView*>(parent);
 }
@@ -72,11 +67,13 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         QRect bg_rect = option.rect;
 
+        QIcon icon = QIcon::fromTheme("application-x-deb");
+
         // draw package icon
         const int x = 6;
         int y = bg_rect.y()+7;
 
-        painter->drawPixmap(x, y, m_packageIcon);
+        icon.paint(painter, x, y, 32, 32);
 
         // draw package name
         QRect name_rect = bg_rect;
