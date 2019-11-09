@@ -45,7 +45,7 @@
 #include <DRecentManager>
 #include <DMessageManager>
 #include <DTitlebar>
-#include <DApplication>
+#include <DGuiApplicationHelper>
 
 using QApt::DebFile;
 
@@ -116,7 +116,7 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
 
-    connect(dApp, &DApplication::newInstanceStarted, this, &DebInstaller::onNewAppOpen);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
 
 void DebInstaller::onNewAppOpen()
