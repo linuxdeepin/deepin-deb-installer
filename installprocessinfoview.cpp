@@ -26,7 +26,7 @@ void InstallProcessInfoView::initUI()
     editLayout->addWidget(m_editor);
 
     QString textFont = Utils::loadFontFamilyByType(Utils::DefautFont);
-    QFont infomationFont = Utils::loadFontBySizeAndWeight(textFont, 11, QFont::Normal);
+    QFont infomationFont = Utils::loadFontBySizeAndWeight(textFont, 11, QFont::Light);
     m_editor->setFont(infomationFont);
 
     DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
