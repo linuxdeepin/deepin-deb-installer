@@ -134,6 +134,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
+            install_status_rect.setTop(version_y+yOffset - 10);
 
             DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);;
             painter->setFont(Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium));

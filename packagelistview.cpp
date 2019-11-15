@@ -44,6 +44,9 @@ void PackagesListView::initUI()
     setAutoScroll(true);
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    setBackgroundRole(QPalette::Window);
+    setAutoFillBackground(true);
 }
 
 void PackagesListView::initConnections()
@@ -235,16 +238,19 @@ void PackagesListView::paintEvent(QPaintEvent *event)
     DPalette pa = DApplicationHelper::instance()->palette(this);
     QPainterPath painterPath;
 
-    painterPath.addRect(this->rect());
-
-    QColor color = pa.color(DPalette::Base);
-    if (this->model()->rowCount() <= 4)
+    qDebug() << this->model()->rowCount() << endl;
+    QColor color = pa.color(QPalette::Base);
+    if (this->model()->rowCount() <= 3)
     {
-        color = pa.color(DPalette::Base);
+        QRect rect = this->rect();
+        rect.setY(48);
+        painterPath.addRect(rect);
+        color = pa.color(QPalette::Base);
     }
     else
     {
-        color = pa.color(DPalette::Window);
+        painterPath.addRect(this->rect());
+        color = pa.color(QPalette::Window);
     }
 
     painter.fillPath(painterPath, QBrush(color));
