@@ -30,19 +30,12 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-#define THEME_DARK 2//"dark"
-#define THEME_LIGHT 1//"light"
-
 DWIDGET_USE_NAMESPACE
 
 PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
 {
-//    m_removeIcon = Utils::renderSVG(":/images/active_tab_close_normal.svg", QSize(16, 16));
-//    m_removeIcon.setDevicePixelRatio(ratio);
-
-    m_view= reinterpret_cast<PackagesListView*>(parent);
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -52,12 +45,38 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
+        DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
+
         const int content_x = 46;
+
+        QPainterPath bgPath;
+        bgPath.addRect(option.rect);
+
+        if (option.state & QStyle::State_Selected) {
+            DStyleHelper styleHelper;
+            QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::ToolTipText);
+            fillColor.setAlphaF(0.2);
+            painter->setBrush(QBrush(fillColor));
+            painter->fillPath(bgPath, fillColor);
+        }
+        else {
+            DStyleHelper styleHelper;
+            QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Base);
+            painter->setBrush(QBrush(fillColor));
+            painter->fillPath(bgPath, fillColor);
+        }
+
+        int yOffset = 6;
 
         //绘制分割线
         QRect lineRect;
         lineRect.setX(content_x);
-        lineRect.setY(option.rect.y()+48-1);
+        int itemHeight = 48;
+        if (0 == index.row()) {
+            itemHeight -= 5;
+            yOffset = 0;
+        }
+        lineRect.setY(option.rect.y()+itemHeight-1);
         lineRect.setWidth(option.rect.width()-content_x-10);
         lineRect.setHeight(1);
 
@@ -71,14 +90,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package icon
         const int x = 6;
-        int y = bg_rect.y()+7;
+        int y = bg_rect.y()+yOffset+1;
 
         icon.paint(painter, x, y, 32, 32);
 
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y()+6);
+        name_rect.setY(bg_rect.y()+yOffset);
         name_rect.setHeight(20);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
@@ -137,15 +156,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                     break;
             }
         }
-//        else if (index.data(DebListModel::WorkerIsPrepareRole).toBool() &&
-//                   index.data(DebListModel::ItemIsCurrentRole).toBool()) {
-//            int icon_width = static_cast<int>(m_removeIcon.width() / m_removeIcon.devicePixelRatio());
-//            int icon_height = static_cast<int>(m_removeIcon.height() / m_removeIcon.devicePixelRatio());
-//            // draw remove icon
-//            const int x = option.rect.right() - icon_width - 18;
-//            const int y = option.rect.top() + (option.rect.height() - icon_height) / 2;
-//            painter->drawPixmap(x, y, m_removeIcon);
-//        }
 
         // draw package info
         QString info_str;
@@ -154,7 +164,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setTop(name_rect.bottom()+2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-        DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
@@ -189,5 +198,9 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 {
     Q_UNUSED(option);
 
-    return index.data(Qt::SizeHintRole).toSize();
+    QSize itemSize = index.data(Qt::SizeHintRole).toSize();
+    if (0 == index.row()) {
+        return QSize(itemSize.width(), itemSize.height()-5);
+    }
+    return itemSize;
 }

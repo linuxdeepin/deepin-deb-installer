@@ -36,30 +36,43 @@ public:
     explicit PackagesListView(DWidget *parent = nullptr);
 
 signals:
+    void onShowHideTopBg(bool bShow);
+    void onShowHideBottomBg(bool bShow);
+
+    void onClickItemAtIndex(QModelIndex index);
     void onShowContextMenu(QModelIndex index);
-    void onItemRemoveClicked(QModelIndex index);
+    void onRemoveItemClicked(QModelIndex index);
 
 protected:
     void leaveEvent(QEvent *e);
+
+    void scrollContentsBy(int dx, int dy);
 
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
 
+    void paintEvent(QPaintEvent *event);
+
 private:
     bool m_bLeftMouse;
+    bool m_bShortcutDelete;
     QModelIndex m_currModelIndex;
     DMenu *m_rightMenu {nullptr};
+    QModelIndex m_highlightIndex;
 
     void initUI();
     void initConnections();
     void initRightContextMenu();
     void initShortcuts();
 
+    void handleHideShowSelection();
+
 private slots:
     void onListViewShowContextMenu(QModelIndex index);
     void onRightMenuDeleteAction();
+    void onShortcutDeleteAction();
 };
 
 #endif  // PACKAGESLISTVIEW_H

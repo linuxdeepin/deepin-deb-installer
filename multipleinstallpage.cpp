@@ -39,7 +39,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
     , m_debListModel(model)
     , m_contentFrame(new DWidget(this))
     , m_appsListView(new PackagesListView)
-    , m_appsListViewBgFrame(new DRoundBgFrame(this, false, 10, 0))
+    , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_installProcessInfoView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
     , m_processFrame(new DWidget(this))
@@ -89,8 +89,9 @@ void MultipleInstallPage::initUI()
     m_appsListView->setModel(m_debListModel);
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsListView->setItemDelegate(delegate);
-    appsViewLayout->addSpacing(10);
+    appsViewLayout->addSpacing(18);
     appsViewLayout->addWidget(m_appsListView);
+    appsViewLayout->addSpacing(8);
 
     m_installButton->setFixedSize(120, 36);
     m_acceptButton->setFixedSize(120, 36);
@@ -165,7 +166,9 @@ void MultipleInstallPage::initConnections()
     connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
-    connect(m_appsListView, &PackagesListView::onItemRemoveClicked, this, &MultipleInstallPage::onItemRequestRemoveClicked);
+    connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
+    connect(m_appsListView, &PackagesListView::onShowHideTopBg, m_appsListViewBgFrame, &DRoundBgFrame::onShowHideTopBg);
+    connect(m_appsListView, &PackagesListView::onShowHideBottomBg, m_appsListViewBgFrame, &DRoundBgFrame::onShowHideBottomBg);
 //    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
@@ -220,7 +223,7 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
     }
 }
 
-void MultipleInstallPage::onItemRequestRemoveClicked(const QModelIndex &index)
+void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
 {
     if (!m_debListModel->isWorkerPrepare()) return;
 

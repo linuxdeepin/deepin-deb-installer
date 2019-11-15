@@ -38,9 +38,7 @@ private:
 
 private:
     QPixmap m_packageIcon;
-//    QPixmap m_removeIcon;
     QSettings m_qsettings;
-    PackagesListView *m_view;
     QAbstractItemView *m_parentView;
 };
 

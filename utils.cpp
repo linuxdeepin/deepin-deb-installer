@@ -161,7 +161,7 @@ QFont Utils::loadFontBySizeAndWeight(QString fontFamily,int fontSize, int fontWe
 
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
-    qDebug() << "inputStr is:" << inputStr << endl;
+//    qDebug() << "inputStr is:" << inputStr << endl;
     bool bFlag = inputStr.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (bFlag) {
         return inputStr;
@@ -171,7 +171,7 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
     if (codec)
     {
         QString unicodeStr =  codec->toUnicode(inputStr.toLatin1());
-        qDebug() << "convert to unicode:" << unicodeStr << endl;
+//        qDebug() << "convert to unicode:" << unicodeStr << endl;
         return unicodeStr;
     }
     else

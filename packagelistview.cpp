@@ -21,6 +21,7 @@
 
 #include "packagelistview.h"
 #include "deblistmodel.h"
+#include "utils.h"
 
 #include <QPainter>
 #include <QShortcut>
@@ -33,17 +34,16 @@ PackagesListView::PackagesListView(DWidget *parent)
     initUI();
     initConnections();
     initRightContextMenu();
+    initShortcuts();
 }
 
 void PackagesListView::initUI()
 {
     setVerticalScrollMode(ScrollPerPixel);
-    setSelectionMode(NoSelection);
+    setSelectionMode(QListView::SingleSelection);
     setAutoScroll(true);
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-    setAutoFillBackground(false);
 }
 
 void PackagesListView::initConnections()
@@ -55,6 +55,13 @@ void PackagesListView::initConnections()
             Qt::ConnectionType::QueuedConnection);
 }
 
+void PackagesListView::initShortcuts()
+{
+    QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);
+    deleteShortcut->setContext(Qt::ApplicationShortcut);
+    connect(deleteShortcut, SIGNAL(activated()), this, SLOT(onShortcutDeleteAction()));
+}
+
 void PackagesListView::leaveEvent(QEvent *e)
 {
     DListView::leaveEvent(e);
@@ -62,25 +69,71 @@ void PackagesListView::leaveEvent(QEvent *e)
     emit entered(QModelIndex());
 }
 
-//QRect getIconRect(QRect visualRect)
-//{
-//    int icon_width = 22;
-//    int icon_height = 22;
-//    const int x = visualRect.right() - icon_width - 30;
-//    const int y = visualRect.top() + (visualRect.height() - icon_height) / 2;
-//    return QRect(x, y, icon_width, icon_height);
-//}
-
 void PackagesListView::mouseMoveEvent(QMouseEvent *event)
 {
     DListView::mouseMoveEvent(event);
 }
 
+void PackagesListView::handleHideShowSelection()
+{
+    if (visualRect(m_highlightIndex).y() < -1 * (48-2))
+    {
+        emit onShowHideTopBg(false);
+    }
+    else
+    {
+        if (m_highlightIndex.row() > 0)
+        {
+            if (visualRect(m_highlightIndex).y() < 0)
+            {
+                emit onShowHideTopBg(true);
+            }
+            else
+            {
+                if (visualRect(m_highlightIndex).y() >= 48*3-10-8)
+                {
+                    if (visualRect(m_highlightIndex).y() >= 48*4-10-8)
+                    {
+                        emit onShowHideBottomBg(false);
+                    }
+                    else
+                    {
+                        emit onShowHideBottomBg(true);
+                    }
+                }
+                else
+                {
+                    emit onShowHideBottomBg(false);
+                }
+            }
+        }
+        else
+        {
+            emit onShowHideTopBg(true);
+        }
+    }
+}
+
+void PackagesListView::scrollContentsBy(int dx, int dy)
+{
+    if (-1 == m_highlightIndex.row()) {
+        QListView::scrollContentsBy(dx, dy);
+        return;
+    }
+
+    handleHideShowSelection();
+
+    QListView::scrollContentsBy(dx, dy);
+}
+
 void PackagesListView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton)
+    {
         m_bLeftMouse = true;
-    } else {
+    }
+    else
+    {
         m_bLeftMouse = false;
     }
 
@@ -90,20 +143,12 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
     DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());
-    if (!debListModel->isWorkerPrepare()) {
+    if (!debListModel->isWorkerPrepare())
+    {
         return;
     }
 
     DListView::mouseReleaseEvent(event);
-
-//    QPoint clickPoint = event->pos();
-//    QModelIndex modelIndex = indexAt(clickPoint);
-//    QRect rect = visualRect(modelIndex);
-//    QRect removeIconRect = getIconRect(rect);
-
-//    if (removeIconRect.contains(clickPoint)) {
-//        emit onItemRemoveClicked(modelIndex);
-//    }
 }
 
 void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
@@ -113,24 +158,29 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
     QPoint clickPoint(rect.x(), rect.y());
     QModelIndex modelIndex = indexAt(clickPoint);
 
-    if (!m_bLeftMouse) {
+    m_highlightIndex = modelIndex;
+    m_currModelIndex = m_highlightIndex;
+    if (!m_bLeftMouse)
+    {
+        m_bShortcutDelete = false;
         emit onShowContextMenu(modelIndex);
     }
+    else
+    {
+        m_bShortcutDelete = true;
+    }
+
+    handleHideShowSelection();
 }
 
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu) {
+    if (nullptr == m_rightMenu)
+    {
         m_rightMenu = new DMenu(this);
 
         //给右键菜单添加快捷键Delete
         QAction *deleteAction = new QAction(tr("Delete"), this);
-        deleteAction->setShortcuts(QKeySequence::Delete);
-        deleteAction->setShortcutContext(Qt::WindowShortcut);
-
-        QShortcut *menuShortcut = new QShortcut(QKeySequence::Delete, m_rightMenu);
-        menuShortcut->setContext(Qt::WindowShortcut);
-        connect(menuShortcut, SIGNAL(activated()), this, SLOT(onRightMenuDeleteAction()));
 
         m_rightMenu->addAction(deleteAction);
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(onRightMenuDeleteAction()));
@@ -141,6 +191,7 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
 
+    m_bShortcutDelete = false;
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
 
@@ -156,8 +207,48 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     rightMenu->exec(QCursor::pos());
 }
 
+void PackagesListView::onShortcutDeleteAction()
+{
+    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible())
+    {
+        return;
+    }
+
+    emit onRemoveItemClicked(m_currModelIndex);
+}
+
 void PackagesListView::onRightMenuDeleteAction()
 {
-    qDebug() << "onRightMenuDeleteAction";
-    emit onItemRemoveClicked(m_currModelIndex);
+    if (-1 == m_currModelIndex.row())
+    {
+        return;
+    }
+
+    emit onRemoveItemClicked(m_currModelIndex);
 }
+
+void PackagesListView::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this->viewport());
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    DPalette pa = DApplicationHelper::instance()->palette(this);
+    QPainterPath painterPath;
+
+    painterPath.addRect(this->rect());
+
+    QColor color = pa.color(DPalette::Base);
+    if (this->model()->rowCount() <= 4)
+    {
+        color = pa.color(DPalette::Base);
+    }
+    else
+    {
+        color = pa.color(DPalette::Window);
+    }
+
+    painter.fillPath(painterPath, QBrush(color));
+
+    DListView::paintEvent(event);
+}
+
