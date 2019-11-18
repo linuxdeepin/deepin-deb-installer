@@ -44,6 +44,9 @@ public:
 
     void afterGetAutherFalse();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 signals:
     void back() const;
     void requestUninstallConfirm() const;

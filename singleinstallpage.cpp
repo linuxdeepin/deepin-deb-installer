@@ -351,9 +351,6 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     m_packageDescription->setFont(descFont);
-    DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
-    palette.setBrush(DPalette::ToolTipText, palette.color(DPalette::ItemBackground));
-    m_packageDescription->setPalette(palette);
 
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
     btnsFrameLayout->setSpacing(0);
@@ -620,6 +617,7 @@ void SingleInstallPage::setPackageInfo()
         m_backButton->setVisible(true);
     }
 }
+
 void SingleInstallPage::afterGetAutherFalse()
 {
     if( m_operate == Install)
@@ -639,4 +637,13 @@ void SingleInstallPage::afterGetAutherFalse()
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }
+}
+
+void SingleInstallPage::paintEvent(QPaintEvent *event)
+{
+    DWidget::paintEvent(event);
+
+    DPalette palette = DebApplicationHelper::instance()->palette(m_packageDescription);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
+    m_packageDescription->setPalette(palette);
 }
