@@ -9,7 +9,7 @@
 #include <DApplicationHelper>
 
 DRoundBgFrame::DRoundBgFrame(QWidget* parent, int bgOffsetTop, int bgOffsetBottom)
-    : DWidget(parent)
+    : QWidget(parent)
     , m_bgOffsetTop(bgOffsetTop)
     , m_bgOffsetBottom(bgOffsetBottom)
     , m_bFillTop(false)

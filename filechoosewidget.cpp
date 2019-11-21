@@ -36,8 +36,8 @@
 #include <DApplicationHelper>
 #include <DStyleHelper>
 
-FileChooseWidget::FileChooseWidget(DWidget *parent)
-    : DWidget(parent)
+FileChooseWidget::FileChooseWidget(QWidget *parent)
+    : QWidget(parent)
     , m_settings("deepin", "deepin-deb-install")
 {
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -144,7 +144,7 @@ void FileChooseWidget::chooseFiles()
 
 void FileChooseWidget::paintEvent(QPaintEvent *event)
 {
-    DWidget::paintEvent(event);
+    QWidget::paintEvent(event);
 
     DPalette palette = DebApplicationHelper::instance()->palette(m_dndTips);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));

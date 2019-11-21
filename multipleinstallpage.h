@@ -28,19 +28,19 @@
 
 #include <QPropertyAnimation>
 
-#include <DWidget>
+#include <QWidget>
 #include <DPushButton>
 #include <DProgressBar>
 #include <DTextEdit>
 
 class PackagesListView;
 class DebListModel;
-class MultipleInstallPage : public DWidget
+class MultipleInstallPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MultipleInstallPage(DebListModel *model, DWidget *parent = nullptr);
+    explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
 
     void afterGetAutherFalse();
 signals:
@@ -66,12 +66,12 @@ private:
     void initConnections();
 
     DebListModel *m_debListModel;
-    DWidget *m_contentFrame;
+    QWidget *m_contentFrame;
     PackagesListView *m_appsListView;
     DRoundBgFrame *m_appsListViewBgFrame;
     InstallProcessInfoView *m_installProcessInfoView;
     InfoControlButton *m_infoControlButton;
-    DWidget *m_processFrame;
+    QWidget *m_processFrame;
     DProgressBar *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
     DPushButton *m_installButton;

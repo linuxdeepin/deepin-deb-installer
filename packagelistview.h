@@ -25,7 +25,7 @@
 #include <QMouseEvent>
 
 #include <DMenu>
-#include <DWidget>
+#include <QWidget>
 #include <DListView>
 
 DWIDGET_USE_NAMESPACE
@@ -33,7 +33,7 @@ DWIDGET_USE_NAMESPACE
 class PackagesListView : public DListView {
     Q_OBJECT
 public:
-    explicit PackagesListView(DWidget *parent = nullptr);
+    explicit PackagesListView(QWidget *parent = nullptr);
 
 signals:
     void onShowHideTopBg(bool bShow);

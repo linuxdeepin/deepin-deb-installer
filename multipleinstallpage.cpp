@@ -34,15 +34,15 @@
 #include <DLabel>
 #include <DTitlebar>
 
-MultipleInstallPage::MultipleInstallPage(DebListModel *model, DWidget *parent)
-    : DWidget(parent)
+MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
+    : QWidget(parent)
     , m_debListModel(model)
-    , m_contentFrame(new DWidget(this))
+    , m_contentFrame(new QWidget(this))
     , m_appsListView(new PackagesListView)
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_installProcessInfoView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
-    , m_processFrame(new DWidget(this))
+    , m_processFrame(new QWidget(this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
     , m_installButton(new DPushButton)
@@ -144,7 +144,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 30);
 
-    DWidget *btnsFrame = new DWidget;
+    QWidget *btnsFrame = new QWidget;
     btnsFrameLayout->addWidget(m_processFrame);
     btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);

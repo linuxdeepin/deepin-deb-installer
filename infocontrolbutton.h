@@ -32,12 +32,12 @@ DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
 
-class InfoControlButton : public DWidget
+class InfoControlButton : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent = nullptr);
+    explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent = nullptr);
 
     void setShrinkTips(const QString text);
     void setExpandTips(const QString text);

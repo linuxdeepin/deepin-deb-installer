@@ -27,13 +27,13 @@
 #include <DLabel>
 #include <DPushButton>
 #include <DTextEdit>
-#include <DWidget>
+#include <QWidget>
 
-class UninstallConfirmPage : public DWidget {
+class UninstallConfirmPage : public QWidget {
     Q_OBJECT
 
 public:
-    explicit UninstallConfirmPage(DWidget *parent = nullptr);
+    explicit UninstallConfirmPage(QWidget *parent = nullptr);
 
     void setPackage(const QString &name);
     void setRequiredList(const QStringList &requiredList);
@@ -49,7 +49,7 @@ private slots:
 private:
     DLabel *m_icon;
     DLabel *m_tips;
-    DWidget *m_infoWrapperWidget;
+    QWidget *m_infoWrapperWidget;
     InfoControlButton *m_infoControl;
     DTextEdit *m_dependsInfomation;
     DPushButton *m_cancelBtn;

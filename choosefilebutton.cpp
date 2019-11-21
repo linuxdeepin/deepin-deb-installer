@@ -3,7 +3,7 @@
 
 #include <DApplicationHelper>
 
-ChooseFileButton::ChooseFileButton(DWidget *parent)
+ChooseFileButton::ChooseFileButton(QWidget *parent)
     :DPushButton(parent)
 {
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);

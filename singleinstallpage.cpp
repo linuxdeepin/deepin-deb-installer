@@ -110,19 +110,19 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
     return text;
 }
 
-SingleInstallPage::SingleInstallPage(DebListModel *model, DWidget *parent)
-    : DWidget(parent)
+SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
+    : QWidget(parent)
     , m_operate(Install)
     , m_workerStarted(false)
     , m_packagesModel(model)
-    , m_contentFrame(new DWidget)
-    , m_itemInfoFrame(new DWidget)
+    , m_contentFrame(new QWidget)
+    , m_itemInfoFrame(new QWidget)
     , m_packageIcon(new DLabel)
     , m_packageName(new DebInfoLabel)
     , m_packageVersion(new DebInfoLabel)
     , m_packageDescription(new DLabel)
     , m_tipsLabel(new DLabel)
-    , m_progressFrame(new DWidget)
+    , m_progressFrame(new QWidget)
     , m_progress(new WorkerProgress)
     , m_installProcessView(new InstallProcessInfoView)
     , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
@@ -254,7 +254,7 @@ void SingleInstallPage::initPkgInfoView()
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
 
-    DWidget *itemInfoWidget = new DWidget(this);
+    QWidget *itemInfoWidget = new QWidget(this);
     itemInfoWidget->setLayout(itemBlockLayout);
 
     QHBoxLayout *packageDescLayout = new QHBoxLayout;
@@ -376,7 +376,7 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_progressFrame->setLayout(progressLayout);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    DWidget *btnsFrame = new DWidget;
+    QWidget *btnsFrame = new QWidget;
     btnsFrame->setFixedHeight(m_installButton->maximumHeight());
     btnsFrameLayout->addWidget(m_progressFrame);
     btnsFrameLayout->addStretch();
@@ -534,7 +534,8 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
-        Q_UNREACHABLE();
+//        Q_UNREACHABLE();
+        qDebug() << "other status:" << stat;
     }
 
     if(!m_upDown)
@@ -641,7 +642,7 @@ void SingleInstallPage::afterGetAutherFalse()
 
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
-    DWidget::paintEvent(event);
+    QWidget::paintEvent(event);
 
     DPalette palette = DebApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));

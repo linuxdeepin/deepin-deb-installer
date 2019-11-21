@@ -32,6 +32,7 @@
 
 #include <QApt/Backend>
 #include <QApt/Package>
+#include <QApt/Transaction>
 
 using namespace QApt;
 
@@ -141,6 +142,44 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+bool DebListModel::isInstalling() const
+{
+    return (m_workerStatus == WorkerProcessing);
+}
+
+int DebListModel::getWorkStatus() const
+{
+    return m_workerStatus;
+}
+
+
+bool doCmd(const QString &program, const QStringList &arguments)
+{
+    QProcess *process = new QProcess;
+    int failed = false;
+    qDebug() << "QProcess start";
+
+    process->start(program, arguments);
+    process->waitForFinished(-1);
+
+    failed |= process->exitCode();
+
+    return !failed;
+}
+
+void DebListModel::cancelTransaction()
+{
+    Backend *b = m_packagesManager->m_backendFuture.result();
+    for (Package *p : b->availablePackages())
+    {
+        if (p->isInstalled())
+        {
+            continue;
+        }
+        b->setPackagePinned(p, true);
+    }
+}
+
 void DebListModel::installAll()
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
@@ -245,7 +284,6 @@ void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
     default:
         ;
     }
-
 }
 
 int DebListModel::getInstallFileSize()
@@ -492,6 +530,7 @@ void DebListModel::initRowStatus()
     Q_ASSERT(trans == m_currentTransaction.data());
     disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
 }
+
 void DebListModel::upWrongStatusRow()
 {   
     QList<int> listWrongIndex;

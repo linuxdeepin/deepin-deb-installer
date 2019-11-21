@@ -30,17 +30,17 @@
 #include <DProgressBar>
 #include <DPushButton>
 #include <DTextEdit>
-#include <DWidget>
+#include <QWidget>
 
 #include <QApt/DebFile>
 
 class DebListModel;
-class SingleInstallPage : public DWidget
+class SingleInstallPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SingleInstallPage(DebListModel *model, DWidget *parent = nullptr);
+    explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
 
     void afterGetAutherFalse();
 
@@ -87,14 +87,14 @@ private:
     bool m_workerStarted;
     bool m_upDown;
     DebListModel *m_packagesModel;
-    DWidget *m_contentFrame;
-    DWidget *m_itemInfoFrame;
+    QWidget *m_contentFrame;
+    QWidget *m_itemInfoFrame;
     DLabel *m_packageIcon;
     DebInfoLabel *m_packageName;
     DebInfoLabel *m_packageVersion;
     DLabel *m_packageDescription;
     DLabel *m_tipsLabel;
-    DWidget *m_progressFrame;
+    QWidget *m_progressFrame;
     DProgressBar *m_progress;
     InstallProcessInfoView *m_installProcessView;
     InfoControlButton *m_infoControlButton;

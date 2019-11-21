@@ -29,11 +29,11 @@
 
 DWIDGET_USE_NAMESPACE
 
-class FileChooseWidget : public DWidget {
+class FileChooseWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit FileChooseWidget(DWidget *parent = nullptr);
+    explicit FileChooseWidget(QWidget *parent = nullptr);
 
 signals:
     void packagesSelected(const QStringList files) const;

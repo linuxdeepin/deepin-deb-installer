@@ -23,13 +23,13 @@
 #define WORKERPROGRESS_H
 
 #include <DProgressBar>
-#include <DWidget>
+#include <QWidget>
 DWIDGET_USE_NAMESPACE
 class WorkerProgress : public DProgressBar {
     Q_OBJECT
 
 public:
-    explicit WorkerProgress(DWidget *parent = nullptr);
+    explicit WorkerProgress(QWidget *parent = nullptr);
 };
 
 #endif  // WORKERPROGRESS_H

@@ -8,7 +8,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class InstallProcessInfoView : public DWidget
+class InstallProcessInfoView : public QWidget
 {
     Q_OBJECT
 public:

@@ -25,6 +25,7 @@
 #include "multipleinstallpage.h"
 #include "singleinstallpage.h"
 #include "uninstallconfirmpage.h"
+#include "quitconfirmdialog.h"
 #include "utils.h"
 
 #include <QAction>
@@ -42,6 +43,7 @@
 #include <QStyleFactory>
 #include <QApt/DebFile>
 
+#include <DInputDialog>
 #include <DRecentManager>
 #include <DMessageManager>
 #include <DTitlebar>
@@ -52,7 +54,7 @@ using QApt::DebFile;
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-DebInstaller::DebInstaller(DWidget *parent)
+DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
@@ -75,7 +77,7 @@ void DebInstaller::initUI()
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    DWidget *wrapWidget = new DWidget;
+    QWidget *wrapWidget = new QWidget;
     wrapWidget->setLayout(m_centralLayout);
 
 //#define SHOWBORDER
@@ -108,9 +110,8 @@ void DebInstaller::initConnections()
 {
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
-    connect(m_fileListModel, &DebListModel::appendOutputInfo, this,
-    [ = ](const QString & output) {
-        qDebug() << output.trimmed();
+    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [ = ](const QString & output) {
+        qDebug() << "append output info:*****" << output.trimmed();
     });
 
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
@@ -119,8 +120,30 @@ void DebInstaller::initConnections()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
 
-void DebInstaller::onNewAppOpen()
+void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
+    Q_UNUSED(pid)
+
+    QStringList debFileList;
+    for(int i=0; i<arguments.size(); i++)
+    {
+        QString strArg = arguments.at(i);
+        if (!strArg.contains("deb-installer"))
+        {
+            const QFileInfo info(strArg);
+            if (info.isFile() && info.suffix() == "deb")
+            {
+                debFileList << strArg;
+            }
+        }
+    }
+
+    if (debFileList.size() > 0)
+    {
+        qDebug() << debFileList << endl;
+        onPackagesSelected(debFileList);
+    }
+
     this->setWindowState(Qt::WindowActive);
     this->activateWindow();
 }
@@ -308,7 +331,7 @@ void DebInstaller::refreshInstallPage()
 SingleInstallPage *DebInstaller::backToSinglePage()
 {
     Q_ASSERT(m_centralLayout->count() == 3);
-    DWidget *confirmPage = m_centralLayout->widget(2);
+    QWidget *confirmPage = m_centralLayout->widget(2);
     m_centralLayout->removeWidget(confirmPage);
     confirmPage->deleteLater();
 
@@ -333,4 +356,39 @@ void DebInstaller::showHiddenButton()
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->afterGetAutherFalse();
     }
+}
+
+void DebInstaller::closeEvent(QCloseEvent * event)
+{
+    DMainWindow::closeEvent(event);
+//    int workerStatus = m_fileListModel->getWorkStatus();
+//    qDebug() << "workerStatus" << workerStatus;
+
+//    if (DebListModel::WorkerProcessing != workerStatus)
+//    {
+//        DMainWindow::closeEvent(event);
+//        return;
+//    }
+
+//    QString tipMessage = tr("Do you want to stop the installation of the currently installed software?");
+//    QuitConfirmDialog dialog(tr(""), tipMessage, this);
+//    int result = dialog.exec();
+//    switch(result)
+//    {
+//    case 0:
+//        {
+//            qDebug() << "是";
+////            m_fileListModel->cancelTransaction();
+//            event->ignore();
+////            event->accept();
+//        }
+//        break;
+//    case 1:
+//    default:
+//        {
+//            qDebug() << "否";
+//            event->ignore();
+//        }
+//        break;
+//    }
 }

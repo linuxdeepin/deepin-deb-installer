@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QShortcut>
 
-PackagesListView::PackagesListView(DWidget *parent)
+PackagesListView::PackagesListView(QWidget *parent)
     : DListView(parent)
     , m_bLeftMouse(false)
     , m_rightMenu(nullptr)
@@ -79,7 +79,7 @@ void PackagesListView::mouseMoveEvent(QMouseEvent *event)
 
 void PackagesListView::handleHideShowSelection()
 {
-    if (visualRect(m_highlightIndex).y() < -1 * (48-2))
+    if (visualRect(m_highlightIndex).y() < -1 * (48-1))
     {
         emit onShowHideTopBg(false);
     }
@@ -238,7 +238,7 @@ void PackagesListView::paintEvent(QPaintEvent *event)
     DPalette pa = DApplicationHelper::instance()->palette(this);
     QPainterPath painterPath;
 
-    qDebug() << this->model()->rowCount() << endl;
+//    qDebug() << this->model()->rowCount() << endl;
     QColor color = pa.color(QPalette::Base);
     if (this->model()->rowCount() <= 3)
     {

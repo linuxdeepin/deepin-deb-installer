@@ -94,6 +94,11 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
+    int getWorkStatus() const;
+    bool isInstalling() const;
+
+    void cancelTransaction();
+
 signals:
     //    void workerStarted() const;
     void lockForAuth(const bool lock) const;

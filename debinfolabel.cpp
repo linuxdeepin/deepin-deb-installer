@@ -22,7 +22,7 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    DWidget tmpWidget;
+    QWidget tmpWidget;
     DPalette palette = DebApplicationHelper::instance()->palette(&tmpWidget);
     QPainter painter(this);
     painter.setPen(QColor(palette.color(m_colorRole)));

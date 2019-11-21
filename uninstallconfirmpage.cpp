@@ -25,11 +25,11 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
-    : DWidget(parent)
+UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
+    : QWidget(parent)
     , m_icon(new DLabel)
     , m_tips(new DLabel)
-    , m_infoWrapperWidget(new DWidget)
+    , m_infoWrapperWidget(new QWidget)
     , m_infoControl(new InfoControlButton(tr("Display related packages"), tr("Collapse")))
     , m_dependsInfomation(new DTextEdit)
     , m_cancelBtn(new DPushButton)
@@ -45,7 +45,7 @@ UninstallConfirmPage::UninstallConfirmPage(DWidget *parent)
     m_tips->setFont(Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Normal));
     m_tips->setAlignment(Qt::AlignCenter);
 
-    QFont font = this->font();
+    QFont font = normalFontFamily;
     font.setPixelSize(14);
     m_cancelBtn->setFont(font);
     m_confirmBtn->setFont(font);

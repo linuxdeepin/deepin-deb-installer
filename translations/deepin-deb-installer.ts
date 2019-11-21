@@ -10,12 +10,17 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
-        <source>Deepin Package Manager</source>
+        <source>Deepin Deb Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Bulk Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="84"/>
+        <source>Do you want to stop the installation of the currently installed software?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -239,6 +244,19 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../main.cpp" line="53"/>
         <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuitConfirmDialog</name>
+    <message>
+        <location filename="../quitconfirmdialog.cpp" line="37"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../quitconfirmdialog.cpp" line="37"/>
+        <source>No</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -28,7 +28,7 @@
 
 
 #include <DMainWindow>
-#include <DWidget>
+#include <QWidget>
 DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
@@ -37,7 +37,7 @@ class DebInstaller : public Dtk::Widget::DMainWindow {
     Q_OBJECT
 
 public:
-    DebInstaller(DWidget *parent = nullptr);
+    DebInstaller(QWidget *parent = nullptr);
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
 protected:
@@ -45,6 +45,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent * event) Q_DECL_OVERRIDE;
 
 private slots:
     void onPackagesSelected(const QStringList &packages);
@@ -52,7 +53,7 @@ private slots:
     void onUninstallAccepted();
     void onUninstallCalceled();
     void onAuthing(const bool authing);
-    void onNewAppOpen();
+    void onNewAppOpen(qint64 pid, const QStringList &arguments);
 
     void reset();
     void removePackage(const int index);
@@ -71,7 +72,7 @@ private:
 
     QStackedLayout *m_centralLayout;
 
-    QPointer<DWidget> m_lastPage;
+    QPointer<QWidget> m_lastPage;
     int m_dragflag;
 };
 

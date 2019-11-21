@@ -21,8 +21,8 @@
 
 #include "workerprogress.h"
 
-WorkerProgress::WorkerProgress(DWidget *parent)
-    : QProgressBar(parent)
+WorkerProgress::WorkerProgress(QWidget *parent)
+    : DProgressBar(parent)
 {
     setMinimum(0);
     setMaximum(100);

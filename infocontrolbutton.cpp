@@ -29,8 +29,8 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, DWidget *parent)
-    : DWidget(parent)
+InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
+    : QWidget(parent)
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
@@ -83,7 +83,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    DWidget::mouseReleaseEvent(e);
+    QWidget::mouseReleaseEvent(e);
 
     onMouseRelease();
 }

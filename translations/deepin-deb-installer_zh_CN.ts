@@ -33,6 +33,11 @@
         <source>Already Added</source>
         <translation>已添加</translation>
     </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="84"/>
+        <source>Do you want to stop the installation of the currently installed software?</source>
+        <translation>当前安装软件中，是否停止安装？</translation>
+    </message>
 </context>
 <context>
     <name>DebListModel</name>
@@ -286,6 +291,19 @@ unusable</source>
         <location filename="../main.cpp" line="69"/>
         <source>Deepin Deb Installer is used to help users install and remove local packages, supporting bulk install.</source>
         <translation>软件包安装器用于帮助用户安装和卸载本地软件包，支持批量安装。</translation>
+    </message>
+</context>
+<context>
+    <name>QuitConfirmDialog</name>
+    <message>
+        <location filename="../quitconfirmdialog.cpp" line="37"/>
+        <source>Yes</source>
+        <translation>是</translation>
+    </message>
+    <message>
+        <location filename="../quitconfirmdialog.cpp" line="37"/>
+        <source>No</source>
+        <translation>否</translation>
     </message>
 </context>
 </TS>
