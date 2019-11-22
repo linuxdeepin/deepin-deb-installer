@@ -45,14 +45,12 @@ DWIDGET_USE_NAMESPACE
 
 const QString holdTextInRect(const QFont &font, QString srcText, const QSize &size)
 {
-    qDebug() << srcText;
-
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
 
     QString text;
     QString tempText;
     int totalHeight = size.height();
-    int lineWidth = size.width() - 12;
+    int lineWidth = size.width() - font.pixelSize();
 
     int offset = bContainsChinese ? font.pixelSize() : 0;
 
@@ -107,6 +105,7 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
         text += tempText;
     }
 
+    qDebug() << text;
     return text;
 }
 
@@ -172,9 +171,6 @@ void SingleInstallPage::initContentLayout()
 
 void SingleInstallPage::initPkgInfoView()
 {
-    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    QString pkgFontFamily = Utils::loadFontFamilyByType(Utils::DefautFont);
 
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
@@ -182,14 +178,12 @@ void SingleInstallPage::initPkgInfoView()
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    QFont lblFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     DLabel *packageName = new DLabel;
     DPalette pkgPalette = DApplicationHelper::instance()->palette(packageName);
     pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
     packageName->setPalette(pkgPalette);
     packageName->setFixedHeight(20);
     packageName->setText(tr("Name: "));
-    packageName->setFont(lblFont);
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
@@ -199,19 +193,15 @@ void SingleInstallPage::initPkgInfoView()
     packageVersion->setPalette(pkgPalette);
     packageVersion->setFixedHeight(20);
     packageVersion->setText(tr("Version: "));
-    packageVersion->setFont(lblFont);
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
-    QFont pkgFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::ExtraLight);
     m_packageName->setCustomPalette(DPalette::Dark);
     m_packageName->setFixedHeight(20);
     m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    m_packageName->setFont(pkgFont);
     m_packageVersion->setCustomPalette(DPalette::Dark);
     m_packageVersion->setFixedHeight(20);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    m_packageVersion->setFont(pkgFont);
 
     QVBoxLayout *packageNameVLayout = new QVBoxLayout;
     packageNameVLayout->setSpacing(0);
@@ -273,6 +263,14 @@ void SingleInstallPage::initPkgInfoView()
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
 
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+
+    Utils::bindFontBySizeAndWeight(packageVersion, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(packageName, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_packageName, normalFontFamily, 14, QFont::ExtraLight);
+    Utils::bindFontBySizeAndWeight(m_packageVersion, normalFontFamily, 14, QFont::ExtraLight);
+
     m_itemInfoFrame->setLayout(itemLayout);
     m_itemInfoFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_itemInfoFrame->setVisible(false);
@@ -292,15 +290,10 @@ void SingleInstallPage::initPkgInfoView()
 
 void SingleInstallPage::initPkgInstallProcessView()
 {
-    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-
     m_infoControlButton->setObjectName("InfoControlButton");
     m_installProcessView->setObjectName("WorkerInformation");
     m_packageDescription->setObjectName("PackageDescription");
 
-    QFont tipFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::Normal);
-    m_tipsLabel->setFont(tipFont);
     m_tipsLabel->setFixedHeight(18);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 
@@ -326,19 +319,12 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
 
-    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     m_installButton->setFixedSize(120,36);
     m_uninstallButton->setFixedSize(120,36);
     m_reinstallButton->setFixedSize(120,36);
     m_confirmButton->setFixedSize(120,36);
     m_backButton->setFixedSize(120,36);
     m_doneButton->setFixedSize(120,36);
-    m_installButton->setFont(btnFont);
-    m_uninstallButton->setFont(btnFont);
-    m_reinstallButton->setFont(btnFont);
-    m_confirmButton->setFont(btnFont);
-    m_backButton->setFont(btnFont);
-    m_doneButton->setFont(btnFont);
     m_installButton->setFocusPolicy(Qt::NoFocus);
     m_uninstallButton->setFocusPolicy(Qt::NoFocus);
     m_reinstallButton->setFocusPolicy(Qt::NoFocus);
@@ -346,11 +332,9 @@ void SingleInstallPage::initPkgInstallProcessView()
     m_backButton->setFocusPolicy(Qt::NoFocus);
     m_doneButton->setFocusPolicy(Qt::NoFocus);
 
-    QFont descFont = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
     m_packageDescription->setFixedHeight(73);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    m_packageDescription->setFont(descFont);
 
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
     btnsFrameLayout->setSpacing(0);
@@ -383,12 +367,24 @@ void SingleInstallPage::initPkgInstallProcessView()
     btnsFrameLayout->addLayout(btnsLayout);
     btnsFrame->setLayout(btnsFrameLayout);
 
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    Utils::bindFontBySizeAndWeight(m_tipsLabel, normalFontFamily, 12, QFont::Normal);
+    Utils::bindFontBySizeAndWeight(m_installButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_uninstallButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_reinstallButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_confirmButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_doneButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
+
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addSpacing(8);
     m_contentLayout->addWidget(btnsFrame);
+
 
 #ifdef SHOWBGCOLOR
     m_progressFrame->setStyleSheet("QFrame{background:blue}");
@@ -570,6 +566,7 @@ void SingleInstallPage::setPackageInfo()
     //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
     //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = Utils::fromSpecialEncoding(package->longDescription());
+    m_description = description;
     const QSize boundingSize = QSize(m_packageDescription->width(), 72);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
@@ -643,6 +640,9 @@ void SingleInstallPage::afterGetAutherFalse()
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
+
+    const QSize boundingSize = QSize(m_packageDescription->width(), 72);
+    m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 
     DPalette palette = DebApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));

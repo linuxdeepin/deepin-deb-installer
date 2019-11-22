@@ -107,6 +107,8 @@ private:
 
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
+
+    QString m_description;
 };
 
 #endif  // SINGLEINSTALLPAGE_H

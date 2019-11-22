@@ -40,26 +40,14 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
-    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    m_tips->setFont(Utils::loadFontBySizeAndWeight(normalFontFamily, 14, QFont::Normal));
     m_tips->setAlignment(Qt::AlignCenter);
 
-    QFont font = normalFontFamily;
-    font.setPixelSize(14);
-    m_cancelBtn->setFont(font);
-    m_confirmBtn->setFont(font);
-    m_dependsInfomation->setFont(font);
-
-    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
     m_confirmBtn->setFixedSize(120, 36);
     m_confirmBtn->setFocusPolicy(Qt::NoFocus);
     m_cancelBtn->setFocusPolicy(Qt::NoFocus);
-    m_cancelBtn->setFont(btnFont);
-    m_confirmBtn->setFont(btnFont);
 
     m_dependsInfomation->setReadOnly(true);
     m_dependsInfomation->setVisible(false);
@@ -96,6 +84,17 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(20, 0, 20, 30);
+
+
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+
+    Utils::bindFontBySizeAndWeight(m_tips, normalFontFamily, 14, QFont::Normal);
+    Utils::bindFontBySizeAndWeight(m_cancelBtn, normalFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_confirmBtn, normalFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_dependsInfomation, normalFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_cancelBtn, normalFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_confirmBtn, normalFontFamily, 14, QFont::Medium);
 
     setLayout(centralLayout);
 

@@ -77,9 +77,6 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    QFont btnFont = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
-
     m_appsListViewBgFrame->setFixedSize(460, 186+10+5);
     QVBoxLayout *appsViewLayout = new QVBoxLayout;
     appsViewLayout->setSpacing(0);
@@ -103,9 +100,12 @@ void MultipleInstallPage::initUI()
     m_backButton->setText(tr("Back"));
     m_backButton->setVisible(false);
 
-    m_installButton->setFont(btnFont);
-    m_acceptButton->setFont(btnFont);
-    m_backButton->setFont(btnFont);
+
+    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+
+    Utils::bindFontBySizeAndWeight(m_installButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_acceptButton, mediumFontFamily, 14, QFont::Medium);
+    Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
 
     m_installButton->setFocusPolicy(Qt::NoFocus);
     m_acceptButton->setFocusPolicy(Qt::NoFocus);

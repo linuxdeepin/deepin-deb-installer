@@ -39,9 +39,6 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QFont font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
-
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);
     if(themeType == DGuiApplicationHelper::LightType) {
@@ -59,9 +56,11 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
     m_tipsText->setPalette(palette);
     m_tipsText->setAlignment(Qt::AlignCenter);
-    m_tipsText->setFont(font);
     m_tipsText->setText(expandTips);
     m_tipsText->setFixedHeight(15);
+
+    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(m_tipsText, normalFontFamily, 12, QFont::ExtraLight);
 
     centralLayout = new QVBoxLayout;
     centralLayout->setSpacing(5);

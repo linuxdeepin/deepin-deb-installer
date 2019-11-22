@@ -106,8 +106,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QString defaultFontFamily = Utils::loadFontFamilyByType(Utils::DefautFont);
 
         QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
-        QFontMetrics fontMetric(pkg_name_font);
+        pkg_name_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
         painter->setFont(pkg_name_font);
+        QFontMetrics fontMetric(pkg_name_font);
+
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
         const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
 
@@ -121,11 +123,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         version_rect.setLeft(version_x);
         version_rect.setTop(version_y);
         version_rect.setRight(option.rect.right() - 85);
-        QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
         const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, bg_rect.width()-m_packageIcon.width()-240);
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText));
+        QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
+        version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
         painter->setFont(version_font);
         painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -136,8 +139,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             install_status_rect.setRight(option.rect.right() - 20);
             install_status_rect.setTop(version_y+yOffset - 10);
 
-            DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);;
-            painter->setFont(Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium));
+            DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
+
+            QFont stat_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium);
+            stat_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
+            painter->setFont(stat_font);
             switch (operate_stat) {
                 case DebListModel::Operating:
                     painter->setPen(QPen(pa.color(DPalette::TextLively)));
@@ -183,7 +189,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         }
 
         painter->setPen(QPen(penColor));
-        painter->setFont(Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight));
+
+        QFont info_font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
+        info_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
+        painter->setFont(info_font);
         info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
         painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
 

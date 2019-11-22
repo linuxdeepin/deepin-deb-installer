@@ -7,8 +7,7 @@ ChooseFileButton::ChooseFileButton(QWidget *parent)
     :DPushButton(parent)
 {
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 12, QFont::ExtraLight);
-    this->setFont(font);
+    Utils::bindFontBySizeAndWeight(this, fontFamily, 12, QFont::ExtraLight);
 
     DPalette palette = DApplicationHelper::instance()->palette(this);
     palette.setColor(DPalette::ButtonText, palette.color(DPalette::Highlight));

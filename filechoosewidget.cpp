@@ -40,9 +40,6 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
     , m_settings("deepin", "deepin-deb-install")
 {
-    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 12, QFont::ExtraLight);
-
     const auto ratio = devicePixelRatioF();
     setFocusPolicy(Qt::NoFocus);
 
@@ -60,11 +57,13 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     m_dndTips = new DLabel(this);
     m_dndTips->setText(tr("Drag and drop file here"));
     m_dndTips->setObjectName("DNDTips");
-    m_dndTips->setFont(font);
     m_dndTips->setFixedHeight(15);
     palette = DebApplicationHelper::instance()->palette(m_dndTips);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
     m_dndTips->setPalette(palette);
+
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(m_dndTips, fontFamily, 12, QFont::ExtraLight);
 
 #ifdef SHOWBORDER
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");

@@ -89,14 +89,14 @@ void DebInstaller::initUI()
 //    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
 //    iconPix.setDevicePixelRatio(ratio);
 
-    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    QFont font = Utils::loadFontBySizeAndWeight(fontFamily, 14, QFont::Medium);
 
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle("");
-    tb->setFont(font);
     tb->setAutoFillBackground(false);
+
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
 
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件

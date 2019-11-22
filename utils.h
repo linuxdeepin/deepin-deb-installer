@@ -26,6 +26,7 @@
 
 #include <DPalette>
 #include <DApplicationHelper>
+#include <DFontSizeManager>
 
 #define dApp (static_cast<DApplication *>(QCoreApplication::instance()))
 
@@ -74,6 +75,7 @@ public:
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
     static QString loadFontFamilyByType(FontType fontType);
     static QFont loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight);
+    static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);
     static QString fromSpecialEncoding(const QString &inputStr);
 };
 

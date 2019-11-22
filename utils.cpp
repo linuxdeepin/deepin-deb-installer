@@ -152,16 +152,80 @@ QString Utils::loadFontFamilyByType(FontType fontType)
 
 QFont Utils::loadFontBySizeAndWeight(QString fontFamily,int fontSize, int fontWeight)
 {
+    Q_UNUSED(fontSize)
+
     QFont font(fontFamily);
-    font.setPixelSize(fontSize);
     font.setWeight(fontWeight);
 
     return font;
 }
 
+void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight)
+{
+    QFont font = loadFontBySizeAndWeight(fontFamily, fontSize, fontWeight);
+    widget->setFont(font);
+
+    DFontSizeManager::SizeType sizeType = DFontSizeManager::T6;
+    switch (fontSize)
+    {
+        case 10:
+        {
+            sizeType = DFontSizeManager::T10;
+        }
+        break;
+        case 11:
+        {
+            sizeType = DFontSizeManager::T9;
+        }
+        break;
+        case 12:
+        {
+            sizeType = DFontSizeManager::T8;
+        }
+        break;
+        case 13:
+        {
+            sizeType = DFontSizeManager::T7;
+        }
+        break;
+        case 14:
+        {
+            sizeType = DFontSizeManager::T6;
+        }
+        break;
+        case 17:
+        {
+            sizeType = DFontSizeManager::T5;
+        }
+        break;
+        case 20:
+        {
+            sizeType = DFontSizeManager::T4;
+        }
+        break;
+        case 24:
+        {
+            sizeType = DFontSizeManager::T3;
+        }
+        break;
+        case 30:
+        {
+            sizeType = DFontSizeManager::T2;
+        }
+        break;
+        case 40:
+        {
+            sizeType = DFontSizeManager::T1;
+        }
+        break;
+    }
+
+    DFontSizeManager *fontManager = DFontSizeManager::instance();
+    fontManager->bind(widget, sizeType, fontWeight);
+}
+
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
-//    qDebug() << "inputStr is:" << inputStr << endl;
     bool bFlag = inputStr.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (bFlag) {
         return inputStr;
@@ -171,7 +235,6 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
     if (codec)
     {
         QString unicodeStr =  codec->toUnicode(inputStr.toLatin1());
-//        qDebug() << "convert to unicode:" << unicodeStr << endl;
         return unicodeStr;
     }
     else
@@ -259,19 +322,15 @@ static QColor dark_dpalette[DPalette::NColorTypes] {
 
 DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType type) const
 {
-    static const DPalette *light_palette = nullptr, *dark_palette = nullptr;
-
     DPalette *pa;
     const QColor *qcolor_list, *dcolor_list;
 
     if (type == DarkType) {
         pa = new DPalette();
-        dark_palette = pa;
         qcolor_list = dark_qpalette;
         dcolor_list = dark_dpalette;
     } else {
         pa = new DPalette();
-        light_palette = pa;
         qcolor_list = light_qpalette;
         dcolor_list = light_dpalette;
     }
