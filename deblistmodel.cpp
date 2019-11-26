@@ -69,15 +69,29 @@ const QString workerErrorString(const int e)
 
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_workerStatus(WorkerPrepare)
-    , m_packagesManager(new PackagesManager(this)) {
-
+    , m_installWorkerStatus(WorkerPrepare)
+    , m_uninstallWorkerStatus(WorkerPrepare)
+    , m_packagesManager(new PackagesManager(this))
+    , m_markedForUninstall(false)
+    , m_reinstallPackage(false)
+    , m_workerType(WorkerType::Install)
+{
      connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
 }
 
 bool DebListModel::isReady() const
 {
     return m_packagesManager->isBackendReady();
+}
+
+bool DebListModel::isInstallWorkerPrepare() const
+{
+    return m_installWorkerStatus == WorkerPrepare;
+}
+
+bool DebListModel::isUninstallWorkerPrepare() const
+{
+    return m_uninstallWorkerStatus == WorkerPrepare;
 }
 
 const QList<DebFile *> DebListModel::preparedPackages() const
@@ -105,7 +119,16 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case WorkerIsPrepareRole:
-        return isWorkerPrepare();
+    {
+        if (Install == m_workerType)
+        {
+            return isInstallWorkerPrepare();
+        }
+        else
+        {
+            return isInstallWorkerPrepare();
+        }
+    }
     case ItemIsCurrentRole:
         return m_currentIdx == index;
     case PackageNameRole:
@@ -144,14 +167,79 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 bool DebListModel::isInstalling() const
 {
-    return (m_workerStatus == WorkerProcessing);
+    return (m_installWorkerStatus == WorkerProcessing);
 }
 
-int DebListModel::getWorkStatus() const
+int DebListModel::getInstallWorkStatus() const
 {
-    return m_workerStatus;
+    return m_installWorkerStatus;
 }
 
+int DebListModel::getUninstallWorkStatus() const
+{
+    return m_uninstallWorkerStatus;
+}
+
+void DebListModel::markPackageUninstall(bool markedForUninstall)
+{
+    m_uninstallWorkerStatus = WorkerPrepare;
+    m_markedForUninstall = markedForUninstall;
+
+    int operationIndex = m_operatingIndex;
+    qDebug() << "mark m_operatingIndex: " << operationIndex << endl;
+
+
+    QModelIndex currIndex = index(operationIndex);
+    QString installedVersion = currIndex.data(DebListModel::PackageInstalledVersionRole).toString();
+    qDebug() << installedVersion;
+
+    const QString debVersion = currIndex.data(DebListModel::PackageVersionRole).toString();
+    qDebug() << debVersion;
+
+    if (installedVersion.length() > 0)
+    {
+        m_reinstallPackage = true;
+    }
+    else
+    {
+        m_reinstallPackage = false;
+    }
+
+    //"10.0.2001.0-1"
+    if (markedForUninstall && m_packagesManager->m_preparedPackages.size() > 1)
+    {
+        qDebug() << m_packagesManager->m_preparedPackages.size();
+
+        int removeAfterSize = m_packagesManager->m_preparedPackages.size()-operationIndex;
+        for(int i=0; i<m_operatingIndex; i++)
+        {
+            m_packagesManager->removePackage(0);
+        }
+
+        if (removeAfterSize > 0)
+        {
+            for(int i=0; i<removeAfterSize-1; i++)
+            {
+                m_packagesManager->removeLastPackage();
+            }
+        }
+
+        qDebug() << m_packagesManager->m_preparedPackages.size();
+        qDebug() << "package left: " << m_packagesManager->m_preparedPackages.first()->packageName() << endl;
+
+        m_operatingIndex = 0;
+    }
+}
+
+bool DebListModel::isMarkPackageUninstall()
+{
+    return m_markedForUninstall;
+}
+
+DebListModel::WorkerType DebListModel::getWorkerType()
+{
+    return m_workerType;
+}
 
 bool doCmd(const QString &program, const QStringList &arguments)
 {
@@ -167,29 +255,16 @@ bool doCmd(const QString &program, const QStringList &arguments)
     return !failed;
 }
 
-void DebListModel::cancelTransaction()
-{
-    Backend *b = m_packagesManager->m_backendFuture.result();
-    for (Package *p : b->availablePackages())
-    {
-        if (p->isInstalled())
-        {
-            continue;
-        }
-        b->setPackagePinned(p, true);
-    }
-}
-
 void DebListModel::installAll()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
-    if (m_workerStatus != WorkerPrepare) return;
+    Q_ASSERT_X(m_installWorkerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+    if (m_installWorkerStatus != WorkerPrepare) return;
 
-    m_workerStatus = WorkerProcessing;
+    m_installWorkerStatus = WorkerProcessing;
     m_operatingIndex = 0;
     m_InitRowStatus = false;
 
-    //    emit workerStarted();
+    m_workerType = WorkerType::Install;
 
     // start first
     installNextDeb();
@@ -198,10 +273,12 @@ void DebListModel::installAll()
 void DebListModel::uninstallPackage(const int idx)
 {
     Q_ASSERT(idx == 0);
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_uninstallWorkerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
-    m_workerStatus = WorkerProcessing;
+    m_workerType = WorkerType::UnInstall;
+    m_uninstallWorkerStatus = WorkerProcessing;
     m_operatingIndex = idx;
+    qDebug() << "uninstallPackage m_operatingIndex : " << m_operatingIndex;
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
 
@@ -215,12 +292,13 @@ void DebListModel::uninstallPackage(const int idx)
 
     refreshOperatingPackageStatus(Operating);
     Transaction *trans = b->commitChanges();
+    trans->setObjectName("uninstall_trans");
 
     connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::statusChanged, this, &DebListModel::onTransactionStatusChanged);
     connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
-    connect(trans, &Transaction::finished, this, &DebListModel::uninstallFinished);
+    connect(trans, &Transaction::finished, this, &DebListModel::onUninstallTransactionFinished);
     connect(trans, &Transaction::finished, trans, &Transaction::deleteLater);
 
     m_currentTransaction = trans;
@@ -230,21 +308,21 @@ void DebListModel::uninstallPackage(const int idx)
 
 void DebListModel::removePackage(const int idx)
 {
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_installWorkerStatus == WorkerPrepare, Q_FUNC_INFO, "install status error");
 
     m_packagesManager->removePackage(idx);
 }
 
 bool DebListModel::appendPackage(DebFile *package)
 {
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_installWorkerStatus == WorkerPrepare, Q_FUNC_INFO, "install status error");
 
     return m_packagesManager->appendPackage(package);
 }
 
 void DebListModel::onTransactionErrorOccurred()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_uninstallWorkerStatus == WorkerProcessing, Q_FUNC_INFO, "uninstall status error");
     Transaction *trans = static_cast<Transaction *>(sender());
 
     const QApt::ErrorCode e = trans->error();
@@ -264,7 +342,7 @@ void DebListModel::onTransactionErrorOccurred()
         emit AuthCancel();
         emit lockForAuth(false);
 
-        m_workerStatus = WorkerPrepare;
+        m_uninstallWorkerStatus = WorkerPrepare;
         return;
     }
 
@@ -295,12 +373,26 @@ void DebListModel::reset()
 {
     //Q_ASSERT_X(m_workerStatus == WorkerFinished, Q_FUNC_INFO, "worker status error");
 
-    m_workerStatus = WorkerPrepare;
+    m_installWorkerStatus = WorkerPrepare;
+    m_uninstallWorkerStatus = WorkerPrepare;
     m_operatingIndex = 0;
 
     m_packageOperateStatus.clear();
     m_packageFailReason.clear();
     m_packagesManager->reset();
+}
+
+void DebListModel::resetInstallState()
+{
+    m_installWorkerStatus = WorkerFinished;
+    m_uninstallWorkerStatus = WorkerPrepare;
+    m_operatingIndex = 0;
+
+    m_packageOperateStatus.clear();
+    m_packageFailReason.clear();
+
+    m_packagesManager->resetInstallStatus();
+    m_packagesManager->resetPackageDependsStatus(0);
 }
 
 void DebListModel::bumpInstallIndex()
@@ -309,9 +401,22 @@ void DebListModel::bumpInstallIndex()
 
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
-        qDebug() << "congraulations, install finished !!!";
+        qDebug() << "congratulations, install finished !!!";
 
-        m_workerStatus = WorkerFinished;
+        m_installWorkerStatus = WorkerFinished;
+        if (this->m_reinstallPackage)
+        {
+            qDebug() << "reinstall finished";
+            exit(0);
+        }
+
+        if (this->isMarkPackageUninstall())
+        {
+            qDebug() << "start uninstalling when install finished";
+            this->resetInstallState();
+            this->uninstallPackage(0);
+        }
+
         emit workerFinished();
         emit workerProgressChanged(100);
         emit transactionProgressChanged(100);
@@ -337,15 +442,23 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
     if (stat.isBreak()) {
-        if (!stat.package.isEmpty()) return tr("Broken Dependencies: %1").arg(stat.package);
+        if (!stat.package.isEmpty())
+        {
+            return tr("Broken Dependencies: %1").arg(stat.package);
+        }
 
-        if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
+        if (m_packagesManager->isArchError(idx))
+        {
+            return tr("Unmatched package architecture");
+        }
 
         const auto conflict = m_packagesManager->packageConflictStat(idx);
-        if (!conflict.is_ok()) return tr("Broken Dependencies: %1").arg(conflict.unwrap());
-        //            return tr("Conflicts: %1").arg(conflict.unwrap());
+        if (!conflict.is_ok())
+        {
+            return tr("Broken Dependencies: %1").arg(conflict.unwrap());
+        }
 
-        Q_UNREACHABLE();
+        qWarning() << "Unknown Install Break Reason!";
     }
 
     Q_ASSERT(m_packageOperateStatus.contains(idx));
@@ -357,16 +470,19 @@ QString DebListModel::packageFailedReason(const int idx) const
     return workerErrorString(m_packageFailReason[idx]);
 }
 
-void DebListModel::onTransactionFinished()
+void DebListModel::onInstallTransactionFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    qDebug() << __FUNCTION__;
+    Q_ASSERT_X(m_installWorkerStatus == WorkerProcessing, Q_FUNC_INFO, "install status error");
     Transaction *trans = static_cast<Transaction *>(sender());
+    qDebug() << trans->objectName() << endl;
 
     // prevent next signal
-    disconnect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
+    disconnect(trans, &Transaction::finished, this, &DebListModel::onInstallTransactionFinished);
 
     // report new progress
-    emit workerProgressChanged(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+    int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+    emit workerProgressChanged(progressValue);
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
@@ -390,7 +506,7 @@ void DebListModel::onTransactionFinished()
 
 void DebListModel::onDependsInstallTransactionFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_installWorkerStatus == WorkerProcessing, Q_FUNC_INFO, "install status error");
     Transaction *trans = static_cast<Transaction *>(sender());
 
     const auto ret = trans->exitStatus();
@@ -420,7 +536,7 @@ void DebListModel::onDependsInstallTransactionFinished()
 
 void DebListModel::installNextDeb()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_installWorkerStatus == WorkerProcessing, Q_FUNC_INFO, "install status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     if (isDpkgRunning()) {
@@ -433,6 +549,7 @@ void DebListModel::installNextDeb()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
 
     auto *const backend = m_packagesManager->m_backendFuture.result();
+    backend->undo();
     Transaction *trans = nullptr;
 
     // reset package depends status
@@ -459,9 +576,10 @@ void DebListModel::installNextDeb()
         qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
 
         trans = backend->installFile(*deb);
+        trans->setObjectName("install_trans");
 
         connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
-        connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
+        connect(trans, &Transaction::finished, this, &DebListModel::onInstallTransactionFinished);
     }
 
     // NOTE: DO NOT remove this.
@@ -485,23 +603,32 @@ void DebListModel::installNextDeb()
 
 void DebListModel::onTransactionOutput()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_installWorkerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
     Q_ASSERT(trans == m_currentTransaction.data());
 
     refreshOperatingPackageStatus(Operating);
+    qDebug() << "onTransactionOutput: refreshOperatingPackageStatus:Operating" << endl;
 
     disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
 }
 
-void DebListModel::uninstallFinished()
+void DebListModel::onUninstallTransactionFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    qDebug() << __FUNCTION__;
+    Transaction *trans = static_cast<Transaction *>(sender());
+    qDebug() << trans->objectName() << endl;
 
     qDebug() << Q_FUNC_INFO;
 
-    m_workerStatus = WorkerFinished;
+    if (this->isMarkPackageUninstall())
+    {
+        exit(0);
+    }
+
+    m_uninstallWorkerStatus = WorkerFinished;
     refreshOperatingPackageStatus(Success);
+    qDebug() << "onUninstallTransactionFinished -- refreshOperatingPackageStatus:Success" << endl;
 
     emit workerFinished();
 }
@@ -522,6 +649,7 @@ void DebListModel::initRowStatus()
     for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)
     {
         m_operatingIndex = i;
+        qDebug() << "initRowStatus m_operatingIndex : " << m_operatingIndex;
         refreshOperatingPackageStatus(Waiting);
     }
     m_operatingIndex = 0;

@@ -167,6 +167,6 @@ translations.path = /usr/share/deepin-deb-installer/translations
 translations.files = $$PWD/translations/*.qm
 
 icon_files.path = /usr/share/icons/hicolor/scalable/apps
-icon_files.files = $$PWD/resources/images/deepin-deb-installer-*px.svg
+icon_files.files = $$PWD/resources/images/deepin-deb-installer.svg
 
 INSTALLS += target desktop applications translations icon_files

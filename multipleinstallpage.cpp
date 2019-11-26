@@ -225,7 +225,7 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
 
 void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
 {
-    if (!m_debListModel->isWorkerPrepare()) return;
+    if (!m_debListModel->isInstallWorkerPrepare()) return;
 
     const int r = index.row();
 
@@ -249,11 +249,13 @@ void MultipleInstallPage::hideInfo()
     m_installProcessInfoView->setVisible(false);
     emit hideAutoBarTitle();
 }
+
 void MultipleInstallPage::hiddenCancelButton()
 {
      m_backButton->setVisible(false);
      m_installButton->setVisible(false);
 }
+
 void MultipleInstallPage::afterGetAutherFalse()
 {
     m_backButton->setVisible(true);

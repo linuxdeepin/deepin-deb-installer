@@ -61,6 +61,11 @@ public:
         WorkerFinished,
     };
 
+    enum WorkerType {
+        Install,
+        UnInstall
+    };
+
     enum PackageInstallStatus {
         NotInstalled,
         InstalledSameVersion,
@@ -83,24 +88,26 @@ public:
     };
 
     void reset();
+    void resetInstallState();
     bool isReady() const;
-    bool isWorkerPrepare() const
-    {
-        return m_workerStatus == WorkerPrepare;
-    }
+    bool isInstallWorkerPrepare() const;
+    bool isUninstallWorkerPrepare() const;
+
     const QList<QApt::DebFile *> preparedPackages() const;
     QModelIndex first() const;
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    int getWorkStatus() const;
+    int getInstallWorkStatus() const;
+    int getUninstallWorkStatus() const;
     bool isInstalling() const;
+    void markPackageUninstall(bool markedForUninstall);
 
-    void cancelTransaction();
+    bool isMarkPackageUninstall();
+    WorkerType getWorkerType();
 
 signals:
-    //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
     void workerFinished() const;
     void workerProgressChanged(const int progress) const;
@@ -123,24 +130,28 @@ public slots:
 
 private slots:
     void upWrongStatusRow();
+    void onUninstallTransactionFinished();
+    void onInstallTransactionFinished();
+    void onDependsInstallTransactionFinished();
 public:
     int getInstallFileSize();
 
 private:
     void bumpInstallIndex();
     void onTransactionOutput();
-    void onTransactionFinished();
-    void onDependsInstallTransactionFinished();
     void installNextDeb();
-    void uninstallFinished();
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
     QString packageFailedReason(const int idx) const;
     void initRowStatus();
+
 private:
-    int m_workerStatus;
+    int m_installWorkerStatus;
+    int m_uninstallWorkerStatus;
     int m_operatingIndex;
     QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
+    bool m_markedForUninstall;
+    bool m_reinstallPackage;
 
     QPointer<QApt::Transaction> m_currentTransaction;
 
@@ -148,6 +159,7 @@ private:
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
 
+    WorkerType m_workerType;
 };
 
 #endif  // DEBLISTMODEL_H

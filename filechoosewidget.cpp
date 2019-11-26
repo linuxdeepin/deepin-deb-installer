@@ -25,7 +25,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QDragEnterEvent>
-#include <QFileDialog>
+#include <DFileDialog>
 #include <QFileInfo>
 #include <DLabel>
 #include <QMimeData>
@@ -124,7 +124,7 @@ void FileChooseWidget::chooseFiles()
         historyDir = QDir::homePath();
     }
 
-    QFileDialog dialog;
+    DFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);

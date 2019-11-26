@@ -324,8 +324,8 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
 
 const QString PackagesManager::packageInstalledVersion(const int index) {
     Q_ASSERT(m_packageInstallStatus.contains(index));
-    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
-             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
+//    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
+//             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
 
     Backend *b = m_backendFuture.result();
     Package *p = b->package(m_preparedPackages[index]->packageName());
@@ -436,6 +436,12 @@ void PackagesManager::reset() {
     m_backendFuture.result()->reloadCache();
 }
 
+void PackagesManager::resetInstallStatus() {
+    m_packageInstallStatus.clear();
+    m_packageDependsStatus.clear();
+    m_backendFuture.result()->reloadCache();
+}
+
 void PackagesManager::resetPackageDependsStatus(const int index) {
     if (!m_packageDependsStatus.contains(index)) return;
 
@@ -446,11 +452,25 @@ void PackagesManager::resetPackageDependsStatus(const int index) {
 }
 
 void PackagesManager::removePackage(const int index) {
+    qDebug() << index << ", size:"<< m_preparedPackages.size();
     DebFile *deb = m_preparedPackages[index];
     const auto md5 = deb->md5Sum();
 
     m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
+    m_packageInstallStatus.clear();
+    m_packageDependsStatus.clear();
+}
+
+void PackagesManager::removeLastPackage()
+{
+    qDebug() << "start remove last, curr m_preparedPackages size:"<< m_preparedPackages.size();
+    DebFile *deb = m_preparedPackages.last();
+    qDebug() << " remove package name is:"<< deb->packageName();
+    const auto md5 = deb->md5Sum();
+
+    m_appendedPackagesMd5.remove(md5);
+    m_preparedPackages.removeLast();
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
 }

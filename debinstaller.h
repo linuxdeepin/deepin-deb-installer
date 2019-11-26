@@ -64,6 +64,8 @@ private:
     void initUI();
     void initConnections();
     void refreshInstallPage();
+
+    void sendMessage(QWidget *par, DFloatingMessage *floMsg);
     SingleInstallPage *backToSinglePage();
 
 private:

@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
     if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
     {
+        qDebug() << "DGuiApplicationHelper::instance()->setSingleInstance";
         exit(0);
     }
 
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon::fromTheme("deepin-deb-installer"));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
-    app.setAttribute(Qt::AA_EnableHighDpiScaling);
+//    app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.loadTranslator();
     app.setProductName(QApplication::translate("main", "Deepin Deb Installer"));
     app.setApplicationDisplayName(QApplication::translate("main", "Deepin Deb Installer"));

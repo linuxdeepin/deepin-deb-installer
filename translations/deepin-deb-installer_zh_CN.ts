@@ -35,8 +35,8 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="84"/>
-        <source>Do you want to stop the installation of the currently installed software?</source>
-        <translation>当前安装软件中，是否停止安装？</translation>
+        <source>There are currently installation tasks in progress</source>
+        <translation>当前有安装任务正在进行</translation>
     </message>
 </context>
 <context>
@@ -297,13 +297,13 @@ unusable</source>
     <name>QuitConfirmDialog</name>
     <message>
         <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Yes</source>
-        <translation>是</translation>
+        <source>Stop Installation</source>
+        <translation>停止安装</translation>
     </message>
     <message>
         <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>No</source>
-        <translation>否</translation>
+        <source>Continue Installation</source>
+        <translation>继续安装</translation>
     </message>
 </context>
 </TS>

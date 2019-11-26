@@ -34,7 +34,7 @@ void QuitConfirmDialog::initUI()
 //    m_icon->setPixmap(icon.pixmap(64, 64));
 
     QStringList btnTextList;
-    btnTextList << tr("Yes") << tr("No");
+    btnTextList << tr("Stop Installation") << tr("Continue Installation");
     addButtons(btnTextList);
 
 

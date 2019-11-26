@@ -87,8 +87,10 @@ public:
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
     void reset();
+    void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
     void removePackage(const int index);
+    void removeLastPackage();
     bool appendPackage(QApt::DebFile *debPackage);
 
     QApt::DebFile * package(const int index) const { return m_preparedPackages[index]; }

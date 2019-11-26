@@ -105,7 +105,6 @@ const QString holdTextInRect(const QFont &font, QString srcText, const QSize &si
         text += tempText;
     }
 
-    qDebug() << text;
     return text;
 }
 
@@ -489,6 +488,8 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
+    qDebug() << __FUNCTION__ << endl;
+
     m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -497,41 +498,60 @@ void SingleInstallPage::onWorkerFinished()
     QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
-    DPalette palette;
-    if (stat == DebListModel::Success) {
-        m_doneButton->setVisible(true);
+    //Install
+    if (DebListModel::Install ==  m_packagesModel->getWorkerType())
+    {
+        DPalette palette;
+        if (stat == DebListModel::Success) {
+            m_doneButton->setVisible(true);
 
-        if (m_operate == Install || m_operate == Reinstall) {
-            m_infoControlButton->setExpandTips(tr("Display install details"));
-            m_tipsLabel->setText(tr("Installed successfully"));
-            palette = DebApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setColor(QPalette::WindowText, palette.color(DPalette::DarkLively));
+            if (m_operate == Install || m_operate == Reinstall) {
+                m_infoControlButton->setExpandTips(tr("Display install details"));
+                m_tipsLabel->setText(tr("Installed successfully"));
+                palette = DebApplicationHelper::instance()->palette(m_tipsLabel);
+                palette.setColor(QPalette::WindowText, palette.color(DPalette::DarkLively));
+                m_tipsLabel->setPalette(palette);
+            }
+
+        } else if (stat == DebListModel::Failed) {
+            m_confirmButton->setVisible(true);
+
+            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
             m_tipsLabel->setPalette(palette);
+
+            if (m_operate == Install || m_operate == Reinstall) {
+                m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+            }
         } else {
+            qWarning() << "Install Other Status:" << stat;
+        }
+    }
+    //UnInstall
+    else
+    {
+        DPalette palette;
+        if (stat == DebListModel::Success) {
+            m_doneButton->setVisible(true);
+
             m_infoControlButton->setExpandTips(tr("Display uninstall details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
 
             palette = DApplicationHelper::instance()->palette(m_tipsLabel);
             palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
             m_tipsLabel->setPalette(palette);
-        }
 
-    } else if (stat == DebListModel::Failed) {
-        m_confirmButton->setVisible(true);
+        } else if (stat == DebListModel::Failed) {
+            m_confirmButton->setVisible(true);
 
-        palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-        palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-        m_tipsLabel->setPalette(palette);
+            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
+            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
+            m_tipsLabel->setPalette(palette);
 
-        if (m_operate == Install || m_operate == Reinstall)
-            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        else
-        {
             m_tipsLabel->setText(tr("Uninstall Failed"));
+        } else {
+            qWarning() << "UnInstall Other Status:" << stat;
         }
-    } else {
-//        Q_UNREACHABLE();
-        qDebug() << "other status:" << stat;
     }
 
     if(!m_upDown)
@@ -540,11 +560,19 @@ void SingleInstallPage::onWorkerFinished()
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
-    if (progress < m_progress->value()) return;
+    qDebug() << progress << endl;
+    if (progress < m_progress->value())
+    {
+        return;
+    }
 
     m_progress->setValue(progress);
 
-    if (progress == m_progress->maximum()) QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
+    if (progress == m_progress->maximum())
+    {
+        qDebug() << "onWorkerProgressChanged" << progress;
+        QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
+    }
 }
 
 void SingleInstallPage::setPackageInfo()
@@ -581,7 +609,6 @@ void SingleInstallPage::setPackageInfo()
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
-    //m_backButton->setVisible(true);
 
     DPalette palette;
     if (installed) {
@@ -620,18 +647,15 @@ void SingleInstallPage::afterGetAutherFalse()
 {
     if( m_operate == Install)
     {
-        //m_backButton->setVisible(true);
         m_installButton->setVisible(true);
     }
     else if(m_operate == Uninstall)
     {
-        //m_backButton->setVisible(true);
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }
     else if(m_operate == Reinstall)
     {
-        //m_backButton->setVisible(true);
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }

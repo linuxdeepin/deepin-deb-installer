@@ -146,7 +146,7 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
     DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());
-    if (!debListModel->isWorkerPrepare())
+    if (!debListModel->isInstallWorkerPrepare())
     {
         return;
     }
