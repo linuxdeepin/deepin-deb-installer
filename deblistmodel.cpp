@@ -60,7 +60,7 @@ const QString workerErrorString(const int e)
         return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
     case NotFoundError:
         return QApplication::translate("DebListModel",
-                                       "Installation failed, please check updates in Control Center");
+                                       "Installation failed, please check for updates in Control Center");
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     }

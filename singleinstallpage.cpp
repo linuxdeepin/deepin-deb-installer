@@ -123,7 +123,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_progressFrame(new QWidget)
     , m_progress(new WorkerProgress)
     , m_installProcessView(new InstallProcessInfoView)
-    , m_infoControlButton(new InfoControlButton(tr("Display install details"), tr("Collapse")))
+    , m_infoControlButton(new InfoControlButton("", tr("Collapse")))
     , m_installButton(new DPushButton)
     , m_uninstallButton(new DPushButton)
     , m_reinstallButton(new DPushButton)
@@ -426,6 +426,7 @@ void SingleInstallPage::reinstall()
 }
 void SingleInstallPage::install()
 {
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
 
@@ -435,7 +436,7 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
-    m_infoControlButton->setExpandTips(tr("Display uninstall details"));
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
@@ -506,7 +507,7 @@ void SingleInstallPage::onWorkerFinished()
             m_doneButton->setVisible(true);
 
             if (m_operate == Install || m_operate == Reinstall) {
-                m_infoControlButton->setExpandTips(tr("Display install details"));
+                m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
                 m_tipsLabel->setText(tr("Installed successfully"));
                 palette = DebApplicationHelper::instance()->palette(m_tipsLabel);
                 palette.setColor(QPalette::WindowText, palette.color(DPalette::DarkLively));
@@ -533,8 +534,7 @@ void SingleInstallPage::onWorkerFinished()
         DPalette palette;
         if (stat == DebListModel::Success) {
             m_doneButton->setVisible(true);
-
-            m_infoControlButton->setExpandTips(tr("Display uninstall details"));
+            m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
 
             palette = DApplicationHelper::instance()->palette(m_tipsLabel);

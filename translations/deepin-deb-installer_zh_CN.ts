@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="101"/>
-        <source>Deepin Deb Installer</source>
+        <source>Package Installer</source>
         <translation>软件包安装器</translation>
     </message>
     <message>
@@ -48,7 +48,7 @@
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
-        <source>Installation failed, please check updates in Control Center</source>
+        <source>Installation failed, please check for updates in Control Center</source>
         <translation>安装失败，请在控制中心检查更新</translation>
     </message>
     <message>
@@ -77,8 +77,8 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="54"/>
-        <source>Drag and drop file here</source>
-        <translation>拖拽安装包到此</translation>
+        <source>Drag deb packages here</source>
+        <translation>拖拽软件包到此</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="79"/>
@@ -95,9 +95,8 @@
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="42"/>
-        <source>Display install details</source>
-        <oldsource>Display details</oldsource>
-        <translation>显示详细安装进程</translation>
+        <source>Show details</source>
+        <translation>显示详细信息</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="66"/>
@@ -157,18 +156,29 @@
     </message>
 </context>
 <context>
+    <name>SingleInstallPage_Install</name>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="106"/>
+        <location filename="../singleinstallpage.cpp" line="339"/>
+        <source>Show details</source>
+        <translation>显示详细信息</translation>
+    </message>
+</context>
+<context>
+    <name>SingleInstallPage_Uninstall</name>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="274"/>
+        <location filename="../singleinstallpage.cpp" line="345"/>
+        <source>Show details</source>
+        <translation>显示卸载进程</translation>
+    </message>
+</context>
+<context>
     <name>SingleInstallPage</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="106"/>
         <source>Collapse</source>
         <translation>收起</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="106"/>
-        <location filename="../singleinstallpage.cpp" line="339"/>
-        <source>Display install details</source>
-        <oldsource>Display details</oldsource>
-        <translation>显示详细安装进程</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="143"/>
@@ -209,12 +219,6 @@
         <location filename="../singleinstallpage.cpp" line="340"/>
         <source>Installed successfully</source>
         <translation>安装成功</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="274"/>
-        <location filename="../singleinstallpage.cpp" line="345"/>
-        <source>Display uninstall details</source>
-        <translation>显示详细卸载进程</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="346"/>
@@ -284,13 +288,13 @@ unusable</source>
     <name>main</name>
     <message>
         <location filename="../main.cpp" line="67"/>
-        <source>Deepin Deb Installer</source>
+        <source>Package Installer</source>
         <translation>软件包安装器</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
-        <source>Deepin Deb Installer is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation>软件包安装器用于帮助用户安装和卸载本地软件包，支持批量安装。</translation>
+        <source>Package Installer helps users install and remove local packages, and supports bulk package installation.</source>
+        <translation>软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
 </context>
 <context>

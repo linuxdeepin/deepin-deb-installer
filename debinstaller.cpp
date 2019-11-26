@@ -104,7 +104,7 @@ void DebInstaller::initUI()
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
-    setWindowTitle(tr("Deepin Deb Installer"));
+    setWindowTitle(tr("Package Installer"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }

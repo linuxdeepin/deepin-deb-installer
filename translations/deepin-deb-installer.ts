@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="88"/>
-        <source>Deepin Deb Installer</source>
+        <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../debinstaller.cpp" line="84"/>
-        <source>Do you want to stop the installation of the currently installed software?</source>
+        <source>There are currently installation tasks in progress</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -62,7 +62,7 @@
     <name>FileChooseWidget</name>
     <message>
         <location filename="../filechoosewidget.cpp" line="52"/>
-        <source>Drag and drop file here</source>
+        <source>Drag deb packages here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

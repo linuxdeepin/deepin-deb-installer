@@ -55,7 +55,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     iconImage->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
     m_dndTips = new DLabel(this);
-    m_dndTips->setText(tr("Drag and drop file here"));
+    m_dndTips->setText(tr("Drag deb packages here"));
     m_dndTips->setObjectName("DNDTips");
     m_dndTips->setFixedHeight(15);
     palette = DebApplicationHelper::instance()->palette(m_dndTips);
