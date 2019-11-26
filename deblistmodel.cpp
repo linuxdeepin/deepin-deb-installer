@@ -205,7 +205,6 @@ void DebListModel::markPackageUninstall(bool markedForUninstall)
         m_reinstallPackage = false;
     }
 
-    //"10.0.2001.0-1"
     if (markedForUninstall && m_packagesManager->m_preparedPackages.size() > 1)
     {
         qDebug() << m_packagesManager->m_preparedPackages.size();
@@ -621,10 +620,10 @@ void DebListModel::onUninstallTransactionFinished()
 
     qDebug() << Q_FUNC_INFO;
 
-    if (this->isMarkPackageUninstall())
-    {
-        exit(0);
-    }
+//    if (this->isMarkPackageUninstall())
+//    {
+//        exit(0);
+//    }
 
     m_uninstallWorkerStatus = WorkerFinished;
     refreshOperatingPackageStatus(Success);

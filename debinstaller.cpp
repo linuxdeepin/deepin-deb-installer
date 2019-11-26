@@ -128,19 +128,19 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     Q_UNUSED(pid)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
 
-    if (m_fileListModel->isMarkPackageUninstall())
-    {
-        qDebug() << "showMessage" << "Still Installing" << endl;
-        DFloatingMessage *msg = new DFloatingMessage();
-        msg->setWindowFlag(Qt::FramelessWindowHint);
-        msg->setAttribute(Qt::WA_TranslucentBackground);
-        msg->setWidget(this);
-        msg->setMessage(tr("There are currently installation tasks in progress"));
-        msg->show();
-        msg->move((QApplication::desktop()->width() - msg->width())/2,(QApplication::desktop()->height() - msg->height())/2);
+//    if (m_fileListModel->isMarkPackageUninstall())
+//    {
+//        qDebug() << "showMessage" << "Still Installing" << endl;
+//        DFloatingMessage *msg = new DFloatingMessage();
+//        msg->setWindowFlag(Qt::FramelessWindowHint);
+//        msg->setAttribute(Qt::WA_TranslucentBackground);
+//        msg->setWidget(this);
+//        msg->setMessage(tr("There are currently installation tasks in progress"));
+//        msg->show();
+//        msg->move((QApplication::desktop()->width() - msg->width())/2,(QApplication::desktop()->height() - msg->height())/2);
 
-        return;
-    }
+//        return;
+//    }
 
     QStringList debFileList;
     for(int i=0; i<arguments.size(); i++)
@@ -379,39 +379,39 @@ void DebInstaller::showHiddenButton()
 void DebInstaller::closeEvent(QCloseEvent * event)
 {
     DMainWindow::closeEvent(event);
-    int installWorkerStatus = m_fileListModel->getInstallWorkStatus();
-    int uninstallWorkerStatus = m_fileListModel->getInstallWorkStatus();
-    qDebug() << "installWorkerStatus: " << installWorkerStatus;
-    qDebug() << "uninstallWorkerStatus: " << uninstallWorkerStatus;
+//    int installWorkerStatus = m_fileListModel->getInstallWorkStatus();
+//    int uninstallWorkerStatus = m_fileListModel->getInstallWorkStatus();
+//    qDebug() << "installWorkerStatus: " << installWorkerStatus;
+//    qDebug() << "uninstallWorkerStatus: " << uninstallWorkerStatus;
 
-    if (DebListModel::WorkerProcessing != installWorkerStatus && !m_fileListModel->isMarkPackageUninstall())
-    {
-        qDebug() << "close window";
-        DMainWindow::closeEvent(event);
-        return;
-    }
+//    if (DebListModel::WorkerProcessing != installWorkerStatus && !m_fileListModel->isMarkPackageUninstall())
+//    {
+//        qDebug() << "close window";
+//        DMainWindow::closeEvent(event);
+//        return;
+//    }
 
-    QString tipMessage = tr("There are currently installation tasks in progress");
-    QuitConfirmDialog dialog(tr(""), tipMessage, this);
-    int result = dialog.exec();
-    switch(result)
-    {
-    case 0:
-        {
-            qDebug() << "是";
-            m_fileListModel->markPackageUninstall(true);
-            event->ignore();
-            // 只是隐藏窗口
-            hide();
-        }
-        break;
-    case 1:
-    default:
-        {
-            qDebug() << "否";
-            m_fileListModel->markPackageUninstall(false);
-            event->ignore();
-        }
-        break;
-    }
+//    QString tipMessage = tr("There are currently installation tasks in progress");
+//    QuitConfirmDialog dialog(tr(""), tipMessage, this);
+//    int result = dialog.exec();
+//    switch(result)
+//    {
+//    case 0:
+//        {
+//            qDebug() << "是";
+//            m_fileListModel->markPackageUninstall(true);
+//            event->ignore();
+//            // 只是隐藏窗口
+//            hide();
+//        }
+//        break;
+//    case 1:
+//    default:
+//        {
+//            qDebug() << "否";
+//            m_fileListModel->markPackageUninstall(false);
+//            event->ignore();
+//        }
+//        break;
+//    }
 }
