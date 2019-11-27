@@ -119,7 +119,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_packageName(new DebInfoLabel)
     , m_packageVersion(new DebInfoLabel)
     , m_packageDescription(new DLabel)
-    , m_tipsLabel(new DLabel)
+    , m_tipsLabel(new DebInfoLabel)
     , m_progressFrame(new QWidget)
     , m_progress(new WorkerProgress)
     , m_installProcessView(new InstallProcessInfoView)
@@ -170,35 +170,30 @@ void SingleInstallPage::initContentLayout()
 
 void SingleInstallPage::initPkgInfoView()
 {
-
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
 
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    DLabel *packageName = new DLabel;
-    DPalette pkgPalette = DApplicationHelper::instance()->palette(packageName);
-    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
-    packageName->setPalette(pkgPalette);
+    DebInfoLabel *packageName = new DebInfoLabel;
+    packageName->setCustomQPalette(QPalette::WindowText);
     packageName->setFixedHeight(20);
     packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
-    DLabel *packageVersion = new DLabel;
-    pkgPalette = DApplicationHelper::instance()->palette(packageVersion);
-    pkgPalette.setBrush(DPalette::ToolTipText, pkgPalette.color(DPalette::ToolTipText));
-    packageVersion->setPalette(pkgPalette);
+    DebInfoLabel *packageVersion = new DebInfoLabel;
+    packageVersion->setCustomQPalette(QPalette::WindowText);
     packageVersion->setFixedHeight(20);
     packageVersion->setText(tr("Version: "));
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
 
-    m_packageName->setCustomPalette(DPalette::Dark);
+    m_packageName->setCustomQPalette(QPalette::WindowText);
     m_packageName->setFixedHeight(20);
     m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    m_packageVersion->setCustomPalette(DPalette::Dark);
+    m_packageVersion->setCustomQPalette(QPalette::WindowText);
     m_packageVersion->setFixedHeight(20);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
@@ -509,17 +504,13 @@ void SingleInstallPage::onWorkerFinished()
             if (m_operate == Install || m_operate == Reinstall) {
                 m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
                 m_tipsLabel->setText(tr("Installed successfully"));
-                palette = DebApplicationHelper::instance()->palette(m_tipsLabel);
-                palette.setColor(QPalette::WindowText, palette.color(DPalette::DarkLively));
-                m_tipsLabel->setPalette(palette);
+                m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
             }
 
         } else if (stat == DebListModel::Failed) {
             m_confirmButton->setVisible(true);
 
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
             if (m_operate == Install || m_operate == Reinstall) {
                 m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
@@ -537,16 +528,12 @@ void SingleInstallPage::onWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
 
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
         } else if (stat == DebListModel::Failed) {
             m_confirmButton->setVisible(true);
 
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
             m_tipsLabel->setText(tr("Uninstall Failed"));
         } else {
@@ -595,7 +582,7 @@ void SingleInstallPage::setPackageInfo()
     //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = Utils::fromSpecialEncoding(package->longDescription());
     m_description = description;
-    const QSize boundingSize = QSize(m_packageDescription->width(), 72);
+    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
     // package install status
@@ -613,15 +600,11 @@ void SingleInstallPage::setPackageInfo()
     DPalette palette;
     if (installed) {
         if (installedSameVersion) {
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
         }
         else {
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Other version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         }
@@ -632,9 +615,7 @@ void SingleInstallPage::setPackageInfo()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-        palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-        m_tipsLabel->setPalette(palette);
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
@@ -665,10 +646,10 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
-    const QSize boundingSize = QSize(m_packageDescription->width(), 72);
+    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 
-    DPalette palette = DebApplicationHelper::instance()->palette(m_packageDescription);
-    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
+    DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
 }

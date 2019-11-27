@@ -88,7 +88,6 @@ public:
     };
 
     void reset();
-    void resetInstallState();
     bool isReady() const;
     bool isInstallWorkerPrepare() const;
     bool isUninstallWorkerPrepare() const;
@@ -102,9 +101,7 @@ public:
     int getInstallWorkStatus() const;
     int getUninstallWorkStatus() const;
     bool isInstalling() const;
-    void markPackageUninstall(bool markedForUninstall);
 
-    bool isMarkPackageUninstall();
     WorkerType getWorkerType();
 
 signals:
@@ -150,8 +147,6 @@ private:
     int m_operatingIndex;
     QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
-    bool m_markedForUninstall;
-    bool m_reinstallPackage;
 
     QPointer<QApt::Transaction> m_currentTransaction;
 

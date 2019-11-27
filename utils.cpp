@@ -300,8 +300,8 @@ static QColor light_dpalette[DPalette::NColorTypes] {
     QColor(),                                   //NoType
     QColor(0, 0, 0, CAST_INT(255 * 0.03)),      //ItemBackground
     QColor("#001A2E"),                          //TextTitle
-    QColor(96, 157, 209, CAST_INT(1.0 * 255)),  //TextTips --- changed origin is #526A7F
-    QColor("#FF6D6D"),                          //TextWarning -- changed origin is #FF5736
+    QColor("#609DC8"),                          //TextTips --- changed origin is #526A7F
+    QColor("#FF5A5A"),                          //TextWarning -- changed origin is #FF5736
     QColor("#7C7C7C"),                          //TextLively  -- changed origin is #0082FA
     QColor("#417505"),                          //LightLively -- changed origin is #25b7ff
     QColor("#47790C"),                          //DarkLively -- changed origin is #0098ff

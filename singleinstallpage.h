@@ -93,7 +93,7 @@ private:
     DebInfoLabel *m_packageName;
     DebInfoLabel *m_packageVersion;
     DLabel *m_packageDescription;
-    DLabel *m_tipsLabel;
+    DebInfoLabel *m_tipsLabel;
     QWidget *m_progressFrame;
     DProgressBar *m_progress;
     InstallProcessInfoView *m_installProcessView;

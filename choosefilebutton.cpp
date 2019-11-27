@@ -10,7 +10,7 @@ ChooseFileButton::ChooseFileButton(QWidget *parent)
     Utils::bindFontBySizeAndWeight(this, fontFamily, 12, QFont::ExtraLight);
 
     DPalette palette = DApplicationHelper::instance()->palette(this);
-    palette.setColor(DPalette::ButtonText, palette.color(DPalette::Highlight));
+    palette.setColor(DPalette::ButtonText, palette.color(DPalette::TextLively));
     this->setPalette(palette);
 
     this->setFlat(true);

@@ -13,12 +13,16 @@ class DebInfoLabel : public DLabel
 public:
     explicit DebInfoLabel(QWidget *parent=nullptr, Qt::WindowFlags f=Qt::WindowFlags());
 
-    void setCustomPalette(QPalette::ColorRole colorRole);
+    void setCustomQPalette(QPalette::ColorRole colorRole);
+    void setCustomDPalette(DPalette::ColorType colorType);
 
     void paintEvent(QPaintEvent *event) override;
 
 private:
     QPalette::ColorRole m_colorRole;
+    DPalette::ColorType m_colorType;
+
+    bool m_bUserColorType;
 };
 
 #endif // DEBINFOLABEL_H

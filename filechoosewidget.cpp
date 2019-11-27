@@ -40,16 +40,12 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
     , m_settings("deepin", "deepin-deb-install")
 {
-    const auto ratio = devicePixelRatioF();
     setFocusPolicy(Qt::NoFocus);
 
     DPalette palette;
 
-    QPixmap iconPix = Utils::renderSVG(":/images/icon.svg", QSize(160, 160));
-    iconPix.setDevicePixelRatio(ratio);
-    DLabel *iconImage = new DLabel;
-    iconImage->setFixedSize(160, 160);
-    iconImage->setPixmap(iconPix);
+    m_iconImage = new DLabel;
+    m_iconImage->setFixedSize(160, 160);
 
 #ifdef SHOWBORDER
     iconImage->setStyleSheet("QLabel{border:1px solid black;}");
@@ -58,8 +54,8 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     m_dndTips->setText(tr("Drag deb packages here"));
     m_dndTips->setObjectName("DNDTips");
     m_dndTips->setFixedHeight(15);
-    palette = DebApplicationHelper::instance()->palette(m_dndTips);
-    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
+    palette = DApplicationHelper::instance()->palette(m_dndTips);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_dndTips->setPalette(palette);
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -72,11 +68,20 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     split_line = new DLabel;
     split_line->setObjectName("SplitLine");
     if(themeType == DGuiApplicationHelper::LightType)
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
+    }
     else if(themeType == DGuiApplicationHelper::DarkType)
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_dark.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
+    }
     else
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
+    }
     split_line->setFixedHeight(3);
 
     m_chooseFileBtn = new ChooseFileButton;
@@ -90,8 +95,8 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addSpacing(32);
-    centralLayout->addWidget(iconImage);
-    centralLayout->setAlignment(iconImage, Qt::AlignHCenter);
+    centralLayout->addWidget(m_iconImage);
+    centralLayout->setAlignment(m_iconImage, Qt::AlignHCenter);
 
     centralLayout->addSpacing(8);
     centralLayout->addWidget(m_dndTips);
@@ -141,23 +146,23 @@ void FileChooseWidget::chooseFiles()
     emit packagesSelected(selected_files);
 }
 
-void FileChooseWidget::paintEvent(QPaintEvent *event)
-{
-    QWidget::paintEvent(event);
-
-    DPalette palette = DebApplicationHelper::instance()->palette(m_dndTips);
-    palette.setBrush(DPalette::WindowText, palette.color(DPalette::ToolTipText));
-    m_dndTips->setPalette(palette);
-}
-
 void FileChooseWidget::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
     if(themeType == DGuiApplicationHelper::LightType)
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
+    }
     else if(themeType == DGuiApplicationHelper::DarkType)
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_dark.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
+    }
     else
+    {
+        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
+    }
 }
