@@ -44,9 +44,6 @@ void PackagesListView::initUI()
     setAutoScroll(true);
     setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-    setBackgroundRole(QPalette::Window);
-    setAutoFillBackground(true);
 }
 
 void PackagesListView::initConnections()
@@ -77,54 +74,12 @@ void PackagesListView::mouseMoveEvent(QMouseEvent *event)
     DListView::mouseMoveEvent(event);
 }
 
-void PackagesListView::handleHideShowSelection()
-{
-    if (visualRect(m_highlightIndex).y() < -1 * (48-1))
-    {
-        emit onShowHideTopBg(false);
-    }
-    else
-    {
-        if (m_highlightIndex.row() > 0)
-        {
-            if (visualRect(m_highlightIndex).y() < 0)
-            {
-                emit onShowHideTopBg(true);
-            }
-            else
-            {
-                if (visualRect(m_highlightIndex).y() >= 48*3-10-8)
-                {
-                    if (visualRect(m_highlightIndex).y() >= 48*4-10-8)
-                    {
-                        emit onShowHideBottomBg(false);
-                    }
-                    else
-                    {
-                        emit onShowHideBottomBg(true);
-                    }
-                }
-                else
-                {
-                    emit onShowHideBottomBg(false);
-                }
-            }
-        }
-        else
-        {
-            emit onShowHideTopBg(true);
-        }
-    }
-}
-
 void PackagesListView::scrollContentsBy(int dx, int dy)
 {
     if (-1 == m_highlightIndex.row()) {
         QListView::scrollContentsBy(dx, dy);
         return;
     }
-
-    handleHideShowSelection();
 
     QListView::scrollContentsBy(dx, dy);
 }
@@ -172,8 +127,6 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
     {
         m_bShortcutDelete = true;
     }
-
-    handleHideShowSelection();
 }
 
 void PackagesListView::initRightContextMenu()
@@ -232,29 +185,6 @@ void PackagesListView::onRightMenuDeleteAction()
 
 void PackagesListView::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this->viewport());
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    DPalette pa = DApplicationHelper::instance()->palette(this);
-    QPainterPath painterPath;
-
-//    qDebug() << this->model()->rowCount() << endl;
-    QColor color = pa.color(QPalette::Base);
-    if (this->model()->rowCount() <= 3)
-    {
-        QRect rect = this->rect();
-        rect.setY(48);
-        painterPath.addRect(rect);
-        color = pa.color(QPalette::Base);
-    }
-    else
-    {
-        painterPath.addRect(this->rect());
-        color = pa.color(QPalette::Window);
-    }
-
-    painter.fillPath(painterPath, QBrush(color));
-
     DListView::paintEvent(event);
 }
 

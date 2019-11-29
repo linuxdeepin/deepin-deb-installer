@@ -45,8 +45,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
-        DPalette pa = DApplicationHelper::instance()->palette(m_parentView);
-
         const int content_x = 46;
 
         QPainterPath bgPath;
@@ -59,12 +57,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             painter->setBrush(QBrush(fillColor));
             painter->fillPath(bgPath, fillColor);
         }
-        else {
-            DStyleHelper styleHelper;
-            QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Base);
-            painter->setBrush(QBrush(fillColor));
-            painter->fillPath(bgPath, fillColor);
-        }
 
         int yOffset = 6;
 
@@ -72,10 +64,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QRect lineRect;
         lineRect.setX(content_x);
         int itemHeight = 48;
-        if (0 == index.row()) {
-            itemHeight -= 5;
-            yOffset = 0;
-        }
         lineRect.setY(option.rect.y()+itemHeight-1);
         lineRect.setWidth(option.rect.width()-content_x-10);
         lineRect.setHeight(1);
@@ -172,7 +160,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
-        pa = DebApplicationHelper::instance()->palette(m_parentView);
+        DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
         if (operate_stat == DebListModel::Failed) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
@@ -209,8 +197,5 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(option);
 
     QSize itemSize = index.data(Qt::SizeHintRole).toSize();
-    if (0 == index.row()) {
-        return QSize(itemSize.width(), itemSize.height()-5);
-    }
     return itemSize;
 }

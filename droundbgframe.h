@@ -19,9 +19,6 @@ public slots:
 private:
     int m_bgOffsetTop;
     int m_bgOffsetBottom;
-
-    bool m_bFillTop;
-    bool m_bFillBottom;
 };
 
 #endif // DROUNDBGFRAME_H
