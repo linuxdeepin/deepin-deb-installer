@@ -51,9 +51,11 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     iconImage->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
     m_dndTips = new DLabel(this);
+    m_dndTips->setFixedHeight(30);
+    m_dndTips->setAlignment(Qt::AlignTop);
     m_dndTips->setText(tr("Drag deb packages here"));
     m_dndTips->setObjectName("DNDTips");
-    m_dndTips->setFixedHeight(15);
+
     palette = DApplicationHelper::instance()->palette(m_dndTips);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_dndTips->setPalette(palette);
@@ -102,7 +104,6 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     centralLayout->addWidget(m_dndTips);
     centralLayout->setAlignment(m_dndTips, Qt::AlignHCenter);
 
-    centralLayout->addSpacing(16);
     centralLayout->addWidget(split_line);
     centralLayout->setAlignment(split_line, Qt::AlignHCenter);
 
