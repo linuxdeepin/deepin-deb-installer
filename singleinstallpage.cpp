@@ -493,31 +493,25 @@ void SingleInstallPage::onWorkerFinished()
 
     QModelIndex index = m_packagesModel->first();
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    DPalette palette;
+
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
 
         if (m_operate == Install || m_operate == Reinstall) {
+            qDebug() << "Installed successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));
-            QPalette pe;
-            pe.setColor(QPalette::WindowText, QColor("#47790C"));
-            m_tipsLabel->setPalette(pe);
+            m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
         } else {
+            qDebug() << "Uninstalled successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));
-
-            palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-            palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-            m_tipsLabel->setPalette(palette);
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         }
 
     } else if (stat == DebListModel::Failed) {
         m_confirmButton->setVisible(true);
-
-        palette = DApplicationHelper::instance()->palette(m_tipsLabel);
-        palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextWarning));
-        m_tipsLabel->setPalette(palette);
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
         if (m_operate == Install || m_operate == Reinstall)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
