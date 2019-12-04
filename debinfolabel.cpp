@@ -49,8 +49,6 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
 
     if (m_bUserColorType)
     {
-        qDebug() << "paintEvent- m_colorType:" << m_colorType << endl;
-
         DPalette palette = DebApplicationHelper::instance()->palette(&tmpWidget);
         QPainter painter(this);
         painter.setPen(QColor(palette.color(m_colorType)));
@@ -59,8 +57,6 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
     }
     else
     {
-        qDebug() << "paintEvent- m_colorRole:" << m_colorRole << endl;
-
         if (m_colorRole == QPalette::WindowText)
         {
             DLabel::paintEvent(event);

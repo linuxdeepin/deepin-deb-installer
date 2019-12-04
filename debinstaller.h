@@ -54,6 +54,7 @@ private slots:
     void onUninstallCalceled();
     void onAuthing(const bool authing);
     void onNewAppOpen(qint64 pid, const QStringList &arguments);
+    void onStartInstallRequested();
 
     void reset();
     void removePackage(const int index);
@@ -64,6 +65,10 @@ private:
     void initUI();
     void initConnections();
     void refreshInstallPage();
+
+    //禁用/启用 关闭按钮和菜单中的退出
+    void disableCloseAndExit();
+    void enableCloseAndExit();
 
     void sendMessage(QWidget *par, DFloatingMessage *floMsg);
     SingleInstallPage *backToSinglePage();

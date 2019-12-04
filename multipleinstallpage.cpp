@@ -222,7 +222,7 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
 
 void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
 {
-    if (!m_debListModel->isInstallWorkerPrepare()) return;
+    if (!m_debListModel->isWorkerPrepare()) return;
 
     const int r = index.row();
 

@@ -88,11 +88,6 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
-//    const auto ratio = devicePixelRatioF();
-//    QPixmap iconPix = Utils::renderSVG(":/images/logo.svg", QSize(32, 32));
-//    iconPix.setDevicePixelRatio(ratio);
-
-
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle("");
@@ -119,28 +114,41 @@ void DebInstaller::initConnections()
 
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
+    connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
+}
+
+void DebInstaller::disableCloseAndExit()
+{
+    qDebug() << "disableCloseAndExit";
+    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);
+    QMenu *titleMenu = titlebar()->menu();
+    QList<QAction *> actions = titleMenu->actions();
+    QAction *action = actions.last();
+    action->setDisabled(true);
+}
+
+void DebInstaller::enableCloseAndExit()
+{
+    qDebug() << "enableCloseAndExit";
+    titlebar()->setDisableFlags(titlebar()->windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowCloseButtonHint);
+
+    QMenu *titleMenu = titlebar()->menu();
+    QList<QAction *> actions = titleMenu->actions();
+    QAction *action = actions.last();
+    action->setDisabled(false);
+}
+
+void DebInstaller::onStartInstallRequested()
+{
+    disableCloseAndExit();
 }
 
 void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
-
-//    if (m_fileListModel->isMarkPackageUninstall())
-//    {
-//        qDebug() << "showMessage" << "Still Installing" << endl;
-//        DFloatingMessage *msg = new DFloatingMessage();
-//        msg->setWindowFlag(Qt::FramelessWindowHint);
-//        msg->setAttribute(Qt::WA_TranslucentBackground);
-//        msg->setWidget(this);
-//        msg->setMessage(tr("There are currently installation tasks in progress"));
-//        msg->show();
-//        msg->move((QApplication::desktop()->width() - msg->width())/2,(QApplication::desktop()->height() - msg->height())/2);
-
-//        return;
-//    }
 
     QStringList debFileList;
     for(int i=0; i<arguments.size(); i++)
@@ -363,10 +371,14 @@ void DebInstaller::changeDragFlag()
 {
     repaint();
     m_dragflag = 0;
+
+    enableCloseAndExit();
 }
 
 void DebInstaller::showHiddenButton()
 {
+    enableCloseAndExit();
+
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->afterGetAutherFalse();
@@ -379,39 +391,4 @@ void DebInstaller::showHiddenButton()
 void DebInstaller::closeEvent(QCloseEvent * event)
 {
     DMainWindow::closeEvent(event);
-//    int installWorkerStatus = m_fileListModel->getInstallWorkStatus();
-//    int uninstallWorkerStatus = m_fileListModel->getInstallWorkStatus();
-//    qDebug() << "installWorkerStatus: " << installWorkerStatus;
-//    qDebug() << "uninstallWorkerStatus: " << uninstallWorkerStatus;
-
-//    if (DebListModel::WorkerProcessing != installWorkerStatus && !m_fileListModel->isMarkPackageUninstall())
-//    {
-//        qDebug() << "close window";
-//        DMainWindow::closeEvent(event);
-//        return;
-//    }
-
-//    QString tipMessage = tr("There are currently installation tasks in progress");
-//    QuitConfirmDialog dialog(tr(""), tipMessage, this);
-//    int result = dialog.exec();
-//    switch(result)
-//    {
-//    case 0:
-//        {
-//            qDebug() << "是";
-//            m_fileListModel->markPackageUninstall(true);
-//            event->ignore();
-//            // 只是隐藏窗口
-//            hide();
-//        }
-//        break;
-//    case 1:
-//    default:
-//        {
-//            qDebug() << "否";
-//            m_fileListModel->markPackageUninstall(false);
-//            event->ignore();
-//        }
-//        break;
-//    }
 }
