@@ -51,13 +51,6 @@ int main(int argc, char *argv[])
 
     DApplication app(argc, argv);
 
-    qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
-    if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
-    {
-        qDebug() << "DGuiApplicationHelper::instance()->setSingleInstance";
-        exit(0);
-    }
-
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion(DApplication::buildVersion("3.0"));
@@ -71,6 +64,13 @@ int main(int argc, char *argv[])
     app.setApplicationDescription(QApplication::translate(
                                       "main",
                                       "Package Installer helps users install and remove local packages, and supports bulk package installation."));
+
+    qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
+    if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
+    {
+        qDebug() << "DGuiApplicationHelper::instance()->setSingleInstance";
+        exit(0);
+    }
 
     DApplicationSettings settings;
 
