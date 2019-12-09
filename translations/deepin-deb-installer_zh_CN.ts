@@ -250,7 +250,7 @@
     <name>UninstallConfirmPage</name>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="32"/>
-        <source>Display related packages</source>
+        <source>Show related packages</source>
         <translation>显示相关软件包</translation>
     </message>
     <message>
@@ -278,10 +278,10 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="103"/>
         <source>Are you sure you want to uninstall %1?
-Uninstalling this software may cause other dependent software
-unusable</source>
+The system or other applications may not work properly 
+if uninstalling this application, continue to uninstall it?</source>
         <translation>您确定要卸载%1吗？
-卸载此软件可能会导致其他有依赖关系的软件无法使用</translation>
+卸载此软件可能会导致系统或其他软件无法正常使用</translation>
     </message>
 </context>
 <context>

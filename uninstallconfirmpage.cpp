@@ -30,7 +30,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_icon(new DLabel)
     , m_tips(new DLabel)
     , m_infoWrapperWidget(new QWidget)
-    , m_infoControl(new InfoControlButton(tr("Display related packages"), tr("Collapse")))
+    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse")))
     , m_dependsInfomation(new DTextEdit)
     , m_cancelBtn(new DPushButton)
     , m_confirmBtn(new DPushButton)
@@ -40,6 +40,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
+    m_tips->setFixedHeight(100);
     m_tips->setAlignment(Qt::AlignCenter);
 
     m_cancelBtn->setText(tr("Cancel"));
@@ -52,6 +53,9 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setReadOnly(true);
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
+    m_dependsInfomation->setFrameShape(QFrame::NoFrame);
+    m_dependsInfomation->viewport()->setBackgroundRole(QPalette::Highlight);
+    m_dependsInfomation->viewport()->setAutoFillBackground(true);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
@@ -108,7 +112,7 @@ void UninstallConfirmPage::setPackage(const QString &name)
 {
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if(!m_requiredList.isEmpty()) {
-        tips = tr("Are you sure you want to uninstall %1?\nUninstalling this software may cause other dependent software\nunusable");
+        tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly \nif uninstalling this application, continue to uninstall it?");
     }
 
     m_tips->setText(tips.arg(name));

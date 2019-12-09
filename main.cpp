@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName(QApplication::translate("main", "Package Installer"));
     app.setApplicationDescription(QApplication::translate(
                                       "main",
-                                      "Package Installer helps users install and remove local packages, and supports bulk package installation."));
+                                      "Package Installer helps users install and remove local packages, and supports bulk installation."));
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
     if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
     // command line arguments
     QCommandLineParser parser;
-    parser.setApplicationDescription("Deepin deb package manager.");
+    parser.setApplicationDescription("Deepin Package Installer.");
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
