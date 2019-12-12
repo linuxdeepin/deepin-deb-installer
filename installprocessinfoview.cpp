@@ -8,7 +8,7 @@
 
 InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
     : QWidget(parent)
-    , m_editor(new DTextEdit)
+    , m_editor(new QTextEdit)
 {
     initUI();
 }
@@ -29,7 +29,8 @@ void InstallProcessInfoView::initUI()
     Utils::bindFontBySizeAndWeight(m_editor, textFont, 11, QFont::Light);
 
     DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
-    pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));
+    m_colorType = DPalette::TextTips;
+    pa.setColor(DPalette::Text, pa.color(m_colorType));
     m_editor->setPalette(pa);
 
     m_editor->setReadOnly(true);
@@ -47,6 +48,20 @@ void InstallProcessInfoView::initUI()
     m_editor->setTextCursor(textCursor);
 }
 
+void InstallProcessInfoView::setTextFontSize(int fontSize, int fontWeight)
+{
+    QString textFont = Utils::loadFontFamilyByType(Utils::DefautFont);
+    Utils::bindFontBySizeAndWeight(m_editor, textFont, fontSize, fontWeight);
+}
+
+void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
+{
+    m_colorType = ct;
+    DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
+    pa.setColor(DPalette::Text, pa.color(m_colorType));
+    m_editor->setPalette(pa);
+}
+
 void InstallProcessInfoView::appendText(QString text)
 {
     m_editor->append(text);
@@ -61,7 +76,7 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     DPalette pa = DebApplicationHelper::instance()->palette(this);
-    pa.setColor(DPalette::Text, pa.color(DPalette::TextTips));
+    pa.setColor(DPalette::Text, pa.color(m_colorType));
     m_editor->setPalette(pa);
 }
 

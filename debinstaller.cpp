@@ -93,6 +93,9 @@ void DebInstaller::initUI()
     tb->setTitle("");
     tb->setAutoFillBackground(false);
 
+    //fix bug 4329, reset focusPolicy
+    handleFocusPolicy();
+
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
 
@@ -102,6 +105,35 @@ void DebInstaller::initUI()
     setWindowTitle(tr("Package Installer"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
+}
+
+void DebInstaller::handleFocusPolicy()
+{
+    QLayout *layout = titlebar()->layout();
+    for (int i = 0; i < layout->count(); ++i)
+    {
+        QWidget *widget = layout->itemAt(i)->widget();
+        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
+        {
+            QLayout *widgetLayout = widget->layout();
+            for (int j = 0; j < widgetLayout->count(); ++j)
+            {
+                QWidget *widget = widgetLayout->itemAt(j)->widget();
+                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
+                {
+                    QLayout *wLayout = widget->layout();
+                    for (int k = 0; k < wLayout->count(); ++k)
+                    {
+                        QWidget *widget = wLayout->itemAt(k)->widget();
+                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button"))
+                        {
+                            widget->setFocusPolicy(Qt::NoFocus);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void DebInstaller::initConnections()

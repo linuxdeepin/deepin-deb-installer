@@ -31,7 +31,6 @@
 #include <QWidget>
 #include <DPushButton>
 #include <DProgressBar>
-#include <DTextEdit>
 
 class PackagesListView;
 class DebListModel;

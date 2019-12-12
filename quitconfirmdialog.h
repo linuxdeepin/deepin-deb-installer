@@ -4,7 +4,6 @@
 #include <DDialog>
 #include <DLabel>
 #include <DPushButton>
-#include <DTextEdit>
 #include <QWidget>
 
 DWIDGET_USE_NAMESPACE

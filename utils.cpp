@@ -299,7 +299,7 @@ static QColor dark_qpalette[QPalette::NColorRoles] {
 static QColor light_dpalette[DPalette::NColorTypes] {
     QColor(),                                   //NoType
     QColor(0, 0, 0, CAST_INT(255 * 0.03)),      //ItemBackground
-    QColor("#001A2E"),                          //TextTitle
+    QColor("#414d68"),                          //TextTitle
     QColor("#609DC8"),                          //TextTips --- changed origin is #526A7F
     QColor("#FF5A5A"),                          //TextWarning -- changed origin is #FF5736
     QColor("#7C7C7C"),                          //TextLively  -- changed origin is #0082FA
@@ -311,7 +311,7 @@ static QColor light_dpalette[DPalette::NColorTypes] {
 static QColor dark_dpalette[DPalette::NColorTypes] {
     QColor(),                                       //NoType
     QColor(255, 255, 255, CAST_INT(255 * 0.05)),    //ItemBackground
-    QColor("#C0C6D4"),                              //TextTitle
+    QColor("#c0c6d4"),                              //TextTitle
     QColor("#6D7C88"),                              //TextTips
     QColor("#9A2F2F"),                              //TextWarning -- changed origin is #FF5736
     QColor("#7C7C7C"),                              //TextLively -- changed origin is #0082FA

@@ -31,7 +31,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_tips(new DLabel)
     , m_infoWrapperWidget(new QWidget)
     , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse")))
-    , m_dependsInfomation(new DTextEdit)
+    , m_dependsInfomation(new InstallProcessInfoView(this))
     , m_cancelBtn(new DPushButton)
     , m_confirmBtn(new DPushButton)
 {
@@ -50,12 +50,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_confirmBtn->setFocusPolicy(Qt::NoFocus);
     m_cancelBtn->setFocusPolicy(Qt::NoFocus);
 
-    m_dependsInfomation->setReadOnly(true);
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
-    m_dependsInfomation->setFrameShape(QFrame::NoFrame);
-    m_dependsInfomation->viewport()->setBackgroundRole(QPalette::Highlight);
-    m_dependsInfomation->viewport()->setAutoFillBackground(true);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QHBoxLayout *btnsLayout = new QHBoxLayout;
@@ -96,7 +92,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     Utils::bindFontBySizeAndWeight(m_tips, normalFontFamily, 14, QFont::Normal);
     Utils::bindFontBySizeAndWeight(m_cancelBtn, normalFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_confirmBtn, normalFontFamily, 14, QFont::Medium);
-    Utils::bindFontBySizeAndWeight(m_dependsInfomation, normalFontFamily, 14, QFont::Medium);
+    m_dependsInfomation->setTextFontSize(14, QFont::Normal);
     Utils::bindFontBySizeAndWeight(m_cancelBtn, normalFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_confirmBtn, normalFontFamily, 14, QFont::Medium);
 
@@ -127,7 +123,9 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     else {
         m_infoControl->setVisible(false);
     }
-    m_dependsInfomation->setText(requiredList.join(", "));
+
+    m_dependsInfomation->setTextColor(DPalette::TextTitle);
+    m_dependsInfomation->appendText(requiredList.join(", "));
 }
 
 void UninstallConfirmPage::showDetail()

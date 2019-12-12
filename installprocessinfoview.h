@@ -3,10 +3,10 @@
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QTextEdit>
+#include <DPalette>
 
-#include <DTextEdit>
-
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class InstallProcessInfoView : public QWidget
 {
@@ -16,6 +16,8 @@ public:
     virtual ~InstallProcessInfoView() override;
 
     void appendText(QString text);
+    void setTextFontSize(int fontSize, int fontWeight);
+    void setTextColor(DPalette::ColorType ct);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -23,7 +25,8 @@ protected:
 private:
     void initUI();
 
-    DTextEdit *m_editor;
+    QTextEdit *m_editor;
+    DPalette::ColorType m_colorType;
 };
 
 #endif // INSTALLPROCESSINFOVIEW_H

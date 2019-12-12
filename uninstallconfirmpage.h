@@ -23,10 +23,10 @@
 #define UNINSTALLCONFIRMPAGE_H
 
 #include "infocontrolbutton.h"
+#include "installprocessinfoview.h"
 
 #include <DLabel>
 #include <DPushButton>
-#include <DTextEdit>
 #include <QWidget>
 
 class UninstallConfirmPage : public QWidget {
@@ -51,7 +51,7 @@ private:
     DLabel *m_tips;
     QWidget *m_infoWrapperWidget;
     InfoControlButton *m_infoControl;
-    DTextEdit *m_dependsInfomation;
+    InstallProcessInfoView *m_dependsInfomation;
     DPushButton *m_cancelBtn;
     DPushButton *m_confirmBtn;
 

@@ -65,6 +65,7 @@ private:
     void initUI();
     void initConnections();
     void refreshInstallPage();
+    void handleFocusPolicy();
 
     //禁用/启用 关闭按钮和菜单中的退出
     void disableCloseAndExit();
