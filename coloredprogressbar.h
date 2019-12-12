@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Author:     sbw <sbw@sbw.so>
+ * Author:     Chris Xiong <chirs241097@gmail.com>
  *
- * Maintainer: sbw <sbw@sbw.so>
+ * Maintainer: Chris Xiong <chirs241097@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WORKERPROGRESS_H
-#define WORKERPROGRESS_H
+#include "dtkwidget_global.h"
+#include "dobject.h"
+#include "utils.h"
 
-#include "coloredprogressbar.h"
+#include <QProgressBar>
 
-#include <DProgressBar>
-#include <QWidget>
-
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class WorkerProgress : public ColoredProgressBar {
+class ColoredProgressBarPrivate;
+class ColoredProgressBar : public QProgressBar, public DObject
+{
     Q_OBJECT
-
 public:
-    explicit WorkerProgress(QWidget *parent = nullptr);
-};
+    explicit ColoredProgressBar(QWidget *parent = nullptr);
+    void addThreshold(int threshold, QBrush brush);
+    void removeThreshold(int threshold);
+    QList<int> thresholds() const;
 
-#endif  // WORKERPROGRESS_H
+protected:
+    void paintEvent(QPaintEvent *) override;
+
+private:
+    DGuiApplicationHelper::ColorType m_themeType;
+    D_DECLARE_PRIVATE(ColoredProgressBar)
+
+private slots:
+    void themeChanged();
+};

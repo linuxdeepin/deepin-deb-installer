@@ -264,7 +264,7 @@ static QColor light_qpalette[QPalette::NColorRoles] {
     QColor("#f8f8f8"),                              //Window
     QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //Shadow
     QColor("#0081ff"),                              //Highlight
-    Qt::white,                                      //HighlightedText
+    QColor(0, 45, 255, CAST_INT(0.5 * 255)),        //HighlightedText   //old Qt::white
     QColor("#0082fa"),                              //Link
     QColor("#ad4579"),                              //LinkVisited
     QColor(0, 0, 0, CAST_INT(0.03 * 255)),          //AlternateBase
@@ -286,8 +286,8 @@ static QColor dark_qpalette[QPalette::NColorRoles] {
     QColor(255, 255, 255, CAST_INT(0.05 * 255)),    //Base --- changed origin is #282828
     QColor("#252525"),                              //Window
     QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //Shadow
-    QColor("#0081ff"),                              //Highlight
-    QColor("#b8d3ff"),                              //HighlightedText
+    QColor("#095EFF"),                              //Highlight         //old : #0081ff
+    QColor("#0059D2"),                              //HighlightedText   //old: b8d3ff
     QColor("#0082fa"),                              //Link
     QColor("#ad4579"),                              //LinkVisited
     QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //AlternateBase

@@ -34,6 +34,7 @@
 
 class PackagesListView;
 class DebListModel;
+class WorkerProgress;
 class MultipleInstallPage : public QWidget
 {
     Q_OBJECT
@@ -71,7 +72,7 @@ private:
     InstallProcessInfoView *m_installProcessInfoView;
     InfoControlButton *m_infoControlButton;
     QWidget *m_processFrame;
-    DProgressBar *m_installProgress;
+    WorkerProgress *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;

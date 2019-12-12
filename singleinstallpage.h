@@ -35,6 +35,7 @@
 #include <QApt/DebFile>
 
 class DebListModel;
+class WorkerProgress;
 class SingleInstallPage : public QWidget
 {
     Q_OBJECT
@@ -95,7 +96,7 @@ private:
     DLabel *m_packageDescription;
     DebInfoLabel *m_tipsLabel;
     QWidget *m_progressFrame;
-    DProgressBar *m_progress;
+    WorkerProgress *m_progress;
     InstallProcessInfoView *m_installProcessView;
     InfoControlButton *m_infoControlButton;
     DPushButton *m_installButton;
