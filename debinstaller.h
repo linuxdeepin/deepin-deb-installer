@@ -62,6 +62,7 @@ private slots:
     void showHiddenButton();
 
 private:
+    void failToSysteminitUI();
     void initUI();
     void initConnections();
     void refreshInstallPage();
@@ -77,7 +78,6 @@ private:
 private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;
-
     QStackedLayout *m_centralLayout;
 
     QPointer<QWidget> m_lastPage;

@@ -64,8 +64,8 @@ DebInstaller::DebInstaller(QWidget *parent)
     , m_centralLayout(new QStackedLayout)
     , m_dragflag(-1)
 {
-    initUI();
-    initConnections();
+        initUI();
+        initConnections();
 }
 
 DebInstaller::~DebInstaller() {}

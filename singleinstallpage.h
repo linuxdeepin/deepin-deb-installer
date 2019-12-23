@@ -31,7 +31,9 @@
 #include <DPushButton>
 #include <DTextEdit>
 #include <QWidget>
-
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
+#include <DDialog>
 #include <QApt/DebFile>
 
 class DebListModel;
@@ -42,9 +44,7 @@ class SingleInstallPage : public QWidget
 
 public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
-
     void afterGetAutherFalse();
-
 protected:
     void paintEvent(QPaintEvent *event);
 
@@ -68,8 +68,9 @@ private:
     void initPkgInfoView();
     void initPkgInstallProcessView();
     void initConnections();
-
     void setPackageInfo();
+
+
 
 private slots:
     void install();
@@ -105,11 +106,11 @@ private:
     DPushButton *m_confirmButton;
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
-
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
-
     QString m_description;
+
+
 };
 
 #endif  // SINGLEINSTALLPAGE_H

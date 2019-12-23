@@ -41,7 +41,7 @@ void InstallProcessInfoView::initUI()
     QTextCursor textCursor = m_editor->textCursor();
     QTextBlockFormat textBlockFormat;
     //设置行高
-    textBlockFormat.setLineHeight(18, QTextBlockFormat::FixedHeight);
+    textBlockFormat.setLineHeight(17, QTextBlockFormat::FixedHeight);
     //设置行间距
     textBlockFormat.setBottomMargin(1);
     textCursor.setBlockFormat(textBlockFormat);

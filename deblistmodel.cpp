@@ -151,7 +151,6 @@ void DebListModel::installAll()
     m_InitRowStatus = false;
 
     //    emit workerStarted();
-
     // start first
     installNextDeb();
 }

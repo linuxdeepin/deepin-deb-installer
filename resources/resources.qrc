@@ -14,5 +14,6 @@
         <file>font/SourceHanSansCN-Normal.ttf</file>
         <file>images/icon_install_dark.svg</file>
         <file>images/icon_install_light.svg</file>
+        <file>images/warning.svg</file>
     </qresource>
 </RCC>

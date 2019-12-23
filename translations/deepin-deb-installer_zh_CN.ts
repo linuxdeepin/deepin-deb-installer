@@ -163,6 +163,7 @@
         <source>Show details</source>
         <translation>显示详细信息</translation>
     </message>
+
 </context>
 <context>
     <name>SingleInstallPage_Uninstall</name>
@@ -184,6 +185,23 @@
         <location filename="../singleinstallpage.cpp" line="143"/>
         <source>Install</source>
         <translation>安 装</translation>
+    </message>
+
+    <message>
+        <location filename="../singleinstallpage.cpp" line="455"/>
+        <source>Unable to install</source>
+        <translation>无法安装</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="456"/>
+        <source>You can install deb packages in developer mode</source>
+        <translation>在开发者模式下可使用软件包安装器安装</translation>
+    </message>
+
+    <message>
+        <location filename="../singleinstallpage.cpp" line="459"/>
+        <source>OK</source>
+        <translation>确 认</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="145"/>
@@ -225,6 +243,7 @@
         <source>Uninstalled successfully</source>
         <translation>卸载成功</translation>
     </message>
+
     <message>
         <location filename="../singleinstallpage.cpp" line="422"/>
         <source>Other version installed: %1</source>
@@ -293,7 +312,7 @@ if uninstalling this application, continue to uninstall it?</source>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
-        <source>Package Installer helps users install and remove local packages, and supports bulk package installation.</source>
+        <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
         <translation>软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
 </context>
