@@ -30,6 +30,11 @@
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
+#include <DDialog>
+#include <DPushButton>
+
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -37,7 +42,6 @@ class DebListModel : public QAbstractListModel
 
 public:
     explicit DebListModel(QObject *parent = nullptr);
-
     enum PackageRole {
         PackageNameRole = Qt::DisplayRole,
         UnusedRole = Qt::UserRole,
@@ -93,6 +97,8 @@ public:
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    int DebInstallFinishedFlag = 0;
+
 
 signals:
     //    void workerStarted() const;

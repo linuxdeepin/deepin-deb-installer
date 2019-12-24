@@ -46,6 +46,23 @@
         <source>Installation failed, please check your network connection</source>
         <translation>安装失败，请检查您的网络连接</translation>
     </message>
+
+    <message>
+        <location filename="../deblistmodel.cpp" line="162"/>
+        <source>Unable to install</source>
+        <translation>无法安装</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="163"/>
+        <source>You can install deb packages in developer mode</source>
+        <translation>在开发者模式下可使用软件包安装器安装</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="166"/>
+        <source>OK</source>
+        <translation>确 认</translation>
+    </message>
+
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
@@ -185,23 +202,6 @@
         <location filename="../singleinstallpage.cpp" line="143"/>
         <source>Install</source>
         <translation>安 装</translation>
-    </message>
-
-    <message>
-        <location filename="../singleinstallpage.cpp" line="455"/>
-        <source>Unable to install</source>
-        <translation>无法安装</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="456"/>
-        <source>You can install deb packages in developer mode</source>
-        <translation>在开发者模式下可使用软件包安装器安装</translation>
-    </message>
-
-    <message>
-        <location filename="../singleinstallpage.cpp" line="459"/>
-        <source>OK</source>
-        <translation>确 认</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="145"/>

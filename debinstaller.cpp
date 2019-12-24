@@ -257,7 +257,6 @@ void DebInstaller::dropEvent(QDropEvent *e)
                 file_list << deb.absoluteFilePath();
         }
     }
-
     onPackagesSelected(file_list);
 }
 
@@ -268,30 +267,36 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    for (const auto &package : packages) {
-        DebFile *p = new DebFile(package);
-        if (!p->isValid()) {
-            qWarning() << "package invalid: " << package;
-
-            delete p;
-            continue;
-        }
-
-        DRecentData data;
-        data.appName = "Deepin Deb Installer";
-        data.appExec = "deepin-deb-installer";
-        DRecentManager::addItem(package, data);
-
-        if (!m_fileListModel->appendPackage(p)) {
-            qWarning() << "package is Exist! ";
-
-            DFloatingMessage *msg = new DFloatingMessage;
-            msg->setMessage(tr("Already Added"));
-            DMessageManager::instance()->sendMessage(this, msg);
-        }
+    if(m_fileListModel->DebInstallFinishedFlag == 1){
+        m_fileListModel->DebInstallFinishedFlag = 0;//20191224
+        qDebug()<< " m_fileListModel->DebInstallFinishedFlag :"<<"             "<< m_fileListModel->DebInstallFinishedFlag;
+        return;
     }
+    else {
+        for (const auto &package : packages) {
+            DebFile *p = new DebFile(package);
+            if (!p->isValid()) {
+                qWarning() << "package invalid: " << package;
 
-    refreshInstallPage();
+                delete p;
+                continue;
+            }
+
+            DRecentData data;
+            data.appName = "Deepin Deb Installer";
+            data.appExec = "deepin-deb-installer";
+            DRecentManager::addItem(package, data);
+
+            if (!m_fileListModel->appendPackage(p)) {
+                qWarning() << "package is Exist! ";
+
+                DFloatingMessage *msg = new DFloatingMessage;
+                msg->setMessage(tr("Already Added"));
+                DMessageManager::instance()->sendMessage(this, msg);
+            }
+        }
+        refreshInstallPage();
+    }
 }
 
 void DebInstaller::showUninstallConfirmPage()

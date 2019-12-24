@@ -411,59 +411,22 @@ void SingleInstallPage::initConnections()
 
 void SingleInstallPage::reinstall()
 {
-    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
-    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
-    if(QDBusResult == true)
-    {
-        m_backButton->setVisible(false);
-        m_installButton->setVisible(false);
-        m_reinstallButton->setVisible(false);
-        m_uninstallButton->setVisible(false);
+    m_backButton->setVisible(false);
+    m_installButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_uninstallButton->setVisible(false);
 
-        m_operate = Reinstall;
-        m_packagesModel->installAll();
-    }
-    else {
-        DDialog *Ddialog = new DDialog();
-        Ddialog->setWindowTitle(QString(tr("Unable to install")));
-        Ddialog->setMessage(QString(tr("You can install deb packages in developer mode")));
-        Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
+    m_operate = Reinstall;
+    m_packagesModel->installAll();
 
-        Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
-        Ddialog->show();
-        QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
-        connect(btnOK,&DPushButton::clicked,this,[=]{
-            qDebug()<<"result:"<<btnOK->isChecked();
-            exit(0);
-        });
-    }
 }
 void SingleInstallPage::install()
 {
-    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
-    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
-    if(QDBusResult == true)
-    {
         m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
         m_backButton->setVisible(false);
         m_installButton->setVisible(false);
         m_operate = Install;
         m_packagesModel->installAll();
-    }
-    else {
-        DDialog *Ddialog = new DDialog();
-        Ddialog->setWindowTitle(QString(tr("Unable to install")));
-        Ddialog->setMessage(QString(tr("You can install deb packages in developer mode")));
-        Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
-
-        Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
-        Ddialog->show();
-        QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
-        connect(btnOK,&DPushButton::clicked,this,[=]{
-            qDebug()<<"result:"<<btnOK->isChecked();
-            exit(0);
-        });
-    }
 }
 
 void SingleInstallPage::uninstallCurrentPackage()
