@@ -271,11 +271,13 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_NetworkManagerQt.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -418,11 +420,13 @@ Makefile: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_NetworkManagerQt.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -530,11 +534,13 @@ Makefile: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_NetworkManagerQt.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -587,7 +593,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents debinstaller.h deblistmodel.h filechoosewidget.h infocontrolbutton.h multipleinstallpage.h packagelistview.h packageslistdelegate.h packagesmanager.h result.h singleinstallpage.h uninstallconfirmpage.h workerprogress.h utils.h droundbgframe.h installprocessinfoview.h choosefilebutton.h debinfolabel.h quitconfirmdialog.h coloredprogressbar.h $(DISTDIR)/
 	$(COPY_FILE) --parents debinstaller.cpp deblistmodel.cpp filechoosewidget.cpp infocontrolbutton.cpp main.cpp multipleinstallpage.cpp packagelistview.cpp packageslistdelegate.cpp packagesmanager.cpp singleinstallpage.cpp uninstallconfirmpage.cpp workerprogress.cpp utils.cpp droundbgframe.cpp installprocessinfoview.cpp choosefilebutton.cpp debinfolabel.cpp quitconfirmdialog.cpp coloredprogressbar.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_CN.ts $(DISTDIR)/
+	$(COPY_FILE) --parents /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_am_ET.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ar.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ast.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_bg.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ca.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_cs.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_da.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_de.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_en_AU.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es_419.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_et.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fi.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_gl_ES.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_he.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hi_IN.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hu.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_id.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_it.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ko.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_lt.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_mn.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ms.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ne.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_nl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pa.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt_BR.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ru.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sk.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_tr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_uk.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_CN.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_TW.ts $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1050,9 +1056,96 @@ uninstall_icon_files: FORCE
 	-$(DEL_DIR) $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps/ 
 
 
-install: install_target install_desktop install_applications install_translations install_icon_files  FORCE
+install_dtk_translations: first FORCE
+	@test -d $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations || mkdir -p $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_am_ET.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ar.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ast.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_bg.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ca.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_cs.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_da.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_de.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_en_AU.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es_419.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es_419.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_et.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fi.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_gl_ES.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_he.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hi_IN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hu.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_id.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_it.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ko.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_lt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_mn.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ms.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ne.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_nl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pa.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt_BR.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ru.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_tr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_uk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_CN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
+	-$(QINSTALL) /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_TW.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
 
-uninstall: uninstall_target uninstall_desktop uninstall_applications uninstall_translations uninstall_icon_files  FORCE
+uninstall_dtk_translations: FORCE
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es_419.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
+	-$(DEL_DIR) $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/ 
+
+
+install: install_target install_desktop install_applications install_translations install_icon_files install_dtk_translations  FORCE
+
+uninstall: uninstall_target uninstall_desktop uninstall_applications uninstall_translations uninstall_icon_files uninstall_dtk_translations  FORCE
 
 FORCE:
 

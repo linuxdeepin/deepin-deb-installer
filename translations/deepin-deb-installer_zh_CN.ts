@@ -313,7 +313,7 @@ if uninstalling this application, continue to uninstall it?</source>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>软件包管理器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
+        <translation>软件包安装器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
 </context>
 <context>

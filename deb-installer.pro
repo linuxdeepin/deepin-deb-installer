@@ -172,3 +172,14 @@ icon_files.files = $$PWD/resources/images/deepin-deb-installer.svg
 
 
 INSTALLS += target desktop applications translations icon_files
+
+CONFIG(release, debug|release) {
+    TRANSLATIONS = $$files($$PWD/translations/*.ts)
+    for(tsfile, TRANSLATIONS) {
+        qmfile = $$replace(tsfile, .ts$, .qm)
+        system(lrelease $$tsfile -qm $$qmfile) | error("Failed to lrelease")
+    }
+    dtk_translations.path = /usr/share/$$TARGET/translations
+    dtk_translations.files = $$PWD/translations/*.qm
+    INSTALLS += dtk_translations
+}

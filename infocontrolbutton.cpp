@@ -53,7 +53,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_arrowIcon->setFixedHeight(13);
 
     DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
-    palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
+//    palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
+    palette.setColor(DPalette::WindowText, QColor(00,130,252));//20191225
     m_tipsText->setPalette(palette);
     m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setText(expandTips);
