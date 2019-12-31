@@ -288,7 +288,7 @@ void DebListModel::bumpInstallIndex()
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
-
+        DebInstallFinishedFlag = 1;
         m_workerStatus = WorkerFinished;
         emit workerFinished();
         emit workerProgressChanged(100);
@@ -358,7 +358,6 @@ void DebListModel::onTransactionFinished()
     } else if (m_packageOperateStatus.contains(m_operatingIndex) &&
                m_packageOperateStatus[m_operatingIndex] != Failed) {
         refreshOperatingPackageStatus(Success);
-        DebInstallFinishedFlag = 1;
     }
     //    delete trans;
     trans->deleteLater();
@@ -420,6 +419,7 @@ void DebListModel::installNextDeb()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+    qDebug()<<"dependsStat******+++++++***:"<<dependsStat.status;
     if (dependsStat.isBreak()) {
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
@@ -438,7 +438,7 @@ void DebListModel::installNextDeb()
     } else {
         qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
 
-        trans = backend->installFile(*deb);
+        trans = backend->installFile(*deb);//触发Qapt授权框和安装线程
 
         connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
         connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);

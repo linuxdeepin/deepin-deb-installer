@@ -29,7 +29,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class WorkerProgress : public ColoredProgressBar {
+class WorkerProgress : public DProgressBar {
     Q_OBJECT
 
 public:

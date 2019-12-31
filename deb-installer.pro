@@ -42,8 +42,7 @@ SOURCES += \
     installprocessinfoview.cpp \
     choosefilebutton.cpp \
     debinfolabel.cpp \
-    quitconfirmdialog.cpp \
-    coloredprogressbar.cpp
+    quitconfirmdialog.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -63,8 +62,7 @@ HEADERS += \
     installprocessinfoview.h \
     choosefilebutton.h \
     debinfolabel.h \
-    quitconfirmdialog.h \
-    coloredprogressbar.h
+    quitconfirmdialog.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

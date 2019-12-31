@@ -36,6 +36,11 @@ private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+    void refreshDebItemStatus(const int operate_stat,
+                           QRect install_status_rect,
+                           QPainter *painter,
+                           const QModelIndex &index) const;
+
 private:
     QPixmap m_packageIcon;
     QSettings m_qsettings;

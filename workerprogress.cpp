@@ -22,7 +22,7 @@
 #include "workerprogress.h"
 
 WorkerProgress::WorkerProgress(QWidget *parent)
-    : ColoredProgressBar(parent)
+    : DProgressBar(parent)
 {
     setMinimum(0);
     setMaximum(100);
