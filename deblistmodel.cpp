@@ -419,7 +419,6 @@ void DebListModel::installNextDeb()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
-    qDebug()<<"dependsStat******+++++++***:"<<dependsStat.status;
     if (dependsStat.isBreak()) {
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();

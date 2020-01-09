@@ -67,8 +67,7 @@ SOURCES       = debinstaller.cpp \
 		installprocessinfoview.cpp \
 		choosefilebutton.cpp \
 		debinfolabel.cpp \
-		quitconfirmdialog.cpp \
-		coloredprogressbar.cpp qrc_resources.cpp \
+		quitconfirmdialog.cpp qrc_resources.cpp \
 		moc_debinstaller.cpp \
 		moc_deblistmodel.cpp \
 		moc_filechoosewidget.cpp \
@@ -84,8 +83,7 @@ SOURCES       = debinstaller.cpp \
 		moc_installprocessinfoview.cpp \
 		moc_choosefilebutton.cpp \
 		moc_debinfolabel.cpp \
-		moc_quitconfirmdialog.cpp \
-		moc_coloredprogressbar.cpp
+		moc_quitconfirmdialog.cpp
 OBJECTS       = debinstaller.o \
 		deblistmodel.o \
 		filechoosewidget.o \
@@ -104,7 +102,6 @@ OBJECTS       = debinstaller.o \
 		choosefilebutton.o \
 		debinfolabel.o \
 		quitconfirmdialog.o \
-		coloredprogressbar.o \
 		qrc_resources.o \
 		moc_debinstaller.o \
 		moc_deblistmodel.o \
@@ -121,8 +118,7 @@ OBJECTS       = debinstaller.o \
 		moc_installprocessinfoview.o \
 		moc_choosefilebutton.o \
 		moc_debinfolabel.o \
-		moc_quitconfirmdialog.o \
-		moc_coloredprogressbar.o
+		moc_quitconfirmdialog.o
 DIST          = deepin-deb-installer.applications \
 		deepin-deb-installer.desktop \
 		translations/deepin-deb-installer.ts \
@@ -317,8 +313,7 @@ DIST          = deepin-deb-installer.applications \
 		installprocessinfoview.h \
 		choosefilebutton.h \
 		debinfolabel.h \
-		quitconfirmdialog.h \
-		coloredprogressbar.h debinstaller.cpp \
+		quitconfirmdialog.h debinstaller.cpp \
 		deblistmodel.cpp \
 		filechoosewidget.cpp \
 		infocontrolbutton.cpp \
@@ -335,8 +330,7 @@ DIST          = deepin-deb-installer.applications \
 		installprocessinfoview.cpp \
 		choosefilebutton.cpp \
 		debinfolabel.cpp \
-		quitconfirmdialog.cpp \
-		coloredprogressbar.cpp
+		quitconfirmdialog.cpp
 QMAKE_TARGET  = deepin-deb-installer
 DESTDIR       = 
 TARGET        = deepin-deb-installer
@@ -591,8 +585,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resources/resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents debinstaller.h deblistmodel.h filechoosewidget.h infocontrolbutton.h multipleinstallpage.h packagelistview.h packageslistdelegate.h packagesmanager.h result.h singleinstallpage.h uninstallconfirmpage.h workerprogress.h utils.h droundbgframe.h installprocessinfoview.h choosefilebutton.h debinfolabel.h quitconfirmdialog.h coloredprogressbar.h $(DISTDIR)/
-	$(COPY_FILE) --parents debinstaller.cpp deblistmodel.cpp filechoosewidget.cpp infocontrolbutton.cpp main.cpp multipleinstallpage.cpp packagelistview.cpp packageslistdelegate.cpp packagesmanager.cpp singleinstallpage.cpp uninstallconfirmpage.cpp workerprogress.cpp utils.cpp droundbgframe.cpp installprocessinfoview.cpp choosefilebutton.cpp debinfolabel.cpp quitconfirmdialog.cpp coloredprogressbar.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents debinstaller.h deblistmodel.h filechoosewidget.h infocontrolbutton.h multipleinstallpage.h packagelistview.h packageslistdelegate.h packagesmanager.h result.h singleinstallpage.h uninstallconfirmpage.h workerprogress.h utils.h droundbgframe.h installprocessinfoview.h choosefilebutton.h debinfolabel.h quitconfirmdialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents debinstaller.cpp deblistmodel.cpp filechoosewidget.cpp infocontrolbutton.cpp main.cpp multipleinstallpage.cpp packagelistview.cpp packageslistdelegate.cpp packagesmanager.cpp singleinstallpage.cpp uninstallconfirmpage.cpp workerprogress.cpp utils.cpp droundbgframe.cpp installprocessinfoview.cpp choosefilebutton.cpp debinfolabel.cpp quitconfirmdialog.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_am_ET.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ar.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ast.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_bg.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ca.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_cs.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_da.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_de.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_en_AU.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_es_419.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_et.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fi.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_fr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_gl_ES.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_he.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hi_IN.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_hu.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_id.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_it.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ko.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_lt.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_mn.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ms.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ne.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_nl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pa.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_pt_BR.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_ru.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sk.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sl.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_sr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_tr.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_uk.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_CN.ts /home/archermind/Desktop/Code/deb_installer/translations/deepin-deb-installer_zh_TW.ts $(DISTDIR)/
 
 
@@ -645,9 +639,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -O2 -fdebug-prefix-map=/home/archermind/Desktop/Code/deb_installer=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_debinstaller.cpp moc_deblistmodel.cpp moc_filechoosewidget.cpp moc_infocontrolbutton.cpp moc_multipleinstallpage.cpp moc_packagelistview.cpp moc_packageslistdelegate.cpp moc_packagesmanager.cpp moc_singleinstallpage.cpp moc_uninstallconfirmpage.cpp moc_workerprogress.cpp moc_utils.cpp moc_installprocessinfoview.cpp moc_choosefilebutton.cpp moc_debinfolabel.cpp moc_quitconfirmdialog.cpp moc_coloredprogressbar.cpp
+compiler_moc_header_make_all: moc_debinstaller.cpp moc_deblistmodel.cpp moc_filechoosewidget.cpp moc_infocontrolbutton.cpp moc_multipleinstallpage.cpp moc_packagelistview.cpp moc_packageslistdelegate.cpp moc_packagesmanager.cpp moc_singleinstallpage.cpp moc_uninstallconfirmpage.cpp moc_workerprogress.cpp moc_utils.cpp moc_installprocessinfoview.cpp moc_choosefilebutton.cpp moc_debinfolabel.cpp moc_quitconfirmdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_debinstaller.cpp moc_deblistmodel.cpp moc_filechoosewidget.cpp moc_infocontrolbutton.cpp moc_multipleinstallpage.cpp moc_packagelistview.cpp moc_packageslistdelegate.cpp moc_packagesmanager.cpp moc_singleinstallpage.cpp moc_uninstallconfirmpage.cpp moc_workerprogress.cpp moc_utils.cpp moc_installprocessinfoview.cpp moc_choosefilebutton.cpp moc_debinfolabel.cpp moc_quitconfirmdialog.cpp moc_coloredprogressbar.cpp
+	-$(DEL_FILE) moc_debinstaller.cpp moc_deblistmodel.cpp moc_filechoosewidget.cpp moc_infocontrolbutton.cpp moc_multipleinstallpage.cpp moc_packagelistview.cpp moc_packageslistdelegate.cpp moc_packagesmanager.cpp moc_singleinstallpage.cpp moc_uninstallconfirmpage.cpp moc_workerprogress.cpp moc_utils.cpp moc_installprocessinfoview.cpp moc_choosefilebutton.cpp moc_debinfolabel.cpp moc_quitconfirmdialog.cpp
 moc_debinstaller.cpp: debinstaller.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -742,12 +736,6 @@ moc_quitconfirmdialog.cpp: quitconfirmdialog.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/archermind/Desktop/Code/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/archermind/Desktop/Code/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.0.11/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.0.11/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.0.11/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include quitconfirmdialog.h -o moc_quitconfirmdialog.cpp
-
-moc_coloredprogressbar.cpp: utils.h \
-		coloredprogressbar.h \
-		moc_predefs.h \
-		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/archermind/Desktop/Code/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/archermind/Desktop/Code/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.0.11/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.0.11/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.0.11/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include coloredprogressbar.h -o moc_coloredprogressbar.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -872,10 +860,6 @@ quitconfirmdialog.o: quitconfirmdialog.cpp quitconfirmdialog.h \
 		utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o quitconfirmdialog.o quitconfirmdialog.cpp
 
-coloredprogressbar.o: coloredprogressbar.cpp coloredprogressbar.h \
-		utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o coloredprogressbar.o coloredprogressbar.cpp
-
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
 
@@ -926,9 +910,6 @@ moc_debinfolabel.o: moc_debinfolabel.cpp
 
 moc_quitconfirmdialog.o: moc_quitconfirmdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_quitconfirmdialog.o moc_quitconfirmdialog.cpp
-
-moc_coloredprogressbar.o: moc_coloredprogressbar.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_coloredprogressbar.o moc_coloredprogressbar.cpp
 
 ####### Install
 

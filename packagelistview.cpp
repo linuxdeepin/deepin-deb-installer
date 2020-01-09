@@ -160,7 +160,9 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     }
 
     //在当前鼠标位置显示右键菜单
-    rightMenu->exec(QCursor::pos());
+    if(DebListModel::Failed != operate_stat){
+        rightMenu->exec(QCursor::pos());
+    }
 }
 
 void PackagesListView::onShortcutDeleteAction()

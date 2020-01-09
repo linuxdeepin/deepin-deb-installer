@@ -70,7 +70,7 @@ QString Utils::getConfigPath()
 
 bool Utils::isFontMimeType(const QString &filePath)
 {
-    const QString mimeName = QMimeDatabase().mimeTypeForFile(filePath).name();;
+    const QString mimeName = QMimeDatabase().mimeTypeForFile(filePath).name();
 
     if (mimeName.startsWith("font/") ||
         mimeName.startsWith("application/x-font")) {

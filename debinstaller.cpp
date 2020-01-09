@@ -267,9 +267,9 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    if(m_fileListModel->DebInstallFinishedFlag == 1){
-        if(m_lastPage.isNull())//判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
-        {
+    //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
+    if(!m_lastPage.isNull()){
+        if(m_fileListModel->DebInstallFinishedFlag == 1){
             m_fileListModel->DebInstallFinishedFlag = 0;
             return;
         }
