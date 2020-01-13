@@ -243,6 +243,71 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
     }
 }
 
+QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &size)
+{
+    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+
+    QString text;
+    QString tempText;
+    int totalHeight = size.height();
+    int lineWidth = size.width() - font.pixelSize();
+
+    int offset = bContainsChinese ? font.pixelSize() : 0;
+
+    QFontMetrics fm(font);
+
+    int calcHeight = 0;
+    int lineHeight = fm.height();
+    int lineSpace = 0;
+    int lineCount = (totalHeight - lineSpace) / lineHeight;
+    int prevLineCharIndex = 0;
+    for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
+        int fmWidth = fm.horizontalAdvance(tempText);
+        if (fmWidth > lineWidth - offset) {
+            calcHeight += lineHeight + 3;
+            if (calcHeight + lineHeight > totalHeight) {
+                QString endString = srcText.mid(prevLineCharIndex);
+                const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
+                text += endText;
+
+                lineCount = 0;
+                break;
+            }
+
+            if (!bContainsChinese) {
+                QChar currChar = tempText.at(tempText.length() - 1);
+                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
+                if (currChar.isLetter() && nextChar.isLetter()) {
+                    tempText += '-';
+                }
+                fmWidth = fm.horizontalAdvance(tempText);
+                if (fmWidth > size.width()) {
+                    --charIndex;
+                    --prevLineCharIndex;
+                    tempText = tempText.remove(tempText.length() - 2, 1);
+                }
+            }
+            text += tempText;
+
+            --lineCount;
+            if (lineCount > 0) {
+                text += "\n";
+            }
+            tempText = srcText.at(charIndex);
+
+            prevLineCharIndex = charIndex;
+        } else {
+            tempText += srcText.at(charIndex);
+        }
+    }
+
+    if (lineCount > 0) {
+        text += tempText;
+    }
+
+    return text;
+}
+
 DebApplicationHelper *DebApplicationHelper::instance()
 {
     return qobject_cast<DebApplicationHelper*>(DGuiApplicationHelper::instance());

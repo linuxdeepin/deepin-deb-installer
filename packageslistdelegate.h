@@ -31,6 +31,7 @@ class PackagesListDelegate : public DStyledItemDelegate {
 
 public:
     explicit PackagesListDelegate(QAbstractItemView *parent = nullptr);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -45,6 +46,7 @@ private:
     QPixmap m_packageIcon;
     QSettings m_qsettings;
     QAbstractItemView *m_parentView;
+    int m_itemHeight;
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

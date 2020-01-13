@@ -56,5 +56,6 @@ private:
     DPushButton *m_confirmBtn;
 
     QStringList m_requiredList;
+    QString m_description;
 };
 #endif  // UNINSTALLCONFIRMPAGE_H

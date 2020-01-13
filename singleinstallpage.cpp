@@ -43,71 +43,6 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-const QString holdTextInRect(const QFont &font, QString srcText, const QSize &size)
-{
-    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
-
-    QString text;
-    QString tempText;
-    int totalHeight = size.height();
-    int lineWidth = size.width() - font.pixelSize();
-
-    int offset = bContainsChinese ? font.pixelSize() : 0;
-
-    QFontMetrics fm(font);
-
-    int calcHeight = 0;
-    int lineHeight = fm.height();
-    int lineSpace = 0;
-    int lineCount = (totalHeight - lineSpace) / lineHeight;
-    int prevLineCharIndex = 0;
-    for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
-        int fmWidth = fm.horizontalAdvance(tempText);
-        if (fmWidth > lineWidth - offset) {
-            calcHeight += lineHeight + 3;
-            if (calcHeight + lineHeight > totalHeight) {
-                QString endString = srcText.mid(prevLineCharIndex);
-                const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
-                text += endText;
-
-                lineCount = 0;
-                break;
-            }
-
-            if (!bContainsChinese) {
-                QChar currChar = tempText.at(tempText.length() - 1);
-                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
-                if (currChar.isLetter() && nextChar.isLetter()) {
-                    tempText += '-';
-                }
-                fmWidth = fm.horizontalAdvance(tempText);
-                if (fmWidth > size.width()) {
-                    --charIndex;
-                    --prevLineCharIndex;
-                    tempText = tempText.remove(tempText.length() - 2, 1);
-                }
-            }
-            text += tempText;
-
-            --lineCount;
-            if (lineCount > 0) {
-                text += "\n";
-            }
-            tempText = srcText.at(charIndex);
-
-            prevLineCharIndex = charIndex;
-        } else {
-            tempText += srcText.at(charIndex);
-        }
-    }
-
-    if (lineCount > 0) {
-        text += tempText;
-    }
-
-    return text;
-}
-
 SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
     , m_operate(Install)
@@ -138,9 +73,12 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
 void SingleInstallPage::initUI()
 {
+    qApp->installEventFilter(this);
+    QFontInfo fontinfo = this->fontInfo();
+    int fontsize = fontinfo.pixelSize();
     initContentLayout();
-    initPkgInfoView();
-    initPkgInstallProcessView();
+    initPkgInfoView(fontsize);
+    initPkgInstallProcessView(fontsize);
     initConnections();
 
     if (m_packagesModel->isReady())
@@ -168,8 +106,15 @@ void SingleInstallPage::initContentLayout()
 #endif
 }
 
-void SingleInstallPage::initPkgInfoView()
+void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
+    int fontinfosizetemp = 0;
+    if(fontinfosize > 18){
+        fontinfosizetemp = 23;
+    }
+    else {
+        fontinfosizetemp = 20;
+    }
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
 
@@ -178,7 +123,7 @@ void SingleInstallPage::initPkgInfoView()
 
     DebInfoLabel *packageName = new DebInfoLabel;
     packageName->setCustomQPalette(QPalette::WindowText);
-    packageName->setFixedHeight(20);
+    packageName->setFixedHeight(fontinfosizetemp);
     packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
@@ -191,7 +136,7 @@ void SingleInstallPage::initPkgInfoView()
     packageVersion->setObjectName("PackageVersionTitle");
 
     m_packageName->setCustomQPalette(QPalette::WindowText);
-    m_packageName->setFixedHeight(20);
+    m_packageName->setFixedHeight(fontinfosizetemp);
     m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_packageVersion->setCustomQPalette(QPalette::WindowText);
     m_packageVersion->setFixedHeight(20);
@@ -282,13 +227,20 @@ void SingleInstallPage::initPkgInfoView()
 #endif
 }
 
-void SingleInstallPage::initPkgInstallProcessView()
+void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
+    int fontinfosizetemp = 0;
+    if(fontinfosize > 16){
+        fontinfosizetemp = 21;
+    }
+    else {
+        fontinfosizetemp = 18;
+    }
     m_infoControlButton->setObjectName("InfoControlButton");
     m_installProcessView->setObjectName("WorkerInformation");
     m_packageDescription->setObjectName("PackageDescription");
 
-    m_tipsLabel->setFixedHeight(18);
+    m_tipsLabel->setFixedHeight(fontinfosizetemp);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
 
     m_progressFrame->setVisible(false);
@@ -565,7 +517,7 @@ void SingleInstallPage::setPackageInfo()
     const QString description = Utils::fromSpecialEncoding(package->longDescription());
     m_description = description;
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
-    m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), description, boundingSize));
+    m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), description, boundingSize));
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
@@ -629,10 +581,19 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
-    m_packageDescription->setText(holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
+    m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
 }
 
+bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::FontChange && watched == this) {
+        QFontInfo fontinfo = this->fontInfo();
+        emit fontinfo.pixelSize();
+    }
+
+    return QObject::eventFilter(watched, event);
+}

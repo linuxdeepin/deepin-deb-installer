@@ -36,6 +36,14 @@ PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
 {
+    qApp->installEventFilter(this);
+    QFontInfo fontinfo = m_parentView->fontInfo();
+    int fontsize = fontinfo.pixelSize();
+    if(fontsize >= 16){
+        m_itemHeight = 52;
+    }else {
+        m_itemHeight = 48;
+    }
 }
 
 void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
@@ -102,7 +110,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         //绘制分割线
         QRect lineRect;
         lineRect.setX(content_x);
-        int itemHeight = 48;
+        int itemHeight = m_itemHeight;
         lineRect.setY(option.rect.y()+itemHeight-1);
         lineRect.setWidth(option.rect.width()-content_x-10);
         lineRect.setHeight(1);
@@ -125,7 +133,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
         name_rect.setY(bg_rect.y()+yOffset);
-        name_rect.setHeight(20);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
         QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -134,6 +141,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
         pkg_name_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
+
+        name_rect.setHeight(pkg_name_font.pixelSize() + 2);
+
         painter->setFont(pkg_name_font);
         QFontMetrics fontMetric(pkg_name_font);
 
@@ -217,6 +227,15 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 {
     Q_UNUSED(option);
 
-    QSize itemSize = index.data(Qt::SizeHintRole).toSize();
+    QSize itemSize = QSize(0, m_itemHeight);
     return itemSize;
+}
+bool PackagesListDelegate::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::FontChange && watched == this) {
+        QFontInfo fontinfo = m_parentView->fontInfo();
+        emit fontinfo.pixelSize();
+    }
+
+    return QObject::eventFilter(watched, event);
 }

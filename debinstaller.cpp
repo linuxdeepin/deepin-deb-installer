@@ -268,11 +268,8 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
-    if(!m_lastPage.isNull()){
-        if(m_fileListModel->DebInstallFinishedFlag == 1){
-            m_fileListModel->DebInstallFinishedFlag = 0;
-            return;
-        }
+    if(!m_lastPage.isNull() && m_fileListModel->DebInstallFinishedFlag){
+        return;
     }
     else {
         for (const auto &package : packages) {
@@ -372,6 +369,7 @@ void DebInstaller::refreshInstallPage()
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
         m_lastPage = singlePage;
+        m_fileListModel->DebInstallFinishedFlag = 0;
         m_centralLayout->addWidget(singlePage);
         m_dragflag = 2;
     } else {
@@ -387,8 +385,7 @@ void DebInstaller::refreshInstallPage()
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
-    }
-
+    }  
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 }

@@ -77,6 +77,7 @@ public:
     static QFont loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight);
     static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);
     static QString fromSpecialEncoding(const QString &inputStr);
+    static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);
 };
 
 #endif

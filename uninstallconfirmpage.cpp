@@ -25,6 +25,15 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
+const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size) {
+
+    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (!bContainsChinese) {
+        return srcText;
+    }
+    return Utils::holdTextInRect(font, srcText, size);
+}
+
 UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     : QWidget(parent)
     , m_icon(new DLabel)
@@ -110,8 +119,8 @@ void UninstallConfirmPage::setPackage(const QString &name)
     if(!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly \nif uninstalling this application, continue to uninstall it?");
     }
-
-    m_tips->setText(tips.arg(name));
+    const QSize boundingSize = QSize(m_tips->width(), 340);
+    m_tips->setText(uninstallTextInRect(m_tips->font(),tips.arg(name),boundingSize));
 }
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)

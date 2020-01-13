@@ -47,7 +47,7 @@ public:
     void afterGetAutherFalse();
 protected:
     void paintEvent(QPaintEvent *event);
-
+    bool eventFilter(QObject *watched, QEvent *event) override;
 signals:
     void back() const;
     void requestUninstallConfirm() const;
@@ -65,8 +65,8 @@ private:
 private:
     void initUI();
     void initContentLayout();
-    void initPkgInfoView();
-    void initPkgInstallProcessView();
+    void initPkgInfoView(int fontinfosize);
+    void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
     void setPackageInfo();
 
