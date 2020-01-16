@@ -109,11 +109,14 @@ void SingleInstallPage::initContentLayout()
 void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
+    int fontinfosizetemp_version = 0;
     if(fontinfosize > 18){
         fontinfosizetemp = 23;
+        fontinfosizetemp_version = 25;
     }
     else {
         fontinfosizetemp = 20;
+        fontinfosizetemp_version = 20;
     }
     m_packageName->setObjectName("PackageName");
     m_packageVersion->setObjectName("PackageVersion");
@@ -130,7 +133,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 
     DebInfoLabel *packageVersion = new DebInfoLabel;
     packageVersion->setCustomQPalette(QPalette::WindowText);
-    packageVersion->setFixedHeight(20);
+    packageVersion->setFixedHeight(fontinfosizetemp_version);
     packageVersion->setText(tr("Version: "));
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageVersion->setObjectName("PackageVersionTitle");
@@ -139,7 +142,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageName->setFixedHeight(fontinfosizetemp);
     m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_packageVersion->setCustomQPalette(QPalette::WindowText);
-    m_packageVersion->setFixedHeight(20);
+    m_packageVersion->setFixedHeight(fontinfosizetemp_version);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
     QVBoxLayout *packageNameVLayout = new QVBoxLayout;
@@ -361,6 +364,41 @@ void SingleInstallPage::initConnections()
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 }
 
+int SingleInstallPage::initLabelWidth(int fontinfo)
+{
+    int fontlabelwidth = 0;
+    switch (fontinfo) {
+        case 11:
+        fontlabelwidth = 260;
+        break;
+        case 12:
+        fontlabelwidth = 255;
+        break;
+        case 13:
+        fontlabelwidth = 250;
+        break;
+        case 14:
+        fontlabelwidth = 250;
+        break;
+        case 15:
+        fontlabelwidth = 240;
+        break;
+        case 16:
+        fontlabelwidth = 240;
+        break;
+        case 18:
+        fontlabelwidth = 230;
+        break;
+        case 20:
+        fontlabelwidth = 220;
+        break;
+        default:
+        fontlabelwidth = 220;
+        break;
+    }
+    return fontlabelwidth;
+}
+
 void SingleInstallPage::reinstall()
 {
     m_backButton->setVisible(false);
@@ -499,7 +537,8 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 void SingleInstallPage::setPackageInfo()
 {
     qApp->processEvents();
-
+    QFontInfo fontinfosize = this->fontInfo();
+    int fontlabelsize = fontinfosize.pixelSize();
     DebFile *package = m_packagesModel->preparedPackages().first();
 
     const QIcon icon = QIcon::fromTheme("application-x-deb");
@@ -518,6 +557,18 @@ void SingleInstallPage::setPackageInfo()
     m_description = description;
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), description, boundingSize));
+
+    //set package name
+    packagename_description = Utils::fromSpecialEncoding(package->packageName());
+    if(fontlabelsize > 18)
+    {
+        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
+        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+    }
+    else {
+        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
+        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+    }
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);

@@ -68,6 +68,7 @@ private:
     void initPkgInfoView(int fontinfosize);
     void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
+    int initLabelWidth(int fontinfo);
     void setPackageInfo();
 
 
@@ -109,6 +110,7 @@ private:
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
     QString m_description;
+    QString packagename_description;
 
 
 };

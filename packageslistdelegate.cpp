@@ -158,7 +158,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const int version_x = static_cast<int>(name_bounding_rect.right()) + 10;
         const int version_y = version_rect.top();
         version_rect.setLeft(version_x);
-        version_rect.setTop(version_y);
+        version_rect.setTop(version_y-1);
         version_rect.setRight(option.rect.right() - 85);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
