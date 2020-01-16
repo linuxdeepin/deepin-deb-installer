@@ -110,7 +110,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
     int fontinfosizetemp_version = 0;
-    if(fontinfosize > 18){
+    if (fontinfosize > 18){
         fontinfosizetemp = 23;
         fontinfosizetemp_version = 25;
     }
@@ -233,7 +233,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
-    if(fontinfosize > 16){
+    if (fontinfosize > 16){
         fontinfosizetemp = 21;
     }
     else {
@@ -560,7 +560,7 @@ void SingleInstallPage::setPackageInfo()
 
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
-    if(fontlabelsize > 18)
+    if (fontlabelsize > 18)
     {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
