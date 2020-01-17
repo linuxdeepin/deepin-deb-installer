@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: deb-installer
+Upstream-Name: deepin-deb-installer
 
 Files: *
 Copyright: 2017 Deepin Technology Co., Ltd.
