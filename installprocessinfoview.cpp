@@ -76,7 +76,24 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     DPalette pa = DebApplicationHelper::instance()->palette(this);
-    pa.setColor(DPalette::Text, pa.color(m_colorType));
-    m_editor->setPalette(pa);
+
+    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    if(themeType == DGuiApplicationHelper::LightType)
+    {
+        pa.setColor(DPalette::Text, QColor(96,157,200));
+        m_editor->setPalette(pa);
+    }
+    else if(themeType == DGuiApplicationHelper::DarkType)
+    {
+        pa.setColor(DPalette::Text, QColor(109,124,136));
+        m_editor->setPalette(pa);
+    }
+    else
+    {
+        pa.setColor(DPalette::Text, QColor(96,157,200));
+        m_editor->setPalette(pa);
+    }
+//    pa.setColor(DPalette::Text, pa.color(m_colorType));
+//    m_editor->setPalette(pa);
 }
 
