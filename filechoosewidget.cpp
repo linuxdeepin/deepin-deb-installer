@@ -69,12 +69,12 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     split_line = new DLabel;
     split_line->setObjectName("SplitLine");
-    if(themeType == DGuiApplicationHelper::LightType)
+    if (themeType == DGuiApplicationHelper::LightType)
     {
         m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
     }
-    else if(themeType == DGuiApplicationHelper::DarkType)
+    else if (themeType == DGuiApplicationHelper::DarkType)
     {
         m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_dark.svg", QSize(160, 160)));
         split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));

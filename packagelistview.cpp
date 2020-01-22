@@ -35,6 +35,7 @@ PackagesListView::PackagesListView(QWidget *parent)
     initConnections();
     initRightContextMenu();
     initShortcuts();
+    this->grabKeyboard();//在packagelist中添加焦点
 }
 
 void PackagesListView::initUI()
@@ -129,6 +130,12 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
     }
 }
 
+void PackagesListView::keyPressEvent(QKeyEvent *event)
+{
+   m_bLeftMouse = true;
+   DListView::keyPressEvent(event);
+}
+
 void PackagesListView::initRightContextMenu()
 {
     if (nullptr == m_rightMenu)
@@ -150,19 +157,23 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     m_bShortcutDelete = false;
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
+    connect(rightMenu, &DMenu::aboutToHide, this, [=] {
+        this->grabKeyboard();//在packagelist中添加焦点
+    });
+    connect(rightMenu, &DMenu::aboutToShow, this, [=] {
+        this->releaseKeyboard();//在packagelist中移除焦点
+    });
 
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    if (DebListModel::Success == operate_stat ||
+    if ((DebListModel::Success == operate_stat ||
         DebListModel::Waiting == operate_stat ||
-        DebListModel::Operating == operate_stat)
+        DebListModel::Operating == operate_stat) || DebListModel::Failed == operate_stat)
     {
         return;
     }
 
     //在当前鼠标位置显示右键菜单
-    if(DebListModel::Failed != operate_stat){
-        rightMenu->exec(QCursor::pos());
-    }
+    rightMenu->exec(QCursor::pos());
 }
 
 void PackagesListView::onShortcutDeleteAction()

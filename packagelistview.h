@@ -23,7 +23,7 @@
 #define PACKAGESLISTVIEW_H
 
 #include <QMouseEvent>
-
+#include <QKeyEvent>
 #include <DMenu>
 #include <QWidget>
 #include <DListView>
@@ -52,6 +52,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
+    void keyPressEvent(QKeyEvent *event);
 
     void paintEvent(QPaintEvent *event);
 
