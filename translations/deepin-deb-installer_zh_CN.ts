@@ -4,18 +4,6 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Theme</source>
-        <translation type="vanished">主题</translation>
-    </message>
-    <message>
-        <source>Dark theme</source>
-        <translation type="vanished">深色主题</translation>
-    </message>
-    <message>
-        <source>Light theme</source>
-        <translation type="vanished">浅色主题</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
         <translation>软件包安装器</translation>
@@ -29,10 +17,6 @@
         <location filename="../debinstaller.cpp" line="293"/>
         <source>Already Added</source>
         <translation>已添加</translation>
-    </message>
-    <message>
-        <source>There are currently installation tasks in progress</source>
-        <translation type="vanished">当前有安装任务正在进行</translation>
     </message>
 </context>
 <context>
@@ -75,7 +59,7 @@
     <message>
         <location filename="../deblistmodel.cpp" line="318"/>
         <location filename="../deblistmodel.cpp" line="323"/>
-        <source>Broken Dependencies: %1</source>
+        <source>Broken dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
@@ -312,8 +296,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="120"/>
         <source>Are you sure you want to uninstall %1?
-The system or other applications may not work properly 
-if uninstalling this application, continue to uninstall it?</source>
+The system or other applications may not work properly if uninstalling this application, continue to uninstall it?</source>
         <translation>您确定要卸载%1吗？
 卸载此软件可能会导致系统或其他软件无法正常使用</translation>
     </message>
