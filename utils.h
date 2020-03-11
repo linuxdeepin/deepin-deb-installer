@@ -79,5 +79,4 @@ public:
     static QString fromSpecialEncoding(const QString &inputStr);
     static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);
 };
-
 #endif
