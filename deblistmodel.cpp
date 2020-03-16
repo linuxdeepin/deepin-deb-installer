@@ -383,7 +383,7 @@ void DebListModel::installNextDeb()
 {  
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     QverifyResult = Utils::Digital_Verify(deb->filePath());
-    if(QverifyResult || QDBusResult)
+    if(QverifyResult || !QDBusResult)
     {
         Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
         Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");

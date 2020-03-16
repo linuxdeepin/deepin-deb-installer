@@ -275,12 +275,12 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         for (const auto &package : packages) {
             DebFile *p = new DebFile(package);
             qDebug()<<"p->md5sum"<<p->md5Sum();
-//            if (!p->isValid()) {
-//                qWarning() << "package invalid: " << package;
+            if (!p->isValid()) {
+                qWarning() << "package invalid: " << package;
 
-//                delete p;
-//                continue;
-//            }
+                delete p;
+                continue;
+            }
 
             DRecentData data;
             data.appName = "Deepin Deb Installer";
