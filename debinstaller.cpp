@@ -274,7 +274,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     else {
         for (const auto &package : packages) {
             DebFile *p = new DebFile(package);
-            qDebug()<<"p->md5sum"<<p->md5Sum();
             if (!p->isValid()) {
                 qWarning() << "package invalid: " << package;
 
