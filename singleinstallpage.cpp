@@ -87,6 +87,16 @@ void SingleInstallPage::initUI()
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 
     m_upDown = true;
+
+    QString File_transfer_Action;
+    QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+    QFileInfo fi(Targetfilepath);
+    bool exist = fi.exists();
+    if (!exist) {
+        File_transfer_Action = "rm -rf "+Targetfilepath;
+        system(File_transfer_Action.toStdString().c_str());
+        qDebug()<<"删除目标文件夹："<<File_transfer_Action;
+    }
 }
 
 void SingleInstallPage::initContentLayout()
@@ -358,7 +368,13 @@ void SingleInstallPage::initConnections()
     connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
     connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
-    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
+//    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
+    connect(m_doneButton, &DPushButton::clicked, qApp, [=]{
+        QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+        QString delete_action = "rm -rf "+Targetfilepath;
+        system(delete_action.toStdString().c_str());
+        QApplication::quit();
+    });
 
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
@@ -474,8 +490,6 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
-    qDebug() << __FUNCTION__ << endl;
-
     m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -492,6 +506,24 @@ void SingleInstallPage::onWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
+
+            QString Sourcefilepath = "/var/lib/dpkg/info";
+            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+            QString filename = packagename_description;
+            filename = filename.toLower();
+
+            int result = Utils::returnfileIsempty(Sourcefilepath,filename);
+            if (result) {
+                bool transfer_file_result = Utils::File_transfer(Sourcefilepath,Targetfilepath,filename);
+                if (transfer_file_result) {
+                    bool modify_file_result = Utils::Modify_transferfile(Targetfilepath,filename);
+                    if (modify_file_result) {
+                        QString shell_Action = Targetfilepath+"/"+filename+".postinst";
+                        system(shell_Action.toStdString().c_str());
+                    }
+                }
+            }
+
         } else {
             qDebug() << "Uninstalled successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
@@ -510,7 +542,9 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
-        Q_UNREACHABLE();
+        m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
+//        Q_UNREACHABLE();
     }
 
     if(!m_upDown)
@@ -526,9 +560,9 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
     }
 
     m_progress->setValue(progress);
-
-    if (progress == m_progress->maximum())
+    if (progress == m_progress->maximum() && flag == 0)
     {
+        flag = 1;
         qDebug() << "onWorkerProgressChanged" << progress;
         QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
     }

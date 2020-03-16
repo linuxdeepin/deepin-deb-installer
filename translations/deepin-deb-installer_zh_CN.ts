@@ -156,7 +156,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">收起</translation>
+        <translation>收起</translation>
     </message>
 </context>
 <context>

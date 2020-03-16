@@ -35,6 +35,9 @@
 #include <QtDBus/QDBusReply>
 #include <DDialog>
 #include <QApt/DebFile>
+#include <unistd.h>
+#include <stdlib.h>
+#include <QProcess>
 
 class DebListModel;
 class WorkerProgress;
@@ -111,7 +114,7 @@ private:
     QVBoxLayout *m_centralLayout;
     QString m_description;
     QString packagename_description;
-
+    int flag = 0;
 
 };
 

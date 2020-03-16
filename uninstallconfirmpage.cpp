@@ -117,7 +117,7 @@ void UninstallConfirmPage::setPackage(const QString &name)
 {
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if(!m_requiredList.isEmpty()) {
-        tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly if uninstalling this application, continue to uninstall it?");
+        tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
     }
     const QSize boundingSize = QSize(m_tips->width(), 340);
     m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));//2020.0210修改中英文状态下描述输出自动换行

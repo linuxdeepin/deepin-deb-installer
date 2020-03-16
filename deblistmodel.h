@@ -32,7 +32,6 @@
 
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
-#include <DDialog>
 #include <DPushButton>
 
 class PackagesManager;
@@ -149,6 +148,8 @@ private:
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
+    bool QDBusResult;
+    bool QverifyResult;
 
 };
 
