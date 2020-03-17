@@ -145,7 +145,7 @@ void DebListModel::installAll()
 {
     QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
     QDBusResult = Installer.property("DeviceUnlocked").toBool();
-    if (QDBusResult == false){
+    if (QDBusResult == true){
         Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
         if (m_workerStatus != WorkerPrepare) return;
 
