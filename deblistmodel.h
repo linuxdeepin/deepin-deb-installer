@@ -25,11 +25,13 @@
 #include <QAbstractListModel>
 #include <QFuture>
 #include <QPointer>
-
+#include <DDialog>
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QApt/Transaction>
-
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
+#include <DPushButton>
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -143,7 +145,7 @@ private:
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
-
+    bool QDBusResult;
 };
 
 #endif  // DEBLISTMODEL_H

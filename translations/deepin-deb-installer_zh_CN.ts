@@ -42,6 +42,21 @@
 <context>
     <name>DebListModel</name>
     <message>
+        <location filename="../deblistmodel.cpp" line="161"/>
+        <source>Unable to install</source>
+        <translation>无法安装</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="162"/>
+        <source>You can install deb packages in developer mode</source>
+        <translation>在开发者模式下可使用软件包安装器安装</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="165"/>
+        <source>OK</source>
+        <translation>确 认</translation>
+    </message>
+    <message>
         <location filename="../deblistmodel.cpp" line="58"/>
         <source>Installation failed, please check your network connection</source>
         <translation>安装失败，请检查您的网络连接</translation>

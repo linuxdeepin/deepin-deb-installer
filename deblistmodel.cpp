@@ -143,17 +143,34 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 void DebListModel::installAll()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
-    if (m_workerStatus != WorkerPrepare) return;
+    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
+    QDBusResult = Installer.property("DeviceUnlocked").toBool();
+    if (QDBusResult == false){
+        Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
+        if (m_workerStatus != WorkerPrepare) return;
 
-    m_workerStatus = WorkerProcessing;
-    m_operatingIndex = 0;
-    m_InitRowStatus = false;
+        m_workerStatus = WorkerProcessing;
+        m_operatingIndex = 0;
+        m_InitRowStatus = false;
 
-    //    emit workerStarted();
+        //    emit workerStarted();
 
-    // start first
-    installNextDeb();
+        // start first
+        installNextDeb();
+    }else {
+        DDialog *Ddialog = new DDialog();
+        Ddialog->setWindowTitle(QString(tr("Unable to install")));
+        Ddialog->setMessage(QString(tr("You can install deb packages in developer mode")));
+        Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
+        Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+        Ddialog->show();
+        QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
+        connect(btnOK,&DPushButton::clicked,this,[=]{
+            qDebug()<<"result:"<<btnOK->isChecked();
+            exit(0);
+        });
+    }
+
 }
 
 void DebListModel::uninstallPackage(const int idx)
