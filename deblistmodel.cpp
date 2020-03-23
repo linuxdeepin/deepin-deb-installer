@@ -149,6 +149,7 @@ void DebListModel::installAll()
     if (m_workerStatus != WorkerPrepare) return;
 
     m_workerStatus = WorkerProcessing;
+    m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;
     m_InitRowStatus = false;
     //    emit workerStarted();
@@ -273,6 +274,7 @@ void DebListModel::bumpInstallIndex()
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
         DebInstallFinishedFlag = 1;
+        m_workerStatus_temp = 0;
         m_workerStatus = WorkerFinished;
         emit workerFinished();
         emit workerProgressChanged(100);
@@ -456,10 +458,26 @@ void DebListModel::installNextDeb()
         Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
         Ddialog->show();
         QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
+        connect(Ddialog,&DDialog::aboutToClose,this,[=]{
+            if(preparedPackages().size() > 1)
+            {
+                refreshOperatingPackageStatus(VerifyFailed);
+                bumpInstallIndex();
+                return;
+            }
+            else if (preparedPackages().size() == 1) {
+                m_workerStatus = WorkerFinished;
+                emit workerFinished();
+                emit workerProgressChanged(100);
+                emit transactionProgressChanged(100);
+                return;
+            }
+        });
         connect(btnOK,&DPushButton::clicked,this,[=]{
             qDebug()<<"result:"<<btnOK->isChecked();
             if(preparedPackages().size() > 1)
             {
+                refreshOperatingPackageStatus(VerifyFailed);
                 bumpInstallIndex();
                 return;
             }

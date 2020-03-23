@@ -25,7 +25,7 @@
 #include <QPair>
 #include <QSet>
 #include <QtConcurrent>
-
+#include "utils.h"
 using namespace QApt;
 
 QString relationName(const RelationType type) {
@@ -283,7 +283,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
 
     DebFile *deb = m_preparedPackages[index];
     const QString architecture = deb->architecture();
-
+    QverifyResult = Utils::Digital_Verify(deb->filePath());
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     // conflicts
@@ -308,7 +308,11 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
         }
     }
-
+    qDebug()<<"QverifyResult"<<QverifyResult;
+    if(!QverifyResult)
+    {
+        ret.status = DebListModel::DependsVerifyFailed;
+    }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
     m_packageDependsStatus[index] = ret;

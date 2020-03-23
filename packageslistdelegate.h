@@ -25,7 +25,7 @@
 #include <DStyledItemDelegate>
 #include <QSettings>
 #include "packagelistview.h"
-
+#include "deblistmodel.h"
 class PackagesListDelegate : public DStyledItemDelegate {
     Q_OBJECT
 
@@ -47,6 +47,7 @@ private:
     QSettings m_qsettings;
     QAbstractItemView *m_parentView;
     int m_itemHeight;
+    DebListModel *m_fileListModel;
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

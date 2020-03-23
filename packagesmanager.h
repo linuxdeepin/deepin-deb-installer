@@ -92,7 +92,7 @@ public:
     void removePackage(const int index);
     void removeLastPackage();
     bool appendPackage(QApt::DebFile *debPackage);
-
+    bool QverifyResult;
     QApt::DebFile * package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend * backend() const { return m_backendFuture.result(); }
 

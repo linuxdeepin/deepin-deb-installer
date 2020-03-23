@@ -35,6 +35,7 @@ DWIDGET_USE_NAMESPACE
 PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
+    , m_fileListModel(new DebListModel(this))
 {
     qApp->installEventFilter(this);
     QFontInfo fontinfo = m_parentView->fontInfo();
@@ -56,7 +57,7 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if ( (DebListModel::Operating == operate_stat ||
          DebListModel::Success == operate_stat) &&
-         DebListModel::DependsBreak == dependsStat) {
+         (DebListModel::DependsBreak == dependsStat || DebListModel::DependsVerifyFailed == dependsStat)) {
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         painter->setPen(QPen(pa.color(DPalette::TextWarning)));
         painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);

@@ -33,8 +33,8 @@
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="162"/>
-        <source>You can install deb packages in developer mode</source>
-        <translation>在开发者模式下可使用软件包安装器安装</translation>
+        <source>This package does not have a valid digital signature</source>
+        <translation>此安装包没有有效的数字签名</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="165"/>

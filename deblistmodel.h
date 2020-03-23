@@ -75,6 +75,7 @@ public:
         DependsOk,  //依赖满足
         DependsAvailable,
         DependsBreak,  //依赖不满足
+        DependsVerifyFailed,
     };
 
     enum PackageOperationStatus {
@@ -83,6 +84,7 @@ public:
         Success,
         Failed,
         Waiting,
+        VerifyFailed,
     };
 
     void reset();
@@ -97,7 +99,7 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     int DebInstallFinishedFlag = 0;
-
+    int m_workerStatus_temp = 0;
 
 signals:
     //    void workerStarted() const;
