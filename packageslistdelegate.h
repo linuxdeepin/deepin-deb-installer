@@ -48,6 +48,7 @@ private:
     QAbstractItemView *m_parentView;
     int m_itemHeight;
     DebListModel *m_fileListModel;
+    int dependsStat_temp;
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

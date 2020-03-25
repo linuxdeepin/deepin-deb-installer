@@ -337,7 +337,7 @@ void DebInstaller::reset()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
-
+    m_fileListModel->m_workerStatus_temp = 0;
     m_dragflag = -1;
     titlebar()->setTitle(QString());
     m_fileListModel->reset();

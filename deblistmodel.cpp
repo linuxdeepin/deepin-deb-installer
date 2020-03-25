@@ -466,11 +466,7 @@ void DebListModel::installNextDeb()
                 return;
             }
             else if (preparedPackages().size() == 1) {
-                m_workerStatus = WorkerFinished;
-                emit workerFinished();
-                emit workerProgressChanged(100);
-                emit transactionProgressChanged(100);
-                return;
+                exit(0);
             }
         });
         connect(btnOK,&DPushButton::clicked,this,[=]{
@@ -482,11 +478,7 @@ void DebListModel::installNextDeb()
                 return;
             }
             else if (preparedPackages().size() == 1) {
-                m_workerStatus = WorkerFinished;
-                emit workerFinished();
-                emit workerProgressChanged(100);
-                emit transactionProgressChanged(100);
-                return;
+                exit(0);
             }
         });
     }
