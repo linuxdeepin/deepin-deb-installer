@@ -54,10 +54,10 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
 {
     QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
     bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
-    if (QDBusResult == false) {
-        DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
+    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
-        const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    if (QDBusResult == false) {
         if ( (DebListModel::Operating == operate_stat ||
              DebListModel::Success == operate_stat) &&
              (DebListModel::DependsBreak == dependsStat || DebListModel::DependsVerifyFailed == dependsStat)) {
@@ -89,9 +89,6 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
         }
     }
     else {
-        DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
-
-        const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
         if ( (DebListModel::Operating == operate_stat ||
              DebListModel::Success == operate_stat) &&
              (DebListModel::DependsBreak == dependsStat)) {
