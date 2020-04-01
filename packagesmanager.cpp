@@ -663,7 +663,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
 
     do {
         if (!p) p = b->package(packageName);
-        if (!p) break;
+        if (p) break;
 
         const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
         //        if (!arch.isEmpty())
