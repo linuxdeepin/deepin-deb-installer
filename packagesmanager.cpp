@@ -665,10 +665,10 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         if (!p) p = b->package(packageName);
         if (p) break;
 
-        const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
-        //        if (!arch.isEmpty())
-        // reset to check foreign arch
-        p = b->package(packageName + arch);
+        //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
+        //if (!arch.isEmpty())
+        //reset to check foreign arch
+        //p = b->package(packageName + arch);
     } while (false);
 
     if (p) return p;
