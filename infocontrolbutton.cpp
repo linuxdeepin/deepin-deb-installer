@@ -58,7 +58,14 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_tipsText->setPalette(palette);
     m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setText(expandTips);
-    m_tipsText->setFixedHeight(15);
+    QFontInfo fontinfo = m_tipsText->fontInfo();
+    int fontsize = fontinfo.pixelSize();
+    if(fontsize >= 16){
+        m_tipsText->setFixedHeight(25);
+    }else {
+        m_tipsText->setFixedHeight(15);
+    }
+//    m_tipsText->setFixedHeight(15);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsText, normalFontFamily, 12, QFont::ExtraLight);
