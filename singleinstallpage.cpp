@@ -560,9 +560,8 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
     }
 
     m_progress->setValue(progress);
-    if (progress == m_progress->maximum() && flag == 0)
+    if (progress == m_progress->maximum())
     {
-        flag = 1;
         qDebug() << "onWorkerProgressChanged" << progress;
         QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
     }
