@@ -517,7 +517,7 @@ void DebListModel::installNextDeb()
         }else {
             DDialog *Ddialog = new DDialog();
             Ddialog->setFixedSize(380,160);
-            Ddialog->setWindowTitle(QString(tr("Unable to install")));
+            Ddialog->setTitle(tr("Unable to install"));
             Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
             Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
             Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
