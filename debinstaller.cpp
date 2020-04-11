@@ -221,19 +221,24 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 
 void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
 {
-    if (m_dragflag == 0)
-        return;
+    if (m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing) {
+        this->setAcceptDrops(false);
+    } else {
+        m_fileChooseWidget->setAcceptDrops(true);
+        if (m_dragflag == 0)
+            return;
 
-    auto *const mime = e->mimeData();
-    if (!mime->hasUrls()) return e->ignore();
+        auto *const mime = e->mimeData();
+        if (!mime->hasUrls()) return e->ignore();
 
-    for (const auto &item : mime->urls()) {
-        const QFileInfo info(item.path());
-        if (info.isDir()) return e->accept();
-        if (info.isFile() && info.suffix() == "deb") return e->accept();
+        for (const auto &item : mime->urls()) {
+            const QFileInfo info(item.path());
+            if (info.isDir()) return e->accept();
+            if (info.isFile() && info.suffix() == "deb") return e->accept();
+        }
+
+        e->ignore();
     }
-
-    e->ignore();
 }
 
 void DebInstaller::dropEvent(QDropEvent *e)
@@ -353,6 +358,7 @@ void DebInstaller::removePackage(const int index)
 
 void DebInstaller::refreshInstallPage()
 {
+    m_fileListModel->reset_filestatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
 

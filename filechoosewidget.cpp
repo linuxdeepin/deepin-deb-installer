@@ -41,7 +41,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     , m_settings("deepin", "deepin-deb-install")
 {
     setFocusPolicy(Qt::NoFocus);
-
+    setAcceptDrops(true);
     DPalette palette;
 
     m_iconImage = new DLabel;

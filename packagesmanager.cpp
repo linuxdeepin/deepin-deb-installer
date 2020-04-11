@@ -282,8 +282,12 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
 
     DebFile *deb = m_preparedPackages[index];
+    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
+    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
     const QString architecture = deb->architecture();
-    QverifyResult = Utils::Digital_Verify(deb->filePath());
+    if (!QDBusResult) {
+        QverifyResult = Utils::Digital_Verify(deb->filePath());
+    }
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     // conflicts

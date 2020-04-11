@@ -160,6 +160,7 @@ void DebListModel::uninstallPackage(const int idx)
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
     m_workerStatus = WorkerProcessing;
+    m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = idx;
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
@@ -224,6 +225,7 @@ void DebListModel::onTransactionErrorOccurred()
         emit lockForAuth(false);
 
         m_workerStatus = WorkerPrepare;
+        m_workerStatus_temp = m_workerStatus;
         return;
     }
 
@@ -256,11 +258,18 @@ void DebListModel::reset()
     //Q_ASSERT_X(m_workerStatus == WorkerFinished, Q_FUNC_INFO, "worker status error");
 
     m_workerStatus = WorkerPrepare;
+    m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;
 
     m_packageOperateStatus.clear();
     m_packageFailReason.clear();
     m_packagesManager->reset();
+}
+
+void DebListModel::reset_filestatus()
+{
+    m_packageOperateStatus.clear();
+    m_packageFailReason.clear();
 }
 
 void DebListModel::bumpInstallIndex()
@@ -271,8 +280,8 @@ void DebListModel::bumpInstallIndex()
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
         DebInstallFinishedFlag = 1;
-        m_workerStatus_temp = 0;
         m_workerStatus = WorkerFinished;
+        m_workerStatus_temp = m_workerStatus;
         emit workerFinished();
         emit workerProgressChanged(100);
         emit transactionProgressChanged(100);
@@ -516,6 +525,7 @@ void DebListModel::installNextDeb()
             m_currentTransaction->run();
         }else {
             DDialog *Ddialog = new DDialog();
+            Ddialog->setModal(true);
             Ddialog->setFixedSize(380,160);
             Ddialog->setTitle(tr("Unable to install"));
             Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
@@ -569,6 +579,7 @@ void DebListModel::uninstallFinished()
     qDebug() << Q_FUNC_INFO;
 
     m_workerStatus = WorkerFinished;
+    m_workerStatus_temp = m_workerStatus;
     refreshOperatingPackageStatus(Success);
 
     emit workerFinished();

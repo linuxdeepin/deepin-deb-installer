@@ -88,6 +88,7 @@ public:
     };
 
     void reset();
+    void reset_filestatus();
     bool isReady() const;
     bool isWorkerPrepare() const
     {

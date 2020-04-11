@@ -229,19 +229,31 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
-        if (operate_stat == DebListModel::Failed) {
+
+        if (install_stat != DebListModel::NotInstalled) {
+                if (install_stat == DebListModel::InstalledSameVersion) {
+                    info_str = tr("Same version installed");
+                } else {
+                    info_str =tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+                }
+        }
+        else {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
-        } else if (install_stat != DebListModel::NotInstalled) {
-            if (install_stat == DebListModel::InstalledSameVersion) {
-                info_str = tr("Same version installed");
-            } else {
-                info_str =
-                    tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-            }
-        } else {
-            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
         }
+//        if (operate_stat == DebListModel::Failed) {
+//            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+//            penColor = pa.color(DPalette::TextWarning);
+//        } else if (install_stat != DebListModel::NotInstalled) {
+//            if (install_stat == DebListModel::InstalledSameVersion) {
+//                info_str = tr("Same version installed");
+//            } else {
+//                info_str =
+//                    tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+//            }
+//        } else {
+//            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
+//        }
 
         painter->setPen(QPen(penColor));
 
