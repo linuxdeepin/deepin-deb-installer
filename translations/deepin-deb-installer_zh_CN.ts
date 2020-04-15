@@ -296,9 +296,9 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="120"/>
         <source>Are you sure you want to uninstall %1?
-The system or other applications may not work properly if uninstalling this application, continue to uninstall it?</source>
+The system or other applications may not work properly</source>
         <translation>您确定要卸载%1吗？
-卸载此软件可能会导致系统或其他软件无法正常使用</translation>
+        卸载此软件可能会导致系统或其他软件无法正常使用</translation>
     </message>
 </context>
 <context>

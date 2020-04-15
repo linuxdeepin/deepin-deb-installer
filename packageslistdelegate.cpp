@@ -226,20 +226,22 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setTop(name_rect.bottom()+2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+        const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
-
-        if (install_stat != DebListModel::NotInstalled) {
-                if (install_stat == DebListModel::InstalledSameVersion) {
-                    info_str = tr("Same version installed");
-                } else {
-                    info_str =tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-                }
-        }
-        else {
+        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
+        } else if (install_stat != DebListModel::NotInstalled) {
+            if (install_stat == DebListModel::InstalledSameVersion) {
+                info_str = tr("Same version installed");
+            } else {
+                info_str =
+                    tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+            }
+        } else {
+            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
         }
 //        if (operate_stat == DebListModel::Failed) {
 //            info_str = index.data(DebListModel::PackageFailReasonRole).toString();

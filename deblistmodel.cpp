@@ -534,6 +534,7 @@ void DebListModel::installNextDeb()
             Ddialog->show();
             QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
             connect(Ddialog,&DDialog::aboutToClose,this,[=]{
+                Ddialog->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
                 if(preparedPackages().size() > 1)
                 {
                     refreshOperatingPackageStatus(VerifyFailed);

@@ -311,10 +311,12 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
             choose_set << deb->packageName();
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
         }
-        qDebug()<<"QverifyResult"<<QverifyResult;
-        qDebug()<<"ret.status)"<<ret.status;
-        if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
-            ret.status = DebListModel::DependsVerifyFailed;
+        if (!QDBusResult) {
+            qDebug()<<"QverifyResult"<<QverifyResult;
+            qDebug()<<"ret.status)"<<ret.status;
+            if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
+                ret.status = DebListModel::DependsVerifyFailed;
+            }
         }
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
