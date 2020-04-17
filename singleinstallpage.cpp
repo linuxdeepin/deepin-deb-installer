@@ -617,13 +617,26 @@ void SingleInstallPage::setPackageInfo()
 
     DPalette palette;
     if (installed) {
-        if (installedSameVersion) {
+//        if (installedSameVersion) {
+//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+//            m_tipsLabel->setText(tr("Same version installed"));
+//        }
+//        else {
+//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+//            m_tipsLabel->setText(tr("Other version installed: %1")
+//                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+//        }
+
+        if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
-        }
-        else {
+        } else if(installStat == DebListModel::InstalledLaterVersion){
+             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+             m_tipsLabel->setText(tr("Later version installed: %1")
+                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+        } else {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Other version installed: %1")
+            m_tipsLabel->setText(tr("Earlier version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         }
         return;

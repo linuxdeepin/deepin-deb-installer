@@ -236,9 +236,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         } else if (install_stat != DebListModel::NotInstalled) {
             if (install_stat == DebListModel::InstalledSameVersion) {
                 info_str = tr("Same version installed");
+            } else if(install_stat == DebListModel::InstalledLaterVersion){
+                info_str =
+                    tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             } else {
                 info_str =
-                    tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+                    tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();

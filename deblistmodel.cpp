@@ -526,7 +526,7 @@ void DebListModel::installNextDeb()
         }else {
             DDialog *Ddialog = new DDialog();
             Ddialog->setModal(true);
-            Ddialog->setFixedSize(380,160);
+            Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
             Ddialog->setTitle(tr("Unable to install"));
             Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
             Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
@@ -534,7 +534,6 @@ void DebListModel::installNextDeb()
             Ddialog->show();
             QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
             connect(Ddialog,&DDialog::aboutToClose,this,[=]{
-                Ddialog->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
                 if(preparedPackages().size() > 1)
                 {
                     refreshOperatingPackageStatus(VerifyFailed);
