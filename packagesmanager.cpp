@@ -28,27 +28,29 @@
 #include "utils.h"
 using namespace QApt;
 
-QString relationName(const RelationType type) {
+QString relationName(const RelationType type)
+{
     switch (type) {
-        case LessOrEqual:
-            return "<=";
-        case GreaterOrEqual:
-            return ">=";
-        case LessThan:
-            return "<";
-        case GreaterThan:
-            return ">";
-        case Equals:
-            return "=";
-        case NotEqual:
-            return "!=";
-        default:;
+    case LessOrEqual:
+        return "<=";
+    case GreaterOrEqual:
+        return ">=";
+    case LessThan:
+        return "<";
+    case GreaterThan:
+        return ">";
+    case Equals:
+        return "=";
+    case NotEqual:
+        return "!=";
+    default:;
     }
 
     return QString();
 }
 
-bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType) {
+bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType)
+{
     Q_UNUSED(multiArchType);
 
     if (sysArch.startsWith(':')) sysArch.remove(0, 1);
@@ -62,7 +64,8 @@ bool isArchMatches(QString sysArch, const QString &packageArch, const int multiA
 }
 
 QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                  const int multiArchType = InvalidMultiArchType) {
+                                  const int multiArchType = InvalidMultiArchType)
+{
     if (annotation == "native" || annotation == "any") return QString();
 
     if (multiArchType == MultiArchForeign) return QString();
@@ -79,27 +82,29 @@ QString resolvMultiArchAnnotation(const QString &annotation, const QString &debA
         return arch;
 }
 
-bool dependencyVersionMatch(const int result, const RelationType relation) {
+bool dependencyVersionMatch(const int result, const RelationType relation)
+{
     switch (relation) {
-        case LessOrEqual:
-            return result <= 0;
-        case GreaterOrEqual:
-            return result >= 0;
-        case LessThan:
-            return result < 0;
-        case GreaterThan:
-            return result > 0;
-        case Equals:
-            return result == 0;
-        case NotEqual:
-            return result != 0;
-        default:;
+    case LessOrEqual:
+        return result <= 0;
+    case GreaterOrEqual:
+        return result >= 0;
+    case LessThan:
+        return result < 0;
+    case GreaterThan:
+        return result > 0;
+    case Equals:
+        return result == 0;
+    case NotEqual:
+        return result != 0;
+    default:;
     }
 
     return true;
 }
 
-Backend *init_backend() {
+Backend *init_backend()
+{
     Backend *b = new Backend;
 
     if (b->init()) return b;
@@ -109,13 +114,15 @@ Backend *init_backend() {
 }
 
 PackagesManager::PackagesManager(QObject *parent)
-    : QObject(parent) {
+    : QObject(parent)
+{
     m_backendFuture = QtConcurrent::run(init_backend);
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
 
-bool PackagesManager::isArchError(const int idx) {
+bool PackagesManager::isArchError(const int idx)
+{
     Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[idx];
 
@@ -126,13 +133,15 @@ bool PackagesManager::isArchError(const int idx) {
     return !b->architectures().contains(deb->architecture());
 }
 
-const ConflictResult PackagesManager::packageConflictStat(const int index) {
+const ConflictResult PackagesManager::packageConflictStat(const int index)
+{
     auto *p = m_preparedPackages[index];
 
     return isConflictSatisfy(p->architecture(), p->conflicts());
 }
 
-const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Package *package) {
+const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Package *package)
+{
     const QString &name = package->name();
     qDebug() << "check conflict for package" << name << arch;
 
@@ -167,7 +176,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 }
 
 const ConflictResult PackagesManager::isInstalledConflict(const QString &packageName, const QString &packageVersion,
-                                                          const QString &packageArch) {
+                                                          const QString &packageArch)
+{
     static QList<QPair<QString, DependencyInfo>> sysConflicts;
 
     if (sysConflicts.isEmpty()) {
@@ -206,7 +216,8 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
     return ConflictResult::ok(QString());
 }
 
-const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts) {
+const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
+{
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
             const QString name = conflict.packageName();
@@ -246,7 +257,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
     return ConflictResult::ok(QString());
 }
 
-int PackagesManager::packageInstallStatus(const int index) {
+int PackagesManager::packageInstallStatus(const int index)
+{
     if (m_packageInstallStatus.contains(index)) return m_packageInstallStatus[index];
 
     const QString packageName = m_preparedPackages[index]->packageName();
@@ -276,13 +288,14 @@ int PackagesManager::packageInstallStatus(const int index) {
     return ret;
 }
 
-PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
+PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
+{
     if (m_packageDependsStatus.contains(index)) return m_packageDependsStatus[index];
 
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
 
     DebFile *deb = m_preparedPackages[index];
-    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
+    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
     bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
     const QString architecture = deb->architecture();
     if (!QDBusResult) {
@@ -312,8 +325,8 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
         }
         if (!QDBusResult) {
-            qDebug()<<"QverifyResult"<<QverifyResult;
-            qDebug()<<"ret.status)"<<ret.status;
+            qDebug() << "QverifyResult" << QverifyResult;
+            qDebug() << "ret.status)" << ret.status;
             if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
                 ret.status = DebListModel::DependsVerifyFailed;
             }
@@ -332,7 +345,8 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index) {
     return ret;
 }
 
-const QString PackagesManager::packageInstalledVersion(const int index) {
+const QString PackagesManager::packageInstalledVersion(const int index)
+{
     Q_ASSERT(m_packageInstallStatus.contains(index));
 //    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
 //             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
@@ -343,7 +357,8 @@ const QString PackagesManager::packageInstalledVersion(const int index) {
     return p->installedVersion();
 }
 
-const QStringList PackagesManager::packageAvailableDepends(const int index) {
+const QStringList PackagesManager::packageAvailableDepends(const int index)
+{
     Q_ASSERT(m_packageDependsStatus.contains(index));
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
@@ -359,12 +374,14 @@ const QStringList PackagesManager::packageAvailableDepends(const int index) {
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                             const QList<DependencyItem> &dependsList) {
+                                             const QList<DependencyItem> &dependsList)
+{
     for (auto const &candidate_list : dependsList) packageCandidateChoose(choosed_set, debArch, candidate_list);
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                             const DependencyItem &candidateList) {
+                                             const DependencyItem &candidateList)
+{
     bool choosed = false;
 
     for (const auto &info : candidateList) {
@@ -403,7 +420,8 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
     Q_ASSERT(choosed);
 }
 
-const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch) {
+const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
+{
     Package *p = packageWithArch(packageName, sysArch);
     Q_ASSERT(p);
 
@@ -438,7 +456,8 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     return ret.toList();
 }
 
-void PackagesManager::reset() {
+void PackagesManager::reset()
+{
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
@@ -446,13 +465,15 @@ void PackagesManager::reset() {
     m_backendFuture.result()->reloadCache();
 }
 
-void PackagesManager::resetInstallStatus() {
+void PackagesManager::resetInstallStatus()
+{
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
     m_backendFuture.result()->reloadCache();
 }
 
-void PackagesManager::resetPackageDependsStatus(const int index) {
+void PackagesManager::resetPackageDependsStatus(const int index)
+{
     if (!m_packageDependsStatus.contains(index)) return;
 
     // reload backend cache
@@ -461,8 +482,9 @@ void PackagesManager::resetPackageDependsStatus(const int index) {
     m_packageDependsStatus.remove(index);
 }
 
-void PackagesManager::removePackage(const int index) {
-    qDebug() << index << ", size:"<< m_preparedPackages.size();
+void PackagesManager::removePackage(const int index)
+{
+    qDebug() << index << ", size:" << m_preparedPackages.size();
     DebFile *deb = m_preparedPackages[index];
     const auto md5 = deb->md5Sum();
 
@@ -474,9 +496,9 @@ void PackagesManager::removePackage(const int index) {
 
 void PackagesManager::removeLastPackage()
 {
-    qDebug() << "start remove last, curr m_preparedPackages size:"<< m_preparedPackages.size();
+    qDebug() << "start remove last, curr m_preparedPackages size:" << m_preparedPackages.size();
     DebFile *deb = m_preparedPackages.last();
-    qDebug() << " remove package name is:"<< deb->packageName();
+    qDebug() << " remove package name is:" << deb->packageName();
     const auto md5 = deb->md5Sum();
 
     m_appendedPackagesMd5.remove(md5);
@@ -485,7 +507,8 @@ void PackagesManager::removeLastPackage()
     m_packageDependsStatus.clear();
 }
 
-bool PackagesManager::appendPackage(DebFile *debPackage) {
+bool PackagesManager::appendPackage(DebFile *debPackage)
+{
     const auto md5 = debPackage->md5Sum();
     if (m_appendedPackagesMd5.contains(md5)) return false;
 
@@ -497,7 +520,8 @@ bool PackagesManager::appendPackage(DebFile *debPackage) {
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
                                                                       const QString &architecture,
-                                                                      const QList<DependencyItem> &depends) {
+                                                                      const QList<DependencyItem> &depends)
+{
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     for (const auto &candicate_list : depends) {
@@ -512,7 +536,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
                                                                       const QString &architecture,
-                                                                      const DependencyItem &candicate) {
+                                                                      const DependencyItem &candicate)
+{
     PackageDependsStatus ret = PackageDependsStatus::_break(QString());
 
     for (const auto &info : candicate) {
@@ -527,7 +552,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
                                                                       const QString &architecture,
-                                                                      const DependencyInfo &dependencyInfo) {
+                                                                      const DependencyInfo &dependencyInfo)
+{
     const QString package_name = dependencyInfo.packageName();
 
     Package *p = packageWithArch(package_name, architecture, dependencyInfo.multiArchAnnotation());
@@ -662,13 +688,18 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 }
 
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch,
-                                          const QString &annotation) {
+                                          const QString &annotation)
+{
     qDebug() << "package with arch" << packageName << sysArch << annotation;
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
 
     do {
-        if (!p) p = b->package(packageName);
+        QStringList archs = {"", ":all", "any",  ":i386", "amd64"};
+        for (QString arch : archs) {
+            if (!p) p = b->package(packageName + arch);
+            if (p) break;
+        }
         if (p) break;
 
         //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
@@ -692,7 +723,8 @@ PackageDependsStatus PackageDependsStatus::ok() { return {DebListModel::DependsO
 
 PackageDependsStatus PackageDependsStatus::available() { return {DebListModel::DependsAvailable, QString()}; }
 
-PackageDependsStatus PackageDependsStatus::_break(const QString &package) {
+PackageDependsStatus PackageDependsStatus::_break(const QString &package)
+{
     return {DebListModel::DependsBreak, package};
 }
 
@@ -703,32 +735,37 @@ PackageDependsStatus::PackageDependsStatus(const int status, const QString &pack
     : status(status)
     , package(package) {}
 
-PackageDependsStatus PackageDependsStatus::operator=(const PackageDependsStatus &other) {
+PackageDependsStatus PackageDependsStatus::operator=(const PackageDependsStatus &other)
+{
     status = other.status;
     package = other.package;
 
     return *this;
 }
 
-PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other) {
+PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other)
+{
     if (other.status > status) *this = other;
 
     return *this;
 }
 
-PackageDependsStatus PackageDependsStatus::maxEq(const PackageDependsStatus &other) {
+PackageDependsStatus PackageDependsStatus::maxEq(const PackageDependsStatus &other)
+{
     if (other.status >= status) *this = other;
 
     return *this;
 }
 
-PackageDependsStatus PackageDependsStatus::min(const PackageDependsStatus &other) {
+PackageDependsStatus PackageDependsStatus::min(const PackageDependsStatus &other)
+{
     if (other.status < status) *this = other;
 
     return *this;
 }
 
-PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &other) {
+PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &other)
+{
     if (other.status <= status) *this = other;
 
     return *this;

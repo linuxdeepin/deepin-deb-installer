@@ -68,9 +68,10 @@ const QString workerErrorString(const int e)
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_workerStatus(WorkerPrepare)
-    , m_packagesManager(new PackagesManager(this)) {
+    , m_packagesManager(new PackagesManager(this))
+{
 
-     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
+    connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
 }
 
 bool DebListModel::isReady() const
@@ -141,7 +142,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 }
 
 void DebListModel::installAll()
-{ 
+{
+
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
 
@@ -151,6 +153,9 @@ void DebListModel::installAll()
     m_InitRowStatus = false;
     //    emit workerStarted();
     // start first
+
+    qDebug() << "size:" << m_packagesManager->m_preparedPackages.size();
+    initRowStatus();
     installNextDeb();
 }
 
@@ -277,6 +282,11 @@ void DebListModel::bumpInstallIndex()
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     // install finished
+    qDebug() << "m_packageFailReason.size:" << m_packageFailReason.size();
+    qDebug() << m_packageFailReason;
+
+    qDebug() << "m_packageOperateStatus:" << m_packageOperateStatus;
+
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
         DebInstallFinishedFlag = 1;
@@ -285,12 +295,30 @@ void DebListModel::bumpInstallIndex()
         emit workerFinished();
         emit workerProgressChanged(100);
         emit transactionProgressChanged(100);
+
+        qDebug() << "m_packageDependsStatus,size" << m_packagesManager->m_packageDependsStatus.size();
+        for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
+            qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
+        }
+//        usleep(1000 * 1000);
+
         return;
     }
-    qDebug()<<"m_packagesManager->m_preparedPackages.size()"<<m_packagesManager->m_preparedPackages.size();
-    qDebug()<<"m_operatingIndex"<<m_operatingIndex;
+//    usleep(1000 * 1000);
+    qDebug() << "m_packageDependsStatus,size" << m_packagesManager->m_packageDependsStatus.size();
+    for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
+        qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
+    }
+
+    qDebug() << "m_packagesManager->m_preparedPackages.size()" << m_packagesManager->m_preparedPackages.size();
+    qDebug() << "m_operatingIndex" << m_operatingIndex;
+
+    qDebug() << "m_packageFailReason.size:" << m_packageFailReason.size();
+    qDebug() << m_packageFailReason;
+
     emit onChangeOperateIndex(m_operatingIndex);
-        // install next
+    // install next
+
     installNextDeb();
 }
 
@@ -317,11 +345,10 @@ QString DebListModel::packageFailedReason(const int idx) const
 
         Q_UNREACHABLE();
     }
-
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
-    if(!m_packageFailReason.contains(idx))
-        qDebug()<<"ggy"<<m_packageFailReason.size()<<idx;
+    if (!m_packageFailReason.contains(idx))
+        qDebug() << "ggy" << m_packageFailReason.size() << idx;
     Q_ASSERT(m_packageFailReason.contains(idx));
 
     return workerErrorString(m_packageFailReason[idx]);
@@ -346,18 +373,18 @@ void DebListModel::onTransactionFinished()
     QString filename = deb->packageName();
     filename = filename.toLower();
 
-    int result = Utils::returnfileIsempty(Sourcefilepath,filename);
+    int result = Utils::returnfileIsempty(Sourcefilepath, filename);
     if (result) {
-        bool transfer_file_result = Utils::File_transfer(Sourcefilepath,Targetfilepath,filename);
+        bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
         if (transfer_file_result) {
-            bool modify_file_result = Utils::Modify_transferfile(Targetfilepath,filename);
+            bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
             if (modify_file_result) {
-                QString shell_Action = Targetfilepath+"/"+filename+".postinst";
+                QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
                 system(shell_Action.toStdString().c_str());
             }
         }
     }
-
+    qDebug() << "tans.exitStatus()" << trans->exitStatus();
     if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
         m_packageFailReason[m_operatingIndex] = trans->error();
@@ -404,13 +431,12 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 }
 
 void DebListModel::installNextDeb()
-{  
-    QDBusInterface Installer("com.deepin.deepinid","/com/deepin/deepinid","com.deepin.deepinid");
+{
+    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
     QDBusResult = Installer.property("DeviceUnlocked").toBool();
-    qDebug()<<"QDBusResult"<<QDBusResult;
+    qDebug() << "QDBusResult" << QDBusResult;
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    if(QDBusResult)
-    {
+    if (QDBusResult) {
         Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
         Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
@@ -460,11 +486,10 @@ void DebListModel::installNextDeb()
         // see: https://bugs.kde.org/show_bug.cgi?id=382272
         trans->setLocale(".UTF-8");
 
-        if(!m_InitRowStatus)
-        {
-            connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
-            m_InitRowStatus = true;
-        }
+//        if (!m_InitRowStatus) {
+//            connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+//            m_InitRowStatus = true;
+//        }
 
         connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
         connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
@@ -473,8 +498,7 @@ void DebListModel::installNextDeb()
 
         m_currentTransaction = trans;
         m_currentTransaction->run();
-    }
-    else {
+    } else {
         QverifyResult = Utils::Digital_Verify(deb->filePath());
         if (QverifyResult) {
             Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
@@ -500,6 +524,8 @@ void DebListModel::installNextDeb()
             const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
             if (dependsStat.isBreak()) {
                 refreshOperatingPackageStatus(Failed);
+
+                m_packageFailReason[m_operatingIndex] = Failed;
                 bumpInstallIndex();
                 return;
             } else if (dependsStat.isAvailable()) {
@@ -526,11 +552,10 @@ void DebListModel::installNextDeb()
             // see: https://bugs.kde.org/show_bug.cgi?id=382272
             trans->setLocale(".UTF-8");
 
-            if(!m_InitRowStatus)
-            {
-                connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
-                m_InitRowStatus = true;
-            }
+//            if (!m_InitRowStatus) {
+//                connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+//                m_InitRowStatus = true;
+//            }
 
             connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
             connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
@@ -539,7 +564,7 @@ void DebListModel::installNextDeb()
 
             m_currentTransaction = trans;
             m_currentTransaction->run();
-        }else {
+        } else {
             DDialog *Ddialog = new DDialog();
             Ddialog->setModal(true);
             Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -548,27 +573,27 @@ void DebListModel::installNextDeb()
             Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
             Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
             Ddialog->show();
-            QPushButton* btnOK = qobject_cast<QPushButton*>(Ddialog->getButton(0));
-            connect(Ddialog,&DDialog::aboutToClose,this,[=]{
-                if(preparedPackages().size() > 1)
+            QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+            connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
+                if (preparedPackages().size() > 1)
                 {
                     refreshOperatingPackageStatus(VerifyFailed);
                     bumpInstallIndex();
                     return;
-                }
-                else if (preparedPackages().size() == 1) {
+                } else if (preparedPackages().size() == 1)
+                {
                     exit(0);
                 }
             });
-            connect(btnOK,&DPushButton::clicked,this,[=]{
-                qDebug()<<"result:"<<btnOK->isChecked();
-                if(preparedPackages().size() > 1)
+            connect(btnOK, &DPushButton::clicked, this, [ = ] {
+                qDebug() << "result:" << btnOK->isChecked();
+                if (preparedPackages().size() > 1)
                 {
                     refreshOperatingPackageStatus(VerifyFailed);
                     bumpInstallIndex();
                     return;
-                }
-                else if (preparedPackages().size() == 1) {
+                } else if (preparedPackages().size() == 1)
+                {
                     exit(0);
                 }
             });
@@ -614,62 +639,58 @@ void DebListModel::setCurrentIndex(const QModelIndex &idx)
 
 void DebListModel::initRowStatus()
 {
-    for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)
-    {
+    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_operatingIndex = i;
         refreshOperatingPackageStatus(Waiting);
     }
     m_operatingIndex = 0;
 
-    Transaction *trans = static_cast<Transaction *>(sender());
-    Q_ASSERT(trans == m_currentTransaction.data());
-    disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+//    Transaction *trans = static_cast<Transaction *>(sender());
+//    Q_ASSERT(trans == m_currentTransaction.data());
+//    disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
+    m_InitRowStatus = true;
 }
 
 void DebListModel::upWrongStatusRow()
-{   
+{
     QList<int> listWrongIndex;
     int iIndex = 0;
 
     //find wrong index
     QMapIterator<int, int> iteratorpackageOperateStatus(m_packageOperateStatus);
     QList<int> listpackageOperateStatus;
-    while(iteratorpackageOperateStatus.hasNext())
-    {
+    while (iteratorpackageOperateStatus.hasNext()) {
         iteratorpackageOperateStatus.next();
-        if(iteratorpackageOperateStatus.value() == Failed)
-        {
-            listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key() );
+        if (iteratorpackageOperateStatus.value() == Failed) {
+            listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key());
             listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());
-        }
-        else if(iteratorpackageOperateStatus.value() == Success)
-            listpackageOperateStatus.append( iteratorpackageOperateStatus.value() );
+        } else if (iteratorpackageOperateStatus.value() == Success)
+            listpackageOperateStatus.append(iteratorpackageOperateStatus.value());
         else
             return;
     }
-    if(listWrongIndex.size() == 0)
+    if (listWrongIndex.size() == 0)
         return;
 
     //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<QApt::DebFile *> listTempDebFile;
     iIndex = 0;
-    for(int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++)
-    {
+    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus[i] = listpackageOperateStatus[i];
-        if( listWrongIndex.contains(i) )
-            listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i] );
+        if (listWrongIndex.contains(i))
+            listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i]);
         else
             listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);
     }
     m_packagesManager->m_preparedPackages = listTempDebFile;
 
     //change  m_packageFailReason sort.
-    QMap<int,int> mappackageFailReason;
+    QMap<int, int> mappackageFailReason;
     QMapIterator<int, int> IteratorpackageFailReason(m_packageFailReason);
     while (IteratorpackageFailReason.hasNext()) {
-         IteratorpackageFailReason.next();
-         int iIndexTemp = listWrongIndex.indexOf( IteratorpackageFailReason.key() );
-         mappackageFailReason[iIndexTemp] = IteratorpackageFailReason.value();
+        IteratorpackageFailReason.next();
+        int iIndexTemp = listWrongIndex.indexOf(IteratorpackageFailReason.key());
+        mappackageFailReason[iIndexTemp] = IteratorpackageFailReason.value();
     }
     m_packageFailReason.clear();
     m_packageFailReason = mappackageFailReason;
@@ -678,30 +699,28 @@ void DebListModel::upWrongStatusRow()
     QMapIterator<int, int> MapIteratorpackageInstallStatus(m_packagesManager->m_packageInstallStatus);
     QList<int> listpackageInstallStatus;
     iIndex = 0;
-    while(MapIteratorpackageInstallStatus.hasNext())
-    {
+    while (MapIteratorpackageInstallStatus.hasNext()) {
         MapIteratorpackageInstallStatus.next();
-        if( listWrongIndex.contains( MapIteratorpackageInstallStatus.key()) )
-            listpackageInstallStatus.insert( iIndex++, MapIteratorpackageInstallStatus.value() );
+        if (listWrongIndex.contains(MapIteratorpackageInstallStatus.key()))
+            listpackageInstallStatus.insert(iIndex++, MapIteratorpackageInstallStatus.value());
         else
             listpackageInstallStatus.append(MapIteratorpackageInstallStatus.value());
     }
-    for(int i = 0; i < listpackageInstallStatus.size(); i++)
+    for (int i = 0; i < listpackageInstallStatus.size(); i++)
         m_packagesManager->m_packageInstallStatus[i] = listpackageInstallStatus[i];
 
     //change  m_packageDependsStatus sort.
     QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
     QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
     iIndex = 0;
-    while(MapIteratorpackageDependsStatus.hasNext())
-    {
+    while (MapIteratorpackageDependsStatus.hasNext()) {
         MapIteratorpackageDependsStatus.next();
-        if( listWrongIndex.contains( MapIteratorpackageDependsStatus.key()) )
-            listpackageDependsStatus.insert( iIndex++, MapIteratorpackageDependsStatus.value() );
+        if (listWrongIndex.contains(MapIteratorpackageDependsStatus.key()))
+            listpackageDependsStatus.insert(iIndex++, MapIteratorpackageDependsStatus.value());
         else
             listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
     }
-    for(int i = 0; i < listpackageDependsStatus.size(); i++)
+    for (int i = 0; i < listpackageDependsStatus.size(); i++)
         m_packagesManager->m_packageDependsStatus[i] = listpackageDependsStatus[i];
 
     //update view
