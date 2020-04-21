@@ -33,7 +33,8 @@ DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
-class DebInstaller : public Dtk::Widget::DMainWindow {
+class DebInstaller : public Dtk::Widget::DMainWindow
+{
     Q_OBJECT
 
 public:
@@ -45,7 +46,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent * event) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onPackagesSelected(const QStringList &packages);
@@ -67,6 +68,10 @@ private:
     void initConnections();
     void refreshInstallPage();
     void handleFocusPolicy();
+
+    //检查黑白名单是否存在
+    void checkWhiteList();
+    void popErrorWindow();
 
     //禁用/启用 关闭按钮和菜单中的退出
     void disableCloseAndExit();

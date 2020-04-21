@@ -21,6 +21,7 @@
 
 #include "packagesmanager.h"
 #include "deblistmodel.h"
+#include "LoadDebFileListThread.h"
 
 #include <QPair>
 #include <QSet>
@@ -275,6 +276,7 @@ int PackagesManager::packageInstallStatus(const int index)
 
         const QString packageVersion = m_preparedPackages[index]->version();
         const int result = Package::compareVersion(packageVersion, installedVersion);
+        qDebug() << "result" << result;
 
         if (result == 0)
             ret = DebListModel::InstalledSameVersion;
@@ -288,6 +290,129 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
+QStringList PackagesManager::getAppList(QString listPath)
+{
+    QStringList appList;
+    QFile listFile(listPath);
+    if (listFile.open(QIODevice::ReadOnly)) {
+        while (!listFile.atEnd()) {
+            QString appPath = listFile.readLine();
+            appPath.remove(" ");
+            appPath.remove("\n");
+            if (!appPath.isEmpty()) {
+                appList << appPath;
+            }
+        }
+    } else {
+        qDebug() << "Failed to open" << listPath;
+    }
+    return appList;
+}
+
+QStringList PackagesManager::getPermissionList(QStringList whiteList, QStringList blackList)
+{
+
+//    qDebug() << "whiteList" << whiteList;
+//    qDebug() << "blackList" << blackList;
+    QStringList authorizedAppList;
+
+    for (QString whiteApp : whiteList) {
+        for (QString blackApp : blackList) {
+//            qDebug() << "blackApp:" << blackApp << "whiteApp" << whiteApp;
+            if (!whiteApp.contains(blackApp)) {
+//                qDebug() << "whiteApp" << whiteApp;
+                authorizedAppList << whiteApp;
+            }
+        }
+    }
+    return authorizedAppList;
+}
+
+bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
+{
+    bool permission = false;
+
+    if (m_packagePermissionStatus.contains(deb->packageName()))
+        return true;
+
+    QString tempFilePath = "/tmp/installer";
+
+    QDir dir(tempFilePath);
+    if (!dir.exists()) {
+        dir.mkdir(tempFilePath);
+    }
+
+    LoadDebFileListThread *m_pLoadThread = nullptr;
+    m_pLoadThread = new LoadDebFileListThread(deb, tempFilePath);
+    if (m_pLoadThread) {
+        m_pLoadThread->start();
+
+        usleep(500 * 1000);
+
+        m_pLoadThread->terminate();
+        m_pLoadThread->wait();
+
+        permission = detectAppPermission(tempFilePath);
+
+        deleteDirectory(tempFilePath);
+
+    }
+
+
+
+    return permission;
+}
+
+bool PackagesManager::deleteDirectory(const QString &path)
+{
+    if (path.isEmpty()) {
+        return false;
+    }
+
+    QDir dir(path);
+    if (!dir.exists()) {
+        return true;
+    }
+
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    QFileInfoList fileList = dir.entryInfoList();
+    foreach (QFileInfo fi, fileList) {
+        if (fi.isFile()) {
+            fi.dir().remove(fi.fileName());
+        } else {
+            deleteDirectory(fi.absoluteFilePath());
+        }
+    }
+    return dir.rmpath(dir.absolutePath());
+}
+
+bool PackagesManager::detectAppPermission(QString tempPath)
+{
+    qDebug() << "detect Application Permission";
+    QStringList whiteList = getAppList("/usr/share/deepin-elf-verify/whitelist");
+    QStringList blackList = getAppList("/usr/share/deepin-elf-verify/blacklist");
+
+    if (whiteList.isEmpty()) {
+        return false;
+    }
+
+    QStringList authorizedAppList;
+    if (blackList.isEmpty()) {
+        authorizedAppList = whiteList;
+    } else {
+        authorizedAppList = getPermissionList(whiteList, blackList);
+    }
+
+    for (QString path : authorizedAppList) {
+        QFile tempFile(tempPath + path);
+        if (tempFile.exists()) {
+
+            return true;
+        }
+    }
+    return false;
+}
+
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index)) return m_packageDependsStatus[index];
@@ -295,13 +420,23 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
 
     DebFile *deb = m_preparedPackages[index];
-    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
     const QString architecture = deb->architecture();
-    if (!QDBusResult) {
-        QverifyResult = Utils::Digital_Verify(deb->filePath());
-    }
     PackageDependsStatus ret = PackageDependsStatus::ok();
+    bool isPermission = checkAppPermissions(deb);
+
+    qDebug() << " permission " << isPermission;
+
+    if (!isPermission /*&& m_packagePermissionStatus.contains(deb->packageName()) && !m_packagePermissionStatus[deb->packageName()]*/) {
+        ret.status = DebListModel::PermissionDenied;
+        ret.package = deb->packageName();
+
+        m_packageDependsStatus[index] = ret;
+//        for (int i = 0; i < m_packageDependsStatus.size(); i++) {
+//            qDebug() << "m_packageDependsStatus[" << i << "]" << m_packageDependsStatus[i].status;
+//        }
+
+        return ret;
+    }
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
@@ -323,13 +458,6 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             QSet<QString> choose_set;
             choose_set << deb->packageName();
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
-        }
-        if (!QDBusResult) {
-            qDebug() << "QverifyResult" << QverifyResult;
-            qDebug() << "ret.status)" << ret.status;
-            if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
-                ret.status = DebListModel::DependsVerifyFailed;
-            }
         }
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
@@ -774,3 +902,5 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
 bool PackageDependsStatus::isBreak() const { return status == DebListModel::DependsBreak; }
 
 bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }
+
+bool PackageDependsStatus::isForbid() const { return status == DebListModel::PermissionDenied; }

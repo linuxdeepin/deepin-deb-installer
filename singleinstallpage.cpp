@@ -93,9 +93,9 @@ void SingleInstallPage::initUI()
     QFileInfo fi(Targetfilepath);
     bool exist = fi.exists();
     if (!exist) {
-        File_transfer_Action = "rm -rf "+Targetfilepath;
+        File_transfer_Action = "rm -rf " + Targetfilepath;
         system(File_transfer_Action.toStdString().c_str());
-        qDebug()<<"删除目标文件夹："<<File_transfer_Action;
+        qDebug() << "删除目标文件夹：" << File_transfer_Action;
     }
 }
 
@@ -120,11 +120,10 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
     int fontinfosizetemp_version = 0;
-    if (fontinfosize > 18){
+    if (fontinfosize > 18) {
         fontinfosizetemp = 23;
         fontinfosizetemp_version = 25;
-    }
-    else {
+    } else {
         fontinfosizetemp = 20;
         fontinfosizetemp_version = 20;
     }
@@ -164,7 +163,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *pkgNameValueLayout = new QVBoxLayout;
     pkgNameValueLayout->setSpacing(0);
     pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
-    pkgNameValueLayout->addSpacing(4+4);
+    pkgNameValueLayout->addSpacing(4 + 4);
     pkgNameValueLayout->addWidget(m_packageName);
 
     QHBoxLayout *pkgNameLayout = new QHBoxLayout;
@@ -192,7 +191,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QHBoxLayout *itemBlockLayout = new QHBoxLayout;
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
-    itemBlockLayout->addSpacing(112-20-10);
+    itemBlockLayout->addSpacing(112 - 20 - 10);
     itemBlockLayout->addWidget(m_packageIcon);
     itemBlockLayout->addLayout(itemInfoLayout);
 
@@ -243,10 +242,9 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
-    if (fontinfosize > 16){
+    if (fontinfosize > 16) {
         fontinfosizetemp = 21;
-    }
-    else {
+    } else {
         fontinfosizetemp = 18;
     }
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -278,12 +276,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_doneButton->setVisible(false);
     m_packageDescription->setWordWrap(true);
 
-    m_installButton->setFixedSize(120,36);
-    m_uninstallButton->setFixedSize(120,36);
-    m_reinstallButton->setFixedSize(120,36);
-    m_confirmButton->setFixedSize(120,36);
-    m_backButton->setFixedSize(120,36);
-    m_doneButton->setFixedSize(120,36);
+    m_installButton->setFixedSize(120, 36);
+    m_uninstallButton->setFixedSize(120, 36);
+    m_reinstallButton->setFixedSize(120, 36);
+    m_confirmButton->setFixedSize(120, 36);
+    m_backButton->setFixedSize(120, 36);
+    m_doneButton->setFixedSize(120, 36);
     m_installButton->setFocusPolicy(Qt::NoFocus);
     m_uninstallButton->setFocusPolicy(Qt::NoFocus);
     m_reinstallButton->setFocusPolicy(Qt::NoFocus);
@@ -369,9 +367,9 @@ void SingleInstallPage::initConnections()
     connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
 //    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
-    connect(m_doneButton, &DPushButton::clicked, qApp, [=]{
+    connect(m_doneButton, &DPushButton::clicked, qApp, [ = ] {
         QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
-        QString delete_action = "rm -rf "+Targetfilepath;
+        QString delete_action = "rm -rf " + Targetfilepath;
         system(delete_action.toStdString().c_str());
         QApplication::quit();
     });
@@ -384,31 +382,31 @@ int SingleInstallPage::initLabelWidth(int fontinfo)
 {
     int fontlabelwidth = 0;
     switch (fontinfo) {
-        case 11:
+    case 11:
         fontlabelwidth = 260;
         break;
-        case 12:
+    case 12:
         fontlabelwidth = 255;
         break;
-        case 13:
+    case 13:
         fontlabelwidth = 250;
         break;
-        case 14:
+    case 14:
         fontlabelwidth = 250;
         break;
-        case 15:
+    case 15:
         fontlabelwidth = 240;
         break;
-        case 16:
+    case 16:
         fontlabelwidth = 240;
         break;
-        case 18:
+    case 18:
         fontlabelwidth = 230;
         break;
-        case 20:
+    case 20:
         fontlabelwidth = 220;
         break;
-        default:
+    default:
         fontlabelwidth = 220;
         break;
     }
@@ -428,11 +426,11 @@ void SingleInstallPage::reinstall()
 }
 void SingleInstallPage::install()
 {
-        m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
-        m_backButton->setVisible(false);
-        m_installButton->setVisible(false);
-        m_operate = Install;
-        m_packagesModel->installAll();
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
+    m_backButton->setVisible(false);
+    m_installButton->setVisible(false);
+    m_operate = Install;
+    m_packagesModel->installAll();
 }
 
 void SingleInstallPage::uninstallCurrentPackage()
@@ -506,24 +504,6 @@ void SingleInstallPage::onWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
-
-            QString Sourcefilepath = "/var/lib/dpkg/info";
-            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
-            QString filename = packagename_description;
-            filename = filename.toLower();
-
-            int result = Utils::returnfileIsempty(Sourcefilepath,filename);
-            if (result) {
-                bool transfer_file_result = Utils::File_transfer(Sourcefilepath,Targetfilepath,filename);
-                if (transfer_file_result) {
-                    bool modify_file_result = Utils::Modify_transferfile(Targetfilepath,filename);
-                    if (modify_file_result) {
-                        QString shell_Action = Targetfilepath+"/"+filename+".postinst";
-                        system(shell_Action.toStdString().c_str());
-                    }
-                }
-            }
-
         } else {
             qDebug() << "Uninstalled successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
@@ -537,8 +517,7 @@ void SingleInstallPage::onWorkerFinished()
 
         if (m_operate == Install || m_operate == Reinstall)
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        else
-        {
+        else {
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
@@ -547,21 +526,19 @@ void SingleInstallPage::onWorkerFinished()
 //        Q_UNREACHABLE();
     }
 
-    if(!m_upDown)
+    if (!m_upDown)
         m_infoControlButton->setShrinkTips(tr("Collapse"));
 }
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
     qDebug() << progress << endl;
-    if (progress < m_progress->value())
-    {
+    if (progress < m_progress->value()) {
         return;
     }
 
     m_progress->setValue(progress);
-    if (progress == m_progress->maximum())
-    {
+    if (progress == m_progress->maximum()) {
         qDebug() << "onWorkerProgressChanged" << progress;
         QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
     }
@@ -593,12 +570,10 @@ void SingleInstallPage::setPackageInfo()
 
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
-    if (fontlabelsize > 18)
-    {
+    if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-    }
-    else {
+    } else {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
     }
@@ -617,26 +592,12 @@ void SingleInstallPage::setPackageInfo()
 
     DPalette palette;
     if (installed) {
-//        if (installedSameVersion) {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Same version installed"));
-//        }
-//        else {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Other version installed: %1")
-//                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-//        }
-
-        if (installStat == DebListModel::InstalledSameVersion) {
+        if (installedSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
-        } else if(installStat == DebListModel::InstalledLaterVersion){
-             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-             m_tipsLabel->setText(tr("Later version installed: %1")
-                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         } else {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Earlier version installed: %1")
+            m_tipsLabel->setText(tr("Other version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         }
         return;
@@ -644,7 +605,7 @@ void SingleInstallPage::setPackageInfo()
 
     // package depends status
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    if (dependsStat == DebListModel::DependsBreak) {
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -657,17 +618,12 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::afterGetAutherFalse()
 {
-    if( m_operate == Install)
-    {
+    if (m_operate == Install) {
         m_installButton->setVisible(true);
-    }
-    else if(m_operate == Uninstall)
-    {
+    } else if (m_operate == Uninstall) {
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
-    }
-    else if(m_operate == Reinstall)
-    {
+    } else if (m_operate == Reinstall) {
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }

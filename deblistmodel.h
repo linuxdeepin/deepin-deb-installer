@@ -75,7 +75,7 @@ public:
         DependsOk,  //依赖满足
         DependsAvailable,
         DependsBreak,  //依赖不满足
-        DependsVerifyFailed,
+        PermissionDenied
     };
 
     enum PackageOperationStatus {
@@ -84,7 +84,6 @@ public:
         Success,
         Failed,
         Waiting,
-        VerifyFailed,
     };
 
     void reset();
@@ -143,6 +142,7 @@ private:
 private:
     int m_workerStatus;
     int m_operatingIndex;
+    int m_oprtatingStatusIndex;
     QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
 
@@ -151,8 +151,6 @@ private:
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
-    bool QDBusResult;
-    bool QverifyResult;
 
 };
 

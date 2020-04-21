@@ -105,28 +105,50 @@ void DebInstaller::initUI()
     setWindowTitle(tr("Package Installer"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
+
+    checkWhiteList();
+}
+
+void DebInstaller::checkWhiteList()
+{
+    QFile whiteFile("/usr/share/deepin-elf-verify/whitelist");
+    if (!whiteFile.exists()) {
+        popErrorWindow();
+    }
+}
+void DebInstaller::popErrorWindow()
+{
+    DDialog *Ddialog = new DDialog();
+    Ddialog->setModal(true);
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
+    Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
+    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+    Ddialog->show();
+    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
+        exit(0);
+    });
+    connect(btnOK, &DPushButton::clicked, this, [ = ] {
+        exit(0);
+    });
 }
 
 void DebInstaller::handleFocusPolicy()
 {
     QLayout *layout = titlebar()->layout();
-    for (int i = 0; i < layout->count(); ++i)
-    {
+    for (int i = 0; i < layout->count(); ++i) {
         QWidget *widget = layout->itemAt(i)->widget();
-        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
-        {
+        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
             QLayout *widgetLayout = widget->layout();
-            for (int j = 0; j < widgetLayout->count(); ++j)
-            {
+            for (int j = 0; j < widgetLayout->count(); ++j) {
                 QWidget *widget = widgetLayout->itemAt(j)->widget();
-                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
-                {
+                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
                     QLayout *wLayout = widget->layout();
-                    for (int k = 0; k < wLayout->count(); ++k)
-                    {
+                    for (int k = 0; k < wLayout->count(); ++k) {
                         QWidget *widget = wLayout->itemAt(k)->widget();
-                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button"))
-                        {
+                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
                             widget->setFocusPolicy(Qt::NoFocus);
                         }
                     }
@@ -183,21 +205,17 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
 
     QStringList debFileList;
-    for(int i=0; i<arguments.size(); i++)
-    {
+    for (int i = 0; i < arguments.size(); i++) {
         QString strArg = arguments.at(i);
-        if (!strArg.contains("deb-installer"))
-        {
+        if (!strArg.contains("deb-installer")) {
             const QFileInfo info(strArg);
-            if (info.isFile() && info.suffix() == "deb")
-            {
+            if (info.isFile() && info.suffix() == "deb") {
                 debFileList << strArg;
             }
         }
     }
 
-    if (debFileList.size() > 0)
-    {
+    if (debFileList.size() > 0) {
         qDebug() << debFileList << endl;
         onPackagesSelected(debFileList);
     }
@@ -273,11 +291,10 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
-    qDebug()<<"m_fileListModel->m_workerStatus_temp+++++++"<<m_fileListModel->m_workerStatus_temp;
-    if((!m_lastPage.isNull() && m_fileListModel->DebInstallFinishedFlag) || m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing){
+    qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
+    if ((!m_lastPage.isNull() && m_fileListModel->DebInstallFinishedFlag) || m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing) {
         return;
-    }
-    else {
+    } else {
         for (const auto &package : packages) {
             DebFile *p = new DebFile(package);
             if (!p->isValid()) {
@@ -392,7 +409,7 @@ void DebInstaller::refreshInstallPage()
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
-    }  
+    }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 }

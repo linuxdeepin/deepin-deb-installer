@@ -67,6 +67,12 @@
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="327"/>
+        <source>The package is not authorized</source>
+        <translation>此安装包为非授权应用</translation>
+    </message>
+
 </context>
 <context>
     <name>FileChooseWidget</name>
@@ -138,14 +144,9 @@
         <translation>已安装相同版本</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="241"/>
-        <source>Later version installed: %1</source>
-        <translation>已安装较新的版本：%1</translation>
-    </message>
-    <message>
-        <location filename="../packageslistdelegate.cpp" line="244"/>
-        <source>Earlier version installed: %1</source>
-        <translation>已安装较早的版本：%1</translation>
+        <location filename="../packageslistdelegate.cpp" line="204"/>
+        <source>Other version installed: %1</source>
+        <translation>已安装其他版本：%1</translation>
     </message>
 </context>
 <context>
@@ -230,14 +231,9 @@
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="635"/>
-        <source>Later version installed: %1</source>
-        <translation>已安装较新的版本：%1</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="639"/>
-        <source>Earlier version installed: %1</source>
-        <translation>已安装较早的版本：%1</translation>
+        <location filename="../singleinstallpage.cpp" line="542"/>
+        <source>Other version installed: %1</source>
+        <translation>已安装其他版本：%1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="472"/>

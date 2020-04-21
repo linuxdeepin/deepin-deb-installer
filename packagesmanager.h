@@ -32,36 +32,39 @@
 
 typedef Result<QString> ConflictResult;
 
-namespace  PackagesManagerDependsStatus{
+namespace  PackagesManagerDependsStatus {
 
-    class PackageDependsStatus {
-    public:
-        static PackageDependsStatus ok();
-        static PackageDependsStatus available();
-        static PackageDependsStatus _break(const QString &package);
+class PackageDependsStatus
+{
+public:
+    static PackageDependsStatus ok();
+    static PackageDependsStatus available();
+    static PackageDependsStatus _break(const QString &package);
 
-        PackageDependsStatus();
-        PackageDependsStatus(const int status, const QString &package);
-        PackageDependsStatus operator=(const PackageDependsStatus &other);
+    PackageDependsStatus();
+    PackageDependsStatus(const int status, const QString &package);
+    PackageDependsStatus operator=(const PackageDependsStatus &other);
 
-        PackageDependsStatus max(const PackageDependsStatus &other);
-        PackageDependsStatus maxEq(const PackageDependsStatus &other);
-        PackageDependsStatus min(const PackageDependsStatus &other);
-        PackageDependsStatus minEq(const PackageDependsStatus &other);
+    PackageDependsStatus max(const PackageDependsStatus &other);
+    PackageDependsStatus maxEq(const PackageDependsStatus &other);
+    PackageDependsStatus min(const PackageDependsStatus &other);
+    PackageDependsStatus minEq(const PackageDependsStatus &other);
 
-        bool isBreak() const;
-        bool isAvailable() const;
+    bool isBreak() const;
+    bool isAvailable() const;
+    bool isForbid() const;
 
-    public:
-        int status;
-        QString package;
-    };
+public:
+    int status;
+    QString package;
+};
 }
 
 using namespace  PackagesManagerDependsStatus;
 
 class DebListModel;
-class PackagesManager : public QObject {
+class PackagesManager : public QObject
+{
     Q_OBJECT
 
     friend class DebListModel;
@@ -93,8 +96,8 @@ public:
     void removeLastPackage();
     bool appendPackage(QApt::DebFile *debPackage);
     bool QverifyResult;
-    QApt::DebFile * package(const int index) const { return m_preparedPackages[index]; }
-    QApt::Backend * backend() const { return m_backendFuture.result(); }
+    QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
+    QApt::Backend *backend() const { return m_backendFuture.result(); }
 
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
@@ -106,12 +109,21 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
+    bool checkAppPermissions(QApt::DebFile *deb);
+    QStringList getAppList(QString listPath);
+    QStringList getPermissionList(QStringList whiteList, QStringList blackList);
+    bool detectAppPermission(QString tempPath);
+    bool deleteDirectory(const QString &path);
+
 private:
     QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
     QMap<int, int> m_packageInstallStatus;
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;
+
+    QMap<QString, int >m_packagePermissionStatus;
+
 };
 
 #endif  // PACKAGESMANAGER_H

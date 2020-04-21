@@ -52,68 +52,35 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
                                                 QPainter *painter,
                                                 const QModelIndex &index) const
 {
-    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
-    if (QDBusResult == false) {
-        if ((DebListModel::Operating == operate_stat ||
-                DebListModel::Success == operate_stat) &&
-                (DebListModel::DependsBreak == dependsStat || DebListModel::DependsVerifyFailed == dependsStat)) {
-            DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
-            painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-            painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-        } else {
-            switch (operate_stat) {
-            case DebListModel::Operating:
-                painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            case DebListModel::Success:
-                painter->setPen(QPen(pa.color(DPalette::LightLively)));
-                painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            case DebListModel::Waiting:
-                painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            default:
-                painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-                painter->drawText(install_status_rect, "", Qt::AlignVCenter | Qt::AlignRight);
-                painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-                painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            }
-        }
+    if ((DebListModel::Operating == operate_stat ||
+            DebListModel::Success == operate_stat) &&
+            (DebListModel::DependsBreak == dependsStat)) {
+        DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
+        painter->setPen(QPen(pa.color(DPalette::TextWarning)));
+        painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
     } else {
-        if ((DebListModel::Operating == operate_stat ||
-                DebListModel::Success == operate_stat) &&
-                (DebListModel::DependsBreak == dependsStat)) {
-            DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
+        switch (operate_stat) {
+        case DebListModel::Operating:
+            painter->setPen(QPen(pa.color(DPalette::TextLively)));
+            painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        case DebListModel::Success:
+            painter->setPen(QPen(pa.color(DPalette::LightLively)));
+            painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        case DebListModel::Waiting:
+            painter->setPen(QPen(pa.color(DPalette::TextLively)));
+            painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
+            break;
+        default:
+            painter->setPen(QPen(pa.color(DPalette::TextWarning)));
+            painter->drawText(install_status_rect, "", Qt::AlignVCenter | Qt::AlignRight);
             painter->setPen(QPen(pa.color(DPalette::TextWarning)));
             painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-        } else {
-            switch (operate_stat) {
-            case DebListModel::Operating:
-                painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            case DebListModel::Success:
-                painter->setPen(QPen(pa.color(DPalette::LightLively)));
-                painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            case DebListModel::Waiting:
-                painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            default:
-                painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-                painter->drawText(install_status_rect, "", Qt::AlignVCenter | Qt::AlignRight);
-                painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-                painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-                break;
-            }
+            break;
         }
     }
 }
@@ -204,7 +171,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // install status
         const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-//        qDebug() << "index:::::" << index.row() << operate_stat;
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
@@ -231,6 +197,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
+        } else if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::PermissionDenied && install_stat == DebListModel::NotInstalled)) {
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            penColor = pa.color(DPalette::TextWarning);
         } else if (install_stat != DebListModel::NotInstalled) {
             if (install_stat == DebListModel::InstalledSameVersion) {
                 info_str = tr("Same version installed");
@@ -244,20 +213,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
         }
-//        if (operate_stat == DebListModel::Failed) {
-//            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-//            penColor = pa.color(DPalette::TextWarning);
-//        } else if (install_stat != DebListModel::NotInstalled) {
-//            if (install_stat == DebListModel::InstalledSameVersion) {
-//                info_str = tr("Same version installed");
-//            } else {
-//                info_str =
-//                    tr("Other version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-//            }
-//        } else {
-//            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
-//        }
-
         painter->setPen(QPen(penColor));
 
         QFont info_font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
@@ -275,6 +230,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(option);
+    Q_UNUSED(index);
 
     QSize itemSize = QSize(0, m_itemHeight);
     return itemSize;
