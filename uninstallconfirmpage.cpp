@@ -25,7 +25,8 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size) {
+const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size)
+{
 
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (!bContainsChinese) {
@@ -44,6 +45,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_cancelBtn(new DPushButton)
     , m_confirmBtn(new DPushButton)
 {
+    this->setAcceptDrops(false);
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
     m_icon->setFixedSize(64, 64);
@@ -117,7 +119,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 void UninstallConfirmPage::setPackage(const QString &name)
 {
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
-    if(!m_requiredList.isEmpty()) {
+    if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
     }
     const QSize boundingSize = QSize(m_tips->width(), 340);
@@ -130,8 +132,7 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     m_requiredList = requiredList;
     if (!requiredList.isEmpty()) {
         m_infoControl->setVisible(true);
-    }
-    else {
+    } else {
         m_infoControl->setVisible(false);
     }
 

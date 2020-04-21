@@ -432,6 +432,7 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 
 void DebListModel::installNextDeb()
 {
+    m_packageOperateStatus[m_operatingIndex] = Prepare;
     QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
     QDBusResult = Installer.property("DeviceUnlocked").toBool();
     qDebug() << "QDBusResult" << QDBusResult;
@@ -460,6 +461,7 @@ void DebListModel::installNextDeb()
         const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
         if (dependsStat.isBreak()) {
             refreshOperatingPackageStatus(Failed);
+            m_packageFailReason[m_operatingIndex] = Failed;
             bumpInstallIndex();
             return;
         } else if (dependsStat.isAvailable()) {
@@ -524,7 +526,6 @@ void DebListModel::installNextDeb()
             const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
             if (dependsStat.isBreak()) {
                 refreshOperatingPackageStatus(Failed);
-
                 m_packageFailReason[m_operatingIndex] = Failed;
                 bumpInstallIndex();
                 return;

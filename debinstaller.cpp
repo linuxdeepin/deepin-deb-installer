@@ -110,23 +110,17 @@ void DebInstaller::initUI()
 void DebInstaller::handleFocusPolicy()
 {
     QLayout *layout = titlebar()->layout();
-    for (int i = 0; i < layout->count(); ++i)
-    {
+    for (int i = 0; i < layout->count(); ++i) {
         QWidget *widget = layout->itemAt(i)->widget();
-        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
-        {
+        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
             QLayout *widgetLayout = widget->layout();
-            for (int j = 0; j < widgetLayout->count(); ++j)
-            {
+            for (int j = 0; j < widgetLayout->count(); ++j) {
                 QWidget *widget = widgetLayout->itemAt(j)->widget();
-                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget"))
-                {
+                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
                     QLayout *wLayout = widget->layout();
-                    for (int k = 0; k < wLayout->count(); ++k)
-                    {
+                    for (int k = 0; k < wLayout->count(); ++k) {
                         QWidget *widget = wLayout->itemAt(k)->widget();
-                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button"))
-                        {
+                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
                             widget->setFocusPolicy(Qt::NoFocus);
                         }
                     }
@@ -183,21 +177,17 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
 
     QStringList debFileList;
-    for(int i=0; i<arguments.size(); i++)
-    {
+    for (int i = 0; i < arguments.size(); i++) {
         QString strArg = arguments.at(i);
-        if (!strArg.contains("deb-installer"))
-        {
+        if (!strArg.contains("deb-installer")) {
             const QFileInfo info(strArg);
-            if (info.isFile() && info.suffix() == "deb")
-            {
+            if (info.isFile() && info.suffix() == "deb") {
                 debFileList << strArg;
             }
         }
     }
 
-    if (debFileList.size() > 0)
-    {
+    if (debFileList.size() > 0) {
         qDebug() << debFileList << endl;
         onPackagesSelected(debFileList);
     }
@@ -273,11 +263,15 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
-    qDebug()<<"m_fileListModel->m_workerStatus_temp+++++++"<<m_fileListModel->m_workerStatus_temp;
-    if((!m_lastPage.isNull() && m_fileListModel->DebInstallFinishedFlag) || m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing){
+    qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
+
+    if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
+        qDebug() << "return";
         return;
-    }
-    else {
+    } else {
+        qDebug() << "append Package";
         for (const auto &package : packages) {
             DebFile *p = new DebFile(package);
             if (!p->isValid()) {
@@ -307,6 +301,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
+    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerUnInstall;
+
+    this->setAcceptDrops(false);
 
     const QModelIndex index = m_fileListModel->first();
 
@@ -316,6 +313,7 @@ void DebInstaller::showUninstallConfirmPage()
 
     m_centralLayout->addWidget(p);
     m_centralLayout->setCurrentIndex(2);
+    p->setAcceptDrops(false);
 
     connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCalceled);
@@ -323,13 +321,15 @@ void DebInstaller::showUninstallConfirmPage()
 
 void DebInstaller::onUninstallAccepted()
 {
-    SingleInstallPage *p = backToSinglePage();
 
+    SingleInstallPage *p = backToSinglePage();
     p->uninstallCurrentPackage();
 }
 
 void DebInstaller::onUninstallCalceled()
 {
+    this->setAcceptDrops(true);
+    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerPrepare;
     backToSinglePage();
 }
 
@@ -392,7 +392,7 @@ void DebInstaller::refreshInstallPage()
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
-    }  
+    }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 }
@@ -405,6 +405,7 @@ SingleInstallPage *DebInstaller::backToSinglePage()
     confirmPage->deleteLater();
 
     SingleInstallPage *p = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));
+    p->setAcceptDrops(true);
     Q_ASSERT(p);
 
     return p;

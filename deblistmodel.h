@@ -62,6 +62,7 @@ public:
         WorkerPrepare,
         WorkerProcessing,
         WorkerFinished,
+        WorkerUnInstall
     };
 
     enum PackageInstallStatus {
