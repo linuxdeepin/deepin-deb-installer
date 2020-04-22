@@ -188,7 +188,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package version
         QRect version_rect = name_rect;
-        const int version_x = static_cast<int>(name_bounding_rect.right()) + 10;
+        const int version_x = static_cast<int>(name_bounding_rect.right());
         const int version_y = version_rect.top();
         version_rect.setLeft(version_x);
         version_rect.setTop(version_y - 1);

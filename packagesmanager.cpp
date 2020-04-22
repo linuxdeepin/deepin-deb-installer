@@ -350,9 +350,11 @@ const QString PackagesManager::packageInstalledVersion(const int index)
     Q_ASSERT(m_packageInstallStatus.contains(index));
 //    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
 //             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
-
+    const QString packageName = m_preparedPackages[index]->packageName();
+    const QString packageArch = m_preparedPackages[index]->architecture();
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(m_preparedPackages[index]->packageName());
+    Package *p = b->package(packageName + ":" + packageArch);
+//    Package *p = b->package(m_preparedPackages[index]->packageName());
 
     return p->installedVersion();
 }
@@ -695,12 +697,8 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
 
     do {
-        QStringList archs = {"", ":all", "any",  ":i386", "amd64"};
-        for (QString arch : archs) {
-            if (!p) p = b->package(packageName + arch);
+            if (!p) p = b->package(packageName);
             if (p) break;
-        }
-        if (p) break;
 
         //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
         //if (!arch.isEmpty())

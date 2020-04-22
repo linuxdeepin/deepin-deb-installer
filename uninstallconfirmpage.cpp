@@ -52,7 +52,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setPixmap(icon.pixmap(64, 64));
 
     m_tips->setFixedHeight(120);
-    m_tips->setFixedWidth(460);
+    m_tips->setFixedWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);
 
     m_cancelBtn->setText(tr("Cancel"));
