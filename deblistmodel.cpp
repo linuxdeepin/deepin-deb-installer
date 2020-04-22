@@ -150,6 +150,7 @@ void DebListModel::installAll()
     m_workerStatus = WorkerProcessing;
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;
+    m_operatingStatusIndex = 0;
     m_InitRowStatus = false;
     //    emit workerStarted();
     // start first
@@ -265,6 +266,7 @@ void DebListModel::reset()
     m_workerStatus = WorkerPrepare;
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;
+    m_operatingStatusIndex = 0;
 
     m_packageOperateStatus.clear();
     m_packageFailReason.clear();
@@ -304,6 +306,7 @@ void DebListModel::bumpInstallIndex()
 
         return;
     }
+    ++ m_operatingStatusIndex;
 //    usleep(1000 * 1000);
     qDebug() << "m_packageDependsStatus,size" << m_packagesManager->m_packageDependsStatus.size();
     for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
@@ -324,9 +327,9 @@ void DebListModel::bumpInstallIndex()
 
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
 {
-    m_packageOperateStatus[m_operatingIndex] = stat;  //将失败包的索引和状态修改保存,用于更新
+    m_packageOperateStatus[m_operatingStatusIndex] = stat;  //将失败包的索引和状态修改保存,用于更新
 
-    const QModelIndex idx = index(m_operatingIndex);
+    const QModelIndex idx = index(m_operatingStatusIndex);
 
     emit dataChanged(idx, idx);
 }
@@ -387,12 +390,15 @@ void DebListModel::onTransactionFinished()
     qDebug() << "tans.exitStatus()" << trans->exitStatus();
     if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
-        m_packageFailReason[m_operatingIndex] = trans->error();
+        m_packageFailReason[m_operatingStatusIndex] = trans->error();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
-    } else if (m_packageOperateStatus.contains(m_operatingIndex) &&
-               m_packageOperateStatus[m_operatingIndex] != Failed) {
+    } else if (m_packageOperateStatus.contains(m_operatingStatusIndex) &&
+               m_packageOperateStatus[m_operatingStatusIndex] != Failed) {
         refreshOperatingPackageStatus(Success);
+        if (m_operatingStatusIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+            m_packageOperateStatus[m_operatingStatusIndex + 1] = Waiting;
+        }
     }
     //    delete trans;
     trans->deleteLater();
@@ -414,7 +420,7 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 
     if (ret) {
         // record error
-        m_packageFailReason[m_operatingIndex] = trans->error();
+        m_packageFailReason[m_operatingStatusIndex] = trans->error();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
@@ -432,7 +438,6 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 
 void DebListModel::installNextDeb()
 {
-    m_packageOperateStatus[m_operatingIndex] = Prepare;
     QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
     QDBusResult = Installer.property("DeviceUnlocked").toBool();
     qDebug() << "QDBusResult" << QDBusResult;
@@ -455,17 +460,17 @@ void DebListModel::installNextDeb()
         Transaction *trans = nullptr;
 
         // reset package depends status
-        m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
+        m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
 
         // check available dependencies
-        const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+        const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
         if (dependsStat.isBreak()) {
             refreshOperatingPackageStatus(Failed);
-            m_packageFailReason[m_operatingIndex] = Failed;
+            m_packageFailReason.insert(m_operatingStatusIndex,-1);
             bumpInstallIndex();
             return;
         } else if (dependsStat.isAvailable()) {
-            Q_ASSERT_X(m_packageOperateStatus[m_operatingIndex] == Prepare, Q_FUNC_INFO,
+            Q_ASSERT_X(m_packageOperateStatus[m_operatingStatusIndex], Q_FUNC_INFO,
                        "package operate status error when start install availble dependencies");
 
             const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
@@ -520,17 +525,17 @@ void DebListModel::installNextDeb()
             Transaction *trans = nullptr;
 
             // reset package depends status
-            m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
+            m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
 
             // check available dependencies
-            const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+            const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
             if (dependsStat.isBreak()) {
                 refreshOperatingPackageStatus(Failed);
-                m_packageFailReason[m_operatingIndex] = Failed;
+                m_packageFailReason[m_operatingStatusIndex] = Failed;
                 bumpInstallIndex();
                 return;
             } else if (dependsStat.isAvailable()) {
-                Q_ASSERT_X(m_packageOperateStatus[m_operatingIndex] == Prepare, Q_FUNC_INFO,
+                Q_ASSERT_X(m_packageOperateStatus[m_operatingStatusIndex] == Prepare, Q_FUNC_INFO,
                            "package operate status error when start install availble dependencies");
 
                 const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
@@ -641,10 +646,10 @@ void DebListModel::setCurrentIndex(const QModelIndex &idx)
 void DebListModel::initRowStatus()
 {
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_operatingIndex = i;
+        m_operatingStatusIndex = i;
         refreshOperatingPackageStatus(Waiting);
     }
-    m_operatingIndex = 0;
+    m_operatingStatusIndex = 0;
 
 //    Transaction *trans = static_cast<Transaction *>(sender());
 //    Q_ASSERT(trans == m_currentTransaction.data());

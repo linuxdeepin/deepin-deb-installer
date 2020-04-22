@@ -422,6 +422,7 @@ void DebInstaller::changeDragFlag()
 void DebInstaller::showHiddenButton()
 {
     enableCloseAndExit();
+    m_fileListModel->reset_filestatus();
 
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);

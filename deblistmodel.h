@@ -144,6 +144,7 @@ private:
 private:
     int m_workerStatus;
     int m_operatingIndex;
+    int m_operatingStatusIndex;
     QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
 
