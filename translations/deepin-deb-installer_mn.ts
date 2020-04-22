@@ -13,12 +13,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="293"/>
+        <location filename="../debinstaller.cpp" line="124"/>
+        <source>Unable to install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="125"/>
+        <source>This package does not have a valid digital signature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="127"/>
+        <source>OK</source>
+        <translation type="unfinished">ОК</translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="316"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="377"/>
+        <location filename="../debinstaller.cpp" line="401"/>
         <source>Bulk Install</source>
         <translation>Багц суулгац</translation>
     </message>
@@ -40,9 +55,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="63"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Суулгалт амжилтгүй боллоо, дискийн зай хангалтгүй</translation>
+        <translation type="vanished">Суулгалт амжилтгүй боллоо, дискийн зай хангалтгүй</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="63"/>
+        <source>Installation failed, bumpInstallIndexinsufficient disk space</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="65"/>
@@ -50,28 +69,26 @@
         <translation>Суулгалт амжилтгүй боллоо</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="161"/>
-        <source>Unable to install</source>
+        <location filename="../deblistmodel.cpp" line="317"/>
+        <location filename="../deblistmodel.cpp" line="322"/>
+        <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="162"/>
-        <source>You can install deb packages in developer mode</source>
+        <location filename="../deblistmodel.cpp" line="327"/>
+        <source>The package is not authorized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="165"/>
         <source>OK</source>
-        <translation type="unfinished">ОК</translation>
+        <translation type="obsolete">ОК</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="318"/>
-        <location filename="../deblistmodel.cpp" line="323"/>
         <source>Broken Dependencies: %1</source>
-        <translation>Эвдрэлтэй хамааралууд: %1</translation>
+        <translation type="vanished">Эвдрэлтэй хамааралууд: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="320"/>
+        <location filename="../deblistmodel.cpp" line="319"/>
         <source>Unmatched package architecture</source>
         <translation>Багцын архитектур тохирсонгүй</translation>
     </message>
@@ -138,7 +155,7 @@
         <translation>Суулгагдсан</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="62"/>
+        <location filename="../packageslistdelegate.cpp" line="63"/>
         <location filename="../packageslistdelegate.cpp" line="82"/>
         <source>Failed</source>
         <translation>Амжилтгүй</translation>
@@ -149,20 +166,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="201"/>
+        <location filename="../packageslistdelegate.cpp" line="205"/>
         <source>Same version installed</source>
         <translation>Адил хувилбар суулгагдсан</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="204"/>
+        <location filename="../packageslistdelegate.cpp" line="208"/>
+        <source>Later version installed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="211"/>
+        <source>Earlier version installed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Other version installed: %1</source>
-        <translation>Суулгагдсан бусад хувилбарууд %1</translation>
+        <translation type="vanished">Суулгагдсан бусад хувилбарууд %1</translation>
     </message>
 </context>
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../packagelistview.cpp" line="139"/>
+        <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,7 +217,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="479"/>
+        <location filename="../singleinstallpage.cpp" line="530"/>
         <source>Collapse</source>
         <translation>Дэлгэх</translation>
     </message>
@@ -200,67 +226,67 @@
         <translation type="vanished">Дэлгэрэнгүй мэдээлэл харуулах</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="254"/>
+        <location filename="../singleinstallpage.cpp" line="265"/>
         <source>Install</source>
         <translation>Суулгах</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="256"/>
+        <location filename="../singleinstallpage.cpp" line="267"/>
         <source>Remove</source>
         <translation>Устгах</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="258"/>
+        <location filename="../singleinstallpage.cpp" line="269"/>
         <source>Reinstall</source>
         <translation>Дахин суулгах</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="260"/>
+        <location filename="../singleinstallpage.cpp" line="271"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="262"/>
+        <location filename="../singleinstallpage.cpp" line="273"/>
         <source>Back</source>
         <translation>Буцах</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="264"/>
+        <location filename="../singleinstallpage.cpp" line="275"/>
         <source>Done</source>
         <translation>Дууссан</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="134"/>
+        <location filename="../singleinstallpage.cpp" line="146"/>
         <source>Version: </source>
         <translation>Хувилбар:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="455"/>
+        <location filename="../singleinstallpage.cpp" line="505"/>
         <source>Installed successfully</source>
         <translation>Амжилттай суулгагдлаа</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="460"/>
+        <location filename="../singleinstallpage.cpp" line="510"/>
         <source>Uninstalled successfully</source>
         <translation>Амжилттай устгагдлаа</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="542"/>
+        <location filename="../singleinstallpage.cpp" line="614"/>
         <source>Other version installed: %1</source>
         <translation>Суулгагдсан бусад хувилбарууд: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="472"/>
+        <location filename="../singleinstallpage.cpp" line="521"/>
         <source>Uninstall Failed</source>
         <translation>Устгах ажиллагаа амжилтгүй болсон</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="127"/>
+        <location filename="../singleinstallpage.cpp" line="139"/>
         <source>Name: </source>
         <translation>Нэр:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="538"/>
+        <location filename="../singleinstallpage.cpp" line="611"/>
         <source>Same version installed</source>
         <translation>Адил хувилбар суулгагдсан</translation>
     </message>
@@ -269,8 +295,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="377"/>
-        <location filename="../singleinstallpage.cpp" line="454"/>
+        <location filename="../singleinstallpage.cpp" line="429"/>
+        <location filename="../singleinstallpage.cpp" line="504"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,8 +304,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="386"/>
-        <location filename="../singleinstallpage.cpp" line="459"/>
+        <location filename="../singleinstallpage.cpp" line="438"/>
+        <location filename="../singleinstallpage.cpp" line="509"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -319,8 +345,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="120"/>
         <source>Are you sure you want to uninstall %1?
-The system or other applications may not work properly 
-if uninstalling this application, continue to uninstall it?</source>
+The system or other applications may not work properly</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

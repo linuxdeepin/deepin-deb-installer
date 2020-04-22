@@ -584,14 +584,28 @@ void SingleInstallPage::setPackageInfo()
 
     const bool installed = installStat != DebListModel::NotInstalled;
     const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
+
+    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     m_installButton->setVisible(!installed);
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
 
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+
+        m_installButton->setVisible(false);
+        m_reinstallButton->setVisible(false);
+        m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
+        return;
+    }
+
     DPalette palette;
     if (installed) {
+
         if (installedSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
@@ -603,17 +617,6 @@ void SingleInstallPage::setPackageInfo()
         return;
     }
 
-    // package depends status
-    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-
-        m_installButton->setVisible(false);
-        m_reinstallButton->setVisible(false);
-        m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
-    }
 }
 
 void SingleInstallPage::afterGetAutherFalse()

@@ -280,7 +280,6 @@ void DebListModel::bumpInstallIndex()
 {
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
-
     // install finished
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
@@ -293,9 +292,6 @@ void DebListModel::bumpInstallIndex()
         return;
     }
     ++ m_oprtatingStatusIndex;
-    qDebug() << "m_packagesManager->m_preparedPackages.size()" << m_packagesManager->m_preparedPackages.size();
-    qDebug() << "m_operatingIndex" << m_operatingIndex;
-    qDebug() << "m_operatingIndex" << m_oprtatingStatusIndex;
     emit onChangeOperateIndex(m_operatingIndex);
     // install next
     installNextDeb();
@@ -358,6 +354,10 @@ void DebListModel::onTransactionFinished()
     } else if (m_packageOperateStatus.contains(m_oprtatingStatusIndex) &&
                m_packageOperateStatus[m_oprtatingStatusIndex] != Failed) {
         refreshOperatingPackageStatus(Success);
+        if (m_oprtatingStatusIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+            m_packageOperateStatus[m_oprtatingStatusIndex + 1] = Waiting;
+        }
+
     }
     //    delete trans;
     trans->deleteLater();
@@ -383,7 +383,6 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
-
     //    delete trans;
     trans->deleteLater();
     m_currentTransaction = nullptr;

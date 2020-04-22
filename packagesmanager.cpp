@@ -347,7 +347,7 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
     if (m_pLoadThread) {
         m_pLoadThread->start();
 
-        usleep(500 * 1000);
+        usleep(800 * 1000);
 
         m_pLoadThread->terminate();
         m_pLoadThread->wait();
@@ -479,10 +479,13 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 //    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
 //             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
 
+    const QString packageName = m_preparedPackages[index]->packageName();
+    const QString packageArch = m_preparedPackages[index]->architecture();
     Backend *b = m_backendFuture.result();
-    Package *p = b->package(m_preparedPackages[index]->packageName());
+    Package *p = b->package(packageName + ":" + packageArch);
 
-    return p->installedVersion();
+    if (p) return p->installedVersion();
+    return QString();
 }
 
 const QStringList PackagesManager::packageAvailableDepends(const int index)
@@ -741,6 +744,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 if (tp && tp->isInstalled()) {
                     qDebug() << "multi arch installed: " << p->name() << p->version() << p->architecture() << "with"
                              << tp->name() << tp->version() << tp->architecture();
+
                     return PackageDependsStatus::_break(p->name() + ":" + p->architecture());
                 }
             }

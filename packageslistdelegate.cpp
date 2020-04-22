@@ -210,6 +210,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                 info_str =
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
+            if (dependsStat == DebListModel::PermissionDenied) {
+                penColor = pa.color(DPalette::TextWarning);
+                info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            }
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
         }
