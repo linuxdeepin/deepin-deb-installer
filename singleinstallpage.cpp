@@ -375,6 +375,9 @@ void SingleInstallPage::initConnections()
     });
 
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
+    connect(m_packagesModel, &DebListModel::onStartInstall,this,[=]{
+        m_progressFrame->setVisible(true);
+    });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 }
 
@@ -435,6 +438,7 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    m_progressFrame->setVisible(true);
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -461,7 +465,7 @@ void SingleInstallPage::hideInfomation()
 void SingleInstallPage::showInfo()
 {
     m_infoControlButton->setVisible(true);
-    m_progressFrame->setVisible(true);
+//    m_progressFrame->setVisible(true);
     m_progress->setValue(0);
     m_tipsLabel->clear();
 
@@ -650,6 +654,7 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    m_progressFrame->setVisible(false);
     if (m_operate == Install) {
         m_installButton->setVisible(true);
     } else if (m_operate == Uninstall) {

@@ -170,7 +170,9 @@ void MultipleInstallPage::initConnections()
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
-
+    connect(m_debListModel, &DebListModel::onStartInstall,this,[=]{
+        m_processFrame->setVisible(true);
+    });
     connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
 }
 
@@ -189,7 +191,7 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
     if (!m_installButton->isVisible()) {
         //m_installButton->setVisible(false);
 
-        m_processFrame->setVisible(true);
+//        m_processFrame->setVisible(true);
         m_infoControlButton->setVisible(true);
     }
 }
@@ -255,6 +257,7 @@ void MultipleInstallPage::hiddenCancelButton()
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
+    m_processFrame->setVisible(false);
 //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
 }
