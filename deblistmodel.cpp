@@ -201,11 +201,16 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);
 }
 
-bool DebListModel::appendPackage(DebFile *package)
+bool DebListModel::getPackageIsNull()
+{
+    return m_packagesManager->getPackageIsNull();
+}
+
+bool DebListModel::appendPackage(DebFile *package, bool isEmpty)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    return m_packagesManager->appendPackage(package);
+    return m_packagesManager->appendPackage(package, isEmpty);
 }
 
 void DebListModel::onTransactionErrorOccurred()
@@ -465,7 +470,7 @@ void DebListModel::installNextDeb()
         const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
         if (dependsStat.isBreak()) {
             refreshOperatingPackageStatus(Failed);
-            m_packageFailReason.insert(m_operatingStatusIndex,-1);
+            m_packageFailReason.insert(m_operatingStatusIndex, -1);
             bumpInstallIndex();
             return;
         } else if (dependsStat.isAvailable()) {

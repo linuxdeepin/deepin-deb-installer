@@ -286,12 +286,16 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
 
-            if (!m_fileListModel->appendPackage(p)) {
-                qWarning() << "package is Exist! ";
+            if (!m_fileListModel->getPackageIsNull()) {
+                if (!m_fileListModel->appendPackage(p, false)) {
+                    qWarning() << "package is Exist! ";
 
-                DFloatingMessage *msg = new DFloatingMessage;
-                msg->setMessage(tr("Already Added"));
-                DMessageManager::instance()->sendMessage(this, msg);
+                    DFloatingMessage *msg = new DFloatingMessage;
+                    msg->setMessage(tr("Already Added"));
+                    DMessageManager::instance()->sendMessage(this, msg);
+                }
+            } else {
+                m_fileListModel->appendPackage(p, true);
             }
         }
         refreshInstallPage();

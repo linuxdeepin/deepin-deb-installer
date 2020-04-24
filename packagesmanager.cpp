@@ -509,13 +509,30 @@ void PackagesManager::removeLastPackage()
     m_packageDependsStatus.clear();
 }
 
-bool PackagesManager::appendPackage(DebFile *debPackage)
+bool PackagesManager::getPackageIsNull()
 {
-    const auto md5 = debPackage->md5Sum();
-    if (m_appendedPackagesMd5.contains(md5)) return false;
+    if (m_preparedPackages.size() == 1 && m_appendedPackagesMd5.size() == 0) {
+        const auto md5 = m_preparedPackages[0]->md5Sum();
+        m_appendedPackagesMd5 << md5;
+        return  false;
+    } else if (m_preparedPackages.size() == 0 && m_appendedPackagesMd5.size() == 0)
+        return true;
+    else {
+        return  false;
+    }
+}
 
-    m_preparedPackages << debPackage;
-    m_appendedPackagesMd5 << md5;
+bool PackagesManager::appendPackage(DebFile *debPackage, bool isEmpty)
+{
+    if (!isEmpty) {
+        const auto md5 = debPackage->md5Sum();
+        if (m_appendedPackagesMd5.contains(md5)) return false;
+
+        m_preparedPackages << debPackage;
+        m_appendedPackagesMd5 << md5;
+    } else {
+        m_preparedPackages << debPackage;
+    }
 
     return true;
 }
@@ -697,8 +714,8 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
 
     do {
-            if (!p) p = b->package(packageName);
-            if (p) break;
+        if (!p) p = b->package(packageName);
+        if (p) break;
 
         //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
         //if (!arch.isEmpty())
