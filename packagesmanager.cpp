@@ -67,7 +67,7 @@ QString resolvMultiArchAnnotation(const QString &annotation, const QString &debA
                                   const int multiArchType = InvalidMultiArchType)
 {
     if (annotation == "native" || annotation == "any") return QString();
-
+    if (annotation == "all") return QString();
     if (multiArchType == MultiArchForeign) return QString();
 
     QString arch;
@@ -714,6 +714,10 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
 
     do {
+        if (packageName == "deepin-wine32") {
+            if (!p) p = b->package(packageName + ":i386");
+            if (p) break;
+        }
         if (!p) p = b->package(packageName);
         if (p) break;
 
