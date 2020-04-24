@@ -337,10 +337,9 @@ void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOper
 QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
+    if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
     if (stat.isBreak()) {
         if (!stat.package.isEmpty()) return tr("Broken dependencies: %1").arg(stat.package);
-
-        if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
 
         const auto conflict = m_packagesManager->packageConflictStat(idx);
         if (!conflict.is_ok()) return tr("Broken dependencies: %1").arg(conflict.unwrap());
