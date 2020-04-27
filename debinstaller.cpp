@@ -122,7 +122,7 @@ void DebInstaller::popErrorWindow()
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
     Ddialog->setTitle(tr("Unable to install"));
-    Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
+    Ddialog->setMessage(QString(tr("No whitelist file was detected in the system, please check again.")));
     Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
     Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
     Ddialog->show();

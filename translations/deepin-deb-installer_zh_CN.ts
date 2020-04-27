@@ -14,6 +14,11 @@
         <translation type="unfinished">无法安装</translation>
     </message>
     <message>
+        <location filename="../debinstaller.cpp" line="125"/>
+        <source>No whitelist file was detected in the system, please check again.</source>
+        <translation type="unfinished">系统中未检测到白名单文件，请重新检查。</translation>
+    </message>
+    <message>
         <location filename="../debinstaller.cpp" line="127"/>
         <source>OK</source>
         <translation type="unfinished">确 认</translation>
