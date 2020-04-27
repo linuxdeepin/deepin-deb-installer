@@ -600,6 +600,7 @@ void SingleInstallPage::setPackageInfo()
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
+        m_uninstallButton->setVisible(false);
         return;
     }
 
