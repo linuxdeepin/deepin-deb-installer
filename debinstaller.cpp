@@ -327,6 +327,7 @@ void DebInstaller::onUninstallAccepted()
 {
 
     SingleInstallPage *p = backToSinglePage();
+    m_fileChooseWidget->setAcceptDrops(true);
     p->uninstallCurrentPackage();
 }
 
@@ -410,6 +411,8 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 
     SingleInstallPage *p = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));
     p->setAcceptDrops(true);
+    m_fileChooseWidget->setAcceptDrops(true);
+    this->setAcceptDrops(true);
     Q_ASSERT(p);
 
     return p;
