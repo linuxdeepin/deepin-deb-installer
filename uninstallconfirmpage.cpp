@@ -25,7 +25,8 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size) {
+const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size)
+{
 
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (!bContainsChinese) {
@@ -49,8 +50,9 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
-    m_tips->setFixedHeight(100);
+    m_tips->setFixedHeight(120);
     m_tips->setAlignment(Qt::AlignCenter);
+    m_tips->setFixedWidth(440);
 
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
@@ -116,9 +118,10 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 void UninstallConfirmPage::setPackage(const QString &name)
 {
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
-    if(!m_requiredList.isEmpty()) {
+    if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
     }
+//    qDebug() << m_tips->width();
     const QSize boundingSize = QSize(m_tips->width(), 340);
     m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));//2020.0210修改中英文状态下描述输出自动换行
 //    m_tips->setText(uninstallTextInRect(m_tips->font(),tips.arg(name),boundingSize));
@@ -129,8 +132,7 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     m_requiredList = requiredList;
     if (!requiredList.isEmpty()) {
         m_infoControl->setVisible(true);
-    }
-    else {
+    } else {
         m_infoControl->setVisible(false);
     }
 

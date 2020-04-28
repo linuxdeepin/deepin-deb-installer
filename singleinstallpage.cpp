@@ -375,6 +375,9 @@ void SingleInstallPage::initConnections()
     });
 
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
+    connect(m_packagesModel, &DebListModel::onStartInstall, this, [ = ] {
+        m_progressFrame->setVisible(true);
+    });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 }
 
@@ -435,6 +438,7 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    m_progressFrame->setVisible(true);
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -606,13 +610,26 @@ void SingleInstallPage::setPackageInfo()
 
     DPalette palette;
     if (installed) {
+//        if (installedSameVersion) {
+//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+//            m_tipsLabel->setText(tr("Same version installed"));
+//        }
+//        else {
+//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+//            m_tipsLabel->setText(tr("Other version installed: %1")
+//                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+//        }
 
-        if (installedSameVersion) {
+        if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
+        } else if (installStat == DebListModel::InstalledLaterVersion) {
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+            m_tipsLabel->setText(tr("Later version installed: %1")
+                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         } else {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Other version installed: %1")
+            m_tipsLabel->setText(tr("Earlier version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
         }
         return;
@@ -622,6 +639,7 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    m_progressFrame->setVisible(false);
     if (m_operate == Install) {
         m_installButton->setVisible(true);
     } else if (m_operate == Uninstall) {

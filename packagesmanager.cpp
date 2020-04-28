@@ -312,20 +312,15 @@ QStringList PackagesManager::getAppList(QString listPath)
 QStringList PackagesManager::getPermissionList(QStringList whiteList, QStringList blackList)
 {
 
-//    qDebug() << "whiteList" << whiteList;
-//    qDebug() << "blackList" << blackList;
-    QStringList authorizedAppList;
-
-    for (QString whiteApp : whiteList) {
-        for (QString blackApp : blackList) {
-//            qDebug() << "blackApp:" << blackApp << "whiteApp" << whiteApp;
-            if (!whiteApp.contains(blackApp)) {
-//                qDebug() << "whiteApp" << whiteApp;
-                authorizedAppList << whiteApp;
-            }
+    qDebug() << "whiteList" << whiteList;
+    qDebug() << "blackList" << blackList;
+    for (QString blackApp : blackList) {
+        if (whiteList.contains(blackApp)) {
+            whiteList.removeOne(blackApp);
         }
     }
-    return authorizedAppList;
+    qDebug() << "whiteList" << whiteList;
+    return whiteList;
 }
 
 bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
@@ -347,7 +342,7 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
     if (m_pLoadThread) {
         m_pLoadThread->start();
 
-        usleep(800 * 1000);
+        usleep(500 * 1000);
 
         m_pLoadThread->terminate();
         m_pLoadThread->wait();
@@ -415,6 +410,7 @@ bool PackagesManager::detectAppPermission(QString tempPath)
 
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
+//    qDebug() << index;
     if (m_packageDependsStatus.contains(index)) return m_packageDependsStatus[index];
 
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
@@ -615,7 +611,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 
 void PackagesManager::removePackage(const int index)
 {
-    qDebug() << index << ", size:" << m_preparedPackages.size();
+    qDebug() << index << ", size:" << m_preparedPackages.size() << "status:" << m_packageDependsStatus[index].status;
     DebFile *deb = m_preparedPackages[index];
     const auto md5 = deb->md5Sum();
 
