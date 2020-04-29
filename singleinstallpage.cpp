@@ -574,12 +574,17 @@ void SingleInstallPage::setPackageInfo()
 
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
+    packageVersion_description = Utils::fromSpecialEncoding(package->version());
     if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+        const QSize packageVersion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 23);
+        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageVersion_description, packageVersion_boundingSize));
     } else {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+        const QSize packageVersion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 20);
+        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageVersion_description, packageVersion_boundingSize));
     }
 
     // package install status
@@ -587,7 +592,6 @@ void SingleInstallPage::setPackageInfo()
     const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 
     const bool installed = installStat != DebListModel::NotInstalled;
-    const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
 
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     m_installButton->setVisible(!installed);
@@ -610,15 +614,6 @@ void SingleInstallPage::setPackageInfo()
 
     DPalette palette;
     if (installed) {
-//        if (installedSameVersion) {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Same version installed"));
-//        }
-//        else {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Other version installed: %1")
-//                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-//        }
 
         if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
