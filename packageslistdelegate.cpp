@@ -190,12 +190,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QRect version_rect = name_rect;
         const int version_x = static_cast<int>(name_bounding_rect.right());
         const int version_y = version_rect.top();
-        version_rect.setLeft(version_x);
+        version_rect.setLeft(195);
         version_rect.setTop(version_y - 1);
         version_rect.setRight(option.rect.right() - 85);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
-        const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, bg_rect.width() - m_packageIcon.width() - 240);
+        const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, 195);
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText));
         QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
         version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));

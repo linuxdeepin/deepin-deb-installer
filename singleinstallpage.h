@@ -114,6 +114,7 @@ private:
     QVBoxLayout *m_centralLayout;
     QString m_description;
     QString packagename_description;
+    QString packageversion_description;
 
 };
 

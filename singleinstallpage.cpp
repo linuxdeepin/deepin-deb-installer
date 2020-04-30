@@ -592,12 +592,17 @@ void SingleInstallPage::setPackageInfo()
 
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
+    packageversion_description = Utils::fromSpecialEncoding(package->version());
     if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize)-10, 23);
+        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
     } else {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
+        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize)-10, 20);
+        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
     }
 
     // package install status
