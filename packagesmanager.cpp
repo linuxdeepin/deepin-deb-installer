@@ -487,11 +487,12 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 void PackagesManager::removePackage(const int index)
 {
     qDebug() << index << ", size:" << m_preparedPackages.size();
-    DebFile *deb = m_preparedPackages[index];
-    const auto md5 = deb->md5Sum();
-
-    m_appendedPackagesMd5.remove(md5);
+    //DebFile *deb = m_preparedPackages[index];
+    //const auto md5 = deb->md5Sum();
+    m_appendedPackagesMd5.remove(m_preparedMd5[index]);
+    //m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
+    m_preparedMd5.removeAt(index);
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
 }
@@ -499,12 +500,13 @@ void PackagesManager::removePackage(const int index)
 void PackagesManager::removeLastPackage()
 {
     qDebug() << "start remove last, curr m_preparedPackages size:" << m_preparedPackages.size();
-    DebFile *deb = m_preparedPackages.last();
-    qDebug() << " remove package name is:" << deb->packageName();
-    const auto md5 = deb->md5Sum();
+    //DebFile *deb = m_preparedPackages.last();
+    //qDebug() << " remove package name is:" << deb->packageName();
+    //const auto md5 = deb->md5Sum();
 
-    m_appendedPackagesMd5.remove(md5);
+    m_appendedPackagesMd5.remove(m_preparedMd5.last());
     m_preparedPackages.removeLast();
+    m_preparedMd5.removeLast();
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
 }
@@ -514,6 +516,7 @@ bool PackagesManager::getPackageIsNull()
     if (m_preparedPackages.size() == 1 && m_appendedPackagesMd5.size() == 0) {
         const auto md5 = m_preparedPackages[0]->md5Sum();
         m_appendedPackagesMd5 << md5;
+        m_preparedMd5 << md5;
         return  false;
     } else if (m_preparedPackages.size() == 0 && m_appendedPackagesMd5.size() == 0)
         return true;
@@ -530,6 +533,7 @@ bool PackagesManager::appendPackage(DebFile *debPackage, bool isEmpty)
 
         m_preparedPackages << debPackage;
         m_appendedPackagesMd5 << md5;
+        m_preparedMd5 << md5;
     } else {
         m_preparedPackages << debPackage;
     }

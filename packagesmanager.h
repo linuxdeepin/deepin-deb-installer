@@ -112,6 +112,7 @@ private:
 private:
     QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
+    QList<QByteArray> m_preparedMd5;
     QMap<int, int> m_packageInstallStatus;
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;

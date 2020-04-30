@@ -684,15 +684,20 @@ void DebListModel::upWrongStatusRow()
 
     //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<QApt::DebFile *> listTempDebFile;
+    QList<QByteArray> listTempPreparedMd5;
     iIndex = 0;
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus[i] = listpackageOperateStatus[i];
-        if (listWrongIndex.contains(i))
+        if (listWrongIndex.contains(i)) {
             listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i]);
-        else
+            listTempPreparedMd5.insert(iIndex++, m_packagesManager->m_preparedMd5[i]);
+        } else {
             listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);
+            listTempPreparedMd5.append(m_packagesManager->m_preparedMd5[i]);
+        }
     }
     m_packagesManager->m_preparedPackages = listTempDebFile;
+    m_packagesManager->m_preparedMd5 = listTempPreparedMd5;
 
     //change  m_packageFailReason sort.
     QMap<int, int> mappackageFailReason;
