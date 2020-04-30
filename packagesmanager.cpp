@@ -276,7 +276,6 @@ int PackagesManager::packageInstallStatus(const int index)
 
         const QString packageVersion = m_preparedPackages[index]->version();
         const int result = Package::compareVersion(packageVersion, installedVersion);
-        qDebug() << "result" << result;
 
         if (result == 0)
             ret = DebListModel::InstalledSameVersion;
@@ -286,6 +285,7 @@ int PackagesManager::packageInstallStatus(const int index)
             ret = DebListModel::InstalledEarlierVersion;
     } while (false);
 
+    qDebug() << "Package Install Status" << ret;
     m_packageInstallStatus.insert(index, ret);
     return ret;
 }
@@ -390,12 +390,13 @@ bool PackagesManager::detectAppPermission(QString tempPath)
     if (whiteList.isEmpty()) {
         return false;
     }
+    if (authorizedAppList.isEmpty()) {
+        if (blackList.isEmpty()) {
+            authorizedAppList = whiteList;
+        } else {
+            authorizedAppList = getPermissionList(whiteList, blackList);
+        }
 
-    QStringList authorizedAppList;
-    if (blackList.isEmpty()) {
-        authorizedAppList = whiteList;
-    } else {
-        authorizedAppList = getPermissionList(whiteList, blackList);
     }
 
     for (QString path : authorizedAppList) {
@@ -613,9 +614,9 @@ void PackagesManager::removePackage(const int index)
 {
     DebFile *deb = m_preparedPackages[index];
     qDebug() << "remove package" << index << "name:" << deb->packageName();
-    const auto md5 = m_packageMd5[index];
 
-    m_appendedPackagesMd5.remove(md5);
+    m_appendedPackagesMd5.remove(m_packageMd5[index]);
+    m_packageMd5.removeAt(index);
     m_packageDependsStatus.removeAt(index);
 
     m_preparedPackages.removeAt(index);
@@ -692,8 +693,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         return PackageDependsStatus::_break(package_name);
     }
 
-    qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType()) << package_name << p->architecture()
-             << relationName(dependencyInfo.relationType()) << dependencyInfo.packageVersion();
+//    qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType()) << package_name << p->architecture()
+//             << relationName(dependencyInfo.relationType()) << dependencyInfo.packageVersion();
 
     //    if (dependencyInfo.packageVersion().isEmpty())
     //        return PackageDependsStatus::ok();

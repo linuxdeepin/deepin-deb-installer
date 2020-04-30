@@ -126,6 +126,7 @@ private:
     QMap<QByteArray, PackageDependsStatus> m_packageMd5Status;
 
     QMap<QString, int >m_packagePermissionStatus;
+    QStringList authorizedAppList;
 };
 
 #endif  // PACKAGESMANAGER_H
