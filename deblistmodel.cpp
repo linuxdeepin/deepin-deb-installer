@@ -414,7 +414,7 @@ void DebListModel::installNextDeb()
     Transaction *trans = nullptr;
 
     // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_oprtatingStatusIndex);
+//    m_packagesManager->resetPackageDependsStatus(m_oprtatingStatusIndex);
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_oprtatingStatusIndex);
@@ -424,6 +424,7 @@ void DebListModel::installNextDeb()
         bumpInstallIndex();
         return;
     } else if (dependsStat.isForbid()) {
+        qDebug() << "Forbid";
         refreshOperatingPackageStatus(Failed);
         m_packageFailReason.insert(m_oprtatingStatusIndex, -1);
         bumpInstallIndex();
@@ -566,15 +567,25 @@ void DebListModel::upWrongStatusRow()
         m_packagesManager->m_packageInstallStatus[i] = listpackageInstallStatus[i];
 
     //change  m_packageDependsStatus sort.
-    QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
+//    QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
+//    QListIterator<PackagesManagerDependsStatus::PackageDependsStatus> listIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
+
     QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
     iIndex = 0;
-    while (MapIteratorpackageDependsStatus.hasNext()) {
-        MapIteratorpackageDependsStatus.next();
-        if (listWrongIndex.contains(MapIteratorpackageDependsStatus.key()))
-            listpackageDependsStatus.insert(iIndex++, MapIteratorpackageDependsStatus.value());
-        else
-            listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
+//    while (MapIteratorpackageDependsStatus.hasNext()) {
+//        MapIteratorpackageDependsStatus.next();
+//        if (listWrongIndex.contains(MapIteratorpackageDependsStatus.key()))
+//            listpackageDependsStatus.insert(iIndex++, MapIteratorpackageDependsStatus.value());
+//        else
+//            listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
+//    }
+
+    for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
+        if (listWrongIndex.contains(i)) {
+            listpackageDependsStatus.insert(iIndex++, m_packagesManager->m_packageDependsStatus[i]);
+        } else {
+            listpackageDependsStatus.append(m_packagesManager->m_packageDependsStatus[i]);
+        }
     }
     for (int i = 0; i < listpackageDependsStatus.size(); i++)
         m_packagesManager->m_packageDependsStatus[i] = listpackageDependsStatus[i];

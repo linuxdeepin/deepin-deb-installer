@@ -119,11 +119,13 @@ private:
     QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
     QMap<int, int> m_packageInstallStatus;
-    QMap<int, PackageDependsStatus> m_packageDependsStatus;
+    QList<PackageDependsStatus>m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;
 
-    QMap<QString, int >m_packagePermissionStatus;
+    QList<QByteArray> m_packageMd5;
+    QMap<QByteArray, PackageDependsStatus> m_packageMd5Status;
 
+    QMap<QString, int >m_packagePermissionStatus;
 };
 
 #endif  // PACKAGESMANAGER_H

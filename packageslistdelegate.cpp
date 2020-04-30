@@ -148,14 +148,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFontMetrics fontMetric(pkg_name_font);
 
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
-        const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
+//        const QRectF name_bounding_rect = painter->boundingRect(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignBottom);
 
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText));
         painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
         // draw package version
         QRect version_rect = name_rect;
-        const int version_x = static_cast<int>(name_bounding_rect.right());
+//        const int version_x = static_cast<int>(name_bounding_rect.right());
         const int version_y = version_rect.top();
         version_rect.setLeft(195);
         version_rect.setTop(version_y - 1);

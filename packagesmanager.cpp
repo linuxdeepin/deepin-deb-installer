@@ -312,8 +312,8 @@ QStringList PackagesManager::getAppList(QString listPath)
 QStringList PackagesManager::getPermissionList(QStringList whiteList, QStringList blackList)
 {
 
-    qDebug() << "whiteList" << whiteList;
-    qDebug() << "blackList" << blackList;
+//    qDebug() << "whiteList" << whiteList;
+//    qDebug() << "blackList" << blackList;
     for (QString blackApp : blackList) {
         if (whiteList.contains(blackApp)) {
             whiteList.removeOne(blackApp);
@@ -411,7 +411,7 @@ bool PackagesManager::detectAppPermission(QString tempPath)
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
 //    qDebug() << index;
-    if (m_packageDependsStatus.contains(index)) return m_packageDependsStatus[index];
+    if (index < m_packageDependsStatus.size())return m_packageDependsStatus[index];
 
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
 
@@ -422,14 +422,11 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 
     qDebug() << " permission " << isPermission;
 
-    if (!isPermission /*&& m_packagePermissionStatus.contains(deb->packageName()) && !m_packagePermissionStatus[deb->packageName()]*/) {
+    if (!isPermission) {
         ret.status = DebListModel::PermissionDenied;
         ret.package = deb->packageName();
 
-        m_packageDependsStatus[index] = ret;
-//        for (int i = 0; i < m_packageDependsStatus.size(); i++) {
-//            qDebug() << "m_packageDependsStatus[" << i << "]" << m_packageDependsStatus[i].status;
-//        }
+        m_packageDependsStatus.append(ret);
 
         return ret;
     }
@@ -458,7 +455,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
-    m_packageDependsStatus[index] = ret;
+    m_packageDependsStatus.append(ret);
 
     qDebug() << "Check finished for package" << deb->packageName() << ret.status;
     if (ret.status == DebListModel::DependsAvailable) {
@@ -486,7 +483,7 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
-    Q_ASSERT(m_packageDependsStatus.contains(index));
+    Q_ASSERT(index < m_packageDependsStatus.size());
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
     DebFile *deb = m_preparedPackages[index];
@@ -601,24 +598,29 @@ void PackagesManager::resetInstallStatus()
 
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
-    if (!m_packageDependsStatus.contains(index)) return;
+    if (index >= m_packageDependsStatus.size()) return;
 
     // reload backend cache
     m_backendFuture.result()->reloadCache();
 
-    m_packageDependsStatus.remove(index);
+//    m_packageDependsStatus.removeAt(index);
+    PackageDependsStatus ret;
+    ret.status = -1;
+    m_packageDependsStatus[index] = ret;
 }
 
 void PackagesManager::removePackage(const int index)
 {
-    qDebug() << index << ", size:" << m_preparedPackages.size() << "status:" << m_packageDependsStatus[index].status;
     DebFile *deb = m_preparedPackages[index];
-    const auto md5 = deb->md5Sum();
+    qDebug() << "remove package" << index << "name:" << deb->packageName();
+    const auto md5 = m_packageMd5[index];
 
     m_appendedPackagesMd5.remove(md5);
+    m_packageDependsStatus.removeAt(index);
+
     m_preparedPackages.removeAt(index);
     m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
+//    m_packageDependsStatus.clear();
 }
 
 void PackagesManager::removeLastPackage()
@@ -638,9 +640,9 @@ bool PackagesManager::appendPackage(DebFile *debPackage)
 {
     const auto md5 = debPackage->md5Sum();
     if (m_appendedPackagesMd5.contains(md5)) return false;
-
     m_preparedPackages << debPackage;
     m_appendedPackagesMd5 << md5;
+    m_packageMd5 << md5;
 
     return true;
 }
