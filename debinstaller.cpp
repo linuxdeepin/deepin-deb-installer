@@ -141,6 +141,7 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
     connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
+    connect(m_fileListModel, &DebListModel::EnableReCancelBtn, this, &DebInstaller::setEnableButton);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
@@ -424,6 +425,14 @@ void DebInstaller::changeDragFlag()
     m_dragflag = 0;
 
     enableCloseAndExit();
+}
+
+void DebInstaller::setEnableButton(bool bEnable)
+{
+    if (m_dragflag == 2) {
+        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+        singlePage->setEnableButton(bEnable);
+    }
 }
 
 void DebInstaller::showHiddenButton()

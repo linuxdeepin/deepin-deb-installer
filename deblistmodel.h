@@ -115,6 +115,7 @@ signals:
 
     void onChangeOperateIndex(int opIndex);
     void AuthCancel();
+    void EnableReCancelBtn(bool bEnable);
     void onStartInstall();
 
 public slots:
@@ -133,6 +134,7 @@ public:
     int getInstallFileSize();
 
 private:
+    void checkBoxStatus();
     void bumpInstallIndex();
     void onTransactionOutput();
     void onTransactionFinished();

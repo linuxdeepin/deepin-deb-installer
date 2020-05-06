@@ -60,6 +60,7 @@ private slots:
     void reset();
     void removePackage(const int index);
     void changeDragFlag();
+    void setEnableButton(bool bEnable);
     void showHiddenButton();
 
 private:
