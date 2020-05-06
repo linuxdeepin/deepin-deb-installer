@@ -87,6 +87,7 @@ private:
 
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
+    bool refresh = true;
 };
 
 #endif  // DEBINSTALLER_H
