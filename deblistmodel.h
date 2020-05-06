@@ -134,6 +134,7 @@ public:
     int getInstallFileSize();
 
 private:
+    void setEndEnable();
     void checkBoxStatus();
     void bumpInstallIndex();
     void onTransactionOutput();

@@ -440,6 +440,11 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
         installNextDeb();
 }
 
+void DebListModel::setEndEnable()
+{
+    emit EnableReCancelBtn(true);
+}
+
 void DebListModel::checkBoxStatus()
 {
     QTime initTime = QTime::currentTime();
@@ -458,7 +463,7 @@ void DebListModel::checkBoxStatus()
 
         if (trans->isCancellable()) {
             trans->cancel();
-            emit EnableReCancelBtn(true);
+            QTimer::singleShot(100 * 1, this, &DebListModel::setEndEnable);
         } else {
             QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);
         }
