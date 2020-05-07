@@ -115,6 +115,7 @@ signals:
     void onChangeOperateIndex(int opIndex);
     void AuthCancel();
     void onStartInstall();
+    void EnableReCancelBtn(bool bEnable);
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
@@ -131,6 +132,9 @@ public:
     int getInstallFileSize();
 
 private:
+    void setEndEnable();
+    void checkBoxStatus();
+
     void bumpInstallIndex();
     void onTransactionOutput();
     void onTransactionFinished();

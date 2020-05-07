@@ -202,7 +202,8 @@ bool DebListModel::appendPackage(DebFile *package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    return m_packagesManager->appendPackage(package);
+    bool appendResult =  m_packagesManager->appendPackage(package);
+    return appendResult;
 }
 
 void DebListModel::onTransactionErrorOccurred()
@@ -220,13 +221,13 @@ void DebListModel::onTransactionErrorOccurred()
 
     if (e == AuthError) {
         trans->deleteLater();
-
+        QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);
         qDebug() << "reset env to prepare";
 
         // reset env
         emit AuthCancel();
         emit lockForAuth(false);
-
+        emit EnableReCancelBtn(false);
         m_workerStatus = WorkerPrepare;
         m_workerStatus_temp = m_workerStatus;
         return;
@@ -392,6 +393,39 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
         bumpInstallIndex();
     else
         installNextDeb();
+}
+
+void DebListModel::setEndEnable()
+{
+    emit EnableReCancelBtn(true);
+}
+
+
+void DebListModel::checkBoxStatus()
+{
+    QTime initTime = QTime::currentTime();
+    Transaction *trans = nullptr;
+    auto *const backend = m_packagesManager->m_backendFuture.result();
+    trans = backend->commitChanges();
+
+    QTime stopTime = QTime::currentTime();
+    int elapsed = initTime.msecsTo(stopTime);
+    if (elapsed > 20000) {
+        QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);
+        return;
+    }
+
+    if (trans != nullptr) {
+
+        if (trans->isCancellable()) {
+            trans->cancel();
+            QTimer::singleShot(100 * 1, this, &DebListModel::setEndEnable);
+        } else {
+            QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);
+        }
+    } else {
+        qDebug() << "Transaction is Nullptr";
+    }
 }
 
 void DebListModel::installNextDeb()

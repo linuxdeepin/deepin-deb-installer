@@ -41,7 +41,7 @@ class MultipleInstallPage : public QWidget
 
 public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
-
+    void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
 signals:
     void back() const;

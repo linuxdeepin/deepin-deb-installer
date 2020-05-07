@@ -632,6 +632,13 @@ void SingleInstallPage::setPackageInfo()
 
 }
 
+void SingleInstallPage::setEnableButton(bool bEnable)
+{
+    m_installButton->setEnabled(bEnable);
+    m_reinstallButton->setEnabled(bEnable);
+    m_uninstallButton->setEnabled(bEnable);
+}
+
 void SingleInstallPage::afterGetAutherFalse()
 {
     m_progressFrame->setVisible(false);

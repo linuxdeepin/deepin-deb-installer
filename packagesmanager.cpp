@@ -421,7 +421,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     PackageDependsStatus ret = PackageDependsStatus::ok();
     bool isPermission = checkAppPermissions(deb);
 
-    qDebug() << " permission " << isPermission;
+    qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
 
     if (!isPermission) {
         ret.status = DebListModel::PermissionDenied;
@@ -676,7 +676,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
         if (!ret.isBreak()) break;
     }
-
     return ret;
 }
 

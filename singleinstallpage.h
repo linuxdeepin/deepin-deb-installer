@@ -48,6 +48,7 @@ class SingleInstallPage : public QWidget
 public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
     void afterGetAutherFalse();
+    void setEnableButton(bool bEnable);
 protected:
     void paintEvent(QPaintEvent *event);
     bool eventFilter(QObject *watched, QEvent *event) override;

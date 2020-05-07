@@ -171,6 +171,7 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
+    connect(m_fileListModel, &DebListModel::EnableReCancelBtn, this, &DebInstaller::setEnableButton);
 }
 
 void DebInstaller::disableCloseAndExit()
@@ -461,6 +462,19 @@ void DebInstaller::changeDragFlag()
 
     enableCloseAndExit();
 }
+
+void DebInstaller::setEnableButton(bool bEnable)
+{
+    if (m_dragflag == 2) {
+        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+        singlePage->setEnableButton(bEnable);
+    } else if (m_dragflag == 1) {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+        multiplePage->setEnableButton(bEnable);
+    }
+
+}
+
 
 void DebInstaller::showHiddenButton()
 {
