@@ -341,20 +341,20 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
     m_pLoadThread = new LoadDebFileListThread(deb, tempFilePath);
     if (m_pLoadThread) {
         m_pLoadThread->start();
-
-        usleep(500 * 1000);
-
-        m_pLoadThread->terminate();
+        int count = 0;
+        while (m_pLoadThread->isRunning()) {
+            usleep(10 * 1000);
+            if (++count  == 50) {
+                m_pLoadThread->terminate();
+                break;
+            }
+        }
         m_pLoadThread->wait();
 
         permission = detectAppPermission(tempFilePath);
 
         deleteDirectory(tempFilePath);
-
     }
-
-
-
     return permission;
 }
 

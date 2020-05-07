@@ -26,7 +26,6 @@
 #include <QSettings>
 #include <QStackedLayout>
 
-
 #include <DMainWindow>
 #include <QWidget>
 DWIDGET_USE_NAMESPACE
