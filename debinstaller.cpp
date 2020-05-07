@@ -293,8 +293,12 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     DebFile *p = nullptr;
-    if ((!m_lastPage.isNull() && m_fileListModel->DebInstallFinishedFlag) || m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing) {
-        qDebug() << "return";
+    qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
+
+    if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
+        qDebug() << "return" << m_fileListModel->m_workerStatus_temp;
         return;
     } else {
         qDebug() << "append";
@@ -336,6 +340,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
+    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerUnInstall;
 
     const QModelIndex index = m_fileListModel->first();
 
@@ -348,17 +353,23 @@ void DebInstaller::showUninstallConfirmPage()
 
     connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCalceled);
+
+    this->setAcceptDrops(false);
+    p->setAcceptDrops(false);
 }
 
 void DebInstaller::onUninstallAccepted()
 {
     SingleInstallPage *p = backToSinglePage();
-
+    m_fileChooseWidget->setAcceptDrops(true);
     p->uninstallCurrentPackage();
 }
 
 void DebInstaller::onUninstallCalceled()
 {
+    this->setAcceptDrops(true);
+    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerPrepare;
+
     backToSinglePage();
 }
 
@@ -435,6 +446,10 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 
     SingleInstallPage *p = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));
     Q_ASSERT(p);
+
+    p->setAcceptDrops(true);
+    m_fileChooseWidget->setAcceptDrops(true);
+    this->setAcceptDrops(true);
 
     return p;
 }
