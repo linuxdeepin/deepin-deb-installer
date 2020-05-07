@@ -264,3 +264,17 @@ void MultipleInstallPage::afterGetAutherFalse()
 //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
 }
+
+void MultipleInstallPage::onScrollSlotFinshed()
+{
+    int row = m_appsListView->count();
+    if (row > 0) {
+        QModelIndex currIndex = m_debListModel->index(row - 1);
+        m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
+    }
+}
+
+void MultipleInstallPage::setScrollBottom()
+{
+    QTimer::singleShot(100, this, &MultipleInstallPage::onScrollSlotFinshed);
+}

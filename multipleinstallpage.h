@@ -43,12 +43,14 @@ public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
+    void setScrollBottom();
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
     void hideAutoBarTitle();
 
 private slots:
+    void onScrollSlotFinshed();
     void onWorkerFinshed();
     void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);

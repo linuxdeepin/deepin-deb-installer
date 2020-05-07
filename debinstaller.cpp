@@ -394,7 +394,7 @@ void DebInstaller::refreshInstallPage()
 
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
         connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
-
+        multiplePage->setScrollBottom();
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
