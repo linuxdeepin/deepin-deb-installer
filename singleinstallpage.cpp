@@ -375,7 +375,7 @@ void SingleInstallPage::initConnections()
     });
 
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
-    connect(m_packagesModel, &DebListModel::onStartInstall,this,[=]{
+    connect(m_packagesModel, &DebListModel::onStartInstall, this, [ = ] {
         m_progressFrame->setVisible(true);
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
@@ -596,12 +596,12 @@ void SingleInstallPage::setPackageInfo()
     if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize)-10, 23);
+        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 23);
         m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
     } else {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize)-10, 20);
+        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 20);
         m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
     }
 
@@ -659,6 +659,7 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
+    m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
 }

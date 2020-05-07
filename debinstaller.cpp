@@ -432,6 +432,9 @@ void DebInstaller::setEnableButton(bool bEnable)
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->setEnableButton(bEnable);
+    } else if (m_dragflag == 1) {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+        multiplePage->setEnableButton(bEnable);
     }
 }
 

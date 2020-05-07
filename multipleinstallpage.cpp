@@ -77,7 +77,7 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    m_appsListViewBgFrame->setFixedSize(460, 186+10+5);
+    m_appsListViewBgFrame->setFixedSize(460, 186 + 10 + 5);
     QVBoxLayout *appsViewLayout = new QVBoxLayout;
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
@@ -170,7 +170,7 @@ void MultipleInstallPage::initConnections()
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
-    connect(m_debListModel, &DebListModel::onStartInstall,this,[=]{
+    connect(m_debListModel, &DebListModel::onStartInstall, this, [ = ] {
         m_processFrame->setVisible(true);
     });
     connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
@@ -214,9 +214,7 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
     if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
         QModelIndex currIndex = m_debListModel->index(opIndex - 1);
         m_appsListView->scrollTo(currIndex, QAbstractItemView::PositionAtTop);
-    }
-    else if(opIndex == -1)//to top
-    {
+    } else if (opIndex == -1) { //to top
         QModelIndex currIndex = m_debListModel->index(0);
         m_appsListView->scrollTo(currIndex);
     }
@@ -251,8 +249,13 @@ void MultipleInstallPage::hideInfo()
 
 void MultipleInstallPage::hiddenCancelButton()
 {
-     m_backButton->setVisible(false);
-     m_installButton->setVisible(false);
+    m_backButton->setVisible(false);
+    m_installButton->setVisible(false);
+}
+
+void MultipleInstallPage::setEnableButton(bool bEnable)
+{
+    m_installButton->setEnabled(bEnable);
 }
 
 void MultipleInstallPage::afterGetAutherFalse()
