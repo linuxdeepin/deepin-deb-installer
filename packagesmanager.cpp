@@ -487,10 +487,10 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 void PackagesManager::removePackage(const int index)
 {
     qDebug() << index << ", size:" << m_preparedPackages.size();
-    //DebFile *deb = m_preparedPackages[index];
-    //const auto md5 = deb->md5Sum();
-    m_appendedPackagesMd5.remove(m_preparedMd5[index]);
-    //m_appendedPackagesMd5.remove(md5);
+    DebFile *deb = m_preparedPackages[index];
+    const auto md5 = deb->md5Sum();
+    //m_appendedPackagesMd5.remove(m_preparedMd5[index]);
+    m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
     m_preparedMd5.removeAt(index);
     m_packageInstallStatus.clear();
