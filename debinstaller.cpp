@@ -292,6 +292,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
+    m_fileChooseWidget->hide();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     DebFile *p = nullptr;
     qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
@@ -394,10 +395,11 @@ void DebInstaller::reset()
 void DebInstaller::removePackage(const int index)
 {
     m_fileListModel->removePackage(index);
-    refreshInstallPage();
+    qDebug() << "remove";
+    refreshInstallPage(index);
 }
 
-void DebInstaller::refreshInstallPage()
+void DebInstaller::refreshInstallPage(int idx)
 {
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
@@ -424,13 +426,16 @@ void DebInstaller::refreshInstallPage()
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
 
-        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+        multiplePage = new MultipleInstallPage(m_fileListModel);
         multiplePage->setObjectName("MultipleInstallPage");
 
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
         connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
 
-        multiplePage->setScrollBottom();
+        if (idx) {
+            qDebug() << "setScrollBottom";
+            multiplePage->setScrollBottom(idx);
+        }
 
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);

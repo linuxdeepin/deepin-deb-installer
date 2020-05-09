@@ -29,6 +29,8 @@
 #include <DMainWindow>
 #include <QWidget>
 DWIDGET_USE_NAMESPACE
+
+class MultipleInstallPage;
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
@@ -66,7 +68,7 @@ private:
     void failToSysteminitUI();
     void initUI();
     void initConnections();
-    void refreshInstallPage();
+    void refreshInstallPage(int idx = 0);
     void handleFocusPolicy();
 
     //检查黑白名单是否存在
@@ -88,6 +90,8 @@ private:
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
     bool refresh = true;
+
+    MultipleInstallPage *multiplePage = nullptr;
 };
 
 #endif  // DEBINSTALLER_H

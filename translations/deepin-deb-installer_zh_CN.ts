@@ -24,12 +24,12 @@
         <translation type="unfinished">确 认</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="401"/>
+        <location filename="../debinstaller.cpp" line="426"/>
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="316"/>
+        <location filename="../debinstaller.cpp" line="323"/>
         <source>Already Added</source>
         <translation>已添加</translation>
     </message>
@@ -55,6 +55,7 @@
         <translation>安装失败，请在控制中心检查更新</translation>
     </message>
     <message>
+        <location filename="../deblistmodel.cpp" line="63"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>安装失败，磁盘空间不足</translation>
     </message>
@@ -64,24 +65,18 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="317"/>
-        <location filename="../deblistmodel.cpp" line="322"/>
+        <location filename="../deblistmodel.cpp" line="314"/>
+        <location filename="../deblistmodel.cpp" line="319"/>
         <source>Broken dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="319"/>
+        <location filename="../deblistmodel.cpp" line="316"/>
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="319"/>
-        <source>The package is not authorized</source>
-        <translation>此安装包为非授权应用</translation>
-    </message>
-
-    <message>
-        <location filename="../deblistmodel.cpp" line="327"/>
+        <location filename="../deblistmodel.cpp" line="324"/>
         <source>The package is not authorized</source>
         <translation>此安装包为非授权应用</translation>
     </message>
@@ -158,12 +153,12 @@
     <message>
         <location filename="../packageslistdelegate.cpp" line="208"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已安装较新版本：%1</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="211"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已安装较早版本：%1</translation>
     </message>
     <message>
         <source>Other version installed: %1</source>
@@ -173,7 +168,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../packagelistview.cpp" line="146"/>
+        <location filename="../packagelistview.cpp" line="138"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -202,7 +197,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="530"/>
+        <location filename="../singleinstallpage.cpp" line="534"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
@@ -237,27 +232,36 @@
         <translation>完 成</translation>
     </message>
     <message>
+        <location filename="../singleinstallpage.cpp" line="623"/>
+        <source>Later version installed: %1</source>
+        <translation type="unfinished">已安装较新版本：%1</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="627"/>
+        <source>Earlier version installed: %1</source>
+        <translation type="unfinished">已安装较早版本：%1</translation>
+    </message>
+    <message>
         <location filename="../singleinstallpage.cpp" line="146"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="505"/>
+        <location filename="../singleinstallpage.cpp" line="509"/>
         <source>Installed successfully</source>
         <translation>安装成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="510"/>
+        <location filename="../singleinstallpage.cpp" line="514"/>
         <source>Uninstalled successfully</source>
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="614"/>
         <source>Other version installed: %1</source>
-        <translation>已安装其他版本：%1</translation>
+        <translation type="vanished">已安装其他版本：%1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="521"/>
+        <location filename="../singleinstallpage.cpp" line="525"/>
         <source>Uninstall Failed</source>
         <translation>卸载失败</translation>
     </message>
@@ -267,7 +271,7 @@
         <translation>软件包：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="611"/>
+        <location filename="../singleinstallpage.cpp" line="620"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
@@ -276,8 +280,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="429"/>
-        <location filename="../singleinstallpage.cpp" line="504"/>
+        <location filename="../singleinstallpage.cpp" line="432"/>
+        <location filename="../singleinstallpage.cpp" line="508"/>
         <source>Show details</source>
         <translation>显示详细信息</translation>
     </message>
@@ -285,8 +289,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="438"/>
-        <location filename="../singleinstallpage.cpp" line="509"/>
+        <location filename="../singleinstallpage.cpp" line="442"/>
+        <location filename="../singleinstallpage.cpp" line="513"/>
         <source>Show details</source>
         <translation>显示卸载进程</translation>
     </message>
@@ -294,34 +298,34 @@
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="42"/>
+        <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
         <translation>显示相关软件包</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="42"/>
+        <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="55"/>
+        <location filename="../uninstallconfirmpage.cpp" line="57"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="57"/>
+        <location filename="../uninstallconfirmpage.cpp" line="59"/>
         <source>Confirm</source>
         <translation>确认卸载</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="118"/>
+        <location filename="../uninstallconfirmpage.cpp" line="120"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>您确定要卸载%1 吗？
 所有依赖也会被一起移除</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="120"/>
+        <location filename="../uninstallconfirmpage.cpp" line="122"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>您确定要卸载%1吗？

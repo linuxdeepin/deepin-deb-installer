@@ -111,7 +111,6 @@ Backend *init_backend()
     if (b->init()) return b;
 
     qFatal("%s", b->initErrorMessage().toStdString().c_str());
-    return nullptr;
 }
 
 PackagesManager::PackagesManager(QObject *parent)
@@ -124,6 +123,7 @@ bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
 
 bool PackagesManager::isArchError(const int idx)
 {
+    Q_ASSERT(idx < m_preparedPackages.size());
     Backend *b = m_backendFuture.result();
     DebFile *deb = m_preparedPackages[idx];
 
@@ -136,6 +136,7 @@ bool PackagesManager::isArchError(const int idx)
 
 const ConflictResult PackagesManager::packageConflictStat(const int index)
 {
+    Q_ASSERT(index < m_preparedPackages.size());
     auto *p = m_preparedPackages[index];
 
     return isConflictSatisfy(p->architecture(), p->conflicts());
@@ -148,24 +149,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 
     const auto ret_installed = isInstalledConflict(name, package->version(), package->architecture());
     if (!ret_installed.is_ok()) return ret_installed;
-    //    if (!ret_installed.is_ok())
-    //    {
-    //        bool found_provider = false;
-    //        // check providers
-    //        Backend *b = m_backendFuture.result();
-    //        for (auto *ap : b->availablePackages())
-    //        {
-    //            if (ap->providesList().contains(name))
-    //            {
-    //                found_provider = true;
-    //                break;
-    //            }
-    //        }
-
-    //        // not found providers, return error
-    //        if (!found_provider)
-    //            return ret_installed;
-    //    }
 
     qDebug() << "check conflict for local installed package is ok.";
 
@@ -260,12 +243,16 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
 int PackagesManager::packageInstallStatus(const int index)
 {
-    if (m_packageInstallStatus.contains(index)) return m_packageInstallStatus[index];
+    Q_ASSERT(index < m_preparedPackages.size());
+//    Q_ASSERT(index < m_packageInstallStatus.size());
+
+    if (index < m_packageInstallStatus.size()) return m_packageInstallStatus[index];
 
     const QString packageName = m_preparedPackages[index]->packageName();
     const QString packageArch = m_preparedPackages[index]->architecture();
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName + ":" + packageArch);
+
 
     int ret = DebListModel::NotInstalled;
     do {
@@ -285,7 +272,8 @@ int PackagesManager::packageInstallStatus(const int index)
             ret = DebListModel::InstalledEarlierVersion;
     } while (false);
 
-    qDebug() << "Package Install Status" << ret;
+
+    qDebug() << packageName << ret;
     m_packageInstallStatus.insert(index, ret);
     return ret;
 }
@@ -332,6 +320,7 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
 
     QString tempFilePath = "/tmp/installer";
 
+    deleteDirectory(tempFilePath);
     QDir dir(tempFilePath);
     if (!dir.exists()) {
         dir.mkdir(tempFilePath);
@@ -344,7 +333,7 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
         int count = 0;
         while (m_pLoadThread->isRunning()) {
             usleep(10 * 1000);
-            if (++count  == 50) {
+            if (++count  == 60) {
                 m_pLoadThread->terminate();
                 break;
             }
@@ -411,8 +400,15 @@ bool PackagesManager::detectAppPermission(QString tempPath)
 
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
-//    qDebug() << index;
-    if (index < m_packageDependsStatus.size())return m_packageDependsStatus[index];
+
+    Q_ASSERT(index < m_preparedPackages.size());
+    Q_ASSERT(index >= 0);
+
+    if (index < m_packageMd5.size()) {
+        if (m_packageMd5Status.contains(m_packageMd5[index])) {
+            return m_packageMd5Status[m_packageMd5[index]];
+        }
+    }
 
     if (isArchError(index)) return PackageDependsStatus::_break(QString());
 
@@ -426,8 +422,9 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     if (!isPermission) {
         ret.status = DebListModel::PermissionDenied;
         ret.package = deb->packageName();
-
-        m_packageDependsStatus.append(ret);
+//        m_packageDependsStatus.append(ret);
+        m_packageMd5Status.insert(m_packageMd5[index], ret);
+        m_packageDependsStatus.insert(0, ret);
 
         return ret;
     }
@@ -447,8 +444,8 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             ret.package = localConflictsResult.unwrap();
             ret.status = DebListModel::DependsBreak;
         } else {
-            qDebug() << "depends:";
-            qDebug() << "Check for package" << deb->packageName();
+//            qDebug() << "depends:";
+//            qDebug() << "Check for package" << deb->packageName();
             QSet<QString> choose_set;
             choose_set << deb->packageName();
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
@@ -456,23 +453,21 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
-    m_packageDependsStatus.append(ret);
-
-    qDebug() << "Check finished for package" << deb->packageName() << ret.status;
-    if (ret.status == DebListModel::DependsAvailable) {
-        const auto list = packageAvailableDepends(index);
-        qDebug() << "available depends:" << list.size() << list;
-    }
-
+//    m_packageDependsStatus.append(ret);
+    m_packageMd5Status.insert(m_packageMd5[index], ret);
+    m_packageDependsStatus.insert(0, ret);
     return ret;
 }
 
 const QString PackagesManager::packageInstalledVersion(const int index)
 {
-    Q_ASSERT(m_packageInstallStatus.contains(index));
+//    const auto md5 = m_packageMd5[index];
+//    Q_ASSERT(m_packageInstallStatus.contains(index));
 //    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
 //             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
 
+
+    Q_ASSERT(index < m_preparedPackages.size());
     const QString packageName = m_preparedPackages[index]->packageName();
     const QString packageArch = m_preparedPackages[index]->architecture();
     Backend *b = m_backendFuture.result();
@@ -485,6 +480,7 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
     Q_ASSERT(index < m_packageDependsStatus.size());
+    Q_ASSERT(index < m_preparedPackages.size());
     Q_ASSERT(m_packageDependsStatus[index].isAvailable());
 
     DebFile *deb = m_preparedPackages[index];
@@ -612,10 +608,12 @@ void PackagesManager::resetPackageDependsStatus(const int index)
 
 void PackagesManager::removePackage(const int index)
 {
+    Q_ASSERT(index < m_preparedPackages.size());
     DebFile *deb = m_preparedPackages[index];
     qDebug() << "remove package" << index << "name:" << deb->packageName();
 
     m_appendedPackagesMd5.remove(m_packageMd5[index]);
+    m_packageMd5Status.remove(m_packageMd5[index]);
     m_packageMd5.removeAt(index);
     m_packageDependsStatus.removeAt(index);
 
@@ -641,9 +639,10 @@ bool PackagesManager::appendPackage(DebFile *debPackage)
 {
     const auto md5 = debPackage->md5Sum();
     if (m_appendedPackagesMd5.contains(md5)) return false;
-    m_preparedPackages << debPackage;
     m_appendedPackagesMd5 << md5;
-    m_packageMd5 << md5;
+
+    m_preparedPackages.insert(0, debPackage);
+    m_packageMd5.insert(0, md5);
 
     return true;
 }

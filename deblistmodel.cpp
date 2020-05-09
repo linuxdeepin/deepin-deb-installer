@@ -587,18 +587,29 @@ void DebListModel::upWrongStatusRow()
     m_packageFailReason = mappackageFailReason;
 
     //change  m_packageInstallStatus sort.
-    QMapIterator<int, int> MapIteratorpackageInstallStatus(m_packagesManager->m_packageInstallStatus);
     QList<int> listpackageInstallStatus;
     iIndex = 0;
-    while (MapIteratorpackageInstallStatus.hasNext()) {
-        MapIteratorpackageInstallStatus.next();
-        if (listWrongIndex.contains(MapIteratorpackageInstallStatus.key()))
-            listpackageInstallStatus.insert(iIndex++, MapIteratorpackageInstallStatus.value());
-        else
-            listpackageInstallStatus.append(MapIteratorpackageInstallStatus.value());
+    for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
+        if (listWrongIndex.contains(i)) {
+            listpackageInstallStatus.insert(iIndex++, m_packagesManager->m_packageInstallStatus[i]);
+        } else {
+            listpackageInstallStatus.append(m_packagesManager->m_packageInstallStatus[i]);
+        }
     }
     for (int i = 0; i < listpackageInstallStatus.size(); i++)
         m_packagesManager->m_packageInstallStatus[i] = listpackageInstallStatus[i];
+
+    QList<QByteArray> listpackageMd5;
+    iIndex = 0;
+    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+        if (listWrongIndex.contains(i)) {
+            listpackageMd5.insert(iIndex++, m_packagesManager->m_packageMd5[i]);
+        } else {
+            listpackageMd5.append(m_packagesManager->m_packageMd5[i]);
+        }
+    }
+    for (int i = 0; i < listpackageInstallStatus.size(); i++)
+        m_packagesManager->m_packageMd5[i] = listpackageMd5[i];
 
     //change  m_packageDependsStatus sort.
 //    QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);

@@ -194,28 +194,26 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
-        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)) {
+
+        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
-        } else if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::PermissionDenied && install_stat == DebListModel::NotInstalled)) {
-            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            penColor = pa.color(DPalette::TextWarning);
-        } else if (install_stat != DebListModel::NotInstalled) {
-            if (install_stat == DebListModel::InstalledSameVersion) {
+        } else {
+            if (install_stat == DebListModel::NotInstalled) {
+                info_str = index.data(DebListModel::PackageDescriptionRole).toString();
+            } else if (install_stat == DebListModel::InstalledSameVersion) {
                 info_str = tr("Same version installed");
             } else if (install_stat == DebListModel::InstalledLaterVersion) {
                 info_str =
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-            } else {
+            } else if (install_stat == DebListModel::InstalledEarlierVersion) {
                 info_str =
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
-            if (dependsStat == DebListModel::PermissionDenied) {
-                penColor = pa.color(DPalette::TextWarning);
+            if (operate_stat == DebListModel::Failed) {
                 info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+                penColor = pa.color(DPalette::TextWarning);
             }
-        } else {
-            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
         }
         painter->setPen(QPen(penColor));
 

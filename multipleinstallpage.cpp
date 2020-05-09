@@ -264,14 +264,14 @@ void MultipleInstallPage::afterGetAutherFalse()
 
 void MultipleInstallPage::onScrollSlotFinshed()
 {
-    int row = m_appsListView->count();
-    if (row > 0) {
-        QModelIndex currIndex = m_debListModel->index(row - 1);
+    if (m_index != -1) {
+        QModelIndex currIndex = m_debListModel->index(m_index);
         m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
     }
 }
 
-void MultipleInstallPage::setScrollBottom()
+void MultipleInstallPage::setScrollBottom(int idx)
 {
-    QTimer::singleShot(100, this, &MultipleInstallPage::onScrollSlotFinshed);
+    m_index = idx;
+    QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
