@@ -265,7 +265,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
-
+    const int packageCount = m_fileListModel->preparedPackages().size();
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
@@ -294,7 +294,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     DFloatingMessage *msg = new DFloatingMessage;
                     msg->setMessage(tr("Already Added"));
                     DMessageManager::instance()->sendMessage(this, msg);
-                    return;
+                    if (packageCount > 0)
+                        return;
                 }
             } else {
                 m_fileListModel->appendPackage(p, true);
