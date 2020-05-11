@@ -360,10 +360,10 @@ void DebInstaller::reset()
 void DebInstaller::removePackage(const int index)
 {
     m_fileListModel->removePackage(index);
-    refreshInstallPage();
+    refreshInstallPage(index);
 }
 
-void DebInstaller::refreshInstallPage()
+void DebInstaller::refreshInstallPage(int index)
 {
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
@@ -395,7 +395,7 @@ void DebInstaller::refreshInstallPage()
 
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
         connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
-        multiplePage->setScrollBottom();
+        multiplePage->setScrollBottom(index);
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;

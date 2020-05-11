@@ -43,7 +43,7 @@ public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
-    void setScrollBottom();
+    void setScrollBottom(int index);
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
@@ -82,6 +82,7 @@ private:
 
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
+    int m_index = -1;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

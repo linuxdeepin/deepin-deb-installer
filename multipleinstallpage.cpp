@@ -268,13 +268,26 @@ void MultipleInstallPage::afterGetAutherFalse()
 void MultipleInstallPage::onScrollSlotFinshed()
 {
     int row = m_appsListView->count();
-    if (row > 0) {
-        QModelIndex currIndex = m_debListModel->index(row - 1);
+    QModelIndex currIndex;
+    if (m_index == -1) {
+        if (row > 0) {
+            currIndex = m_debListModel->index(row - 1);
+            m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
+        }
+    } else {
+        if (m_index == 0) {
+            currIndex = m_debListModel->index(0);
+        } else if (m_index == row) {
+            currIndex = m_debListModel->index(m_index - 1);
+        } else {
+            currIndex = m_debListModel->index(m_index);
+        }
         m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
     }
 }
 
-void MultipleInstallPage::setScrollBottom()
+void MultipleInstallPage::setScrollBottom(int index)
 {
+    m_index = index;
     QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }

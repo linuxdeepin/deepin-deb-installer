@@ -67,7 +67,7 @@ private:
     void failToSysteminitUI();
     void initUI();
     void initConnections();
-    void refreshInstallPage();
+    void refreshInstallPage(int index = -1);
     void handleFocusPolicy();
 
     //禁用/启用 关闭按钮和菜单中的退出
