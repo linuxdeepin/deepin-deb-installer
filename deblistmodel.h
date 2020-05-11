@@ -76,6 +76,7 @@ public:
         DependsOk,  //依赖满足
         DependsAvailable,
         DependsBreak,  //依赖不满足
+        ArchBreak,
         PermissionDenied
     };
 

@@ -313,8 +313,6 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (stat.isBreak()) {
         if (!stat.package.isEmpty()) return tr("Broken dependencies: %1").arg(stat.package);
 
-        if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
-
         const auto conflict = m_packagesManager->packageConflictStat(idx);
         if (!conflict.is_ok()) return tr("Broken dependencies: %1").arg(conflict.unwrap());
         //            return tr("Conflicts: %1").arg(conflict.unwrap());
@@ -322,6 +320,8 @@ QString DebListModel::packageFailedReason(const int idx) const
         Q_UNREACHABLE();
     } else if (stat.isForbid()) {
         return tr("The package is not authorized");
+    } else if (stat.isArchBreak()) {
+        return tr("Unmatched package architecture");
     }
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
@@ -458,7 +458,7 @@ void DebListModel::installNextDeb()
         bumpInstallIndex();
         return;
     } else if (dependsStat.isForbid()) {
-        qDebug() << "Forbid";
+        qDebug() << "Forbid" << dependsStat.package;
         refreshOperatingPackageStatus(Failed);
         m_packageFailReason.insert(m_oprtatingStatusIndex, -1);
         bumpInstallIndex();

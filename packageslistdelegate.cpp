@@ -195,7 +195,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
 
-        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
+        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied || dependsStat == DebListModel::ArchBreak) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
         } else {

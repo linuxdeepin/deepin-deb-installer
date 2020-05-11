@@ -404,17 +404,25 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     Q_ASSERT(index < m_preparedPackages.size());
     Q_ASSERT(index >= 0);
 
+    DebFile *deb = m_preparedPackages[index];
+    const QString architecture = deb->architecture();
+    PackageDependsStatus ret = PackageDependsStatus::ok();
+
     if (index < m_packageMd5.size()) {
         if (m_packageMd5Status.contains(m_packageMd5[index])) {
             return m_packageMd5Status[m_packageMd5[index]];
         }
     }
 
-    if (isArchError(index)) return PackageDependsStatus::_break(QString());
+    if (isArchError(index)) {
+        ret.status = DebListModel::ArchBreak;
+        ret.package = deb->packageName();
+//        m_packageDependsStatus.append(ret);
+        m_packageMd5Status.insert(m_packageMd5[index], ret);
+        m_packageDependsStatus.insert(0, ret);
+        return PackageDependsStatus::_break(QString());
+    }
 
-    DebFile *deb = m_preparedPackages[index];
-    const QString architecture = deb->architecture();
-    PackageDependsStatus ret = PackageDependsStatus::ok();
     bool isPermission = checkAppPermissions(deb);
 
     qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
@@ -454,6 +462,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
 //    m_packageDependsStatus.append(ret);
+    ret.package = deb->packageName();
     m_packageMd5Status.insert(m_packageMd5[index], ret);
     m_packageDependsStatus.insert(0, ret);
     return ret;
@@ -622,18 +631,6 @@ void PackagesManager::removePackage(const int index)
 //    m_packageDependsStatus.clear();
 }
 
-void PackagesManager::removeLastPackage()
-{
-    qDebug() << "start remove last, curr m_preparedPackages size:" << m_preparedPackages.size();
-    DebFile *deb = m_preparedPackages.last();
-    qDebug() << " remove package name is:" << deb->packageName();
-    const auto md5 = deb->md5Sum();
-
-    m_appendedPackagesMd5.remove(md5);
-    m_preparedPackages.removeLast();
-    m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
-}
 
 bool PackagesManager::appendPackage(DebFile *debPackage)
 {
@@ -905,3 +902,5 @@ bool PackageDependsStatus::isBreak() const { return status == DebListModel::Depe
 bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }
 
 bool PackageDependsStatus::isForbid() const { return status == DebListModel::PermissionDenied; }
+
+bool PackageDependsStatus::isArchBreak() const {return status == DebListModel::ArchBreak; }

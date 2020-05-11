@@ -53,6 +53,7 @@ public:
     bool isBreak() const;
     bool isAvailable() const;
     bool isForbid() const;
+    bool isArchBreak() const;
 
 public:
     int status;
@@ -93,7 +94,6 @@ public:
     void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
     void removePackage(const int index);
-    void removeLastPackage();
     bool appendPackage(QApt::DebFile *debPackage);
     bool QverifyResult;
     QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
