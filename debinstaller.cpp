@@ -294,6 +294,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     DFloatingMessage *msg = new DFloatingMessage;
                     msg->setMessage(tr("Already Added"));
                     DMessageManager::instance()->sendMessage(this, msg);
+                    return;
                 }
             } else {
                 m_fileListModel->appendPackage(p, true);

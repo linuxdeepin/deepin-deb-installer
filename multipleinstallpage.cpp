@@ -276,5 +276,5 @@ void MultipleInstallPage::onScrollSlotFinshed()
 
 void MultipleInstallPage::setScrollBottom()
 {
-    QTimer::singleShot(100, this, &MultipleInstallPage::onScrollSlotFinshed);
+    QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
