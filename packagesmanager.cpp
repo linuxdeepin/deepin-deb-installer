@@ -292,7 +292,10 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index)) return m_packageDependsStatus[index];
 
-    if (isArchError(index)) return PackageDependsStatus::_break(QString());
+    if (isArchError(index)) {
+        m_packageDependsStatus[index].status = 2; // fix:24886
+        return PackageDependsStatus::_break(QString());
+    }
 
     DebFile *deb = m_preparedPackages[index];
     QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
