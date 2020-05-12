@@ -600,7 +600,7 @@ void SingleInstallPage::setPackageInfo()
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
 
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied) {
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::PermissionDenied || dependsStat == DebListModel::ArchBreak) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 

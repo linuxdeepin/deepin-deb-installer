@@ -27,6 +27,8 @@
 #include "uninstallconfirmpage.h"
 #include "quitconfirmdialog.h"
 #include "utils.h"
+#include "AddPackageThread.h"
+#include "AppendLoadingWidget.h"
 
 #include <QAction>
 #include <QDebug>
@@ -60,8 +62,8 @@ DWIDGET_USE_NAMESPACE
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
-    , m_fileChooseWidget(new FileChooseWidget)
-    , m_centralLayout(new QStackedLayout)
+    , m_fileChooseWidget(new FileChooseWidget(this))
+    , m_centralLayout(new QStackedLayout(this))
     , m_dragflag(-1)
 {
     initUI();
@@ -204,6 +206,7 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
+    m_fileChooseWidget->show();
 
     QStringList debFileList;
     for (int i = 0; i < arguments.size(); i++) {
@@ -291,52 +294,29 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    //判断当前界面是否为空，在安装完成之后，不允许继续添加deb包，fixbug9935
     m_fileChooseWidget->hide();
-    qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
-    DebFile *p = nullptr;
-    qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
-
-    if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
-            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
-            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
-        qDebug() << "return" << m_fileListModel->m_workerStatus_temp;
-        return;
-    } else {
-        qDebug() << "append";
-        for (const auto &package : packages) {
-            p = new DebFile(package);
-            if (!p->isValid()) {
-                qWarning() << "package invalid: " << package;
-                delete p;
-                continue;
-            }
-
-            DRecentData data;
-            data.appName = "Deepin Deb Installer";
-            data.appExec = "deepin-deb-installer";
-            DRecentManager::addItem(package, data);
-
-            if (!m_fileListModel->appendPackage(p)) {
-                qWarning() << "package is Exist! ";
-
-                DFloatingMessage *msg = new DFloatingMessage;
-                msg->setMessage(tr("Already Added"));
-                DMessageManager::instance()->sendMessage(this, msg);
-            } else {
-                if (refresh) {
-                    refreshInstallPage();
-                    refresh = false;
-                    usleep(20 * 1000);
-                }
-            }
 
 
-        }
-        qDebug() << "append Finish";
+    m_pSpinner = new AppendLoadingWidget(this);
 
-        refreshInstallPage();
-    }
+    if (!m_lastPage.isNull()) m_lastPage->deleteLater();
+    m_pSpinner->setObjectName("AppendLoadingWidget");
+    m_centralLayout->addWidget(m_pSpinner);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);
+    m_centralLayout->setSpacing(0);
+
+    m_pSpinner->show();
+    m_centralLayout->addWidget(m_pSpinner);
+    m_centralLayout->setAlignment(m_pSpinner, Qt::AlignBottom);
+
+    m_lastPage = m_pSpinner;
+    m_centralLayout->setCurrentWidget(m_pSpinner);
+
+
+    AddPackageThread *m_pAddPackageThread = new AddPackageThread(m_fileListModel, m_lastPage, packages, this);
+    connect(m_pAddPackageThread, &AddPackageThread::appendPackageFinish, this, &DebInstaller::refreshInstallPage);
+
+    m_pAddPackageThread->start();
 }
 
 void DebInstaller::showUninstallConfirmPage()
@@ -401,6 +381,8 @@ void DebInstaller::removePackage(const int index)
 
 void DebInstaller::refreshInstallPage(int idx)
 {
+    qDebug() << "refresh";
+
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
@@ -481,7 +463,6 @@ void DebInstaller::setEnableButton(bool bEnable)
     }
 
 }
-
 
 void DebInstaller::showHiddenButton()
 {

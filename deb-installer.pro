@@ -43,7 +43,9 @@ SOURCES += \
     choosefilebutton.cpp \
     debinfolabel.cpp \
     quitconfirmdialog.cpp \
-    LoadDebFileListThread.cpp
+    LoadDebFileListThread.cpp \
+    AddPackageThread.cpp \
+    AppendLoadingWidget.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -64,7 +66,9 @@ HEADERS += \
     choosefilebutton.h \
     debinfolabel.h \
     quitconfirmdialog.h \
-    LoadDebFileListThread.h
+    LoadDebFileListThread.h \
+    AddPackageThread.h \
+    AppendLoadingWidget.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

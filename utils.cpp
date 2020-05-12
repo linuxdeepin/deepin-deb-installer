@@ -80,6 +80,64 @@ bool Utils::isFontMimeType(const QString &filePath)
     return false;
 }
 
+int Utils::returnfileIsempty(QString strfilepath, QString strfilename)
+{
+    QDir dir(strfilepath);
+    QString filename = strfilename + ".postinst";
+    do {
+        if (!dir.exists()) {
+            qDebug() << "文件夹不存在";
+            return 0;
+        }
+        dir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        QFileInfoList list = dir.entryInfoList();
+        int file_count = list.count();
+        qDebug() << "file_count                 " << file_count;
+        if (file_count <= 0) {
+            qDebug() << "当前文件夹为空";
+            return 0;
+        }
+        QStringList string_list;
+        for (int i = 0; i < list.count(); i++) {
+            QFileInfo file_info = list.at(i);
+            if (file_info.fileName() == filename) {
+                qDebug() << "文件路径：  " << file_info.path() << "           " << "文件名：  " << file_info.fileName();
+                break;
+            }
+        }
+    } while (0);
+    return 1;
+}
+
+
+bool Utils::File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename)
+{
+    QDir dir(Targetfilepath);
+    QString filename = strfilename + ".postinst";
+    QString File_transfer_Action1 = "";
+    QString File_transfer_Action2 = "";
+
+    File_transfer_Action1 = "mkdir " + Targetfilepath;
+    qDebug() << "创建文件夹：" << File_transfer_Action1;
+    system(File_transfer_Action1.toStdString().c_str());
+    File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
+    system(File_transfer_Action2.toStdString().c_str());
+    qDebug() << "文件复制转移：" << File_transfer_Action2;
+    return true;
+}
+
+bool Utils::Modify_transferfile(QString Targetfilepath, QString strfilename)
+{
+    QDir dir(Targetfilepath);
+    QString filename = strfilename + ".postinst";
+    QString File_modify_Action = "";
+    File_modify_Action = "sed -i '1,$s/su /#su /g' " + Targetfilepath + "/" + filename;
+    qDebug() << "修改文件内容：" << File_modify_Action;
+    system(File_modify_Action.toStdString().c_str());
+    return true;
+}
+
+
 QString Utils::suffixList()
 {
     return QString("Font Files (*.ttf *.ttc *.otf)");

@@ -26,10 +26,10 @@
 
 #include <QSettings>
 #include <DPushButton>
-
 DWIDGET_USE_NAMESPACE
 
-class FileChooseWidget : public QWidget {
+class FileChooseWidget : public QWidget
+{
     Q_OBJECT
 
 public:

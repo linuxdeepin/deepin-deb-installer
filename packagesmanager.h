@@ -75,13 +75,16 @@ public:
 
     bool isBackendReady();
     bool isArchError(const int idx);
+    bool isArchError(QApt::DebFile *deb);
     const ConflictResult packageConflictStat(const int index);
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
                                              const QString &packageArch);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
     int packageInstallStatus(const int index);
+    void addPackageInstallStatus(QApt::DebFile *deb);
     PackageDependsStatus packageDependsStatus(const int index);
+    void addDependsStatus(QApt::DebFile *deb);
     const QString packageInstalledVersion(const int index);
     const QStringList packageAvailableDepends(const int index);
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,

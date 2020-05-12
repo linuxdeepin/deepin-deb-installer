@@ -25,6 +25,7 @@
 #include <QPointer>
 #include <QSettings>
 #include <QStackedLayout>
+#include <DSpinner>
 
 #include <DMainWindow>
 #include <QWidget>
@@ -34,6 +35,8 @@ class MultipleInstallPage;
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
+class AppendLoadingWidget;
+
 class DebInstaller : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
@@ -92,6 +95,7 @@ private:
     bool refresh = true;
 
     MultipleInstallPage *multiplePage = nullptr;
+    AppendLoadingWidget *m_pSpinner;
 };
 
 #endif  // DEBINSTALLER_H

@@ -81,6 +81,9 @@ public:
     static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);
     static QString fromSpecialEncoding(const QString &inputStr);
     static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);
+    static int returnfileIsempty(QString strfilepath, QString strfilename);
+    static bool Modify_transferfile(QString Targetfilepath, QString strfilename);
+    static bool File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename);
 };
 
 #endif

@@ -134,6 +134,18 @@ bool PackagesManager::isArchError(const int idx)
     return !b->architectures().contains(deb->architecture());
 }
 
+bool PackagesManager::isArchError(QApt::DebFile *deb)
+{
+
+    Backend *b = m_backendFuture.result();
+
+    const QString arch = deb->architecture();
+
+    if (arch == "all" || arch == "any") return false;
+
+    return !b->architectures().contains(deb->architecture());
+}
+
 const ConflictResult PackagesManager::packageConflictStat(const int index)
 {
     Q_ASSERT(index < m_preparedPackages.size());
@@ -404,15 +416,15 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     Q_ASSERT(index < m_preparedPackages.size());
     Q_ASSERT(index >= 0);
 
-    DebFile *deb = m_preparedPackages[index];
-    const QString architecture = deb->architecture();
-    PackageDependsStatus ret = PackageDependsStatus::ok();
-
     if (index < m_packageMd5.size()) {
         if (m_packageMd5Status.contains(m_packageMd5[index])) {
             return m_packageMd5Status[m_packageMd5[index]];
         }
     }
+
+    DebFile *deb = m_preparedPackages[index];
+    const QString architecture = deb->architecture();
+    PackageDependsStatus ret = PackageDependsStatus::ok();
 
     if (isArchError(index)) {
         ret.status = DebListModel::ArchBreak;
@@ -637,11 +649,106 @@ bool PackagesManager::appendPackage(DebFile *debPackage)
     const auto md5 = debPackage->md5Sum();
     if (m_appendedPackagesMd5.contains(md5)) return false;
     m_appendedPackagesMd5 << md5;
+    addDependsStatus(debPackage);
+    addPackageInstallStatus(debPackage);
 
     m_preparedPackages.insert(0, debPackage);
     m_packageMd5.insert(0, md5);
 
     return true;
+}
+
+void PackagesManager::addPackageInstallStatus(QApt::DebFile *deb)
+{
+
+    const QString packageName = deb->packageName();
+    const QString packageArch = deb->architecture();
+    Backend *b = m_backendFuture.result();
+    Package *p = b->package(packageName + ":" + packageArch);
+
+
+    int ret = DebListModel::NotInstalled;
+    do {
+        if (!p) break;
+
+        const QString installedVersion = p->installedVersion();
+        if (installedVersion.isEmpty()) break;
+
+        const QString packageVersion = deb->version();
+        const int result = Package::compareVersion(packageVersion, installedVersion);
+
+        if (result == 0)
+            ret = DebListModel::InstalledSameVersion;
+        else if (result < 0)
+            ret = DebListModel::InstalledLaterVersion;
+        else
+            ret = DebListModel::InstalledEarlierVersion;
+    } while (false);
+
+
+    qDebug() << packageName << ret;
+    m_packageInstallStatus.insert(0, ret);
+}
+
+void PackagesManager::addDependsStatus(QApt::DebFile *deb)
+{
+
+    const QString architecture = deb->architecture();
+    PackageDependsStatus ret = PackageDependsStatus::ok();
+
+    if (isArchError(deb)) {
+        ret.status = DebListModel::ArchBreak;
+        ret.package = deb->packageName();
+//        m_packageDependsStatus.append(ret);
+        m_packageMd5Status.insert(deb->md5Sum(), ret);
+        m_packageDependsStatus.insert(0, ret);
+        return;
+
+    }
+
+    bool isPermission = checkAppPermissions(deb);
+
+    qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
+
+    if (!isPermission) {
+        ret.status = DebListModel::PermissionDenied;
+        ret.package = deb->packageName();
+//        m_packageDependsStatus.append(ret);
+        m_packageMd5Status.insert(deb->md5Sum(), ret);
+        m_packageDependsStatus.insert(0, ret);
+        return ;
+
+    }
+
+    // conflicts
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
+
+    if (!debConflitsResult.is_ok()) {
+        qDebug() << "depends break because conflict" << deb->packageName();
+        ret.package = debConflitsResult.unwrap();
+        ret.status = DebListModel::DependsBreak;
+    } else {
+        const ConflictResult localConflictsResult =
+            isInstalledConflict(deb->packageName(), deb->version(), architecture);
+        if (!localConflictsResult.is_ok()) {
+            qDebug() << "depends break because conflict with local package" << deb->packageName();
+            ret.package = localConflictsResult.unwrap();
+            ret.status = DebListModel::DependsBreak;
+        } else {
+//            qDebug() << "depends:";
+//            qDebug() << "Check for package" << deb->packageName();
+            QSet<QString> choose_set;
+            choose_set << deb->packageName();
+            ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
+        }
+    }
+    if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
+
+//    m_packageDependsStatus.append(ret);
+    ret.package = deb->packageName();
+    m_packageMd5Status.insert(deb->md5Sum(), ret);
+    m_packageDependsStatus.insert(0, ret);
+
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,

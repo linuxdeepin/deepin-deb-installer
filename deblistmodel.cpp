@@ -346,6 +346,23 @@ void DebListModel::onTransactionFinished()
 
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
+    QString Sourcefilepath = "/var/lib/dpkg/info";
+    QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+    QString filename = deb->packageName();
+    filename = filename.toLower();
+
+    int result = Utils::returnfileIsempty(Sourcefilepath, filename);
+    if (result) {
+        bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
+        if (transfer_file_result) {
+            bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
+            if (modify_file_result) {
+                QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
+                system(shell_Action.toStdString().c_str());
+            }
+        }
+    }
+
 
     if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
@@ -589,7 +606,7 @@ void DebListModel::upWrongStatusRow()
     //change  m_packageInstallStatus sort.
     QList<int> listpackageInstallStatus;
     iIndex = 0;
-    for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
+    for (int i = 0; i < m_packagesManager->m_packageInstallStatus.size(); i++) {
         if (listWrongIndex.contains(i)) {
             listpackageInstallStatus.insert(iIndex++, m_packagesManager->m_packageInstallStatus[i]);
         } else {
