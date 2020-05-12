@@ -8,12 +8,10 @@ AppendLoadingWidget::AppendLoadingWidget(QWidget *parent) : QWidget(parent)
     m_pSpinner = new DSpinner(this);
 //    m_pSpinner->show();
     m_pSpinner->start();
-    m_pSpinner->setFixedSize(100, 100);
+    m_pSpinner->setFixedSize(50, 50);
 
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
-    pMainLayout->addStretch();
     pMainLayout->addWidget(m_pSpinner);
-    pMainLayout->addStretch();
     pMainLayout->setAlignment(m_pSpinner, Qt::AlignCenter);
 
     this->setLayout(pMainLayout);

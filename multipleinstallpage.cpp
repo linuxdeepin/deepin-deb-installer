@@ -273,7 +273,6 @@ void MultipleInstallPage::onScrollSlotFinshed()
             currIndex = m_debListModel->index(m_index);
         }
         m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-
     }
 }
 

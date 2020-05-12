@@ -294,9 +294,66 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
+    if (m_fileListModel->preparedPackages().size() == 0) {
+        packagesSelectedThread(packages);
+    } else {
+        packagesSelected(packages);
+    }
+}
+
+void DebInstaller::packagesSelected(const QStringList &packages)
+{
     m_fileChooseWidget->hide();
+    qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
+    DebFile *p = nullptr;
+    qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
+
+    if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
+            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
+        qDebug() << "return" << m_fileListModel->m_workerStatus_temp;
+        return;
+    } else {
+        qDebug() << "append";
+        for (const auto &package : packages) {
+            p = new DebFile(package);
+            if (!p->isValid()) {
+                qWarning() << "package invalid: " << package;
+                delete p;
+                continue;
+            }
+
+            DRecentData data;
+            data.appName = "Deepin Deb Installer";
+            data.appExec = "deepin-deb-installer";
+            DRecentManager::addItem(package, data);
+
+            if (!m_fileListModel->appendPackage(p)) {
+                qWarning() << "package is Exist! ";
+
+                DFloatingMessage *msg = new DFloatingMessage;
+                msg->setMessage(tr("Already Added"));
+                DMessageManager::instance()->sendMessage(this, msg);
+            } else {
+                if (refresh) {
+                    refreshInstallPage(0);
+                    refresh = false;
+                    usleep(20 * 1000);
+                }
+            }
 
 
+        }
+        qDebug() << "append Finish";
+
+        refreshInstallPage(0);
+    }
+
+}
+
+void DebInstaller::packagesSelectedThread(const QStringList &packages)
+{
+    m_fileChooseWidget->hide();
     m_pSpinner = new AppendLoadingWidget(this);
 
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
@@ -312,11 +369,18 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     m_lastPage = m_pSpinner;
     m_centralLayout->setCurrentWidget(m_pSpinner);
 
+    m_pAddPackageThread = new AddPackageThread(m_fileListModel, m_lastPage, packages, this);
 
-    AddPackageThread *m_pAddPackageThread = new AddPackageThread(m_fileListModel, m_lastPage, packages, this);
-    connect(m_pAddPackageThread, &AddPackageThread::appendPackageFinish, this, &DebInstaller::refreshInstallPage);
+    connect(m_pAddPackageThread, &AddPackageThread::refresh, this, &DebInstaller::refreshInstallPage);
+    connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyAdd, this, [ = ] {
+        qWarning() << "package is Exist! ";
 
+        DFloatingMessage *msg = new DFloatingMessage;
+        msg->setMessage(tr("Already Added"));
+        DMessageManager::instance()->sendMessage(this, msg);
+    });
     m_pAddPackageThread->start();
+
 }
 
 void DebInstaller::showUninstallConfirmPage()
@@ -381,7 +445,8 @@ void DebInstaller::removePackage(const int index)
 
 void DebInstaller::refreshInstallPage(int idx)
 {
-    qDebug() << "refresh";
+    qDebug() << "refresh" << idx;
+    usleep(200 * 1000);
 
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
@@ -394,12 +459,17 @@ void DebInstaller::refreshInstallPage(int idx)
     if (packageCount == 1) {
         // single package install
         titlebar()->setTitle(QString());
-
-        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        singlePage = new SingleInstallPage(m_fileListModel);
         singlePage->setObjectName("SingleInstallPage");
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
-
+        connect(m_pAddPackageThread, &AddPackageThread::addSingleFinish, this, [ = ](bool enable) {
+            qDebug() << "single page set enable ";
+            singlePage->setEnableButton(enable);
+        });
+        if (idx == -1) {
+            singlePage->setEnableButton(false);
+        }
         m_lastPage = singlePage;
         m_fileListModel->DebInstallFinishedFlag = 0;
         m_centralLayout->addWidget(singlePage);
@@ -407,8 +477,14 @@ void DebInstaller::refreshInstallPage(int idx)
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
-
         multiplePage = new MultipleInstallPage(m_fileListModel);
+        connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, this, [ = ](bool enable) {
+            qDebug() << "single page set enable ";
+            multiplePage->setEnableButton(enable);
+        });
+        if (idx == -1) {
+            multiplePage->setEnableButton(false);
+        }
         multiplePage->setObjectName("MultipleInstallPage");
 
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
@@ -425,6 +501,7 @@ void DebInstaller::refreshInstallPage(int idx)
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
+    qDebug() << "refresh end";
 }
 
 SingleInstallPage *DebInstaller::backToSinglePage()

@@ -15,7 +15,11 @@ public:
     void run();
 
 signals:
-    void appendPackageFinish(int idx = 0);
+    void refresh(int idx = 0);
+    void packageAlreadyAdd();
+    void addSingleFinish(bool enable);
+    void addMultiFinish(bool enable);
+    void addStart();
 
 private:
     DebListModel *m_fileListModel;

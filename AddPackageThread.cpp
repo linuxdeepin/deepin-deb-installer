@@ -20,6 +20,7 @@ AddPackageThread::AddPackageThread(DebListModel *fileListModel, QPointer<QWidget
 }
 void AddPackageThread::run()
 {
+    emit addStart();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     QApt::DebFile *p = nullptr;
     qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
@@ -32,30 +33,34 @@ void AddPackageThread::run()
     } else {
         qDebug() << "append";
         for (const auto &package : m_packages) {
+            qDebug() << "append" << package;
             p = new QApt::DebFile(package);
             if (!p->isValid()) {
                 qWarning() << "package invalid: " << package;
                 delete p;
                 continue;
             }
-
             DRecentData data;
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
 
             if (!m_fileListModel->appendPackage(p)) {
-                qWarning() << "package is Exist! ";
-
-                DFloatingMessage *msg = new DFloatingMessage;
-                msg->setMessage(tr("Already Added"));
-                DMessageManager::instance()->sendMessage(m_pwidget, msg);
+                emit packageAlreadyAdd();
+            }
+            if (m_fileListModel->preparedPackages().size() > 1 || m_packages.size() == 1) {
+                emit refresh();
             }
 
 
         }
-        qDebug() << "appendPackageFinish";
-        emit appendPackageFinish(0);
+        usleep(250 * 1000);
+        qDebug() << "emit add Finish";
+        if (m_fileListModel->preparedPackages().size() > 1) {
+            emit addMultiFinish(true);
+        } else if (m_fileListModel->preparedPackages().size() <= 1) {
+            emit addSingleFinish(true);
+        }
 
     }
 }

@@ -36,6 +36,7 @@ class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
 class AppendLoadingWidget;
+class AddPackageThread;
 
 class DebInstaller : public Dtk::Widget::DMainWindow
 {
@@ -71,7 +72,7 @@ private:
     void failToSysteminitUI();
     void initUI();
     void initConnections();
-    void refreshInstallPage(int idx = 0);
+    void refreshInstallPage(int idx = -1);
     void handleFocusPolicy();
 
     //检查黑白名单是否存在
@@ -85,6 +86,9 @@ private:
     void sendMessage(QWidget *par, DFloatingMessage *floMsg);
     SingleInstallPage *backToSinglePage();
 
+    void packagesSelectedThread(const QStringList &packages);
+    void packagesSelected(const QStringList &packages);
+
 private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;
@@ -95,7 +99,10 @@ private:
     bool refresh = true;
 
     MultipleInstallPage *multiplePage = nullptr;
+    SingleInstallPage *singlePage = nullptr;
+
     AppendLoadingWidget *m_pSpinner;
+    AddPackageThread *m_pAddPackageThread;
 };
 
 #endif  // DEBINSTALLER_H
