@@ -42,7 +42,6 @@ SOURCES += \
     installprocessinfoview.cpp \
     choosefilebutton.cpp \
     debinfolabel.cpp \
-    quitconfirmdialog.cpp \
     LoadDebFileListThread.cpp \
     AddPackageThread.cpp \
     AppendLoadingWidget.cpp
@@ -65,7 +64,6 @@ HEADERS += \
     installprocessinfoview.h \
     choosefilebutton.h \
     debinfolabel.h \
-    quitconfirmdialog.h \
     LoadDebFileListThread.h \
     AddPackageThread.h \
     AppendLoadingWidget.h

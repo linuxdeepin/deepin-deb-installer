@@ -25,7 +25,6 @@
 #include "multipleinstallpage.h"
 #include "singleinstallpage.h"
 #include "uninstallconfirmpage.h"
-#include "quitconfirmdialog.h"
 #include "utils.h"
 #include "AddPackageThread.h"
 #include "AppendLoadingWidget.h"
@@ -295,10 +294,21 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     if (m_fileListModel->preparedPackages().size() == 0) {
-        packagesSelectedThread(packages);
+        if (packages.size() == 1) {
+            QApt::DebFile *p = new DebFile(packages[0]);
+            if (p) {
+                qDebug() << packages << p->installedSize();
+                if (p->installedSize() < 50000) {
+                    packagesSelected(packages);
+                    return;
+                }
+            }
+        }
     } else {
         packagesSelected(packages);
+        return;
     }
+    packagesSelectedThread(packages);
 }
 
 void DebInstaller::packagesSelected(const QStringList &packages)
@@ -341,14 +351,10 @@ void DebInstaller::packagesSelected(const QStringList &packages)
                     usleep(20 * 1000);
                 }
             }
-
-
         }
         qDebug() << "append Finish";
-
         refreshInstallPage(0);
     }
-
 }
 
 void DebInstaller::packagesSelectedThread(const QStringList &packages)
@@ -380,7 +386,6 @@ void DebInstaller::packagesSelectedThread(const QStringList &packages)
         DMessageManager::instance()->sendMessage(this, msg);
     });
     m_pAddPackageThread->start();
-
 }
 
 void DebInstaller::showUninstallConfirmPage()
@@ -445,9 +450,7 @@ void DebInstaller::removePackage(const int index)
 
 void DebInstaller::refreshInstallPage(int idx)
 {
-    qDebug() << "refresh" << idx;
-    usleep(200 * 1000);
-
+    qDebug() << "refresh";
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
@@ -460,16 +463,16 @@ void DebInstaller::refreshInstallPage(int idx)
         // single package install
         titlebar()->setTitle(QString());
         singlePage = new SingleInstallPage(m_fileListModel);
+        if (idx == -1) {
+            connect(m_pAddPackageThread, &AddPackageThread::addSingleFinish, this, [ = ](bool enable) {
+                qDebug() << "single page set enable ";
+                singlePage->setEnableButton(enable);
+            });
+            singlePage->setEnableButton(false);
+        }
         singlePage->setObjectName("SingleInstallPage");
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
-        connect(m_pAddPackageThread, &AddPackageThread::addSingleFinish, this, [ = ](bool enable) {
-            qDebug() << "single page set enable ";
-            singlePage->setEnableButton(enable);
-        });
-        if (idx == -1) {
-            singlePage->setEnableButton(false);
-        }
         m_lastPage = singlePage;
         m_fileListModel->DebInstallFinishedFlag = 0;
         m_centralLayout->addWidget(singlePage);
@@ -478,11 +481,11 @@ void DebInstaller::refreshInstallPage(int idx)
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
         multiplePage = new MultipleInstallPage(m_fileListModel);
-        connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, this, [ = ](bool enable) {
-            qDebug() << "single page set enable ";
-            multiplePage->setEnableButton(enable);
-        });
         if (idx == -1) {
+            connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, this, [ = ](bool enable) {
+                qDebug() << "single page set enable ";
+                multiplePage->setEnableButton(enable);
+            });
             multiplePage->setEnableButton(false);
         }
         multiplePage->setObjectName("MultipleInstallPage");
@@ -498,6 +501,7 @@ void DebInstaller::refreshInstallPage(int idx)
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
+        usleep(200 * 1000);
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
