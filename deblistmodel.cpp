@@ -295,6 +295,8 @@ void DebListModel::bumpInstallIndex()
     ++ m_oprtatingStatusIndex;
     emit onChangeOperateIndex(m_operatingIndex);
     // install next
+
+    m_packageOperateStatus[m_operatingIndex] = Prepare;
     installNextDeb();
 }
 
@@ -534,7 +536,7 @@ void DebListModel::uninstallFinished()
     m_workerStatus = WorkerFinished;
     m_workerStatus_temp = m_workerStatus;
     refreshOperatingPackageStatus(Success);
-
+    m_packageOperateStatus[m_operatingIndex] = Success;
     emit workerFinished();
 }
 

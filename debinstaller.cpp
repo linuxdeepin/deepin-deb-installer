@@ -205,7 +205,6 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
-    m_fileChooseWidget->show();
 
     QStringList debFileList;
     for (int i = 0; i < arguments.size(); i++) {
