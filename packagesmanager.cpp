@@ -391,13 +391,11 @@ bool PackagesManager::detectAppPermission(QString tempPath)
     if (whiteList.isEmpty()) {
         return false;
     }
-    if (authorizedAppList.isEmpty()) {
-        if (blackList.isEmpty()) {
-            authorizedAppList = whiteList;
-        } else {
-            authorizedAppList = getPermissionList(whiteList, blackList);
-        }
 
+    if (blackList.isEmpty()) {
+        authorizedAppList = whiteList;
+    } else {
+        authorizedAppList = getPermissionList(whiteList, blackList);
     }
 
     for (QString path : authorizedAppList) {
