@@ -89,7 +89,7 @@ void SingleInstallPage::initUI()
     m_upDown = true;
 
     QString File_transfer_Action;
-    QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+    QString Targetfilepath = "/tmp/.UOS_Installer_build";
     QFileInfo fi(Targetfilepath);
     bool exist = fi.exists();
     if (!exist) {
@@ -368,7 +368,7 @@ void SingleInstallPage::initConnections()
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
 //    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
     connect(m_doneButton, &DPushButton::clicked, qApp, [ = ] {
-        QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+        QString Targetfilepath = "/tmp/.UOS_Installer_build";
         QString delete_action = "rm -rf " + Targetfilepath;
         system(delete_action.toStdString().c_str());
         QApplication::quit();

@@ -120,10 +120,15 @@ bool Utils::File_transfer(QString Sourcefilepath, QString Targetfilepath, QStrin
     File_transfer_Action1 = "mkdir " + Targetfilepath;
     qDebug() << "创建文件夹：" << File_transfer_Action1;
     system(File_transfer_Action1.toStdString().c_str());
-    File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
-    system(File_transfer_Action2.toStdString().c_str());
-    qDebug() << "文件复制转移：" << File_transfer_Action2;
-    return true;
+    QFile file(Sourcefilepath + "/" + filename);
+    if (file.exists()) {
+        File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
+        system(File_transfer_Action2.toStdString().c_str());
+        qDebug() << "文件复制转移：" << File_transfer_Action2;
+        return true;
+    }
+
+    return false;
 }
 
 bool Utils::Modify_transferfile(QString Targetfilepath, QString strfilename)
@@ -131,10 +136,16 @@ bool Utils::Modify_transferfile(QString Targetfilepath, QString strfilename)
     QDir dir(Targetfilepath);
     QString filename = strfilename + ".postinst";
     QString File_modify_Action = "";
-    File_modify_Action = "sed -i '1,$s/su /#su /g' " + Targetfilepath + "/" + filename;
-    qDebug() << "修改文件内容：" << File_modify_Action;
-    system(File_modify_Action.toStdString().c_str());
-    return true;
+
+    QFile postinstFile(Targetfilepath + "/" + filename);
+    if (postinstFile.exists()) {
+        File_modify_Action = "sed -i '1,$s/su /#su /g' " + Targetfilepath + "/" + filename;
+        qDebug() << "修改文件内容：" << File_modify_Action;
+        system(File_modify_Action.toStdString().c_str());
+        return true;
+    }
+
+    return false;
 }
 
 
