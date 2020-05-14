@@ -296,7 +296,6 @@ void DebListModel::bumpInstallIndex()
     emit onChangeOperateIndex(m_operatingIndex);
     // install next
 
-    m_packageOperateStatus[m_operatingIndex] = Prepare;
     installNextDeb();
 }
 
@@ -349,7 +348,7 @@ void DebListModel::onTransactionFinished()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
     QString Sourcefilepath = "/var/lib/dpkg/info";
-    QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+    QString Targetfilepath = "~/tmp/.UOS_Installer_build";
     QString filename = deb->packageName();
     filename = filename.toLower();
 
@@ -374,7 +373,7 @@ void DebListModel::onTransactionFinished()
     } else if (m_packageOperateStatus.contains(m_oprtatingStatusIndex) &&
                m_packageOperateStatus[m_oprtatingStatusIndex] != Failed) {
         refreshOperatingPackageStatus(Success);
-        if (m_oprtatingStatusIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+        if (m_oprtatingStatusIndex < m_packageOperateStatus.size() - 1) {
             m_packageOperateStatus[m_oprtatingStatusIndex + 1] = Waiting;
         }
 
@@ -483,8 +482,6 @@ void DebListModel::installNextDeb()
         bumpInstallIndex();
         return;
     } else if (dependsStat.isAvailable()) {
-        Q_ASSERT_X(m_packageOperateStatus[m_oprtatingStatusIndex] == Prepare, Q_FUNC_INFO,
-                   "package operate status error when start install availble dependencies");
 
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
         for (auto const &p : availableDepends) backend->markPackageForInstall(p);
