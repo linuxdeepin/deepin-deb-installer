@@ -12,32 +12,33 @@
         <translation type="vanished">डिपिन प्याकेज प्रबन्धक</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="105"/>
+        <location filename="../debinstaller.cpp" line="106"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="124"/>
+        <location filename="../debinstaller.cpp" line="125"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="125"/>
+        <location filename="../debinstaller.cpp" line="126"/>
         <source>No whitelist file was detected in the system, please check again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="127"/>
+        <location filename="../debinstaller.cpp" line="128"/>
         <source>OK</source>
         <translation type="unfinished">ठिक छ</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="323"/>
+        <location filename="../debinstaller.cpp" line="344"/>
+        <location filename="../debinstaller.cpp" line="384"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="426"/>
+        <location filename="../debinstaller.cpp" line="481"/>
         <source>Bulk Install</source>
         <translation>बल्क स्थापना</translation>
     </message>
@@ -69,13 +70,13 @@
         <translation>स्थापना असफल भयो</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="314"/>
-        <location filename="../deblistmodel.cpp" line="319"/>
+        <location filename="../deblistmodel.cpp" line="315"/>
+        <location filename="../deblistmodel.cpp" line="318"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="324"/>
+        <location filename="../deblistmodel.cpp" line="323"/>
         <source>The package is not authorized</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,7 +89,7 @@
         <translation type="vanished">टूटेको निर्भरताहरू:% 1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="316"/>
+        <location filename="../deblistmodel.cpp" line="325"/>
         <source>Unmatched package architecture</source>
         <translation>बेमेल प्याकेज वास्तुकला</translation>
     </message>
@@ -105,7 +106,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="93"/>
+        <location filename="../filechoosewidget.cpp" line="88"/>
         <source>Select File</source>
         <translation>फाइल चयन गर्नुहोस्</translation>
     </message>
@@ -199,19 +200,6 @@
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
         <translation type="unfinished">संक्षिप्त गर्नुहोस्</translation>
-    </message>
-</context>
-<context>
-    <name>QuitConfirmDialog</name>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Stop Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Continue Installation</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -346,16 +334,16 @@
         <translation>पक्का गर्नु</translation>
     </message>
     <message>
-        <location filename="../uninstallconfirmpage.cpp" line="120"/>
-        <source>Are you sure you want to uninstall %1?
-All dependencies will also be removed</source>
-        <translation>के तपाईँ% 1 लाई अनस्टल गर्न निश्चित हुनुहुन्छ? सबै निर्भरताहरू हटाइनेछ</translation>
-    </message>
-    <message>
         <location filename="../uninstallconfirmpage.cpp" line="122"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../uninstallconfirmpage.cpp" line="120"/>
+        <source>Are you sure you want to uninstall %1?
+All dependencies will also be removed</source>
+        <translation>के तपाईँ% 1 लाई अनस्टल गर्न निश्चित हुनुहुन्छ? सबै निर्भरताहरू हटाइनेछ</translation>
     </message>
 </context>
 <context>

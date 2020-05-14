@@ -299,6 +299,7 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
 QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &size)
 {
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    srcText = srcText.replace(" ", "");
 
     QString text;
     QString tempText;
@@ -316,7 +317,7 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
     int prevLineCharIndex = 0;
     for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
         int fmWidth = fm.horizontalAdvance(tempText);
-        if (fmWidth > lineWidth - offset) {
+        if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
             calcHeight += lineHeight + 3;
             if (calcHeight + lineHeight > totalHeight) {
                 QString endString = srcText.mid(prevLineCharIndex);
@@ -344,7 +345,8 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
 
             --lineCount;
             if (lineCount > 0) {
-                text += "\n";
+                if (!tempText.contains("\n"))
+                    text += "\n";
             }
             tempText = srcText.at(charIndex);
 

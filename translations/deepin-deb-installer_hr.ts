@@ -8,32 +8,33 @@
         <translation type="vanished">Deepin upravitelj paketima</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="105"/>
+        <location filename="../debinstaller.cpp" line="106"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="124"/>
+        <location filename="../debinstaller.cpp" line="125"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="125"/>
+        <location filename="../debinstaller.cpp" line="126"/>
         <source>No whitelist file was detected in the system, please check again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="127"/>
+        <location filename="../debinstaller.cpp" line="128"/>
         <source>OK</source>
         <translation type="unfinished">U redu</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="323"/>
+        <location filename="../debinstaller.cpp" line="344"/>
+        <location filename="../debinstaller.cpp" line="384"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="426"/>
+        <location filename="../debinstaller.cpp" line="481"/>
         <source>Bulk Install</source>
         <translation>Skupno instaliranje</translation>
     </message>
@@ -65,13 +66,13 @@
         <translation>Neuspjela instalacija</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="314"/>
-        <location filename="../deblistmodel.cpp" line="319"/>
+        <location filename="../deblistmodel.cpp" line="315"/>
+        <location filename="../deblistmodel.cpp" line="318"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="324"/>
+        <location filename="../deblistmodel.cpp" line="323"/>
         <source>The package is not authorized</source>
         <translation type="unfinished"></translation>
     </message>
@@ -84,7 +85,7 @@
         <translation type="vanished">Slomljene međuzavisnosti: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="316"/>
+        <location filename="../deblistmodel.cpp" line="325"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,7 +102,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="93"/>
+        <location filename="../filechoosewidget.cpp" line="88"/>
         <source>Select File</source>
         <translation>Odaberi datoteku</translation>
     </message>
@@ -194,19 +195,6 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QuitConfirmDialog</name>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Stop Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Continue Installation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

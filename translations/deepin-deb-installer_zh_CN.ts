@@ -4,32 +4,33 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="105"/>
+        <location filename="../debinstaller.cpp" line="106"/>
         <source>Package Installer</source>
         <translation>软件包安装器</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="124"/>
+        <location filename="../debinstaller.cpp" line="125"/>
         <source>Unable to install</source>
         <translation type="unfinished">无法安装</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="125"/>
+        <location filename="../debinstaller.cpp" line="126"/>
         <source>No whitelist file was detected in the system, please check again.</source>
         <translation type="unfinished">系统中未检测到白名单文件，请重新检查。</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="127"/>
+        <location filename="../debinstaller.cpp" line="128"/>
         <source>OK</source>
         <translation type="unfinished">确 认</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="426"/>
+        <location filename="../debinstaller.cpp" line="481"/>
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="323"/>
+        <location filename="../debinstaller.cpp" line="344"/>
+        <location filename="../debinstaller.cpp" line="384"/>
         <source>Already Added</source>
         <translation>已添加</translation>
     </message>
@@ -65,18 +66,18 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="314"/>
-        <location filename="../deblistmodel.cpp" line="319"/>
+        <location filename="../deblistmodel.cpp" line="315"/>
+        <location filename="../deblistmodel.cpp" line="318"/>
         <source>Broken dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="316"/>
+        <location filename="../deblistmodel.cpp" line="325"/>
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="324"/>
+        <location filename="../deblistmodel.cpp" line="323"/>
         <source>The package is not authorized</source>
         <translation>此安装包为非授权应用</translation>
     </message>
@@ -89,7 +90,7 @@
         <translation>拖拽软件包到此</translation>
     </message>
     <message>
-        <location filename="../filechoosewidget.cpp" line="93"/>
+        <location filename="../filechoosewidget.cpp" line="88"/>
         <source>Select File</source>
         <translation>选择文件</translation>
     </message>
@@ -184,14 +185,12 @@
 <context>
     <name>QuitConfirmDialog</name>
     <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
         <source>Stop Installation</source>
-        <translation>停止安装</translation>
+        <translation type="vanished">停止安装</translation>
     </message>
     <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
         <source>Continue Installation</source>
-        <translation>继续安装</translation>
+        <translation type="vanished">继续安装</translation>
     </message>
 </context>
 <context>
@@ -329,7 +328,7 @@ All dependencies will also be removed</source>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>您确定要卸载%1吗？
-        卸载此软件可能会导致系统或其他软件无法正常使用</translation>
+卸载此软件可能会导致系统或其他软件无法正常使用</translation>
     </message>
 </context>
 <context>
