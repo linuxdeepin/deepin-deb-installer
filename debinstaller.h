@@ -86,8 +86,7 @@ private:
     void sendMessage(QWidget *par, DFloatingMessage *floMsg);
     SingleInstallPage *backToSinglePage();
 
-    void packagesSelectedThread(const QStringList &packages);
-    void packagesSelected(const QStringList &packages);
+    void packagesSelectedThread(const QStringList &packages, bool animation);
 
 private:
     DebListModel *m_fileListModel;
