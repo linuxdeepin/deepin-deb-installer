@@ -133,7 +133,7 @@ QString Utils::loadFontFamilyByType(FontType fontType)
     QString fontFamilyName = "";
     QFile fontFile(fontFileName);
     if (!fontFile.open(QIODevice::ReadOnly)) {
-        qDebug()<<"Open font file error";
+        qDebug() << "Open font file error";
         return fontFamilyName;
     }
 
@@ -148,7 +148,7 @@ QString Utils::loadFontFamilyByType(FontType fontType)
     return fontFamilyName;
 }
 
-QFont Utils::loadFontBySizeAndWeight(QString fontFamily,int fontSize, int fontWeight)
+QFont Utils::loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight)
 {
     Q_UNUSED(fontSize)
 
@@ -211,28 +211,28 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fon
     fontManager->bind(widget, sizeType, fontWeight);
 }
 
-int Utils::returnfileIsempty(QString strfilepath,QString strfilename)
+int Utils::returnfileIsempty(QString strfilepath, QString strfilename)
 {
     QDir dir(strfilepath);
-    QString filename = strfilename+".postinst";
+    QString filename = strfilename + ".postinst";
     do {
         if (!dir.exists()) {
-            qDebug()<<"文件夹不存在";
+            qDebug() << "文件夹不存在";
             return 0;
         }
         dir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
         QFileInfoList list = dir.entryInfoList();
         int file_count = list.count();
-        qDebug()<<"file_count                 "<<file_count;
+        qDebug() << "file_count                 " << file_count;
         if (file_count <= 0) {
-            qDebug()<<"当前文件夹为空";
+            qDebug() << "当前文件夹为空";
             return 0;
         }
         QStringList string_list;
         for (int i = 0; i < list.count(); i++) {
             QFileInfo file_info = list.at(i);
             if (file_info.fileName() == filename) {
-                qDebug()<<"文件路径：  "<<file_info.path()<<"           "<<"文件名：  "<<file_info.fileName();
+                qDebug() << "文件路径：  " << file_info.path() << "           " << "文件名：  " << file_info.fileName();
                 break;
             }
         }
@@ -256,53 +256,53 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
     }
 }
 
-bool Utils::File_transfer(QString Sourcefilepath,QString Targetfilepath,QString strfilename)
+bool Utils::File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename)
 {
     QDir dir(Targetfilepath);
-    QString filename = strfilename+".postinst";
+    QString filename = strfilename + ".postinst";
     QString File_transfer_Action1 = "";
     QString File_transfer_Action2 = "";
 
-    File_transfer_Action1 = "mkdir "+Targetfilepath;
-    qDebug()<<"创建文件夹："<<File_transfer_Action1;
+    File_transfer_Action1 = "mkdir " + Targetfilepath;
+    qDebug() << "创建文件夹：" << File_transfer_Action1;
     system(File_transfer_Action1.toStdString().c_str());
-    File_transfer_Action2 = "cp "+Sourcefilepath+"/"+filename+" "+Targetfilepath;
+    File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
     system(File_transfer_Action2.toStdString().c_str());
-    qDebug()<<"文件复制转移："<<File_transfer_Action2;
+    qDebug() << "文件复制转移：" << File_transfer_Action2;
     return true;
 }
 
-bool Utils::Modify_transferfile(QString Targetfilepath,QString strfilename)
+bool Utils::Modify_transferfile(QString Targetfilepath, QString strfilename)
 {
     QDir dir(Targetfilepath);
-    QString filename = strfilename+".postinst";
+    QString filename = strfilename + ".postinst";
     QString File_modify_Action = "";
-    File_modify_Action = "sed -i '1,$s/su /#su /g' "+Targetfilepath+"/"+filename;
-    qDebug()<<"修改文件内容："<<File_modify_Action;
+    File_modify_Action = "sed -i '1,$s/su /#su /g' " + Targetfilepath + "/" + filename;
+    qDebug() << "修改文件内容：" << File_modify_Action;
     system(File_modify_Action.toStdString().c_str());
     return true;
 }
 
-bool Utils::Return_Digital_Verify(QString strfilepath,QString strfilename)
+bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
 {
     QDir dir(strfilepath);
     if (!dir.exists()) {
-        qDebug()<<"文件夹不存在";
+        qDebug() << "文件夹不存在";
         return false;
     }
     dir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
     int file_count = list.count();
-    qDebug()<<"file_count                 "<<file_count;
+    qDebug() << "file_count                 " << file_count;
     if (file_count <= 0) {
-        qDebug()<<"当前文件夹为空";
+        qDebug() << "当前文件夹为空";
         return false;
     }
     QStringList string_list;
     for (int i = 0; i < list.count(); i++) {
         QFileInfo file_info = list.at(i);
         if (file_info.fileName() == strfilename) {
-            qDebug()<<"文件路径：  "<<file_info.path()<<"           "<<"文件名：  "<<file_info.fileName();
+            qDebug() << "文件路径：  " << file_info.path() << "           " << "文件名：  " << file_info.fileName();
             return true;
         }
     }
@@ -312,21 +312,21 @@ bool Utils::Digital_Verify(QString filepath_name)
 {
     QString verifyfilepath = "/usr/bin/";
     QString verifyfilename = "deepin-deb-verify";
-    bool result_verify_file = Return_Digital_Verify(verifyfilepath,verifyfilename);
-    qDebug()<<"result_verify_file"<<result_verify_file;
+    bool result_verify_file = Return_Digital_Verify(verifyfilepath, verifyfilename);
+    qDebug() << "result_verify_file" << result_verify_file;
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify ";
-        program = program+filepath_name;
+        program = program + filepath_name;
         proc.start(program);
-        qDebug()<<"program:"<<program;
+        qDebug() << "program:" << program;
         proc.waitForFinished();
         const QString output = proc.readAllStandardOutput();
         const QString output1 = proc.readAllStandardError();
         qDebug() << output1;
         for (const auto &item : output1.split('\n'))
             if (item.toLatin1() == "[INFO] signature verified!") {
-                qDebug()<<"item:"<<item;
+                qDebug() << "item:" << item;
                 return true;
             }
     }
@@ -353,7 +353,7 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
     int prevLineCharIndex = 0;
     for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
         int fmWidth = fm.horizontalAdvance(tempText);
-        if (fmWidth > lineWidth - offset) {
+        if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
             calcHeight += lineHeight + 3;
             if (calcHeight + lineHeight > totalHeight) {
                 QString endString = srcText.mid(prevLineCharIndex);
@@ -381,7 +381,8 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
 
             --lineCount;
             if (lineCount > 0) {
-                text += "\n";
+                if (!tempText.contains("\n"))
+                    text += "\n";
             }
             tempText = srcText.at(charIndex);
 

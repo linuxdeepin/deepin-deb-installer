@@ -174,19 +174,6 @@
     </message>
 </context>
 <context>
-    <name>QuitConfirmDialog</name>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Stop Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../quitconfirmdialog.cpp" line="37"/>
-        <source>Continue Installation</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SingleInstallPage</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="552"/>

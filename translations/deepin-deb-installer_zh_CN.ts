@@ -290,13 +290,17 @@
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="121"/>
-        <source>Are you sure you want to uninstall %1?All dependencies will also be removed</source>
-        <translation>您确定要卸载%1吗？所有依赖也会被一起移除</translation>
+        <source>Are you sure you want to uninstall %1?
+All dependencies will also be removed</source>
+        <translation>您确定要卸载%1吗？
+所有依赖也会被一起移除</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
-        <source>Are you sure you want to uninstall %1?The system or other applications may not work properly</source>
-        <translation>您确定要卸载%1吗？卸载此软件可能会导致系统或其他软件无法正常使用</translation>
+        <source>Are you sure you want to uninstall %1?
+The system or other applications may not work properly</source>
+        <translation>您确定要卸载%1吗？
+卸载此软件可能会导致系统或其他软件无法正常使用</translation>
     </message>
 </context>
 <context>
