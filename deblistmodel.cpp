@@ -376,7 +376,7 @@ void DebListModel::onTransactionFinished()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
     QString Sourcefilepath = "/var/lib/dpkg/info";
-    QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+    QString Targetfilepath = "/tmp/.UOS_Installer_build";
     QString filename = deb->packageName();
     filename = filename.toLower();
 

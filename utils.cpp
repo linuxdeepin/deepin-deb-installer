@@ -73,7 +73,7 @@ bool Utils::isFontMimeType(const QString &filePath)
     const QString mimeName = QMimeDatabase().mimeTypeForFile(filePath).name();
 
     if (mimeName.startsWith("font/") ||
-        mimeName.startsWith("application/x-font")) {
+            mimeName.startsWith("application/x-font")) {
         return true;
     }
 
@@ -113,7 +113,7 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 QString Utils::loadFontFamilyByType(FontType fontType)
 {
     QString fontFileName = "";
-    switch(fontType) {
+    switch (fontType) {
     case SourceHanSansMedium:
         fontFileName = ":/font/SourceHanSansCN-Medium.ttf";
         break;
@@ -132,16 +132,14 @@ QString Utils::loadFontFamilyByType(FontType fontType)
 
     QString fontFamilyName = "";
     QFile fontFile(fontFileName);
-    if(!fontFile.open(QIODevice::ReadOnly))
-    {
+    if (!fontFile.open(QIODevice::ReadOnly)) {
         qDebug()<<"Open font file error";
         return fontFamilyName;
     }
 
     int loadedFontID = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
     QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(loadedFontID);
-    if(!loadedFontFamilies.empty())
-    {
+    if (!loadedFontFamilies.empty()) {
         fontFamilyName = loadedFontFamilies.at(0);
     }
     fontFile.close();
@@ -166,58 +164,47 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fon
     widget->setFont(font);
 
     DFontSizeManager::SizeType sizeType = DFontSizeManager::T6;
-    switch (fontSize)
-    {
-        case 10:
-        {
-            sizeType = DFontSizeManager::T10;
-        }
-        break;
-        case 11:
-        {
-            sizeType = DFontSizeManager::T9;
-        }
-        break;
-        case 12:
-        {
-            sizeType = DFontSizeManager::T8;
-        }
-        break;
-        case 13:
-        {
-            sizeType = DFontSizeManager::T7;
-        }
-        break;
-        case 14:
-        {
-            sizeType = DFontSizeManager::T6;
-        }
-        break;
-        case 17:
-        {
-            sizeType = DFontSizeManager::T5;
-        }
-        break;
-        case 20:
-        {
-            sizeType = DFontSizeManager::T4;
-        }
-        break;
-        case 24:
-        {
-            sizeType = DFontSizeManager::T3;
-        }
-        break;
-        case 30:
-        {
-            sizeType = DFontSizeManager::T2;
-        }
-        break;
-        case 40:
-        {
-            sizeType = DFontSizeManager::T1;
-        }
-        break;
+    switch (fontSize) {
+    case 10: {
+        sizeType = DFontSizeManager::T10;
+    }
+    break;
+    case 11: {
+        sizeType = DFontSizeManager::T9;
+    }
+    break;
+    case 12: {
+        sizeType = DFontSizeManager::T8;
+    }
+    break;
+    case 13: {
+        sizeType = DFontSizeManager::T7;
+    }
+    break;
+    case 14: {
+        sizeType = DFontSizeManager::T6;
+    }
+    break;
+    case 17: {
+        sizeType = DFontSizeManager::T5;
+    }
+    break;
+    case 20: {
+        sizeType = DFontSizeManager::T4;
+    }
+    break;
+    case 24: {
+        sizeType = DFontSizeManager::T3;
+    }
+    break;
+    case 30: {
+        sizeType = DFontSizeManager::T2;
+    }
+    break;
+    case 40: {
+        sizeType = DFontSizeManager::T1;
+    }
+    break;
     }
 
     DFontSizeManager *fontManager = DFontSizeManager::instance();
@@ -228,7 +215,7 @@ int Utils::returnfileIsempty(QString strfilepath,QString strfilename)
 {
     QDir dir(strfilepath);
     QString filename = strfilename+".postinst";
-    do{
+    do {
         if (!dir.exists()) {
             qDebug()<<"文件夹不存在";
             return 0;
@@ -242,11 +229,9 @@ int Utils::returnfileIsempty(QString strfilepath,QString strfilename)
             return 0;
         }
         QStringList string_list;
-        for (int i = 0; i < list.count(); i++)
-        {
+        for (int i = 0; i < list.count(); i++) {
             QFileInfo file_info = list.at(i);
-            if (file_info.fileName() == filename)
-            {
+            if (file_info.fileName() == filename) {
                 qDebug()<<"文件路径：  "<<file_info.path()<<"           "<<"文件名：  "<<file_info.fileName();
                 break;
             }
@@ -263,13 +248,10 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
     }
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
-    if (codec)
-    {
+    if (codec) {
         QString unicodeStr =  codec->toUnicode(inputStr.toLatin1());
         return unicodeStr;
-    }
-    else
-    {
+    } else {
         return inputStr;
     }
 }
@@ -317,11 +299,9 @@ bool Utils::Return_Digital_Verify(QString strfilepath,QString strfilename)
         return false;
     }
     QStringList string_list;
-    for (int i = 0; i < list.count(); i++)
-    {
+    for (int i = 0; i < list.count(); i++) {
         QFileInfo file_info = list.at(i);
-        if (file_info.fileName() == strfilename)
-        {
+        if (file_info.fileName() == strfilename) {
             qDebug()<<"文件路径：  "<<file_info.path()<<"           "<<"文件名：  "<<file_info.fileName();
             return true;
         }
@@ -345,11 +325,10 @@ bool Utils::Digital_Verify(QString filepath_name)
         const QString output1 = proc.readAllStandardError();
         qDebug() << output1;
         for (const auto &item : output1.split('\n'))
-        if (item.toLatin1() == "[INFO] signature verified!")
-        {
-            qDebug()<<"item:"<<item;
-            return true;
-        }
+            if (item.toLatin1() == "[INFO] signature verified!") {
+                qDebug()<<"item:"<<item;
+                return true;
+            }
     }
     return false;
 }
@@ -421,7 +400,7 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
 
 DebApplicationHelper *DebApplicationHelper::instance()
 {
-    return qobject_cast<DebApplicationHelper*>(DGuiApplicationHelper::instance());
+    return qobject_cast<DebApplicationHelper *>(DGuiApplicationHelper::instance());
 }
 
 #define CAST_INT static_cast<int>
@@ -527,7 +506,7 @@ DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType 
         generatePaletteColor(*pa, role, type);
     }
 
-    return *const_cast<const DPalette*>(pa);
+    return *const_cast<const DPalette *>(pa);
 }
 
 DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &base) const
@@ -543,7 +522,7 @@ DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &ba
         palette = standardPalette(toColorType(wp));
 
         // 关注控件palette改变的事件
-        const_cast<QWidget*>(widget)->installEventFilter(const_cast<DebApplicationHelper*>(this));
+        const_cast<QWidget *>(widget)->installEventFilter(const_cast<DebApplicationHelper *>(this));
     } while (false);
 
     return palette;
@@ -562,9 +541,9 @@ void DebApplicationHelper::resetPalette(QWidget *widget)
     widget->setAttribute(Qt::WA_SetPalette, false);
 }
 
-DebApplicationHelper::DebApplicationHelper(){}
+DebApplicationHelper::DebApplicationHelper() {}
 
-DebApplicationHelper::~DebApplicationHelper(){}
+DebApplicationHelper::~DebApplicationHelper() {}
 
 bool DebApplicationHelper::eventFilter(QObject *watched, QEvent *event)
 {
