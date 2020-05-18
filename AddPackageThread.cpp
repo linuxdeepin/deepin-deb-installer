@@ -47,6 +47,7 @@ void AddPackageThread::run()
 
             if (!m_fileListModel->appendPackage(p, package)) {
                 emit packageAlreadyAdd();
+
             }
             if (m_packages.size() > 1 && m_fileListModel->preparedPackages().size() == 1) {
                 continue;
@@ -54,15 +55,15 @@ void AddPackageThread::run()
             if (m_fileListModel->preparedPackages().size() % 3 == 0) {
                 emit refresh(-1);
             }
-
         }
-        usleep(250 * 1000);
-        qDebug() << "emit add Finish";
-        if (m_fileListModel->preparedPackages().size() > 1) {
-            emit addMultiFinish(true);
-        } else if (m_fileListModel->preparedPackages().size() <= 1) {
-            emit addSingleFinish(true);
-        }
+        emit refresh(-1);
+    }
 
+    usleep(300 * 1000);
+    qDebug() << "emit add Finish";
+    if (m_fileListModel->preparedPackages().size() > 1) {
+        emit addMultiFinish(true);
+    } else if (m_fileListModel->preparedPackages().size() <= 1) {
+        emit addSingleFinish(true);
     }
 }
