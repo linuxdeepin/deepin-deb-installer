@@ -1,12 +1,14 @@
 #include "LoadDebFileListThread.h"
 
-LoadDebFileListThread::LoadDebFileListThread(QApt::DebFile *deb, QString tempFilePath)
+LoadDebFileListThread::LoadDebFileListThread(QString package, QString tempFilePath)
 {
-    m_pDebFile = deb;
+    m_package = package;
     m_filePath = tempFilePath;
+    deb = new QApt::DebFile(m_package);
 }
 
 void LoadDebFileListThread::run()
 {
-    m_pDebFile->extractArchive(m_filePath);
+    deb->extractArchive(m_filePath);
+    deb->~DebFile();
 }

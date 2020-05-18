@@ -323,7 +323,7 @@ QStringList PackagesManager::getPermissionList(QStringList whiteList, QStringLis
     return whiteList;
 }
 
-bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
+bool PackagesManager::checkAppPermissions(QApt::DebFile *deb, QString packagePath)
 {
     bool permission = false;
 
@@ -337,9 +337,8 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
     if (!dir.exists()) {
         dir.mkdir(tempFilePath);
     }
-
     LoadDebFileListThread *m_pLoadThread = nullptr;
-    m_pLoadThread = new LoadDebFileListThread(deb, tempFilePath);
+    m_pLoadThread = new LoadDebFileListThread(packagePath, tempFilePath);
     if (m_pLoadThread) {
         m_pLoadThread->start();
         int count = 0;
@@ -351,7 +350,7 @@ bool PackagesManager::checkAppPermissions(QApt::DebFile *deb)
             }
         }
         m_pLoadThread->wait();
-
+        m_pLoadThread->deleteLater();
         permission = detectAppPermission(tempFilePath);
 
         deleteDirectory(tempFilePath);
@@ -433,19 +432,19 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
         return PackageDependsStatus::_break(QString());
     }
 
-    bool isPermission = checkAppPermissions(deb);
+//    bool isPermission = checkAppPermissions(deb, pac);
 
-    qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
+//    qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
 
-    if (!isPermission) {
-        ret.status = DebListModel::PermissionDenied;
-        ret.package = deb->packageName();
-//        m_packageDependsStatus.append(ret);
-        m_packageMd5Status.insert(m_packageMd5[index], ret);
-        m_packageDependsStatus.insert(0, ret);
+//    if (!isPermission) {
+//        ret.status = DebListModel::PermissionDenied;
+//        ret.package = deb->packageName();
+////        m_packageDependsStatus.append(ret);
+//        m_packageMd5Status.insert(m_packageMd5[index], ret);
+//        m_packageDependsStatus.insert(0, ret);
 
-        return ret;
-    }
+//        return ret;
+//    }
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
@@ -642,12 +641,12 @@ void PackagesManager::removePackage(const int index)
 }
 
 
-bool PackagesManager::appendPackage(DebFile *debPackage)
+bool PackagesManager::appendPackage(DebFile *debPackage, QString packagePath)
 {
     const auto md5 = debPackage->md5Sum();
     if (m_appendedPackagesMd5.contains(md5)) return false;
     m_appendedPackagesMd5 << md5;
-    addDependsStatus(debPackage);
+    addDependsStatus(debPackage, packagePath);
     addPackageInstallStatus(debPackage);
 
     m_preparedPackages.insert(0, debPackage);
@@ -688,7 +687,7 @@ void PackagesManager::addPackageInstallStatus(QApt::DebFile *deb)
     m_packageInstallStatus.insert(0, ret);
 }
 
-void PackagesManager::addDependsStatus(QApt::DebFile *deb)
+void PackagesManager::addDependsStatus(QApt::DebFile *deb, QString packagePath)
 {
 
     const QString architecture = deb->architecture();
@@ -704,7 +703,7 @@ void PackagesManager::addDependsStatus(QApt::DebFile *deb)
 
     }
 
-    bool isPermission = checkAppPermissions(deb);
+    bool isPermission = checkAppPermissions(deb, packagePath);
 
     qDebug() << "package name:" << deb->packageName() << " permission:" << isPermission;
 

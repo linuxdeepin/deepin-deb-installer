@@ -332,16 +332,19 @@ void DebInstaller::packagesSelectedThread(const QStringList &packages, bool anim
 
     m_pAddPackageThread = new AddPackageThread(m_fileListModel, m_lastPage, packages, this);
     connect(m_pAddPackageThread, &AddPackageThread::refresh, this, &DebInstaller::refreshInstallPage);
-    connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyAdd, this, [ = ] {
-        qWarning() << "package is Exist! ";
-
-        DFloatingMessage *msg = new DFloatingMessage;
-        msg->setMessage(tr("Already Added"));
-        DMessageManager::instance()->sendMessage(this, msg);
-    });
+    connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyAdd, this, &DebInstaller::popFloatingError);
     m_pAddPackageThread->start();
 }
 
+void DebInstaller::popFloatingError()
+{
+    qWarning() << "package is Exist! ";
+
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("Already Added"));
+    DMessageManager::instance()->sendMessage(this, msg);
+
+}
 void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
@@ -416,14 +419,8 @@ void DebInstaller::refreshInstallPage(int idx)
     if (packageCount == 1) {
         // single package install
         titlebar()->setTitle(QString());
-        singlePage = new SingleInstallPage(m_fileListModel);
-        if (idx == -1) {
-            connect(m_pAddPackageThread, &AddPackageThread::addSingleFinish, this, [ = ](bool enable) {
-                qDebug() << "single page set enable ";
-                singlePage->setEnableButton(enable);
-            });
-            singlePage->setEnableButton(false);
-        }
+        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+
         singlePage->setObjectName("SingleInstallPage");
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
@@ -434,17 +431,12 @@ void DebInstaller::refreshInstallPage(int idx)
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
-        multiplePage = new MultipleInstallPage(m_fileListModel);
+        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
         if (idx == -1) {
-            connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, this, [ = ](bool enable) {
-                qDebug() << "single page set enable ";
-                multiplePage->setEnableButton(enable);
-            });
             multiplePage->setEnableButton(false);
+            connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, multiplePage, &MultipleInstallPage::setEnableButton);
         }
-        connect(m_pAddPackageThread, &AddPackageThread::addStart, this, [ = ] {
-            multiplePage->setEnableButton(false);
-        });
+        connect(m_pAddPackageThread, &AddPackageThread::addStart, multiplePage, &MultipleInstallPage::setEnableButton);
         multiplePage->setObjectName("MultipleInstallPage");
 
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
@@ -454,7 +446,6 @@ void DebInstaller::refreshInstallPage(int idx)
             qDebug() << "setScrollBottom";
             multiplePage->setScrollBottom(idx);
         }
-
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;

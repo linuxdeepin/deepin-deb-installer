@@ -123,7 +123,7 @@ public slots:
     void installAll();
     void uninstallPackage(const int idx);
     void removePackage(const int idx);
-    bool appendPackage(QApt::DebFile *package);
+    bool appendPackage(QApt::DebFile *package, QString packagePath);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
 

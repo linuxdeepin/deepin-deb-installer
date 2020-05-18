@@ -19,7 +19,7 @@ signals:
     void packageAlreadyAdd();
     void addSingleFinish(bool enable);
     void addMultiFinish(bool enable);
-    void addStart();
+    void addStart(bool enable);
 
 private:
     DebListModel *m_fileListModel;

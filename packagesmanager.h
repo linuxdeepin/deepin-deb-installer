@@ -84,7 +84,7 @@ public:
     int packageInstallStatus(const int index);
     void addPackageInstallStatus(QApt::DebFile *deb);
     PackageDependsStatus packageDependsStatus(const int index);
-    void addDependsStatus(QApt::DebFile *deb);
+    void addDependsStatus(QApt::DebFile *deb, QString packagePath);
     const QString packageInstalledVersion(const int index);
     const QStringList packageAvailableDepends(const int index);
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
@@ -97,7 +97,7 @@ public:
     void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
     void removePackage(const int index);
-    bool appendPackage(QApt::DebFile *debPackage);
+    bool appendPackage(QApt::DebFile *debPackage, QString packagePath);
     bool QverifyResult;
     QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
@@ -112,7 +112,7 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
-    bool checkAppPermissions(QApt::DebFile *deb);
+    bool checkAppPermissions(QApt::DebFile *deb, QString packagePath);
     QStringList getAppList(QString listPath);
     QStringList getPermissionList(QStringList whiteList, QStringList blackList);
     bool detectAppPermission(QString tempPath);

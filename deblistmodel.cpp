@@ -198,11 +198,11 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);
 }
 
-bool DebListModel::appendPackage(DebFile *package)
+bool DebListModel::appendPackage(DebFile *package, QString packagePath)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    bool appendResult =  m_packagesManager->appendPackage(package);
+    bool appendResult =  m_packagesManager->appendPackage(package, packagePath);
     return appendResult;
 }
 

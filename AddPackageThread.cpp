@@ -20,7 +20,7 @@ AddPackageThread::AddPackageThread(DebListModel *fileListModel, QPointer<QWidget
 }
 void AddPackageThread::run()
 {
-    emit addStart();
+    emit addStart(false);
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     QApt::DebFile *p = nullptr;
     qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
@@ -45,13 +45,16 @@ void AddPackageThread::run()
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
 
-            if (!m_fileListModel->appendPackage(p)) {
+            if (!m_fileListModel->appendPackage(p, package)) {
                 emit packageAlreadyAdd();
             }
             if (m_packages.size() > 1 && m_fileListModel->preparedPackages().size() == 1) {
                 continue;
             }
-            emit refresh(-1);
+            if (m_fileListModel->preparedPackages().size() % 3 == 0) {
+                emit refresh(-1);
+            }
+
         }
         usleep(250 * 1000);
         qDebug() << "emit add Finish";

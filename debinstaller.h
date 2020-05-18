@@ -87,6 +87,7 @@ private:
     SingleInstallPage *backToSinglePage();
 
     void packagesSelectedThread(const QStringList &packages, bool animation);
+    void popFloatingError();
 
 private:
     DebListModel *m_fileListModel;
@@ -96,10 +97,6 @@ private:
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
     bool refresh = true;
-
-    MultipleInstallPage *multiplePage = nullptr;
-    SingleInstallPage *singlePage = nullptr;
-
     AppendLoadingWidget *m_pSpinner;
     AddPackageThread *m_pAddPackageThread;
 };
