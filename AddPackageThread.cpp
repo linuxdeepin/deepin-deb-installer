@@ -48,13 +48,10 @@ void AddPackageThread::run()
             if (!m_fileListModel->appendPackage(p)) {
                 emit packageAlreadyAdd();
             }
-            if (m_packages.size() > 1) {
-                emit refresh(-1);
-            } else {
-                emit refresh();
+            if (m_packages.size() > 1 && m_fileListModel->preparedPackages().size() == 1) {
+                continue;
             }
-
-
+            emit refresh(-1);
         }
         usleep(250 * 1000);
         qDebug() << "emit add Finish";
