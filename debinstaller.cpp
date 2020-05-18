@@ -458,7 +458,7 @@ void DebInstaller::refreshInstallPage(int idx)
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
-        usleep(100 * 1000);
+        usleep(250 * 1000);
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
