@@ -1,9 +1,0 @@
-
-Deepin deb installer
-	command=deepin-deb-installer
-	name=Install Package (Deepin deb installer)
-	can_open_multiple_files=true
-	expects_uris=false
-	requires_terminal=false
-	mime_types=application/x-deb
-

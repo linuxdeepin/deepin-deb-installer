@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/active_tab_close_hover.svg</file>
+        <file>images/active_tab_close_normal.svg</file>
+        <file>images/active_tab_close_press.svg</file>
+        <file>images/arrow_down.svg</file>
+        <file>images/arrow_up.svg</file>
+        <file>images/icon.svg</file>
+        <file>images/split_line.svg</file>
+        <file>images/split_line_dark.svg</file>
+        <file>font/SourceHanSansCN-Medium.ttf</file>
+        <file>images/arrow_down_dark.svg</file>
+        <file>images/arrow_up_dark.svg</file>
+        <file>font/SourceHanSansCN-Normal.ttf</file>
+        <file>images/icon_install_dark.svg</file>
+        <file>images/icon_install_light.svg</file>
+        <file>images/warning.svg</file>
+    </qresource>
+</RCC>

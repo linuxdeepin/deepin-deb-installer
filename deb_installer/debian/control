@@ -1,0 +1,13 @@
+Source: deepin-deb-installer
+Section: utils
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@deepin.com>
+Build-Depends: debhelper (>= 9), pkg-config, qt5-qmake, libqt5widgets5, libqt5concurrent5, libqapt-dev, libdtkwidget-dev, qt5-default, qttools5-dev-tools 
+Standards-Version: 3.9.8
+Homepage: https://www.deepin.com/
+
+Package: deepin-deb-installer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqapt3-runtime, deepin-elf-sign-tool
+Description: deb installer tool
+ Package Installer helps users install and remove local packages, and supports bulk installation.
