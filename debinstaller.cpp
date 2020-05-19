@@ -411,7 +411,6 @@ void DebInstaller::refreshInstallPage(int idx)
     m_fileListModel->reset_filestatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
-
     const int packageCount = m_fileListModel->preparedPackages().size();
     // no packages found
     if (packageCount == 0) return;
@@ -419,7 +418,7 @@ void DebInstaller::refreshInstallPage(int idx)
     if (packageCount == 1) {
         // single package install
         titlebar()->setTitle(QString());
-        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+        /*SingleInstallPage **/singlePage = new SingleInstallPage(m_fileListModel);
 
         singlePage->setObjectName("SingleInstallPage");
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
@@ -431,7 +430,7 @@ void DebInstaller::refreshInstallPage(int idx)
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
-        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+        /*MultipleInstallPage **/multiplePage = new MultipleInstallPage(m_fileListModel);
         if (idx == -1) {
             multiplePage->setEnableButton(false);
             connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, multiplePage, &MultipleInstallPage::setEnableButton);

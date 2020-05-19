@@ -99,6 +99,9 @@ private:
     bool refresh = true;
     AppendLoadingWidget *m_pSpinner;
     AddPackageThread *m_pAddPackageThread;
+
+    SingleInstallPage *singlePage = nullptr;
+    MultipleInstallPage *multiplePage = nullptr;
 };
 
 #endif  // DEBINSTALLER_H
