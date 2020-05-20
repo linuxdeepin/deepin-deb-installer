@@ -285,6 +285,7 @@ void MultipleInstallPage::onScrollSlotFinshed()
         }
         m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
     }
+    m_appsListView->reset();
 }
 
 void MultipleInstallPage::setScrollBottom(int index)

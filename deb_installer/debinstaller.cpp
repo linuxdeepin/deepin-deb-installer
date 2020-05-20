@@ -338,7 +338,20 @@ void DebInstaller::reset()
 void DebInstaller::removePackage(const int index)
 {
     m_fileListModel->removePackage(index);
-    refreshInstallPage(index);
+    const int packageCount = m_fileListModel->preparedPackages().size();
+    if (packageCount == 1) {
+        refreshInstallPage(index);
+    }
+    if (packageCount > 1)
+        MulRefreshPage(index);
+}
+
+void DebInstaller::MulRefreshPage(int index)
+{
+    if (m_dragflag == 1) {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+        multiplePage->setScrollBottom(index);
+    }
 }
 
 void DebInstaller::refreshInstallPage(int index)
