@@ -9,7 +9,7 @@
     <description>authentication</description>
     <description xml:lang="zh_CN">认证</description>
     <message>Authentication is required to super permissions</message>
-    <message xml:lang="zh_CN">安装deepin-wine依赖关系</message>
+    <message xml:lang="zh_CN">安装deepin-wine需要授权</message>
     <icon_name></icon_name>
     <defaults>
       <allow_any>no</allow_any>
