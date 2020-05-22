@@ -12,17 +12,17 @@
         <translation type="vanished">Deepin Pakketbeheer</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="104"/>
+        <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="297"/>
+        <location filename="../debinstaller.cpp" line="281"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="394"/>
+        <location filename="../debinstaller.cpp" line="382"/>
         <source>Bulk Install</source>
         <translation>Alles installeren</translation>
     </message>
@@ -205,7 +205,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="552"/>
+        <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
         <translation>Inklappen</translation>
     </message>
@@ -214,57 +214,62 @@
         <translation type="vanished">Details tonen</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="265"/>
+        <location filename="../singleinstallpage.cpp" line="284"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="267"/>
+        <location filename="../singleinstallpage.cpp" line="286"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="269"/>
+        <location filename="../singleinstallpage.cpp" line="288"/>
         <source>Reinstall</source>
         <translation>Opnieuw installeren</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="271"/>
+        <location filename="../singleinstallpage.cpp" line="290"/>
         <source>OK</source>
         <translation>Oké</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="273"/>
+        <location filename="../singleinstallpage.cpp" line="292"/>
         <source>Back</source>
         <translation>Terug</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="275"/>
+        <location filename="../singleinstallpage.cpp" line="294"/>
         <source>Done</source>
         <translation>Klaar</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="637"/>
+        <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="641"/>
+        <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="146"/>
+        <location filename="../singleinstallpage.cpp" line="736"/>
+        <source>Broken dependencies: deepin-wine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="165"/>
         <source>Version: </source>
         <translation>Versie:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="509"/>
+        <location filename="../singleinstallpage.cpp" line="530"/>
         <source>Installed successfully</source>
         <translation>Geïnstalleerd</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="532"/>
+        <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>Verwijderd</translation>
     </message>
@@ -273,17 +278,17 @@
         <translation type="vanished">Andere versie geïnstalleerd: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="543"/>
+        <location filename="../singleinstallpage.cpp" line="564"/>
         <source>Uninstall Failed</source>
         <translation>Opnieuw installeren mislukt</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="139"/>
+        <location filename="../singleinstallpage.cpp" line="158"/>
         <source>Name: </source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="634"/>
+        <location filename="../singleinstallpage.cpp" line="645"/>
         <source>Same version installed</source>
         <translation>Dezelfde versie geïnstalleerd</translation>
     </message>
@@ -292,8 +297,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="432"/>
-        <location filename="../singleinstallpage.cpp" line="508"/>
+        <location filename="../singleinstallpage.cpp" line="453"/>
+        <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -301,8 +306,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="442"/>
-        <location filename="../singleinstallpage.cpp" line="531"/>
+        <location filename="../singleinstallpage.cpp" line="463"/>
+        <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>

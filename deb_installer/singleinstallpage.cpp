@@ -48,25 +48,27 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_operate(Install)
     , m_workerStarted(false)
     , m_packagesModel(model)
-    , m_contentFrame(new QWidget)
-    , m_itemInfoFrame(new QWidget)
-    , m_packageIcon(new DLabel)
-    , m_packageName(new DebInfoLabel)
-    , m_packageVersion(new DebInfoLabel)
-    , m_packageDescription(new DLabel)
-    , m_tipsLabel(new DebInfoLabel)
-    , m_progressFrame(new QWidget)
-    , m_progress(new WorkerProgress)
-    , m_installProcessView(new InstallProcessInfoView)
+    , m_contentFrame(new QWidget(this))
+    , m_itemInfoFrame(new QWidget(this))
+    , m_packageIcon(new DLabel(this))
+    , m_packageName(new DebInfoLabel(this))
+    , m_packageVersion(new DebInfoLabel(this))
+    , m_packageDescription(new DLabel(this))
+    , m_tipsLabel(new DebInfoLabel(this))
+    , m_progressFrame(new QWidget(this))
+    , m_progress(new WorkerProgress(this))
+    , m_installProcessView(new InstallProcessInfoView(this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
-    , m_installButton(new DPushButton)
-    , m_uninstallButton(new DPushButton)
-    , m_reinstallButton(new DPushButton)
-    , m_confirmButton(new DPushButton)
-    , m_backButton(new DPushButton)
-    , m_doneButton(new DPushButton)
+    , m_installButton(new DPushButton(this))
+    , m_uninstallButton(new DPushButton(this))
+    , m_reinstallButton(new DPushButton(this))
+    , m_confirmButton(new DPushButton(this))
+    , m_backButton(new DPushButton(this))
+    , m_doneButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(m_contentFrame))
     , m_centralLayout(new QVBoxLayout(this))
+    , m_pDSpinner(new DSpinner(this))
+    , m_pLoadingLabel(new DebInfoLabel(this))
 {
     initUI();
 }
@@ -116,6 +118,23 @@ void SingleInstallPage::initContentLayout()
 #endif
 }
 
+void SingleInstallPage::initInstallWineLoadingLayout()
+{
+    QVBoxLayout *m_pLoadingLayout = new QVBoxLayout(this);
+
+    m_pDSpinner->setFixedSize(24, 24);
+    m_pDSpinner->setVisible(false);
+    m_pDSpinner->start();
+    m_pLoadingLayout->addWidget(m_pDSpinner);
+    m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);
+
+    m_pLoadingLabel->setVisible(false);
+    m_pLoadingLayout->addWidget(m_pLoadingLabel);
+    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);
+
+    m_contentLayout->addLayout(m_pLoadingLayout);
+
+}
 void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
@@ -133,14 +152,14 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    DebInfoLabel *packageName = new DebInfoLabel;
+    DebInfoLabel *packageName = new DebInfoLabel(this);
     packageName->setCustomQPalette(QPalette::WindowText);
     packageName->setFixedHeight(fontinfosizetemp);
     packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
-    DebInfoLabel *packageVersion = new DebInfoLabel;
+    DebInfoLabel *packageVersion = new DebInfoLabel(this);
     packageVersion->setCustomQPalette(QPalette::WindowText);
     packageVersion->setFixedHeight(fontinfosizetemp_version);
     packageVersion->setText(tr("Version: "));
@@ -154,19 +173,19 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageVersion->setFixedHeight(fontinfosizetemp_version);
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
-    QVBoxLayout *packageNameVLayout = new QVBoxLayout;
+    QVBoxLayout *packageNameVLayout = new QVBoxLayout(this);
     packageNameVLayout->setSpacing(0);
     packageNameVLayout->setContentsMargins(0, 0, 0, 0);
     packageNameVLayout->addSpacing(4);
     packageNameVLayout->addWidget(packageName);
 
-    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout;
+    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout(this);
     pkgNameValueLayout->setSpacing(0);
     pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
     pkgNameValueLayout->addSpacing(4 + 4);
     pkgNameValueLayout->addWidget(m_packageName);
 
-    QHBoxLayout *pkgNameLayout = new QHBoxLayout;
+    QHBoxLayout *pkgNameLayout = new QHBoxLayout(this);
     pkgNameLayout->setSpacing(0);
     pkgNameLayout->setContentsMargins(0, 0, 0, 0);
     pkgNameLayout->addSpacing(2);
@@ -174,7 +193,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     pkgNameLayout->addLayout(pkgNameValueLayout);
     pkgNameLayout->addStretch();
 
-    QHBoxLayout *pkgVersionLayout = new QHBoxLayout;
+    QHBoxLayout *pkgVersionLayout = new QHBoxLayout(this);
     pkgVersionLayout->setSpacing(0);
     pkgVersionLayout->setContentsMargins(0, 0, 0, 0);
     pkgVersionLayout->addSpacing(2);
@@ -182,13 +201,13 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     pkgVersionLayout->addWidget(m_packageVersion);
     pkgVersionLayout->addStretch();
 
-    QVBoxLayout *itemInfoLayout = new QVBoxLayout;
+    QVBoxLayout *itemInfoLayout = new QVBoxLayout(this);
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);
     itemInfoLayout->addLayout(pkgNameLayout);
     itemInfoLayout->addLayout(pkgVersionLayout);
 
-    QHBoxLayout *itemBlockLayout = new QHBoxLayout;
+    QHBoxLayout *itemBlockLayout = new QHBoxLayout(this);
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
     itemBlockLayout->addSpacing(112 - 20 - 10);
@@ -198,14 +217,14 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QWidget *itemInfoWidget = new QWidget(this);
     itemInfoWidget->setLayout(itemBlockLayout);
 
-    QHBoxLayout *packageDescLayout = new QHBoxLayout;
+    QHBoxLayout *packageDescLayout = new QHBoxLayout(this);
     packageDescLayout->addStretch();
     packageDescLayout->addWidget(m_packageDescription);
     packageDescLayout->addStretch();
     packageDescLayout->setSpacing(0);
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
-    QVBoxLayout *itemLayout = new QVBoxLayout;
+    QVBoxLayout *itemLayout = new QVBoxLayout(this);
     itemLayout->addSpacing(45);
     itemLayout->addWidget(itemInfoWidget);
     itemLayout->addSpacing(28);
@@ -293,11 +312,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout(this);
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_uninstallButton);
@@ -309,7 +328,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    QVBoxLayout *progressLayout = new QVBoxLayout;
+    QVBoxLayout *progressLayout = new QVBoxLayout(this);
     progressLayout->setSpacing(0);
     progressLayout->setContentsMargins(0, 8, 0, 0);
     progressLayout->addWidget(m_progress);
@@ -317,7 +336,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_progressFrame->setLayout(progressLayout);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QWidget *btnsFrame = new QWidget;
+    QWidget *btnsFrame = new QWidget(this);
     btnsFrame->setFixedHeight(m_installButton->maximumHeight());
     btnsFrameLayout->addWidget(m_progressFrame);
     btnsFrameLayout->addStretch();
@@ -342,6 +361,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addSpacing(8);
     m_contentLayout->addWidget(btnsFrame);
 
+    initInstallWineLoadingLayout();
 
 #ifdef SHOWBGCOLOR
     m_progressFrame->setStyleSheet("QFrame{background:blue}");
@@ -379,7 +399,7 @@ void SingleInstallPage::initConnections()
         m_progressFrame->setVisible(true);
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
-	connect(m_packagesModel, &DebListModel::DependEnableBtn, this, &SingleInstallPage::setEnableDependBtn);
+    connect(m_packagesModel, &DebListModel::DependEnableBtn, this, &SingleInstallPage::setEnableDependBtn);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -569,6 +589,7 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 
 void SingleInstallPage::setPackageInfo()
 {
+    qDebug() << "set package info";
     qApp->processEvents();
     QFontInfo fontinfosize = this->fontInfo();
     int fontlabelsize = fontinfosize.pixelSize();
@@ -611,7 +632,6 @@ void SingleInstallPage::setPackageInfo()
     const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 
     const bool installed = installStat != DebListModel::NotInstalled;
-    const bool installedSameVersion = installStat == DebListModel::InstalledSameVersion;
     m_installButton->setVisible(!installed);
     m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
@@ -620,16 +640,6 @@ void SingleInstallPage::setPackageInfo()
 
     DPalette palette;
     if (installed) {
-//        if (installedSameVersion) {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Same version installed"));
-//        }
-//        else {
-//            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-//            m_tipsLabel->setText(tr("Other version installed: %1")
-//                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-//        }
-
         if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
@@ -646,7 +656,9 @@ void SingleInstallPage::setPackageInfo()
     }
 
     // package depends status
+
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    qDebug() << "set package info" << "depend status" << dependsStat;
     if (dependsStat == DebListModel::DependsBreak) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -656,6 +668,21 @@ void SingleInstallPage::setPackageInfo()
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
     }
+    qDebug() << "m_tipsLabel" << m_tipsLabel->text();
+    if (m_tipsLabel->text().contains("deepin-wine")) {
+        qDebug() << "show Spinner" << m_tipsLabel->text();
+
+        m_tipsLabel->setVisible(false);
+        m_pDSpinner->setVisible(true);
+        m_pLoadingLabel->setVisible(true);
+
+        m_pLoadingLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+        m_pLoadingLabel->setCustomDPalette(DPalette::TextTips);
+        m_installButton->setVisible(false);
+        m_reinstallButton->setVisible(false);
+        m_confirmButton->setVisible(false);
+        m_backButton->setVisible(false);
+    }
 }
 
 void SingleInstallPage::setEnableButton(bool bEnable)
@@ -663,6 +690,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
+
 }
 
 void SingleInstallPage::afterGetAutherFalse()
@@ -704,12 +732,14 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
 void SingleInstallPage::setEnableDependBtn(bool bEnable)
 {
     if (!bEnable) {
-        QModelIndex index = m_packagesModel->first();
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+        m_tipsLabel->setVisible(true);
+        m_tipsLabel->setText(tr("Broken dependencies: deepin-wine"));
+        m_pDSpinner->setVisible(false);
+        m_pLoadingLabel->setVisible(false);
+        m_installButton->setVisible(false);
+        m_reinstallButton->setVisible(false);
+        m_uninstallButton->setVisible(false);
+        m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
     }
-    bEnable = !bEnable;
-    m_installButton->setEnabled(bEnable);
-    m_backButton->setEnabled(bEnable);
-    m_reinstallButton->setEnabled(bEnable);
-    m_confirmButton->setEnabled(bEnable);
 }

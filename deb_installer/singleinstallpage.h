@@ -30,6 +30,7 @@
 #include <DProgressBar>
 #include <DPushButton>
 #include <DTextEdit>
+#include <DSpinner>
 #include <QWidget>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
@@ -70,6 +71,7 @@ private:
 private:
     void initUI();
     void initContentLayout();
+    void initInstallWineLoadingLayout();
     void initPkgInfoView(int fontinfosize);
     void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
@@ -117,6 +119,9 @@ private:
     QString m_description;
     QString packagename_description;
     QString packageversion_description;
+
+    DSpinner *m_pDSpinner;
+    DebInfoLabel *m_pLoadingLabel;
 
 };
 

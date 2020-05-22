@@ -4,17 +4,17 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../debinstaller.cpp" line="104"/>
+        <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
         <translation>软件包安装器</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="394"/>
+        <location filename="../debinstaller.cpp" line="382"/>
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="297"/>
+        <location filename="../debinstaller.cpp" line="281"/>
         <source>Already Added</source>
         <translation>已添加</translation>
     </message>
@@ -177,77 +177,90 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="552"/>
+        <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="265"/>
+        <location filename="../singleinstallpage.cpp" line="284"/>
         <source>Install</source>
         <translation>安 装</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="267"/>
+        <location filename="../singleinstallpage.cpp" line="286"/>
         <source>Remove</source>
         <translation>卸 载</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="269"/>
+        <location filename="../singleinstallpage.cpp" line="288"/>
         <source>Reinstall</source>
         <translation>重新安装</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="271"/>
+        <location filename="../singleinstallpage.cpp" line="290"/>
         <source>OK</source>
         <translation>确 认</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="273"/>
+        <location filename="../singleinstallpage.cpp" line="292"/>
         <source>Back</source>
         <translation>返 回</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="275"/>
+        <location filename="../singleinstallpage.cpp" line="294"/>
         <source>Done</source>
         <translation>完 成</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="146"/>
+        <source>deepin-wine</source>
+        <translation type="vanished">deepin-wine</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="736"/>
+        <source>Broken dependencies: deepin-wine</source>
+        <translation>依赖关系不满足：deepin-wine</translation>
+    </message>
+    <message>
+        <source>Installing dependencies: deepin-wine</source>
+        <translation type="vanished">正在安装依赖关系: deepin-wine</translation>
+    </message>
+    <message>
+        <location filename="../singleinstallpage.cpp" line="165"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="509"/>
+        <location filename="../singleinstallpage.cpp" line="530"/>
         <source>Installed successfully</source>
         <translation>安装成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="532"/>
+        <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="637"/>
+        <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
         <translation>已安装较新的版本：%1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="641"/>
+        <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
         <translation>已安装较早的版本：%1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="543"/>
+        <location filename="../singleinstallpage.cpp" line="564"/>
         <source>Uninstall Failed</source>
         <translation>卸载失败</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="139"/>
+        <location filename="../singleinstallpage.cpp" line="158"/>
         <source>Name: </source>
         <translation>软件包：</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="634"/>
+        <location filename="../singleinstallpage.cpp" line="645"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
@@ -256,8 +269,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="432"/>
-        <location filename="../singleinstallpage.cpp" line="508"/>
+        <location filename="../singleinstallpage.cpp" line="453"/>
+        <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
         <translation>显示详细信息</translation>
     </message>
@@ -265,8 +278,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="442"/>
-        <location filename="../singleinstallpage.cpp" line="531"/>
+        <location filename="../singleinstallpage.cpp" line="463"/>
+        <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
         <translation>显示卸载进程</translation>
     </message>
