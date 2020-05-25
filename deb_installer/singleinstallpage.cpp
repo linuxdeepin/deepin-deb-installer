@@ -131,6 +131,9 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLabel->setVisible(false);
     m_pLoadingLayout->addWidget(m_pLoadingLabel);
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);
+    m_pLoadingLabel->setFixedHeight(18);
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
 
     m_contentLayout->addLayout(m_pLoadingLayout);
 
@@ -724,7 +727,7 @@ void SingleInstallPage::setAuthConfirm()
     m_pDSpinner->setVisible(true);
     m_pDSpinner->start();
     m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
-    m_pLoadingLabel->setCustomDPalette(DPalette::TextTips);
+    m_pLoadingLabel->setCustomDPalette();
     m_pLoadingLabel->setVisible(true);
     m_tipsLabel->setVisible(false);
 }
