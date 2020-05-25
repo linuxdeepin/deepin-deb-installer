@@ -399,7 +399,7 @@ void SingleInstallPage::initConnections()
         m_progressFrame->setVisible(true);
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
-    connect(m_packagesModel, &DebListModel::DependEnableBtn, this, &SingleInstallPage::setEnableDependBtn);
+    //connect(m_packagesModel, &DebListModel::DependEnableBtn, this, &SingleInstallPage::setEnableDependBtn);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)

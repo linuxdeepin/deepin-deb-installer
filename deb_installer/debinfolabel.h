@@ -15,6 +15,7 @@ public:
 
     void setCustomQPalette(QPalette::ColorRole colorRole);
     void setCustomDPalette(DPalette::ColorType colorType);
+    void setCustomDPalette();
 
     void paintEvent(QPaintEvent *event) override;
 
@@ -23,6 +24,7 @@ private:
     DPalette::ColorType m_colorType;
 
     bool m_bUserColorType;
+    bool m_bMultiIns = false;
 };
 
 #endif // DEBINFOLABEL_H

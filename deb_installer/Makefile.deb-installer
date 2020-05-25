@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DVERSION=5.3.9 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIAWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_MULTIMEDIA_LIB -DQT_X11EXTRAS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_DBUS_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -isystem /usr/local/include/libqapt -isystem /usr/include/libdtk-5.2.0/DWidget -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtMultimedia -isystem /usr/include/libdtk-5.1.2/DGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtX11Extras -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtConcurrent -isystem /usr/include/libdtk-5.2.0/DCore -isystem /usr/include/x86_64-linux-gnu/qt5/QtDBus -isystem /usr/include/x86_64-linux-gnu/qt5/QtXml -isystem /usr/include/x86_64-linux-gnu/qt5/QtNetwork -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -isystem /usr/include/libqapt -isystem /usr/include/libdtk-5.2.0/DWidget -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtMultimedia -isystem /usr/include/libdtk-5.1.2/DGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtX11Extras -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtConcurrent -isystem /usr/include/libdtk-5.2.0/DCore -isystem /usr/include/x86_64-linux-gnu/qt5/QtDBus -isystem /usr/include/x86_64-linux-gnu/qt5/QtXml -isystem /usr/include/x86_64-linux-gnu/qt5/QtNetwork -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,10 +35,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = deepin-deb-installer1.0.0
-DISTDIR = /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/.tmp/deepin-deb-installer1.0.0
+DISTDIR = /data/home/lx777/project/deb_installer/deb_installer/deb_installer/.tmp/deepin-deb-installer1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu
-LIBS          = $(SUBLIBS) -L/usr/local/lib -lQApt -ldtkwidget -lQt5MultimediaWidgets -lpulse-mainloop-glib -lpulse -lglib-2.0 -lQt5Widgets -lQt5Multimedia -ldtkgui -lQt5X11Extras -lQt5Gui -lQt5Concurrent -ldtkcore -lQt5DBus -lQt5Xml -lQt5Network -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -lQApt -ldtkwidget -lQt5MultimediaWidgets -lpulse-mainloop-glib -lpulse -lglib-2.0 -lQt5Widgets -lQt5Multimedia -ldtkgui -lQt5X11Extras -lQt5Gui -lQt5Concurrent -ldtkcore -lQt5DBus -lQt5Xml -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -205,33 +205,6 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-base.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Attica.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KAuth.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KBookmarks.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCodecs.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCompletion.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigGui.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCoreAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KDBusAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGlobalAccel.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGuiAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KI18n.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIconThemes.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOFileWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOGui.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KItemViews.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KJobWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KNTLM.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KRunner.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KService.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KTextWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWidgetsAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWindowSystem.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KXmlGui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_accessibility_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri \
@@ -240,11 +213,11 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkcore.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkgui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwidget.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwm.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_edid_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_egl_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
@@ -255,7 +228,6 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_glx_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
@@ -270,8 +242,6 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_service_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
@@ -279,8 +249,6 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
@@ -289,14 +257,11 @@ DIST          = deepin-deb-installer.applications \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetUi.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		../../../../.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -374,33 +339,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-base.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Attica.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KAuth.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KBookmarks.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCodecs.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCompletion.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigGui.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCoreAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KDBusAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGlobalAccel.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGuiAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KI18n.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIconThemes.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOFileWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOGui.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KItemViews.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KJobWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KNTLM.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KRunner.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KService.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KTextWidgets.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWidgetsAddons.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWindowSystem.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KXmlGui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_accessibility_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri \
@@ -409,11 +347,11 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkcore.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkgui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwidget.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwm.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_edid_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_egl_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
@@ -424,7 +362,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_glx_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
@@ -439,8 +376,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_service_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
@@ -448,8 +383,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
@@ -458,14 +391,11 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetCore.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetUi.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		../../../../.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -510,33 +440,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-base.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/g++-unix.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/qconfig.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Attica.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KAuth.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KBookmarks.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCodecs.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCompletion.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigCore.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigGui.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KConfigWidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KCoreAddons.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KDBusAddons.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGlobalAccel.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KGuiAddons.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KI18n.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIconThemes.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOCore.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOFileWidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOGui.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KIOWidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KItemViews.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KJobWidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KNTLM.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KRunner.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KService.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KTextWidgets.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWidgetsAddons.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KWindowSystem.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_KXmlGui.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_accessibility_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_bootstrap_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_concurrent.pri:
@@ -545,11 +448,11 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_core_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dbus_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_designer.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_devicediscovery_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkcore.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkgui.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwidget.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_dtkwm.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_edid_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_egl_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri:
@@ -560,7 +463,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_glx_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_gui_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_help.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri:
@@ -575,8 +477,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformcompositor_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_service_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri:
@@ -584,8 +484,6 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uiplugin.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_uitools.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri:
@@ -594,14 +492,11 @@ Makefile.deb-installer: deb-installer.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_QApt.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetCore.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_SonnetUi.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
-../../../../.qmake.stash:
+../.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -654,7 +549,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents debinstaller.h deblistmodel.h filechoosewidget.h infocontrolbutton.h multipleinstallpage.h packagelistview.h packageslistdelegate.h packagesmanager.h result.h singleinstallpage.h uninstallconfirmpage.h workerprogress.h utils.h droundbgframe.h installprocessinfoview.h choosefilebutton.h debinfolabel.h appendpackagethread.h $(DISTDIR)/
 	$(COPY_FILE) --parents debinstaller.cpp deblistmodel.cpp filechoosewidget.cpp infocontrolbutton.cpp main.cpp multipleinstallpage.cpp packagelistview.cpp packageslistdelegate.cpp packagesmanager.cpp singleinstallpage.cpp uninstallconfirmpage.cpp workerprogress.cpp utils.cpp droundbgframe.cpp installprocessinfoview.cpp choosefilebutton.cpp debinfolabel.cpp appendpackagethread.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.ts /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.ts $(DISTDIR)/
+	$(COPY_FILE) --parents /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.ts /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.ts $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -711,49 +606,51 @@ compiler_moc_header_clean:
 moc_debinstaller.cpp: debinstaller.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include debinstaller.h -o moc_debinstaller.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include debinstaller.h -o moc_debinstaller.cpp
 
 moc_deblistmodel.cpp: deblistmodel.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include deblistmodel.h -o moc_deblistmodel.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include deblistmodel.h -o moc_deblistmodel.cpp
 
 moc_filechoosewidget.cpp: choosefilebutton.h \
 		filechoosewidget.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include filechoosewidget.h -o moc_filechoosewidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include filechoosewidget.h -o moc_filechoosewidget.cpp
 
 moc_infocontrolbutton.cpp: infocontrolbutton.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include infocontrolbutton.h -o moc_infocontrolbutton.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include infocontrolbutton.h -o moc_infocontrolbutton.cpp
 
 moc_multipleinstallpage.cpp: infocontrolbutton.h \
 		droundbgframe.h \
 		installprocessinfoview.h \
+		debinfolabel.h \
+		utils.h \
 		multipleinstallpage.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include multipleinstallpage.h -o moc_multipleinstallpage.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include multipleinstallpage.h -o moc_multipleinstallpage.cpp
 
 moc_packagelistview.cpp: packagelistview.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packagelistview.h -o moc_packagelistview.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packagelistview.h -o moc_packagelistview.cpp
 
 moc_packageslistdelegate.cpp: packagelistview.h \
 		deblistmodel.h \
 		packageslistdelegate.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packageslistdelegate.h -o moc_packageslistdelegate.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packageslistdelegate.h -o moc_packageslistdelegate.cpp
 
 moc_packagesmanager.cpp: result.h \
 		packagesmanager.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packagesmanager.h -o moc_packagesmanager.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include packagesmanager.h -o moc_packagesmanager.cpp
 
 moc_singleinstallpage.cpp: infocontrolbutton.h \
 		installprocessinfoview.h \
@@ -762,47 +659,47 @@ moc_singleinstallpage.cpp: infocontrolbutton.h \
 		singleinstallpage.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include singleinstallpage.h -o moc_singleinstallpage.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include singleinstallpage.h -o moc_singleinstallpage.cpp
 
 moc_uninstallconfirmpage.cpp: infocontrolbutton.h \
 		installprocessinfoview.h \
 		uninstallconfirmpage.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include uninstallconfirmpage.h -o moc_uninstallconfirmpage.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include uninstallconfirmpage.h -o moc_uninstallconfirmpage.cpp
 
 moc_workerprogress.cpp: coloredprogressbar.h \
 		utils.h \
 		workerprogress.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include workerprogress.h -o moc_workerprogress.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include workerprogress.h -o moc_workerprogress.cpp
 
 moc_utils.cpp: utils.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include utils.h -o moc_utils.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include utils.h -o moc_utils.cpp
 
 moc_installprocessinfoview.cpp: installprocessinfoview.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include installprocessinfoview.h -o moc_installprocessinfoview.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include installprocessinfoview.h -o moc_installprocessinfoview.cpp
 
 moc_choosefilebutton.cpp: choosefilebutton.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include choosefilebutton.h -o moc_choosefilebutton.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include choosefilebutton.h -o moc_choosefilebutton.cpp
 
 moc_debinfolabel.cpp: utils.h \
 		debinfolabel.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include debinfolabel.h -o moc_debinfolabel.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include debinfolabel.h -o moc_debinfolabel.cpp
 
 moc_appendpackagethread.cpp: appendpackagethread.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer -I/usr/local/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include appendpackagethread.h -o moc_appendpackagethread.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /data/home/lx777/project/deb_installer/deb_installer/deb_installer/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/data/home/lx777/project/deb_installer/deb_installer/deb_installer -I/usr/include/libqapt -I/usr/include/libdtk-5.2.0/DWidget -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtMultimediaWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets/5.11.3/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtMultimedia -I/usr/include/libdtk-5.1.2/DGui -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtGui/5.11.3/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtX11Extras -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent -I/usr/include/libdtk-5.2.0/DCore -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3 -I/usr/include/x86_64-linux-gnu/qt5/QtCore/5.11.3/QtCore -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/8 -I/usr/include/x86_64-linux-gnu/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/x86_64-linux-gnu/8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include appendpackagethread.h -o moc_appendpackagethread.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -829,9 +726,9 @@ debinstaller.o: debinstaller.cpp debinstaller.h \
 		infocontrolbutton.h \
 		droundbgframe.h \
 		installprocessinfoview.h \
-		singleinstallpage.h \
 		debinfolabel.h \
 		utils.h \
+		singleinstallpage.h \
 		uninstallconfirmpage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debinstaller.o debinstaller.cpp
 
@@ -858,12 +755,13 @@ multipleinstallpage.o: multipleinstallpage.cpp multipleinstallpage.h \
 		infocontrolbutton.h \
 		droundbgframe.h \
 		installprocessinfoview.h \
+		debinfolabel.h \
+		utils.h \
 		deblistmodel.h \
 		packagelistview.h \
 		packageslistdelegate.h \
 		workerprogress.h \
-		coloredprogressbar.h \
-		utils.h
+		coloredprogressbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o multipleinstallpage.o multipleinstallpage.cpp
 
 packagelistview.o: packagelistview.cpp packagelistview.h \
@@ -993,7 +891,7 @@ uninstall_target: FORCE
 
 install_desktop: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/applications || mkdir -p $(INSTALL_ROOT)/usr/share/applications
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/deepin-deb-installer.desktop $(INSTALL_ROOT)/usr/share/applications/deepin-deb-installer.desktop
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/deepin-deb-installer.desktop $(INSTALL_ROOT)/usr/share/applications/deepin-deb-installer.desktop
 
 uninstall_desktop: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/applications/deepin-deb-installer.desktop
@@ -1002,7 +900,7 @@ uninstall_desktop: FORCE
 
 install_applications: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/application-registry || mkdir -p $(INSTALL_ROOT)/usr/share/application-registry
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/deepin-deb-installer.applications $(INSTALL_ROOT)/usr/share/application-registry/deepin-deb-installer.applications
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/deepin-deb-installer.applications $(INSTALL_ROOT)/usr/share/application-registry/deepin-deb-installer.applications
 
 uninstall_applications: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/application-registry/deepin-deb-installer.applications
@@ -1011,45 +909,45 @@ uninstall_applications: FORCE
 
 install_translations: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations || mkdir -p $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
 
 uninstall_translations: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
@@ -1096,7 +994,7 @@ uninstall_translations: FORCE
 
 install_icon_files: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps || mkdir -p $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/resources/images/deepin-deb-installer.svg $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps/deepin-deb-installer.svg
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/resources/images/deepin-deb-installer.svg $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps/deepin-deb-installer.svg
 
 uninstall_icon_files: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/icons/hicolor/scalable/apps/deepin-deb-installer.svg
@@ -1105,7 +1003,7 @@ uninstall_icon_files: FORCE
 
 install_policy: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/polkit-1/actions || mkdir -p $(INSTALL_ROOT)/usr/share/polkit-1/actions
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/com.deepin.pkexec.aptInstallDepend.policy $(INSTALL_ROOT)/usr/share/polkit-1/actions/com.deepin.pkexec.aptInstallDepend.policy
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/com.deepin.pkexec.aptInstallDepend.policy $(INSTALL_ROOT)/usr/share/polkit-1/actions/com.deepin.pkexec.aptInstallDepend.policy
 
 uninstall_policy: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/polkit-1/actions/com.deepin.pkexec.aptInstallDepend.policy
@@ -1114,45 +1012,45 @@ uninstall_policy: FORCE
 
 install_dtk_translations: first FORCE
 	@test -d $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations || mkdir -p $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
-	-$(QINSTALL) /home/uniontech/workspace/deepin-deb-installer/deb_installer/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_am_ET.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_am_ET.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ar.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ar.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ast.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ast.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_bg.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_bg.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ca.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ca.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_cs.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_cs.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_da.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_da.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_de.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_de.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_en_AU.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_en_AU.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_es.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_es.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_et.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_et.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fi.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fi.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_fr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_fr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_gl_ES.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_gl_ES.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_he.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_he.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hi_IN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hi_IN.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_hu.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_hu.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_id.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_id.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_it.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_it.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ko.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ko.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_lt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_lt.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_mn.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_mn.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ms.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ms.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ne.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ne.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_nl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_nl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pa.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pa.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_pt_BR.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_pt_BR.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_ru.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_ru.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sk.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sl.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sl.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_sr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_sr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_tr.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_tr.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_uk.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_uk.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_CN.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_CN.qm
+	-$(QINSTALL) /data/home/lx777/project/deb_installer/deb_installer/deb_installer/translations/deepin-deb-installer_zh_TW.qm $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm
 
 uninstall_dtk_translations: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/usr/share/deepin-deb-installer/translations/deepin-deb-installer_zh_TW.qm

@@ -143,8 +143,7 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
     connect(m_fileListModel, &DebListModel::EnableReCancelBtn, this, &DebInstaller::setEnableButton);
 
-    connect(m_fileListModel, &DebListModel::DeepinWineFinished, this, &DebInstaller::dealDeepinWineFinished);
-    connect(m_fileListModel, &DebListModel::DependEnableBtn, this, &DebInstaller::dealDependEnableBtn);
+    connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
@@ -449,19 +448,15 @@ void DebInstaller::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-void DebInstaller::dealDeepinWineFinished()
+void DebInstaller::DealDependResult(int iAuthRes)
 {
-    refreshInstallPage();
-}
-
-void DebInstaller::dealDependEnableBtn(bool bEnable)
-{
-    qDebug() << "dealDependEnableBtn:" << m_dragflag << bEnable;
+    if (iAuthRes == DebListModel::AuthDependsSuccess)
+        refreshInstallPage();
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->setEnableDependBtn(bEnable);
+        //singlePage->DealDependResult(iAuthRes);
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->setEnableDependBtn(bEnable);
+        multiplePage->DealDependResult(iAuthRes);
     }
 }

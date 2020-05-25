@@ -113,6 +113,11 @@
         <source>Back</source>
         <translation>返 回</translation>
     </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="352"/>
+        <source>Installing dependencies: %1</source>
+        <translation>正在安装依赖关系: %1</translation>
+    </message>
 </context>
 <context>
     <name>PackagesListDelegate</name>

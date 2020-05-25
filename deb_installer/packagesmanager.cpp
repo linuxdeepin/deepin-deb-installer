@@ -135,28 +135,25 @@ void dealDependThread::on_readoutput()
 {
     QString tmp = proc->readAllStandardOutput().data();
     qDebug() << "安装依赖输出数据:" << tmp;
-    if (!tmp.contains("Not authorized")) {
-        if (bStartInstall) {
-            emit DependEnableBtn(false);
-            bStartInstall = false;
-        }
-    } else {
-        emit DependEnableBtn(false);
+
+    if (tmp.contains("StartInstallDeepinwine")) {
+        emit DependResult(DebListModel::AuthConfirm, m_index);
+        return;
+    }
+
+    if (tmp.contains("Not authorized")) {
+        emit DependResult(DebListModel::CancelAuth, m_index);
     }
 }
 
 void dealDependThread::onFinished(int num)
 {
-    if (!bStartInstall) {
-        if (num == 0) {
-            qDebug() << m_dependName << "install success" << num;
-            emit DealDependFinish(m_dependName, true, m_index);
-        } else {
-            emit DependEnableBtn(false);
-        }
+    if (num == 0) {
+        qDebug() << m_dependName << "安装成功";
+        emit DependResult(DebListModel::AuthDependsSuccess, m_index);
     } else {
         qDebug() << m_dependName << "install error" << num;
-        emit DealDependFinish(m_dependName, false, m_index);
+        emit DependResult(DebListModel::AuthDependsErr, m_index);
     }
 }
 
@@ -165,7 +162,8 @@ void dealDependThread::run()
     if (m_dependName == "deepin-wine") {
         proc->setProcessChannelMode(QProcess::MergedChannels);
         msleep(100);
-        emit DependEnableBtn(true);
+
+        emit DependResult(DebListModel::AuthBefore, m_index);
         proc->start("pkexec", QStringList() << "aptInstallDepend");
     }
 }
@@ -175,8 +173,7 @@ PackagesManager::PackagesManager(QObject *parent)
 {
     m_backendFuture = QtConcurrent::run(init_backend);
     dthread = new dealDependThread;
-    connect(dthread, SIGNAL(DealDependFinish(QString, bool, int)), this, SLOT(DealDependFinishSlot(QString, bool, int)));
-    connect(dthread, SIGNAL(DependEnableBtn(bool)), this, SLOT(DealDependEnableBtn(bool)));
+    connect(dthread, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
@@ -348,27 +345,19 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
-void PackagesManager::DealDependFinishSlot(QString name, bool bFinish, int iIndex)
+void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
 {
-    if (bFinish) {
-        m_packageDependsStatus[iIndex].status = 0;
-        m_DealDependIndex = iIndex;
-        emit DeepinWineFinished();
+    if (iAuthRes == DebListModel::AuthDependsSuccess) {
+        for (int num = 0; num < m_dependInstallMark.size(); num++) {
+            m_packageDependsStatus[m_dependInstallMark.at(num)].status = 0;
+        }
     }
-}
-
-void PackagesManager::DealDependEnableBtn(bool bEnable)
-{
-    emit DependEnableBtn(bEnable);
+    emit DependResult(iAuthRes, iIndex);
 }
 
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index)) {
-        if (m_DealDependIndex != -1 && m_DealDependIndex < m_packageDependsStatus.size()) {
-            m_packageDependsStatus[m_DealDependIndex].status = 0;
-            m_DealDependIndex = -1;
-        }
         return m_packageDependsStatus[index];
     }
 
@@ -410,9 +399,12 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             if (ret.status == DebListModel::DependsBreak) {
                 qDebug() << "查找到依赖不满足:" << ret.package;
                 if (ret.package == "deepin-wine") {
-                    if (!dthread->isRunning()) {
-                        dthread->setDependName(ret.package, index);
-                        dthread->run();
+                    if (!m_dependInstallMark.contains(index)) {
+                        if (!dthread->isRunning()) {
+                            m_dependInstallMark.append(index);
+                            dthread->setDependName(ret.package, index);
+                            dthread->run();
+                        }
                     }
                 }
             }
@@ -553,6 +545,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
 void PackagesManager::reset()
 {
+    m_dependInstallMark.clear();
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
@@ -586,6 +579,16 @@ void PackagesManager::removePackage(const int index)
     m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
     m_preparedMd5.removeAt(index);
+
+    if (m_dependInstallMark.contains(index))
+        m_dependInstallMark.removeAt(index);
+    else {
+        for (int i = 0; i < m_dependInstallMark.size(); i++) {
+            if (m_dependInstallMark[i] > index)
+                m_dependInstallMark[i] = m_dependInstallMark[i] - 1;
+        }
+    }
+
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
 }

@@ -72,19 +72,27 @@ DebListModel::DebListModel(QObject *parent)
 {
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
-    connect(m_packagesManager, SIGNAL(DeepinWineFinished()), this, SLOT(dealDeepinWineFinished()));
-    connect(m_packagesManager, SIGNAL(DependEnableBtn(bool)), this, SLOT(dealDependEnableBtn(bool)));
+    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
 }
 
-void DebListModel::dealDependEnableBtn(bool bEnable)
+void DebListModel::DealDependResult(int iAuthRes, int iIndex)
 {
-    bModifyFailedReason = bEnable;
-    emit DependEnableBtn(bEnable);
-}
-
-void DebListModel::dealDeepinWineFinished()
-{
-    emit DeepinWineFinished();
+    switch (iAuthRes) {
+    case DebListModel::CancelAuth:
+        m_packageOperateStatus[iIndex] = Failed;
+        break;
+    case DebListModel::AuthConfirm:
+        break;
+    case DebListModel::AuthDependsSuccess:
+        m_packageOperateStatus[iIndex] = Success;
+        break;
+    case DebListModel::AuthDependsErr:
+        m_packageOperateStatus[iIndex] = Failed;
+        break;
+    default:
+        break;
+    }
+    emit DependResult(iAuthRes);
 }
 
 bool DebListModel::isReady() const
@@ -358,10 +366,10 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
     if (stat.isBreak()) {
         if (!stat.package.isEmpty()) {
-            if (bModifyFailedReason) {
-                if (stat.package == "deepin-wine")
-                    return tr("Installing dependencies: %1").arg(stat.package);
-            }
+//            if (bModifyFailedReason) {
+//                if (stat.package == "deepin-wine")
+//                    return tr("Installing dependencies: %1").arg(stat.package);
+//            }
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -715,6 +723,9 @@ void DebListModel::initRowStatus()
 
 void DebListModel::upWrongStatusRow()
 {
+    if (m_packagesManager->m_preparedPackages.size() == 1)
+        return;
+
     QList<int> listWrongIndex;
     int iIndex = 0;
 

@@ -11,8 +11,7 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    QCommandLineParser parser;
-    parser.process(app);
+    qDebug() << "StartInstallDeepinwine";
 
     QProcess proc;
 

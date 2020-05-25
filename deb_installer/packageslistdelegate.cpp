@@ -202,10 +202,16 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setFont(version_font);
         painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
+        bool bDeepinWine = false;
+        const QString operate_string = index.data(DebListModel::PackageFailReasonRole).toString();
+        if (operate_string.contains("deepin-wine")) {
+            bDeepinWine = true;
+        }
+
         // install status
         const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 //        qDebug() << "index:::::" << index.row() << operate_stat;
-        if (operate_stat != DebListModel::Prepare) {
+        if (operate_stat != DebListModel::Prepare && !bDeepinWine) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
             install_status_rect.setTop(version_y + yOffset - 10);

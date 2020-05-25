@@ -31,6 +31,8 @@
 #include <QWidget>
 #include <DPushButton>
 #include <DProgressBar>
+#include <DSpinner>
+#include "debinfolabel.h"
 
 class PackagesListView;
 class DebListModel;
@@ -44,7 +46,7 @@ public:
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
     void setScrollBottom(int index);
-    void setEnableDependBtn(bool bEnable);
+    void DealDependResult(int iAuthRes);
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
@@ -84,6 +86,8 @@ private:
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
     int m_index = -1;
+    DebInfoLabel *m_tipsLabel;
+    DSpinner *m_dSpinner;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

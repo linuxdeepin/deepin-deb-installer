@@ -88,6 +88,15 @@ public:
         VerifyFailed,
     };
 
+    enum DependsAuthStatus {
+        AuthBefore,   //鉴权框弹出之前
+        AuthPop,      //鉴权框弹出
+        CancelAuth,   //鉴权取消
+        AuthConfirm,  //鉴权确认后
+        AuthDependsSuccess, //安装成功
+        AuthDependsErr,  //安装失败
+    };
+
     void reset();
     void reset_filestatus();
     bool isReady() const;
@@ -117,8 +126,7 @@ signals:
     void AuthCancel();
     void EnableReCancelBtn(bool bEnable);
     void onStartInstall();
-    void DeepinWineFinished();
-    void DependEnableBtn(bool);
+    void DependResult(int);
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
@@ -129,8 +137,7 @@ public slots:
     bool appendPackage(QApt::DebFile *package, bool isEmpty);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
-    void dealDeepinWineFinished();
-    void dealDependEnableBtn(bool bEnable);
+    void DealDependResult(int iAuthRes, int iIndex);
 
 private slots:
     void upWrongStatusRow();

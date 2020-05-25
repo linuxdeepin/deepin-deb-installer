@@ -50,6 +50,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(this))
     , m_centralLayout(new QVBoxLayout(this))
+    , m_tipsLabel(new DebInfoLabel)
+    , m_dSpinner(new DSpinner(this))
 {
     initContentLayout();
     initUI();
@@ -110,6 +112,14 @@ void MultipleInstallPage::initUI()
     m_acceptButton->setFocusPolicy(Qt::NoFocus);
     m_backButton->setFocusPolicy(Qt::NoFocus);
 
+    m_tipsLabel->setFixedHeight(18);
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
+
+    m_dSpinner->setMinimumSize(20, 20);
+    m_dSpinner->hide();
+
     m_installProcessInfoView->setVisible(false);
     m_installProcessInfoView->setAcceptDrops(false);
     m_installProcessInfoView->setFixedHeight(200);
@@ -153,6 +163,13 @@ void MultipleInstallPage::initUI()
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);
     m_contentLayout->addWidget(m_installProcessInfoView);
+
+    m_contentLayout->addStretch();
+    m_contentLayout->addWidget(m_dSpinner);
+    m_contentLayout->addSpacing(4);
+    m_contentLayout->addWidget(m_tipsLabel);
+    m_tipsLabel->setVisible(false);
+
     m_contentLayout->addWidget(btnsFrame);
 }
 
@@ -174,7 +191,7 @@ void MultipleInstallPage::initConnections()
         m_processFrame->setVisible(true);
     });
     connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
-    connect(m_debListModel, &DebListModel::DependEnableBtn, this, &MultipleInstallPage::setEnableDependBtn);
+    connect(m_debListModel, &DebListModel::DependResult, this, &MultipleInstallPage::DealDependResult);
 }
 
 void MultipleInstallPage::onWorkerFinshed()
@@ -294,20 +311,37 @@ void MultipleInstallPage::setScrollBottom(int index)
     QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
 
-void MultipleInstallPage::setEnableDependBtn(bool bEnable)
+void MultipleInstallPage::DealDependResult(int iAuthRes)
 {
-//    m_installButton->setEnabled(!bEnable);
-//    m_backButton->setEnabled(!bEnable);
-//    m_acceptButton->setEnabled(!bEnable);
-    if (!bEnable) {
+    qDebug() << "批量处理鉴权结果：" << iAuthRes;
+    switch (iAuthRes) {
+    case DebListModel::AuthBefore:
+        m_appsListView->setEnabled(false);
+        m_installButton->setVisible(true);
+        m_installButton->setEnabled(false);
+        m_dSpinner->stop();
+        m_dSpinner->hide();
+        m_tipsLabel->setVisible(false);
+        break;
+    case DebListModel::CancelAuth:
+        m_appsListView->setEnabled(true);
+        m_installButton->setVisible(true);
+        m_installButton->setEnabled(true);
+        break;
+    case DebListModel::AuthConfirm:
+        m_appsListView->setEnabled(false);
+        m_tipsLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
+        m_tipsLabel->setCustomDPalette();
+        m_tipsLabel->setVisible(true);
+        m_dSpinner->show();
+        m_dSpinner->start();
         m_installButton->setVisible(false);
-        m_backButton->setVisible(true);
-        m_acceptButton->setVisible(true);
-        m_backButton->setEnabled(true);
-        m_acceptButton->setEnabled(true);
-    } else {
-        m_installButton->setEnabled(!bEnable);
-        m_backButton->setEnabled(!bEnable);
-        m_acceptButton->setEnabled(!bEnable);
+        break;
+    case DebListModel::AuthDependsSuccess:
+    case DebListModel::AuthDependsErr:
+        m_appsListView->setEnabled(true);
+        break;
+    default:
+        break;
     }
 }

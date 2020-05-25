@@ -65,8 +65,7 @@ private slots:
     void setEnableButton(bool bEnable);
     void showHiddenButton();
 
-    void dealDeepinWineFinished();
-    void dealDependEnableBtn(bool bEnable);
+    void DealDependResult(int iAuthRes);
 
     void popFloatingError();
 private:

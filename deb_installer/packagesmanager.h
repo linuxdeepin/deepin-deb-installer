@@ -45,8 +45,7 @@ public:
     void setDependName(QString tmp, int index);
     void run();
 signals:
-    void DealDependFinish(QString name, bool bFinish, int iIndex);
-    void DependEnableBtn(bool bEnable);
+    void DependResult(int, int);
 
 public slots:
     void onFinished(int);
@@ -55,7 +54,6 @@ private:
     QProcess *proc;
     int m_index = -1;
     QString m_dependName;
-    bool bStartInstall = true;
 };
 
 class PackageDependsStatus
@@ -142,13 +140,12 @@ private:
     QSet<QByteArray> m_appendedPackagesMd5;
     int m_DealDependIndex = -1;
     dealDependThread *dthread;
+    QList<int> m_dependInstallMark;
 
 public slots:
-    void DealDependFinishSlot(QString name, bool bFinish, int iIndex);
-    void DealDependEnableBtn(bool bEnable);
+    void DealDependResult(int iAuthRes, int iIndex);
 signals:
-    void DeepinWineFinished();
-    void DependEnableBtn(bool);
+    void DependResult(int, int);
 };
 
 #endif  // PACKAGESMANAGER_H
