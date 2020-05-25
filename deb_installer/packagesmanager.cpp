@@ -590,7 +590,26 @@ void PackagesManager::removePackage(const int index)
     }
 
     m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
+    //m_packageDependsStatus.clear();
+    if (m_packageDependsStatus.contains(index)) {
+        if (m_packageDependsStatus.size() > 1) {
+            QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packageDependsStatus);
+            QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
+            int iDependIndex = 0;
+            while (MapIteratorpackageDependsStatus.hasNext()) {
+                MapIteratorpackageDependsStatus.next();
+                if (index < MapIteratorpackageDependsStatus.key())
+                    listpackageDependsStatus.insert(iDependIndex++, MapIteratorpackageDependsStatus.value());
+                else if (index != MapIteratorpackageDependsStatus.key()) {
+                    listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
+                }
+            }
+            for (int i = 0; i < listpackageDependsStatus.size(); i++)
+                m_packageDependsStatus[i] = listpackageDependsStatus[i];
+        } else {
+            m_packageDependsStatus.clear();
+        }
+    }
 }
 
 void PackagesManager::removeLastPackage()

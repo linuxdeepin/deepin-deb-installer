@@ -450,6 +450,11 @@ void DebInstaller::closeEvent(QCloseEvent *event)
 
 void DebInstaller::DealDependResult(int iAuthRes)
 {
+    if (iAuthRes == DebListModel::AuthBefore || iAuthRes == DebListModel::AuthConfirm || iAuthRes == DebListModel::AuthPop) {
+        this->setAcceptDrops(false);
+    } else {
+        this->setAcceptDrops(true);
+    }
     if (iAuthRes == DebListModel::AuthDependsSuccess)
         refreshInstallPage();
     if (m_dragflag == 2) {
