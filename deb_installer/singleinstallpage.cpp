@@ -399,7 +399,7 @@ void SingleInstallPage::initConnections()
         m_progressFrame->setVisible(true);
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
-    //connect(m_packagesModel, &DebListModel::DependEnableBtn, this, &SingleInstallPage::setEnableDependBtn);
+    connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -668,21 +668,6 @@ void SingleInstallPage::setPackageInfo()
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
     }
-    qDebug() << "m_tipsLabel" << m_tipsLabel->text();
-    if (m_tipsLabel->text().contains("deepin-wine")) {
-        qDebug() << "show Spinner" << m_tipsLabel->text();
-
-        m_tipsLabel->setVisible(false);
-        m_pDSpinner->setVisible(true);
-        m_pLoadingLabel->setVisible(true);
-
-        m_pLoadingLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        m_pLoadingLabel->setCustomDPalette(DPalette::TextTips);
-        m_installButton->setVisible(false);
-        m_reinstallButton->setVisible(false);
-        m_confirmButton->setVisible(false);
-        m_backButton->setVisible(false);
-    }
 }
 
 void SingleInstallPage::setEnableButton(bool bEnable)
@@ -729,17 +714,110 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-void SingleInstallPage::setEnableDependBtn(bool bEnable)
+void SingleInstallPage::setAuthConfirm()
 {
-    if (!bEnable) {
-        m_tipsLabel->setVisible(true);
-        m_tipsLabel->setText(tr("Broken dependencies: deepin-wine"));
-        m_pDSpinner->setVisible(false);
-        m_pLoadingLabel->setVisible(false);
+    m_installButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_uninstallButton->setVisible(false);
+    m_confirmButton->setVisible(false);
+    m_backButton->setVisible(false);
+    m_pDSpinner->setVisible(true);
+    m_pDSpinner->start();
+    m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
+    m_pLoadingLabel->setCustomDPalette(DPalette::TextTips);
+    m_pLoadingLabel->setVisible(true);
+    m_tipsLabel->setVisible(false);
+}
+
+void SingleInstallPage::setAuthBefore()
+{
+    m_tipsLabel->setVisible(true);
+    m_progressFrame->setVisible(false);
+    QModelIndex index = m_packagesModel->first();
+    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    if (dependsStat == DebListModel::DependsBreak) {
+        m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
+        m_confirmButton->setEnabled(false);
+        m_backButton->setEnabled(false);
+    } else {
+        if (m_operate == Install) {
+            m_installButton->setVisible(true);
+        } else if (m_operate == Uninstall) {
+            m_reinstallButton->setVisible(true);
+            m_uninstallButton->setVisible(true);
+        } else if (m_operate == Reinstall) {
+            m_reinstallButton->setVisible(true);
+            m_uninstallButton->setVisible(true);
+        }
+        m_installButton->setEnabled(false);
+        m_reinstallButton->setEnabled(false);
+        m_uninstallButton->setEnabled(false);
+    }
+
+    m_pLoadingLabel->setVisible(false);
+    m_pDSpinner->stop();
+    m_pDSpinner->setVisible(false);
+}
+
+void SingleInstallPage::setCancelAuthOrAuthDependsErr()
+{
+    m_tipsLabel->setVisible(true);
+    m_progressFrame->setVisible(false);
+    QModelIndex index = m_packagesModel->first();
+    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    qDebug() << "cancel Auth" << dependsStat;
+    if (dependsStat == DebListModel::DependsBreak) {
+        qDebug() << "confirm button";
+        m_confirmButton->setVisible(true);
+        m_backButton->setVisible(true);
+        m_confirmButton->setEnabled(true);
+        m_backButton->setEnabled(true);
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_uninstallButton->setVisible(false);
-        m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
+    } else {
+        m_confirmButton->setVisible(false);
+        m_backButton->setVisible(false);
+        qDebug() << "operate Button";
+        if (m_operate == Install) {
+            m_installButton->setVisible(true);
+        } else if (m_operate == Uninstall) {
+            m_reinstallButton->setVisible(true);
+            m_uninstallButton->setVisible(true);
+        } else if (m_operate == Reinstall) {
+            m_reinstallButton->setVisible(true);
+            m_uninstallButton->setVisible(true);
+        }
+        m_installButton->setEnabled(true);
+        m_reinstallButton->setEnabled(true);
+        m_uninstallButton->setEnabled(true);
+    }
+
+    m_pLoadingLabel->setVisible(false);
+    m_pDSpinner->stop();
+    m_pDSpinner->setVisible(false);
+}
+void SingleInstallPage::DealDependResult(int iAuthRes)
+{
+    qDebug() << "Deal DependResult" << iAuthRes;
+    switch (iAuthRes) {
+    case DebListModel::AuthConfirm:
+        setAuthConfirm();
+        break;
+
+    case DebListModel::AuthBefore:
+        setAuthBefore();
+        break;
+    case DebListModel::CancelAuth:
+        setCancelAuthOrAuthDependsErr();
+        break;
+    case DebListModel::AuthDependsSuccess:
+    case DebListModel::AuthDependsErr:
+        setCancelAuthOrAuthDependsErr();
+        break;
+    default:
+        break;
     }
 }
+

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -9,14 +7,14 @@
         <translation>软件包安装器</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
-        <source>Bulk Install</source>
-        <translation>批量安装</translation>
-    </message>
-    <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
         <translation>已添加</translation>
+    </message>
+    <message>
+        <location filename="../debinstaller.cpp" line="381"/>
+        <source>Bulk Install</source>
+        <translation>批量安装</translation>
     </message>
 </context>
 <context>
@@ -25,21 +23,6 @@
         <location filename="../deblistmodel.cpp" line="58"/>
         <source>Installation failed, please check your network connection</source>
         <translation>安装失败，请检查您的网络连接</translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
-        <source>Unable to install</source>
-        <translation>无法安装</translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation>此安装包没有有效的数字签名</translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
-        <source>OK</source>
-        <translation>确 认</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
@@ -57,18 +40,28 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation>正在安装依赖关系: %1</translation>
+        <location filename="../deblistmodel.cpp" line="640"/>
+        <source>Unable to install</source>
+        <translation>无法安装</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
+        <source>This package does not have a valid digital signature</source>
+        <translation>此安装包没有有效的数字签名</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="643"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
         <source>Broken dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
@@ -99,24 +92,24 @@
         <translation>显示详细信息</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
-        <translation>安 装</translation>
-    </message>
-    <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
-        <source>Done</source>
-        <translation>完 成</translation>
+        <translation>安装</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="99"/>
-        <source>Back</source>
-        <translation>返 回</translation>
+        <source>Done</source>
+        <translation>完成</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="352"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
         <source>Installing dependencies: %1</source>
-        <translation>正在安装依赖关系: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -148,17 +141,17 @@
         <translation>等待安装</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
         <translation>已安装较新的版本：%1</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
         <translation>已安装较早的版本：%1</translation>
     </message>
@@ -189,12 +182,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
         <source>Install</source>
-        <translation>安 装</translation>
+        <translation>安装</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="286"/>
         <source>Remove</source>
-        <translation>卸 载</translation>
+        <translation>卸载</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="288"/>
@@ -204,30 +197,32 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="290"/>
         <source>OK</source>
-        <translation>确 认</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="292"/>
         <source>Back</source>
-        <translation>返 回</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="294"/>
         <source>Done</source>
-        <translation>完 成</translation>
+        <translation>完成</translation>
     </message>
     <message>
-        <source>deepin-wine</source>
-        <translation type="vanished">deepin-wine</translation>
+        <location filename="../singleinstallpage.cpp" line="648"/>
+        <source>Later version installed: %1</source>
+        <translation>已安装较新的版本：%1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation>依赖关系不满足：deepin-wine</translation>
+        <location filename="../singleinstallpage.cpp" line="652"/>
+        <source>Earlier version installed: %1</source>
+        <translation>已安装较早的版本：%1</translation>
     </message>
     <message>
-        <source>Installing dependencies: deepin-wine</source>
-        <translation type="vanished">正在安装依赖关系: deepin-wine</translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -245,16 +240,6 @@
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="648"/>
-        <source>Later version installed: %1</source>
-        <translation>已安装较新的版本：%1</translation>
-    </message>
-    <message>
-        <location filename="../singleinstallpage.cpp" line="652"/>
-        <source>Earlier version installed: %1</source>
-        <translation>已安装较早的版本：%1</translation>
-    </message>
-    <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
         <source>Uninstall Failed</source>
         <translation>卸载失败</translation>
@@ -262,7 +247,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="158"/>
         <source>Name: </source>
-        <translation>软件包：</translation>
+        <translation>名称：</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="645"/>
@@ -293,13 +278,13 @@
     <name>UninstallConfirmPage</name>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
-        <source>Show related packages</source>
-        <translation>显示相关软件包</translation>
+        <source>Collapse</source>
+        <translation>收起</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
-        <source>Collapse</source>
-        <translation>收起</translation>
+        <source>Show related packages</source>
+        <translation>显示相关软件包</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -309,13 +294,13 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="60"/>
         <source>Confirm</source>
-        <translation>确认卸载</translation>
+        <translation>确定卸载</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="121"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>您确定要卸载%1吗？
+        <translation>您确定要卸载%1 吗？
 所有依赖也会被一起移除</translation>
     </message>
     <message>

@@ -13,12 +13,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>Bulk Install</translation>
     </message>
@@ -46,33 +46,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
@@ -103,18 +98,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -147,17 +147,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -226,8 +226,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

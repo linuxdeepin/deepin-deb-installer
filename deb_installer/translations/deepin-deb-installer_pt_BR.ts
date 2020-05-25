@@ -1,28 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Tema escuro</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin Gerenciador de Pacotes</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalador de Pacotes</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Já Adicionado</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>Instalação em Massa</translation>
     </message>
@@ -32,73 +22,56 @@
     <message>
         <location filename="../deblistmodel.cpp" line="58"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Falha na instalação, verifique sua conexão com a internet</translation>
-    </message>
-    <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">Falha na instalação, verifique se há atualizações pendentes na Central de Controle</translation>
+        <translation>Erro na Instalação! Verifique sua conexão</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro na instalação. Verifique se há atualizações no Centro de Controle.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="63"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Falha na instalação, espaço insuficiente em disco</translation>
+        <translation>Erro na Instalação! Espaço insuficiente no disco</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="65"/>
         <source>Installation Failed</source>
-        <translation>Falha na Instalação.</translation>
+        <translation>Erro na Instalação.</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
-        <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível instalar</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Este pacote não possui uma assinatura digital válida</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">Dependências Quebradas: %1</translation>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
+        <source>Broken dependencies: %1</source>
+        <translation>Dependências quebradas: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
-        <translation>Arquitetura de pacote incompatível</translation>
+        <translation>Arquitetura do pacote incompatível</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">Arraste e solte o arquivo aqui</translation>
-    </message>
-    <message>
         <location filename="../filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>Arraste os pacotes .deb aqui</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="93"/>
@@ -111,31 +84,32 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Collapse</source>
-        <translation>Ocultar detalhes</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">Exibir detalhes</translation>
+        <translation>Recolher</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar detalhes</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation>Concluído</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
         <translation>Voltar</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -164,26 +138,22 @@
         <location filename="../packageslistdelegate.cpp" line="79"/>
         <location filename="../packageslistdelegate.cpp" line="108"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperando</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation>Versão já instalada</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Última versão instalada: %1</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Outra versão está instalada: %1</translation>
+        <translation>Versão anterior instalada: %1</translation>
     </message>
 </context>
 <context>
@@ -191,7 +161,7 @@
     <message>
         <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Excluir</translation>
     </message>
 </context>
 <context>
@@ -199,7 +169,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">Ocultar detalhes</translation>
+        <translation>Recolher</translation>
     </message>
 </context>
 <context>
@@ -207,11 +177,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
-        <translation>Ocultar detalhes</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">Exibir detalhes</translation>
+        <translation>Ocultar Detalhes</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
@@ -231,7 +197,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="290"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="292"/>
@@ -246,17 +212,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Última versão instalada: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Versão anterior instalada: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation type="unfinished"></translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -266,21 +232,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="530"/>
         <source>Installed successfully</source>
-        <translation>Instalado com sucesso</translation>
+        <translation>Instalado</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
-        <translation>Desinstalado com sucesso</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Outra versão está instalada: %1</translation>
+        <translation>Desinstalado</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
         <source>Uninstall Failed</source>
-        <translation>Falha na Desinstalação</translation>
+        <translation>Falha na desinstalação</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="158"/>
@@ -300,7 +262,7 @@
         <location filename="../singleinstallpage.cpp" line="453"/>
         <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar detalhes</translation>
     </message>
 </context>
 <context>
@@ -309,24 +271,20 @@
         <location filename="../singleinstallpage.cpp" line="463"/>
         <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar detalhes</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <source>Display related packages</source>
-        <translation type="vanished">Exibir pacotes relacionados</translation>
-    </message>
-    <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>Ocultar detalhes</translation>
+        <translation>Recolher</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar pacotes relacionados</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -342,36 +300,29 @@
         <location filename="../uninstallconfirmpage.cpp" line="121"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Deseja desinstalar %1?
+        <translation>Desinstalar %1?
 Todas as dependências serão removidas</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Desinstalar %1?
+O sistema ou outros aplicativos podem não funcionar corretamente</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin Gerenciador de Pacotes</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="vanished">O Deepin Package Manager é usado para ajudar os usuários a instalar e remover pacotes locais, suportando a instalação em massa.</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="62"/>
         <location filename="../main.cpp" line="63"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalador de Pacotes</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="64"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>O Instalador de Pacotes ajuda os usuários a instalar e remover pacotes locais e suporta a instalação em massa.</translation>
     </message>
 </context>
 </TS>

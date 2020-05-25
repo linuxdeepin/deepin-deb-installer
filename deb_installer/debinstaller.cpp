@@ -454,7 +454,7 @@ void DebInstaller::DealDependResult(int iAuthRes)
         refreshInstallPage();
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        //singlePage->DealDependResult(iAuthRes);
+        singlePage->DealDependResult(iAuthRes);
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->DealDependResult(iAuthRes);

@@ -1,28 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ne">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ne" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">डार्क थिम</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">डिपिन प्याकेज प्रबन्धक</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>प्याकेज स्थापनाकर्ता</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>पहिले नै थपिएको</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>बल्क स्थापना</translation>
     </message>
@@ -35,13 +25,9 @@
         <translation>स्थापना असफल भयो, कृपया तपाइँको नेटवर्क जडान जाँच्नुहोस्</translation>
     </message>
     <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">स्थापना विफल भयो, कृपया नियन्त्रण केन्द्रमा अपडेट जाँच गर्नुहोस्</translation>
-    </message>
-    <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>स्थापना असफल भयो, कृपया नियन्त्रण केन्द्रमा अद्यावधिकहरू जाँच गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="63"/>
@@ -54,37 +40,28 @@
         <translation>स्थापना असफल भयो</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
-        <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>स्थापना गर्न असमर्थ</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
-        <translation type="unfinished">ठिक छ</translation>
+        <translation>ठिक छ</translation>
     </message>
     <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">टूटेको निर्भरताहरू:% 1</translation>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
+        <source>Broken dependencies: %1</source>
+        <translation>टुक्रिएको निर्भरता:% 1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation>बेमेल प्याकेज वास्तुकला</translation>
     </message>
@@ -92,13 +69,9 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">फाइल यहाँ तान्नुहोस् र ड्रप गर्नुहोस्</translation>
-    </message>
-    <message>
         <location filename="../filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>यहाँ डेब प्याकेजहरू तान्नुहोस्</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="93"/>
@@ -114,28 +87,29 @@
         <translation>संक्षिप्त गर्नुहोस्</translation>
     </message>
     <message>
-        <source>Display details</source>
-        <translation type="vanished">विवरणहरू प्रदर्शन गर्नुहोस्</translation>
-    </message>
-    <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>विवरण देखाऊ</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation>स्थापना</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation>भयो</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
         <translation>पछाडि</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -164,26 +138,22 @@
         <location filename="../packageslistdelegate.cpp" line="79"/>
         <location filename="../packageslistdelegate.cpp" line="108"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>पर्खँदै</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation>एउटै संस्करण स्थापित</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">अन्य संस्करण स्थापित:% 1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -191,7 +161,7 @@
     <message>
         <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>हटाउनुहोस्</translation>
     </message>
 </context>
 <context>
@@ -199,7 +169,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">संक्षिप्त गर्नुहोस्</translation>
+        <translation>संक्षिप्त गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -208,10 +178,6 @@
         <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
         <translation>संक्षिप्त गर्नुहोस्</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">विवरणहरू प्रदर्शन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
@@ -246,17 +212,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation type="unfinished"></translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -272,10 +238,6 @@
         <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>सफलतापूर्वक स्थापना रद्द गरियो</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">अन्य संस्करण स्थापित:% 1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
@@ -300,7 +262,7 @@
         <location filename="../singleinstallpage.cpp" line="453"/>
         <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>विवरण देखाऊ</translation>
     </message>
 </context>
 <context>
@@ -309,15 +271,11 @@
         <location filename="../singleinstallpage.cpp" line="463"/>
         <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>विवरण देखाऊ</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
-    <message>
-        <source>Display related packages</source>
-        <translation type="vanished">सम्बन्धित प्याकेजहरू प्रदर्शन गर्नुहोस्</translation>
-    </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
@@ -326,7 +284,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>सम्बन्धित प्याकेजहरू देखाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -348,29 +306,22 @@ All dependencies will also be removed</source>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>के तपाईं पक्का% 1 स्थापना हटाउन चाहनुहुन्छ?
+प्रणाली वा अन्य अनुप्रयोगहरू ठीकसँग काम नगर्न सक्छ</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">डिपिन प्याकेज प्रबन्धक</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="vanished">डिपिन प्याकेज प्रबन्धक, प्याकेज फाइल स्थापना र स्थापना रद्द गर्न प्रयोग हुन्छ </translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="62"/>
         <location filename="../main.cpp" line="63"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>प्याकेज स्थापनाकर्ता</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="64"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>प्याकेज स्थापनाकर्ताले प्रयोगकर्ताहरूलाई स्थानीय प्याकेजहरू स्थापना र हटाउन मद्दत गर्दछ, र बल्क स्थापनालाई समर्थन गर्दछ।</translation>
     </message>
 </context>
 </TS>

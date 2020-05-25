@@ -1,28 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Тамна тема</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Дипин Управник Пакета</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Инсталатер Пакета</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Већ додато</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>Групно инсталирање</translation>
     </message>
@@ -35,13 +25,9 @@
         <translation>Инсталација неуспешна, молимо проверите везу са мрежом</translation>
     </message>
     <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">Инсталација неуспешна, молимо проверите ажурирања у Контролном Центру</translation>
-    </message>
-    <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Инсталација неуспешна, молимо проверите ажурирања у Контролном Центру</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="63"/>
@@ -54,37 +40,28 @@
         <translation>Инсталација неуспешна</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
-        <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу да инсталирам</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Пакет нема важећи дигитални потпис</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
-        <translation type="unfinished">У реду</translation>
+        <translation>У реду</translation>
     </message>
     <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">Незадовољене зависности: %1</translation>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
+        <source>Broken dependencies: %1</source>
+        <translation>Незадовољене зависности: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation>Неподударна архитектура пакета</translation>
     </message>
@@ -92,13 +69,9 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">Превуци и убаци датотеку овде</translation>
-    </message>
-    <message>
         <location filename="../filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>Превуци deb датотеку овде</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="93"/>
@@ -114,28 +87,29 @@
         <translation>Скупи</translation>
     </message>
     <message>
-        <source>Display details</source>
-        <translation type="vanished">Прикажи детаље</translation>
-    </message>
-    <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Детаљније</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation>Инсталирај</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
         <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -164,26 +138,22 @@
         <location filename="../packageslistdelegate.cpp" line="79"/>
         <location filename="../packageslistdelegate.cpp" line="108"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Чекам</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation>Иста верзија је инсталирана</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Новија верзија је инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Друга верзија је инсталирана: %1</translation>
+        <translation>Старија верзија је инсталирана: %1</translation>
     </message>
 </context>
 <context>
@@ -191,7 +161,7 @@
     <message>
         <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Обриши</translation>
     </message>
 </context>
 <context>
@@ -199,7 +169,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">Скупи</translation>
+        <translation>Скупи</translation>
     </message>
 </context>
 <context>
@@ -208,10 +178,6 @@
         <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
         <translation>Скупи</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">Прикажи детаље</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
@@ -246,17 +212,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Новија верзија је инсталирана: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Старија верзија је инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation type="unfinished"></translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -272,10 +238,6 @@
         <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>Успешно уклоњено</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Друга верзија је инсталирана: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
@@ -300,7 +262,7 @@
         <location filename="../singleinstallpage.cpp" line="453"/>
         <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Детаљније</translation>
     </message>
 </context>
 <context>
@@ -309,15 +271,11 @@
         <location filename="../singleinstallpage.cpp" line="463"/>
         <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Детаљније</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
-    <message>
-        <source>Display related packages</source>
-        <translation type="vanished">Прикажи повезане пакете</translation>
-    </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
@@ -326,7 +284,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Прикажи повезане пакете</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -343,35 +301,28 @@
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>Заиста желите да уклоните %1?
-Све зависности биће уклоњене такође</translation>
+Биће уклоњене и све зависности</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Заиста желита да уклоните %1?
+Систем и програми можда неће радити исправно</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Дипин Управник Пакета</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="vanished">Дипин Управник Пакета је програм који помаже корисницима при инсталирању и уклањању локалног софтвера. Подржава групну инсталацију.</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="62"/>
         <location filename="../main.cpp" line="63"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Инсталатер пакета</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="64"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Инсалатер пакета помаже корисницима да инсталирају и уклањају локалне пакете. Подржава групну инсталацију.</translation>
     </message>
 </context>
 </TS>

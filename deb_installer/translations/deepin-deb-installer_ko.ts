@@ -1,28 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ko">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">어두운 테마</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin 패키지 관리자</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>패키지 관리자</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 추가됨</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>일괄 설치</translation>
     </message>
@@ -32,16 +22,12 @@
     <message>
         <location filename="../deblistmodel.cpp" line="58"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>설치 실패, 네트워크 연결을 확인하세요</translation>
-    </message>
-    <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">설치 실패, 제어 센터에서 업데이트를 확인하세요</translation>
+        <translation>설치 실패. 네트워크 연결을 확인하십시오</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>설치 실패. 제어 센터에서 업데이트를 확인하십시오</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="63"/>
@@ -54,37 +40,28 @@
         <translation>설치 실패</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
-        <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>설치할 수 없음</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>이 패키지에는 유효한 디지털 서명이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
-        <translation type="unfinished">확인</translation>
+        <translation>확인</translation>
     </message>
     <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">손상된 종속성: %1</translation>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
+        <source>Broken dependencies: %1</source>
+        <translation>깨진 종속성: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation>최고의 패키지 아키텍처</translation>
     </message>
@@ -92,13 +69,9 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">파일을 여기로 끌어다 놓기</translation>
-    </message>
-    <message>
         <location filename="../filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>deb 패키지를 여기로 끌어다 놓으십시오</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="93"/>
@@ -111,31 +84,32 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Collapse</source>
-        <translation>접기</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">세부 정보 표시</translation>
+        <translation>축소</translation>
     </message>
     <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>상세 정보 표시</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation>설치</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation>완료</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
         <translation>뒤로</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -158,32 +132,28 @@
         <location filename="../packageslistdelegate.cpp" line="95"/>
         <location filename="../packageslistdelegate.cpp" line="114"/>
         <source>Failed</source>
-        <translation>실패됨</translation>
+        <translation>실패함</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="79"/>
         <location filename="../packageslistdelegate.cpp" line="108"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>기다리는 중</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
+        <location filename="../packageslistdelegate.cpp" line="242"/>
         <source>Same version installed</source>
         <translation>동일한 버전 설치됨</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>이후 버전 설치: %1</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">다른 버전 설치됨: %1</translation>
+        <translation>이전 버전 설치: %1</translation>
     </message>
 </context>
 <context>
@@ -191,7 +161,7 @@
     <message>
         <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>삭제</translation>
     </message>
 </context>
 <context>
@@ -199,7 +169,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">접기</translation>
+        <translation>축소</translation>
     </message>
 </context>
 <context>
@@ -207,11 +177,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
-        <translation>접기</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">세부 정보 표시</translation>
+        <translation>축소</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
@@ -246,17 +212,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>이후 버전 설치: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 버전 설치: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation type="unfinished"></translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -272,10 +238,6 @@
         <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>제거 성공</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">다른 버전 설치됨: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
@@ -300,7 +262,7 @@
         <location filename="../singleinstallpage.cpp" line="453"/>
         <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>상세 정보 표시</translation>
     </message>
 </context>
 <context>
@@ -309,24 +271,20 @@
         <location filename="../singleinstallpage.cpp" line="463"/>
         <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>상세 정보 표시</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <source>Display related packages</source>
-        <translation type="vanished">관련 패키지 표시</translation>
-    </message>
-    <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>접기</translation>
+        <translation>축소</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>관련 패키지 표시</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -349,29 +307,22 @@ All dependencies will also be removed</source>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>%1을(를) 제거하시겠습니까?
+시스템 또는 다른 응용 프로그램이 제대로 작동하지 않을 수 있습니다.</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin 패키지 관리자</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="vanished">Deepin 패키지 관리자는 사용자가 일괄 설치를 지원하여 로컬 패키지를 설치 및 제거하는데 사용됩니다.</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="62"/>
         <location filename="../main.cpp" line="63"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>패키지 관리자</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="64"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>패키지 설치 관리자는 사용자가 로컬 패키지를 설치하고, 제거할 수 있도록 지원하고 일괄 설치를 지원합니다.</translation>
     </message>
 </context>
 </TS>

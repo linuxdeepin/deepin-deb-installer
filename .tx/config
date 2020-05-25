@@ -15,7 +15,3 @@ source_file = deb_installer/translations/desktop/desktop.ts
 source_lang = en
 type = QT
 
-
-
-
-

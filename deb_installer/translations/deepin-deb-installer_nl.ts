@@ -1,28 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Dark theme</source>
-        <translation type="vanished">Donker thema</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin Pakketbeheer</translation>
-    </message>
-    <message>
         <location filename="../debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketinstallatie</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="281"/>
+        <location filename="../debinstaller.cpp" line="280"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Reeds toegevoegd</translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="382"/>
+        <location filename="../debinstaller.cpp" line="381"/>
         <source>Bulk Install</source>
         <translation>Alles installeren</translation>
     </message>
@@ -32,21 +22,17 @@
     <message>
         <location filename="../deblistmodel.cpp" line="58"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Installatie mislukt; controleer je netwerkverbinding.</translation>
-    </message>
-    <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">Installatie mislukt; controleer op updates in het Configuratiecentrum.</translation>
+        <translation>Installatie mislukt; controleer je internetverbinding.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="60"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Installatie mislukt; controleer op updates in het Configuratiecentrum.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="63"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Installatie mislukt; onvoldoende schijfruimte.</translation>
+        <translation>Installatie mislukt: onvoldoende schijfruimte.</translation>
     </message>
     <message>
         <location filename="../deblistmodel.cpp" line="65"/>
@@ -54,37 +40,28 @@
         <translation>Installatie mislukt</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="363"/>
-        <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="365"/>
-        <location filename="../deblistmodel.cpp" line="369"/>
-        <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../deblistmodel.cpp" line="632"/>
+        <location filename="../deblistmodel.cpp" line="640"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeren niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="633"/>
+        <location filename="../deblistmodel.cpp" line="641"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit pakket bevat geen geldige ondertekening</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="635"/>
+        <location filename="../deblistmodel.cpp" line="643"/>
         <source>OK</source>
-        <translation type="unfinished">Oké</translation>
+        <translation>Oké</translation>
     </message>
     <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">Gebroken afhankelijkheden: %1</translation>
+        <location filename="../deblistmodel.cpp" line="373"/>
+        <location filename="../deblistmodel.cpp" line="377"/>
+        <source>Broken dependencies: %1</source>
+        <translation>Gebroken afhankelijkheden: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="358"/>
+        <location filename="../deblistmodel.cpp" line="366"/>
         <source>Unmatched package architecture</source>
         <translation>Pakketarchitectuur komt niet overeen</translation>
     </message>
@@ -92,13 +69,9 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">Versleep een bestand hierheen</translation>
-    </message>
-    <message>
         <location filename="../filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleep deb-bestanden hierheen</translation>
     </message>
     <message>
         <location filename="../filechoosewidget.cpp" line="93"/>
@@ -114,28 +87,29 @@
         <translation>Inklappen</translation>
     </message>
     <message>
-        <source>Display details</source>
-        <translation type="vanished">Details tonen</translation>
-    </message>
-    <message>
         <location filename="../multipleinstallpage.cpp" line="44"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Informatie tonen</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="96"/>
+        <location filename="../multipleinstallpage.cpp" line="98"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="97"/>
+        <location filename="../multipleinstallpage.cpp" line="99"/>
         <source>Done</source>
         <translation>Klaar</translation>
     </message>
     <message>
-        <location filename="../multipleinstallpage.cpp" line="99"/>
+        <location filename="../multipleinstallpage.cpp" line="101"/>
         <source>Back</source>
         <translation>Terug</translation>
+    </message>
+    <message>
+        <location filename="../multipleinstallpage.cpp" line="333"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -144,7 +118,7 @@
         <location filename="../packageslistdelegate.cpp" line="71"/>
         <location filename="../packageslistdelegate.cpp" line="100"/>
         <source>Installing</source>
-        <translation>Installeren</translation>
+        <translation>Bezig met installeren</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="75"/>
@@ -164,26 +138,22 @@
         <location filename="../packageslistdelegate.cpp" line="79"/>
         <location filename="../packageslistdelegate.cpp" line="108"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../packageslistdelegate.cpp" line="236"/>
-        <source>Same version installed</source>
-        <translation>Dezelfde versie geïnstalleerd</translation>
-    </message>
-    <message>
-        <location filename="../packageslistdelegate.cpp" line="239"/>
-        <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met wachten</translation>
     </message>
     <message>
         <location filename="../packageslistdelegate.cpp" line="242"/>
-        <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <source>Same version installed</source>
+        <translation>Dezelfde versie is geïnstalleerd</translation>
     </message>
     <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Andere versie geïnstalleerd: %1</translation>
+        <location filename="../packageslistdelegate.cpp" line="245"/>
+        <source>Later version installed: %1</source>
+        <translation>Nieuwere versie geïnstalleerd: %1</translation>
+    </message>
+    <message>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
+        <source>Earlier version installed: %1</source>
+        <translation>Oudere versie geïnstalleerd: %1</translation>
     </message>
 </context>
 <context>
@@ -191,7 +161,7 @@
     <message>
         <location filename="../packagelistview.cpp" line="146"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -199,7 +169,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished">Inklappen</translation>
+        <translation>Inklappen</translation>
     </message>
 </context>
 <context>
@@ -208,10 +178,6 @@
         <location filename="../singleinstallpage.cpp" line="573"/>
         <source>Collapse</source>
         <translation>Inklappen</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">Details tonen</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="284"/>
@@ -246,17 +212,17 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieuwere versie geïnstalleerd: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="652"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Oudere versie geïnstalleerd: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="736"/>
-        <source>Broken dependencies: deepin-wine</source>
-        <translation type="unfinished"></translation>
+        <location filename="../singleinstallpage.cpp" line="741"/>
+        <source>Installing dependencies: %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="165"/>
@@ -266,16 +232,12 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="530"/>
         <source>Installed successfully</source>
-        <translation>Geïnstalleerd</translation>
+        <translation>Installatie voltooid</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="553"/>
         <source>Uninstalled successfully</source>
         <translation>Verwijderd</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">Andere versie geïnstalleerd: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="564"/>
@@ -290,7 +252,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="645"/>
         <source>Same version installed</source>
-        <translation>Dezelfde versie geïnstalleerd</translation>
+        <translation>Dezelfde versie is geïnstalleerd</translation>
     </message>
 </context>
 <context>
@@ -300,7 +262,7 @@
         <location filename="../singleinstallpage.cpp" line="453"/>
         <location filename="../singleinstallpage.cpp" line="529"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Informatie tonen</translation>
     </message>
 </context>
 <context>
@@ -309,15 +271,11 @@
         <location filename="../singleinstallpage.cpp" line="463"/>
         <location filename="../singleinstallpage.cpp" line="552"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Informatie tonen</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
-    <message>
-        <source>Display related packages</source>
-        <translation type="vanished">Gerelateerde pakketten tonen</translation>
-    </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
@@ -326,7 +284,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerelateerde pakketten tonen</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="58"/>
@@ -336,7 +294,7 @@
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="60"/>
         <source>Confirm</source>
-        <translation>Bevestigen</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../uninstallconfirmpage.cpp" line="121"/>
@@ -349,29 +307,22 @@ Alle afhankelijkheden worden eveneens verwijderd</translation>
         <location filename="../uninstallconfirmpage.cpp" line="123"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet je zeker dat je %1 wilt verwijderen?
+Het systeem of andere programma&apos;s werken dan mogelijk niet goed meer.</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin Pakketbeheer</translation>
-    </message>
-    <message>
-        <source>Deepin Package Manager is used to help users install and remove local packages, supporting bulk install.</source>
-        <translation type="vanished">Deepin Pakketbeheer is een applicatie die gebruikers helpt bij het installeren en verwijderen van lokale software, zowel één voor één als meerdere tegelijk.</translation>
-    </message>
-    <message>
         <location filename="../main.cpp" line="62"/>
         <location filename="../main.cpp" line="63"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketinstallatie</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="64"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakketinstallatie is een programma dat gebruikers helpt bij het installeren van lokale software.</translation>
     </message>
 </context>
 </TS>
