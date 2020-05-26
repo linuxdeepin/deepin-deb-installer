@@ -614,7 +614,7 @@ void PackagesManager::removePackage(const int index)
             int iDependIndex = 0;
             while (MapIteratorpackageDependsStatus.hasNext()) {
                 MapIteratorpackageDependsStatus.next();
-                if (index < MapIteratorpackageDependsStatus.key())
+                if (index > MapIteratorpackageDependsStatus.key())
                     listpackageDependsStatus.insert(iDependIndex++, MapIteratorpackageDependsStatus.value());
                 else if (index != MapIteratorpackageDependsStatus.key()) {
                     listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
