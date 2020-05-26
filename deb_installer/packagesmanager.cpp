@@ -620,8 +620,9 @@ void PackagesManager::removePackage(const int index)
                     listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
                 }
             }
+            m_packageDependsStatus.clear();
             for (int i = 0; i < listpackageDependsStatus.size(); i++)
-                m_packageDependsStatus[i] = listpackageDependsStatus[i];
+                m_packageDependsStatus.insert(i, listpackageDependsStatus[i]);
         } else {
             m_packageDependsStatus.clear();
         }

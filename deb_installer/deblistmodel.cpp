@@ -381,8 +381,8 @@ QString DebListModel::packageFailedReason(const int idx) const
     }
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
-    if (!m_packageFailReason.contains(idx))
-        qDebug() << "ggy" << m_packageFailReason.size() << idx;
+//    if (!m_packageFailReason.contains(idx))
+//        qDebug() << "ggy" << m_packageFailReason.size() << idx;
     Q_ASSERT(m_packageFailReason.contains(idx));
 
     return workerErrorString(m_packageFailReason[idx]);
