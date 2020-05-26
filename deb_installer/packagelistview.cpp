@@ -35,7 +35,8 @@ PackagesListView::PackagesListView(QWidget *parent)
     initConnections();
     initRightContextMenu();
     initShortcuts();
-    this->grabKeyboard();//在packagelist中添加焦点
+    //this->grabKeyboard();//在packagelist中添加焦点
+    this->setFocusPolicy(Qt::StrongFocus);
 }
 
 void PackagesListView::initUI()
@@ -87,12 +88,9 @@ void PackagesListView::scrollContentsBy(int dx, int dy)
 
 void PackagesListView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton)
-    {
+    if (event->button() == Qt::LeftButton) {
         m_bLeftMouse = true;
-    }
-    else
-    {
+    } else {
         m_bLeftMouse = false;
     }
 
@@ -102,8 +100,7 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
     DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());
-    if (!debListModel->isWorkerPrepare())
-    {
+    if (!debListModel->isWorkerPrepare()) {
         return;
     }
 
@@ -119,27 +116,23 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
 
     m_highlightIndex = modelIndex;
     m_currModelIndex = m_highlightIndex;
-    if (!m_bLeftMouse)
-    {
+    if (!m_bLeftMouse) {
         m_bShortcutDelete = false;
         emit onShowContextMenu(modelIndex);
-    }
-    else
-    {
+    } else {
         m_bShortcutDelete = true;
     }
 }
 
 void PackagesListView::keyPressEvent(QKeyEvent *event)
 {
-   m_bLeftMouse = true;
-   DListView::keyPressEvent(event);
+    m_bLeftMouse = true;
+    DListView::keyPressEvent(event);
 }
 
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu)
-    {
+    if (nullptr == m_rightMenu) {
         m_rightMenu = new DMenu(this);
 
         //给右键菜单添加快捷键Delete
@@ -157,18 +150,19 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     m_bShortcutDelete = false;
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
-    connect(rightMenu, &DMenu::aboutToHide, this, [=] {
+    /*
+    connect(rightMenu, &DMenu::aboutToHide, this, [ = ] {
         this->grabKeyboard();//在packagelist中添加焦点
     });
-    connect(rightMenu, &DMenu::aboutToShow, this, [=] {
+    connect(rightMenu, &DMenu::aboutToShow, this, [ = ] {
         this->releaseKeyboard();//在packagelist中移除焦点
     });
+    */
 
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
     if ((DebListModel::Success == operate_stat ||
-        DebListModel::Waiting == operate_stat ||
-        DebListModel::Operating == operate_stat) || DebListModel::Failed == operate_stat)
-    {
+            DebListModel::Waiting == operate_stat ||
+            DebListModel::Operating == operate_stat) || DebListModel::Failed == operate_stat) {
         return;
     }
 
@@ -178,8 +172,7 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 
 void PackagesListView::onShortcutDeleteAction()
 {
-    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible())
-    {
+    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible()) {
         return;
     }
 
@@ -188,8 +181,7 @@ void PackagesListView::onShortcutDeleteAction()
 
 void PackagesListView::onRightMenuDeleteAction()
 {
-    if (-1 == m_currModelIndex.row())
-    {
+    if (-1 == m_currModelIndex.row()) {
         return;
     }
 
