@@ -204,7 +204,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         bool bDeepinWine = false;
         const QString operate_string = index.data(DebListModel::PackageFailReasonRole).toString();
-        if (operate_string.contains("deepin-wine")) {
+        const int iDependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+
+        if (operate_string.contains("deepin-wine") && iDependsStat == DebListModel::DependsAuthCancel) {
             bDeepinWine = true;
         }
 
@@ -225,6 +227,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package info
         QString info_str;
+
         QRect info_rect = option.rect;
         info_rect.setLeft(content_x);
         info_rect.setTop(name_rect.bottom() + 2);
@@ -234,7 +237,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
         QColor penColor = pa.color(DPalette::ToolTipText);
-        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)) {
+        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
+                || (dependsStat == DebListModel::DependsAuthCancel)) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             penColor = pa.color(DPalette::TextWarning);
         } else if (install_stat != DebListModel::NotInstalled) {

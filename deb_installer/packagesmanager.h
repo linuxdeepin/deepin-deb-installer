@@ -54,6 +54,7 @@ private:
     QProcess *proc;
     int m_index = -1;
     QString m_dependName;
+    bool bDependsStatusErr = false;
 };
 
 class PackageDependsStatus
@@ -73,6 +74,7 @@ public:
     PackageDependsStatus minEq(const PackageDependsStatus &other);
 
     bool isBreak() const;
+    bool isAuthCancel() const;
     bool isAvailable() const;
 
 public:

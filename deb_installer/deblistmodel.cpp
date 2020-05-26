@@ -79,15 +79,15 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex)
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
-        m_packageOperateStatus[iIndex] = Failed;
+        m_packageOperateStatus[iIndex] = Prepare;
         break;
     case DebListModel::AuthConfirm:
         break;
     case DebListModel::AuthDependsSuccess:
-        m_packageOperateStatus[iIndex] = Success;
+        //m_packageOperateStatus[iIndex] = Success;
         break;
     case DebListModel::AuthDependsErr:
-        m_packageOperateStatus[iIndex] = Failed;
+        //m_packageOperateStatus[iIndex] = Failed;
         break;
     default:
         break;
@@ -364,7 +364,7 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
-    if (stat.isBreak()) {
+    if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
 //            if (bModifyFailedReason) {
 //                if (stat.package == "deepin-wine")

@@ -144,14 +144,27 @@ void dealDependThread::on_readoutput()
     if (tmp.contains("Not authorized")) {
         emit DependResult(DebListModel::CancelAuth, m_index);
     }
+    if (tmp.contains("暂时不能解析域名")) {
+        bDependsStatusErr = true;
+    }
 }
 
 void dealDependThread::onFinished(int num)
 {
     if (num == 0) {
+        if (bDependsStatusErr) {
+            emit DependResult(DebListModel::AnalysisErr, m_index);
+            bDependsStatusErr = false;
+            return;
+        }
         qDebug() << m_dependName << "安装成功";
         emit DependResult(DebListModel::AuthDependsSuccess, m_index);
     } else {
+        if (bDependsStatusErr) {
+            emit DependResult(DebListModel::AnalysisErr, m_index);
+            bDependsStatusErr = false;
+            return;
+        }
         qDebug() << m_dependName << "install error" << num;
         emit DependResult(DebListModel::AuthDependsErr, m_index);
     }
@@ -351,6 +364,9 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageDependsStatus[m_dependInstallMark.at(num)].status = 0;
         }
+    }
+    if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
+        m_packageDependsStatus[iIndex].status = DebListModel::DependsAuthCancel;
     }
     emit DependResult(iAuthRes, iIndex);
 }
@@ -910,5 +926,7 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
 }
 
 bool PackageDependsStatus::isBreak() const { return status == DebListModel::DependsBreak; }
+
+bool PackageDependsStatus::isAuthCancel() const { return status == DebListModel::DependsAuthCancel; }
 
 bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }

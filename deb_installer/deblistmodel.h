@@ -77,6 +77,7 @@ public:
         DependsAvailable,
         DependsBreak,  //依赖不满足
         DependsVerifyFailed,
+        DependsAuthCancel,
     };
 
     enum PackageOperationStatus {
@@ -95,6 +96,7 @@ public:
         AuthConfirm,  //鉴权确认后
         AuthDependsSuccess, //安装成功
         AuthDependsErr,  //安装失败
+        AnalysisErr,     //解析错误
     };
 
     void reset();
