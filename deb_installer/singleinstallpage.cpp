@@ -662,7 +662,7 @@ void SingleInstallPage::setPackageInfo()
 
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     qDebug() << "set package info" << "depend status" << dependsStat;
-    if (dependsStat == DebListModel::DependsBreak) {
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -738,7 +738,7 @@ void SingleInstallPage::setAuthBefore()
     m_progressFrame->setVisible(false);
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    if (dependsStat == DebListModel::DependsBreak) {
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
         m_confirmButton->setEnabled(false);
@@ -770,7 +770,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     qDebug() << "cancel Auth" << dependsStat;
-    if (dependsStat == DebListModel::DependsBreak) {
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         qDebug() << "confirm button";
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
