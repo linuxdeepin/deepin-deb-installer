@@ -158,6 +158,9 @@ private:
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
     QString packageFailedReason(const int idx) const;
     void initRowStatus();
+
+    void installDebs();
+    void showNoDigitalErrWindow();
 private:
     int m_workerStatus;
     int m_operatingIndex;
@@ -170,7 +173,6 @@ private:
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
     bool m_InitRowStatus;
-    bool QDBusResult;
     bool QverifyResult;
     bool bModifyFailedReason = false;
 };

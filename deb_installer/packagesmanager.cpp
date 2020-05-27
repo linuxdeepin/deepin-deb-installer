@@ -217,24 +217,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 
     const auto ret_installed = isInstalledConflict(name, package->version(), package->architecture());
     if (!ret_installed.is_ok()) return ret_installed;
-    //    if (!ret_installed.is_ok())
-    //    {
-    //        bool found_provider = false;
-    //        // check providers
-    //        Backend *b = m_backendFuture.result();
-    //        for (auto *ap : b->availablePackages())
-    //        {
-    //            if (ap->providesList().contains(name))
-    //            {
-    //                found_provider = true;
-    //                break;
-    //            }
-    //        }
-
-    //        // not found providers, return error
-    //        if (!found_provider)
-    //            return ret_installed;
-    //    }
 
     qDebug() << "check conflict for local installed package is ok.";
 
