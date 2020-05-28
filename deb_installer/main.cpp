@@ -33,6 +33,10 @@
 #include <DLog>
 #include <DTitlebar>
 
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include "singleInstallerApplication.h"
+
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
@@ -49,7 +53,8 @@ int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
 
-    DApplication app(argc, argv);
+    //DApplication app(argc, argv);
+    SingleInstallerApplication app(argc, argv);
 
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
@@ -66,11 +71,6 @@ int main(int argc, char *argv[])
                                       "Package Installer helps users install and remove local packages, and supports bulk installation."));
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
-    if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
-    {
-        qDebug() << "DGuiApplicationHelper::instance()->setSingleInstance";
-        exit(0);
-    }
 
     DApplicationSettings settings;
 
@@ -79,30 +79,20 @@ int main(int argc, char *argv[])
 
     qDebug() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
 
-    // command line arguments
-    QCommandLineParser parser;
-    parser.setApplicationDescription("Deepin Package Installer.");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
-
-    parser.process(app);
-
-    const QStringList file_list = parser.positionalArguments();
-
-    qDebug() << file_list;
-
-
-    DebInstaller w;
-    w.show();
-    // select files from args
-    if (!file_list.isEmpty())
-    {
-        QMetaObject::invokeMethod(&w, "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, file_list));
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    if (dbus.registerService("com.deepin.DebInstaller")) {
+        dbus.registerObject("/com/deepin/DebInstaller", &app, QDBusConnection::ExportScriptableSlots);
+        app.parseCmdLine();
+        app.activateWindow();
+        return app.exec();
+    } else {
+        QCommandLineParser parser;
+        parser.process(app);
+        QList<QVariant> debInstallPathList;
+        debInstallPathList << parser.positionalArguments();
+        QDBusInterface notification("com.deepin.DebInstaller", "/com/deepin/DebInstaller", "com.deepin.DebInstaller", QDBusConnection::sessionBus());
+        QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
+        return 0;
     }
-
-    return app.exec();
-
-
 
 }

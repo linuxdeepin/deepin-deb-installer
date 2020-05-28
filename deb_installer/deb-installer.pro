@@ -42,7 +42,8 @@ SOURCES += \
     installprocessinfoview.cpp \
     choosefilebutton.cpp \
     debinfolabel.cpp \
-    appendpackagethread.cpp
+    appendpackagethread.cpp \
+    singleInstallerApplication.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -62,7 +63,8 @@ HEADERS += \
     installprocessinfoview.h \
     choosefilebutton.h \
     debinfolabel.h \
-    appendpackagethread.h
+    appendpackagethread.h \
+    singleInstallerApplication.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

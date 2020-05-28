@@ -47,6 +47,7 @@ void AppendPackageThread::run()
             if (!m_fileListModel->getPackageIsNull()) {
                 if (!m_fileListModel->appendPackage(p, false)) {
                     emit packageAlreadyAdd();
+                    return;
                 }
             } else {
                 m_fileListModel->appendPackage(p, true);
