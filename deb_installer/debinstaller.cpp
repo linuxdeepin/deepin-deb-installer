@@ -356,6 +356,7 @@ void DebInstaller::MulRefreshPage(int index)
 void DebInstaller::refreshInstallPage(int index)
 {
     m_fileListModel->reset_filestatus();
+    m_fileListModel->initPrepareStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
 

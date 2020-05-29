@@ -380,8 +380,8 @@ QString DebListModel::packageFailedReason(const int idx) const
     }
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
-//    if (!m_packageFailReason.contains(idx))
-//        qDebug() << "ggy" << m_packageFailReason.size() << idx;
+    if (!m_packageFailReason.contains(idx))
+        qDebug() << "ggy" << m_packageFailReason.size() << idx;
     Q_ASSERT(m_packageFailReason.contains(idx));
 
     return workerErrorString(m_packageFailReason[idx]);
@@ -656,6 +656,19 @@ void DebListModel::setCurrentIndex(const QModelIndex &idx)
 
     emit dataChanged(index, index);
     emit dataChanged(m_currentIdx, m_currentIdx);
+}
+
+void DebListModel::initPrepareStatus()
+{
+    qDebug() << "m_packageOperateStatus" << m_packageOperateStatus;
+    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
+        m_packageOperateStatus.insert(i, Prepare);
+//        refreshOperatingPackageStatus(Prepare);
+    }
+    qDebug() << "after m_packageOperateStatus" << m_packageOperateStatus;
+//    m_operatingStatusIndex = 0;
+//    m_InitRowStatus = true;
+
 }
 
 void DebListModel::initRowStatus()

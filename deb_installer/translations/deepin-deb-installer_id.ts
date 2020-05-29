@@ -18,7 +18,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="381"/>
+        <location filename="../debinstaller.cpp" line="382"/>
         <source>Bulk Install</source>
         <translation>Instal Jumlah Besar</translation>
     </message>
@@ -26,7 +26,7 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="58"/>
+        <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Instalasi gagal, mohon periksa koneksi jaringan Anda</translation>
     </message>
@@ -35,38 +35,38 @@
         <translation type="vanished">Instalasi gagal, mohon periksa pembaruan dalam Pusat Kontrol</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="60"/>
+        <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="63"/>
+        <location filename="../deblistmodel.cpp" line="62"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Instalasi gagal, ruang diska tidak mencukupi</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="65"/>
+        <location filename="../deblistmodel.cpp" line="64"/>
         <source>Installation Failed</source>
         <translation>Instalasi Gagal</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="373"/>
-        <location filename="../deblistmodel.cpp" line="377"/>
+        <location filename="../deblistmodel.cpp" line="372"/>
+        <location filename="../deblistmodel.cpp" line="376"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="640"/>
+        <location filename="../deblistmodel.cpp" line="582"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="641"/>
+        <location filename="../deblistmodel.cpp" line="583"/>
         <source>This package does not have a valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="643"/>
+        <location filename="../deblistmodel.cpp" line="585"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
@@ -75,7 +75,7 @@
         <translation type="vanished">Dependesi rusak: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="366"/>
+        <location filename="../deblistmodel.cpp" line="365"/>
         <source>Unmatched package architecture</source>
         <translation>Paket arsitektur tidak cocok</translation>
     </message>
@@ -163,17 +163,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Same version installed</source>
         <translation>Versi sama diinstal</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="245"/>
+        <location filename="../packageslistdelegate.cpp" line="251"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="248"/>
+        <location filename="../packageslistdelegate.cpp" line="254"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -185,7 +185,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../packagelistview.cpp" line="146"/>
+        <location filename="../packagelistview.cpp" line="139"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +201,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="573"/>
+        <location filename="../singleinstallpage.cpp" line="576"/>
         <source>Collapse</source>
         <translation>Jatuhkan</translation>
     </message>
@@ -210,62 +210,62 @@
         <translation type="vanished">Tampilkan detail</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="284"/>
+        <location filename="../singleinstallpage.cpp" line="287"/>
         <source>Install</source>
         <translation>Instal</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="286"/>
+        <location filename="../singleinstallpage.cpp" line="289"/>
         <source>Remove</source>
         <translation>Hapus</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="288"/>
+        <location filename="../singleinstallpage.cpp" line="291"/>
         <source>Reinstall</source>
         <translation>Instal ulang</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="290"/>
+        <location filename="../singleinstallpage.cpp" line="293"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="292"/>
+        <location filename="../singleinstallpage.cpp" line="295"/>
         <source>Back</source>
         <translation>Kembali</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="294"/>
+        <location filename="../singleinstallpage.cpp" line="297"/>
         <source>Done</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="648"/>
+        <location filename="../singleinstallpage.cpp" line="651"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="652"/>
+        <location filename="../singleinstallpage.cpp" line="655"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="741"/>
+        <location filename="../singleinstallpage.cpp" line="729"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="165"/>
+        <location filename="../singleinstallpage.cpp" line="168"/>
         <source>Version: </source>
         <translation>Versi:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="530"/>
+        <location filename="../singleinstallpage.cpp" line="533"/>
         <source>Installed successfully</source>
         <translation>Instal berhasil</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="553"/>
+        <location filename="../singleinstallpage.cpp" line="556"/>
         <source>Uninstalled successfully</source>
         <translation>Lepas berhasil</translation>
     </message>
@@ -274,17 +274,17 @@
         <translation type="vanished">Versi lain diinstal: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="564"/>
+        <location filename="../singleinstallpage.cpp" line="567"/>
         <source>Uninstall Failed</source>
         <translation>Lepaskan gagal</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="158"/>
+        <location filename="../singleinstallpage.cpp" line="161"/>
         <source>Name: </source>
         <translation>Nama:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="645"/>
+        <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Same version installed</source>
         <translation>Versi sama diinstal</translation>
     </message>
@@ -293,8 +293,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="453"/>
-        <location filename="../singleinstallpage.cpp" line="529"/>
+        <location filename="../singleinstallpage.cpp" line="456"/>
+        <location filename="../singleinstallpage.cpp" line="532"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -302,8 +302,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="463"/>
-        <location filename="../singleinstallpage.cpp" line="552"/>
+        <location filename="../singleinstallpage.cpp" line="466"/>
+        <location filename="../singleinstallpage.cpp" line="555"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,13 +354,13 @@ The system or other applications may not work properly</source>
         <translation type="vanished">Manajer Paket Deepin</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="62"/>
-        <location filename="../main.cpp" line="63"/>
+        <location filename="../main.cpp" line="67"/>
+        <location filename="../main.cpp" line="68"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="64"/>
+        <location filename="../main.cpp" line="69"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
         <translation type="unfinished"></translation>
     </message>

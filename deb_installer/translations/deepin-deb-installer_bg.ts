@@ -18,7 +18,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../debinstaller.cpp" line="381"/>
+        <location filename="../debinstaller.cpp" line="382"/>
         <source>Bulk Install</source>
         <translation>Групова инсталация</translation>
     </message>
@@ -26,7 +26,7 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../deblistmodel.cpp" line="58"/>
+        <location filename="../deblistmodel.cpp" line="57"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Инсталацията е неуспешна, моля, проверете вашата връзка към мрежата</translation>
     </message>
@@ -35,38 +35,38 @@
         <translation type="vanished">Инсталацията е неуспешна, моля, проверете за обновление в контролния център</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="60"/>
+        <location filename="../deblistmodel.cpp" line="59"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="63"/>
+        <location filename="../deblistmodel.cpp" line="62"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Инсталацията е неуспешна, няма достатъчно място на диска</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="65"/>
+        <location filename="../deblistmodel.cpp" line="64"/>
         <source>Installation Failed</source>
         <translation>Инсталацията е неуспешна</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="373"/>
-        <location filename="../deblistmodel.cpp" line="377"/>
+        <location filename="../deblistmodel.cpp" line="372"/>
+        <location filename="../deblistmodel.cpp" line="376"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="640"/>
+        <location filename="../deblistmodel.cpp" line="582"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="641"/>
+        <location filename="../deblistmodel.cpp" line="583"/>
         <source>This package does not have a valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="643"/>
+        <location filename="../deblistmodel.cpp" line="585"/>
         <source>OK</source>
         <translation type="unfinished">ОК</translation>
     </message>
@@ -75,7 +75,7 @@
         <translation type="vanished">Счупени зависимости: %1</translation>
     </message>
     <message>
-        <location filename="../deblistmodel.cpp" line="366"/>
+        <location filename="../deblistmodel.cpp" line="365"/>
         <source>Unmatched package architecture</source>
         <translation>Неподходяща архитектура на пакета</translation>
     </message>
@@ -163,17 +163,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="242"/>
+        <location filename="../packageslistdelegate.cpp" line="248"/>
         <source>Same version installed</source>
         <translation>Същата версия е инсталирана</translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="245"/>
+        <location filename="../packageslistdelegate.cpp" line="251"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../packageslistdelegate.cpp" line="248"/>
+        <location filename="../packageslistdelegate.cpp" line="254"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -185,7 +185,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../packagelistview.cpp" line="146"/>
+        <location filename="../packagelistview.cpp" line="139"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +201,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="573"/>
+        <location filename="../singleinstallpage.cpp" line="576"/>
         <source>Collapse</source>
         <translation>Сриване</translation>
     </message>
@@ -210,62 +210,62 @@
         <translation type="vanished">Показване на подробности</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="284"/>
+        <location filename="../singleinstallpage.cpp" line="287"/>
         <source>Install</source>
         <translation>Инсталиране</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="286"/>
+        <location filename="../singleinstallpage.cpp" line="289"/>
         <source>Remove</source>
         <translation>Премахване</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="288"/>
+        <location filename="../singleinstallpage.cpp" line="291"/>
         <source>Reinstall</source>
         <translation>Преинсталиране</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="290"/>
+        <location filename="../singleinstallpage.cpp" line="293"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="292"/>
+        <location filename="../singleinstallpage.cpp" line="295"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="294"/>
+        <location filename="../singleinstallpage.cpp" line="297"/>
         <source>Done</source>
         <translation>Завършено</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="648"/>
+        <location filename="../singleinstallpage.cpp" line="651"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="652"/>
+        <location filename="../singleinstallpage.cpp" line="655"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="741"/>
+        <location filename="../singleinstallpage.cpp" line="729"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="165"/>
+        <location filename="../singleinstallpage.cpp" line="168"/>
         <source>Version: </source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="530"/>
+        <location filename="../singleinstallpage.cpp" line="533"/>
         <source>Installed successfully</source>
         <translation>Инсталирането е успешно</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="553"/>
+        <location filename="../singleinstallpage.cpp" line="556"/>
         <source>Uninstalled successfully</source>
         <translation>Деинсталирането е успешно</translation>
     </message>
@@ -274,17 +274,17 @@
         <translation type="vanished">Инсталирана е друга версия: %1</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="564"/>
+        <location filename="../singleinstallpage.cpp" line="567"/>
         <source>Uninstall Failed</source>
         <translation>Деинсталирането е неуспешно</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="158"/>
+        <location filename="../singleinstallpage.cpp" line="161"/>
         <source>Name: </source>
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../singleinstallpage.cpp" line="645"/>
+        <location filename="../singleinstallpage.cpp" line="648"/>
         <source>Same version installed</source>
         <translation>Същата версия е инсталирана</translation>
     </message>
@@ -293,8 +293,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../singleinstallpage.cpp" line="61"/>
-        <location filename="../singleinstallpage.cpp" line="453"/>
-        <location filename="../singleinstallpage.cpp" line="529"/>
+        <location filename="../singleinstallpage.cpp" line="456"/>
+        <location filename="../singleinstallpage.cpp" line="532"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -302,8 +302,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../singleinstallpage.cpp" line="463"/>
-        <location filename="../singleinstallpage.cpp" line="552"/>
+        <location filename="../singleinstallpage.cpp" line="466"/>
+        <location filename="../singleinstallpage.cpp" line="555"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,13 +354,13 @@ The system or other applications may not work properly</source>
         <translation type="vanished">Deepin Инсталатор на пакети</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="62"/>
-        <location filename="../main.cpp" line="63"/>
+        <location filename="../main.cpp" line="67"/>
+        <location filename="../main.cpp" line="68"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="64"/>
+        <location filename="../main.cpp" line="69"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
         <translation type="unfinished"></translation>
     </message>

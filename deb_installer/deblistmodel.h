@@ -114,6 +114,9 @@ public:
     int DebInstallFinishedFlag = 0;
     int m_workerStatus_temp = 0;
 
+public:
+    void initPrepareStatus();
+
 signals:
     //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
