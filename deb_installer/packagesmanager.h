@@ -115,7 +115,7 @@ public:
     void reset();
     void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
-    void removePackage(const int index);
+    void removePackage(const int index, QList<int> listDependInstallMark);
     void removeLastPackage();
     bool getPackageIsNull();
     bool appendPackage(QApt::DebFile *debPackage, bool isEmpty);

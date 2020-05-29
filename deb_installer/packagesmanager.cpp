@@ -344,11 +344,13 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
 {
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageDependsStatus[m_dependInstallMark.at(num)].status = 0;
+            m_packageDependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;
         }
     }
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
-        m_packageDependsStatus[iIndex].status = DebListModel::DependsAuthCancel;
+        for (int num = 0; num < m_dependInstallMark.size(); num++) {
+            m_packageDependsStatus[m_dependInstallMark[num]].status = DebListModel::DependsAuthCancel;
+        }
     }
     emit DependResult(iAuthRes, iIndex);
 }
@@ -568,7 +570,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageDependsStatus.remove(index);
 }
 
-void PackagesManager::removePackage(const int index)
+void PackagesManager::removePackage(const int index, QList<int> listDependInstallMark)
 {
     qDebug() << index << ", size:" << m_preparedPackages.size();
     DebFile *deb = m_preparedPackages[index];
@@ -578,12 +580,14 @@ void PackagesManager::removePackage(const int index)
     m_preparedPackages.removeAt(index);
     m_preparedMd5.removeAt(index);
 
-    if (m_dependInstallMark.contains(index))
-        m_dependInstallMark.removeAt(index);
-    else {
-        for (int i = 0; i < m_dependInstallMark.size(); i++) {
-            if (m_dependInstallMark[i] > index)
-                m_dependInstallMark[i] = m_dependInstallMark[i] - 1;
+    m_dependInstallMark.clear();
+    if (listDependInstallMark.size() > 1) {
+        for (int i = 0; i < listDependInstallMark.size(); i++) {
+            if (index > listDependInstallMark[i]) {
+                m_dependInstallMark.append(listDependInstallMark[i]);
+            } else if (index != listDependInstallMark[i]) {
+                m_dependInstallMark.append(listDependInstallMark[i] - 1);
+            }
         }
     }
 

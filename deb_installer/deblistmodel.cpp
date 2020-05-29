@@ -218,7 +218,16 @@ void DebListModel::removePackage(const int idx)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    m_packagesManager->removePackage(idx);
+    const int packageCount = this->preparedPackages().size();
+    QList<int> listdependInstallMark;
+    for (int num = 0; num < packageCount; num++) {
+        QString dependStr = this->index(num).data(DebListModel::PackageDependsStatusRole).toString();
+        QString failStr = this->index(num).data(DebListModel::PackageFailReasonRole).toString();
+        if (failStr.contains("deepin-wine"))
+            listdependInstallMark.append(num);
+    }
+
+    m_packagesManager->removePackage(idx, listdependInstallMark);
 }
 
 bool DebListModel::getPackageIsNull()
