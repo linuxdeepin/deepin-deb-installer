@@ -2,6 +2,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    AptInstallDepend
+    src/AptInstallDepend
 SUBDIRS += \
-    deb_installer/deb-installer.pro
+    src/deb_installer/deb-installer.pro
