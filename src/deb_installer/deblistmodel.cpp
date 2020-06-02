@@ -31,6 +31,7 @@
 #include <DDialog>
 #include <QApt/Backend>
 #include <QApt/Package>
+#include <DSysInfo>
 using namespace QApt;
 
 bool isDpkgRunning()
@@ -624,7 +625,23 @@ void DebListModel::installNextDeb()
     DebFile *deb = m_packagesManager->package(m_operatingIndex);
     bool digitalSigntual = Utils::Digital_Verify(deb->filePath()); //判断是否有数字签名
 
-    if (!deviceMode && !digitalSigntual)// 非开发者模式且数字签名验证失败
+    bool isVerifyDigital = false;
+    switch (Dtk::Core::DSysInfo::deepinType()) {
+    case Dtk::Core::DSysInfo::DeepinDesktop:
+    case Dtk::Core::DSysInfo::DeepinPersonal:
+    case Dtk::Core::DSysInfo::DeepinProfessional:
+        isVerifyDigital = true;
+        break;
+    case Dtk::Core::DSysInfo::DeepinServer:
+        isVerifyDigital = false;
+        break;
+    default:
+        isVerifyDigital = true;
+    }
+    qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
+    qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
+
+    if (isVerifyDigital && !deviceMode && !digitalSigntual)// 非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();
     else
         installDebs();

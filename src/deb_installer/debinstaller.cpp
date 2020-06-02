@@ -213,6 +213,7 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
 
 void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
 {
+    this->activateWindow();
     if (m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing) {
         this->setAcceptDrops(false);
     } else {
@@ -265,7 +266,6 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    this->activateWindow();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
@@ -294,7 +294,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     DFloatingMessage *msg = new DFloatingMessage;
                     msg->setMessage(tr("Already Added"));
                     DMessageManager::instance()->sendMessage(this, msg);
-                    continue;
+                    if (packages.size() == 1)
+                        return;
                 }
             } else {
                 m_fileListModel->appendPackage(p, true);
