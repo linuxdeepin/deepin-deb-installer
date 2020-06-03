@@ -215,6 +215,15 @@ void DebListModel::uninstallPackage(const int idx)
     trans->run();
 }
 
+void DebListModel::initDependsStatus(int index)
+{
+    const int packageCount = this->preparedPackages().size();
+    if (index >= packageCount)
+        return;
+    for (int num = index; num < packageCount; num++)
+        this->index(num).data(DebListModel::PackageDependsStatusRole);
+}
+
 void DebListModel::removePackage(const int idx)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
@@ -222,10 +231,12 @@ void DebListModel::removePackage(const int idx)
     const int packageCount = this->preparedPackages().size();
     QList<int> listdependInstallMark;
     for (int num = 0; num < packageCount; num++) {
-        QString dependStr = this->index(num).data(DebListModel::PackageDependsStatusRole).toString();
-        QString failStr = this->index(num).data(DebListModel::PackageFailReasonRole).toString();
-        if (failStr.contains("deepin-wine"))
-            listdependInstallMark.append(num);
+        int dependsStatus = this->index(num).data(DebListModel::PackageDependsStatusRole).toInt();
+        if (dependsStatus != DependsOk) {
+            QString failStr = this->index(num).data(DebListModel::PackageFailReasonRole).toString();
+            if (failStr.contains("deepin-wine"))
+                listdependInstallMark.append(num);
+        }
     }
 
     m_packagesManager->removePackage(idx, listdependInstallMark);

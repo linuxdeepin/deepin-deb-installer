@@ -316,9 +316,10 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         } else {
             m_dragflag = 1;
             MulRefreshPage(packageCount);
+            m_fileListModel->initDependsStatus(packageCountInit);
+            MulRefreshPage(packageCount);
         }
     }
-
 }
 
 void DebInstaller::popFloatingError()

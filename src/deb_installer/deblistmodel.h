@@ -33,7 +33,7 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <DPushButton>
-
+#include <DSysInfo>
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -116,6 +116,7 @@ public:
 
 public:
     void initPrepareStatus();
+    void initDependsStatus(int index = 0);
 
 signals:
     //    void workerStarted() const;
