@@ -8,7 +8,7 @@
   <action id="com.deepin.pkexec.aptInstallDepend">
     <description>authentication</description>
     <description xml:lang="zh_CN">认证</description>
-    <message>Authentication is required to super permissions</message>
+    <message>Authentication is required to install deepin-wine</message>
     <message xml:lang="zh_CN">安装deepin-wine需要授权</message>
     <icon_name></icon_name>
     <defaults>

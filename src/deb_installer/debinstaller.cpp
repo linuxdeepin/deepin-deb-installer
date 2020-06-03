@@ -276,7 +276,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         return;
     } else {
         qDebug() << "append Package";
-
         for (const auto &package : packages) {
             QApt::DebFile *p = new QApt::DebFile(package);
             if (!p->isValid()) {
