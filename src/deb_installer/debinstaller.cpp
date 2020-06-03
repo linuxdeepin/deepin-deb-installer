@@ -266,6 +266,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
+    this->activateWindow();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
@@ -274,6 +275,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         return;
     } else {
         qDebug() << "append Package";
+
         for (const auto &package : packages) {
             QApt::DebFile *p = new QApt::DebFile(package);
             if (!p->isValid()) {
