@@ -116,6 +116,7 @@ public:
 
 public:
     void initPrepareStatus();
+    void initDependsStatus(int index = 0);
 
 signals:
     //    void workerStarted() const;

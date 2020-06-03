@@ -295,14 +295,17 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     DFloatingMessage *msg = new DFloatingMessage;
                     msg->setMessage(tr("Already Added"));
                     DMessageManager::instance()->sendMessage(this, msg);
-                    continue;
+                    if (packages.size() == 1)
+                        return;
                 }
             } else {
                 m_fileListModel->appendPackage(p, true);
             }
         }
+        //fix bug29948 服务器版
         const int packageCount = m_fileListModel->preparedPackages().size();
-        if (packageCount == 1) {
+
+        if (packageCount == 1 || packages.size() > 1) {
             refreshInstallPage(packageCount);
             return;
         }
@@ -311,9 +314,10 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         } else {
             m_dragflag = 1;
             MulRefreshPage(packageCount);
+            m_fileListModel->initDependsStatus(packageCountInit);
+            MulRefreshPage(packageCount);
         }
     }
-
 }
 
 void DebInstaller::popFloatingError()
