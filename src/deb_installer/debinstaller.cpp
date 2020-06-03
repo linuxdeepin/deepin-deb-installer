@@ -267,6 +267,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     this->activateWindow();
+    int packageCountInit = m_fileListModel->preparedPackages().size();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
@@ -303,7 +304,19 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 m_fileListModel->appendPackage(p, true);
             }
         }
-        refreshInstallPage();
+        //fix bug29948 服务器版
+        const int packageCount = m_fileListModel->preparedPackages().size();
+
+        if (packageCount == 1 || packages.size() > 1) {
+            refreshInstallPage(packageCount);
+            return;
+        }
+        if (packageCountInit == 1 && packageCount > 1) {
+            refreshInstallPage(packageCount);
+        } else {
+            m_dragflag = 1;
+            MulRefreshPage(packageCount);
+        }
     }
 
 }

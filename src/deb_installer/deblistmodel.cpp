@@ -619,15 +619,13 @@ void DebListModel::showNoDigitalErrWindow()
 
 void DebListModel::installNextDeb()
 {
-    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    bool deviceMode = Installer.property("DeviceUnlocked").toBool();// 判断当前是否处于开发者模式
-    qDebug() << "QDBusResult" << deviceMode;
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    bool digitalSigntual = Utils::Digital_Verify(deb->filePath()); //判断是否有数字签名
-
+    // add for judge OS Version
+    // 个人版专业版 非开模式需要验证签名， 服务器版 没有开发者模式，默认不验证签名， 社区版默认开发者模式，不验证签名。
     bool isVerifyDigital = false;
     switch (Dtk::Core::DSysInfo::deepinType()) {
     case Dtk::Core::DSysInfo::DeepinDesktop:
+        isVerifyDigital = false;
+        break;
     case Dtk::Core::DSysInfo::DeepinPersonal:
     case Dtk::Core::DSysInfo::DeepinProfessional:
         isVerifyDigital = true;
@@ -641,9 +639,18 @@ void DebListModel::installNextDeb()
     qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
     qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
 
-    if (isVerifyDigital && !deviceMode && !digitalSigntual)// 非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();
-    else
+    if (isVerifyDigital) {// 当前系统是个人版或者专业版，非开模式下需要验证签名。
+        QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = Installer.property("DeviceUnlocked").toBool();// 判断当前是否处于开发者模式
+        qDebug() << "QDBusResult" << deviceMode;
+        DebFile *deb = m_packagesManager->package(m_operatingIndex);
+        bool digitalSigntual = Utils::Digital_Verify(deb->filePath()); //判断是否有数字签名
+        if (!deviceMode && !digitalSigntual) { //非开发者模式且数字签名验证失败
+            showNoDigitalErrWindow();
+        } else {// 是开发者模式或者有数字签名。
+            installDebs();
+        }
+    } else // 当前系统是服务器版或者社区版， 不需要验证数字签名。
         installDebs();
 }
 
