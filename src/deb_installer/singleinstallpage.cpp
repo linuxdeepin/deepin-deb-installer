@@ -813,6 +813,7 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
         setAuthBefore();
         break;
     case DebListModel::CancelAuth:
+    case DebListModel::AnalysisErr:
         setCancelAuthOrAuthDependsErr();
         break;
     case DebListModel::AuthDependsSuccess:
