@@ -144,7 +144,7 @@ void dealDependThread::on_readoutput()
     if (tmp.contains("Not authorized")) {
         emit DependResult(DebListModel::CancelAuth, m_index);
     }
-    if (tmp.contains("暂时不能解析域名")) {
+    if (tmp.contains("暂时不能解析域名") || tmp.contains("没有可用的软件包 deepin-wine")) {
         bDependsStatusErr = true;
     }
 }
