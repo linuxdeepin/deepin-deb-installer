@@ -645,17 +645,13 @@ bool PackagesManager::getPackageIsNull()
 
 bool PackagesManager::appendPackage(DebFile *debPackage, bool isEmpty)
 {
-    if (!isEmpty) {
-        const auto md5 = debPackage->md5Sum();
-        if (m_appendedPackagesMd5.contains(md5)) return false;
+    Q_UNUSED(isEmpty);
+    const auto md5 = debPackage->md5Sum();
+    if (m_appendedPackagesMd5.contains(md5)) return false;
 
-        m_preparedPackages << debPackage;
-        m_appendedPackagesMd5 << md5;
-        m_preparedMd5 << md5;
-    } else {
-        m_preparedPackages << debPackage;
-    }
-
+    m_preparedPackages << debPackage;
+    m_appendedPackagesMd5 << md5;
+    m_preparedMd5 << md5;
     return true;
 }
 
