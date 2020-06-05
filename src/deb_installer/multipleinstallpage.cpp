@@ -112,7 +112,7 @@ void MultipleInstallPage::initUI()
     m_acceptButton->setFocusPolicy(Qt::NoFocus);
     m_backButton->setFocusPolicy(Qt::NoFocus);
 
-    m_tipsLabel->setFixedHeight(18);
+    m_tipsLabel->setFixedHeight(24);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
