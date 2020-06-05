@@ -122,7 +122,7 @@ void SingleInstallPage::initInstallWineLoadingLayout()
 {
     QVBoxLayout *m_pLoadingLayout = new QVBoxLayout(this);
 
-    m_pDSpinner->setFixedSize(24, 24);
+    m_pDSpinner->setMinimumSize(24, 24);
     m_pDSpinner->setVisible(false);
     m_pDSpinner->start();
     m_pLoadingLayout->addWidget(m_pDSpinner);
@@ -131,7 +131,7 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLabel->setVisible(false);
     m_pLoadingLayout->addWidget(m_pLoadingLabel);
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);
-    m_pLoadingLabel->setFixedHeight(18);
+    m_pLoadingLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
 
@@ -765,6 +765,7 @@ void SingleInstallPage::setAuthBefore()
 
 void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
+    qDebug() << "set Cancel Auth or Auth Depends Error";
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     QModelIndex index = m_packagesModel->first();
