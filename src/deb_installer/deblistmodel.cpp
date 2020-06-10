@@ -239,6 +239,20 @@ void DebListModel::removePackage(const int idx)
         }
     }
 
+    if (m_packageOperateStatus.size() > 1) {
+        QMapIterator<int, int> MapIteratorOperateStatus(m_packageOperateStatus);
+        QMap<int, int> tmpOperateStatus;
+        while (MapIteratorOperateStatus.hasNext()) {
+            MapIteratorOperateStatus.next();
+            if (idx > MapIteratorOperateStatus.key())
+                tmpOperateStatus[MapIteratorOperateStatus.key()] = MapIteratorOperateStatus.value();
+            else if (idx != MapIteratorOperateStatus.key()) {
+                tmpOperateStatus[MapIteratorOperateStatus.key() - 1] = MapIteratorOperateStatus.value();
+            }
+        }
+        m_packageOperateStatus = tmpOperateStatus;
+    }
+
     m_packagesManager->removePackage(idx, listdependInstallMark);
 }
 
