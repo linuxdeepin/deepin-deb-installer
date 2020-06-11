@@ -103,6 +103,7 @@ void SingleInstallPage::initUI()
 
 void SingleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(20, 0, 20, 30);
     m_contentFrame->setLayout(m_contentLayout);

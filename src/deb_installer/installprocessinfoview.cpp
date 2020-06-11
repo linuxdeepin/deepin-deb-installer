@@ -16,7 +16,7 @@ InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
 void InstallProcessInfoView::initUI()
 {
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
-    bgFrame->setFixedSize(440, 200);
+    bgFrame->setFixedSize(440, 190);
 
     QVBoxLayout *editLayout = new QVBoxLayout;
     editLayout->setSpacing(0);
@@ -78,19 +78,14 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     DPalette pa = DebApplicationHelper::instance()->palette(this);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
-    {
-        pa.setColor(DPalette::Text, QColor(96,157,200));
+    if (themeType == DGuiApplicationHelper::LightType) {
+        pa.setColor(DPalette::Text, QColor(96, 157, 200));
         m_editor->setPalette(pa);
-    }
-    else if(themeType == DGuiApplicationHelper::DarkType)
-    {
-        pa.setColor(DPalette::Text, QColor(109,124,136));
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
+        pa.setColor(DPalette::Text, QColor(109, 124, 136));
         m_editor->setPalette(pa);
-    }
-    else
-    {
-        pa.setColor(DPalette::Text, QColor(96,157,200));
+    } else {
+        pa.setColor(DPalette::Text, QColor(96, 157, 200));
         m_editor->setPalette(pa);
     }
 //    pa.setColor(DPalette::Text, pa.color(m_colorType));

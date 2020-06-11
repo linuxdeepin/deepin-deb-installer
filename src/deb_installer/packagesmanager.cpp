@@ -110,7 +110,7 @@ Backend *init_backend()
     if (b->init()) return b;
 
     qFatal("%s", b->initErrorMessage().toStdString().c_str());
-    return nullptr;
+//    return nullptr;
 }
 
 dealDependThread::dealDependThread()
