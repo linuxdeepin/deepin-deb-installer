@@ -60,6 +60,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 
 void MultipleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
     m_contentFrame->setLayout(m_contentLayout);
