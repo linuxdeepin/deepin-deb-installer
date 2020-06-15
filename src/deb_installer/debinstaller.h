@@ -25,7 +25,7 @@
 #include <QPointer>
 #include <QSettings>
 #include <QStackedLayout>
-
+#include <QApt/DebFile>
 
 #include <DMainWindow>
 #include <QWidget>
@@ -33,6 +33,8 @@ DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
+
+using QApt::DebFile;
 
 class DebInstaller : public Dtk::Widget::DMainWindow
 {
@@ -66,7 +68,6 @@ private slots:
 
     void DealDependResult(int iAuthRes);
 
-    void popFloatingError();
 private:
     void failToSysteminitUI();
     void initUI();

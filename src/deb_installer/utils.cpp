@@ -484,15 +484,13 @@ static QColor dark_dpalette[DPalette::NColorTypes] {
 
 DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType type) const
 {
-    DPalette *pa;
+    DPalette pa;
     const QColor *qcolor_list, *dcolor_list;
 
     if (type == DarkType) {
-        pa = new DPalette();
         qcolor_list = dark_qpalette;
         dcolor_list = dark_dpalette;
     } else {
-        pa = new DPalette();
         qcolor_list = light_qpalette;
         dcolor_list = light_dpalette;
     }
@@ -501,19 +499,19 @@ DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType 
         QPalette::ColorRole role = static_cast<QPalette::ColorRole>(i);
 
         QColor color = qcolor_list[i];
-        pa->setColor(DPalette::Active, role, color);
-        generatePaletteColor(*pa, role, type);
+        pa.setColor(DPalette::Active, role, color);
+        generatePaletteColor(pa, role, type);
     }
 
     for (int i = 0; i < DPalette::NColorTypes; ++i) {
         DPalette::ColorType role = static_cast<DPalette::ColorType>(i);
 
         QColor color = dcolor_list[i];
-        pa->setColor(DPalette::Active, role, color);
-        generatePaletteColor(*pa, role, type);
+        pa.setColor(DPalette::Active, role, color);
+        generatePaletteColor(pa, role, type);
     }
 
-    return *const_cast<const DPalette *>(pa);
+    return *const_cast<const DPalette *>(&pa);
 }
 
 DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &base) const

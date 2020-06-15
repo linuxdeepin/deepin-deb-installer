@@ -79,7 +79,7 @@ void DebInstaller::initUI()
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    QWidget *wrapWidget = new QWidget;
+    QWidget *wrapWidget = new QWidget(this);
     wrapWidget->setLayout(m_centralLayout);
 
 //#define SHOWBORDER
@@ -277,11 +277,10 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     } else {
         qDebug() << "append Package";
         for (const auto &package : packages) {
-            QApt::DebFile *p = new QApt::DebFile(package);
-            if (!p->isValid()) {
+            QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
+            if (!m_pDebPackage->isValid()) {
                 qWarning() << "package invalid: " << package;
-
-                delete p;
+                delete m_pDebPackage;
                 continue;
             }
             DRecentData data;
@@ -290,18 +289,21 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             DRecentManager::addItem(package, data);
 
             if (!m_fileListModel->getPackageIsNull()) {
-                if (!m_fileListModel->appendPackage(p, false)) {
+                if (!m_fileListModel->appendPackage(package, false)) {
                     qWarning() << "package is Exist! ";
 
                     DFloatingMessage *msg = new DFloatingMessage;
                     msg->setMessage(tr("Already Added"));
                     DMessageManager::instance()->sendMessage(this, msg);
-                    if (packages.size() == 1)
+                    if (packages.size() == 1) {
                         return;
+                    }
                 }
             } else {
-                m_fileListModel->appendPackage(p, true);
+                m_fileListModel->appendPackage(package, true);
             }
+
+            delete m_pDebPackage;
         }
         //fix bug29948 服务器版
         const int packageCount = m_fileListModel->preparedPackages().size();
@@ -319,15 +321,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             MulRefreshPage(packageCount);
         }
     }
-}
-
-void DebInstaller::popFloatingError()
-{
-    qWarning() << "package is Exist! ";
-
-    DFloatingMessage *msg = new DFloatingMessage();
-    msg->setMessage(tr("Already Added"));
-    DMessageManager::instance()->sendMessage(this, msg);
 }
 
 void DebInstaller::showUninstallConfirmPage()

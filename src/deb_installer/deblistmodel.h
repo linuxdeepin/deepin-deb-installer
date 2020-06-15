@@ -106,7 +106,8 @@ public:
     {
         return m_workerStatus == WorkerPrepare;
     }
-    const QList<QApt::DebFile *> preparedPackages() const;
+//    const QList<QApt::DebFile *> preparedPackages() const;
+    const QList<QString> preparedPackages() const;
     QModelIndex first() const;
 
     int rowCount(const QModelIndex &parent) const override;
@@ -141,6 +142,7 @@ public slots:
     void removePackage(const int idx);
     bool getPackageIsNull();
     bool appendPackage(QApt::DebFile *package, bool isEmpty);
+    bool appendPackage(QString package, bool isEmpty);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
     void DealDependResult(int iAuthRes, int iIndex);

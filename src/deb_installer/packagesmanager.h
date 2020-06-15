@@ -40,7 +40,7 @@ class dealDependThread : public QThread
 {
     Q_OBJECT
 public:
-    dealDependThread();
+    dealDependThread(QObject *parent = nullptr);
     virtual ~dealDependThread();
     void setDependName(QString tmp, int index);
     void run();
@@ -94,6 +94,7 @@ class PackagesManager : public QObject
 
 public:
     explicit PackagesManager(QObject *parent = nullptr);
+    ~PackagesManager();
 
     bool isBackendReady();
     bool isArchError(const int idx);
@@ -119,8 +120,9 @@ public:
     void removeLastPackage();
     bool getPackageIsNull();
     bool appendPackage(QApt::DebFile *debPackage, bool isEmpty);
+    bool appendPackage(QString debPackage, bool isEmpty);
     bool QverifyResult;
-    QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
+    QString package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
 
 private:
@@ -135,13 +137,13 @@ private:
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
-    QList<QApt::DebFile *> m_preparedPackages;
+    QList<QString> m_preparedPackages;
     QList<QByteArray> m_preparedMd5;
     QMap<int, int> m_packageInstallStatus;
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;
     int m_DealDependIndex = -1;
-    dealDependThread *dthread;
+    dealDependThread *dthread = nullptr;
     QList<int> m_dependInstallMark;
 
 public slots:
