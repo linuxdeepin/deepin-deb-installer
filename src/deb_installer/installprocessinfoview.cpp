@@ -8,7 +8,7 @@
 
 InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
     : QWidget(parent)
-    , m_editor(new QTextEdit)
+    , m_editor(new QTextEdit(this))
 {
     initUI();
 }
@@ -18,7 +18,7 @@ void InstallProcessInfoView::initUI()
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
     bgFrame->setFixedSize(440, 190);
 
-    QVBoxLayout *editLayout = new QVBoxLayout;
+    QVBoxLayout *editLayout = new QVBoxLayout(this);
     editLayout->setSpacing(0);
     editLayout->setContentsMargins(5, 1, 0, 5);
     bgFrame->setLayout(editLayout);

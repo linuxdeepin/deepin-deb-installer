@@ -41,7 +41,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_appsListView(new PackagesListView(this))
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_installProcessInfoView(new InstallProcessInfoView(this))
-    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse")))
+    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
     , m_processFrame(new QWidget(this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
@@ -50,7 +50,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(this))
     , m_centralLayout(new QVBoxLayout(this))
-    , m_tipsLabel(new DebInfoLabel)
+    , m_tipsLabel(new DebInfoLabel(this))
     , m_dSpinner(new DSpinner(this))
 {
     initContentLayout();
@@ -81,7 +81,7 @@ void MultipleInstallPage::initUI()
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
     m_appsListViewBgFrame->setFixedSize(460, 186 + 10 + 5);
-    QVBoxLayout *appsViewLayout = new QVBoxLayout;
+    QVBoxLayout *appsViewLayout = new QVBoxLayout(this);
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
     m_appsListViewBgFrame->setLayout(appsViewLayout);
@@ -128,7 +128,7 @@ void MultipleInstallPage::initUI()
 
     m_infoControlButton->setVisible(false);
 
-    QVBoxLayout *progressFrameLayout = new QVBoxLayout;
+    QVBoxLayout *progressFrameLayout = new QVBoxLayout(this);
     progressFrameLayout->setSpacing(0);
     progressFrameLayout->setContentsMargins(0, 0, 0, 0);
     m_processFrame->setLayout(progressFrameLayout);
@@ -141,11 +141,11 @@ void MultipleInstallPage::initUI()
     m_processFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_processFrame->setFixedHeight(53);
 
-    QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout(this);
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_backButton);
@@ -154,7 +154,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 30);
 
-    QWidget *btnsFrame = new QWidget;
+    QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);
     btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);

@@ -60,7 +60,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
-    , m_centralLayout(new QStackedLayout)
+    , m_centralLayout(new QStackedLayout(this))
     , m_dragflag(-1)
 {
     initUI();

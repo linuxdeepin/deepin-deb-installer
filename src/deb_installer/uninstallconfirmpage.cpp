@@ -37,13 +37,13 @@ const QString uninstallTextInRect(const QFont &font, QString srcText, const QSiz
 
 UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     : QWidget(parent)
-    , m_icon(new DLabel)
-    , m_tips(new DLabel)
-    , m_infoWrapperWidget(new QWidget)
-    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse")))
+    , m_icon(new DLabel(this))
+    , m_tips(new DLabel(this))
+    , m_infoWrapperWidget(new QWidget(this))
+    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse"), this))
     , m_dependsInfomation(new InstallProcessInfoView(this))
-    , m_cancelBtn(new DPushButton)
-    , m_confirmBtn(new DPushButton)
+    , m_cancelBtn(new DPushButton(this))
+    , m_confirmBtn(new DPushButton(this))
 {
     this->setAcceptDrops(false);
     const QIcon icon = QIcon::fromTheme("application-x-deb");
@@ -66,7 +66,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
     btnsLayout->setSpacing(0);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
     btnsLayout->addStretch();
@@ -75,7 +75,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
 
-    QVBoxLayout *contentLayout = new QVBoxLayout;
+    QVBoxLayout *contentLayout = new QVBoxLayout(this);
     contentLayout->setSpacing(0);
     contentLayout->setContentsMargins(0, 0, 0, 0);
     contentLayout->addStretch();
@@ -87,7 +87,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     m_infoWrapperWidget->setLayout(contentLayout);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->addWidget(m_infoWrapperWidget);
     centralLayout->addWidget(m_infoControl);
     centralLayout->setAlignment(m_infoControl, Qt::AlignHCenter);
