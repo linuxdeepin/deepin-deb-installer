@@ -149,6 +149,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         lineRect.setWidth(option.rect.width() - content_x - 10);
         lineRect.setHeight(1);
 
+        // fix bug:33728
+        DStyleHelper styleHelper;
+        QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Shadow);
+        painter->fillRect(lineRect, fillColor);
+
 
         QRect bg_rect = option.rect;
 
