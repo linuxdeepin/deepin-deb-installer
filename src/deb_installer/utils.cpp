@@ -76,7 +76,6 @@ bool Utils::isFontMimeType(const QString &filePath)
             mimeName.startsWith("application/x-font")) {
         return true;
     }
-
     return false;
 }
 
@@ -124,7 +123,6 @@ QString Utils::loadFontFamilyByType(FontType fontType)
         QFont font;
         return font.family();
     }
-
 
     if (m_fontNameCache.contains(fontFileName)) {
         return m_fontNameCache.value(fontFileName);

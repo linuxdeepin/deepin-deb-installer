@@ -131,24 +131,40 @@ void DebInstaller::handleFocusPolicy()
 
 void DebInstaller::initConnections()
 {
+    //Append packages via file-choose-widget's file-choose-button
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
+
+    //Determine the status of the current application based on the status of the authorization box.
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
+
+    //show dpkg details
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [ = ](const QString & output) {
         qDebug() << "append output info:*****" << output.trimmed();
     });
 
+    //During installing/uninstalling, drag is not allowed
     connect(m_fileListModel, &DebListModel::workerFinished, this, &DebInstaller::changeDragFlag);
+
+    //When the authorization is revoked, show install/uninstall/reinstall button which hidden during authorizing
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
+
+    //When starting the installation, the install button is not available
     connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
+
+    //When the authorization box pops up, the install button is not available.
     connect(m_fileListModel, &DebListModel::EnableReCancelBtn, this, &DebInstaller::setEnableButton);
 
+    //When installing deepin-wine for the first time, set the button display according to the progress of the installation
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
+    //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
 
+// closed is forbidden during install/uninstall
 void DebInstaller::disableCloseAndExit()
 {
+
     qDebug() << "disableCloseAndExit";
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);
     QMenu *titleMenu = titlebar()->menu();
@@ -157,6 +173,7 @@ void DebInstaller::disableCloseAndExit()
     action->setDisabled(true);
 }
 
+// closed is allowed after install/uninstall
 void DebInstaller::enableCloseAndExit()
 {
     qDebug() << "enableCloseAndExit";
@@ -168,11 +185,13 @@ void DebInstaller::enableCloseAndExit()
     action->setDisabled(false);
 }
 
+//after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
     disableCloseAndExit();
 }
 
+// packages selected via double-click or right-click
 void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
@@ -198,6 +217,7 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     this->activateWindow();
 }
 
+
 void DebInstaller::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
@@ -211,6 +231,8 @@ void DebInstaller::keyPressEvent(QKeyEvent *e)
     }
 }
 
+//during install, drag package into application is not allowed.
+//If the dragged file which suffix isn't deb, not allowed to append
 void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
 {
     this->activateWindow();
@@ -234,6 +256,7 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
     }
 }
 
+//Accept the file which suffix is deb and append to application
 void DebInstaller::dropEvent(QDropEvent *e)
 {
     auto *const mime = e->mimeData();
@@ -264,6 +287,8 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
     e->accept();
 }
 
+//Add packages that are not in the application to the application in sequence
+//After appending ,refresh page according to packages' count
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     this->activateWindow();
@@ -322,6 +347,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         }
     }
 }
+
 
 void DebInstaller::showUninstallConfirmPage()
 {

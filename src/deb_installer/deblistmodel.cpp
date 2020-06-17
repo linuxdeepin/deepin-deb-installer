@@ -581,7 +581,10 @@ void DebListModel::installDebs()
                    "package operate status error when start install availble dependencies");
 
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
+        // 获取到所有的依赖包 准备安装
         for (auto const &p : availableDepends) backend->markPackageForInstall(p);
+
+        //安装
 
         qDebug() << Q_FUNC_INFO << "install" << deb.packageName() << "dependencies: " << availableDepends;
 

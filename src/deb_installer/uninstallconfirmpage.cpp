@@ -66,7 +66,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
+    QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->setSpacing(0);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
     btnsLayout->addStretch();
@@ -118,6 +118,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
+    qDebug() << "name" << name;
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");

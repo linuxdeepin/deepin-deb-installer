@@ -94,5 +94,4 @@ int main(int argc, char *argv[])
         QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
         return 0;
     }
-
 }
