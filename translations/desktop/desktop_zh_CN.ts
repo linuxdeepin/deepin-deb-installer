@@ -11,7 +11,7 @@
     <message>
         <location filename="Desktop Entry]Comment" line="0"/>
         <source>Deepin Deb Installer is used to help users install and remove local package, supports bulk install.</source>
-        <translation>深度软件包安装器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
+        <translation>软件包安装器用于帮助用户安装和卸载本地软件，支持批量安装。</translation>
     </message>
     <message>
         <location filename="Desktop Entry]GenericName" line="0"/>
