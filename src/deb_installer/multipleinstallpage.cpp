@@ -80,7 +80,8 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    m_appsListViewBgFrame->setFixedSize(460, 186 + 10 + 5);
+    //fix bug:33730
+    m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
     QVBoxLayout *appsViewLayout = new QVBoxLayout(this);
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
