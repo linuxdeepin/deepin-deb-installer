@@ -81,8 +81,9 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     }
     split_line->setFixedHeight(3);
 
-    m_chooseFileBtn = new ChooseFileButton(this);
-
+    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
+//    m_chooseFileBtn = new ChooseFileButton(this);
+    m_chooseFileBtn = new ChooseFileButton("", this);
     m_chooseFileBtn->setFixedHeight(28);
     m_chooseFileBtn->setObjectName("FileChooseButton");
     m_chooseFileBtn->setText(tr("Select File"));

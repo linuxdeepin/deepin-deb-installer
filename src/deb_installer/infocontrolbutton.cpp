@@ -23,6 +23,7 @@
 #include "utils.h"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPixmap>
 #include <QIcon>
 
@@ -35,7 +36,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
-    , m_tipsText(new DLabel(this))
+    , m_tipsText(new DCommandLinkButton("", this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -50,11 +51,14 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     }
     m_arrowIcon->setFixedHeight(13);
 
-    DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
+    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
+//    DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
 //    palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
-    palette.setColor(DPalette::WindowText, QColor(00, 130, 252)); //20191225
-    m_tipsText->setPalette(palette);
-    m_tipsText->setAlignment(Qt::AlignCenter);
+//    palette.setColor(DPalette::WindowText, QColor(00, 130, 252)); //20191225
+//    m_tipsText->setPalette(palette);
+//    m_tipsText->setAlignment(Qt::AlignCenter);
+
+
     m_tipsText->setText(expandTips);
     QFontInfo fontinfo = m_tipsText->fontInfo();
     int fontsize = fontinfo.pixelSize();
@@ -74,10 +78,17 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
 
+    // keep the tips in the middle
+    centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
+
     setLayout(centralLayout);
 
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
                      this, &InfoControlButton::themeChanged);
+
+    // add clicked connection fot expand or shrink
+    connect(m_tipsText, &DCommandLinkButton::clicked, this, &InfoControlButton::onMouseRelease);
+
 
 //#define SHOWBGCOLOR
 #ifdef SHOWBGCOLOR
@@ -111,6 +122,8 @@ void InfoControlButton::onMouseRelease()
         centralLayout->setSpacing(5);
         centralLayout->addWidget(m_arrowIcon);
         centralLayout->addWidget(m_tipsText);
+        //fix bug: 33399 keep tips in the middle when install details hidden
+        centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         } else if (themeType == DGuiApplicationHelper::DarkType) {
@@ -122,6 +135,9 @@ void InfoControlButton::onMouseRelease()
     } else {
         centralLayout->setSpacing(0);
         centralLayout->addWidget(m_tipsText);
+        //fix bug: 33399 keep tips in the middle when details show
+        centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
+        centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         centralLayout->addWidget(m_arrowIcon);
         if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));

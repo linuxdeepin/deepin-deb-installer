@@ -50,7 +50,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(this))
     , m_centralLayout(new QVBoxLayout(this))
-    , m_tipsLabel(new DebInfoLabel(this))
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
     initContentLayout();
@@ -115,9 +116,11 @@ void MultipleInstallPage::initUI()
     m_backButton->setFocusPolicy(Qt::NoFocus);
 
     m_tipsLabel->setFixedHeight(24);
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
+
+    //fix bug:33399 Make the DCommandLinkbutton looks like a Lable O_o
+    m_tipsLabel->setEnabled(false);
 
     m_dSpinner->setMinimumSize(20, 20);
     m_dSpinner->hide();
@@ -170,6 +173,9 @@ void MultipleInstallPage::initUI()
     m_contentLayout->addWidget(m_dSpinner);
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);
+
+    //fix bug:33399 keep tips in the middle
+    m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);
     m_tipsLabel->setVisible(false);
 
     m_contentLayout->addWidget(btnsFrame);
@@ -333,7 +339,6 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
     case DebListModel::AuthConfirm:
         m_appsListView->setEnabled(false);
         m_tipsLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
-        m_tipsLabel->setCustomDPalette();
         m_tipsLabel->setVisible(true);
         m_dSpinner->show();
         m_dSpinner->start();

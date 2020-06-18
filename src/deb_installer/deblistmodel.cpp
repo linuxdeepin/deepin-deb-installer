@@ -377,12 +377,10 @@ void DebListModel::bumpInstallIndex()
         for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
             qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
         }
-//        usleep(1000 * 1000);
 
         return;
     }
     ++ m_operatingStatusIndex;
-//    usleep(1000 * 1000);
     qDebug() << "m_packageDependsStatus,size" << m_packagesManager->m_packageDependsStatus.size();
     for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
         qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
@@ -396,7 +394,6 @@ void DebListModel::bumpInstallIndex()
 
     emit onChangeOperateIndex(m_operatingIndex);
     // install next
-
     installNextDeb();
 }
 
@@ -415,10 +412,6 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
-//            if (bModifyFailedReason) {
-//                if (stat.package == "deepin-wine")
-//                    return tr("Installing dependencies: %1").arg(stat.package);
-//            }
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -601,18 +594,7 @@ void DebListModel::installDebs()
 
     // NOTE: DO NOT remove this.
     // see: https://bugs.kde.org/show_bug.cgi?id=382272
-
-//    trans->setLocale(".UTF-8");
-
-    trans->setLocale("zh_CN.UTF-8");
-
-    QString uuid = QUuid::createUuid().toString();
-    uuid.remove('{').remove('}').remove('-');
-    QString pipe = QDir::tempPath() % QLatin1String("/qapt-sock-") % uuid;
-
-    qDebug() << pipe << pipe;
-
-    trans->setDebconfPipe(pipe);
+    trans->setLocale(".UTF-8");
 
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
@@ -685,7 +667,6 @@ void DebListModel::installNextDeb()
         QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = Installer.property("DeviceUnlocked").toBool();// 判断当前是否处于开发者模式
         qDebug() << "QDBusResult" << deviceMode;
-//        DebFile *deb = m_packagesManager->package(m_operatingIndex);
         bool digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
         if (!deviceMode && !digitalSigntual) { //非开发者模式且数字签名验证失败
             showNoDigitalErrWindow();
@@ -738,11 +719,8 @@ void DebListModel::initPrepareStatus()
     qDebug() << "m_packageOperateStatus" << m_packageOperateStatus;
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus.insert(i, Prepare);
-//        refreshOperatingPackageStatus(Prepare);
     }
     qDebug() << "after m_packageOperateStatus" << m_packageOperateStatus;
-//    m_operatingStatusIndex = 0;
-//    m_InitRowStatus = true;
 
 }
 
@@ -753,11 +731,6 @@ void DebListModel::initRowStatus()
         refreshOperatingPackageStatus(Waiting);
     }
     m_operatingStatusIndex = 0;
-
-//    Transaction *trans = static_cast<Transaction *>(sender());
-//    Q_ASSERT(trans == m_currentTransaction.data());
-//    disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::initRowStatus);
-    m_InitRowStatus = true;
 }
 
 void DebListModel::upWrongStatusRow()
