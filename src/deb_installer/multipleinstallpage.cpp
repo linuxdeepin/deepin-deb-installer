@@ -119,7 +119,7 @@ void MultipleInstallPage::initUI()
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
 
-    //fix bug:33399 Make the DCommandLinkbutton looks like a Lable O_o
+    //fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_tipsLabel->setEnabled(false);
 
     m_dSpinner->setMinimumSize(20, 20);
@@ -174,7 +174,7 @@ void MultipleInstallPage::initUI()
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);
 
-    //fix bug:33399 keep tips in the middle
+    //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);
     m_tipsLabel->setVisible(false);
 

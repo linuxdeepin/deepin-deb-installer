@@ -122,7 +122,7 @@ void InfoControlButton::onMouseRelease()
         centralLayout->setSpacing(5);
         centralLayout->addWidget(m_arrowIcon);
         centralLayout->addWidget(m_tipsText);
-        //fix bug: 33399 keep tips in the middle when install details hidden
+        //fix bug: 33999 keep tips in the middle when install details hidden
         centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
@@ -135,7 +135,7 @@ void InfoControlButton::onMouseRelease()
     } else {
         centralLayout->setSpacing(0);
         centralLayout->addWidget(m_tipsText);
-        //fix bug: 33399 keep tips in the middle when details show
+        //fix bug: 33999 keep tips in the middle when details show
         centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         centralLayout->addWidget(m_arrowIcon);

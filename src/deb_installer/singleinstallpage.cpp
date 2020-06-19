@@ -130,11 +130,11 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);
 
 
-    m_pLoadingLayout->addSpacing(4); //fix bug:33399 The spinner and The Label are too close together add a distence of 4px
+    m_pLoadingLayout->addSpacing(4); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
     m_pLoadingLabel->setVisible(false);
-    m_pLoadingLayout->setEnabled(false);//fix bug:33399 Make the DCommandLinkbutton looks like a Lable O_o
+    m_pLoadingLayout->setEnabled(false);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);
-    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33399 keep the label in the middle
+    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
     m_pLoadingLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
