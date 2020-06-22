@@ -442,25 +442,6 @@ void DebListModel::onTransactionFinished()
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
     emit workerProgressChanged(progressValue);
 
-    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));
-    qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
-    QString Sourcefilepath = "/var/lib/dpkg/info";
-    QString Targetfilepath = "/tmp/.UOS_Installer_build";
-    QString filename = deb->packageName();
-    delete deb;
-    filename = filename.toLower();
-
-    int result = Utils::returnfileIsempty(Sourcefilepath, filename);
-    if (result) {
-        bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
-        if (transfer_file_result) {
-            bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
-            if (modify_file_result) {
-                QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
-                system(shell_Action.toStdString().c_str());
-            }
-        }
-    }
     qDebug() << "tans.exitStatus()" << trans->exitStatus();
     if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
