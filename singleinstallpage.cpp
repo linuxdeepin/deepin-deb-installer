@@ -375,7 +375,7 @@ void SingleInstallPage::initConnections()
     });
 
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
-    connect(m_packagesModel, &DebListModel::onStartInstall,this,[=]{
+    connect(m_packagesModel, &DebListModel::onStartInstall, this, [ = ] {
         m_progressFrame->setVisible(true);
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
@@ -509,22 +509,22 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Installed successfully"));
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
 
-            QString Sourcefilepath = "/var/lib/dpkg/info";
-            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
-            QString filename = packagename_description;
-            filename = filename.toLower();
+//            QString Sourcefilepath = "/var/lib/dpkg/info";
+//            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
+//            QString filename = packagename_description;
+//            filename = filename.toLower();
 
-            int result = Utils::returnfileIsempty(Sourcefilepath, filename);
-            if (result) {
-                bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
-                if (transfer_file_result) {
-                    bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
-                    if (modify_file_result) {
-                        QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
-                        system(shell_Action.toStdString().c_str());
-                    }
-                }
-            }
+//            int result = Utils::returnfileIsempty(Sourcefilepath, filename);
+//            if (result) {
+//                bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
+//                if (transfer_file_result) {
+//                    bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
+//                    if (modify_file_result) {
+//                        QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
+//                        system(shell_Action.toStdString().c_str());
+//                    }
+//                }
+//            }
 
         } else {
             qDebug() << "Uninstalled successfully";
