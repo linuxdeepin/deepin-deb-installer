@@ -5,7 +5,7 @@
 		<name>policy</name>
 		<message>
 			<location filename="com.deepin.pkexec.aptInstallDepend!message" line="0" />
-			<source>Authentication is required to super permissions</source>
+			<source>Authentication is required to install deepin-wine</source>
 			<translation type="unfinished" />
 		</message>
 		<message>

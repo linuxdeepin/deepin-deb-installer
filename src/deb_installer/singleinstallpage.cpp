@@ -75,6 +75,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 
 void SingleInstallPage::initUI()
 {
+    QApplication::restoreOverrideCursor();
     qApp->installEventFilter(this);
     QFontInfo fontinfo = this->fontInfo();
     int fontsize = fontinfo.pixelSize();

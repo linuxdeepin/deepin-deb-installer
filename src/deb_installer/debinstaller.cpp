@@ -71,6 +71,7 @@ DebInstaller::~DebInstaller() {}
 
 void DebInstaller::initUI()
 {
+    QApplication::restoreOverrideCursor();
     //隐藏标题栏下的阴影
     setTitlebarShadowEnabled(false);
 
