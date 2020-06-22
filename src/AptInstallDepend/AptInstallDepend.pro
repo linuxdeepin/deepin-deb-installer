@@ -3,7 +3,7 @@ QT -= gui
 
 CONFIG += c++11
 
-TARGET = aptInstallDepend
+TARGET = deepin-deb-installer-dependsInstall
 CONFIG += console
 CONFIG -= app_bundle
 

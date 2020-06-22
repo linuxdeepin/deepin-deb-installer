@@ -179,7 +179,7 @@ void dealDependThread::run()
         msleep(100);
 
         emit DependResult(DebListModel::AuthBefore, m_index);
-        proc->start("pkexec", QStringList() << "aptInstallDepend");
+        proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall");
     }
 }
 

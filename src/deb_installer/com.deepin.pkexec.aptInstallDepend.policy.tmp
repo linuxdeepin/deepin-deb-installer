@@ -5,7 +5,7 @@
 <policyconfig>
   <vendor>LinuxDeepin</vendor>
   <vendor_url>https://www.deepin.com/</vendor_url>
-  <action id="com.deepin.pkexec.aptInstallDepend">
+  <action id="com.deepin.pkexec.deepin-deb-installer-dependsInstall">
     <description>authentication</description>
     <description xml:lang="zh_CN">认证</description>
     <message>Authentication is required to install deepin-wine</message>
@@ -16,7 +16,7 @@
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/aptInstallDepend</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/deepin-deb-installer-dependsInstall</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
