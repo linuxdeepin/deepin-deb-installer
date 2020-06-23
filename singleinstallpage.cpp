@@ -509,6 +509,7 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Installed successfully"));
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
 
+//            fix bug:34501
 //            QString Sourcefilepath = "/var/lib/dpkg/info";
 //            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
 //            QString filename = packagename_description;
