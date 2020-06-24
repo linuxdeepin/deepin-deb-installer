@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ko">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -111,7 +109,7 @@
     <message>
         <location filename="../multipleinstallpage.cpp" line="333"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>종속성 설치 중: %1</translation>
     </message>
 </context>
 <context>
@@ -224,7 +222,7 @@
     <message>
         <location filename="../singleinstallpage.cpp" line="729"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>종속성 설치 중: %1</translation>
     </message>
     <message>
         <location filename="../singleinstallpage.cpp" line="168"/>

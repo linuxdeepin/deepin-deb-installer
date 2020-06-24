@@ -54,7 +54,7 @@ public:
     void setEnableButton(bool bEnable);
     void DealDependResult(int iAuthRes);
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 signals:
     void back() const;

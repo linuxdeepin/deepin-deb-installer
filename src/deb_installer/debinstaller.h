@@ -69,7 +69,6 @@ private slots:
     void DealDependResult(int iAuthRes);
 
 private:
-    void failToSysteminitUI();
     void initUI();
     void initConnections();
     void refreshInstallPage(int index = -1);

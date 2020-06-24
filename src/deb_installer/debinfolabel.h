@@ -6,12 +6,11 @@
 #include <DLabel>
 
 DWIDGET_USE_NAMESPACE
-
 class DebInfoLabel : public DLabel
 {
     Q_OBJECT
 public:
-    explicit DebInfoLabel(QWidget *parent=nullptr, Qt::WindowFlags f=Qt::WindowFlags());
+    explicit DebInfoLabel(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     void setCustomQPalette(QPalette::ColorRole colorRole);
     void setCustomDPalette(DPalette::ColorType colorType);

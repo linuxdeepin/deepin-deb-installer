@@ -79,7 +79,6 @@ void DebInstaller::initUI()
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
-
     QWidget *wrapWidget = new QWidget(this);
     wrapWidget->setLayout(m_centralLayout);
 
@@ -306,6 +305,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
             if (!m_pDebPackage->isValid()) {
                 qWarning() << "package invalid: " << package;
+                // this is a suggestion, add Floating Message while package invalid
+//                DFloatingMessage *msg = new DFloatingMessage;
+//                msg->setMessage(tr("Package Invalid"));
+//                DMessageManager::instance()->sendMessage(this, msg);
+
                 delete m_pDebPackage;
                 continue;
             }
