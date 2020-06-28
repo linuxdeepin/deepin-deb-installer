@@ -58,8 +58,10 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 
 void MultipleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
+
     m_contentFrame->setLayout(m_contentLayout);
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -77,7 +79,8 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    m_appsListViewBgFrame->setFixedSize(460, 186 + 10 + 5);
+    // 增加展开详细信息按键与listView之间的间距
+    m_appsListViewBgFrame->setFixedSize(460, 186 /*+ 10 */ + 5);
     QVBoxLayout *appsViewLayout = new QVBoxLayout;
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
@@ -143,7 +146,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 30);
 
-    QWidget *btnsFrame = new QWidget;
+    QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);
     btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);

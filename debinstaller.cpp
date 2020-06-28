@@ -81,7 +81,7 @@ void DebInstaller::initUI()
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
-    QWidget *wrapWidget = new QWidget;
+    QWidget *wrapWidget = new QWidget(this);
     wrapWidget->setLayout(m_centralLayout);
 
 //#define SHOWBORDER
@@ -92,7 +92,7 @@ void DebInstaller::initUI()
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle("");
-    tb->setAutoFillBackground(false);
+    tb->setAutoFillBackground(true);
 
     //fix bug 4329, reset focusPolicy
     handleFocusPolicy();

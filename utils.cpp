@@ -119,9 +119,13 @@ bool Utils::File_transfer(QString Sourcefilepath, QString Targetfilepath, QStrin
 
     File_transfer_Action1 = "mkdir " + Targetfilepath;
     qDebug() << "创建文件夹：" << File_transfer_Action1;
-    system(File_transfer_Action1.toStdString().c_str());
-    QFile file(Sourcefilepath + "/" + filename);
-    if (file.exists()) {
+    QFile file(Targetfilepath);
+    if (!file.exists()) {
+        system(File_transfer_Action1.toStdString().c_str());
+    }
+
+    QFile file1(Sourcefilepath + "/" + filename);
+    if (file1.exists()) {
         File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
         system(File_transfer_Action2.toStdString().c_str());
         qDebug() << "文件复制转移：" << File_transfer_Action2;

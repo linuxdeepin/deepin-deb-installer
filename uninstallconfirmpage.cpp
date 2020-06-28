@@ -37,8 +37,8 @@ const QString uninstallTextInRect(const QFont &font, QString srcText, const QSiz
 
 UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     : QWidget(parent)
-    , m_icon(new DLabel)
-    , m_tips(new DLabel)
+    , m_icon(new DLabel(this))
+    , m_tips(new DLabel(this))
     , m_infoWrapperWidget(new QWidget)
     , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse")))
     , m_dependsInfomation(new InstallProcessInfoView(this))

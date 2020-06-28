@@ -27,6 +27,7 @@
 #include <QVBoxLayout>
 
 #include <DLabel>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
@@ -58,7 +59,7 @@ private:
     QString m_shrinkTips;
 
     DLabel *m_arrowIcon;
-    DLabel *m_tipsText;
+    DCommandLinkButton *m_tipsText;
 
     QVBoxLayout *centralLayout;
 };

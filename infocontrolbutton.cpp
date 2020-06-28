@@ -27,6 +27,7 @@
 #include <QIcon>
 
 #include <DStyleHelper>
+
 #include <DApplicationHelper>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
@@ -34,35 +35,33 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
-    , m_arrowIcon(new DLabel)
-    , m_tipsText(new DLabel)
+    , m_arrowIcon(new DLabel(this))
+    , m_tipsText(new DCommandLinkButton("", this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_arrowIcon->setAlignment(Qt::AlignCenter);
-    if(themeType == DGuiApplicationHelper::LightType) {
+    if (themeType == DGuiApplicationHelper::LightType) {
         m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
-    }
-    else if(themeType == DGuiApplicationHelper::DarkType) {
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
         m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
-    }
-    else {
+    } else {
         m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
     }
     m_arrowIcon->setFixedHeight(13);
 
     DPalette palette = DApplicationHelper::instance()->palette(m_tipsText);
 //    palette.setColor(DPalette::WindowText, palette.color(DPalette::TextLively));
-    palette.setColor(DPalette::WindowText, QColor(00,130,252));//20191225
+    palette.setColor(DPalette::WindowText, QColor(00, 130, 252)); //20191225
     m_tipsText->setPalette(palette);
-    m_tipsText->setAlignment(Qt::AlignCenter);
+//    m_tipsText->setAlignment(Qt::AlignCenter);
     m_tipsText->setText(expandTips);
     QFontInfo fontinfo = m_tipsText->fontInfo();
     int fontsize = fontinfo.pixelSize();
-    if(fontsize >= 16){
+    if (fontsize >= 16) {
         m_tipsText->setFixedHeight(25);
-    }else {
+    } else {
         m_tipsText->setFixedHeight(15);
     }
 //    m_tipsText->setFixedHeight(15);
@@ -75,11 +74,14 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     centralLayout->setContentsMargins(0, 0, 0, 0);
     centralLayout->addWidget(m_arrowIcon);
     centralLayout->addWidget(m_tipsText);
+    centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
 
     setLayout(centralLayout);
 
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
-                        this, &InfoControlButton::themeChanged);
+                     this, &InfoControlButton::themeChanged);
+
+    connect(m_tipsText, &DCommandLinkButton::clicked, this, &InfoControlButton::onMouseRelease);
 
 //#define SHOWBGCOLOR
 #ifdef SHOWBGCOLOR
@@ -113,27 +115,26 @@ void InfoControlButton::onMouseRelease()
         centralLayout->setSpacing(5);
         centralLayout->addWidget(m_arrowIcon);
         centralLayout->addWidget(m_tipsText);
-        if(themeType == DGuiApplicationHelper::LightType) {
+        centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
+        if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
-        }
-        else if(themeType == DGuiApplicationHelper::DarkType) {
+        } else if (themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
-        }
-        else {
+        } else {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
         m_tipsText->setText(m_expandTips);
+
     } else {
         centralLayout->setSpacing(0);
         centralLayout->addWidget(m_tipsText);
         centralLayout->addWidget(m_arrowIcon);
-        if(themeType == DGuiApplicationHelper::LightType) {
+        centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
+        if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
-        }
-        else if(themeType == DGuiApplicationHelper::DarkType) {
+        } else if (themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down_dark.svg", QSize(25, 8)));
-        }
-        else {
+        } else {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
         m_tipsText->setText(m_shrinkTips);
@@ -155,24 +156,20 @@ void InfoControlButton::setShrinkTips(const QString text)
 void InfoControlButton::themeChanged()
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(m_expand) {
-        if(themeType == DGuiApplicationHelper::LightType) {
+    if (m_expand) {
+        if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
-        }
-        else if(themeType == DGuiApplicationHelper::DarkType) {
+        } else if (themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down_dark.svg", QSize(25, 8)));
-        }
-        else {
+        } else {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_down.svg", QSize(25, 8)));
         }
     } else {
-        if(themeType == DGuiApplicationHelper::LightType) {
+        if (themeType == DGuiApplicationHelper::LightType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
-        }
-        else if(themeType == DGuiApplicationHelper::DarkType) {
+        } else if (themeType == DGuiApplicationHelper::DarkType) {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up_dark.svg", QSize(25, 8)));
-        }
-        else {
+        } else {
             m_arrowIcon->setPixmap(Utils::renderSVG(":/images/arrow_up.svg", QSize(25, 8)));
         }
     }

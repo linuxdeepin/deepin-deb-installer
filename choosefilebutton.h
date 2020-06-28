@@ -2,15 +2,15 @@
 #define CHOOSEFILEBUTTON_H
 
 #include <DLabel>
-#include <DPushButton>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
-class ChooseFileButton : public DPushButton
+class ChooseFileButton : public DCommandLinkButton
 {
     Q_OBJECT
 public:
-    explicit ChooseFileButton(QWidget *parent = nullptr);
+    explicit ChooseFileButton(QString text, QWidget *parent = nullptr);
 };
 
 #endif // CHOOSEFILEBUTTON_H

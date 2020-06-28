@@ -26,7 +26,8 @@
 #include <QSettings>
 #include "packagelistview.h"
 #include "deblistmodel.h"
-class PackagesListDelegate : public DStyledItemDelegate {
+class PackagesListDelegate : public DStyledItemDelegate
+{
     Q_OBJECT
 
 public:
@@ -34,13 +35,13 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
     void refreshDebItemStatus(const int operate_stat,
-                           QRect install_status_rect,
-                           QPainter *painter,
-                           const QModelIndex &index) const;
+                              QRect install_status_rect,
+                              QPainter *painter,
+                              bool isSelect, bool isEnable) const;
 
 private:
     QPixmap m_packageIcon;

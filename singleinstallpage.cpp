@@ -101,6 +101,7 @@ void SingleInstallPage::initUI()
 
 void SingleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(20, 0, 20, 30);
     m_contentFrame->setLayout(m_contentLayout);
@@ -133,14 +134,14 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
 
-    DebInfoLabel *packageName = new DebInfoLabel;
+    DebInfoLabel *packageName = new DebInfoLabel(this);
     packageName->setCustomQPalette(QPalette::WindowText);
     packageName->setFixedHeight(fontinfosizetemp);
     packageName->setText(tr("Name: "));
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     packageName->setObjectName("PackageNameTitle");
 
-    DebInfoLabel *packageVersion = new DebInfoLabel;
+    DebInfoLabel *packageVersion = new DebInfoLabel(this);
     packageVersion->setCustomQPalette(QPalette::WindowText);
     packageVersion->setFixedHeight(fontinfosizetemp_version);
     packageVersion->setText(tr("Version: "));

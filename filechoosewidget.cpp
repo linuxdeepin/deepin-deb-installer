@@ -44,7 +44,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     setAcceptDrops(true);
     DPalette palette;
 
-    m_iconImage = new DLabel;
+    m_iconImage = new DLabel(this);
     m_iconImage->setFixedSize(160, 160);
 
 #ifdef SHOWBORDER
@@ -67,7 +67,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    split_line = new DLabel;
+    split_line = new DLabel(this);
     split_line->setObjectName("SplitLine");
     if (themeType == DGuiApplicationHelper::LightType) {
         m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
@@ -81,7 +81,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     }
     split_line->setFixedHeight(3);
 
-    m_chooseFileBtn = new ChooseFileButton;
+    m_chooseFileBtn = new ChooseFileButton("", this);
 
     m_chooseFileBtn->setFixedHeight(28);
     m_chooseFileBtn->setObjectName("FileChooseButton");
@@ -90,7 +90,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     m_chooseFileBtn->setStyleSheet("QPushButton{border:1px solid black;}");
 #endif
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->addSpacing(32);
     centralLayout->addWidget(m_iconImage);
     centralLayout->setAlignment(m_iconImage, Qt::AlignHCenter);
