@@ -209,7 +209,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *itemLayout = new QVBoxLayout;
     itemLayout->addSpacing(45);
     itemLayout->addWidget(itemInfoWidget);
-    itemLayout->addSpacing(28);
+    itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);
     itemLayout->addStretch();
     itemLayout->setMargin(0);
@@ -290,7 +290,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_backButton->setFocusPolicy(Qt::NoFocus);
     m_doneButton->setFocusPolicy(Qt::NoFocus);
 
-    m_packageDescription->setFixedHeight(73);
+    m_packageDescription->setFixedHeight(65);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
@@ -340,7 +340,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addSpacing(8);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(btnsFrame);
 
 
