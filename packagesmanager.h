@@ -75,16 +75,16 @@ public:
 
     bool isBackendReady();
     bool isArchError(const int idx);
-    bool isArchError(QApt::DebFile *deb);
+    bool isArchError(QString debPath);
     const ConflictResult packageConflictStat(const int index);
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
                                              const QString &packageArch);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
     int packageInstallStatus(const int index);
-    void addPackageInstallStatus(QApt::DebFile *deb);
+    void addPackageInstallStatus(QString debPath);
     PackageDependsStatus packageDependsStatus(const int index);
-    void addDependsStatus(QApt::DebFile *deb, QString packagePath);
+    void addDependsStatus(QString packagePath);
     const QString packageInstalledVersion(const int index);
     const QStringList packageAvailableDepends(const int index);
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
@@ -97,9 +97,9 @@ public:
     void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
     void removePackage(const int index);
-    bool appendPackage(QApt::DebFile *debPackage, QString packagePath);
+    bool appendPackage(QString packagePath);
     bool QverifyResult;
-    QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
+    QString package(const int index) const {return m_preparedPackages[index];  }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
 
 private:
@@ -112,7 +112,7 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
-    bool checkAppPermissions(QApt::DebFile *deb, QString packagePath);
+    bool checkAppPermissions(QString packagePath);
     QStringList getAppList(QString listPath);
     QStringList getPermissionList(QStringList whiteList, QStringList blackList);
     bool detectAppPermission(QString tempPath);
@@ -120,7 +120,7 @@ private:
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
-    QList<QApt::DebFile *> m_preparedPackages;
+    QList<QString> m_preparedPackages;
 
     QList<int> m_packageInstallStatus;
     QList<PackageDependsStatus>m_packageDependsStatus;

@@ -9,8 +9,8 @@ class LoadDebFileListThread : public QThread
 
 public:
     LoadDebFileListThread(QString package, QString tempFilePath);
+    ~LoadDebFileListThread();
     void run();
-
 private:
     QString m_filePath;
     QString m_package;

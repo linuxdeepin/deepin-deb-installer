@@ -553,7 +553,7 @@ void SingleInstallPage::setPackageInfo()
     qApp->processEvents();
     QFontInfo fontinfosize = this->fontInfo();
     int fontlabelsize = fontinfosize.pixelSize();
-    DebFile *package = m_packagesModel->preparedPackages().first();
+    DebFile *package = new DebFile(m_packagesModel->preparedPackages().first());
 
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
@@ -575,6 +575,8 @@ void SingleInstallPage::setPackageInfo()
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
     packageVersion_description = Utils::fromSpecialEncoding(package->version());
+
+    delete package;
     if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));

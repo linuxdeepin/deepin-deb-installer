@@ -22,7 +22,6 @@ void AddPackageThread::run()
 {
     emit addStart(false);
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
-    QApt::DebFile *p = nullptr;
     qDebug() << m_lastPage.isNull() << m_fileListModel->DebInstallFinishedFlag;
 
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
@@ -34,24 +33,27 @@ void AddPackageThread::run()
         qDebug() << "append";
         for (const auto &package : m_packages) {
             qDebug() << "append" << package;
-            p = new QApt::DebFile(package);
-            if (!p->isValid()) {
+            QApt::DebFile *deb = new QApt::DebFile(package);
+            if (!deb->isValid()) {
                 qWarning() << "package invalid: " << package;
-                delete p;
+                delete deb;
                 continue;
             }
+            delete deb;
             DRecentData data;
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
 
-            if (!m_fileListModel->appendPackage(p, package)) {
+            if (!m_fileListModel->appendPackage(package)) {
                 emit packageAlreadyAdd();
             }
             if (m_packages.size() > 1 && m_fileListModel->preparedPackages().size() == 1) {
                 continue;
             }
-            if (m_fileListModel->preparedPackages().size() % 3 == 0) {
+            if (m_fileListModel->preparedPackages().size() == 2) {
+                refresh(-1);
+            } else if (m_fileListModel->preparedPackages().size() % 3 == 0) {
                 qDebug() << "emit refresh";
                 emit refresh(-1);
             }

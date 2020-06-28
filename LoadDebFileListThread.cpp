@@ -7,8 +7,12 @@ LoadDebFileListThread::LoadDebFileListThread(QString package, QString tempFilePa
     deb = new QApt::DebFile(m_package);
 }
 
+LoadDebFileListThread::~LoadDebFileListThread()
+{
+    delete deb;
+}
+
 void LoadDebFileListThread::run()
 {
     deb->extractArchive(m_filePath);
-    deb->~DebFile();
 }

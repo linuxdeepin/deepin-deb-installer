@@ -89,6 +89,9 @@ private:
     void packagesSelectedThread(const QStringList &packages, bool animation);
     void popFloatingError();
 
+    void MulRefreshPage(int index);
+    void refreshPage();
+
 private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;

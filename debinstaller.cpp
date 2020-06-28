@@ -299,13 +299,16 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     if (m_fileListModel->preparedPackages().size() == 0) {
         if (packages.size() > 1) {
             packagesSelectedThread(packages, true);
+            delete p;
             return;
         } else if (packages.size() == 1 || (p && p->installedSize() > 50000)) {
             packagesSelectedThread(packages, true);
+            delete p;
             return;
         }
     }
     packagesSelectedThread(packages, false);
+    delete p;
     return;
 }
 
@@ -331,7 +334,7 @@ void DebInstaller::packagesSelectedThread(const QStringList &packages, bool anim
     }
 
     m_pAddPackageThread = new AddPackageThread(m_fileListModel, m_lastPage, packages, this);
-    connect(m_pAddPackageThread, &AddPackageThread::refresh, this, &DebInstaller::refreshInstallPage);
+    connect(m_pAddPackageThread, &AddPackageThread::refresh, this, &DebInstaller::refreshPage);
     connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyAdd, this, &DebInstaller::popFloatingError);
     m_pAddPackageThread->start();
 }
@@ -402,7 +405,36 @@ void DebInstaller::removePackage(const int index)
 {
     m_fileListModel->removePackage(index);
     qDebug() << "remove";
-    refreshInstallPage(index);
+    const int packageCount = m_fileListModel->preparedPackages().size();
+    if (packageCount <= 2) {
+        refreshInstallPage(index);
+    }
+    if (packageCount > 1)
+        MulRefreshPage(index);
+}
+
+void DebInstaller::MulRefreshPage(int index)
+{
+    if (m_dragflag == 1) {
+//        multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+        multiplePage->setScrollBottom(index);
+        qDebug() << "multi pageds" << multiplePage;
+    }
+}
+
+void DebInstaller::refreshPage()
+{
+    const int packageCount = m_fileListModel->preparedPackages().size();
+    if (packageCount >= 3) {
+        qDebug() << "refreshPage Mul Refresh" << packageCount;
+        MulRefreshPage(0);
+        m_dragflag = 1;
+    } else {
+        qDebug() << "refreshPage refresh Install page" << packageCount;
+        refreshInstallPage();
+
+    }
+    qDebug() << "refresh end";
 }
 
 void DebInstaller::refreshInstallPage(int idx)
@@ -430,7 +462,7 @@ void DebInstaller::refreshInstallPage(int idx)
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
-        /*MultipleInstallPage **/multiplePage = new MultipleInstallPage(m_fileListModel);
+        multiplePage = new MultipleInstallPage(m_fileListModel);
         if (idx == -1) {
             multiplePage->setEnableButton(false);
             connect(m_pAddPackageThread, &AddPackageThread::addMultiFinish, multiplePage, &MultipleInstallPage::setEnableButton);
@@ -489,7 +521,6 @@ void DebInstaller::setEnableButton(bool bEnable)
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setEnableButton(bEnable);
     }
-
 }
 
 void DebInstaller::showHiddenButton()

@@ -264,16 +264,7 @@ void MultipleInstallPage::afterGetAutherFalse()
 
 void MultipleInstallPage::onScrollSlotFinshed()
 {
-    qDebug() << m_index << m_appsListView->count();
-    if (m_index != -1) {
-        QModelIndex currIndex;
-        if (m_index == m_appsListView->count()) {
-            currIndex = m_debListModel->index(m_appsListView->count() - 1);
-        } else {
-            currIndex = m_debListModel->index(m_index);
-        }
-        m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-    }
+    m_appsListView->reset();
 }
 
 void MultipleInstallPage::setScrollBottom(int idx)

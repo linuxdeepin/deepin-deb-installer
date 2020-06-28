@@ -79,7 +79,7 @@ bool DebListModel::isReady() const
     return m_packagesManager->isBackendReady();
 }
 
-const QList<DebFile *> DebListModel::preparedPackages() const
+const QList<QString> DebListModel::preparedPackages() const
 {
     return m_packagesManager->m_preparedPackages;
 }
@@ -100,7 +100,13 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
 
-    const DebFile *deb = m_packagesManager->package(r);
+    const DebFile *deb = new DebFile(m_packagesManager->package(r));
+    QString packageName     = deb->packageName();
+    QString filePath        = deb->filePath();
+    QString version         = deb->version();
+    QString architecture    = deb->architecture();
+    QString shortDescription = deb->shortDescription();
+    delete deb;
 
     switch (role) {
     case WorkerIsPrepareRole:
@@ -108,11 +114,11 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case ItemIsCurrentRole:
         return m_currentIdx == index;
     case PackageNameRole:
-        return deb->packageName();
+        return packageName;
     case PackagePathRole:
-        return deb->filePath();
+        return filePath;
     case PackageVersionRole:
-        return deb->version();
+        return version;
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);
     case PackageDependsStatusRole:
@@ -122,9 +128,9 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageAvailableDependsListRole:
         return m_packagesManager->packageAvailableDepends(r);
     case PackageReverseDependsListRole:
-        return m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
+        return m_packagesManager->packageReverseDependsList(packageName, architecture);
     case PackageDescriptionRole:
-        return Utils::fromSpecialEncoding(deb->shortDescription());
+        return Utils::fromSpecialEncoding(shortDescription);
     case PackageFailReasonRole:
         return packageFailedReason(r);
     case PackageOperateStatusRole:
@@ -166,7 +172,7 @@ void DebListModel::uninstallPackage(const int idx)
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = idx;
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
@@ -189,6 +195,7 @@ void DebListModel::uninstallPackage(const int idx)
     m_currentTransaction = trans;
 
     trans->run();
+    delete deb;
 }
 
 void DebListModel::removePackage(const int idx)
@@ -198,11 +205,11 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);
 }
 
-bool DebListModel::appendPackage(DebFile *package, QString packagePath)
+bool DebListModel::appendPackage(QString packagePath)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    bool appendResult =  m_packagesManager->appendPackage(package, packagePath);
+    bool appendResult =  m_packagesManager->appendPackage(packagePath);
     return appendResult;
 }
 
@@ -249,7 +256,6 @@ void DebListModel::onTransactionStatusChanged(TransactionStatus stat)
     default:
         ;
     }
-
 }
 
 int DebListModel::getInstallFileSize()
@@ -345,11 +351,12 @@ void DebListModel::onTransactionFinished()
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
     emit workerProgressChanged(progressValue);
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));
     qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
     QString Sourcefilepath = "/var/lib/dpkg/info";
     QString Targetfilepath = "/tmp/.UOS_Installer_build";
     QString filename = deb->packageName();
+    delete deb;
     filename = filename.toLower();
 
     int result = Utils::returnfileIsempty(Sourcefilepath, filename);
@@ -391,7 +398,7 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 
     const auto ret = trans->exitStatus();
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex)) ;
     qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << ret;
 
     if (ret) qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
@@ -448,13 +455,14 @@ void DebListModel::checkBoxStatus()
 
 void DebListModel::installNextDeb()
 {
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     if (isDpkgRunning()) {
         qDebug() << "dpkg running, waitting...";
         QTimer::singleShot(1000 * 5, this, &DebListModel::installNextDeb);
+        delete deb;
         return;
     }
 
@@ -474,12 +482,14 @@ void DebListModel::installNextDeb()
         refreshOperatingPackageStatus(Failed);
         m_packageFailReason.insert(m_oprtatingStatusIndex, -1);
         bumpInstallIndex();
+        delete deb;
         return;
     } else if (dependsStat.isForbid()) {
         qDebug() << "Forbid" << dependsStat.package;
         refreshOperatingPackageStatus(Failed);
         m_packageFailReason.insert(m_oprtatingStatusIndex, -1);
         bumpInstallIndex();
+        delete deb;
         return;
     } else if (dependsStat.isAvailable()) {
 
@@ -511,6 +521,8 @@ void DebListModel::installNextDeb()
 
     m_currentTransaction = trans;
     m_currentTransaction->run();
+
+    delete deb;
 }
 
 void DebListModel::onTransactionOutput()
@@ -580,7 +592,7 @@ void DebListModel::upWrongStatusRow()
         return;
 
     //change  m_preparedPackages, m_packageOperateStatus sort.
-    QList<QApt::DebFile *> listTempDebFile;
+    QList<QString> listTempDebFile;
     iIndex = 0;
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus[i] = listpackageOperateStatus[i];

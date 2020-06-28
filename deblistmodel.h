@@ -95,7 +95,7 @@ public:
     {
         return m_workerStatus == WorkerPrepare;
     }
-    const QList<QApt::DebFile *> preparedPackages() const;
+    const QList<QString> preparedPackages() const;
     QModelIndex first() const;
 
     int rowCount(const QModelIndex &parent) const override;
@@ -123,7 +123,7 @@ public slots:
     void installAll();
     void uninstallPackage(const int idx);
     void removePackage(const int idx);
-    bool appendPackage(QApt::DebFile *package, QString packagePath);
+    bool appendPackage(QString packagePath);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
 
