@@ -451,6 +451,7 @@ void SingleInstallPage::reinstall()
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
+    m_tipsLabel->setVisible(false);
 
     m_operate = Reinstall;
     m_packagesModel->installAll();
@@ -458,9 +459,12 @@ void SingleInstallPage::reinstall()
 }
 void SingleInstallPage::install()
 {
-    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
+    m_tipsLabel->setVisible(false);
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
+    m_infoControlButton->setVisible(true);
+
     m_operate = Install;
     m_packagesModel->installAll();
 }
@@ -468,12 +472,12 @@ void SingleInstallPage::install()
 void SingleInstallPage::uninstallCurrentPackage()
 {
     m_tipsLabel->setVisible(false);
-    m_progressFrame->setVisible(true);
-    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
-    m_infoControlButton->setVisible(true);
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
+    m_progressFrame->setVisible(true);
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
+    m_infoControlButton->setVisible(true);
 
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
