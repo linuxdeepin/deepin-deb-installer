@@ -527,6 +527,7 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
 
 void SingleInstallPage::onWorkerFinished()
 {
+    m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
