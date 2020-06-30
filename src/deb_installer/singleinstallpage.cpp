@@ -467,8 +467,10 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    m_tipsLabel->setVisible(false);
     m_progressFrame->setVisible(true);
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
+    m_infoControlButton->setVisible(true);
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
