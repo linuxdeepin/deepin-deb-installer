@@ -32,7 +32,6 @@
 #include <QVBoxLayout>
 
 #include <DLabel>
-#include <DTitlebar>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)

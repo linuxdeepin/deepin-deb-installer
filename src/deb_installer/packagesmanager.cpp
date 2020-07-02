@@ -376,12 +376,15 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     }
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
-    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
     const QString architecture = deb->architecture();
-    if (!QDBusResult) {
-        QverifyResult = Utils::Digital_Verify(deb->filePath());
-    }
+    // fix bug:36334 非开模式下，双击打开已签名的deb包，会先跳到安装器首页再加载出安装界面
+    // The signature verification time is too long, and there is no need to verify the signature when verifying dependencies
+//    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+//    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
+
+//    if (!QDBusResult) {
+//        QverifyResult = Utils::Digital_Verify(deb->filePath());
+//    }
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     // conflicts
@@ -418,13 +421,15 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                 }
             }
         }
-        if (!QDBusResult) {
-            qDebug() << "QverifyResult" << QverifyResult;
-            qDebug() << "ret.status)" << ret.status;
-            if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
-                ret.status = DebListModel::DependsVerifyFailed;
-            }
-        }
+        // fix bug:36334 非开模式下，双击打开已签名的deb包，会先跳到安装器首页再加载出安装界面
+        // The signature verification time is too long, and there is no need to verify the signature when verifying dependencies
+//        if (!QDBusResult) {
+//            qDebug() << "QverifyResult" << QverifyResult;
+//            qDebug() << "ret.status)" << ret.status;
+//            if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
+//                ret.status = DebListModel::DependsVerifyFailed;
+//            }
+//        }
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 

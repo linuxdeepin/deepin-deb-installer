@@ -31,7 +31,6 @@
 #include <DGuiApplicationHelper>
 #include <DApplication>
 #include <DLog>
-#include <DTitlebar>
 
 #include <QDBusConnection>
 #include <QDBusInterface>

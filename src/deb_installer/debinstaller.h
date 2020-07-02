@@ -51,6 +51,19 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
+private:
+    void initUI();
+    void initConnections();
+    void refreshInstallPage(int index = -1);
+    void MulRefreshPage(int index);
+    void handleFocusPolicy();
+
+    //Disable/enable close button and exit in menu
+    void disableCloseAndExit();
+    void enableCloseAndExit();
+
+    SingleInstallPage *backToSinglePage();
+
 private slots:
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
@@ -69,24 +82,9 @@ private slots:
     void DealDependResult(int iAuthRes);
 
 private:
-    void initUI();
-    void initConnections();
-    void refreshInstallPage(int index = -1);
-    void MulRefreshPage(int index);
-    void handleFocusPolicy();
-
-    //Disable/enable close button and exit in menu
-    void disableCloseAndExit();
-    void enableCloseAndExit();
-
-    void sendMessage(QWidget *par, DFloatingMessage *floMsg);
-    SingleInstallPage *backToSinglePage();
-
-private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;
     QStackedLayout *m_centralLayout;
-
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
 };
