@@ -72,9 +72,10 @@ DebInstaller::~DebInstaller() {}
 void DebInstaller::initUI()
 {
     QApplication::restoreOverrideCursor();
-    //隐藏标题栏下的阴影
+    //Hide the shadow under the title bar
     setTitlebarShadowEnabled(false);
 
+    //file choose widget settings
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
@@ -87,11 +88,12 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
+    //title bar settings
     DTitlebar *tb = titlebar();
     tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
     tb->setTitle("");
     tb->setAutoFillBackground(true);
-
+    tb->setDisableFlags(Qt::CustomizeWindowHint);
     //fix bug 4329, reset focusPolicy
     handleFocusPolicy();
 
@@ -108,6 +110,7 @@ void DebInstaller::initUI()
 
 void DebInstaller::handleFocusPolicy()
 {
+    //Cancel all window focus
     QLayout *layout = titlebar()->layout();
     for (int i = 0; i < layout->count(); ++i) {
         QWidget *widget = layout->itemAt(i)->widget();
@@ -318,6 +321,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
 
+            // Decide how to add according to the number of packages in the application
             if (!m_fileListModel->getPackageIsNull()) {
                 if (!m_fileListModel->appendPackage(package, false)) {
                     qWarning() << "package is Exist! ";
@@ -337,11 +341,12 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         }
         //fix bug29948 服务器版
         const int packageCount = m_fileListModel->preparedPackages().size();
-
+        // There is already one package and there will be multiple packages to be added
         if (packageCount == 1 || packages.size() > 1) {
             refreshInstallPage(packageCount);
             return;
         }
+        // There was a package from the beginning and it was added
         if (packageCountInit == 1 && packageCount > 1) {
             refreshInstallPage(packageCount);
         } else {
@@ -353,7 +358,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     }
 }
 
-
+//Show uninstall page
 void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
@@ -363,6 +368,7 @@ void DebInstaller::showUninstallConfirmPage()
 
     const QModelIndex index = m_fileListModel->first();
 
+    //  Set the display information of the uninstall page
     UninstallConfirmPage *p = new UninstallConfirmPage(this);
     p->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList());
     p->setPackage(index.data().toString());
@@ -372,18 +378,23 @@ void DebInstaller::showUninstallConfirmPage()
     p->setAcceptDrops(false);
 
     connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);
-    connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCalceled);
+    connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCancel);
 }
 
 void DebInstaller::onUninstallAccepted()
 {
+    // uninstall begin
     SingleInstallPage *p = backToSinglePage();
     m_fileChooseWidget->setAcceptDrops(true);
     p->uninstallCurrentPackage();
+
+    //set close button disabled while uninstalling
+    disableCloseAndExit();
 }
 
-void DebInstaller::onUninstallCalceled()
+void DebInstaller::onUninstallCancel()
 {
+    // Cancel uninstall
     this->setAcceptDrops(true);
     m_fileListModel->m_workerStatus_temp = DebListModel::WorkerPrepare;
     backToSinglePage();
@@ -391,11 +402,13 @@ void DebInstaller::onUninstallCalceled()
 
 void DebInstaller::onAuthing(const bool authing)
 {
+    //The authorization box pops up, the setting button is not available
     setEnabled(!authing);
 }
 
 void DebInstaller::reset()
 {
+    //reset page status
     Q_ASSERT(m_centralLayout->count() == 2);
     Q_ASSERT(!m_lastPage.isNull());
     m_fileListModel->m_workerStatus_temp = 0;
@@ -493,6 +506,7 @@ void DebInstaller::changeDragFlag()
 
 void DebInstaller::setEnableButton(bool bEnable)
 {
+    //Set button enabled after installation canceled
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->setEnableButton(bEnable);
@@ -504,6 +518,7 @@ void DebInstaller::setEnableButton(bool bEnable)
 
 void DebInstaller::showHiddenButton()
 {
+    //After the installation is complete, the hidden button is displayed and the close button is available
     enableCloseAndExit();
     m_fileListModel->reset_filestatus();
 
@@ -523,13 +538,17 @@ void DebInstaller::closeEvent(QCloseEvent *event)
 
 void DebInstaller::DealDependResult(int iAuthRes)
 {
+    //Set the display effect according to the status of deepin-wine installation authorization.
+    //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
     if (iAuthRes == DebListModel::AuthBefore || iAuthRes == DebListModel::AuthConfirm || iAuthRes == DebListModel::AuthPop) {
         this->setAcceptDrops(false);
     } else {
         this->setAcceptDrops(true);
     }
+    //Refresh the page after successful installation.
     if (iAuthRes == DebListModel::AuthDependsSuccess)
         refreshInstallPage();
+    //Refresh the display effect of different pages
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->DealDependResult(iAuthRes);

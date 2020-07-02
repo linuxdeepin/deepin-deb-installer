@@ -671,6 +671,9 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
+    // fix bug: 36120 After the uninstall authorization is canceled, hide the uninstall details and display the version status
+    m_tipsLabel->setVisible(true);
+    m_infoControlButton->setVisible(false);
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);

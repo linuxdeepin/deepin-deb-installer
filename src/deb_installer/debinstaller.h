@@ -55,7 +55,7 @@ private slots:
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
     void onUninstallAccepted();
-    void onUninstallCalceled();
+    void onUninstallCancel();
     void onAuthing(const bool authing);
     void onNewAppOpen(qint64 pid, const QStringList &arguments);
     void onStartInstallRequested();
@@ -75,7 +75,7 @@ private:
     void MulRefreshPage(int index);
     void handleFocusPolicy();
 
-    //禁用/启用 关闭按钮和菜单中的退出
+    //Disable/enable close button and exit in menu
     void disableCloseAndExit();
     void enableCloseAndExit();
 
