@@ -697,7 +697,6 @@ void SingleInstallPage::afterGetAutherFalse()
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
-
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 

@@ -173,6 +173,8 @@ void DebInstaller::disableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();
     action->setDisabled(true);
+
+    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
     titlebar()->setFocusPolicy(Qt::NoFocus);
     this->setFocusPolicy(Qt::NoFocus);
 }
@@ -187,6 +189,8 @@ void DebInstaller::enableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();
     action->setDisabled(false);
+
+    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
     titlebar()->setFocusPolicy(Qt::NoFocus);
     this->setFocusPolicy(Qt::NoFocus);
 }

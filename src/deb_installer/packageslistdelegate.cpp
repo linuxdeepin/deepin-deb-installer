@@ -99,7 +99,6 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
-    QApplication::restoreOverrideCursor();
     if (index.isValid()) {
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
