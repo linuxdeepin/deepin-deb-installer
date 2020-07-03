@@ -173,6 +173,8 @@ void DebInstaller::disableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();
     action->setDisabled(true);
+    titlebar()->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 // closed is allowed after install/uninstall
@@ -185,6 +187,8 @@ void DebInstaller::enableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();
     action->setDisabled(false);
+    titlebar()->setFocusPolicy(Qt::NoFocus);
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 //after start installing,all close button is forbidden.
