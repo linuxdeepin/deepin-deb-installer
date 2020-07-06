@@ -296,6 +296,19 @@ void DebListModel::onTransactionErrorOccurred()
 
     if (trans->isCancellable()) trans->cancel();
 
+    //fix bug: 36727 Increased handling of unload exceptions
+    if (e == CommitError) {
+        if (trans != nullptr) {
+            trans->deleteLater();
+            m_workerStatus = WorkerFinished;
+            m_workerStatus_temp = m_workerStatus;
+
+            emit CommitErrorFinished();
+            emit workerFinished();
+            return;
+        }
+    }
+
     if (e == AuthError) {
         trans->deleteLater();
         QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);

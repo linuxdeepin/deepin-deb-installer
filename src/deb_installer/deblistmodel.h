@@ -134,6 +134,7 @@ signals:
     void EnableReCancelBtn(bool bEnable);
     void onStartInstall();
     void DependResult(int);
+    void CommitErrorFinished();
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);

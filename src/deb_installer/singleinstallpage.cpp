@@ -407,6 +407,7 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
+    connect(m_packagesModel, &DebListModel::CommitErrorFinished, this, &SingleInstallPage::OnCommitErrorFinished);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -522,6 +523,21 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
         m_workerStarted = true;
         showInfo();
     }
+}
+
+void SingleInstallPage::OnCommitErrorFinished()
+{
+    m_tipsLabel->setVisible(true);
+    m_progressFrame->setVisible(false);
+    m_uninstallButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_backButton->setVisible(true);
+
+    m_confirmButton->setVisible(true);
+    m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+
+    if (m_operate == Uninstall)
+        m_tipsLabel->setText(tr("Uninstall Failed"));
 }
 
 void SingleInstallPage::onWorkerFinished()
