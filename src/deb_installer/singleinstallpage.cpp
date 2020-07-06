@@ -37,7 +37,6 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-
 using QApt::DebFile;
 using QApt::Transaction;
 
