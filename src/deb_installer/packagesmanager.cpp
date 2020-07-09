@@ -545,10 +545,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
         if (deb->recommendsList().contains(packageName)) continue;
 
-        // fix bug: 37220 cz 卸载某些依赖包时会卸载dde
-        if (deb->requiredByList().isEmpty()) {
-            ret << item;
-        }
+        ret << item;
         // append new reqiure list
 
         // fix bug:37220
