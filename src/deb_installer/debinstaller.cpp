@@ -301,6 +301,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 //After appending ,refresh page according to packages' count
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
+    this->showNormal();
     this->activateWindow();
     int packageCountInit = m_fileListModel->preparedPackages().size();
     qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
