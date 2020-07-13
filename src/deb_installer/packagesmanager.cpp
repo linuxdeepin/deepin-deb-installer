@@ -540,20 +540,19 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
         if (ret.contains(item)) continue;
 
-        Package *deb = packageWithArch(item, sysArch);
-        if (!deb || !deb->isInstalled()) continue;
+        Package *p = packageWithArch(item, sysArch);
+        if (!p || !p->isInstalled()) continue;
 
-        if (deb->recommendsList().contains(packageName)) continue;
+        if (p->recommendsList().contains(packageName)) continue;
+        if (p->suggestsList().contains(packageName)) continue;
 
         ret << item;
-        // append new reqiure list
 
-        // fix bug:37220
-        // No longer looking for deep reverse dependencies
-//        for (const auto &r : p->requiredByList()) {
-//            if (ret.contains(r) || testQueue.contains(r)) continue;
-//            testQueue.append(r);
-//        }
+        // append new reqiure list
+        for (const auto &r : p->requiredByList()) {
+            if (ret.contains(r) || testQueue.contains(r)) continue;
+            testQueue.append(r);
+        }
     }
 
     // remove self

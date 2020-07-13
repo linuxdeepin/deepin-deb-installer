@@ -313,14 +313,14 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         qDebug() << "append Package";
         for (const auto &package : packages) {
             QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
-            if (!m_pDebPackage->isValid()) {
+            bool isValid =  m_pDebPackage->isValid();
+            delete m_pDebPackage;
+            if (!isValid) {
                 qWarning() << "package invalid: " << package;
                 // this is a suggestion, add Floating Message while package invalid
 //                DFloatingMessage *msg = new DFloatingMessage;
 //                msg->setMessage(tr("Package Invalid"));
 //                DMessageManager::instance()->sendMessage(this, msg);
-
-                delete m_pDebPackage;
                 continue;
             }
             DRecentData data;
@@ -344,11 +344,13 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 m_fileListModel->appendPackage(package, true);
             }
 
-            delete m_pDebPackage;
         }
         //fix bug29948 服务器版
         const int packageCount = m_fileListModel->preparedPackages().size();
         // There is already one package and there will be multiple packages to be added
+        if (packageCount == packageCountInit) {
+            return ;
+        }
         if (packageCount == 1 || packages.size() > 1) {
             refreshInstallPage(packageCount);
             return;
