@@ -68,6 +68,14 @@ public:
         DefautFont
     };
 
+    enum VerifyResultCode {
+        OtherError = -1,     //其他错误
+        VerifySuccess,       //验证成功
+        DebfileInexistence,  //解压deb文件用的临时目录不存在
+        ExtractDebFail,      //提取deb包内容时出错
+        DebVerifyFail        //deb包验证失败
+    };
+
     static QHash<QString, QPixmap> m_imgCacheHash;
     static QHash<QString, QString> m_fontNameCache;
 
@@ -81,11 +89,11 @@ public:
     static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);//绑定字体大小等
     static QString fromSpecialEncoding(const QString &inputStr);//字体编码处理
     static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);//针对字体截断处理函数
-    static int returnfileIsempty(QString strfilepath,QString strfilename);//返回文件是否存在
-    static bool Modify_transferfile(QString Targetfilepath,QString strfilename);//修改文件权限
-    static bool File_transfer(QString Sourcefilepath,QString Targetfilepath,QString strfilename);//将源文件复制出来
-    static bool Digital_Verify(QString filepath_name);//验证deb数字签名
-    static bool Return_Digital_Verify(QString strfilepath,QString strfilename);//返回验证工具是否存在
+    static int returnfileIsempty(QString strfilepath, QString strfilename); //返回文件是否存在
+    static bool Modify_transferfile(QString Targetfilepath, QString strfilename); //修改文件权限
+    static bool File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename); //将源文件复制出来
+    static int Digital_Verify(QString filepath_name);//验证deb数字签名
+    static bool Return_Digital_Verify(QString strfilepath, QString strfilename); //返回验证工具是否存在
 };
 
 #endif

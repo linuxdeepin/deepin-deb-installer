@@ -312,7 +312,7 @@ bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
     }
     return false;
 }
-bool Utils::Digital_Verify(QString filepath_name)
+int Utils::Digital_Verify(QString filepath_name)
 {
     QString verifyfilepath = "/usr/bin/";
     QString verifyfilename = "deepin-deb-verify";
@@ -328,13 +328,22 @@ bool Utils::Digital_Verify(QString filepath_name)
         const QString output = proc.readAllStandardOutput();
         const QString output1 = proc.readAllStandardError();
         qDebug() << output1;
-        for (const auto &item : output1.split('\n'))
+        for (const auto &item : output1.split('\n')) {
             if (item.toLatin1() == "[INFO] signature verified!") {
-                qDebug() << "item:" << item;
-                return true;
+                return VerifySuccess;
             }
+            if (item.toLatin1() == "cannot find signinfo in deb file") {
+                return DebfileInexistence;
+            }
+            if (item.toLatin1() == "extract deb_file failed!") {
+                return ExtractDebFail;
+            }
+            if (item.toLatin1() == "verify deb file failed!") {
+                return DebVerifyFail;
+            }
+        }
     }
-    return false;
+    return OtherError;
 }
 
 QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &size)
