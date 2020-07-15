@@ -524,6 +524,15 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
     Q_ASSERT(choosed);
 }
 
+QMap<QString, QString> PackagesManager::specialPackage()
+{
+    QMap<QString, QString> sp;
+    sp.insert("deepin-wine-plugin-virtual", "deepin-wine-helper");
+    sp.insert("deepin-wine32", "deepin-wine");
+
+    return sp;
+}
+
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
     Package *p = packageWithArch(packageName, sysArch);
@@ -533,7 +542,6 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     QQueue<QString> testQueue;
 
     for (const auto &item : p->requiredByList().toSet()) testQueue.append(item);
-
     while (!testQueue.isEmpty()) {
         const auto item = testQueue.first();
         testQueue.pop_front();
@@ -545,16 +553,20 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
         if (p->recommendsList().contains(packageName)) continue;
         if (p->suggestsList().contains(packageName)) continue;
-
+        // fix bug: https://pms.uniontech.com/zentao/bug-view-37220.html dde相关组件特殊处理.
+        if (item.contains("dde")) continue;
         ret << item;
 
+        // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
+        if (specialPackage().contains(item)) {
+            testQueue.append(specialPackage()[item]);
+        }
         // append new reqiure list
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
             testQueue.append(r);
         }
     }
-
     // remove self
     ret.remove(packageName);
 
@@ -870,14 +882,14 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     qDebug() << "package with arch" << packageName << sysArch << annotation;
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
-
     do {
-        if (packageName == "deepin-wine32") {
-            if (!p) p = b->package(packageName + ":i386");
-            if (p) break;
-        }
+        // change: 按照当前支持的CPU架构进行打包。取消对deepin-wine的特殊处理
         if (!p) p = b->package(packageName);
         if (p) break;
+        for (QString arch : b->architectures()) {
+            if (!p) p = b->package(packageName + ":" + arch);
+            if (p) break;
+        }
 
         //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
         //if (!arch.isEmpty())

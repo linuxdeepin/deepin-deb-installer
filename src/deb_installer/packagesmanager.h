@@ -146,6 +146,12 @@ private:
     dealDependThread *dthread = nullptr;
     QList<int> m_dependInstallMark;
 
+private:
+
+    // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
+    // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
+    QMap<QString, QString> specialPackage();
+
 public slots:
     void DealDependResult(int iAuthRes, int iIndex);
 signals:
