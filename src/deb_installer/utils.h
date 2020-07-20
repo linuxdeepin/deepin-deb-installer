@@ -92,7 +92,7 @@ public:
     static int returnfileIsempty(QString strfilepath, QString strfilename); //返回文件是否存在
     static bool Modify_transferfile(QString Targetfilepath, QString strfilename); //修改文件权限
     static bool File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename); //将源文件复制出来
-    static int Digital_Verify(QString filepath_name);//验证deb数字签名
+    static bool Digital_Verify(QString filepath_name);//验证deb数字签名
     static bool Return_Digital_Verify(QString strfilepath, QString strfilename); //返回验证工具是否存在
 };
 
