@@ -554,7 +554,8 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         if (p->recommendsList().contains(packageName)) continue;
         if (p->suggestsList().contains(packageName)) continue;
         // fix bug: https://pms.uniontech.com/zentao/bug-view-37220.html dde相关组件特殊处理.
-        if (item.contains("dde")) continue;
+        //修复dde会被动卸载但是不会提示的问题
+        //if (item.contains("dde")) continue;
         ret << item;
 
         // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
