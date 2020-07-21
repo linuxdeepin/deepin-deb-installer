@@ -601,16 +601,19 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     if (QEvent::WindowDeactivate == event->type()) {
         m_OptionWindow->clearFocus();
         bActiveWindowFlag = true;
-        return true;
+        return QObject::eventFilter(watched, event);
     }
     if (QEvent::WindowActivate == event->type()) {
         m_OptionWindow->clearFocus();
         m_MinWindow->clearFocus();
         bActiveWindowFlag = false;
         bTabFlag = false;
+        //Refresh when focus is restored
         this->repaint();
         this->update();
-        return true;
+        titlebar()->repaint();
+        titlebar()->update();
+        return QObject::eventFilter(watched, event);
     }
 
     //Filtering events are not handled when focus is lost

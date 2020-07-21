@@ -742,13 +742,14 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
         if (this->focusWidget() != nullptr) {
             this->focusWidget()->clearFocus();
         }
-        return true;
+        emit OutOfFocus(false);
+        return QObject::eventFilter(watched, event);
     }
     if (QEvent::WindowActivate == event->type()) {
         this->repaint();
         this->update();
         emit OutOfFocus(false);
-        return true;
+        return QObject::eventFilter(watched, event);
     }
 
     if (QEvent::MouseButtonRelease == event->type()) {
