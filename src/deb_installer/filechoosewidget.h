@@ -29,14 +29,18 @@
 
 DWIDGET_USE_NAMESPACE
 
-class FileChooseWidget : public QWidget {
+class FileChooseWidget : public QWidget
+{
     Q_OBJECT
 
 public:
     explicit FileChooseWidget(QWidget *parent = nullptr);
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void setChooseBtnFocus();
 
 signals:
     void packagesSelected(const QStringList files) const;
+    void OutOfFocus(bool) const;
 
 private slots:
     void chooseFiles();

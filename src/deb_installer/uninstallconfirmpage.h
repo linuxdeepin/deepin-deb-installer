@@ -29,7 +29,8 @@
 #include <DPushButton>
 #include <QWidget>
 
-class UninstallConfirmPage : public QWidget {
+class UninstallConfirmPage : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -37,10 +38,15 @@ public:
 
     void setPackage(const QString &name);
     void setRequiredList(const QStringList &requiredList);
+    void initSetFocus();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 signals:
     void accepted() const;
     void canceled() const;
+    void OutOfFocus(bool) const;
 
 private slots:
     void showDetail();

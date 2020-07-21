@@ -47,10 +47,16 @@ public:
     void afterGetAutherFalse();
     void setScrollBottom(int index);
     void DealDependResult(int iAuthRes);
+    void setInitSelect();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
     void hideAutoBarTitle();
+    void OutOfFocus(bool) const;
 
 private slots:
     void onScrollSlotFinshed();
@@ -65,6 +71,7 @@ private slots:
     void onAutoScrollInstallList(int opIndex);
     void hiddenCancelButton();
 
+    void ResetFocus(bool);
 private:
     void initContentLayout();
     void initUI();
@@ -90,6 +97,9 @@ private:
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsLabel;
     DSpinner *m_dSpinner;
+
+    //install:1    finish:2
+    int m_currentFlag = 1;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

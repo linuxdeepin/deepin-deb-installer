@@ -75,7 +75,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 void SingleInstallPage::initUI()
 {
     QApplication::restoreOverrideCursor();
-    qApp->installEventFilter(this);
+    //qApp->installEventFilter(this);
     QFontInfo fontinfo = this->fontInfo();
     int fontsize = fontinfo.pixelSize();
     initContentLayout();
@@ -554,6 +554,8 @@ void SingleInstallPage::onWorkerFinished()
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
 
+        m_currentFlag = 3;
+
         if (m_operate == Install || m_operate == Reinstall) {
             qDebug() << "Installed successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
@@ -568,6 +570,8 @@ void SingleInstallPage::onWorkerFinished()
         }
 
     } else if (stat == DebListModel::Failed) {
+        m_currentFlag = 4;
+
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -652,6 +656,11 @@ void SingleInstallPage::setPackageInfo()
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
 
+    if (!installed)
+        m_currentFlag = 1;   //install
+    else
+        m_currentFlag = 2;
+
     DPalette palette;
     if (installed) {
         if (installStat == DebListModel::InstalledSameVersion) {
@@ -681,6 +690,8 @@ void SingleInstallPage::setPackageInfo()
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
+
+        m_currentFlag = 4;
     }
 }
 
@@ -725,6 +736,56 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
     if (event->type() == QEvent::FontChange && watched == this) {
         QFontInfo fontinfo = this->fontInfo();
         emit fontinfo.pixelSize();
+    }
+
+    if (QEvent::WindowDeactivate == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        return true;
+    }
+    if (QEvent::WindowActivate == event->type()) {
+        this->repaint();
+        this->update();
+        emit OutOfFocus(false);
+        return true;
+    }
+
+    if (QEvent::MouseButtonRelease == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        emit OutOfFocus(false);
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
+        if (key_event->key() == Qt::Key_Tab) {
+            if (m_installButton->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_reinstallButton->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_uninstallButton->hasFocus()) {
+                m_reinstallButton->setFocus();
+            }
+            if (m_doneButton->hasFocus() || m_confirmButton->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_backButton->hasFocus()) {
+                if (m_currentFlag == 3) {
+                    m_doneButton->setFocus();
+                }
+                if (m_currentFlag == 4) {
+                    m_confirmButton->setFocus();
+                }
+            }
+            return true;
+        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -838,3 +899,53 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
     }
 }
 
+void SingleInstallPage::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return) {
+        this->releaseKeyboard();
+
+        switch (m_currentFlag) {
+        case 1: {
+            if (m_installButton->hasFocus()) {
+                emit OutOfFocus(false);
+                m_installButton->click();
+            }
+            break;
+        }
+        case 2: {
+            if (m_uninstallButton->hasFocus()) {
+                emit OutOfFocus(false);
+                m_uninstallButton->click();
+            }
+            if (m_reinstallButton->hasFocus()) {
+                m_reinstallButton->click();
+                //emit OutOfFocus(false);
+            }
+            break;
+        }
+        case 3: {
+            if (m_backButton->hasFocus()) {
+                m_backButton->click();
+                emit OutOfFocus(false);
+            }
+            if (m_doneButton->hasFocus()) {
+                m_doneButton->click();
+            }
+            break;
+        }
+        case 4: {
+            if (m_backButton->hasFocus()) {
+                m_backButton->click();
+                emit OutOfFocus(false);
+            }
+            if (m_confirmButton->hasFocus()) {
+                emit OutOfFocus(false);
+                m_confirmButton->click();
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}

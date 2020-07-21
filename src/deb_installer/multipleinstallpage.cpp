@@ -190,7 +190,8 @@ void MultipleInstallPage::initConnections()
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
-//    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
+    connect(m_appsListView, &PackagesListView::OutOfFocus, this, &MultipleInstallPage::ResetFocus);
+    //    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
@@ -203,6 +204,7 @@ void MultipleInstallPage::initConnections()
 
 void MultipleInstallPage::onWorkerFinshed()
 {
+    m_currentFlag = 2;   //install finish
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
     m_processFrame->setVisible(false);
@@ -252,6 +254,11 @@ void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
     const int r = index.row();
 
     emit requestRemovePackage(r);
+
+    //When deleted to the last only one, switch focus
+    if (m_appsListView->count() == 1) {
+        emit OutOfFocus(false);
+    }
 }
 
 void MultipleInstallPage::showInfo()
@@ -358,4 +365,93 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
     default:
         break;
     }
+}
+
+void MultipleInstallPage::setInitSelect()
+{
+    int num = m_appsListView->currentIndex().row();
+    if (num == -1) {
+        m_appsListView->setCurrentIndex(m_debListModel->index(0, 0));
+        m_appsListView->setInitConfig();
+    }
+    m_appsListView->setFocus();
+    m_appsListView->grabKeyboard();
+    qApp->installEventFilter(m_appsListView);
+}
+
+bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (QEvent::WindowDeactivate == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        return true;
+    }
+    if (QEvent::WindowActivate == event->type()) {
+        this->repaint();
+        this->update();
+        emit OutOfFocus(false);
+        return true;
+    }
+
+    if (QEvent::MouseButtonRelease == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        emit OutOfFocus(false);
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
+        if (key_event->key() == Qt::Key_Tab) {
+            if (m_installButton->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_acceptButton->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_backButton->hasFocus()) {
+                m_acceptButton->setFocus();
+                //emit OutOfFocus(false);
+            }
+            if (m_appsListView->hasFocus()) {
+                if (m_currentFlag == 1) {
+                    m_installButton->setFocus();
+                }
+                if (m_currentFlag == 2) {
+                    m_backButton->setFocus();
+                }
+                m_appsListView->releaseKeyboard();
+                qApp->removeEventFilter(m_appsListView);
+            }
+            return true;
+        } else if (key_event->key() == Qt::Key_Return) {
+            this->releaseKeyboard();
+            if (m_installButton->hasFocus()) {
+                m_installButton->click();
+                emit OutOfFocus(false);
+            }
+            if (m_backButton->hasFocus()) {
+                m_backButton->click();
+                emit OutOfFocus(false);
+            }
+            if (m_acceptButton->hasFocus()) {
+                m_acceptButton->click();
+            }
+            return true;
+        } else
+            return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
+void MultipleInstallPage::ResetFocus(bool bFlag)
+{
+    Q_UNUSED(bFlag)
+    qApp->removeEventFilter(m_appsListView);
+    m_appsListView->clearFocus();
+    emit OutOfFocus(false);
 }

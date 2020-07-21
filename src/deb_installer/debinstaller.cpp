@@ -74,6 +74,8 @@ void DebInstaller::initUI()
     //Hide the shadow under the title bar
     setTitlebarShadowEnabled(false);
 
+    qApp->installEventFilter(this);
+
     //file choose widget settings
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_centralLayout->addWidget(m_fileChooseWidget);
@@ -122,7 +124,16 @@ void DebInstaller::handleFocusPolicy()
                     for (int k = 0; k < wLayout->count(); ++k) {
                         QWidget *widget = wLayout->itemAt(k)->widget();
                         if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
-                            widget->setFocusPolicy(Qt::NoFocus);
+                            //widget->setFocusPolicy(Qt::NoFocus);
+                            if ("Dtk::Widget::DWindowOptionButton" == QString(widget->metaObject()->className())) {
+                                m_OptionWindow = widget;
+                            }
+                            if ("Dtk::Widget::DWindowMinButton" == QString(widget->metaObject()->className())) {
+                                m_MinWindow = widget;
+                            }
+                            if ("Dtk::Widget::DWindowCloseButton" == QString(widget->metaObject()->className())) {
+                                m_closeWindow = widget;
+                            }
                         }
                     }
                 }
@@ -135,6 +146,9 @@ void DebInstaller::initConnections()
 {
     //Append packages via file-choose-widget's file-choose-button
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
+
+    //Select the focus of the page
+    connect(m_fileChooseWidget, &FileChooseWidget::OutOfFocus, this, &DebInstaller::ResetFocus);
 
     //Determine the status of the current application based on the status of the authorization box.
     connect(m_fileListModel, &DebListModel::lockForAuth, this, &DebInstaller::onAuthing);
@@ -383,10 +397,14 @@ void DebInstaller::showUninstallConfirmPage()
     p->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList());
     p->setPackage(index.data().toString());
 
+    m_Filterflag = 3; //Uninstall the page
+    m_UninstallPage = p;
+
     m_centralLayout->addWidget(p);
     m_centralLayout->setCurrentIndex(2);
     p->setAcceptDrops(false);
 
+    connect(p, &UninstallConfirmPage::OutOfFocus, this, &DebInstaller::ResetFocus);
     connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCancel);
 }
@@ -400,6 +418,8 @@ void DebInstaller::onUninstallAccepted()
 
     //set close button disabled while uninstalling
     disableCloseAndExit();
+
+    m_Filterflag = m_dragflag;
 }
 
 void DebInstaller::onUninstallCancel()
@@ -408,6 +428,8 @@ void DebInstaller::onUninstallCancel()
     this->setAcceptDrops(true);
     m_fileListModel->m_workerStatus_temp = DebListModel::WorkerPrepare;
     backToSinglePage();
+
+    m_Filterflag = m_dragflag;
 }
 
 void DebInstaller::onAuthing(const bool authing)
@@ -423,9 +445,11 @@ void DebInstaller::reset()
     Q_ASSERT(!m_lastPage.isNull());
     m_fileListModel->m_workerStatus_temp = 0;
     m_dragflag = -1;
+    m_Filterflag = -1;
     titlebar()->setTitle(QString());
     m_fileListModel->reset();
     m_lastPage->deleteLater();
+    m_UninstallPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
 }
 
@@ -465,6 +489,7 @@ void DebInstaller::refreshInstallPage(int index)
 
         SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
         singlePage->setObjectName("SingleInstallPage");
+        connect(singlePage, &SingleInstallPage::OutOfFocus, this, &DebInstaller::ResetFocus);
         connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
@@ -472,6 +497,7 @@ void DebInstaller::refreshInstallPage(int index)
         m_fileListModel->DebInstallFinishedFlag = 0;
         m_centralLayout->addWidget(singlePage);
         m_dragflag = 2;
+        m_Filterflag = 2;
     } else {
         // multiple packages install
         titlebar()->setTitle(tr("Bulk Install"));
@@ -479,12 +505,14 @@ void DebInstaller::refreshInstallPage(int index)
         MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
         multiplePage->setObjectName("MultipleInstallPage");
 
+        connect(multiplePage, &MultipleInstallPage::OutOfFocus, this, &DebInstaller::ResetFocus);
         connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
         connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
         multiplePage->setScrollBottom(index);
         m_lastPage = multiplePage;
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
+        m_Filterflag = 1;
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
@@ -565,5 +593,156 @@ void DebInstaller::DealDependResult(int iAuthRes)
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->DealDependResult(iAuthRes);
+    }
+}
+
+bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
+{
+    if (QEvent::WindowDeactivate == event->type()) {
+        m_OptionWindow->clearFocus();
+        bActiveWindowFlag = true;
+        return true;
+    }
+    if (QEvent::WindowActivate == event->type()) {
+        m_OptionWindow->clearFocus();
+        m_MinWindow->clearFocus();
+        bActiveWindowFlag = false;
+        bTabFlag = false;
+        this->repaint();
+        this->update();
+        return true;
+    }
+
+    //Filtering events are not handled when focus is lost
+    if (bActiveWindowFlag)
+        return QObject::eventFilter(watched, event);
+
+    if (QEvent::MouseButtonRelease == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        bTabFlag = false;
+        return QObject::eventFilter(watched, event);
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //Convert events to keyboard events
+        if (key_event->key() == Qt::Key_Escape) {
+            if (titlebar()->menu()->isVisible()) {
+                titlebar()->menu()->hide();
+            }
+            return true;
+        }
+        if (key_event->key() == Qt::Key_Tab) {
+            if (!bTabFlag) {
+                bTabFlag = true;
+                m_OptionWindow->setFocus();
+                return true;
+            }
+            if (m_OptionWindow->hasFocus()) {
+                m_MinWindow->setFocus();
+                return true;
+            }
+            if (m_MinWindow->hasFocus()) {
+                //During installation, when the close button is not available, switch TAB from scratch
+                if (m_closeWindow->isEnabled())
+                    m_closeWindow->setFocus();
+                else {
+                    bTabFlag = false;
+                    m_MinWindow->clearFocus();
+                }
+                return true;
+            }
+
+            if (m_closeWindow->hasFocus()) {
+                switch (m_Filterflag) {
+                case -1: {
+                    //Initial selection of file interface
+                    qApp->installEventFilter(m_fileChooseWidget);
+                    m_fileChooseWidget->setChooseBtnFocus();
+                    break;
+                }
+                case 1: {
+                    //The batch installation
+                    MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+                    qApp->installEventFilter(multiplePage);
+                    multiplePage->setInitSelect();
+                    break;
+                }
+                case 2: {
+                    //Single installation interface
+                    SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+                    singlePage->grabKeyboard();
+                    qApp->installEventFilter(singlePage);
+                    if (singlePage->m_currentFlag == 1)
+                        singlePage->m_installButton->setFocus();
+                    if (singlePage->m_currentFlag == 2)
+                        singlePage->m_uninstallButton->setFocus();
+                    if (singlePage->m_currentFlag == 3 || singlePage->m_currentFlag == 4)
+                        singlePage->m_backButton->setFocus();
+                    break;
+                }
+                case 3: {
+                    //Uninstall interface
+                    if (!m_UninstallPage.isNull()) {
+                        UninstallConfirmPage *uninstallPage = qobject_cast<UninstallConfirmPage *>(m_UninstallPage);
+                        uninstallPage->grabKeyboard();
+                        qApp->installEventFilter(uninstallPage);
+                        uninstallPage->initSetFocus();
+                    }
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            return true;
+        } else {
+            if (m_closeWindow == watched || m_OptionWindow == watched)
+                bTabFlag = false;
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
+void DebInstaller::ResetFocus(bool bFlag)
+{
+    this->repaint();
+    this->update();
+
+    //Remove the corresponding filter
+    switch (m_Filterflag) {
+    case -1: {
+        qApp->removeEventFilter(m_fileChooseWidget);
+        break;
+    }
+    case 1: {
+        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+        qApp->removeEventFilter(multiplePage);
+        multiplePage->releaseKeyboard();
+        break;
+    }
+    case 2: {
+        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+        qApp->removeEventFilter(singlePage);
+        break;
+    }
+    case 3: {
+        if (!m_UninstallPage.isNull()) {
+            UninstallConfirmPage *uninstallPage = qobject_cast<UninstallConfirmPage *>(m_UninstallPage);
+            qApp->removeEventFilter(uninstallPage);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (bFlag) {
+        m_OptionWindow->setFocus();
+    } else {
+        bTabFlag = false;
+        m_OptionWindow->clearFocus();
     }
 }

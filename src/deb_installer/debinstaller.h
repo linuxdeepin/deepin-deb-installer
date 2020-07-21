@@ -50,6 +50,7 @@ protected:
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -80,6 +81,7 @@ private slots:
     void showHiddenButton();
 
     void DealDependResult(int iAuthRes);
+    void ResetFocus(bool bFlag);
 
 private:
     DebListModel *m_fileListModel;
@@ -87,6 +89,14 @@ private:
     QStackedLayout *m_centralLayout;
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
+
+    bool bTabFlag = false;          //Control focus is re-identified from titlebar
+    bool bActiveWindowFlag = true;  //Window activation id
+    int m_Filterflag = -1; //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+    QPointer<QWidget> m_UninstallPage; //Store uninstall page
+    QWidget *m_OptionWindow;  //titlebar main menu
+    QWidget *m_MinWindow;
+    QWidget *m_closeWindow;
 };
 
 #endif  // DEBINSTALLER_H

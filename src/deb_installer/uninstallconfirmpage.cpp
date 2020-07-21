@@ -163,3 +163,46 @@ void UninstallConfirmPage::hideDetail()
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
 }
+
+void UninstallConfirmPage::initSetFocus()
+{
+    m_cancelBtn->setFocus();
+}
+
+bool UninstallConfirmPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (QEvent::MouseButtonRelease == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        emit OutOfFocus(false);
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
+        if (key_event->key() == Qt::Key_Tab) {
+            if (m_confirmBtn->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            if (m_cancelBtn->hasFocus()) {
+                m_confirmBtn->setFocus();
+            }
+            return true;
+        } else if (key_event->key() == Qt::Key_Return) {
+            this->releaseKeyboard();
+            if (m_confirmBtn->hasFocus()) {
+                emit OutOfFocus(false);
+                m_confirmBtn->click();
+            }
+            if (m_cancelBtn->hasFocus()) {
+                emit OutOfFocus(false);
+                m_cancelBtn->click();
+            }
+            return true;
+        } else
+            return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}

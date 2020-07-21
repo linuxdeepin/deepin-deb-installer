@@ -193,3 +193,85 @@ void PackagesListView::paintEvent(QPaintEvent *event)
     DListView::paintEvent(event);
 }
 
+void PackagesListView::setInitConfig()
+{
+    if (this->count() > 0)
+        m_currModelIndex = this->model()->index(0, 0);
+}
+
+bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
+{
+    if (QEvent::WindowDeactivate == event->type()) {
+        qDebug() << "PackagesListView 丢失焦点--------";
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        return true;
+    }
+    if (QEvent::WindowActivate == event->type()) {
+        //qApp->removeEventFilter(m_appsListView);
+        qDebug() << "PackagesListView 激活焦点--------";
+        this->repaint();
+        this->update();
+        emit OutOfFocus(false);
+        return true;
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
+        qDebug() << "PackagesListView   KeyPress";
+        if (key_event->key() == Qt::Key_Escape) {
+            qDebug() << "PackagesListView   Key_Escape";
+            if (m_rightMenu->isVisible())
+                m_rightMenu->hide();
+            return true;
+        }
+        if ((key_event->modifiers() == Qt::AltModifier) && (key_event->key() == Qt::Key_M)) {
+            qDebug() << "PackagesListView::keyPressEvent222222222" << this->selectionModel()->currentIndex().row();
+            if (this->selectionModel()->currentIndex().row() > -1) {
+                m_bShortcutDelete = false;
+                //connect(m_rightMenu->actions().at(0), SIGNAL(activated()), this, SLOT(onShortcutDeleteAction()));
+                emit onShowContextMenu(this->selectionModel()->currentIndex());
+                this->setFocus();
+            }
+            return true;
+        }
+
+        if (key_event->key() == Qt::Key_Return) {
+            if (m_rightMenu->isActiveWindow()) {
+                qDebug() << "Key_Return" << m_currModelIndex.row();
+                m_rightMenu->activeAction()->trigger();
+                m_rightMenu->hide();
+                this->releaseKeyboard();
+            }
+        }
+
+        if (key_event->key() == Qt::Key_Down || key_event->key() == Qt::Key_Up) {
+            if (m_rightMenu->isVisible()) {
+                m_rightMenu->setActiveAction(m_rightMenu->actions().at(0));
+                return true;
+            } else {
+                if (key_event->key() == Qt::Key_Down) {
+                    int row = this->model()->rowCount();
+                    int currentNum = this->currentIndex().row();
+                    if (currentNum < (row - 1)) {
+                        this->setCurrentIndex(this->model()->index(currentNum + 1, 0));
+                    } else if (currentNum == (row - 1)) {
+                        this->setCurrentIndex(this->model()->index(0, 0));
+                    }
+                }
+                if (key_event->key() == Qt::Key_Up) {
+                    int row = this->model()->rowCount();
+                    int currentNum = this->currentIndex().row();
+                    if (currentNum > 0) {
+                        this->setCurrentIndex(this->model()->index(currentNum - 1, 0));
+                    } else if (currentNum == 0) {
+                        this->setCurrentIndex(this->model()->index(row - 1, 0));
+                    }
+                }
+            }
+        }
+        return QObject::eventFilter(watched, event);
+    }
+    return QObject::eventFilter(watched, event);
+}

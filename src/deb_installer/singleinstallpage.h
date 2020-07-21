@@ -56,9 +56,11 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 signals:
     void back() const;
     void requestUninstallConfirm() const;
+    void OutOfFocus(bool) const;
 
 public slots:
     void uninstallCurrentPackage();
@@ -115,12 +117,19 @@ private:
     WorkerProgress *m_progress;
     InstallProcessInfoView *m_installProcessView;
     InfoControlButton *m_infoControlButton;
+
+public:
     DPushButton *m_installButton;
     DPushButton *m_uninstallButton;
     DPushButton *m_reinstallButton;
     DPushButton *m_confirmButton;
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
+    //Current interface identification
+    //install:1;uninstall/reinstall:2;back/done:3;back/confirm:4
+    int m_currentFlag = 0;
+
+private:
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
     QString m_description;

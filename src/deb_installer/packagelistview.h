@@ -30,10 +30,12 @@
 
 DWIDGET_USE_NAMESPACE
 
-class PackagesListView : public DListView {
+class PackagesListView : public DListView
+{
     Q_OBJECT
 public:
     explicit PackagesListView(QWidget *parent = nullptr);
+    void setInitConfig();
 
 signals:
     void onShowHideTopBg(bool bShow);
@@ -42,6 +44,7 @@ signals:
     void onClickItemAtIndex(QModelIndex index);
     void onShowContextMenu(QModelIndex index);
     void onRemoveItemClicked(QModelIndex index);
+    void OutOfFocus(bool);
 
 protected:
     void leaveEvent(QEvent *e);
@@ -53,6 +56,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
     void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
     void paintEvent(QPaintEvent *event);
 

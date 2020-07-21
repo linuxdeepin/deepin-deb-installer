@@ -158,3 +158,51 @@ void FileChooseWidget::themeChanged()
         split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
     }
 }
+
+void FileChooseWidget::setChooseBtnFocus()
+{
+    m_chooseFileBtn->setFocus();
+}
+
+bool FileChooseWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (QEvent::WindowDeactivate == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        return true;
+    }
+    if (QEvent::WindowActivate == event->type()) {
+        this->repaint();
+        this->update();
+        emit OutOfFocus(false);
+        return true;
+    }
+
+    if (QEvent::MouseButtonRelease == event->type()) {
+        if (this->focusWidget() != nullptr) {
+            this->focusWidget()->clearFocus();
+        }
+        emit OutOfFocus(false);
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
+        if (key_event->key() == Qt::Key_Tab) {
+            if (m_chooseFileBtn->hasFocus()) {
+                emit OutOfFocus(true);
+                this->releaseKeyboard();
+            }
+            return true;
+        } else if (key_event->key() == Qt::Key_Return) {
+            this->releaseKeyboard();
+            if (m_chooseFileBtn->hasFocus()) {
+                m_chooseFileBtn->click();
+            }
+            return true;
+        } else
+            return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}
