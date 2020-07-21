@@ -535,13 +535,14 @@ QMap<QString, QString> PackagesManager::specialPackage()
 
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
-    Package *p = packageWithArch(packageName, sysArch);
-    Q_ASSERT(p);
+    Package *package = packageWithArch(packageName, sysArch);
+    Q_ASSERT(package);
 
     QSet<QString> ret{packageName};
     QQueue<QString> testQueue;
 
-    for (const auto &item : p->requiredByList().toSet()) testQueue.append(item);
+    for (const auto &item : package->requiredByList().toSet())
+        testQueue.append(item);
     while (!testQueue.isEmpty()) {
         const auto item = testQueue.first();
         testQueue.pop_front();
@@ -565,6 +566,11 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         // append new reqiure list
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
+            Package *subPackage = packageWithArch(r, sysArch);
+            if (subPackage->recommendsList().contains(item))
+                continue;
+            if (subPackage->suggestsList().contains(item))
+                continue;
             testQueue.append(r);
         }
     }
