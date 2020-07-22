@@ -44,6 +44,7 @@ signals:
     void onClickItemAtIndex(QModelIndex index);
     void onShowContextMenu(QModelIndex index);
     void onRemoveItemClicked(QModelIndex index);
+
     void OutOfFocus(bool);
 
 protected:
@@ -61,12 +62,6 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    bool m_bLeftMouse;
-    bool m_bShortcutDelete;
-    QModelIndex m_currModelIndex;
-    DMenu *m_rightMenu {nullptr};
-    QModelIndex m_highlightIndex;
-
     void initUI();
     void initConnections();
     void initRightContextMenu();
@@ -78,6 +73,13 @@ private slots:
     void onListViewShowContextMenu(QModelIndex index);
     void onRightMenuDeleteAction();
     void onShortcutDeleteAction();
+
+private:
+    bool m_bLeftMouse;
+    bool m_bShortcutDelete;
+    QModelIndex m_currModelIndex;
+    DMenu *m_rightMenu {nullptr};
+    QModelIndex m_highlightIndex;
 };
 
 #endif  // PACKAGESLISTVIEW_H

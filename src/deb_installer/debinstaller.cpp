@@ -342,23 +342,17 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
-
             // Decide how to add according to the number of packages in the application
-            if (!m_fileListModel->getPackageIsNull()) {
-                if (!m_fileListModel->appendPackage(package, false)) {
-                    qWarning() << "package is Exist! ";
+            if (!m_fileListModel->appendPackage(package)) {
+                qWarning() << "package is Exist! ";
 
-                    DFloatingMessage *msg = new DFloatingMessage;
-                    msg->setMessage(tr("Already Added"));
-                    DMessageManager::instance()->sendMessage(this, msg);
-                    if (packages.size() == 1) {
-                        return;
-                    }
+                DFloatingMessage *msg = new DFloatingMessage;
+                msg->setMessage(tr("Already Added"));
+                DMessageManager::instance()->sendMessage(this, msg);
+                if (packages.size() == 1) {
+                    return;
                 }
-            } else {
-                m_fileListModel->appendPackage(package, true);
             }
-
         }
         //fix bug29948 服务器版
         const int packageCount = m_fileListModel->preparedPackages().size();

@@ -119,59 +119,78 @@ public:
     void initPrepareStatus();
     void initDependsStatus(int index = 0);
 
+public:
+    int getInstallFileSize();
+
 signals:
     //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
+    void AuthCancel();
+
+    void onStartInstall();
+
     void workerFinished() const;
-    void workerProgressChanged(const int progress) const;
+    void CommitErrorFinished();
+
     void transactionProgressChanged(const int progress) const;
-    void appendOutputInfo(const QString &info) const;
+    void workerProgressChanged(const int progress) const;
+
     void packageOperationChanged(const QModelIndex &index, int status) const;
     void packageDependsChanged(const QModelIndex &index, int status) const;
 
+    void appendOutputInfo(const QString &info) const;
+
     void onChangeOperateIndex(int opIndex);
-    void AuthCancel();
+
     void EnableReCancelBtn(bool bEnable);
-    void onStartInstall();
+
     void DependResult(int);
-    void CommitErrorFinished();
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
-    void installAll();
+
+    void installPackages();
     void uninstallPackage(const int idx);
+
     void removePackage(const int idx);
-    bool getPackageIsNull();
-    bool appendPackage(QApt::DebFile *package, bool isEmpty);
-    bool appendPackage(QString package, bool isEmpty);
+    bool appendPackage(QString package);
+
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
+
     void DealDependResult(int iAuthRes, int iIndex);
 
 private slots:
     void upWrongStatusRow();
-public:
-    int getInstallFileSize();
 
 private:
     void setEndEnable();
     void checkBoxStatus();
+
     void bumpInstallIndex();
+    void installNextDeb();
+    void installDebs();
+
     void onTransactionOutput();
     void onTransactionFinished();
     void onDependsInstallTransactionFinished();
-    void installNextDeb();
     void uninstallFinished();
+
     void refreshOperatingPackageStatus(const PackageOperationStatus stat);
     QString packageFailedReason(const int idx) const;
+
     void initRowStatus();
 
-    void installDebs();
+    bool checkSystemVersion();
+    bool checkDigitalSignature();
+
     void showNoDigitalErrWindow();
+
 private:
     int m_workerStatus;
     int m_operatingIndex;
     int m_operatingStatusIndex;
+
     QModelIndex m_currentIdx;
     PackagesManager *m_packagesManager;
 
@@ -179,9 +198,11 @@ private:
 
     QMap<int, int> m_packageOperateStatus;
     QMap<int, int> m_packageFailReason;
+
     bool m_InitRowStatus;
-    bool QverifyResult;
     bool bModifyFailedReason = false;
+
+    bool QverifyResult;
 };
 
 #endif  // DEBLISTMODEL_H

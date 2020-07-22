@@ -53,6 +53,7 @@ public:
     void afterGetAutherFalse();
     void setEnableButton(bool bEnable);
     void DealDependResult(int iAuthRes);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -80,13 +81,13 @@ private:
     void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
     int initLabelWidth(int fontinfo);
+
     void setPackageInfo();
 
     void setAuthConfirm();
     void setAuthBefore();
     void setCancelAuthOrAuthDependsErr();
     void setAuthDependsSuccess();
-
 
 private slots:
     void install();
@@ -97,6 +98,7 @@ private slots:
 
     void showInfo();
     void onOutputAvailable(const QString &output);
+
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
     void OnCommitErrorFinished();
@@ -125,6 +127,7 @@ public:
     DPushButton *m_confirmButton;
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
+
     //Current interface identification
     //install:1;uninstall/reinstall:2;back/done:3;back/confirm:4
     int m_currentFlag = 0;

@@ -43,24 +43,32 @@ class MultipleInstallPage : public QWidget
 
 public:
     explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
+
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
+
     void setScrollBottom(int index);
+
     void DealDependResult(int iAuthRes);
+
     void setInitSelect();
+
+signals:
+    void back() const;
+
+    void requestRemovePackage(const int index) const;
+
+    void hideAutoBarTitle();
+
+    void OutOfFocus(bool) const;
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-signals:
-    void back() const;
-    void requestRemovePackage(const int index) const;
-    void hideAutoBarTitle();
-    void OutOfFocus(bool) const;
-
 private slots:
     void onScrollSlotFinshed();
     void onWorkerFinshed();
+
     void onOutputAvailable(const QString &output);
     void onProgressChanged(const int progress);
     void onRequestRemoveItemClicked(const QModelIndex &index);
@@ -72,31 +80,38 @@ private slots:
     void hiddenCancelButton();
 
     void ResetFocus(bool);
+
 private:
-    void initContentLayout();
     void initUI();
     void initConnections();
+    void initContentLayout();
 
+private:
     DebListModel *m_debListModel;
-    QWidget *m_contentFrame;
-    PackagesListView *m_appsListView;
+
     DRoundBgFrame *m_appsListViewBgFrame;
-    InstallProcessInfoView *m_installProcessInfoView;
-    InfoControlButton *m_infoControlButton;
+    QWidget *m_contentFrame;
     QWidget *m_processFrame;
+    QVBoxLayout *m_contentLayout;
+    QVBoxLayout *m_centralLayout;
+
+    PackagesListView *m_appsListView;
+
+    InstallProcessInfoView *m_installProcessInfoView;
+
     WorkerProgress *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
+
     DPushButton *m_installButton;
     DPushButton *m_acceptButton;
     DPushButton *m_backButton;
-
-    QVBoxLayout *m_contentLayout;
-    QVBoxLayout *m_centralLayout;
-    int m_index = -1;
+    InfoControlButton *m_infoControlButton;
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsLabel;
     DSpinner *m_dSpinner;
+
+    int m_index = -1;
 
     //install:1    finish:2
     int m_currentFlag = 1;

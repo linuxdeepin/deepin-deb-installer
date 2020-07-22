@@ -377,14 +377,6 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const QString architecture = deb->architecture();
-    // fix bug:36334 非开模式下，双击打开已签名的deb包，会先跳到安装器首页再加载出安装界面
-    // The signature verification time is too long, and there is no need to verify the signature when verifying dependencies
-//    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-//    bool QDBusResult = Installer.property("DeviceUnlocked").toBool();
-
-//    if (!QDBusResult) {
-//        QverifyResult = Utils::Digital_Verify(deb->filePath());
-//    }
     PackageDependsStatus ret = PackageDependsStatus::ok();
 
     // conflicts
@@ -421,15 +413,6 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                 }
             }
         }
-        // fix bug:36334 非开模式下，双击打开已签名的deb包，会先跳到安装器首页再加载出安装界面
-        // The signature verification time is too long, and there is no need to verify the signature when verifying dependencies
-//        if (!QDBusResult) {
-//            qDebug() << "QverifyResult" << QverifyResult;
-//            qDebug() << "ret.status)" << ret.status;
-//            if (!QverifyResult && (ret.status != DebListModel::DependsBreak)) {
-//                ret.status = DebListModel::DependsVerifyFailed;
-//            }
-//        }
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
@@ -667,39 +650,8 @@ void PackagesManager::removeLastPackage()
     m_packageDependsStatus.clear();
 }
 
-bool PackagesManager::getPackageIsNull()
+bool PackagesManager::appendPackage(QString debPackage)
 {
-    if (m_preparedPackages.size() == 1 && m_appendedPackagesMd5.size() == 0) {
-        DebFile *deb = new DebFile(m_preparedPackages[0]);
-        const auto md5 = deb->md5Sum();
-        delete deb;
-
-        m_appendedPackagesMd5 << md5;
-        m_preparedMd5 << md5;
-        return  false;
-    } else if (m_preparedPackages.size() == 0 && m_appendedPackagesMd5.size() == 0)
-        return true;
-    else {
-        return  false;
-    }
-}
-
-bool PackagesManager::appendPackage(DebFile *debPackage, bool isEmpty)
-{
-    Q_UNUSED(isEmpty);
-    Q_UNUSED(debPackage);
-//    const auto md5 = debPackage->md5Sum();
-//    if (m_appendedPackagesMd5.contains(md5)) return false;
-
-//    m_preparedPackages << debPackage;
-//    m_appendedPackagesMd5 << md5;
-//    m_preparedMd5 << md5;
-    return true;
-}
-
-bool PackagesManager::appendPackage(QString debPackage, bool isEmpty)
-{
-    Q_UNUSED(isEmpty);
     qDebug() << "debPackage" << debPackage;
     QApt::DebFile *p = new DebFile(debPackage);
 
@@ -762,9 +714,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType()) << package_name << p->architecture()
              << relationName(dependencyInfo.relationType()) << dependencyInfo.packageVersion();
 
-    //    if (dependencyInfo.packageVersion().isEmpty())
-    //        return PackageDependsStatus::ok();
-
     const RelationType relation = dependencyInfo.relationType();
     const QString &installedVersion = p->installedVersion();
 
@@ -813,7 +762,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 }
             }
         }
-
         // let's check conflicts
         if (!isConflictSatisfy(architecture, p).is_ok()) {
             qDebug() << "depends break because conflict, ready to find providers" << p->name();
@@ -854,29 +802,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             return PackageDependsStatus::_break(p->name());
         }
 
-        //        const auto &depends = p->depends();
-        //        for (auto const &item : depends)
-        //        {
-        //            PackageDependsStatus rs = PackageDependsStatus::_break(QString());
-        //            for (auto const &info : item)
-        //            {
-        //                const QString arch = resolvMultiArchAnnotation(info.multiArchAnnotation(), p->architecture(),
-        //                p->multiArchType());
-
-        //                const auto r = checkDependsPackageStatus(choosed_set, arch, info);
-        //                rs.minEq(r);
-        //            }
-
-        //            if (rs.isBreak())
-        //            {
-        //                // we are break, remove self
-        //                choosed_set.remove(p->name());
-
-        //                qDebug() << "depends break by direct depends" << p->name() << p->architecture() <<
-        //                dependencyInfo.packageVersion(); return PackageDependsStatus::_break(p->name());
-        //            }
-        //        }
-
         qDebug() << "Check finshed for package" << p->name();
 
         return PackageDependsStatus::available();
@@ -898,10 +823,6 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
             if (p) break;
         }
 
-        //const QString arch = resolvMultiArchAnnotation(annotation, sysArch, p->multiArchType());
-        //if (!arch.isEmpty())
-        //reset to check foreign arch
-        //p = b->package(packageName + arch);
     } while (false);
 
     if (p) return p;
