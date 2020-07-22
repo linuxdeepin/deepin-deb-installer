@@ -830,8 +830,12 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
         setCancelAuthOrAuthDependsErr();
         break;
     case DebListModel::AuthDependsSuccess:
+        setCancelAuthOrAuthDependsErr();
+        break;
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
+        m_tipsLabel->setText(tr("%1 Installation Failed").arg("deepin-wine"));
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
     default:
         break;

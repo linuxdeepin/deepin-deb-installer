@@ -425,6 +425,8 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
+            if (m_packagesManager->m_errorIndex.contains(idx))
+                return tr("%1 Installation Failed").arg(stat.package);
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -751,6 +753,7 @@ void DebListModel::upWrongStatusRow()
     if (listWrongIndex.size() == 0)
         return;
 
+    QList<int> t_errorIndex;
     //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<QString> listTempDebFile;
     QList<QByteArray> listTempPreparedMd5;
@@ -758,7 +761,8 @@ void DebListModel::upWrongStatusRow()
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus[i] = listpackageOperateStatus[i];
         if (listWrongIndex.contains(i)) {
-            listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i]);
+            t_errorIndex.push_back(iIndex);
+            listTempDebFile.insert(iIndex, m_packagesManager->m_preparedPackages[i]);
             listTempPreparedMd5.insert(iIndex++, m_packagesManager->m_preparedMd5[i]);
         } else {
             listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);
@@ -767,6 +771,12 @@ void DebListModel::upWrongStatusRow()
     }
     m_packagesManager->m_preparedPackages = listTempDebFile;
     m_packagesManager->m_preparedMd5 = listTempPreparedMd5;
+
+    //Reupdates the index that failed to install Deepin-Wine
+    if (m_packagesManager->m_errorIndex.size() > 0) {
+        m_packagesManager->m_errorIndex.clear();
+        m_packagesManager->m_errorIndex = t_errorIndex;
+    }
 
     //change  m_packageFailReason sort.
     QMap<int, int> mappackageFailReason;

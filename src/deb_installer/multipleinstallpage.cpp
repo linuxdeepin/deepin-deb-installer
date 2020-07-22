@@ -346,6 +346,11 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
     case DebListModel::AuthDependsSuccess:
     case DebListModel::AuthDependsErr:
         m_appsListView->setEnabled(true);
+        m_installButton->setVisible(true);
+        m_installButton->setEnabled(true);
+        m_dSpinner->stop();
+        m_dSpinner->hide();
+        m_tipsLabel->setVisible(false);
         break;
     case DebListModel::AnalysisErr:
         m_appsListView->setEnabled(true);

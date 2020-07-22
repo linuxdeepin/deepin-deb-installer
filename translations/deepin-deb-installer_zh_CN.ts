@@ -57,6 +57,11 @@
         <translation>确定</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="429"/>
+        <source>%1 Installation Failed</source>
+        <translation>%1 安装失败</translation>
+    </message>
+    <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="415"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="419"/>
         <source>Broken dependencies: %1</source>
@@ -219,6 +224,11 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="725"/>
         <source>Installing dependencies: %1</source>
         <translation>正在安装依赖：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="837"/>
+        <source>%1 Installation Failed</source>
+        <translation>%1 安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="173"/>

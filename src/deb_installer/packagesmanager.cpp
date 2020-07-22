@@ -144,29 +144,22 @@ void dealDependThread::on_readoutput()
     }
 
     if (tmp.contains("Not authorized")) {
-        emit DependResult(DebListModel::CancelAuth, m_index);
-    }
-    if (tmp.contains("暂时不能解析域名") || tmp.contains("没有可用的软件包 deepin-wine")) {
         bDependsStatusErr = true;
+        emit DependResult(DebListModel::CancelAuth, m_index);
     }
 }
 
-void dealDependThread::onFinished(int num)
+void dealDependThread::onFinished(int num = -1)
 {
+    if (bDependsStatusErr) {
+        bDependsStatusErr = false;
+        return;
+    }
+
     if (num == 0) {
-        if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index);
-            bDependsStatusErr = false;
-            return;
-        }
         qDebug() << m_dependName << "安装成功";
         emit DependResult(DebListModel::AuthDependsSuccess, m_index);
     } else {
-        if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index);
-            bDependsStatusErr = false;
-            return;
-        }
         qDebug() << m_dependName << "install error" << num;
         emit DependResult(DebListModel::AuthDependsErr, m_index);
     }
@@ -359,6 +352,12 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageDependsStatus[m_dependInstallMark[num]].status = DebListModel::DependsAuthCancel;
+        }
+    }
+    if (iAuthRes == DebListModel::AuthDependsErr) {
+        for (int num = 0; num < m_dependInstallMark.size(); num++) {
+            if (!m_errorIndex.contains(m_dependInstallMark[num]))
+                m_errorIndex.push_back(m_dependInstallMark[num]);
         }
     }
     emit DependResult(iAuthRes, iIndex);
@@ -583,6 +582,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
 void PackagesManager::reset()
 {
+    m_errorIndex.clear();
     m_dependInstallMark.clear();
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
@@ -629,6 +629,19 @@ void PackagesManager::removePackage(const int index, QList<int> listDependInstal
             }
         }
     }
+
+    QList<int> t_errorIndex;
+    if (m_errorIndex.size() > 0) {
+        for (int i = 0; i < m_errorIndex.size(); i++) {
+            if (index > m_errorIndex[i]) {
+                t_errorIndex.append(m_errorIndex[i]);
+            } else if (index != m_errorIndex[i]) {
+                t_errorIndex.append(m_errorIndex[i] - 1);
+            }
+        }
+    }
+    m_errorIndex.clear();
+    m_errorIndex = t_errorIndex;
 
     m_packageInstallStatus.clear();
     //m_packageDependsStatus.clear();

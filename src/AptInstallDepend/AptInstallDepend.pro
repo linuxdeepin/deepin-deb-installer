@@ -9,7 +9,8 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    installDebThread.cpp
 DEFINES += QT_DEPRECATED_WARNINGS
 
 target.path = /usr/bin
@@ -17,3 +18,6 @@ target.path = /usr/bin
 INSTALLS += target
 
 DISTFILES +=
+
+HEADERS += \
+    installDebThread.h

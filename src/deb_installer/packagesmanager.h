@@ -125,6 +125,8 @@ public:
     QString package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
 
+    QList<int> m_errorIndex;  //Store the subscript that failed to install Deepin-Wine
+
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
                                                          const QList<QApt::DependencyItem> &depends);
