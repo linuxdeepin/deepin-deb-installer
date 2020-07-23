@@ -58,7 +58,6 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 //    m_tipsText->setPalette(palette);
 //    m_tipsText->setAlignment(Qt::AlignCenter);
 
-
     m_tipsText->setText(expandTips);
     QFontInfo fontinfo = m_tipsText->fontInfo();
     int fontsize = fontinfo.pixelSize();

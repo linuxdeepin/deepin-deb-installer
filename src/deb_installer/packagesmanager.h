@@ -123,10 +123,8 @@ public:
     bool appendPackage(QString debPackage);
 
     void removePackage(const int index, QList<int> listDependInstallMark);
-    void removeLastPackage();
 
     void reset();
-    void resetInstallStatus();
     void resetPackageDependsStatus(const int index);
 
 private:
@@ -149,6 +147,9 @@ private:
                                              const QString &packageArch);
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
+
+    void removeLastPackage();
+    void resetInstallStatus();
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
