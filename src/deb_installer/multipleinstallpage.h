@@ -115,6 +115,7 @@ private:
 
     //install:1    finish:2
     int m_currentFlag = 1;
+    int m_MouseBtnRelease = 0;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

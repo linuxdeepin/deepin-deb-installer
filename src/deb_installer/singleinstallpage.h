@@ -131,6 +131,7 @@ public:
     //Current interface identification
     //install:1;uninstall/reinstall:2;back/done:3;back/confirm:4
     int m_currentFlag = 0;
+    int m_MouseBtnRelease = 0;
 
 private:
     QVBoxLayout *m_contentLayout;

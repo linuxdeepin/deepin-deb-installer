@@ -212,6 +212,9 @@ void DebInstaller::enableCloseAndExit()
 //after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
+    //Solve flash problems when installing and reinstalling
+    m_OptionWindow->clearFocus();
+
     disableCloseAndExit();
 }
 
@@ -600,6 +603,7 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     if (QEvent::WindowActivate == event->type()) {
         m_OptionWindow->clearFocus();
         m_MinWindow->clearFocus();
+        m_closeWindow->clearFocus();
         bActiveWindowFlag = false;
         bTabFlag = false;
         //Refresh when focus is restored
@@ -615,11 +619,37 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
         return QObject::eventFilter(watched, event);
 
     if (QEvent::MouseButtonRelease == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
+        if (watched != m_OptionWindow && watched != m_MinWindow &&
+                watched != m_closeWindow && watched != titlebar()) {
+            if (this->focusWidget() != nullptr) {
+                this->focusWidget()->clearFocus();
+                bTabFlag = false;
+                return QObject::eventFilter(watched, event);
+            }
+        } else {
+            if (m_closeWindow == watched) {
+                if (m_closeWindow->isEnabled())
+                    this->close();
+            } else if (m_MinWindow == watched) {
+                this->showMinimized();
+            } else if (m_OptionWindow == watched) {
+                QPoint pos = m_OptionWindow->pos();
+                pos.setY(pos.y() + 49);
+                titlebar()->menu()->exec(m_OptionWindow->mapToGlobal(pos));
+            } else
+                return QObject::eventFilter(watched, event);
         }
-        bTabFlag = false;
-        return QObject::eventFilter(watched, event);
+    }
+
+    //Fixed flash problem after single install click cancel uninstall
+    if (event->type() == QEvent::FocusIn) {
+        if (m_OptionWindow == watched) {
+            if (!bTabFlag) {
+                m_OptionWindow->clearFocus();
+                return true;
+            }
+            return QObject::eventFilter(watched, event);
+        }
     }
 
     if (event->type() == QEvent::KeyPress) {

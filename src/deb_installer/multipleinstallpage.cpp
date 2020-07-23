@@ -49,7 +49,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_acceptButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
-    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -395,10 +395,26 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (QEvent::MouseButtonRelease == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
+        m_MouseBtnRelease++;
+        QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
+        if (btnList.size() > 0) {
+            for (int num = 0; num < btnList.size(); num++) {
+                if (watched == btnList.at(num)) {
+                    this->releaseKeyboard();
+                    btnList.at(num)->click();
+                    m_MouseBtnRelease = 0;
+                    qApp->removeEventFilter(this);
+                    return QObject::eventFilter(watched, event);
+                }
+            }
         }
-        emit OutOfFocus(false);
+        if (m_MouseBtnRelease == (btnList.size() + 1)) {
+            if (this->focusWidget() != nullptr) {
+                this->focusWidget()->clearFocus();
+            }
+            m_MouseBtnRelease = 0;
+            emit OutOfFocus(false);
+        }
     }
 
     if (event->type() == QEvent::KeyPress) {
@@ -430,8 +446,8 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
         } else if (key_event->key() == Qt::Key_Return) {
             this->releaseKeyboard();
             if (m_installButton->hasFocus()) {
-                m_installButton->click();
                 emit OutOfFocus(false);
+                m_installButton->click();
             }
             if (m_backButton->hasFocus()) {
                 m_backButton->click();

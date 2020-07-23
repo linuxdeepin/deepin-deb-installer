@@ -63,5 +63,6 @@ private:
 
     QStringList m_requiredList;
     QString m_description;
+    int m_MouseBtnRelease = 0;
 };
 #endif  // UNINSTALLCONFIRMPAGE_H
