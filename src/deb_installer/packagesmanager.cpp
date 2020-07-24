@@ -348,6 +348,7 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageDependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;
         }
+        m_errorIndex.clear();
     }
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
@@ -356,6 +357,7 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
     }
     if (iAuthRes == DebListModel::AuthDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
+            m_packageDependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.push_back(m_dependInstallMark[num]);
         }
@@ -601,6 +603,12 @@ void PackagesManager::resetInstallStatus()
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
     if (!m_packageDependsStatus.contains(index)) return;
+
+    if (m_packageDependsStatus.contains(index)) {
+        if (m_packageDependsStatus[index].package.contains("deepin-wine")) {
+            return;
+        }
+    }
 
     // reload backend cache
     m_backendFuture.result()->reloadCache();

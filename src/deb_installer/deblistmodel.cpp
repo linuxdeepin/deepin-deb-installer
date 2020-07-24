@@ -560,7 +560,7 @@ void DebListModel::installDebs()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
-    if (dependsStat.isBreak()) {
+    if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {
         refreshOperatingPackageStatus(Failed);
         m_packageFailReason.insert(m_operatingStatusIndex, -1);
         bumpInstallIndex();
