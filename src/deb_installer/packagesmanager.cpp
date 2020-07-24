@@ -605,7 +605,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     if (!m_packageDependsStatus.contains(index)) return;
 
     if (m_packageDependsStatus.contains(index)) {
-        if (m_packageDependsStatus[index].package.contains("deepin-wine")) {
+        if ((m_packageDependsStatus[index].package == "deepin-wine") && m_packageDependsStatus[index].status != DebListModel::DependsOk) {
             return;
         }
     }
