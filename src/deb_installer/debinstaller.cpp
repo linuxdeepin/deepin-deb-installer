@@ -618,6 +618,13 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     if (bActiveWindowFlag)
         return QObject::eventFilter(watched, event);
 
+    //Remove focus when clicking on the title bar
+    if (watched == titlebar()) {
+        if (QEvent::MouseButtonRelease == event->type()) {
+            ResetFocus(false);
+        }
+    }
+
     if (QEvent::MouseButtonRelease == event->type()) {
         if (watched != m_OptionWindow && watched != m_MinWindow &&
                 watched != m_closeWindow && watched != titlebar()) {

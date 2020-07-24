@@ -765,7 +765,7 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
-        if (m_MouseBtnRelease == (btnList.size() + 1)) {
+        if ((m_MouseBtnRelease + 1) >= btnList.size()) {
             if (this->focusWidget() != nullptr) {
                 this->focusWidget()->clearFocus();
             }
