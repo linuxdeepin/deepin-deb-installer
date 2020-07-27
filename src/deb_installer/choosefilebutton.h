@@ -6,6 +6,11 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The ChooseFileButton class
+ * 文件选择对话框中的文件选择按钮
+ * 一开始使用的控件为DPushButton ,后UI与测试提出按钮需要跟随活动色变化。后修改为DCommandLinkButton.
+ */
 class ChooseFileButton : public DCommandLinkButton
 {
     Q_OBJECT

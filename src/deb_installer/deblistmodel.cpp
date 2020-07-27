@@ -61,6 +61,8 @@ const QString workerErrorString(const int e)
                                        "Installation failed, please check for updates in Control Center");
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
+    case LockError:
+        return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     }
     return QApplication::translate("DebListModel", "Installation Failed");
 }
