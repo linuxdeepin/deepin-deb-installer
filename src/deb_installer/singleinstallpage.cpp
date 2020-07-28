@@ -407,7 +407,8 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
-    connect(m_packagesModel, &DebListModel::CommitErrorFinished, this, &SingleInstallPage::OnCommitErrorFinished);
+    // 抛弃 CommitErrorFinished 与OnCommitErrorFinished 在listModel中修改为信号workerFinished。
+    connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -525,6 +526,11 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
     }
 }
 
+/**
+ * @brief SingleInstallPage::OnCommitErrorFinished
+ * transaction 返回CommitError时的槽函数，目前不再使用
+ * 暂时留用，待下个版本测试后，如果正常，删除。
+ */
 void SingleInstallPage::OnCommitErrorFinished()
 {
     m_tipsLabel->setVisible(true);
@@ -577,9 +583,10 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
+        //正常情况不会进入此分支，如果进入此分支表明状态错误。
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
-//        Q_UNREACHABLE();
+        qDebug() << "Operate Status Error. current"
+                 << "index=" << index.row() << "stat=" << stat;
     }
 
     if (!m_upDown)

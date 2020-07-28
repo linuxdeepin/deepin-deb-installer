@@ -119,6 +119,9 @@ public:
     void initPrepareStatus();
     void initDependsStatus(int index = 0);
 
+public:
+    int getInstallFileSize();
+
 signals:
     //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
@@ -150,8 +153,6 @@ public slots:
 
 private slots:
     void upWrongStatusRow();
-public:
-    int getInstallFileSize();
 
 private:
     void setEndEnable();
@@ -178,7 +179,8 @@ private:
     QPointer<QApt::Transaction> m_currentTransaction;
 
     QMap<int, int> m_packageOperateStatus;
-    QMap<int, int> m_packageFailReason;
+    QMap<int, int> m_packageFailCode; //FailCode 错误代码 ，trans返回的错误代码
+    QMap<int, QString> m_packageFailReason; //FailReason , trans返回的详细错误信息
     bool m_InitRowStatus;
     bool QverifyResult;
     bool bModifyFailedReason = false;
