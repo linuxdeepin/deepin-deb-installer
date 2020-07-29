@@ -715,8 +715,9 @@ void DebListModel::installNextDeb()
 {
     if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();
+    } else {
+        installDebs();
     }
-    installDebs();
 }
 
 void DebListModel::onTransactionOutput()
