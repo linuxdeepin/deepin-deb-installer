@@ -7,20 +7,15 @@
 #include <QStringList>
 #include <QThread>
 #include <iostream>
+#include "installDebThread.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     qDebug() << "StartInstallDeepinwine";
 
-    QProcess proc;
-
-    proc.start("sudo", QStringList() << "apt-get" << "install" << "deepin-wine" << "deepin-wine-helper" << "--fix-missing" << "-y");
-
-    proc.waitForFinished(-1);
-    std::cout << proc.readAllStandardOutput().data();
-
-    proc.close();
-
-    return 0;
+    InstallDebThread *mThread = new InstallDebThread;
+    mThread->run();
+    mThread->wait();
+    return mThread->m_resultFlag;
 }

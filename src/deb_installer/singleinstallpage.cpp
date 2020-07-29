@@ -407,7 +407,9 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
-    connect(m_packagesModel, &DebListModel::CommitErrorFinished, this, &SingleInstallPage::OnCommitErrorFinished);
+    //    connect(m_packagesModel, &DebListModel::CommitErrorFinished, this, &SingleInstallPage::OnCommitErrorFinished);
+    // 抛弃 CommitErrorFinished 与OnCommitErrorFinished 在listModel中修改为信号workerFinished。
+    connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -524,6 +526,12 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
     }
 }
 
+/**
+ * @brief SingleInstallPage::OnCommitErrorFinished
+ * transaction 返回CommitError时的槽函数，目前不再使用
+ * 暂时留用，待下个版本测试后，如果正常，删除。
+ */
+
 void SingleInstallPage::OnCommitErrorFinished()
 {
     m_tipsLabel->setVisible(true);
@@ -581,8 +589,8 @@ void SingleInstallPage::onWorkerFinished()
         }
     } else {
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
-//        Q_UNREACHABLE();
+        qDebug() << "Operate Status Error. current"
+                 << "index=" << index.row() << "stat=" << stat;
     }
 
     if (!m_upDown)
@@ -907,8 +915,12 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
         setCancelAuthOrAuthDependsErr();
         break;
     case DebListModel::AuthDependsSuccess:
+        setCancelAuthOrAuthDependsErr();
+        break;
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
+        m_tipsLabel->setText(tr("%1 Installation Failed").arg("deepin-wine"));
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
     default:
         break;

@@ -127,6 +127,9 @@ public:
     void reset();
     void resetPackageDependsStatus(const int index);
 
+public:
+    QList<int> m_errorIndex;
+
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
                                                          const QList<QApt::DependencyItem> &depends);

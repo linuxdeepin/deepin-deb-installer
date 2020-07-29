@@ -197,7 +197,8 @@ private:
     QPointer<QApt::Transaction> m_currentTransaction;
 
     QMap<int, int> m_packageOperateStatus;
-    QMap<int, int> m_packageFailReason;
+    QMap<int, int> m_packageFailCode; //FailCode 错误代码 ，trans返回的错误代码
+    QMap<int, QString> m_packageFailReason; //FailReason , trans返回的详细错误信息
 
     bool m_InitRowStatus;
     bool bModifyFailedReason = false;
