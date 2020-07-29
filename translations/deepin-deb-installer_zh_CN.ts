@@ -44,33 +44,33 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="458"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="454"/>
         <source>%1 Installation Failed</source>
         <translation>%1 安装失败</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="642"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="637"/>
         <source>Unable to install</source>
         <translation>无法安装</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="643"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="638"/>
         <source>This package does not have a valid digital signature</source>
         <translation>此安装包没有有效的数字签名</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="645"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="640"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="456"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="460"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="464"/>
         <source>Broken dependencies: %1</source>
         <translation>依赖关系不满足：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="454"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="450"/>
         <source>Unmatched package architecture</source>
         <translation>软件包架构不匹配</translation>
     </message>
@@ -178,7 +178,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="599"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="597"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
@@ -213,22 +213,22 @@
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="680"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="678"/>
         <source>Later version installed: %1</source>
         <translation>已安装较新的版本：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="684"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="682"/>
         <source>Earlier version installed: %1</source>
         <translation>已安装较早的版本：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="829"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="827"/>
         <source>Installing dependencies: %1</source>
         <translation>正在安装依赖：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="922"/>
         <source>%1 Installation Failed</source>
         <translation>%1 安装失败</translation>
     </message>
@@ -238,18 +238,18 @@
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="570"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="569"/>
         <source>Installed successfully</source>
         <translation>安装成功</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="576"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="575"/>
         <source>Uninstalled successfully</source>
         <translation>卸载成功</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="548"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="589"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="547"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="588"/>
         <source>Uninstall Failed</source>
         <translation>卸载失败</translation>
     </message>
@@ -259,7 +259,7 @@
         <translation>名称：</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="677"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="675"/>
         <source>Same version installed</source>
         <translation>已安装相同版本</translation>
     </message>
@@ -268,8 +268,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="467"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="569"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="466"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="568"/>
         <source>Show details</source>
         <translation>显示详细信息</translation>
     </message>
@@ -277,8 +277,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="481"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="575"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="480"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="574"/>
         <source>Show details</source>
         <translation>显示卸载进程</translation>
     </message>
