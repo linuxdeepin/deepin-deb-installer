@@ -119,8 +119,8 @@ public:
     void removePackage(const int index, QList<int> listDependInstallMark);
     void removeLastPackage();
     bool getPackageIsNull();
-    bool appendPackage(QApt::DebFile *debPackage, bool isEmpty);
-    bool appendPackage(QString debPackage, bool isEmpty);
+
+    bool appendPackage(QString debPackage);
     bool QverifyResult;
     QString package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }

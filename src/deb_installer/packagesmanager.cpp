@@ -706,22 +706,8 @@ bool PackagesManager::getPackageIsNull()
     }
 }
 
-bool PackagesManager::appendPackage(DebFile *debPackage, bool isEmpty)
+bool PackagesManager::appendPackage(QString debPackage)
 {
-    Q_UNUSED(isEmpty);
-    Q_UNUSED(debPackage);
-//    const auto md5 = debPackage->md5Sum();
-//    if (m_appendedPackagesMd5.contains(md5)) return false;
-
-//    m_preparedPackages << debPackage;
-//    m_appendedPackagesMd5 << md5;
-//    m_preparedMd5 << md5;
-    return true;
-}
-
-bool PackagesManager::appendPackage(QString debPackage, bool isEmpty)
-{
-    Q_UNUSED(isEmpty);
     qDebug() << "debPackage" << debPackage;
     QApt::DebFile *p = new DebFile(debPackage);
 

@@ -145,8 +145,7 @@ public slots:
     void uninstallPackage(const int idx);
     void removePackage(const int idx);
     bool getPackageIsNull();
-    bool appendPackage(QApt::DebFile *package, bool isEmpty);
-    bool appendPackage(QString package, bool isEmpty);
+    bool appendPackage(QString packagey);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
     void DealDependResult(int iAuthRes, int iIndex);

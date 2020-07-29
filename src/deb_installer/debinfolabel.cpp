@@ -11,7 +11,11 @@ DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags f)
 {
 }
 
-
+/**
+ * @brief DebInfoLabel::setCustomQPalette
+ * @param colorRole 字体调色板的颜色
+ * 设置自定的Qt风格 字体颜色，根据传入的颜色角色来对DLabel进行设置
+ */
 void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
 {
     m_colorRole = colorRole;
@@ -29,6 +33,11 @@ void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
     }
 }
 
+/**
+ * @brief DebInfoLabel::setCustomDPalette
+ * @param colorType 字体调色板的颜色
+ * 设置自定的Deepin字体风格，根据传入的颜色角色来对DLabel进行设置
+ */
 void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
 {
     m_colorType = colorType;
@@ -41,6 +50,10 @@ void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
     this->setPalette(palette);
 }
 
+/**
+ * @brief DebInfoLabel::setCustomDPalette
+ * 设置当前DLabel 为默认的风格
+ */
 void DebInfoLabel::setCustomDPalette()
 {
     m_bMultiIns = true;
@@ -51,6 +64,11 @@ void DebInfoLabel::setCustomDPalette()
     this->setPalette(palette);
 }
 
+/**
+ * @brief DebInfoLabel::paintEvent
+ * @param event
+ * 根据调色板设置进行重绘
+ */
 void DebInfoLabel::paintEvent(QPaintEvent *event)
 {
     QWidget tmpWidget;

@@ -295,18 +295,11 @@ bool DebListModel::getPackageIsNull()
     return m_packagesManager->getPackageIsNull();
 }
 
-bool DebListModel::appendPackage(DebFile *package, bool isEmpty)
+bool DebListModel::appendPackage(QString package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    return m_packagesManager->appendPackage(package, isEmpty);
-}
-
-bool DebListModel::appendPackage(QString package, bool isEmpty)
-{
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
-
-    return m_packagesManager->appendPackage(package, isEmpty);
+    return m_packagesManager->appendPackage(package);
 }
 
 void DebListModel::onTransactionErrorOccurred()
