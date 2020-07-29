@@ -626,25 +626,36 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (QEvent::MouseButtonRelease == event->type()) {
-        if (watched != m_OptionWindow && watched != m_MinWindow &&
-                watched != m_closeWindow && watched != titlebar()) {
+        if (watched == m_OptionWindow) {
+            if (m_iOptionWindowFlag != 1) {
+                return QObject::eventFilter(watched, event);
+            } else {
+                QPoint pos = m_OptionWindow->pos();
+                pos.setY(pos.y() + 49);
+                titlebar()->menu()->exec(m_OptionWindow->mapToGlobal(pos));
+            }
+        } else if (watched == m_MinWindow) {
+            if (m_iOptionWindowFlag != 2) {
+                return QObject::eventFilter(watched, event);
+            } else {
+                this->showMinimized();
+            }
+        } else if (watched == m_closeWindow) {
+            if (m_iOptionWindowFlag != 3) {
+                return QObject::eventFilter(watched, event);
+            } else {
+                this->close();
+            }
+        } else {
+            m_iOptionWindowFlag = 0;
+            if (m_OptionWindow->hasFocus()) m_iOptionWindowFlag = 1;
+            if (m_MinWindow->hasFocus()) m_iOptionWindowFlag = 2;
+            if (m_closeWindow->hasFocus()) m_iOptionWindowFlag = 3;
             if (this->focusWidget() != nullptr) {
                 this->focusWidget()->clearFocus();
                 bTabFlag = false;
                 return QObject::eventFilter(watched, event);
             }
-        } else {
-            if (m_closeWindow == watched) {
-                if (m_closeWindow->isEnabled())
-                    this->close();
-            } else if (m_MinWindow == watched) {
-                this->showMinimized();
-            } else if (m_OptionWindow == watched) {
-                QPoint pos = m_OptionWindow->pos();
-                pos.setY(pos.y() + 49);
-                titlebar()->menu()->exec(m_OptionWindow->mapToGlobal(pos));
-            } else
-                return QObject::eventFilter(watched, event);
         }
     }
 
@@ -732,8 +743,18 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
             }
             return true;
         } else {
-            if (m_closeWindow == watched || m_OptionWindow == watched)
-                bTabFlag = false;
+            if (key_event->key() == Qt::Key_Up || key_event->key() == Qt::Key_Left) {
+                if (m_MinWindow == watched)
+                    bTabFlag = true;
+            }
+            if (key_event->key() == Qt::Key_Up || key_event->key() == Qt::Key_Left) {
+                if (m_OptionWindow == watched)
+                    bTabFlag = false;
+            }
+            if (key_event->key() == Qt::Key_Down || key_event->key() == Qt::Key_Right) {
+                if (m_closeWindow == watched)
+                    bTabFlag = false;
+            }
         }
     }
 

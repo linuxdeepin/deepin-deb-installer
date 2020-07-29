@@ -218,6 +218,7 @@ private:
 
     int m_dragflag = -1;
 
+    int m_iOptionWindowFlag = 0; //判断菜单栏是否手动弹出
     bool bTabFlag = false;          //Control focus is re-identified from titlebar
     bool bActiveWindowFlag = true;  //Window activation id
     int m_Filterflag = -1; //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
