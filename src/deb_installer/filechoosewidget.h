@@ -51,6 +51,7 @@ private:
     DLabel *split_line {nullptr};
     DLabel *m_dndTips {nullptr};
     DLabel *m_iconImage {nullptr};
+    int m_MouseBtnRelease = 0;
 };
 
 #endif  // FILECHOOSEWIDGET_H

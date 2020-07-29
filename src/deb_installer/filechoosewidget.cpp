@@ -181,10 +181,27 @@ bool FileChooseWidget::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (QEvent::MouseButtonRelease == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
+        m_MouseBtnRelease++;
+        QList<ChooseFileButton *> btnList = this->findChildren<ChooseFileButton *>();
+        if (btnList.size() > 0) {
+            for (int num = 0; num < btnList.size(); num++) {
+                if (watched == btnList.at(num)) {
+                    this->releaseKeyboard();
+                    btnList.at(num)->click();
+                    m_MouseBtnRelease = 0;
+                    qApp->removeEventFilter(this);
+                    return QObject::eventFilter(watched, event);
+                }
+            }
         }
-        emit OutOfFocus(false);
+
+        if (m_MouseBtnRelease >= (btnList.size() + 1)) {
+            if (this->focusWidget() != nullptr) {
+                this->focusWidget()->clearFocus();
+            }
+            m_MouseBtnRelease = 0;
+            emit OutOfFocus(false);
+        }
     }
 
     if (event->type() == QEvent::KeyPress) {
