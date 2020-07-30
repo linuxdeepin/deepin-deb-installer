@@ -800,7 +800,7 @@ void DebListModel::upWrongStatusRow()
     QList<int> listpackageOperateStatus;
     while (iteratorpackageOperateStatus.hasNext()) {
         iteratorpackageOperateStatus.next();
-        if (iteratorpackageOperateStatus.value() == Failed) {
+        if (iteratorpackageOperateStatus.value() == Failed || iteratorpackageOperateStatus.value() == VerifyFailed) {
             listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key());
             listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());
         } else if (iteratorpackageOperateStatus.value() == Success)
