@@ -446,6 +446,9 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
             if (m_appsListView->hasFocus()) {
                 if (m_currentFlag == 1) {
                     m_installButton->setFocus();
+                    if (!m_installButton->isVisible()) {
+                        m_infoControlButton->setFocus();
+                    }
                 }
                 if (m_currentFlag == 2) {
                     //m_backButton->setFocus();

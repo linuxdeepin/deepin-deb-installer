@@ -695,6 +695,17 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
                 else {
                     bTabFlag = false;
                     m_MinWindow->clearFocus();
+
+                    if (m_Filterflag == 2) {
+                        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+                        singlePage->grabKeyboard();
+                        qApp->installEventFilter(singlePage);
+                        singlePage->setInfoControlButtonFocus();
+                    } else if (m_Filterflag == 1) {
+                        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+                        qApp->installEventFilter(multiplePage);
+                        multiplePage->setInitSelect();
+                    }
                 }
                 return true;
             }

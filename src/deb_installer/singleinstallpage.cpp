@@ -930,6 +930,11 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
     }
 }
 
+void SingleInstallPage::setInfoControlButtonFocus()
+{
+    m_infoControlButton->setFocus();
+}
+
 void SingleInstallPage::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
@@ -941,6 +946,10 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
                 emit OutOfFocus(false);
                 m_installButton->click();
             }
+
+            if (m_infoControlButton->hasFocus()) {
+                m_infoControlButton->m_tipsText->click();
+            }
             break;
         }
         case 2: {
@@ -951,6 +960,10 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
             if (m_reinstallButton->hasFocus()) {
                 emit OutOfFocus(false);
                 m_reinstallButton->click();
+            }
+
+            if (m_infoControlButton->hasFocus()) {
+                m_infoControlButton->m_tipsText->click();
             }
             break;
         }

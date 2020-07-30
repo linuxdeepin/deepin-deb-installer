@@ -53,6 +53,7 @@ public:
     void afterGetAutherFalse();
     void setEnableButton(bool bEnable);
     void DealDependResult(int iAuthRes);
+    void setInfoControlButtonFocus();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
