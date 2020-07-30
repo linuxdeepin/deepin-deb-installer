@@ -262,6 +262,7 @@ void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
 
 void MultipleInstallPage::showInfo()
 {
+    m_upDown = false;
     m_contentLayout->setContentsMargins(20, 0, 20, 0);
     m_appsListViewBgFrame->setVisible(false);
     m_appsListView->setVisible(false);
@@ -271,6 +272,7 @@ void MultipleInstallPage::showInfo()
 
 void MultipleInstallPage::hideInfo()
 {
+    m_upDown = true;
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
     m_appsListViewBgFrame->setVisible(true);
     m_appsListView->setVisible(true);
@@ -437,16 +439,22 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 m_acceptButton->setFocus();
                 //emit OutOfFocus(false);
             }
+
+            if (m_infoControlButton->hasFocus())
+                m_backButton->setFocus();
+
             if (m_appsListView->hasFocus()) {
                 if (m_currentFlag == 1) {
                     m_installButton->setFocus();
                 }
                 if (m_currentFlag == 2) {
-                    m_backButton->setFocus();
+                    //m_backButton->setFocus();
+                    m_infoControlButton->setFocus();
                 }
                 m_appsListView->releaseKeyboard();
                 qApp->removeEventFilter(m_appsListView);
             }
+
             return true;
         } else if (key_event->key() == Qt::Key_Return) {
             this->releaseKeyboard();
@@ -460,6 +468,10 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
             }
             if (m_acceptButton->hasFocus()) {
                 m_acceptButton->click();
+            }
+
+            if (m_infoControlButton->hasFocus()) {
+                m_infoControlButton->m_tipsText->click();
             }
             return true;
         } else

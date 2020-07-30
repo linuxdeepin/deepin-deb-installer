@@ -724,7 +724,7 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
                     if (singlePage->m_currentFlag == 2)
                         singlePage->m_uninstallButton->setFocus();
                     if (singlePage->m_currentFlag == 3 || singlePage->m_currentFlag == 4)
-                        singlePage->m_backButton->setFocus();
+                        singlePage->m_infoControlButton->setFocus();
                     break;
                 }
                 case 3: {

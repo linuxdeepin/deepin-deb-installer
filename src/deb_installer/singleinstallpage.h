@@ -118,9 +118,9 @@ private:
     QWidget *m_progressFrame;
     WorkerProgress *m_progress;
     InstallProcessInfoView *m_installProcessView;
-    InfoControlButton *m_infoControlButton;
 
 public:
+    InfoControlButton *m_infoControlButton;
     DPushButton *m_installButton;
     DPushButton *m_uninstallButton;
     DPushButton *m_reinstallButton;

@@ -113,6 +113,7 @@ private:
 
     int m_index = -1;
 
+    bool m_upDown = true;
     //install:1    finish:2
     int m_currentFlag = 1;
     int m_MouseBtnRelease = 0;

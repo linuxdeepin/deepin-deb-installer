@@ -808,6 +808,9 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
                     m_confirmButton->setFocus();
                 }
             }
+            if (m_infoControlButton->hasFocus()) {
+                m_backButton->setFocus();
+            }
             return true;
         }
     }
@@ -952,6 +955,10 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
             break;
         }
         case 3: {
+            if (m_infoControlButton->hasFocus()) {
+                m_infoControlButton->m_tipsText->click();
+            }
+
             if (m_backButton->hasFocus()) {
                 m_backButton->click();
                 emit OutOfFocus(false);
@@ -962,6 +969,10 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
             break;
         }
         case 4: {
+            if (m_infoControlButton->hasFocus()) {
+                m_infoControlButton->m_tipsText->click();
+            }
+
             if (m_backButton->hasFocus()) {
                 emit OutOfFocus(false);
                 m_backButton->click();

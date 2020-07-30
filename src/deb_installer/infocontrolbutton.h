@@ -59,11 +59,11 @@ private:
     QString m_shrinkTips;
 
     DLabel *m_arrowIcon;
+    QVBoxLayout *centralLayout;
 
+public:
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsText;
-
-    QVBoxLayout *centralLayout;
 };
 
 #endif // INFOCONTROLBUTTON_H
