@@ -285,6 +285,7 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
+    m_infoControlButton->setVisible(false); //取消安装后只显示安装按钮
     m_processFrame->setVisible(false);
 //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
