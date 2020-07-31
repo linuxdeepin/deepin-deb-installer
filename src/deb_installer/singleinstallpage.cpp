@@ -516,6 +516,8 @@ void SingleInstallPage::showInfo()
 void SingleInstallPage::onOutputAvailable(const QString &output)
 {
     m_installProcessView->appendText(output.trimmed());
+    if (!m_infoControlButton->isVisible())
+        m_infoControlButton->setVisible(true);
 
     // pump progress
     if (m_progress->value() < 90) m_progress->setValue(m_progress->value() + 10);
@@ -695,6 +697,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 {
     // fix bug: 36120 After the uninstall authorization is canceled, hide the uninstall details and display the version status
     m_tipsLabel->setVisible(true);
+    setPackageInfo();
     m_infoControlButton->setVisible(false);
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
@@ -704,6 +707,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    m_infoControlButton->setVisible(false);
     m_progressFrame->setVisible(false);
     if (m_operate == Install) {
         m_installButton->setVisible(true);
