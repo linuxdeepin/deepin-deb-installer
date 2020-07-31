@@ -78,13 +78,18 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
     case LockError:
-        return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
-
+        if (errorInfo.contains("No space left on device")) {
+            return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
+        }
+        break;
     // fix bug:39834 网络断开时，偶现安装deb包失败时提示语不显示
     case CommitError:
         for (auto error : netErrors()) {
             if (errorInfo.contains(error) && errorInfo.contains("http"))
                 return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
+        }
+        if (errorInfo.contains("No space left on device")) {
+            return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
         }
     }
     return QApplication::translate("DebListModel", "Installation Failed");
