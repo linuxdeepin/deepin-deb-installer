@@ -278,7 +278,7 @@ bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
 void PackagesListView::getPos(QRect rect, int index)
 {
     if (index == m_currentIndex) {
-        m_rightMenuPos.setX(rect.x() + rect.width() - m_rightMenu->width());
+        m_rightMenuPos.setX(rect.x() + rect.width() - 162);
         m_rightMenuPos.setY(rect.y() + rect.height() / 2);
     }
 }
