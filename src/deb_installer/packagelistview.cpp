@@ -190,6 +190,8 @@ void PackagesListView::onRightMenuDeleteAction()
 
 void PackagesListView::paintEvent(QPaintEvent *event)
 {
+    //获取cuurentIndex并保存，用于右键菜单的定位。
+    m_currentIndex = this->currentIndex().row();
     DListView::paintEvent(event);
 }
 
@@ -209,7 +211,6 @@ bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
         return QObject::eventFilter(watched, event);
     }
     if (QEvent::WindowActivate == event->type()) {
-        //qApp->removeEventFilter(m_appsListView);
         this->repaint();
         this->update();
         emit OutOfFocus(false);
@@ -226,8 +227,10 @@ bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
         if ((key_event->modifiers() == Qt::AltModifier) && (key_event->key() == Qt::Key_M)) {
             if (this->selectionModel()->currentIndex().row() > -1) {
                 m_bShortcutDelete = false;
-                emit onShowContextMenu(this->selectionModel()->currentIndex());
-                this->setFocus();
+                if (this->hasFocus()) {
+                    // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
+                    m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
+                }
             }
             return true;
         }
@@ -263,4 +266,19 @@ bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
         return QObject::eventFilter(watched, event);
     }
     return QObject::eventFilter(watched, event);
+}
+
+/**
+ * @brief PackagesListView::getPos
+ * @param rect 某一个Item的rect
+ * @param index Item的index.row()
+ *
+ * 获取某一个Item的rect,与index。用于保存位置参数触发右键菜单
+ */
+void PackagesListView::getPos(QRect rect, int index)
+{
+    if (index == m_currentIndex) {
+        m_rightMenuPos.setX(rect.x() + rect.width() - m_rightMenu->width());
+        m_rightMenuPos.setY(rect.y() + rect.height() / 2);
+    }
 }

@@ -108,7 +108,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         QPainterPath bgPath;
         bgPath.addRect(option.rect);
-
+        // 将当前Item的位置参数 发送给ListView,确定右键菜单的位置。
+        emit sigIndexAndRect(option.rect, index.row());
         DApplicationHelper *dAppHelper = DApplicationHelper::instance();
         DPalette palette = dAppHelper->applicationPalette();
         QBrush background;

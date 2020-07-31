@@ -80,6 +80,8 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
+    //获取currentIndex的坐标位置，用于键盘触发右键菜单
+    connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::getPos);
     //fix bug:33730
     m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
     QVBoxLayout *appsViewLayout = new QVBoxLayout(this);
@@ -490,5 +492,7 @@ void MultipleInstallPage::ResetFocus(bool bFlag)
     Q_UNUSED(bFlag)
     qApp->removeEventFilter(m_appsListView);
     m_appsListView->clearFocus();
+    // 修复当appListView Focus时，切换到其他应用，键盘无响应的问题
+    m_appsListView->releaseKeyboard();
     emit OutOfFocus(false);
 }

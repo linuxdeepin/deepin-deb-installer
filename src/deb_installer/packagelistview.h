@@ -47,6 +47,8 @@ signals:
 
     void OutOfFocus(bool);
 
+public slots:
+    void getPos(QRect rect, int index); //获取到的当前Item的位置和row
 protected:
     void leaveEvent(QEvent *e);
 
@@ -80,6 +82,9 @@ private:
     QModelIndex m_currModelIndex;
     DMenu *m_rightMenu {nullptr};
     QModelIndex m_highlightIndex;
+
+    QPoint m_rightMenuPos; //确定的右键菜单出现的位置
+    int m_currentIndex; //当前选中的index.row
 };
 
 #endif  // PACKAGESLISTVIEW_H

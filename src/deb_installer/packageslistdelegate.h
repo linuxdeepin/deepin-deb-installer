@@ -34,6 +34,10 @@ public:
     explicit PackagesListDelegate(QAbstractItemView *parent = nullptr);
     bool eventFilter(QObject *watched, QEvent *event) override;
 
+signals:
+    // 用来发送当前Item的位置参数和row。确定右键菜单的位置。
+    void sigIndexAndRect(QRect rect, int index) const;
+
 private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
