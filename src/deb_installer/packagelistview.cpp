@@ -172,11 +172,10 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 
 void PackagesListView::onShortcutDeleteAction()
 {
-    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible()) {
+    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible())
         return;
-    }
-
-    emit onRemoveItemClicked(m_currModelIndex);
+    if (this->hasFocus())
+        emit onRemoveItemClicked(m_currModelIndex);
 }
 
 void PackagesListView::onRightMenuDeleteAction()
