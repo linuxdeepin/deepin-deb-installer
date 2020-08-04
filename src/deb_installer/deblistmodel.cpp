@@ -233,7 +233,12 @@ void DebListModel::uninstallPackage(const int idx)
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (const auto &r : rdepends) b->markPackageForRemoval(r);
+    for (auto r : rdepends) {
+        if (b->package(r))
+            b->markPackageForRemoval(r);
+        else
+            qDebug() << "rDepend" << r << "package error ,please check it!";
+    }
     b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());
 
     // uninstall

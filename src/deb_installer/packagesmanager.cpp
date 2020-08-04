@@ -562,6 +562,8 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
             Package *subPackage = packageWithArch(r, sysArch);
+            if (!subPackage || !subPackage->isInstalled())
+                continue;
             if (subPackage->recommendsList().contains(item))
                 continue;
             if (subPackage->suggestsList().contains(item))
