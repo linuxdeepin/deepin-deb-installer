@@ -32,6 +32,7 @@
 #include <QApt/Backend>
 #include <QApt/Package>
 #include <DSysInfo>
+#include "AptConfigMessage.h"
 using namespace QApt;
 
 bool isDpkgRunning()
@@ -103,6 +104,13 @@ DebListModel::DebListModel(QObject *parent)
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
     connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+
+    m_procInstallConfig = new QProcess;
+    m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);
+    m_procInstallConfig->setReadChannel(QProcess::StandardOutput);
+    connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
+    connect(m_procInstallConfig, &QProcess::readyReadStandardOutput, this, &DebListModel::ConfigReadOutput);
+    connect(AptConfigMessage::getInstance(), &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
 }
 
 void DebListModel::DealDependResult(int iAuthRes, int iIndex)
@@ -722,7 +730,18 @@ void DebListModel::installNextDeb()
     if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();
     } else {
-        installDebs();
+        int iPackageSize = m_packagesManager->m_preparedPackages.size();
+        QString sPackageName = m_packagesManager->m_preparedPackages[0];
+        QStringList strFilePath;
+        if (iPackageSize == 1) {
+            qDebug() << sPackageName;
+            if (sPackageName.contains("apt-config")) {
+                if (!m_procInstallConfig->isOpen())
+                    m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
+            } else
+                installDebs();
+        } else
+            installDebs();
     }
 }
 
@@ -888,4 +907,63 @@ void DebListModel::upWrongStatusRow()
 
     //update scroll
     emit onChangeOperateIndex(-1);
+}
+
+void DebListModel::ConfigInstallFinish(int flag)
+{
+    qDebug() << "config install result:" << flag;
+    if (flag == 0) {
+        DebInstallFinishedFlag = 1;
+        m_workerStatus = WorkerFinished;
+        m_workerStatus_temp = m_workerStatus;
+
+        int num = m_packagesManager->m_preparedPackages.size();
+        for (int i = 0; i < num; i++) {
+            if (m_packagesManager->m_packageDependsStatus[i].status == DependsOk) {
+                m_packageOperateStatus[i] = Success;
+            } else {
+                m_packageOperateStatus[i] = Failed;
+            }
+        }
+
+        emit workerFinished();
+        emit workerProgressChanged(100);
+        emit transactionProgressChanged(100);
+
+    } else {
+        int num = m_packagesManager->m_preparedPackages.size();
+        for (int i = 0; i < num; i++) {
+            m_packageOperateStatus[i] = 0;
+        }
+        emit AuthCancel();
+    }
+
+    AptConfigMessage::getInstance()->hide();
+    AptConfigMessage::getInstance()->m_textEdit->clear();
+}
+
+void DebListModel::ConfigReadOutput()
+{
+    QString tmp = m_procInstallConfig->readAllStandardOutput().data();
+    tmp.remove(QChar('"'), Qt::CaseInsensitive);
+    tmp.remove(QChar('\n'), Qt::CaseInsensitive);
+
+    if (tmp.contains("StartInstallAptConfig")) {
+        emit onStartInstall();
+        int num = m_packagesManager->m_preparedPackages.size();
+        for (int i = 0; i < num; i++) {
+            m_packageOperateStatus[i] = Operating;
+        }
+        AptConfigMessage::getInstance()->show();
+        return;
+    }
+
+    emit appendOutputInfo(tmp);
+    AptConfigMessage::getInstance()->appendTextEdit(tmp);
+}
+
+void DebListModel::ConfigInputWrite(QString str)
+{
+    m_procInstallConfig->write(str.toUtf8());
+    m_procInstallConfig->write("\n");
 }

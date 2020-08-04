@@ -27,6 +27,7 @@ class InstallDebThread : public QThread
 public:
     InstallDebThread();
     virtual ~InstallDebThread();
+    void setParam(QStringList tParam);
     void run();
     int m_resultFlag = -1;
 
@@ -36,5 +37,6 @@ public slots:
 
 private:
     QProcess *m_proc;
+    QStringList m_listParam;
 };
 #endif // INSTALLDEBTHREAD_H

@@ -34,6 +34,7 @@
 #include <QtDBus/QDBusReply>
 #include <DPushButton>
 #include <DSysInfo>
+#include <QProcess>
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -160,6 +161,10 @@ public slots:
 
     void DealDependResult(int iAuthRes, int iIndex);
 
+    void ConfigReadOutput();
+    void ConfigInstallFinish(int flag);
+    void ConfigInputWrite(QString str);
+
 private slots:
     void upWrongStatusRow();
 
@@ -204,6 +209,7 @@ private:
     bool bModifyFailedReason = false;
 
     bool QverifyResult;
+    QProcess *m_procInstallConfig;
 };
 
 #endif  // DEBLISTMODEL_H
