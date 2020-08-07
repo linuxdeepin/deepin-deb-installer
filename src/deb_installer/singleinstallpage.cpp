@@ -815,7 +815,10 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 }
             }
             if (m_infoControlButton->hasFocus()) {
-                m_backButton->setFocus();
+                if (m_backButton->isVisible())
+                    m_backButton->setFocus();
+                else
+                    emit OutOfFocus(true);
             }
             return true;
         }
