@@ -319,7 +319,7 @@ void MultipleInstallPage::setScrollBottom(int index)
     QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
 
-void MultipleInstallPage::DealDependResult(int iAuthRes)
+void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "批量处理鉴权结果：" << iAuthRes;
     switch (iAuthRes) {
@@ -338,7 +338,7 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
         break;
     case DebListModel::AuthConfirm:
         m_appsListView->setEnabled(false);
-        m_tipsLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
+        m_tipsLabel->setText(tr("Installing dependencies: %1").arg(dependName));
         m_tipsLabel->setVisible(true);
         m_dSpinner->show();
         m_dSpinner->start();

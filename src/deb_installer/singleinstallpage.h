@@ -52,7 +52,8 @@ public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
     void afterGetAutherFalse();
     void setEnableButton(bool bEnable);
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -80,7 +81,7 @@ private:
     int initLabelWidth(int fontinfo);
     void setPackageInfo();
 
-    void setAuthConfirm();
+    void setAuthConfirm(QString dependName);
     void setAuthBefore();
     void setCancelAuthOrAuthDependsErr();
     void setAuthDependsSuccess();

@@ -79,7 +79,8 @@ private slots:
     void setEnableButton(bool bEnable);
     void showHiddenButton();
 
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
+    void enableCloseButton(bool);
 
 private:
     DebListModel *m_fileListModel;

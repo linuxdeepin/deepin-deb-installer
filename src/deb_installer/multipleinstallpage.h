@@ -46,7 +46,7 @@ public:
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
     void setScrollBottom(int index);
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;

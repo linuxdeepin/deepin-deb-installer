@@ -159,10 +159,21 @@ void DebInstaller::initConnections()
     //When installing deepin-wine for the first time, set the button display according to the progress of the installation
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
+    connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
+
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
 
+void DebInstaller::enableCloseButton(bool enable)
+{
+    qDebug() << "enable close and exit? " << enable;
+    if (enable) {
+        enableCloseAndExit();
+    } else {
+        disableCloseAndExit();
+    }
+}
 // closed is forbidden during install/uninstall
 void DebInstaller::disableCloseAndExit()
 {
@@ -541,7 +552,7 @@ void DebInstaller::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-void DebInstaller::DealDependResult(int iAuthRes)
+void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
 {
     //Set the display effect according to the status of deepin-wine installation authorization.
     //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
@@ -556,9 +567,9 @@ void DebInstaller::DealDependResult(int iAuthRes)
     //Refresh the display effect of different pages
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->DealDependResult(iAuthRes);
+        singlePage->DealDependResult(iAuthRes, dependName);
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->DealDependResult(iAuthRes);
+        multiplePage->DealDependResult(iAuthRes, dependName);
     }
 }

@@ -42,10 +42,12 @@ class dealDependThread : public QThread
 public:
     dealDependThread(QObject *parent = nullptr);
     virtual ~dealDependThread();
-    void setDependName(QString tmp, int index);
+    void setDependList(QStringList depends, int index);
+    void setDependName(QString dependName);
     void run();
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 
 public slots:
     void onFinished(int);
@@ -53,7 +55,8 @@ public slots:
 private:
     QProcess *proc;
     int m_index = -1;
-    QString m_dependName;
+    QStringList m_dependList;
+    QString m_brokenDepend;
     bool bDependsStatusErr = false;
 };
 
@@ -155,9 +158,10 @@ private:
     QMap<QString, QString> specialPackage();
 
 public slots:
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 };
 
 #endif  // PACKAGESMANAGER_H

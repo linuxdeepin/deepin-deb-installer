@@ -136,8 +136,9 @@ signals:
     void AuthCancel();
     void EnableReCancelBtn(bool bEnable);
     void onStartInstall();
-    void DependResult(int);
+    void DependResult(int, QString);
     void CommitErrorFinished();
+    void enableCloseButton(bool);
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
@@ -148,7 +149,7 @@ public slots:
     bool appendPackage(QString packagey);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
 private slots:
     void upWrongStatusRow();
