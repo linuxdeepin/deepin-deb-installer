@@ -49,7 +49,7 @@ public:
 
     void setScrollBottom(int index);
 
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
 
     void setInitSelect();
 

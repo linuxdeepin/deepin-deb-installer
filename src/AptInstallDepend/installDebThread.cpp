@@ -47,10 +47,15 @@ void InstallDebThread::run()
 {
     m_proc->start("sudo", QStringList() << "apt-get"
                                         << "install"
-                                        << "deepin-wine"
+                                        << m_DependList
                                         << "deepin-wine-helper"
                                         << "--fix-missing"
                                         << "-y");
     m_proc->waitForFinished(-1);
     m_proc->close();
+}
+
+void InstallDebThread::setDependList(QStringList param)
+{
+    m_DependList = param;
 }

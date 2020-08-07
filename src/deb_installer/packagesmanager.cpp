@@ -116,7 +116,6 @@ Backend *init_backend()
 dealDependThread::dealDependThread(QObject *parent)
 {
     Q_UNUSED(parent);
-    m_dependName = "";
     proc = new QProcess(this);
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &dealDependThread::onFinished);
     connect(proc, &QProcess::readyReadStandardOutput, this, &dealDependThread::on_readoutput);
@@ -127,25 +126,29 @@ dealDependThread::~dealDependThread()
     delete proc;
 }
 
-void dealDependThread::setDependName(QString tmp, int index)
+void dealDependThread::setDependsList(QStringList dependList, int index)
 {
     m_index = index;
-    m_dependName = tmp;
+    m_dependsList = dependList;
 }
 
+void dealDependThread::setBrokenDepend(QString dependName)
+{
+    m_brokenDepend = dependName;
+}
 void dealDependThread::on_readoutput()
 {
     QString tmp = proc->readAllStandardOutput().data();
     qDebug() << "安装依赖输出数据:" << tmp;
 
     if (tmp.contains("StartInstallDeepinwine")) {
-        emit DependResult(DebListModel::AuthConfirm, m_index);
+        emit DependResult(DebListModel::AuthConfirm, m_index, m_brokenDepend);
         return;
     }
 
     if (tmp.contains("Not authorized")) {
         bDependsStatusErr = true;
-        emit DependResult(DebListModel::CancelAuth, m_index);
+        emit DependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
     }
 }
 
@@ -158,32 +161,32 @@ void dealDependThread::onFinished(int num = -1)
 
     if (num == 0) {
         if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index);
+            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
             bDependsStatusErr = false;
             return;
         }
-        qDebug() << m_dependName << "安装成功";
-        emit DependResult(DebListModel::AuthDependsSuccess, m_index);
+        qDebug() << m_dependsList << "安装成功";
+        emit DependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
     } else {
         if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index);
+            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
             bDependsStatusErr = false;
             return;
         }
-        qDebug() << m_dependName << "install error" << num;
-        emit DependResult(DebListModel::AuthDependsErr, m_index);
+        qDebug() << m_dependsList << "install error" << num;
+        emit DependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
     }
+    emit enableCloseButton(true);
 }
 
 void dealDependThread::run()
 {
-    if (m_dependName == "deepin-wine") {
-        proc->setProcessChannelMode(QProcess::MergedChannels);
-        msleep(100);
+    proc->setProcessChannelMode(QProcess::MergedChannels);
+    msleep(100);
 
-        emit DependResult(DebListModel::AuthBefore, m_index);
-        proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall");
-    }
+    emit DependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
+    proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << m_dependsList);
+    emit enableCloseButton(false);
 }
 
 PackagesManager::PackagesManager(QObject *parent)
@@ -192,7 +195,7 @@ PackagesManager::PackagesManager(QObject *parent)
     m_backendFuture = QtConcurrent::run(init_backend);
     dthread = new dealDependThread();
     connect(dthread, &dealDependThread::DependResult, this, &PackagesManager::DealDependResult);
-
+    connect(dthread, &dealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
@@ -352,7 +355,7 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
-void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
+void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependName)
 {
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
@@ -364,6 +367,7 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageDependsStatus[m_dependInstallMark[num]].status = DebListModel::DependsAuthCancel;
         }
+        emit enableCloseButton(true);
     }
     if (iAuthRes == DebListModel::AuthDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
@@ -371,9 +375,9 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex)
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.push_back(m_dependInstallMark[num]);
         }
+        emit enableCloseButton(true);
     }
-
-    emit DependResult(iAuthRes, iIndex);
+    emit DependResult(iAuthRes, iIndex, dependName);
 }
 
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
@@ -412,13 +416,24 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             choose_set << deb->packageName();
             ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
 
+            QStringList dependList;
+            qDebug() << deb->packageName();
+            for (auto ditem : deb->depends()) {
+                for (auto dinfo : ditem) {
+                    qDebug() << dinfo.packageName();
+                    dependList << dinfo.packageName() + ":" + deb->architecture();
+                }
+            }
+            qDebug() << ret.package << "\n";
             if (ret.status == DebListModel::DependsBreak) {
                 qDebug() << "查找到依赖不满足:" << ret.package;
-                if (ret.package == "deepin-wine") {
+                if (ret.package.contains("deepin-wine")) {
                     if (!m_dependInstallMark.contains(index)) {
                         if (!dthread->isRunning()) {
                             m_dependInstallMark.append(index);
-                            dthread->setDependName(ret.package, index);
+                            qDebug() << dependList;
+                            dthread->setDependsList(dependList, index);
+                            dthread->setBrokenDepend(ret.package);
                             dthread->run();
                         }
                     }

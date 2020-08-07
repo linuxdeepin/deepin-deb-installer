@@ -42,10 +42,12 @@ class dealDependThread : public QThread
 public:
     dealDependThread(QObject *parent = nullptr);
     virtual ~dealDependThread();
-    void setDependName(QString tmp, int index);
+    void setDependsList(QStringList dependList, int index);
+    void setBrokenDepend(QString dependName);
     void run();
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 
 public slots:
     void onFinished(int);
@@ -53,8 +55,9 @@ public slots:
 private:
     QProcess *proc;
     int m_index = -1;
-    QString m_dependName;
+    QStringList m_dependsList;
     bool bDependsStatusErr = false;
+    QString m_brokenDepend;
 };
 
 class PackageDependsStatus
@@ -97,10 +100,11 @@ public:
     ~PackagesManager();
 
 public slots:
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 
 public:
     bool isBackendReady();

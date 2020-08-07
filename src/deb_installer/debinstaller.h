@@ -136,7 +136,7 @@ private slots:
      * @param iAuthRes
      * 根据deepin-wine依赖安装的结果处理界面显示效果
      */
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
 
     /**
      * @brief changeDragFlag
@@ -156,6 +156,13 @@ private slots:
      * @param bFlag
      */
     void ResetFocus(bool bFlag);
+
+    /**
+     * @brief enableCloseButton
+     * @param enable 是否禁用关闭按钮
+     * 下载依赖时，关闭按钮不可用，下载依赖成功后，依赖按钮可用
+     */
+    void enableCloseButton(bool enable);
 
 private:
     /**

@@ -102,7 +102,10 @@ void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
 
     onMouseRelease();
 }
-
+/**
+ * @brief InfoControlButton::onMouseRelease
+ * 鼠标点击事件
+ */
 void InfoControlButton::onMouseRelease()
 {
     if (m_expand) {

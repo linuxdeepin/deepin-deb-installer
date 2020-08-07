@@ -102,10 +102,12 @@ DebListModel::DebListModel(QObject *parent)
 {
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
-    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+    //    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+    connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
+    connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 }
 
-void DebListModel::DealDependResult(int iAuthRes, int iIndex)
+void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName)
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
@@ -122,7 +124,7 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex)
     default:
         break;
     }
-    emit DependResult(iAuthRes);
+    emit DependResult(iAuthRes, dependName);
 }
 
 bool DebListModel::isReady() const

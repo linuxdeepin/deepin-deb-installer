@@ -29,12 +29,13 @@ public:
     virtual ~InstallDebThread();
     void run();
     int m_resultFlag = -1;
-
+    void setDependList(QStringList param);
 public slots:
     void onFinished(int);
     void on_readoutput();
 
 private:
     QProcess *m_proc;
+    QStringList m_DependList;
 };
 #endif // INSTALLDEBTHREAD_H
