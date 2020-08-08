@@ -25,6 +25,7 @@
 #include "multipleinstallpage.h"
 #include "singleinstallpage.h"
 #include "uninstallconfirmpage.h"
+#include "AptConfigMessage.h"
 #include "utils.h"
 
 #include <QAction>
@@ -69,6 +70,10 @@ DebInstaller::DebInstaller(QWidget *parent)
 
 DebInstaller::~DebInstaller() {}
 
+/**
+ * @brief initUI
+ * 初始化界面
+ */
 void DebInstaller::initUI()
 {
     //Hide the shadow under the title bar
@@ -109,6 +114,10 @@ void DebInstaller::initUI()
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }
 
+/**
+ * @brief handleFocusPolicy
+ * 获取titleBar的控件 optionButton minButton closeButton
+ */
 void DebInstaller::handleFocusPolicy()
 {
     //Cancel all window focus
@@ -142,6 +151,10 @@ void DebInstaller::handleFocusPolicy()
     }
 }
 
+/**
+ * @brief initConnections
+ * 初始化链接信号和槽
+ */
 void DebInstaller::initConnections()
 {
     //Append packages via file-choose-widget's file-choose-button
@@ -175,8 +188,24 @@ void DebInstaller::initConnections()
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
+
+    connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
 }
 
+void DebInstaller::enableCloseButton(bool enable)
+{
+    qDebug() << "enable close and exit? " << enable;
+    if (enable) {
+        enableCloseAndExit();
+    } else {
+        disableCloseAndExit();
+    }
+}
+
+/**
+ * @brief disableCloseAndExit
+ * 设置退出和关闭按钮为不可用
+ */
 // closed is forbidden during install/uninstall
 void DebInstaller::disableCloseAndExit()
 {
@@ -193,6 +222,10 @@ void DebInstaller::disableCloseAndExit()
     this->setFocusPolicy(Qt::NoFocus);
 }
 
+/**
+ * @brief enableCloseAndExit
+ * 设置退出和关闭按钮可用
+ */
 // closed is allowed after install/uninstall
 void DebInstaller::enableCloseAndExit()
 {
@@ -209,6 +242,11 @@ void DebInstaller::enableCloseAndExit()
     this->setFocusPolicy(Qt::NoFocus);
 }
 
+/**
+ * @brief onStartInstallRequested
+ * 安装开始后，所有的关闭按钮都会被禁止
+ * SP3新增，解决安装开始时焦点闪现的问题。
+ */
 //after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
@@ -218,7 +256,14 @@ void DebInstaller::onStartInstallRequested()
     disableCloseAndExit();
 }
 
-// packages selected via double-click or right-click
+/**
+ * @brief onNewAppOpen
+ * @param pid 进程号
+ * @param arguments 要安装的包的全路径的列表
+ * 桌面或文管中双击或右键打开时的槽函数
+ * 会把后缀为.deb的包传递到onPackageSelected中
+ * packages selected via double-click or right-click
+ */
 void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
@@ -314,8 +359,14 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
     e->accept();
 }
 
-//Add packages that are not in the application to the application in sequence
-//After appending ,refresh page according to packages' count
+/**
+ * @brief onPackagesSelected
+ * @param packages 安装的包的全路径的列表
+ * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
+ * Add packages that are not in the application to the application in sequence
+ * After appending ,refresh page according to packages' count
+ */
+
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     this->showNormal();
@@ -379,7 +430,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     }
 }
 
-//Show uninstall page
+/**
+ * @brief showUninstallConfirmPage
+ * 卸载按钮的槽函数
+ * 显示卸载界面
+ */
 void DebInstaller::showUninstallConfirmPage()
 {
     Q_ASSERT(m_centralLayout->count() == 2);
@@ -406,6 +461,11 @@ void DebInstaller::showUninstallConfirmPage()
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCancel);
 }
 
+/**
+ * @brief onUninstallAccepted
+ * 卸载界面确认卸载按钮的槽函数
+ * 卸载开始时，返回singleInstallPage 并显示卸载进程。
+ */
 void DebInstaller::onUninstallAccepted()
 {
     // uninstall begin
@@ -419,6 +479,11 @@ void DebInstaller::onUninstallAccepted()
     m_Filterflag = m_dragflag;
 }
 
+/**
+ * @brief onUninstallCancel
+ * 卸载界面取消卸载按钮的槽函数
+ * 取消卸载后返回 singleInstallPage
+ */
 void DebInstaller::onUninstallCancel()
 {
     // Cancel uninstall
@@ -429,12 +494,22 @@ void DebInstaller::onUninstallCancel()
     m_Filterflag = m_dragflag;
 }
 
+/**
+ * @brief onAuthing
+ * @param authing 按钮是否可用的标志
+ * 授权框弹出后，设置当前界面为不可用状态
+ */
 void DebInstaller::onAuthing(const bool authing)
 {
     //The authorization box pops up, the setting button is not available
     setEnabled(!authing);
 }
 
+/**
+ * @brief reset
+ * 重置当前工作状态、拖入状态、标题栏、页面暂存区，删除卸载页面
+ *
+ */
 void DebInstaller::reset()
 {
     //reset page status
@@ -450,6 +525,11 @@ void DebInstaller::reset()
     m_centralLayout->setCurrentIndex(0);
 }
 
+/**
+ * @brief removePackage
+ * @param index 要删除的包的下标
+ * 根据传入的下表删除某个包。
+ */
 void DebInstaller::removePackage(const int index)
 {
     m_fileListModel->removePackage(index);
@@ -461,6 +541,12 @@ void DebInstaller::removePackage(const int index)
         MulRefreshPage(index);
 }
 
+/**
+ * @brief MulRefreshPage
+ * @param index 某一个包的下标位置
+ *
+ * 刷新multiInstallPage并在刷新后滚动到下标处
+ */
 void DebInstaller::MulRefreshPage(int index)
 {
     if (m_dragflag == 1) {
@@ -469,6 +555,12 @@ void DebInstaller::MulRefreshPage(int index)
     }
 }
 
+/**
+ * @brief refreshInstallPage
+ * @param index 某一个包的下标
+ * 刷新安装界面 多用于singleInstallPage 转换到 multiSinglePage
+ * 如果传入的下标不为-1， 则刷新时滚动到下标处
+ */
 void DebInstaller::refreshInstallPage(int index)
 {
     m_fileListModel->reset_filestatus();
@@ -491,7 +583,6 @@ void DebInstaller::refreshInstallPage(int index)
         connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
         m_lastPage = singlePage;
-        m_fileListModel->DebInstallFinishedFlag = 0;
         m_centralLayout->addWidget(singlePage);
         m_dragflag = 2;
         m_Filterflag = 2;
@@ -515,6 +606,10 @@ void DebInstaller::refreshInstallPage(int index)
     m_centralLayout->setCurrentIndex(1);
 }
 
+/**
+ * @brief backToSinglePage 返回单包安装界面
+ * @return SingleInstallPage* SingleInstallPage的指针
+ */
 SingleInstallPage *DebInstaller::backToSinglePage()
 {
     Q_ASSERT(m_centralLayout->count() == 3);
@@ -531,6 +626,10 @@ SingleInstallPage *DebInstaller::backToSinglePage()
     return p;
 }
 
+/**
+ * @brief changeDragFlag
+ * 安装卸载结束后，允许包被拖入程序，并设置关闭按钮可用
+ */
 void DebInstaller::changeDragFlag()
 {
     repaint();
@@ -539,6 +638,11 @@ void DebInstaller::changeDragFlag()
     enableCloseAndExit();
 }
 
+/**
+ * @brief setEnableButton
+ * @param bEnable 按钮是否可用标志
+ * 根据当前的安装/卸载进程来控制singleInstallPage/multiInstallPage按钮的可用性
+ */
 void DebInstaller::setEnableButton(bool bEnable)
 {
     //Set button enabled after installation canceled
@@ -551,6 +655,10 @@ void DebInstaller::setEnableButton(bool bEnable)
     }
 }
 
+/**
+ * @brief showHiddenButton
+ * 授权取消后显示被隐藏的按钮
+ */
 void DebInstaller::showHiddenButton()
 {
     //After the installation is complete, the hidden button is displayed and the close button is available
@@ -571,7 +679,12 @@ void DebInstaller::closeEvent(QCloseEvent *event)
     DMainWindow::closeEvent(event);
 }
 
-void DebInstaller::DealDependResult(int iAuthRes)
+/**
+ * @brief DealDependResult
+ * @param iAuthRes
+ * 根据deepin-wine依赖安装的结果处理界面显示效果
+ */
+void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
 {
     //Set the display effect according to the status of deepin-wine installation authorization.
     //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
@@ -586,10 +699,10 @@ void DebInstaller::DealDependResult(int iAuthRes)
     //Refresh the display effect of different pages
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->DealDependResult(iAuthRes);
+        singlePage->DealDependResult(iAuthRes, dependName);
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->DealDependResult(iAuthRes);
+        multiplePage->DealDependResult(iAuthRes, dependName);
     }
 }
 
@@ -772,6 +885,10 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
+/**
+ * @brief ResetFocus
+ * @param bFlag
+ */
 void DebInstaller::ResetFocus(bool bFlag)
 {
     this->repaint();

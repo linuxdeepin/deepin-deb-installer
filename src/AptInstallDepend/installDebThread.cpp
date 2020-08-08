@@ -53,10 +53,16 @@ void InstallDebThread::run()
     if (m_listParam.size() > 0) {
         if (m_listParam[0] == "InstallDeepinWine") {
             qDebug() << "StartInstallDeepinwine";
+            QStringList depends;
 
+            for (int i = 1; i < m_listParam.size(); i++) {
+                depends << m_listParam[i];
+            }
+
+            system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
             m_proc->start("sudo", QStringList() << "apt-get"
                           << "install"
-                          << "deepin-wine"
+                          << depends
                           << "deepin-wine-helper"
                           << "--fix-missing"
                           << "-y");
@@ -87,7 +93,6 @@ void InstallDebThread::run()
                     break;
                 }
             }
-
             m_proc->close();
         }
     }

@@ -89,6 +89,7 @@ public:
     static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);//绑定字体大小等
     static QString fromSpecialEncoding(const QString &inputStr);//字体编码处理
     static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);//针对字体截断处理函数
+    static QString holdTextInRect(const QFont &font, QString srcText, const int &width);//针对配置界面字体截断处理函数
     static int returnfileIsempty(QString strfilepath, QString strfilename); //返回文件是否存在
     static bool Modify_transferfile(QString Targetfilepath, QString strfilename); //修改文件权限
     static bool File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename); //将源文件复制出来

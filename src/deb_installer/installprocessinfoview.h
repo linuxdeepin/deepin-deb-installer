@@ -18,6 +18,7 @@ public:
     void appendText(QString text);
     void setTextFontSize(int fontSize, int fontWeight);
     void setTextColor(DPalette::ColorType ct);
+    void clearText();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

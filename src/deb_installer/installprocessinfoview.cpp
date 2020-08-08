@@ -11,6 +11,9 @@ InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
     , m_editor(new QTextEdit(this))
 {
     initUI();
+    connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
+        m_editor->moveCursor(QTextCursor::End);
+    });
 }
 
 void InstallProcessInfoView::initUI()
@@ -92,3 +95,7 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 //    m_editor->setPalette(pa);
 }
 
+void InstallProcessInfoView::clearText()
+{
+    m_editor->clear();
+}

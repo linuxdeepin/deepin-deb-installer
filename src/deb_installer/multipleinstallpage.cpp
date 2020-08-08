@@ -329,7 +329,7 @@ void MultipleInstallPage::setScrollBottom(int index)
     QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
 
-void MultipleInstallPage::DealDependResult(int iAuthRes)
+void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "批量处理鉴权结果：" << iAuthRes;
     switch (iAuthRes) {
@@ -348,7 +348,7 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
         break;
     case DebListModel::AuthConfirm:
         m_appsListView->setEnabled(false);
-        m_tipsLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
+        m_tipsLabel->setText(tr("Installing dependencies: %1").arg(dependName));
         m_tipsLabel->setVisible(true);
         m_dSpinner->show();
         m_dSpinner->start();
@@ -383,9 +383,14 @@ void MultipleInstallPage::setInitSelect()
         m_appsListView->setCurrentIndex(m_debListModel->index(0, 0));
         m_appsListView->setInitConfig();
     }
-    m_appsListView->setFocus();
-    m_appsListView->grabKeyboard();
-    qApp->installEventFilter(m_appsListView);
+    if (m_appsListView->isVisible()) {
+        m_appsListView->setFocus();
+        m_appsListView->grabKeyboard();
+        qApp->installEventFilter(m_appsListView);
+    } else {
+        if (m_infoControlButton->isVisible())
+            m_infoControlButton->setFocus();
+    }
 }
 
 bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
@@ -443,9 +448,12 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 //emit OutOfFocus(false);
             }
 
-            if (m_infoControlButton->hasFocus())
-                m_backButton->setFocus();
-
+            if (m_infoControlButton->hasFocus()) {
+                if (m_backButton->isVisible())
+                    m_backButton->setFocus();
+                else
+                    emit OutOfFocus(true);
+            }
             if (m_appsListView->hasFocus()) {
                 if (m_currentFlag == 1) {
                     m_installButton->setFocus();
@@ -460,7 +468,6 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 m_appsListView->releaseKeyboard();
                 qApp->removeEventFilter(m_appsListView);
             }
-
             return true;
         } else if (key_event->key() == Qt::Key_Return) {
             this->releaseKeyboard();

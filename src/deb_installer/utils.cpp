@@ -413,6 +413,58 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
     return text;
 }
 
+QString Utils::holdTextInRect(const QFont &font, QString srcText, const int &width)
+{
+
+    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+
+    QString text;
+    QString tempText;
+    int lineWidth = width - 12;
+
+    int offset = bContainsChinese ? font.pixelSize() : 0;
+
+    QFontMetrics fm(font);
+
+    int prevLineCharIndex = 0;
+    for (int charIndex = 0; charIndex < srcText.size(); ++charIndex) {
+        int fmWidth = fm.horizontalAdvance(tempText);
+        if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
+
+            if (!bContainsChinese) {
+                QChar currChar = tempText.at(tempText.length() - 1);
+                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
+                if (currChar.isLetter() && nextChar.isLetter()) {
+                    tempText += '-';
+                }
+                fmWidth = fm.horizontalAdvance(tempText);
+                if (fmWidth > lineWidth) {
+                    --charIndex;
+                    --prevLineCharIndex;
+                    tempText = tempText.remove(tempText.length() - 2, 1);
+                    if (currChar != '\n' && nextChar != '\n') {
+                        text += tempText;
+                        text += "\n";
+                    }
+                }
+            } else {
+                text += tempText;
+                text += "\n";
+            }
+
+            tempText = srcText.at(charIndex);
+            prevLineCharIndex = charIndex;
+        } else {
+            tempText += srcText.at(charIndex);
+        }
+    }
+    if (text.size() >= 1 && text[text.size() - 1] != '\n')
+        text += "\n";
+    text += tempText;
+
+    return text;
+}
+
 DebApplicationHelper *DebApplicationHelper::instance()
 {
     return qobject_cast<DebApplicationHelper *>(DGuiApplicationHelper::instance());

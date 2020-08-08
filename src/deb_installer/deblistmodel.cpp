@@ -24,6 +24,7 @@
 #include "utils.h"
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QSize>
@@ -69,6 +70,10 @@ const QStringList netErrors()
 
 const QString workerErrorString(const int errorCode, const QString errorInfo)
 {
+    if (errorCode == ConfigAuthCancel) {
+        return QApplication::translate("DebListModel",
+                                       "Authorization cancelled");
+    }
     switch (errorCode) {
     case FetchError:
     case DownloadDisallowedError:
@@ -103,17 +108,21 @@ DebListModel::DebListModel(QObject *parent)
 {
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
-    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+    connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
 
     m_procInstallConfig = new QProcess;
     m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);
     m_procInstallConfig->setReadChannel(QProcess::StandardOutput);
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
     connect(m_procInstallConfig, &QProcess::readyReadStandardOutput, this, &DebListModel::ConfigReadOutput);
+
     connect(AptConfigMessage::getInstance(), &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
+    //    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+    connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
+    connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 }
 
-void DebListModel::DealDependResult(int iAuthRes, int iIndex)
+void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName)
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
@@ -130,7 +139,7 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex)
     default:
         break;
     }
-    emit DependResult(iAuthRes);
+    emit DependResult(iAuthRes, dependName);
 }
 
 bool DebListModel::isReady() const
@@ -241,7 +250,12 @@ void DebListModel::uninstallPackage(const int idx)
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (const auto &r : rdepends) b->markPackageForRemoval(r);
+    for (auto r : rdepends) {
+        if (b->package(r))
+            b->markPackageForRemoval(r);
+        else
+            qDebug() << "rDepend" << r << "package error ,please check it!";
+    }
     b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());
 
     // uninstall
@@ -418,7 +432,6 @@ void DebListModel::bumpInstallIndex()
 
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
-        DebInstallFinishedFlag = 1;
         m_workerStatus = WorkerFinished;
         m_workerStatus_temp = m_workerStatus;
         emit workerFinished();
@@ -730,19 +743,91 @@ void DebListModel::installNextDeb()
     if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();
     } else {
-        int iPackageSize = m_packagesManager->m_preparedPackages.size();
-        QString sPackageName = m_packagesManager->m_preparedPackages[0];
+        QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         QStringList strFilePath;
-        if (iPackageSize == 1) {
-            qDebug() << sPackageName;
-            if (sPackageName.contains("apt-config")) {
-                if (!m_procInstallConfig->isOpen())
-                    m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
-            } else
-                installDebs();
-        } else
+        qDebug() << sPackageName;
+        if (checkTemplate(sPackageName)) {
+            rmdir();
+
+            if (!m_procInstallConfig->isOpen()) {
+                qDebug() << "pkexec install" << sPackageName;
+                m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
+            } else {
+                qDebug() << "pkexec install again" << sPackageName;
+                m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
+            }
+        } else {
+            qDebug() << "normal install" << sPackageName;
             installDebs();
+        }
     }
+}
+
+/**
+ * @brief DebListModel::rmdir 删除临时目录
+ */
+void DebListModel::rmdir()
+{
+    QDir filePath(tempPath);
+    if (filePath.exists()) {
+        if (filePath.removeRecursively()) {
+            qDebug() << "remove success";
+        } else {
+            qDebug() << "remove failed";
+        }
+    }
+}
+
+/**
+ * @brief DebListModel::checkTemplate 检查template文件是否存在
+ * @param debPath 包的路径
+ * @return template是否存在
+ * 根据template 来判断当前包是否需要配置
+ */
+bool DebListModel::checkTemplate(QString debPath)
+{
+    rmdir();
+    getDebian(debPath);
+    QFile templates(tempPath + "/templates");
+    qDebug() << tempPath + "/templates";
+    if (templates.exists()) {
+        qDebug() << "exists";
+        return true;
+    }
+    return false;
+}
+/**
+ * @brief DebListModel::mkdir 创建临时文件夹
+ * @return 是否创建成功。
+ */
+bool DebListModel::mkdir()
+{
+    QDir filePath(tempPath);
+
+    if (!filePath.exists()) {
+        return filePath.mkdir(tempPath);
+    }
+    return true;
+}
+
+/**
+ * @brief DebListModel::getDebian
+ * @param debPath 包的路径
+ * 通过dpkg获取当前包的DEBIAN文件
+ */
+void DebListModel::getDebian(QString debPath)
+{
+    QProcess *m_pDpkg = new QProcess;
+
+    if (!mkdir()) {
+        qWarning() << "check error mkdir" << tempPath << "failed";
+        return;
+    }
+    qDebug() << "dpkg" << "-e" << debPath << tempPath;
+    m_pDpkg->start("dpkg", QStringList() << "-e" << debPath << tempPath);
+    m_pDpkg->waitForFinished();
+    qDebug() << "dpkg StandardOutput" << m_pDpkg->readAllStandardOutput();
+    qDebug() << "dpkg StandardError" << m_pDpkg->readAllStandardError();
 }
 
 void DebListModel::onTransactionOutput()
@@ -909,39 +994,41 @@ void DebListModel::upWrongStatusRow()
     emit onChangeOperateIndex(-1);
 }
 
+/**
+ * @brief DebListModel::ConfigInstallFinish
+ * @param flag 安装配置包的返回结果
+ * 处理命令的返回结果
+ */
 void DebListModel::ConfigInstallFinish(int flag)
 {
+    int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
+    emit workerProgressChanged(progressValue);
     qDebug() << "config install result:" << flag;
     if (flag == 0) {
-        DebInstallFinishedFlag = 1;
-        m_workerStatus = WorkerFinished;
-        m_workerStatus_temp = m_workerStatus;
-
-        int num = m_packagesManager->m_preparedPackages.size();
-        for (int i = 0; i < num; i++) {
-            if (m_packagesManager->m_packageDependsStatus[i].status == DependsOk) {
-                m_packageOperateStatus[i] = Success;
-            } else {
-                m_packageOperateStatus[i] = Failed;
-            }
+        if (m_packagesManager->m_packageDependsStatus[m_operatingIndex].status == DependsOk) {
+            refreshOperatingPackageStatus(Success);
         }
-
-        emit workerFinished();
-        emit workerProgressChanged(100);
-        emit transactionProgressChanged(100);
-
+        bumpInstallIndex();
     } else {
-        int num = m_packagesManager->m_preparedPackages.size();
-        for (int i = 0; i < num; i++) {
-            m_packageOperateStatus[i] = 0;
-        }
-        emit AuthCancel();
-    }
 
+        if (m_packagesManager->m_preparedPackages.size() == 1) {
+            refreshOperatingPackageStatus(Prepare);
+            m_workerStatus = WorkerPrepare;
+            emit AuthCancel();
+        } else {
+            refreshOperatingPackageStatus(Failed);
+            m_packageFailCode.insert(m_operatingIndex, flag);
+            m_packageFailReason.insert(m_operatingIndex, "授权取消");
+            bumpInstallIndex();
+        }
+    }
     AptConfigMessage::getInstance()->hide();
-    AptConfigMessage::getInstance()->m_textEdit->clear();
 }
 
+/**
+ * @brief DebListModel::ConfigReadOutput
+ * 根据命令返回的输出数据，向界面添加数据展示
+ */
 void DebListModel::ConfigReadOutput()
 {
     QString tmp = m_procInstallConfig->readAllStandardOutput().data();
@@ -950,18 +1037,24 @@ void DebListModel::ConfigReadOutput()
 
     if (tmp.contains("StartInstallAptConfig")) {
         emit onStartInstall();
-        int num = m_packagesManager->m_preparedPackages.size();
-        for (int i = 0; i < num; i++) {
-            m_packageOperateStatus[i] = Operating;
-        }
+        refreshOperatingPackageStatus(Operating);
         AptConfigMessage::getInstance()->show();
         return;
     }
 
     emit appendOutputInfo(tmp);
-    AptConfigMessage::getInstance()->appendTextEdit(tmp);
+    if (tmp.contains("Not authorized")) {
+        AptConfigMessage::getInstance()->close();
+    } else {
+        AptConfigMessage::getInstance()->appendTextEdit(tmp);
+    }
 }
 
+/**
+ * @brief DebListModel::ConfigInputWrite
+ * @param str 输入的数据
+ * 向命令传递输入的数据
+ */
 void DebListModel::ConfigInputWrite(QString str)
 {
     m_procInstallConfig->write(str.toUtf8());

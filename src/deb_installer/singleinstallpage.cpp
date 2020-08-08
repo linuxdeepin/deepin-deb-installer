@@ -815,7 +815,10 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
                 }
             }
             if (m_infoControlButton->hasFocus()) {
-                m_backButton->setFocus();
+                if (m_backButton->isVisible())
+                    m_backButton->setFocus();
+                else
+                    emit OutOfFocus(true);
             }
             return true;
         }
@@ -824,7 +827,7 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-void SingleInstallPage::setAuthConfirm()
+void SingleInstallPage::setAuthConfirm(QString dependName)
 {
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -833,7 +836,7 @@ void SingleInstallPage::setAuthConfirm()
     m_backButton->setVisible(false);
     m_pDSpinner->setVisible(true);
     m_pDSpinner->start();
-    m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
+    m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg(dependName));
     m_pLoadingLabel->setVisible(true);
     m_tipsLabel->setVisible(false);
 }
@@ -908,12 +911,12 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     m_pDSpinner->stop();
     m_pDSpinner->setVisible(false);
 }
-void SingleInstallPage::DealDependResult(int iAuthRes)
+void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "Deal DependResult" << iAuthRes;
     switch (iAuthRes) {
     case DebListModel::AuthConfirm:
-        setAuthConfirm();
+        setAuthConfirm(dependName);
         break;
 
     case DebListModel::AuthBefore:
@@ -928,7 +931,7 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
         break;
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
-        m_tipsLabel->setText(tr("%1 Installation Failed").arg("deepin-wine"));
+        m_tipsLabel->setText(tr("%1 Installation Failed").arg(dependName));
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
     default:

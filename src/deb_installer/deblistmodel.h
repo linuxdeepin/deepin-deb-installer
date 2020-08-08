@@ -35,6 +35,8 @@
 #include <DPushButton>
 #include <DSysInfo>
 #include <QProcess>
+#define ConfigAuthCancel 127
+
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -113,7 +115,6 @@ public:
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-    int DebInstallFinishedFlag = 0;
     int m_workerStatus_temp = 0;
 
 public:
@@ -145,7 +146,9 @@ signals:
 
     void EnableReCancelBtn(bool bEnable);
 
-    void DependResult(int);
+    void DependResult(int, QString);
+
+    void enableCloseButton(bool);
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
@@ -159,7 +162,7 @@ public slots:
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
 
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
     void ConfigReadOutput();
     void ConfigInstallFinish(int flag);
@@ -191,6 +194,11 @@ private:
 
     void showNoDigitalErrWindow();
 
+    bool checkTemplate(QString debPath);
+    void getDebian(QString debPath);
+    bool mkdir();
+    void rmdir();
+
 private:
     int m_workerStatus;
     int m_operatingIndex;
@@ -210,6 +218,7 @@ private:
 
     bool QverifyResult;
     QProcess *m_procInstallConfig;
+    const QString tempPath = "/tmp/DEBIAN";
 };
 
 #endif  // DEBLISTMODEL_H
