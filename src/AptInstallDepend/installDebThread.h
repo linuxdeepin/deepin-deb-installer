@@ -20,6 +20,11 @@
 //#include <QObject>
 #include <QThread>
 #include <QProcess>
+#include <QFile>
+#include <QDir>
+
+#define TEMPLATE_DIR "/tmp/DEBIAN_TMP"
+#define TEMPLATE_PATH "/tmp/DEBIAN_TMP/templates"
 
 class InstallDebThread : public QThread
 {
@@ -28,6 +33,7 @@ public:
     InstallDebThread();
     virtual ~InstallDebThread();
     void setParam(QStringList tParam);
+    void getDescription();
     void run();
     int m_resultFlag = -1;
 
@@ -38,5 +44,6 @@ public slots:
 private:
     QProcess *m_proc;
     QStringList m_listParam;
+    QList<QString> m_listDescribeData;
 };
 #endif // INSTALLDEBTHREAD_H

@@ -37,10 +37,51 @@ void InstallDebThread::setParam(QStringList tParam)
     m_listParam = tParam;
 }
 
+void InstallDebThread::getDescription()
+{
+    QString str = "sudo dpkg -e " + m_listParam[1] + " " + TEMPLATE_DIR;
+    system(str.toUtf8());
+
+    QFile file;
+    file.setFileName(TEMPLATE_PATH);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QString tmpData;
+        while (!file.atEnd()) {
+            tmpData = file.readLine().data();
+            if (tmpData.size() > 13) {
+                if (tmpData.contains("Description: ")) {
+                    QString str = tmpData.mid(13, tmpData.size() - 13);
+                    str.remove(QChar('\n'), Qt::CaseInsensitive);
+                    m_listDescribeData << str;
+                }
+            }
+        }
+
+        file.close();
+    }
+}
+
 void InstallDebThread::on_readoutput()
 {
     QString tmp = m_proc->readAllStandardOutput().data();
     qDebug() << tmp;
+
+    foreach (QString str, m_listDescribeData) {
+        if (tmp.contains(str)) {
+            char c_input[20];
+            while (fgets(c_input, 10, stdin)) {
+                QString str = c_input;
+                str.remove(QChar('\\'), Qt::CaseInsensitive);
+                str.remove(QChar('"'), Qt::CaseInsensitive);
+
+                m_proc->write(str.toLatin1().data());
+
+                m_proc->waitForFinished(1500);
+
+                break;
+            }
+        }
+    }
 }
 
 void InstallDebThread::onFinished(int num)
@@ -82,25 +123,16 @@ void InstallDebThread::run()
 
             qDebug() << "StartInstallAptConfig";
 
+            getDescription();
+
             m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-            m_proc->waitForFinished(1500);
+            m_proc->waitForFinished(-1);
 
-            char c_input[20];
-            while (fgets(c_input, 10, stdin)) {
-                QString str = c_input;
-                str.remove(QChar('\\'), Qt::CaseInsensitive);
-                str.remove(QChar('"'), Qt::CaseInsensitive);
-
-                m_proc->write(str.toLatin1().data());
-
-                m_proc->waitForFinished(1500);
-
-                QProcess::ProcessState tmp = m_proc->state();
-                if (tmp == QProcess::ProcessState::NotRunning) {
-                    m_proc->close();
-                    break;
-                }
+            QDir filePath(TEMPLATE_DIR);
+            if (filePath.exists()) {
+                filePath.removeRecursively();
             }
+
             m_proc->close();
         }
     }
