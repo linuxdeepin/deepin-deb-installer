@@ -1023,6 +1023,9 @@ void DebListModel::ConfigInstallFinish(int flag)
         }
     }
     AptConfigMessage::getInstance()->hide();
+    AptConfigMessage::getInstance()->clearTexts();
+    m_procInstallConfig->terminate();
+    m_procInstallConfig->close();
 }
 
 /**

@@ -46,6 +46,14 @@ void InstallDebThread::on_readoutput()
 void InstallDebThread::onFinished(int num)
 {
     m_resultFlag = num;
+    if (num == 0) {
+        if (m_listParam.size() > 1)
+            if (m_listParam[0] == "InstallConfig") {
+                QProcess tmp;
+                tmp.start("sudo", QStringList() << "-S" <<  "dpkg" << "--unpack" << m_listParam[1]);
+                tmp.waitForFinished(-1);
+            }
+    }
 }
 
 void InstallDebThread::run()
@@ -74,7 +82,7 @@ void InstallDebThread::run()
 
             qDebug() << "StartInstallAptConfig";
 
-            m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << m_listParam[1]);
+            m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
             m_proc->waitForFinished(1500);
 
             char c_input[20];

@@ -206,3 +206,9 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
         }
     }
 }
+
+void AptConfigMessage::clearTexts()
+{
+    m_textEdit->clearText();
+    m_inputEdit->clear();
+}

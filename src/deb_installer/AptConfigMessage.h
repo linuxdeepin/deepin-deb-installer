@@ -32,6 +32,7 @@ public:
 
 public:
     void appendTextEdit(QString str);
+    void clearTexts();
 
 public slots:
     void dealInput();
