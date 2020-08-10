@@ -40,12 +40,14 @@ class dealDependThread : public QThread
 {
     Q_OBJECT
 public:
-    dealDependThread();
+    dealDependThread(QObject *parent = nullptr);
     virtual ~dealDependThread();
-    void setDependName(QString tmp, int index);
+    void setDependList(QStringList depends, int index);
+    void setDependName(QString dependName);
     void run();
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 
 public slots:
     void onFinished(int);
@@ -53,7 +55,8 @@ public slots:
 private:
     QProcess *proc;
     int m_index = -1;
-    QString m_dependName;
+    QStringList m_dependList;
+    QString m_brokenDepend;
     bool bDependsStatusErr = false;
 };
 
@@ -94,6 +97,7 @@ class PackagesManager : public QObject
 
 public:
     explicit PackagesManager(QObject *parent = nullptr);
+    ~PackagesManager();
 
     bool isBackendReady();
     bool isArchError(const int idx);
@@ -118,10 +122,13 @@ public:
     void removePackage(const int index, QList<int> listDependInstallMark);
     void removeLastPackage();
     bool getPackageIsNull();
-    bool appendPackage(QApt::DebFile *debPackage, bool isEmpty);
+
+    bool appendPackage(QString debPackage);
     bool QverifyResult;
-    QApt::DebFile *package(const int index) const { return m_preparedPackages[index]; }
+    QString package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
+
+    QList<int> m_errorIndex;  //Store the subscript that failed to install Deepin-Wine
 
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
@@ -135,19 +142,26 @@ private:
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
-    QList<QApt::DebFile *> m_preparedPackages;
+    QList<QString> m_preparedPackages;
     QList<QByteArray> m_preparedMd5;
     QMap<int, int> m_packageInstallStatus;
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
     QSet<QByteArray> m_appendedPackagesMd5;
     int m_DealDependIndex = -1;
-    dealDependThread *dthread;
+    dealDependThread *dthread = nullptr;
     QList<int> m_dependInstallMark;
 
+private:
+
+    // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
+    // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
+    QMap<QString, QString> specialPackage();
+
 public slots:
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 signals:
-    void DependResult(int, int);
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
 };
 
 #endif  // PACKAGESMANAGER_H

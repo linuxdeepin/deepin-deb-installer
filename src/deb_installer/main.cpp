@@ -31,7 +31,6 @@
 #include <DGuiApplicationHelper>
 #include <DApplication>
 #include <DLog>
-#include <DTitlebar>
 
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -51,9 +50,6 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    DApplication::loadDXcbPlugin();
-
-    //DApplication app(argc, argv);
     SingleInstallerApplication app(argc, argv);
 
     app.setOrganizationName("deepin");
@@ -94,5 +90,4 @@ int main(int argc, char *argv[])
         QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
         return 0;
     }
-
 }

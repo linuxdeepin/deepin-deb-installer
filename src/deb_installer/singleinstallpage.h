@@ -31,6 +31,8 @@
 #include <DPushButton>
 #include <DTextEdit>
 #include <DSpinner>
+#include <DCommandLinkButton>
+
 #include <QWidget>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
@@ -50,9 +52,10 @@ public:
     explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
     void afterGetAutherFalse();
     void setEnableButton(bool bEnable);
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
+
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 signals:
     void back() const;
@@ -78,7 +81,7 @@ private:
     int initLabelWidth(int fontinfo);
     void setPackageInfo();
 
-    void setAuthConfirm();
+    void setAuthConfirm(QString dependName);
     void setAuthBefore();
     void setCancelAuthOrAuthDependsErr();
     void setAuthDependsSuccess();
@@ -95,6 +98,7 @@ private slots:
     void onOutputAvailable(const QString &output);
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
+    void OnCommitErrorFinished();
 
 private:
     int m_operate;
@@ -125,7 +129,9 @@ private:
     QString packageversion_description;
 
     DSpinner *m_pDSpinner;
-    DebInfoLabel *m_pLoadingLabel;
+
+    // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
+    DCommandLinkButton *m_pLoadingLabel;
 
 };
 

@@ -25,7 +25,7 @@
 #include <QPointer>
 #include <QSettings>
 #include <QStackedLayout>
-
+#include <QApt/DebFile>
 
 #include <DMainWindow>
 #include <QWidget>
@@ -33,6 +33,8 @@ DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
+
+using QApt::DebFile;
 
 class DebInstaller : public Dtk::Widget::DMainWindow
 {
@@ -49,11 +51,24 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
+private:
+    void initUI();
+    void initConnections();
+    void refreshInstallPage(int index = -1);
+    void MulRefreshPage(int index);
+    void handleFocusPolicy();
+
+    //Disable/enable close button and exit in menu
+    void disableCloseAndExit();
+    void enableCloseAndExit();
+
+    SingleInstallPage *backToSinglePage();
+
 private slots:
     void onPackagesSelected(const QStringList &packages);
     void showUninstallConfirmPage();
     void onUninstallAccepted();
-    void onUninstallCalceled();
+    void onUninstallCancel();
     void onAuthing(const bool authing);
     void onNewAppOpen(qint64 pid, const QStringList &arguments);
     void onStartInstallRequested();
@@ -64,29 +79,13 @@ private slots:
     void setEnableButton(bool bEnable);
     void showHiddenButton();
 
-    void DealDependResult(int iAuthRes);
-
-    void popFloatingError();
-private:
-    void failToSysteminitUI();
-    void initUI();
-    void initConnections();
-    void refreshInstallPage(int index = -1);
-    void MulRefreshPage(int index);
-    void handleFocusPolicy();
-
-    //禁用/启用 关闭按钮和菜单中的退出
-    void disableCloseAndExit();
-    void enableCloseAndExit();
-
-    void sendMessage(QWidget *par, DFloatingMessage *floMsg);
-    SingleInstallPage *backToSinglePage();
+    void DealDependResult(int iAuthRes, QString dependName);
+    void enableCloseButton(bool);
 
 private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;
     QStackedLayout *m_centralLayout;
-
     QPointer<QWidget> m_lastPage;
     int m_dragflag;
 };

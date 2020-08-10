@@ -32,7 +32,6 @@
 #include <QVBoxLayout>
 
 #include <DLabel>
-#include <DTitlebar>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
@@ -41,7 +40,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_appsListView(new PackagesListView(this))
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_installProcessInfoView(new InstallProcessInfoView(this))
-    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse")))
+    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
     , m_processFrame(new QWidget(this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
@@ -50,7 +49,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(this))
     , m_centralLayout(new QVBoxLayout(this))
-    , m_tipsLabel(new DebInfoLabel)
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
     initContentLayout();
@@ -60,6 +60,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
 
 void MultipleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
     m_contentFrame->setLayout(m_contentLayout);
@@ -79,8 +80,9 @@ void MultipleInstallPage::initUI()
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
-    m_appsListViewBgFrame->setFixedSize(460, 186 + 10 + 5);
-    QVBoxLayout *appsViewLayout = new QVBoxLayout;
+    //fix bug:33730
+    m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
+    QVBoxLayout *appsViewLayout = new QVBoxLayout(this);
     appsViewLayout->setSpacing(0);
     appsViewLayout->setContentsMargins(0, 0, 0, 0);
     m_appsListViewBgFrame->setLayout(appsViewLayout);
@@ -113,9 +115,11 @@ void MultipleInstallPage::initUI()
     m_backButton->setFocusPolicy(Qt::NoFocus);
 
     m_tipsLabel->setFixedHeight(24);
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
+
+    //fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
+    m_tipsLabel->setEnabled(false);
 
     m_dSpinner->setMinimumSize(20, 20);
     m_dSpinner->hide();
@@ -127,7 +131,7 @@ void MultipleInstallPage::initUI()
 
     m_infoControlButton->setVisible(false);
 
-    QVBoxLayout *progressFrameLayout = new QVBoxLayout;
+    QVBoxLayout *progressFrameLayout = new QVBoxLayout(this);
     progressFrameLayout->setSpacing(0);
     progressFrameLayout->setContentsMargins(0, 0, 0, 0);
     m_processFrame->setLayout(progressFrameLayout);
@@ -140,11 +144,11 @@ void MultipleInstallPage::initUI()
     m_processFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_processFrame->setFixedHeight(53);
 
-    QVBoxLayout *btnsFrameLayout = new QVBoxLayout;
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout(this);
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_backButton);
@@ -153,7 +157,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addStretch();
     btnsLayout->setContentsMargins(0, 0, 0, 30);
 
-    QWidget *btnsFrame = new QWidget;
+    QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);
     btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);
@@ -168,6 +172,9 @@ void MultipleInstallPage::initUI()
     m_contentLayout->addWidget(m_dSpinner);
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);
+
+    //fix bug:33999 keep tips in the middle
+    m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);
     m_tipsLabel->setVisible(false);
 
     m_contentLayout->addWidget(btnsFrame);
@@ -278,6 +285,7 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
+    m_infoControlButton->setVisible(false); //取消安装后只显示安装按钮
     m_processFrame->setVisible(false);
 //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
@@ -311,7 +319,7 @@ void MultipleInstallPage::setScrollBottom(int index)
     QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);
 }
 
-void MultipleInstallPage::DealDependResult(int iAuthRes)
+void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "批量处理鉴权结果：" << iAuthRes;
     switch (iAuthRes) {
@@ -330,8 +338,7 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
         break;
     case DebListModel::AuthConfirm:
         m_appsListView->setEnabled(false);
-        m_tipsLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
-        m_tipsLabel->setCustomDPalette();
+        m_tipsLabel->setText(tr("Installing dependencies: %1").arg(dependName));
         m_tipsLabel->setVisible(true);
         m_dSpinner->show();
         m_dSpinner->start();
@@ -340,6 +347,11 @@ void MultipleInstallPage::DealDependResult(int iAuthRes)
     case DebListModel::AuthDependsSuccess:
     case DebListModel::AuthDependsErr:
         m_appsListView->setEnabled(true);
+        m_installButton->setVisible(true);
+        m_installButton->setEnabled(true);
+        m_dSpinner->stop();
+        m_dSpinner->hide();
+        m_tipsLabel->setVisible(false);
         break;
     case DebListModel::AnalysisErr:
         m_appsListView->setEnabled(true);

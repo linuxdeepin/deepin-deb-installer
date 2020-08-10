@@ -37,7 +37,6 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 
-
 using QApt::DebFile;
 using QApt::Transaction;
 
@@ -68,13 +67,14 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_contentLayout(new QVBoxLayout(m_contentFrame))
     , m_centralLayout(new QVBoxLayout(this))
     , m_pDSpinner(new DSpinner(this))
-    , m_pLoadingLabel(new DebInfoLabel(this))
+    , m_pLoadingLabel(new DCommandLinkButton("", this))
 {
     initUI();
 }
 
 void SingleInstallPage::initUI()
 {
+    QApplication::restoreOverrideCursor();
     qApp->installEventFilter(this);
     QFontInfo fontinfo = this->fontInfo();
     int fontsize = fontinfo.pixelSize();
@@ -103,6 +103,7 @@ void SingleInstallPage::initUI()
 
 void SingleInstallPage::initContentLayout()
 {
+    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);
     m_contentLayout->setContentsMargins(20, 0, 20, 30);
     m_contentFrame->setLayout(m_contentLayout);
@@ -122,15 +123,18 @@ void SingleInstallPage::initInstallWineLoadingLayout()
 {
     QVBoxLayout *m_pLoadingLayout = new QVBoxLayout(this);
 
-    m_pDSpinner->setFixedSize(24, 24);
+    m_pDSpinner->setMinimumSize(24, 24);
     m_pDSpinner->setVisible(false);
     m_pDSpinner->start();
     m_pLoadingLayout->addWidget(m_pDSpinner);
     m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);
 
+
+    m_pLoadingLayout->addSpacing(4); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
     m_pLoadingLabel->setVisible(false);
+    m_pLoadingLayout->setEnabled(false);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);
-    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);
+    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
     m_pLoadingLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
@@ -230,7 +234,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *itemLayout = new QVBoxLayout(this);
     itemLayout->addSpacing(45);
     itemLayout->addWidget(itemInfoWidget);
-    itemLayout->addSpacing(28);
+    itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);
     itemLayout->addStretch();
     itemLayout->setMargin(0);
@@ -311,7 +315,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_backButton->setFocusPolicy(Qt::NoFocus);
     m_doneButton->setFocusPolicy(Qt::NoFocus);
 
-    m_packageDescription->setFixedHeight(73);
+    m_packageDescription->setFixedHeight(65);
     m_packageDescription->setFixedWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
@@ -361,7 +365,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addSpacing(8);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(btnsFrame);
 
     initInstallWineLoadingLayout();
@@ -403,6 +407,8 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
+    // 抛弃 CommitErrorFinished 与OnCommitErrorFinished 在listModel中修改为信号workerFinished。
+    connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
@@ -446,6 +452,7 @@ void SingleInstallPage::reinstall()
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
+    m_tipsLabel->setVisible(false);
 
     m_operate = Reinstall;
     m_packagesModel->installAll();
@@ -453,20 +460,25 @@ void SingleInstallPage::reinstall()
 }
 void SingleInstallPage::install()
 {
-    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
+    m_tipsLabel->setVisible(false);
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
+    m_infoControlButton->setVisible(true);
+
     m_operate = Install;
     m_packagesModel->installAll();
 }
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
-    m_progressFrame->setVisible(true);
-    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
+    m_tipsLabel->setVisible(false);
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_uninstallButton->setVisible(false);
+    m_progressFrame->setVisible(true);
+    m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
+    m_infoControlButton->setVisible(true);
 
     m_operate = Uninstall;
     m_packagesModel->uninstallPackage(0);
@@ -504,6 +516,8 @@ void SingleInstallPage::showInfo()
 void SingleInstallPage::onOutputAvailable(const QString &output)
 {
     m_installProcessView->appendText(output.trimmed());
+    if (!m_infoControlButton->isVisible())
+        m_infoControlButton->setVisible(true);
 
     // pump progress
     if (m_progress->value() < 90) m_progress->setValue(m_progress->value() + 10);
@@ -514,8 +528,29 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
     }
 }
 
+/**
+ * @brief SingleInstallPage::OnCommitErrorFinished
+ * transaction 返回CommitError时的槽函数，目前不再使用
+ * 暂时留用，待下个版本测试后，如果正常，删除。
+ */
+void SingleInstallPage::OnCommitErrorFinished()
+{
+    m_tipsLabel->setVisible(true);
+    m_progressFrame->setVisible(false);
+    m_uninstallButton->setVisible(false);
+    m_reinstallButton->setVisible(false);
+    m_backButton->setVisible(true);
+
+    m_confirmButton->setVisible(true);
+    m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+
+    if (m_operate == Uninstall)
+        m_tipsLabel->setText(tr("Uninstall Failed"));
+}
+
 void SingleInstallPage::onWorkerFinished()
 {
+    m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -532,23 +567,6 @@ void SingleInstallPage::onWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
-
-//            QString Sourcefilepath = "/var/lib/dpkg/info";
-//            QString Targetfilepath = "~/Desktop/.UOS_Installer_build";
-//            QString filename = packagename_description;
-//            filename = filename.toLower();
-
-//            int result = Utils::returnfileIsempty(Sourcefilepath, filename);
-//            if (result) {
-//                bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
-//                if (transfer_file_result) {
-//                    bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
-//                    if (modify_file_result) {
-//                        QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
-//                        system(shell_Action.toStdString().c_str());
-//                    }
-//                }
-//            }
 
         } else {
             qDebug() << "Uninstalled successfully";
@@ -567,9 +585,10 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
+        //正常情况不会进入此分支，如果进入此分支表明状态错误。
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
-//        Q_UNREACHABLE();
+        qDebug() << "Operate Status Error. current"
+                 << "index=" << index.row() << "stat=" << stat;
     }
 
     if (!m_upDown)
@@ -596,7 +615,7 @@ void SingleInstallPage::setPackageInfo()
     qApp->processEvents();
     QFontInfo fontinfosize = this->fontInfo();
     int fontlabelsize = fontinfosize.pixelSize();
-    DebFile *package = m_packagesModel->preparedPackages().first();
+    DebFile *package = new DebFile(m_packagesModel->preparedPackages().first());
 
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
@@ -618,6 +637,7 @@ void SingleInstallPage::setPackageInfo()
     //set package name
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
     packageversion_description = Utils::fromSpecialEncoding(package->version());
+    delete package;
     if (fontlabelsize > 18) {
         const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
         m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
@@ -675,6 +695,10 @@ void SingleInstallPage::setPackageInfo()
 
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
+    // fix bug: 36120 After the uninstall authorization is canceled, hide the uninstall details and display the version status
+    m_tipsLabel->setVisible(true);
+    setPackageInfo();
+    m_infoControlButton->setVisible(false);
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
@@ -683,6 +707,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    m_infoControlButton->setVisible(false);
     m_progressFrame->setVisible(false);
     if (m_operate == Install) {
         m_installButton->setVisible(true);
@@ -698,7 +723,6 @@ void SingleInstallPage::afterGetAutherFalse()
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
-
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
     m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 
@@ -717,7 +741,7 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-void SingleInstallPage::setAuthConfirm()
+void SingleInstallPage::setAuthConfirm(QString dependName)
 {
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -726,8 +750,7 @@ void SingleInstallPage::setAuthConfirm()
     m_backButton->setVisible(false);
     m_pDSpinner->setVisible(true);
     m_pDSpinner->start();
-    m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg("deepin-wine"));
-    m_pLoadingLabel->setCustomDPalette();
+    m_pLoadingLabel->setText(tr("Installing dependencies: %1").arg(dependName));
     m_pLoadingLabel->setVisible(true);
     m_tipsLabel->setVisible(false);
 }
@@ -765,6 +788,7 @@ void SingleInstallPage::setAuthBefore()
 
 void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
+    qDebug() << "set Cancel Auth or Auth Depends Error";
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     QModelIndex index = m_packagesModel->first();
@@ -801,12 +825,12 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     m_pDSpinner->stop();
     m_pDSpinner->setVisible(false);
 }
-void SingleInstallPage::DealDependResult(int iAuthRes)
+void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "Deal DependResult" << iAuthRes;
     switch (iAuthRes) {
     case DebListModel::AuthConfirm:
-        setAuthConfirm();
+        setAuthConfirm(dependName);
         break;
 
     case DebListModel::AuthBefore:
@@ -817,8 +841,12 @@ void SingleInstallPage::DealDependResult(int iAuthRes)
         setCancelAuthOrAuthDependsErr();
         break;
     case DebListModel::AuthDependsSuccess:
+        setCancelAuthOrAuthDependsErr();
+        break;
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
+        m_tipsLabel->setText(tr("%1 Installation Failed").arg(dependName));
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
     default:
         break;

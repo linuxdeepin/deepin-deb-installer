@@ -8,7 +8,7 @@
 
 InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
     : QWidget(parent)
-    , m_editor(new QTextEdit)
+    , m_editor(new QTextEdit(this))
 {
     initUI();
 }
@@ -16,9 +16,9 @@ InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
 void InstallProcessInfoView::initUI()
 {
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
-    bgFrame->setFixedSize(440, 200);
+    bgFrame->setFixedSize(440, 190);
 
-    QVBoxLayout *editLayout = new QVBoxLayout;
+    QVBoxLayout *editLayout = new QVBoxLayout(this);
     editLayout->setSpacing(0);
     editLayout->setContentsMargins(5, 1, 0, 5);
     bgFrame->setLayout(editLayout);
@@ -41,7 +41,7 @@ void InstallProcessInfoView::initUI()
     QTextCursor textCursor = m_editor->textCursor();
     QTextBlockFormat textBlockFormat;
     //设置行高
-    textBlockFormat.setLineHeight(17, QTextBlockFormat::FixedHeight);
+    textBlockFormat.setLineHeight(20, QTextBlockFormat::FixedHeight);
     //设置行间距
     textBlockFormat.setBottomMargin(1);
     textCursor.setBlockFormat(textBlockFormat);
@@ -78,19 +78,14 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     DPalette pa = DebApplicationHelper::instance()->palette(this);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType)
-    {
-        pa.setColor(DPalette::Text, QColor(96,157,200));
+    if (themeType == DGuiApplicationHelper::LightType) {
+        pa.setColor(DPalette::Text, QColor(96, 157, 200));
         m_editor->setPalette(pa);
-    }
-    else if(themeType == DGuiApplicationHelper::DarkType)
-    {
-        pa.setColor(DPalette::Text, QColor(109,124,136));
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
+        pa.setColor(DPalette::Text, QColor(109, 124, 136));
         m_editor->setPalette(pa);
-    }
-    else
-    {
-        pa.setColor(DPalette::Text, QColor(96,157,200));
+    } else {
+        pa.setColor(DPalette::Text, QColor(96, 157, 200));
         m_editor->setPalette(pa);
     }
 //    pa.setColor(DPalette::Text, pa.color(m_colorType));

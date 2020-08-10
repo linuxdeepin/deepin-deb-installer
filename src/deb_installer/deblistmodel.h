@@ -33,7 +33,7 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <DPushButton>
-
+#include <DSysInfo>
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
@@ -106,7 +106,8 @@ public:
     {
         return m_workerStatus == WorkerPrepare;
     }
-    const QList<QApt::DebFile *> preparedPackages() const;
+//    const QList<QApt::DebFile *> preparedPackages() const;
+    const QList<QString> preparedPackages() const;
     QModelIndex first() const;
 
     int rowCount(const QModelIndex &parent) const override;
@@ -117,6 +118,9 @@ public:
 public:
     void initPrepareStatus();
     void initDependsStatus(int index = 0);
+
+public:
+    int getInstallFileSize();
 
 signals:
     //    void workerStarted() const;
@@ -132,7 +136,9 @@ signals:
     void AuthCancel();
     void EnableReCancelBtn(bool bEnable);
     void onStartInstall();
-    void DependResult(int);
+    void DependResult(int, QString);
+    void CommitErrorFinished();
+    void enableCloseButton(bool);
 
 public slots:
     void setCurrentIndex(const QModelIndex &idx);
@@ -140,15 +146,13 @@ public slots:
     void uninstallPackage(const int idx);
     void removePackage(const int idx);
     bool getPackageIsNull();
-    bool appendPackage(QApt::DebFile *package, bool isEmpty);
+    bool appendPackage(QString packagey);
     void onTransactionErrorOccurred();
     void onTransactionStatusChanged(QApt::TransactionStatus stat);
-    void DealDependResult(int iAuthRes, int iIndex);
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
 private slots:
     void upWrongStatusRow();
-public:
-    int getInstallFileSize();
 
 private:
     void setEndEnable();
@@ -175,7 +179,8 @@ private:
     QPointer<QApt::Transaction> m_currentTransaction;
 
     QMap<int, int> m_packageOperateStatus;
-    QMap<int, int> m_packageFailReason;
+    QMap<int, int> m_packageFailCode; //FailCode 错误代码 ，trans返回的错误代码
+    QMap<int, QString> m_packageFailReason; //FailReason , trans返回的详细错误信息
     bool m_InitRowStatus;
     bool QverifyResult;
     bool bModifyFailedReason = false;

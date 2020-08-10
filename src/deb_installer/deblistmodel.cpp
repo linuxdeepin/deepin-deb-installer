@@ -29,9 +29,9 @@
 #include <QSize>
 #include <QtConcurrent>
 #include <DDialog>
-#include <DSysInfo>
 #include <QApt/Backend>
 #include <QApt/Package>
+#include <DSysInfo>
 using namespace QApt;
 
 bool isDpkgRunning()
@@ -50,9 +50,25 @@ bool isDpkgRunning()
     return false;
 }
 
-const QString workerErrorString(const int e)
+/**
+ * @brief netErrors
+ * @return the List of The Error infomations.
+ * 无网络安装依赖时，库返回错误为FetechError 偶尔为CommitError
+ * 此函数处理库返回CommitError时，网络错误的各种情况，如果错误信息中包含此列表中的信息，则判断为网络原因。
+ */
+const QStringList netErrors()
 {
-    switch (e) {
+    QStringList errorDetails;
+    errorDetails << "Address family for hostname not supported";
+    errorDetails << "Temporary failure resolving";
+    errorDetails << "Network is unreachable";
+    errorDetails << "Cannot initiate the connection to";
+    return errorDetails;
+}
+
+const QString workerErrorString(const int errorCode, const QString errorInfo)
+{
+    switch (errorCode) {
     case FetchError:
     case DownloadDisallowedError:
         return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
@@ -61,6 +77,20 @@ const QString workerErrorString(const int e)
                                        "Installation failed, please check for updates in Control Center");
     case DiskSpaceError:
         return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
+    case LockError:
+        if (errorInfo.contains("No space left on device")) {
+            return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
+        }
+        break;
+    // fix bug:39834 网络断开时，偶现安装deb包失败时提示语不显示
+    case CommitError:
+        for (auto error : netErrors()) {
+            if (errorInfo.contains(error) && errorInfo.contains("http"))
+                return QApplication::translate("DebListModel", "Installation failed, please check your network connection");
+        }
+        if (errorInfo.contains("No space left on device")) {
+            return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
+        }
     }
     return QApplication::translate("DebListModel", "Installation Failed");
 }
@@ -72,10 +102,11 @@ DebListModel::DebListModel(QObject *parent)
 {
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
-    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
+    connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
+    connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 }
 
-void DebListModel::DealDependResult(int iAuthRes, int iIndex)
+void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName)
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
@@ -92,7 +123,7 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex)
     default:
         break;
     }
-    emit DependResult(iAuthRes);
+    emit DependResult(iAuthRes, dependName);
 }
 
 bool DebListModel::isReady() const
@@ -100,7 +131,7 @@ bool DebListModel::isReady() const
     return m_packagesManager->isBackendReady();
 }
 
-const QList<DebFile *> DebListModel::preparedPackages() const
+const QList<QString> DebListModel::preparedPackages() const
 {
     return m_packagesManager->m_preparedPackages;
 }
@@ -121,7 +152,14 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
 
-    const DebFile *deb = m_packagesManager->package(r);
+    const DebFile *deb = new DebFile(m_packagesManager->package(r));
+
+    QString packageName = deb->packageName();
+    QString filePath = deb->filePath();
+    QString version = deb->version();
+    QString architecture = deb->architecture();
+    QString shortDescription = deb->shortDescription();
+    delete deb;
 
     switch (role) {
     case WorkerIsPrepareRole:
@@ -129,11 +167,11 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case ItemIsCurrentRole:
         return m_currentIdx == index;
     case PackageNameRole:
-        return deb->packageName();
+        return packageName;
     case PackagePathRole:
-        return deb->filePath();
+        return filePath;
     case PackageVersionRole:
-        return deb->version();
+        return version;
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);
     case PackageDependsStatusRole:
@@ -143,9 +181,9 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageAvailableDependsListRole:
         return m_packagesManager->packageAvailableDepends(r);
     case PackageReverseDependsListRole:
-        return m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
+        return m_packagesManager->packageReverseDependsList(packageName, architecture);
     case PackageDescriptionRole:
-        return Utils::fromSpecialEncoding(deb->shortDescription());
+        return Utils::fromSpecialEncoding(shortDescription);
     case PackageFailReasonRole:
         return packageFailedReason(r);
     case PackageOperateStatusRole:
@@ -164,7 +202,6 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 void DebListModel::installAll()
 {
-
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
 
@@ -189,12 +226,19 @@ void DebListModel::uninstallPackage(const int idx)
     m_workerStatus = WorkerProcessing;
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = idx;
+    // fix bug : 卸载失败时不提示卸载失败。
+    m_operatingStatusIndex = idx;
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (const auto &r : rdepends) b->markPackageForRemoval(r);
+    for (const auto &r : rdepends) {
+        if (b->package(r))
+            b->markPackageForRemoval(r);
+        else
+            qDebug() << "rDepend" << r << "package error ,please check it!";
+    }
     b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());
 
     // uninstall
@@ -213,6 +257,16 @@ void DebListModel::uninstallPackage(const int idx)
     m_currentTransaction = trans;
 
     trans->run();
+    delete deb;
+}
+
+void DebListModel::initDependsStatus(int index)
+{
+    const int packageCount = this->preparedPackages().size();
+    if (index >= packageCount)
+        return;
+    for (int num = index; num < packageCount; num++)
+        this->index(num).data(DebListModel::PackageDependsStatusRole);
 }
 
 void DebListModel::removePackage(const int idx)
@@ -252,11 +306,11 @@ bool DebListModel::getPackageIsNull()
     return m_packagesManager->getPackageIsNull();
 }
 
-bool DebListModel::appendPackage(DebFile *package, bool isEmpty)
+bool DebListModel::appendPackage(QString package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
 
-    return m_packagesManager->appendPackage(package, isEmpty);
+    return m_packagesManager->appendPackage(package);
 }
 
 void DebListModel::onTransactionErrorOccurred()
@@ -264,13 +318,35 @@ void DebListModel::onTransactionErrorOccurred()
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());
 
+    //fix bug:39834
+    //失败时刷新操作状态为failed,并记录失败原因
+    refreshOperatingPackageStatus(Failed);
+    m_packageOperateStatus[m_operatingStatusIndex] = Failed;
+
+    m_packageFailCode[m_operatingIndex] = trans->error();
+    m_packageFailReason[m_operatingIndex] = trans->errorString();
+    emit appendOutputInfo(trans->errorString());
+
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
 
-    qWarning() << Q_FUNC_INFO << e << workerErrorString(e);
+    qWarning() << Q_FUNC_INFO << e << workerErrorString(e, trans->errorString());
     qWarning() << trans->errorDetails() << trans->errorString();
 
     if (trans->isCancellable()) trans->cancel();
+
+    //    //fix bug: 36727 Increased handling of unload exceptions
+    //    if (e == CommitError) {
+    //        if (trans != nullptr) {
+    //            trans->deleteLater();
+    //            m_workerStatus = WorkerFinished;
+    //            m_workerStatus_temp = m_workerStatus;
+
+    //            emit CommitErrorFinished();
+    //            emit workerFinished();
+    //            return;
+    //        }
+    //    }
 
     if (e == AuthError) {
         trans->deleteLater();
@@ -320,6 +396,8 @@ void DebListModel::reset()
     m_operatingStatusIndex = 0;
 
     m_packageOperateStatus.clear();
+
+    m_packageFailCode.clear();
     m_packageFailReason.clear();
     m_packagesManager->reset();
 }
@@ -327,6 +405,7 @@ void DebListModel::reset()
 void DebListModel::reset_filestatus()
 {
     m_packageOperateStatus.clear();
+    m_packageFailCode.clear();
     m_packageFailReason.clear();
 }
 
@@ -335,8 +414,8 @@ void DebListModel::bumpInstallIndex()
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
     // install finished
-    qDebug() << "m_packageFailReason.size:" << m_packageFailReason.size();
-    qDebug() << m_packageFailReason;
+    qDebug() << "m_packageFailCode.size:" << m_packageFailCode.size();
+    qDebug() << m_packageFailCode;
 
     qDebug() << "m_packageOperateStatus:" << m_packageOperateStatus;
 
@@ -353,12 +432,10 @@ void DebListModel::bumpInstallIndex()
         for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
             qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
         }
-//        usleep(1000 * 1000);
 
         return;
     }
     ++ m_operatingStatusIndex;
-//    usleep(1000 * 1000);
     qDebug() << "m_packageDependsStatus,size" << m_packagesManager->m_packageDependsStatus.size();
     for (int i = 0; i < m_packagesManager->m_packageDependsStatus.size(); i++) {
         qDebug() << "m_packageDependsStatus[" << i << "] = " << m_packagesManager->m_packageDependsStatus[i].status;
@@ -367,12 +444,11 @@ void DebListModel::bumpInstallIndex()
     qDebug() << "m_packagesManager->m_preparedPackages.size()" << m_packagesManager->m_preparedPackages.size();
     qDebug() << "m_operatingIndex" << m_operatingIndex;
 
-    qDebug() << "m_packageFailReason.size:" << m_packageFailReason.size();
-    qDebug() << m_packageFailReason;
+    qDebug() << "m_packageFailCode.size:" << m_packageFailCode.size();
+    qDebug() << m_packageFailCode;
 
     emit onChangeOperateIndex(m_operatingIndex);
     // install next
-
     installNextDeb();
 }
 
@@ -391,10 +467,8 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
-//            if (bModifyFailedReason) {
-//                if (stat.package == "deepin-wine")
-//                    return tr("Installing dependencies: %1").arg(stat.package);
-//            }
+            if (m_packagesManager->m_errorIndex.contains(idx))
+                return tr("%1 Installation Failed").arg(stat.package);
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -406,11 +480,11 @@ QString DebListModel::packageFailedReason(const int idx) const
     }
     Q_ASSERT(m_packageOperateStatus.contains(idx));
     Q_ASSERT(m_packageOperateStatus[idx] == Failed);
-    if (!m_packageFailReason.contains(idx))
-        qDebug() << "ggy" << m_packageFailReason.size() << idx;
-    Q_ASSERT(m_packageFailReason.contains(idx));
+    if (!m_packageFailCode.contains(idx))
+        qDebug() << "ggy" << m_packageFailCode.size() << idx;
+    Q_ASSERT(m_packageFailCode.contains(idx));
 
-    return workerErrorString(m_packageFailReason[idx]);
+    return workerErrorString(m_packageFailCode[idx], m_packageFailReason[idx]);
 }
 
 void DebListModel::onTransactionFinished()
@@ -425,28 +499,11 @@ void DebListModel::onTransactionFinished()
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
     emit workerProgressChanged(progressValue);
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    qDebug() << "install" << deb->packageName() << "finished with exit status:" << trans->exitStatus();
-    QString Sourcefilepath = "/var/lib/dpkg/info";
-    QString Targetfilepath = "/tmp/.UOS_Installer_build";
-    QString filename = deb->packageName();
-    filename = filename.toLower();
-
-    int result = Utils::returnfileIsempty(Sourcefilepath, filename);
-    if (result) {
-        bool transfer_file_result = Utils::File_transfer(Sourcefilepath, Targetfilepath, filename);
-        if (transfer_file_result) {
-            bool modify_file_result = Utils::Modify_transferfile(Targetfilepath, filename);
-            if (modify_file_result) {
-                QString shell_Action = Targetfilepath + "/" + filename + ".postinst";
-                system(shell_Action.toStdString().c_str());
-            }
-        }
-    }
     qDebug() << "tans.exitStatus()" << trans->exitStatus();
     if (trans->exitStatus()) {
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
-        m_packageFailReason[m_operatingStatusIndex] = trans->error();
+        m_packageFailCode[m_operatingStatusIndex] = trans->error();
+        m_packageFailReason[m_operatingStatusIndex] = trans->errorString();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     } else if (m_packageOperateStatus.contains(m_operatingStatusIndex) &&
@@ -460,6 +517,7 @@ void DebListModel::onTransactionFinished()
     trans->deleteLater();
     m_currentTransaction = nullptr;
     bumpInstallIndex();
+    qDebug() << "end";
 }
 
 void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满足
@@ -469,14 +527,12 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
 
     const auto ret = trans->exitStatus();
 
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
-    qDebug() << "install" << deb->packageName() << "dependencies finished with exit status:" << ret;
-
     if (ret) qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
 
     if (ret) {
         // record error
-        m_packageFailReason[m_operatingStatusIndex] = trans->error();
+        m_packageFailCode[m_operatingStatusIndex] = trans->error();
+        m_packageFailReason[m_operatingStatusIndex] = trans->errorString();
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
     }
@@ -526,7 +582,7 @@ void DebListModel::checkBoxStatus()
 
 void DebListModel::installDebs()
 {
-    DebFile *deb = m_packagesManager->package(m_operatingIndex);
+    DebFile deb(m_packagesManager->package(m_operatingIndex)) ;
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
@@ -548,9 +604,9 @@ void DebListModel::installDebs()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
-    if (dependsStat.isBreak()) {
+    if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {
         refreshOperatingPackageStatus(Failed);
-        m_packageFailReason.insert(m_operatingStatusIndex, -1);
+        m_packageFailCode.insert(m_operatingStatusIndex, -1);
         bumpInstallIndex();
         return;
     } else if (dependsStat.isAvailable()) {
@@ -558,16 +614,19 @@ void DebListModel::installDebs()
                    "package operate status error when start install availble dependencies");
 
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
+        // 获取到所有的依赖包 准备安装
         for (auto const &p : availableDepends) backend->markPackageForInstall(p);
 
-        qDebug() << Q_FUNC_INFO << "install" << deb->packageName() << "dependencies: " << availableDepends;
+        //安装
+
+        qDebug() << Q_FUNC_INFO << "install" << deb.packageName() << "dependencies: " << availableDepends;
 
         trans = backend->commitChanges();
         connect(trans, &Transaction::finished, this, &DebListModel::onDependsInstallTransactionFinished);
     } else {
-        qDebug() << Q_FUNC_INFO << "starting to install package: " << deb->packageName();
+        qDebug() << Q_FUNC_INFO << "starting to install package: " << deb.packageName();
 
-        trans = backend->installFile(*deb);//触发Qapt授权框和安装线程
+        trans = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
         connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
@@ -575,18 +634,7 @@ void DebListModel::installDebs()
 
     // NOTE: DO NOT remove this.
     // see: https://bugs.kde.org/show_bug.cgi?id=382272
-
-//    trans->setLocale(".UTF-8");
-
-    trans->setLocale("zh_CN.UTF-8");
-
-    QString uuid = QUuid::createUuid().toString();
-    uuid.remove('{').remove('}').remove('-');
-    QString pipe = QDir::tempPath() % QLatin1String("/qapt-sock-") % uuid;
-
-    qDebug() << pipe << pipe;
-
-    trans->setDebconfPipe(pipe);
+    trans->setLocale(".UTF-8");
 
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
@@ -659,8 +707,7 @@ void DebListModel::installNextDeb()
         QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = Installer.property("DeviceUnlocked").toBool();// 判断当前是否处于开发者模式
         qDebug() << "QDBusResult" << deviceMode;
-        DebFile *deb = m_packagesManager->package(m_operatingIndex);
-        bool digitalSigntual = Utils::Digital_Verify(deb->filePath()); //判断是否有数字签名
+        bool digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
         if (!deviceMode && !digitalSigntual) { //非开发者模式且数字签名验证失败
             showNoDigitalErrWindow();
         } else {// 是开发者模式或者有数字签名。
@@ -686,14 +733,23 @@ void DebListModel::uninstallFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
 
-    qDebug() << Q_FUNC_INFO;
-
-    m_workerStatus = WorkerFinished;
-    m_workerStatus_temp = m_workerStatus;
-    refreshOperatingPackageStatus(Success);
-    m_packageOperateStatus[m_operatingIndex] = Success;
-
+    //增加卸载失败的情况
+    //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
+    Transaction *trans = static_cast<Transaction *>(sender());
+    qDebug() << Q_FUNC_INFO << "trans.error()" << trans->error() << "trans.errorString" << trans->errorString();
+    if (trans->exitStatus()) {
+        m_workerStatus = WorkerFinished;
+        m_workerStatus_temp = m_workerStatus;
+        refreshOperatingPackageStatus(Failed);
+        m_packageOperateStatus[m_operatingIndex] = Failed;
+    } else {
+        m_workerStatus = WorkerFinished;
+        m_workerStatus_temp = m_workerStatus;
+        refreshOperatingPackageStatus(Success);
+        m_packageOperateStatus[m_operatingIndex] = Success;
+    }
     emit workerFinished();
+    trans->deleteLater();
 }
 
 void DebListModel::setCurrentIndex(const QModelIndex &idx)
@@ -714,15 +770,7 @@ void DebListModel::initPrepareStatus()
         m_packageOperateStatus.insert(i, Prepare);
     }
     qDebug() << "after m_packageOperateStatus" << m_packageOperateStatus;
-}
 
-void DebListModel::initDependsStatus(int index)
-{
-    const int packageCount = this->preparedPackages().size();
-    if (index >= packageCount)
-        return;
-    for (int num = index; num < packageCount; num++)
-        this->index(num).data(DebListModel::PackageDependsStatusRole);
 }
 
 void DebListModel::initRowStatus()
@@ -732,8 +780,6 @@ void DebListModel::initRowStatus()
         refreshOperatingPackageStatus(Waiting);
     }
     m_operatingStatusIndex = 0;
-
-    m_InitRowStatus = true;
 }
 
 void DebListModel::upWrongStatusRow()
@@ -749,7 +795,7 @@ void DebListModel::upWrongStatusRow()
     QList<int> listpackageOperateStatus;
     while (iteratorpackageOperateStatus.hasNext()) {
         iteratorpackageOperateStatus.next();
-        if (iteratorpackageOperateStatus.value() == Failed) {
+        if (iteratorpackageOperateStatus.value() == Failed || iteratorpackageOperateStatus.value() == VerifyFailed) {
             listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key());
             listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());
         } else if (iteratorpackageOperateStatus.value() == Success)
@@ -760,14 +806,16 @@ void DebListModel::upWrongStatusRow()
     if (listWrongIndex.size() == 0)
         return;
 
+    QList<int> t_errorIndex;
     //change  m_preparedPackages, m_packageOperateStatus sort.
-    QList<QApt::DebFile *> listTempDebFile;
+    QList<QString> listTempDebFile;
     QList<QByteArray> listTempPreparedMd5;
     iIndex = 0;
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
         m_packageOperateStatus[i] = listpackageOperateStatus[i];
         if (listWrongIndex.contains(i)) {
-            listTempDebFile.insert(iIndex++, m_packagesManager->m_preparedPackages[i]);
+            t_errorIndex.push_back(iIndex);
+            listTempDebFile.insert(iIndex, m_packagesManager->m_preparedPackages[i]);
             listTempPreparedMd5.insert(iIndex++, m_packagesManager->m_preparedMd5[i]);
         } else {
             listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);
@@ -777,16 +825,22 @@ void DebListModel::upWrongStatusRow()
     m_packagesManager->m_preparedPackages = listTempDebFile;
     m_packagesManager->m_preparedMd5 = listTempPreparedMd5;
 
-    //change  m_packageFailReason sort.
+    //Reupdates the index that failed to install Deepin-Wine
+    if (m_packagesManager->m_errorIndex.size() > 0) {
+        m_packagesManager->m_errorIndex.clear();
+        m_packagesManager->m_errorIndex = t_errorIndex;
+    }
+
+    //change  m_packageFailCode sort.
     QMap<int, int> mappackageFailReason;
-    QMapIterator<int, int> IteratorpackageFailReason(m_packageFailReason);
+    QMapIterator<int, int> IteratorpackageFailReason(m_packageFailCode);
     while (IteratorpackageFailReason.hasNext()) {
         IteratorpackageFailReason.next();
         int iIndexTemp = listWrongIndex.indexOf(IteratorpackageFailReason.key());
         mappackageFailReason[iIndexTemp] = IteratorpackageFailReason.value();
     }
-    m_packageFailReason.clear();
-    m_packageFailReason = mappackageFailReason;
+    m_packageFailCode.clear();
+    m_packageFailCode = mappackageFailReason;
 
     //change  m_packageInstallStatus sort.
     QMapIterator<int, int> MapIteratorpackageInstallStatus(m_packagesManager->m_packageInstallStatus);

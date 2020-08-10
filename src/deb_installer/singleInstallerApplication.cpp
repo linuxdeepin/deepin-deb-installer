@@ -61,6 +61,7 @@ void SingleInstallerApplication::activateWindow()
     }
 
     if (m_selectedFiles.size() > 0) {
+        qDebug() << "m_selectedFiles" << m_selectedFiles;
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_selectedFiles));
     }
 }
@@ -68,6 +69,7 @@ void SingleInstallerApplication::activateWindow()
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
     if (debPathList.size() > 0) {
+        qDebug() << "debPath List" << debPathList;
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     }
 }

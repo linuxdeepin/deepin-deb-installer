@@ -2,15 +2,21 @@
 #define CHOOSEFILEBUTTON_H
 
 #include <DLabel>
-#include <DPushButton>
+#include <DCommandLinkButton>
 
 DWIDGET_USE_NAMESPACE
 
-class ChooseFileButton : public DPushButton
+/**
+ * @brief The ChooseFileButton class
+ * 文件选择对话框中的文件选择按钮
+ * 一开始使用的控件为DPushButton ,后UI与测试提出按钮需要跟随活动色变化。后修改为DCommandLinkButton.
+ */
+class ChooseFileButton : public DCommandLinkButton
 {
     Q_OBJECT
 public:
-    explicit ChooseFileButton(QWidget *parent = nullptr);
+    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    explicit ChooseFileButton(QString text, QWidget *parent = nullptr);
 };
 
 #endif // CHOOSEFILEBUTTON_H

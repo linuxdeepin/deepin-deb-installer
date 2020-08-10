@@ -37,17 +37,18 @@ const QString uninstallTextInRect(const QFont &font, QString srcText, const QSiz
 
 UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     : QWidget(parent)
-    , m_icon(new DLabel)
-    , m_tips(new DLabel)
-    , m_infoWrapperWidget(new QWidget)
-    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse")))
+    , m_icon(new DLabel(this))
+    , m_tips(new DLabel(this))
+    , m_infoWrapperWidget(new QWidget(this))
+    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse"), this))
     , m_dependsInfomation(new InstallProcessInfoView(this))
-    , m_cancelBtn(new DPushButton)
-    , m_confirmBtn(new DPushButton)
+    , m_cancelBtn(new DPushButton(this))
+    , m_confirmBtn(new DPushButton(this))
 {
     this->setAcceptDrops(false);
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
+    //set Icon size and location
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
@@ -55,6 +56,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_tips->setFixedWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);
 
+    // cancel button settings
     m_cancelBtn->setText(tr("Cancel"));
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
@@ -62,11 +64,13 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_confirmBtn->setFocusPolicy(Qt::NoFocus);
     m_cancelBtn->setFocusPolicy(Qt::NoFocus);
 
+    // When uninstalling dependent packages, if there are prompts for dependent packages.
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QHBoxLayout *btnsLayout = new QHBoxLayout;
+    //layout of buttons
+    QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->setSpacing(0);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
     btnsLayout->addStretch();
@@ -75,7 +79,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
 
-    QVBoxLayout *contentLayout = new QVBoxLayout;
+    //Layout of icons and tips
+    QVBoxLayout *contentLayout = new QVBoxLayout(this);
     contentLayout->setSpacing(0);
     contentLayout->setContentsMargins(0, 0, 0, 0);
     contentLayout->addStretch();
@@ -87,7 +92,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     m_infoWrapperWidget->setLayout(contentLayout);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    //The details of the uninstall process and the layout of the dependent information.
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->addWidget(m_infoWrapperWidget);
     centralLayout->addWidget(m_infoControl);
     centralLayout->setAlignment(m_infoControl, Qt::AlignHCenter);
@@ -98,6 +104,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->setContentsMargins(20, 0, 20, 30);
 
 
+    //Set font and size
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
@@ -118,6 +125,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
+    //add tips
+    qDebug() << "name" << name;
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
@@ -129,6 +138,7 @@ void UninstallConfirmPage::setPackage(const QString &name)
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
+    //According to the dependency status, it is determined whether there is a package that depends on the current package, and if so, it is prompted.
     m_requiredList = requiredList;
     if (!requiredList.isEmpty()) {
         m_infoControl->setVisible(true);
@@ -142,12 +152,14 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 
 void UninstallConfirmPage::showDetail()
 {
+    // Show dependency information
     m_infoWrapperWidget->setVisible(false);
     m_dependsInfomation->setVisible(true);
 }
 
 void UninstallConfirmPage::hideDetail()
 {
+    //Hide dependency information
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
 }

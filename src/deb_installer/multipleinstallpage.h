@@ -32,7 +32,7 @@
 #include <DPushButton>
 #include <DProgressBar>
 #include <DSpinner>
-#include "debinfolabel.h"
+#include <DCommandLinkButton>
 
 class PackagesListView;
 class DebListModel;
@@ -46,7 +46,7 @@ public:
     void setEnableButton(bool bEnable);
     void afterGetAutherFalse();
     void setScrollBottom(int index);
-    void DealDependResult(int iAuthRes);
+    void DealDependResult(int iAuthRes, QString dependName);
 signals:
     void back() const;
     void requestRemovePackage(const int index) const;
@@ -86,7 +86,9 @@ private:
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
     int m_index = -1;
-    DebInfoLabel *m_tipsLabel;
+
+    // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
+    DCommandLinkButton *m_tipsLabel;
     DSpinner *m_dSpinner;
 };
 
