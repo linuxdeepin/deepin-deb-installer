@@ -44,6 +44,10 @@ void AptConfigMessage::initControl()
     m_inputEdit = new QLineEdit();
     m_inputEdit->setFixedSize(360, 36);
 
+    //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
+    QRegExp regExp("[0-9]{1,2}");
+    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
+
     m_pQuestionLabel = new DLabel();
     m_pQuestionLabel->setMaximumWidth(360);
 
