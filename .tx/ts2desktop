@@ -1,4 +1,5 @@
-DESKTOP_TEMP_FILE=deb_installer/deepin-deb-installer.desktop.tmp
-DESKTOP_SOURCE_FILE=deb_installer/deepin-deb-installer.desktop
-DESKTOP_DEST_FILE=deb_installer/deepin-deb-installer.desktop
-DESKTOP_TS_DIR=deb_installer/translations/desktop
+DESKTOP_TEMP_FILE=src/deb_installer/deepin-deb-installer.desktop.tmp
+DESKTOP_SOURCE_FILE=src/deb_installer/deepin-deb-installer.desktop
+DESKTOP_DEST_FILE=src/deb_installer/deepin-deb-installer.desktop
+DESKTOP_TS_DIR=translations/desktop
+
