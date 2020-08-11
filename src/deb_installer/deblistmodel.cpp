@@ -1042,10 +1042,20 @@ void DebListModel::ConfigReadOutput()
         emit onStartInstall();
         refreshOperatingPackageStatus(Operating);
         AptConfigMessage::getInstance()->show();
+        QString startFlagStr = "StartInstallAptConfig";
+        int num = tmp.indexOf(startFlagStr) + startFlagStr.size();
+        int iCutoutNum = tmp.size() - num;
+        if (iCutoutNum > 0)
+            AptConfigMessage::getInstance()->appendTextEdit(tmp.mid(num, iCutoutNum));
         return;
     }
 
-    emit appendOutputInfo(tmp);
+    QString appendInfoStr = tmp;
+    appendInfoStr.remove(QChar('\"'), Qt::CaseInsensitive);
+    appendInfoStr.remove(QChar('"'), Qt::CaseInsensitive);
+    appendInfoStr.replace("\\n", "\n");
+    appendInfoStr.replace("\n\n", "\n");
+    emit appendOutputInfo(appendInfoStr);
     if (tmp.contains("Not authorized")) {
         AptConfigMessage::getInstance()->close();
     } else {
