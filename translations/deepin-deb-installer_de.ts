@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -46,8 +44,8 @@
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
-        <source>%1 Installation Failed</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to install %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
@@ -57,7 +55,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
@@ -119,7 +117,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="341"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -152,7 +150,7 @@
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="243"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="246"/>
@@ -216,7 +214,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="671"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="675"/>
@@ -226,12 +224,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="753"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
-        <source>%1 Installation Failed</source>
-        <translation type="unfinished"></translation>
+        <source>Failed to install %1</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>
