@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sq">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -45,7 +47,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
         <source>%1 Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
@@ -229,7 +231,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
         <source>%1 Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>
