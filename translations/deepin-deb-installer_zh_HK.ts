@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="he">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">מנהל החבילות של Deepin</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="105"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>軟件包安裝器</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="348"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>已添加</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
         <source>Bulk Install</source>
-        <translation>התקנה קבוצתית</translation>
+        <translation>批量安裝</translation>
     </message>
 </context>
 <context>
@@ -29,80 +23,68 @@
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="89"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>ההתקנה נכשלה, נא לבדוק את החיבור שלך לרשת</translation>
-    </message>
-    <message>
-        <source>Installation failed, please check updates in Control Center</source>
-        <translation type="vanished">ההתקנה נכשלה, נא לבדוק אם יש עדכונים במרכז הבקרה</translation>
+        <translation>安裝失敗，請檢查您的網絡連接</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="76"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>安裝失敗，請在控制中心檢查更新</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="79"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="92"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>ההתקנה נכשלה, אין מספיק מקום בכונן</translation>
+        <translation>安裝失敗，磁盤空間不足</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation Failed</source>
-        <translation>ההתקנה נכשלה</translation>
+        <translation>安裝失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
         <source>%1 Installation Failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
+        <source>Unable to install</source>
+        <translation>無法安裝</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
+        <source>This package does not have a valid digital signature</source>
+        <translation>此安裝包沒有有效的數字簽名</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
+        <source>OK</source>
+        <translation>確定</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="472"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="476"/>
         <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
-        <source>Unable to install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
-        <source>OK</source>
-        <translation type="unfinished">אישור</translation>
-    </message>
-    <message>
-        <source>Broken Dependencies: %1</source>
-        <translation type="vanished">תלויות פגומות: %1</translation>
+        <translation>依賴關係不滿足：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="467"/>
         <source>Unmatched package architecture</source>
-        <translation>ארכיטקטורת החבילה אינה תואמת</translation>
+        <translation>軟件包架構不匹配</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <source>Drag and drop file here</source>
-        <translation type="vanished">ניתן לגרור לכאן קבצים</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="56"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>拖拽軟件包到此</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="89"/>
         <source>Select File</source>
-        <translation>בחירת קובץ</translation>
+        <translation>選擇文件</translation>
     </message>
 </context>
 <context>
@@ -110,36 +92,32 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>צמצום</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">הצגת פרטים</translation>
+        <translation>收起</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="43"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示卸載進程</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="100"/>
         <source>Install</source>
-        <translation>התקנה</translation>
+        <translation>安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="101"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="103"/>
         <source>Back</source>
-        <translation>חזרה</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="341"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在安裝依賴：%1</translation>
     </message>
 </context>
 <context>
@@ -147,41 +125,37 @@
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="76"/>
         <source>Installing</source>
-        <translation>בהתקנה</translation>
+        <translation>正在安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="80"/>
         <source>Installed</source>
-        <translation>מותקן</translation>
+        <translation>已安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="88"/>
         <source>Failed</source>
-        <translation>נכשל</translation>
+        <translation>安裝失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="84"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>等待安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="240"/>
         <source>Same version installed</source>
-        <translation>אותה הגרסה מותקנת</translation>
+        <translation>已安裝相同版本</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="243"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已安裝較新的版本：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="246"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">גרסה אחרת מותקנת: %1</translation>
+        <translation>已安裝較早的版本：%1</translation>
     </message>
 </context>
 <context>
@@ -189,7 +163,7 @@
     <message>
         <location filename="../src/deb_installer/packagelistview.cpp" line="139"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>刪除</translation>
     </message>
 </context>
 <context>
@@ -197,7 +171,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
         <source>Collapse</source>
-        <translation type="unfinished">צמצום</translation>
+        <translation>收起</translation>
     </message>
 </context>
 <context>
@@ -205,96 +179,88 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="595"/>
         <source>Collapse</source>
-        <translation>צמצום</translation>
-    </message>
-    <message>
-        <source>Display details</source>
-        <translation type="vanished">הצגת פרטים</translation>
+        <translation>收起</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="291"/>
         <source>Install</source>
-        <translation>התקנה</translation>
+        <translation>安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="293"/>
         <source>Remove</source>
-        <translation>הסרה</translation>
+        <translation>卸載</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="295"/>
         <source>Reinstall</source>
-        <translation>התקנה מחדש</translation>
+        <translation>重新安裝</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="297"/>
         <source>OK</source>
-        <translation>אישור</translation>
+        <translation>確定</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="299"/>
         <source>Back</source>
-        <translation>חזרה</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="301"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="671"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已安裝較新的版本：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="675"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已安裝較早的版本：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="753"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在安裝依賴：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
         <source>%1 Installation Failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>
         <source>Version: </source>
-        <translation>גרסה:</translation>
+        <translation>版本：</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="568"/>
         <source>Installed successfully</source>
-        <translation>הותקן בהצלחה</translation>
+        <translation>安裝成功</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="574"/>
         <source>Uninstalled successfully</source>
-        <translation>הוסר בהצלחה</translation>
-    </message>
-    <message>
-        <source>Other version installed: %1</source>
-        <translation type="vanished">גרסה אחר מותקנת: %1</translation>
+        <translation>卸載成功</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="548"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="585"/>
         <source>Uninstall Failed</source>
-        <translation>ההסרה נכשלה</translation>
+        <translation>卸載失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="165"/>
         <source>Name: </source>
-        <translation>שם:</translation>
+        <translation>名稱：</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="668"/>
         <source>Same version installed</source>
-        <translation>הותקנה אותה הגרסה</translation>
+        <translation>已安裝相同版本</translation>
     </message>
 </context>
 <context>
@@ -304,7 +270,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="466"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="567"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示卸載進程</translation>
     </message>
 </context>
 <context>
@@ -313,64 +279,58 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="480"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="573"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示卸載進程</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <source>Display related packages</source>
-        <translation type="vanished">הצגת חבילות קשורות</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>צמצום</translation>
+        <translation>收起</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示相關軟件包</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="60"/>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="62"/>
         <source>Confirm</source>
-        <translation>אישור</translation>
+        <translation>確定卸載</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="130"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>您確定要卸載%1 嗎？
+所有依賴也會被一起移除</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>您確定要卸載%1嗎？
+卸載此軟件可能會導致系統或其他軟件無法正常使用</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">מנהל החבילות של Deepin</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/main.cpp" line="63"/>
         <location filename="../src/deb_installer/main.cpp" line="64"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>軟件包安裝器</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>軟件包安裝器用於幫助用戶安裝和卸載本地軟件，支持批量安裝。</translation>
     </message>
 </context>
 </TS>
