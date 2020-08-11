@@ -47,7 +47,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
         <source>Failed to install %1</source>
-        <translation>%1 下载失败</translation>
+        <translation>%1 安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
@@ -231,7 +231,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
         <source>Failed to install %1</source>
-        <translation>%1 下载失败</translation>
+        <translation>%1 安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>
