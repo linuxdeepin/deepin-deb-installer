@@ -9,12 +9,12 @@
         <translation>Инсталатер Пакета</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="337"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="348"/>
         <source>Already Added</source>
         <translation>Већ додато</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="472"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
         <source>Bulk Install</source>
         <translation>Групно инсталирање</translation>
     </message>
@@ -23,7 +23,7 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="87"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="89"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Инсталација неуспешна, молимо проверите везу са мрежом</translation>
     </message>
@@ -34,43 +34,44 @@
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="79"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="81"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="92"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Инсталација неуспешна, недовољно простора на диску</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="90"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation Failed</source>
         <translation>Инсталација неуспешна</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="460"/>
-        <source>%1 Installation Failed</source>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
+        <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="642"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
         <source>Unable to install</source>
         <translation>Не могу да инсталирам</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="643"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Пакет нема важећи дигитални потпис</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="645"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
         <source>OK</source>
         <translation>У реду</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="461"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="465"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="472"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="476"/>
         <source>Broken dependencies: %1</source>
         <translation>Незадовољене зависности: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="456"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="467"/>
         <source>Unmatched package architecture</source>
         <translation>Неподударна архитектура пакета</translation>
     </message>
@@ -116,7 +117,7 @@
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="340"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="341"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,7 +179,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="593"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="595"/>
         <source>Collapse</source>
         <translation>Скупи</translation>
     </message>
@@ -213,23 +214,23 @@
         <translation>Готово</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="669"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="671"/>
         <source>Later version installed: %1</source>
         <translation>Новија верзија је инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="673"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="675"/>
         <source>Earlier version installed: %1</source>
         <translation>Старија верзија је инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="749"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="753"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="844"/>
-        <source>%1 Installation Failed</source>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
+        <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -238,18 +239,18 @@
         <translation>Верзија:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="566"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="568"/>
         <source>Installed successfully</source>
         <translation>Успешно инсталирано</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="574"/>
         <source>Uninstalled successfully</source>
         <translation>Успешно уклоњено</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="546"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="583"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="548"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="585"/>
         <source>Uninstall Failed</source>
         <translation>Уклањање неуспешно</translation>
     </message>
@@ -259,7 +260,7 @@
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="666"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="668"/>
         <source>Same version installed</source>
         <translation>Иста верзија је инсталирана</translation>
     </message>
@@ -269,7 +270,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="466"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="565"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="567"/>
         <source>Show details</source>
         <translation>Детаљније</translation>
     </message>
@@ -278,7 +279,7 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="480"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="571"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="573"/>
         <source>Show details</source>
         <translation>Детаљније</translation>
     </message>

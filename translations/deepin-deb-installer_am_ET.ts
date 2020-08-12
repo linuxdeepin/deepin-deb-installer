@@ -13,12 +13,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="337"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="348"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="472"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
         <source>Bulk Install</source>
         <translation>መግጠሚያ</translation>
     </message>
@@ -27,7 +27,7 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="87"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="89"/>
         <source>Installation failed, please check your network connection</source>
         <translation>መግጠም አልተቻለም: እባክዎን የ ኔትዎርክ ግንኙነት ይመርምሩ</translation>
     </message>
@@ -42,38 +42,39 @@
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="79"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="81"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="92"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>መግጠም አልተቻለም: በቂ ነፃ የ ዲስክ ቦታ የለም</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="90"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation Failed</source>
         <translation>መግጠሙ አልተሳካም</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="460"/>
-        <source>%1 Installation Failed</source>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
+        <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="461"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="465"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="472"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="476"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="642"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="643"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
         <source>This package does not have a valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="645"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
         <source>OK</source>
         <translation type="unfinished">እሺ</translation>
     </message>
@@ -82,7 +83,7 @@
         <translation type="vanished">የ ተሰበሩ ጥገኞች: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="456"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="467"/>
         <source>Unmatched package architecture</source>
         <translation>የ ማይመሳሰል ጥቅል ግንባታ</translation>
     </message>
@@ -136,7 +137,7 @@
         <translation>ወደ ኋላ</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="340"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="341"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,7 +203,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="593"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="595"/>
         <source>Collapse</source>
         <translation>ማሳነሻ</translation>
     </message>
@@ -241,23 +242,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="669"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="671"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="673"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="675"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="749"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="753"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="844"/>
-        <source>%1 Installation Failed</source>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
+        <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -266,12 +267,12 @@
         <translation>እትም: </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="566"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="568"/>
         <source>Installed successfully</source>
         <translation>ተሳክቶ ተገጥሟል</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="574"/>
         <source>Uninstalled successfully</source>
         <translation>ተሳክቶ ጠፍቷል</translation>
     </message>
@@ -280,8 +281,8 @@
         <translation type="vanished">ሌላ እትም ተገጥሟል: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="546"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="583"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="548"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="585"/>
         <source>Uninstall Failed</source>
         <translation>ማጥፋት አልተቻለም</translation>
     </message>
@@ -291,7 +292,7 @@
         <translation>ስም: </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="666"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="668"/>
         <source>Same version installed</source>
         <translation>ተመሳሳይ እትም ተገጥሟል</translation>
     </message>
@@ -301,7 +302,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="466"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="565"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="567"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,7 +311,7 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="480"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="571"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="573"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
