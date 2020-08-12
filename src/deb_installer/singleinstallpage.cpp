@@ -845,7 +845,7 @@ void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         break;
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
-        m_tipsLabel->setText(tr("%1 Installation Failed").arg(dependName));
+        m_tipsLabel->setText(tr("Failed to install %1").arg(dependName));
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
     default:
