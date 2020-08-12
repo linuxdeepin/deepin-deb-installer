@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -14,7 +12,7 @@
         <translation>已添加</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>批量安装</translation>
     </message>
@@ -47,7 +45,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
@@ -63,10 +61,6 @@
         <location filename="../src/deb_installer/deblistmodel.cpp" line="656"/>
         <source>OK</source>
         <translation>确定</translation>
-    </message>
-    <message>
-        <source>%1 Installation Failed</source>
-        <translation type="vanished">%1 安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="472"/>
@@ -235,11 +229,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 Installation Failed</source>
-        <translation type="vanished">%1 安装失败</translation>
+        <translation>%1安装失败</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>

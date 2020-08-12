@@ -14,7 +14,7 @@
         <translation>Già aggiunto</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>Installazione di massa</translation>
     </message>

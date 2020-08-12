@@ -14,7 +14,7 @@
         <translation>이미 추가됨</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>일괄 설치</translation>
     </message>

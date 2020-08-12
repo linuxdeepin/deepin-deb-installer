@@ -14,7 +14,7 @@
         <translation>पहिले नै थपिएको</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>बल्क स्थापना</translation>
     </message>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="br" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="br">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -12,7 +14,7 @@
         <translation>Ouzhpennet endeo</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>Lies-staliañ</translation>
     </message>
@@ -45,7 +47,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="653"/>
@@ -229,7 +231,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="848"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>

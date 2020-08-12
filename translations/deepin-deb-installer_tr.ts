@@ -14,7 +14,7 @@
         <translation>Zaten Eklenmiş</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="483"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="484"/>
         <source>Bulk Install</source>
         <translation>Toplu Kurulum</translation>
     </message>
