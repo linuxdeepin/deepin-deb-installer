@@ -172,11 +172,14 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 
 void PackagesListView::onShortcutDeleteAction()
 {
-    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible()) {
+    //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
+    if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible() || this->count() == 1) {
         return;
     }
 
-    emit onRemoveItemClicked(m_currModelIndex);
+    //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
+    if (m_currModelIndex.row() < this->count())
+        emit onRemoveItemClicked(m_currModelIndex);
 }
 
 void PackagesListView::onRightMenuDeleteAction()
