@@ -351,25 +351,25 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     return;
                 }
             }
-            //fix bug29948 服务器版
-            const int packageCount = m_fileListModel->preparedPackages().size();
-            // There is already one package and there will be multiple packages to be added
-            if (packageCount == packageCountInit) {
-                return;
-            }
-            if (packageCount == 1 || packages.size() > 1) {
-                refreshInstallPage(packageCount);
-                return;
-            }
-            // There was a package from the beginning and it was added
-            if (packageCountInit == 1 && packageCount > 1) {
-                refreshInstallPage(packageCount);
-            } else {
-                m_dragflag = 1;
-                MulRefreshPage(packageCount);
-                m_fileListModel->initDependsStatus(packageCountInit);
-                MulRefreshPage(packageCount);
-            }
+        }
+        //fix bug29948 服务器版
+        const int packageCount = m_fileListModel->preparedPackages().size();
+        // There is already one package and there will be multiple packages to be added
+        if (packageCount == packageCountInit) {
+            return;
+        }
+        if (packageCount == 1 || packages.size() > 1) {
+            refreshInstallPage(packageCount);
+            return;
+        }
+        // There was a package from the beginning and it was added
+        if (packageCountInit == 1 && packageCount > 1) {
+            refreshInstallPage(packageCount);
+        } else {
+            m_dragflag = 1;
+            MulRefreshPage(packageCount);
+            m_fileListModel->initDependsStatus(packageCountInit);
+            MulRefreshPage(packageCount);
         }
     }
 }
