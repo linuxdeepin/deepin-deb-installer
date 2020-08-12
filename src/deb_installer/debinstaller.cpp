@@ -330,16 +330,15 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             if (!isValid) {
                 qWarning() << "package invalid: " << package;
                 // this is a suggestion, add Floating Message while package invalid
-//                DFloatingMessage *msg = new DFloatingMessage;
-//                msg->setMessage(tr("Package Invalid"));
-//                DMessageManager::instance()->sendMessage(this, msg);
+                DFloatingMessage *msg = new DFloatingMessage;
+                msg->setMessage(tr("Package Invalid"));
+                DMessageManager::instance()->sendMessage(this, msg);
                 continue;
             }
             DRecentData data;
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
             DRecentManager::addItem(package, data);
-
             // Decide how to add according to the number of packages in the application
             if (!m_fileListModel->appendPackage(package)) {
                 qWarning() << "package is Exist! ";
@@ -351,25 +350,25 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                     return;
                 }
             }
-            //fix bug29948 服务器版
-            const int packageCount = m_fileListModel->preparedPackages().size();
-            // There is already one package and there will be multiple packages to be added
-            if (packageCount == packageCountInit) {
-                return;
-            }
-            if (packageCount == 1 || packages.size() > 1) {
-                refreshInstallPage(packageCount);
-                return;
-            }
-            // There was a package from the beginning and it was added
-            if (packageCountInit == 1 && packageCount > 1) {
-                refreshInstallPage(packageCount);
-            } else {
-                m_dragflag = 1;
-                MulRefreshPage(packageCount);
-                m_fileListModel->initDependsStatus(packageCountInit);
-                MulRefreshPage(packageCount);
-            }
+        }
+        //fix bug29948 服务器版
+        const int packageCount = m_fileListModel->preparedPackages().size();
+        // There is already one package and there will be multiple packages to be added
+        if (packageCount == packageCountInit) {
+            return;
+        }
+        if (packageCount == 1 || packages.size() > 1) {
+            refreshInstallPage(packageCount);
+            return;
+        }
+        // There was a package from the beginning and it was added
+        if (packageCountInit == 1 && packageCount > 1) {
+            refreshInstallPage(packageCount);
+        } else {
+            m_dragflag = 1;
+            MulRefreshPage(packageCount);
+            m_fileListModel->initDependsStatus(packageCountInit);
+            MulRefreshPage(packageCount);
         }
     }
 }
