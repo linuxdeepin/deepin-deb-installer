@@ -22,16 +22,15 @@
 #include "deblistmodel.h"
 #include "packagesmanager.h"
 #include "utils.h"
-#include <QApplication>
-#include <QDebug>
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QSize>
-#include <QtConcurrent>
+
 #include <DDialog>
-#include <QApt/Backend>
-#include <QApt/Package>
+#include <DPushButton>
 #include <DSysInfo>
+
+#include <QDebug>
+#include <QApplication>
+#include <QtConcurrent>
+
 using namespace QApt;
 
 bool isDpkgRunning()

@@ -26,14 +26,13 @@
 #include <QFuture>
 #include <QPointer>
 
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
+
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusReply>
-#include <DPushButton>
-#include <DSysInfo>
 class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
