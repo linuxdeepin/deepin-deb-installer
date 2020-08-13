@@ -27,6 +27,12 @@
 #include "uninstallconfirmpage.h"
 #include "utils.h"
 
+#include <DInputDialog>
+#include <DRecentManager>
+#include <DMessageManager>
+#include <DTitlebar>
+#include <DGuiApplicationHelper>
+
 #include <QAction>
 #include <QDebug>
 #include <QDir>
@@ -40,16 +46,8 @@
 #include <QProcess>
 #include <QScreen>
 #include <QStyleFactory>
-#include <QApt/DebFile>
-
 #include <QApplication>
 #include <QDesktopWidget>
-
-#include <DInputDialog>
-#include <DRecentManager>
-#include <DMessageManager>
-#include <DTitlebar>
-#include <DGuiApplicationHelper>
 
 using QApt::DebFile;
 

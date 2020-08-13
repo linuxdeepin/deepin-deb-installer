@@ -29,6 +29,7 @@
 
 #include <DMainWindow>
 #include <QWidget>
+
 DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
