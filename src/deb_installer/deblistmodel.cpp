@@ -214,6 +214,7 @@ void DebListModel::installPackages()
     m_InitRowStatus = false;
     //    emit workerStarted();
     // start first
+    emit workerProgressChanged(0);
 
     qDebug() << "size:" << m_packagesManager->m_preparedPackages.size();
     initRowStatus();
@@ -322,7 +323,10 @@ void DebListModel::onTransactionErrorOccurred()
 
     m_packageFailCode[m_operatingIndex] = trans->error();
     m_packageFailReason[m_operatingIndex] = trans->errorString();
-    emit appendOutputInfo(trans->errorString());
+    //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
+    //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
+    if (!trans->errorString().contains("authorization was not provided"))
+        emit appendOutputInfo(trans->errorString());
 
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
