@@ -941,7 +941,13 @@ void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 
 void SingleInstallPage::setInfoControlButtonFocus()
 {
-    m_infoControlButton->setFocus();
+    // fix bug: 42340 安装过程中，点击tab键循环切换时，有一次切换未focus任何控件
+    //切换时 当正在下载依赖，infoControlButton不可见会造成焦点丢失。
+    if (m_infoControlButton->isVisible()) {
+        m_infoControlButton->setFocus();
+    } else {
+        emit OutOfFocus(true);
+    }
 }
 
 void SingleInstallPage::keyPressEvent(QKeyEvent *event)
