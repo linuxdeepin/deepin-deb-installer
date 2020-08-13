@@ -22,7 +22,6 @@
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
 
-#include <QPen>
 #include <QSettings>
 #include <QVBoxLayout>
 
