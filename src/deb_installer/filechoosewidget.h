@@ -22,10 +22,13 @@
 #ifndef FILECHOOSEWIDGET_H
 #define FILECHOOSEWIDGET_H
 
-#include "choosefilebutton.h"
+#include <DLabel>
+#include <DPushButton>
 
 #include <QSettings>
-#include <DPushButton>
+#include <QWidget>
+
+class ChooseFileButton;
 
 DWIDGET_USE_NAMESPACE
 
