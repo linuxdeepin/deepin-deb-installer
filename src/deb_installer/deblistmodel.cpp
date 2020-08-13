@@ -468,7 +468,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(idx))
-                return tr("%1 Installation Failed").arg(stat.package);
+                return tr("Failed to install %1").arg(stat.package);
 
             return tr("Broken dependencies: %1").arg(stat.package);
         }
