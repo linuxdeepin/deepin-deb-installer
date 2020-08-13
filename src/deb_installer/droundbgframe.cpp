@@ -1,14 +1,14 @@
 #include "droundbgframe.h"
 #include "utils.h"
 
+#include <DStyleHelper>
+#include <DApplicationHelper>
+
 #include <QPainter>
 #include <QModelIndex>
 #include <QDebug>
 
-#include <DStyleHelper>
-#include <DApplicationHelper>
-
-DRoundBgFrame::DRoundBgFrame(QWidget* parent, int bgOffsetTop, int bgOffsetBottom)
+DRoundBgFrame::DRoundBgFrame(QWidget *parent, int bgOffsetTop, int bgOffsetBottom)
     : QWidget(parent)
     , m_bgOffsetTop(bgOffsetTop)
     , m_bgOffsetBottom(bgOffsetBottom)
@@ -28,7 +28,7 @@ void DRoundBgFrame::paintEvent(QPaintEvent *event)
     rect.setX(0);
     rect.setY(m_bgOffsetTop);
     rect.setWidth(rect.width());
-    rect.setHeight(rect.height()-m_bgOffsetBottom);
+    rect.setHeight(rect.height() - m_bgOffsetBottom);
 
     path.addRoundedRect(rect, 8, 8);
     painter.fillPath(path, QBrush(pa.color(DPalette::Base)));
