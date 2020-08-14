@@ -45,15 +45,18 @@ void InstallDebThread::onFinished(int num)
 
 void InstallDebThread::run()
 {
+    system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
     m_proc->start("sudo", QStringList() << "apt-get"
-                                        << "install" << m_dependList << "deepin-wine-helper"
+                                        << "install"
+                                        << m_DependList
+                                        << "deepin-wine-helper"
                                         << "--fix-missing"
                                         << "-y");
     m_proc->waitForFinished(-1);
     m_proc->close();
 }
 
-void InstallDebThread::setDependList(QStringList depends)
+void InstallDebThread::setDependList(QStringList param)
 {
-    m_dependList = depends;
+    m_DependList = param;
 }

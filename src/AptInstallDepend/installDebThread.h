@@ -21,7 +21,7 @@
 #include <QThread>
 #include <QProcess>
 
-class InstallDebThread: public QThread
+class InstallDebThread : public QThread
 {
     Q_OBJECT
 public:
@@ -29,13 +29,13 @@ public:
     virtual ~InstallDebThread();
     void run();
     int m_resultFlag = -1;
-    void setDependList(QStringList depends);
-
+    void setDependList(QStringList param);
 public slots:
     void onFinished(int);
     void on_readoutput();
+
 private:
     QProcess *m_proc;
-    QStringList m_dependList;
+    QStringList m_DependList;
 };
 #endif // INSTALLDEBTHREAD_H

@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     qDebug() << "StartInstallDeepinwine";
+
     QCommandLineParser parser;
     parser.process(app);
     const QStringList tParamList = parser.positionalArguments();
