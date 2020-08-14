@@ -20,6 +20,7 @@
  */
 
 #include "filechoosewidget.h"
+#include "choosefilebutton.h"
 #include "utils.h"
 
 #include <QDebug>
@@ -117,7 +118,10 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
                      this, &FileChooseWidget::themeChanged);
 }
-
+/**
+ * @brief FileChooseWidget::chooseFiles
+ * 选择文件
+ */
 void FileChooseWidget::chooseFiles()
 {
     QString historyDir = m_settings.value("history_dir").toString();
