@@ -36,20 +36,20 @@
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
     , m_debListModel(model)
-    , m_contentFrame(new QWidget(this))
-    , m_appsListView(new PackagesListView(this))
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
-    , m_installProcessInfoView(new InstallProcessInfoView(this))
-    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
+    , m_contentFrame(new QWidget(this))
     , m_processFrame(new QWidget(this))
+    , m_contentLayout(new QVBoxLayout(this))
+    , m_centralLayout(new QVBoxLayout(this))
+    , m_appsListView(new PackagesListView(this))
+    , m_installProcessInfoView(new InstallProcessInfoView(this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
     , m_installButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
-    , m_contentLayout(new QVBoxLayout(this))
-    , m_centralLayout(new QVBoxLayout(this))
-      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
+    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -190,7 +190,6 @@ void MultipleInstallPage::initConnections()
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
-//    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
@@ -215,7 +214,6 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
     // change to install
     if (!m_installButton->isVisible()) {
         //m_installButton->setVisible(false);
-
 //        m_processFrame->setVisible(true);
         m_infoControlButton->setVisible(true);
     }
@@ -285,9 +283,9 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
-    m_infoControlButton->setVisible(false); //取消安装后只显示安装按钮
     m_processFrame->setVisible(false);
-//    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
+    m_infoControlButton->setVisible(false);
+    //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
 }
 
