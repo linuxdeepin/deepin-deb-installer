@@ -325,7 +325,8 @@ void DebListModel::onTransactionErrorOccurred()
 
     m_packageFailCode[m_operatingIndex] = trans->error();
     m_packageFailReason[m_operatingIndex] = trans->errorString();
-    emit appendOutputInfo(trans->errorString());
+    if (!trans->errorString().contains("proper authorization was not provided"))
+        emit appendOutputInfo(trans->errorString());
 
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
