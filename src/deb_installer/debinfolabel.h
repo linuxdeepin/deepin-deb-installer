@@ -1,8 +1,6 @@
 #ifndef DEBINFOLABEL_H
 #define DEBINFOLABEL_H
 
-#include "utils.h"
-
 #include <DLabel>
 
 DWIDGET_USE_NAMESPACE
