@@ -30,7 +30,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-class PackagesListView : public DListView {
+class PackagesListView : public DListView
+{
     Q_OBJECT
 public:
     explicit PackagesListView(QWidget *parent = nullptr);
@@ -57,12 +58,6 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    bool m_bLeftMouse;
-    bool m_bShortcutDelete;
-    QModelIndex m_currModelIndex;
-    DMenu *m_rightMenu {nullptr};
-    QModelIndex m_highlightIndex;
-
     void initUI();
     void initConnections();
     void initRightContextMenu();
@@ -74,6 +69,13 @@ private slots:
     void onListViewShowContextMenu(QModelIndex index);
     void onRightMenuDeleteAction();
     void onShortcutDeleteAction();
+
+private:
+    bool m_bLeftMouse;
+    bool m_bShortcutDelete;
+    QModelIndex m_currModelIndex;
+    DMenu *m_rightMenu {nullptr};
+    QModelIndex m_highlightIndex;
 };
 
 #endif  // PACKAGESLISTVIEW_H
