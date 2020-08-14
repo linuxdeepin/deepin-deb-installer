@@ -22,16 +22,15 @@
 #include "deblistmodel.h"
 #include "packagesmanager.h"
 #include "utils.h"
-#include <QApplication>
-#include <QDebug>
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QSize>
-#include <QtConcurrent>
+
 #include <DDialog>
-#include <QApt/Backend>
-#include <QApt/Package>
+#include <DPushButton>
 #include <DSysInfo>
+
+#include <QDebug>
+#include <QApplication>
+#include <QtConcurrent>
+
 using namespace QApt;
 
 bool isDpkgRunning()
@@ -200,7 +199,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void DebListModel::installAll()
+void DebListModel::installPackages()
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
@@ -301,11 +300,6 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx, listdependInstallMark);
 }
 
-bool DebListModel::getPackageIsNull()
-{
-    return m_packagesManager->getPackageIsNull();
-}
-
 bool DebListModel::appendPackage(QString package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
@@ -325,7 +319,10 @@ void DebListModel::onTransactionErrorOccurred()
 
     m_packageFailCode[m_operatingIndex] = trans->error();
     m_packageFailReason[m_operatingIndex] = trans->errorString();
-    emit appendOutputInfo(trans->errorString());
+    //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
+    //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
+    if (!trans->errorString().contains("proper authorization was not provided"))
+        emit appendOutputInfo(trans->errorString());
 
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
@@ -396,7 +393,6 @@ void DebListModel::reset()
     m_operatingStatusIndex = 0;
 
     m_packageOperateStatus.clear();
-
     m_packageFailCode.clear();
     m_packageFailReason.clear();
     m_packagesManager->reset();
@@ -405,8 +401,8 @@ void DebListModel::reset()
 void DebListModel::reset_filestatus()
 {
     m_packageOperateStatus.clear();
-    m_packageFailCode.clear();
     m_packageFailReason.clear();
+    m_packageFailCode.clear();
 }
 
 void DebListModel::bumpInstallIndex()
@@ -681,7 +677,7 @@ void DebListModel::showNoDigitalErrWindow()
     });
 }
 
-void DebListModel::installNextDeb()
+bool DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 个人版专业版 非开模式需要验证签名， 服务器版 没有开发者模式，默认不验证签名， 社区版默认开发者模式，不验证签名。
@@ -702,19 +698,36 @@ void DebListModel::installNextDeb()
     }
     qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
     qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
+    return isVerifyDigital;
+}
 
-    if (isVerifyDigital) {// 当前系统是个人版或者专业版，非开模式下需要验证签名。
-        QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-        bool deviceMode = Installer.property("DeviceUnlocked").toBool();// 判断当前是否处于开发者模式
-        qDebug() << "QDBusResult" << deviceMode;
-        bool digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
-        if (!deviceMode && !digitalSigntual) { //非开发者模式且数字签名验证失败
-            showNoDigitalErrWindow();
-        } else {// 是开发者模式或者有数字签名。
-            installDebs();
-        }
-    } else // 当前系统是服务器版或者社区版， 不需要验证数字签名。
+bool DebListModel::checkDigitalSignature()
+{
+    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+    bool deviceMode = Installer.property("DeviceUnlocked").toBool(); // 判断当前是否处于开发者模式
+    qDebug() << "QDBusResult" << deviceMode;
+    if (deviceMode)
+        return true;
+    int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
+    switch (digitalSigntual) {
+    case Utils::VerifySuccess:
+        return true;
+    case Utils::DebfileInexistence:
+    case Utils::ExtractDebFail:
+    case Utils::DebVerifyFail:
+    case Utils::OtherError:
+        return false;
+    default:
+        return false;
+    }
+}
+void DebListModel::installNextDeb()
+{
+    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
+        showNoDigitalErrWindow();
+    } else {
         installDebs();
+    }
 }
 
 void DebListModel::onTransactionOutput()

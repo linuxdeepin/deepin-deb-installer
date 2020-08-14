@@ -455,8 +455,7 @@ void SingleInstallPage::reinstall()
     m_tipsLabel->setVisible(false);
 
     m_operate = Reinstall;
-    m_packagesModel->installAll();
-
+    m_packagesModel->installPackages();
 }
 void SingleInstallPage::install()
 {
@@ -467,7 +466,7 @@ void SingleInstallPage::install()
     m_infoControlButton->setVisible(true);
 
     m_operate = Install;
-    m_packagesModel->installAll();
+    m_packagesModel->installPackages();
 }
 
 void SingleInstallPage::uninstallCurrentPackage()

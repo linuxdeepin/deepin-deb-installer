@@ -184,7 +184,7 @@ void MultipleInstallPage::initConnections()
 {
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::hideInfo);
-    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::installAll);
+    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::installPackages);
     connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::hiddenCancelButton);
     connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
