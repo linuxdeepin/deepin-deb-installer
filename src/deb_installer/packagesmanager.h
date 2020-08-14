@@ -42,8 +42,8 @@ class dealDependThread : public QThread
 public:
     dealDependThread(QObject *parent = nullptr);
     virtual ~dealDependThread();
-    void setDependList(QStringList depends, int index);
-    void setDependName(QString dependName);
+    void setDependsList(QStringList dependList, int index);
+    void setBrokenDepend(QString dependName);
     void run();
 signals:
     void DependResult(int, int, QString);
@@ -55,9 +55,9 @@ public slots:
 private:
     QProcess *proc;
     int m_index = -1;
-    QStringList m_dependList;
-    QString m_brokenDepend;
+    QStringList m_dependsList;
     bool bDependsStatusErr = false;
+    QString m_brokenDepend;
 };
 
 class PackageDependsStatus
@@ -99,36 +99,40 @@ public:
     explicit PackagesManager(QObject *parent = nullptr);
     ~PackagesManager();
 
+public slots:
+    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
+
+signals:
+    void DependResult(int, int, QString);
+    void enableCloseButton(bool);
+
+public:
     bool isBackendReady();
     bool isArchError(const int idx);
-    const ConflictResult packageConflictStat(const int index);
-    const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
-    const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
-                                             const QString &packageArch);
-    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
+
+public:
     int packageInstallStatus(const int index);
-    PackageDependsStatus packageDependsStatus(const int index);
+
     const QString packageInstalledVersion(const int index);
+
+    const ConflictResult packageConflictStat(const int index);
+
     const QStringList packageAvailableDepends(const int index);
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QList<QApt::DependencyItem> &dependsList);
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QApt::DependencyItem &candidateItem);
+    PackageDependsStatus packageDependsStatus(const int index);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
-    void reset();
-    void resetInstallStatus();
-    void resetPackageDependsStatus(const int index);
-    void removePackage(const int index, QList<int> listDependInstallMark);
-    void removeLastPackage();
-    bool getPackageIsNull();
-
-    bool appendPackage(QString debPackage);
-    bool QverifyResult;
     QString package(const int index) const { return m_preparedPackages[index]; }
     QApt::Backend *backend() const { return m_backendFuture.result(); }
 
-    QList<int> m_errorIndex;  //Store the subscript that failed to install Deepin-Wine
+    bool appendPackage(QString debPackage);
+
+    void removePackage(const int index, QList<int> listDependInstallMark);
+
+    void reset();
+    void resetPackageDependsStatus(const int index);
+
+public:
+    QList<int> m_errorIndex;
 
 private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
@@ -137,16 +141,33 @@ private:
                                                          const QApt::DependencyItem &candicate);
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
                                                          const QApt::DependencyInfo &dependencyInfo);
+
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
+    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
+                                const QList<QApt::DependencyItem> &dependsList);
+    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
+                                const QApt::DependencyItem &candidateItem);
+
+    const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
+                                             const QString &packageArch);
+    const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
+    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
+
+    void removeLastPackage();
+    void resetInstallStatus();
+
 private:
     QFuture<QApt::Backend *> m_backendFuture;
+
     QList<QString> m_preparedPackages;
     QList<QByteArray> m_preparedMd5;
+    QSet<QByteArray> m_appendedPackagesMd5;
+
     QMap<int, int> m_packageInstallStatus;
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
-    QSet<QByteArray> m_appendedPackagesMd5;
+
     int m_DealDependIndex = -1;
     dealDependThread *dthread = nullptr;
     QList<int> m_dependInstallMark;
@@ -156,12 +177,6 @@ private:
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
     QMap<QString, QString> specialPackage();
-
-public slots:
-    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
-signals:
-    void DependResult(int, int, QString);
-    void enableCloseButton(bool);
 };
 
 #endif  // PACKAGESMANAGER_H
