@@ -101,7 +101,6 @@ DebListModel::DebListModel(QObject *parent)
 {
 
     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
-    //    connect(m_packagesManager, SIGNAL(DependResult(int, int)), this, SLOT(DealDependResult(int, int)));
     connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
     connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 }
@@ -213,7 +212,6 @@ void DebListModel::installPackages()
     m_InitRowStatus = false;
     //    emit workerStarted();
     // start first
-    emit workerProgressChanged(0);
 
     qDebug() << "size:" << m_packagesManager->m_preparedPackages.size();
     initRowStatus();
@@ -235,7 +233,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (auto r : rdepends) {
+    for (const auto &r : rdepends) {
         if (b->package(r))
             b->markPackageForRemoval(r);
         else
@@ -324,7 +322,7 @@ void DebListModel::onTransactionErrorOccurred()
     m_packageFailReason[m_operatingIndex] = trans->errorString();
     //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
     //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
-    if (!trans->errorString().contains("authorization was not provided"))
+    if (!trans->errorString().contains("proper authorization was not provided"))
         emit appendOutputInfo(trans->errorString());
 
     const QApt::ErrorCode e = trans->error();
@@ -468,7 +466,6 @@ QString DebListModel::packageFailedReason(const int idx) const
         if (!stat.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(idx))
                 return tr("Failed to install %1").arg(stat.package);
-
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -685,7 +682,6 @@ bool DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 个人版专业版 非开模式需要验证签名， 服务器版 没有开发者模式，默认不验证签名， 社区版默认开发者模式，不验证签名。
-
     bool isVerifyDigital = false;
     switch (Dtk::Core::DSysInfo::deepinType()) {
     case Dtk::Core::DSysInfo::DeepinDesktop:
@@ -701,7 +697,6 @@ bool DebListModel::checkSystemVersion()
     default:
         isVerifyDigital = true;
     }
-
     qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
     qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
     return isVerifyDigital;
@@ -751,8 +746,6 @@ void DebListModel::onTransactionOutput()
 void DebListModel::uninstallFinished()
 {
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
-
-    qDebug() << Q_FUNC_INFO;
 
     //增加卸载失败的情况
     //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
@@ -827,8 +820,8 @@ void DebListModel::upWrongStatusRow()
     if (listWrongIndex.size() == 0)
         return;
 
-    //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<int> t_errorIndex;
+    //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<QString> listTempDebFile;
     QList<QByteArray> listTempPreparedMd5;
     iIndex = 0;
