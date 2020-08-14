@@ -22,21 +22,22 @@
 #include "infocontrolbutton.h"
 #include "utils.h"
 
+#include <DStyleHelper>
+#include <DApplicationHelper>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QIcon>
-
-#include <DStyleHelper>
-#include <DApplicationHelper>
+#include <QPen>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent)
+    , m_tipsText(new DCommandLinkButton("", this))
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
-    , m_tipsText(new DCommandLinkButton("", this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -57,7 +58,6 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 //    palette.setColor(DPalette::WindowText, QColor(00, 130, 252)); //20191225
 //    m_tipsText->setPalette(palette);
 //    m_tipsText->setAlignment(Qt::AlignCenter);
-
 
     m_tipsText->setText(expandTips);
     QFontInfo fontinfo = m_tipsText->fontInfo();
@@ -103,7 +103,10 @@ void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
 
     onMouseRelease();
 }
-
+/**
+ * @brief InfoControlButton::onMouseRelease
+ * 鼠标点击事件
+ */
 void InfoControlButton::onMouseRelease()
 {
     if (m_expand) {
