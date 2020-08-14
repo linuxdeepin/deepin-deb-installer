@@ -79,13 +79,13 @@ private:
     void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
     int initLabelWidth(int fontinfo);
+
     void setPackageInfo();
 
     void setAuthConfirm(QString dependName);
     void setAuthBefore();
     void setCancelAuthOrAuthDependsErr();
     void setAuthDependsSuccess();
-
 
 private slots:
     void install();
@@ -96,6 +96,7 @@ private slots:
 
     void showInfo();
     void onOutputAvailable(const QString &output);
+
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
     void OnCommitErrorFinished();
