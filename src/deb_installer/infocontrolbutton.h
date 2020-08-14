@@ -41,6 +41,11 @@ public:
 
     void setShrinkTips(const QString text);
     void setExpandTips(const QString text);
+
+public:
+    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    DCommandLinkButton *m_tipsText;
+
 signals:
     void expand();
     void shrink();
@@ -59,10 +64,6 @@ private:
 
     DLabel *m_arrowIcon;
     QVBoxLayout *centralLayout;
-
-public:
-    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
-    DCommandLinkButton *m_tipsText;
 };
 
 #endif // INFOCONTROLBUTTON_H

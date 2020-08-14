@@ -33,11 +33,11 @@
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent)
+    , m_tipsText(new DCommandLinkButton("", this))
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
-    , m_tipsText(new DCommandLinkButton("", this))
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
