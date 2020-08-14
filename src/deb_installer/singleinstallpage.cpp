@@ -75,7 +75,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 void SingleInstallPage::initUI()
 {
     QApplication::restoreOverrideCursor();
-    //qApp->installEventFilter(this);
     QFontInfo fontinfo = this->fontInfo();
     int fontsize = fontinfo.pixelSize();
     initContentLayout();
@@ -407,7 +406,6 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
-    //    connect(m_packagesModel, &DebListModel::CommitErrorFinished, this, &SingleInstallPage::OnCommitErrorFinished);
     // 抛弃 CommitErrorFinished 与OnCommitErrorFinished 在listModel中修改为信号workerFinished。
     connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
@@ -516,7 +514,6 @@ void SingleInstallPage::showInfo()
 void SingleInstallPage::onOutputAvailable(const QString &output)
 {
     m_installProcessView->appendText(output.trimmed());
-
     if (!m_infoControlButton->isVisible())
         m_infoControlButton->setVisible(true);
     // pump progress
@@ -533,7 +530,6 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
  * transaction 返回CommitError时的槽函数，目前不再使用
  * 暂时留用，待下个版本测试后，如果正常，删除。
  */
-
 void SingleInstallPage::OnCommitErrorFinished()
 {
     m_tipsLabel->setVisible(true);
@@ -590,6 +586,7 @@ void SingleInstallPage::onWorkerFinished()
             m_tipsLabel->setText(tr("Uninstall Failed"));
         }
     } else {
+        //正常情况不会进入此分支，如果进入此分支表明状态错误。
         m_confirmButton->setVisible(true);
         qDebug() << "Operate Status Error. current"
                  << "index=" << index.row() << "stat=" << stat;
@@ -656,8 +653,6 @@ void SingleInstallPage::setPackageInfo()
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
-    // package depends status
-
     //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
     //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
@@ -710,13 +705,11 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 {
     // fix bug: 36120 After the uninstall authorization is canceled, hide the uninstall details and display the version status
     m_tipsLabel->setVisible(true);
-    //    m_infoControlButton->setVisible(false);
     m_tipsLabel->setVisible(true);
 
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
-
 }
 
 void SingleInstallPage::afterGetAutherFalse()
@@ -897,15 +890,14 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
         if (installStat == DebListModel::NotInstalled) {
             m_installButton->setVisible(true);
+            m_installButton->setEnabled(true);
         } else {
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);
+            m_reinstallButton->setEnabled(true);
+            m_uninstallButton->setEnabled(true);
         }
-        m_installButton->setEnabled(true);
-        m_reinstallButton->setEnabled(true);
-        m_uninstallButton->setEnabled(true);
     }
-
     m_pLoadingLabel->setVisible(false);
     m_pDSpinner->stop();
     m_pDSpinner->setVisible(false);
