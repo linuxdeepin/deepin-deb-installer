@@ -6,12 +6,14 @@ mode = developer
 [deepin-package-manager.deepin-deb-installer]
 file_filter = translations/deepin-deb-installer_<lang>.ts
 source_file = translations/deepin-deb-installer.ts
+preTranlate_file = src/deb_installer/deepin-deb-installer.desktop
 source_lang = en
 type = QT
 
 [deepin-package-manager.deepin-deb-installer_desktop]
 file_filter = translations/desktop/desktop_<lang>.ts
 source_file = translations/desktop/desktop.ts
+preTranlate_file = src/deb_installer/deepin-deb-installer.desktop
 source_lang = en
 type = QT
 
