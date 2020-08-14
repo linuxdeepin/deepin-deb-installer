@@ -193,7 +193,6 @@ void MultipleInstallPage::initConnections()
 
     connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
     connect(m_appsListView, &PackagesListView::OutOfFocus, this, &MultipleInstallPage::ResetFocus);
-    //    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
