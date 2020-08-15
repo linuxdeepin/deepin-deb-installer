@@ -25,7 +25,9 @@
 #include "choosefilebutton.h"
 
 #include <QSettings>
-#include <DPushButton>
+#include <QWidget>
+
+class ChooseFileButton;
 
 DWIDGET_USE_NAMESPACE
 

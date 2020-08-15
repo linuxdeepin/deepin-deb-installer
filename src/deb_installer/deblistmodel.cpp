@@ -250,7 +250,7 @@ void DebListModel::uninstallPackage(const int idx)
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());
     Backend *b = m_packagesManager->m_backendFuture.result();
-    for (auto r : rdepends) {
+    for (const auto &r : rdepends) {
         if (b->package(r))
             b->markPackageForRemoval(r);
         else
@@ -337,7 +337,10 @@ void DebListModel::onTransactionErrorOccurred()
 
     m_packageFailCode[m_operatingIndex] = trans->error();
     m_packageFailReason[m_operatingIndex] = trans->errorString();
-    emit appendOutputInfo(trans->errorString());
+    //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
+    //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
+    if (!trans->errorString().contains("proper authorization was not provided"))
+        emit appendOutputInfo(trans->errorString());
 
     const QApt::ErrorCode e = trans->error();
     Q_ASSERT(e);
@@ -478,8 +481,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(idx))
-                return tr("%1 Installation Failed").arg(stat.package);
-
+                return tr("Failed to install %1").arg(stat.package);
             return tr("Broken dependencies: %1").arg(stat.package);
         }
 
@@ -921,8 +923,8 @@ void DebListModel::upWrongStatusRow()
     if (listWrongIndex.size() == 0)
         return;
 
-    //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<int> t_errorIndex;
+    //change  m_preparedPackages, m_packageOperateStatus sort.
     QList<QString> listTempDebFile;
     QList<QByteArray> listTempPreparedMd5;
     iIndex = 0;

@@ -28,6 +28,12 @@
 #include "AptConfigMessage.h"
 #include "utils.h"
 
+#include <DInputDialog>
+#include <DRecentManager>
+#include <DMessageManager>
+#include <DTitlebar>
+#include <DGuiApplicationHelper>
+
 #include <QAction>
 #include <QDebug>
 #include <QDir>
@@ -186,10 +192,10 @@ void DebInstaller::initConnections()
     //When installing deepin-wine for the first time, set the button display according to the progress of the installation
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
+    connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
+
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
-
-    connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
 }
 
 void DebInstaller::enableCloseButton(bool enable)
@@ -412,7 +418,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         const int packageCount = m_fileListModel->preparedPackages().size();
         // There is already one package and there will be multiple packages to be added
         if (packageCount == packageCountInit) {
-            return ;
+            return;
         }
         if (packageCount == 1 || packages.size() > 1) {
             refreshInstallPage(packageCount);

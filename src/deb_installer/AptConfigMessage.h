@@ -26,10 +26,8 @@ public:
         if (aptConfig == nullptr) {
             aptConfig = new AptConfigMessage;
         }
-
         return aptConfig;
     }
-
 public:
     void appendTextEdit(QString str);
     void clearTexts();
@@ -52,7 +50,6 @@ private:
     static AptConfigMessage *aptConfig;
 
     // QWidget interface
-
 private:
     bool dealWrongAnswer(QString question, QString output);
 

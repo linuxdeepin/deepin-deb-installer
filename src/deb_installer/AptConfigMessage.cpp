@@ -163,6 +163,11 @@ void AptConfigMessage::appendTextEdit(QString str)
  */
 void AptConfigMessage::dealInput()
 {
+    qDebug() << "m_inputEdit" << m_inputEdit->text();
+    if (m_inputEdit->text().isEmpty() || m_inputEdit->text() == "" || m_inputEdit->text() == "00") {
+        m_inputEdit->clear();
+        return;
+    }
     QString str = m_inputEdit->text();
     str.remove(QChar('"'), Qt::CaseInsensitive);
     emit AptConfigInputStr(str);

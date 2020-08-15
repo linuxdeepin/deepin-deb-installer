@@ -193,7 +193,6 @@ void MultipleInstallPage::initConnections()
 
     connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
     connect(m_appsListView, &PackagesListView::OutOfFocus, this, &MultipleInstallPage::ResetFocus);
-    //    connect(m_appsListView, &PackagesListView::entered, m_debListModel, &DebListModel::setCurrentIndex);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
@@ -456,9 +455,14 @@ bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
             }
             if (m_appsListView->hasFocus()) {
                 if (m_currentFlag == 1) {
-                    m_installButton->setFocus();
-                    if (!m_installButton->isVisible()) {
+                    // fix bug: 42340 安装过程中，点击tab键循环切换时，有一次切换未focus任何控件
+                    //切换时 当正在下载依赖，infoControlButton不可见会造成焦点丢失。
+                    if (m_installButton->isVisible()) {
+                        m_installButton->setFocus();
+                    } else if (m_infoControlButton->isVisible()) {
                         m_infoControlButton->setFocus();
+                    } else {
+                        emit OutOfFocus(true);
                     }
                 }
                 if (m_currentFlag == 2) {
