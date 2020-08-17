@@ -717,6 +717,7 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
     if (QEvent::WindowDeactivate == event->type()) {
         m_OptionWindow->clearFocus();
         bActiveWindowFlag = true;
+        this->releaseKeyboard();
         return QObject::eventFilter(watched, event);
     }
     if (QEvent::WindowActivate == event->type()) {

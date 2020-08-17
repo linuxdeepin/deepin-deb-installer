@@ -750,6 +750,7 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
             this->focusWidget()->clearFocus();
         }
         emit OutOfFocus(false);
+        this->releaseKeyboard();
         return QObject::eventFilter(watched, event);
     }
     if (QEvent::WindowActivate == event->type()) {
