@@ -248,12 +248,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             }
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
-            forground.setColor(palette.color(cg, DPalette::ToolTipText));
-
+            //fix bug: 43139
+            forground.setColor(palette.color(cg, DPalette::TextTips));
         }
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 forground.setColor(palette.color(cg, DPalette::HighlightedText));
+            } else {
+                //fix bug: 43139
+                forground.setColor(palette.color(cg, DPalette::TextTips));
             }
         }
         painter->setPen(forground);
