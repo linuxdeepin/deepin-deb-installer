@@ -178,7 +178,7 @@ void PackagesListView::onShortcutDeleteAction()
     }
 
     //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
-    if (m_currModelIndex.row() < this->count())
+    if (m_currModelIndex.row() < this->count() && this->selectionModel()->selectedIndexes().contains(m_currModelIndex))
         emit onRemoveItemClicked(m_currModelIndex);
 }
 
