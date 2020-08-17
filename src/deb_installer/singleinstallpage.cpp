@@ -1008,3 +1008,16 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
         }
     }
 }
+
+void SingleInstallPage::setInitFocus()
+{
+    if (m_installButton->isVisible())
+        m_installButton->setFocus();
+    else if (m_backButton->isVisible()) {
+        m_backButton->setFocus();
+    } else if (m_infoControlButton->isVisible()) {
+        m_infoControlButton->setFocus();
+    } else if (m_uninstallButton->isVisible()) {
+        m_uninstallButton->setFocus();
+    }
+}

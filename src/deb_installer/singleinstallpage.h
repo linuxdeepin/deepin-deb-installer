@@ -54,6 +54,7 @@ public:
     void setEnableButton(bool bEnable);
     void DealDependResult(int iAuthRes, QString dependName);
     void setInfoControlButtonFocus();
+    void setInitFocus();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -120,7 +121,7 @@ private:
     WorkerProgress *m_progress;
     InstallProcessInfoView *m_installProcessView;
 
-public:
+    //public:
     InfoControlButton *m_infoControlButton;
     DPushButton *m_installButton;
     DPushButton *m_uninstallButton;

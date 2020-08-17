@@ -842,12 +842,7 @@ bool DebInstaller::eventFilter(QObject *watched, QEvent *event)
                     SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
                     singlePage->grabKeyboard();
                     qApp->installEventFilter(singlePage);
-                    if (singlePage->m_currentFlag == 1)
-                        singlePage->m_installButton->setFocus();
-                    if (singlePage->m_currentFlag == 2)
-                        singlePage->m_uninstallButton->setFocus();
-                    if (singlePage->m_currentFlag == 3 || singlePage->m_currentFlag == 4)
-                        singlePage->m_infoControlButton->setFocus();
+                    singlePage->setInitFocus();
                     break;
                 }
                 case 3: {
