@@ -246,6 +246,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                 info_str =
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
+            //fix bug: 43139
+            forground.setColor(palette.color(cg, DPalette::TextTips));
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
             //fix bug: 43139
@@ -254,9 +256,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 forground.setColor(palette.color(cg, DPalette::HighlightedText));
-            } else {
-                //fix bug: 43139
-                forground.setColor(palette.color(cg, DPalette::TextTips));
             }
         }
         painter->setPen(forground);
