@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sq">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -7,7 +9,7 @@
         <translation>Instalues Paketash</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
         <translation>Paketa deb mund të jetë e dëmtuar</translation>
     </message>
@@ -17,7 +19,7 @@
         <translation>E shtuar Tashmë</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="598"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="597"/>
         <source>Bulk Install</source>
         <translation>Instalim Në Masë</translation>
     </message>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_HK">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -7,7 +9,7 @@
         <translation>軟件包安裝器</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
         <translation>請檢查deb包是否損壞</translation>
     </message>
@@ -17,7 +19,7 @@
         <translation>已添加</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="598"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="597"/>
         <source>Bulk Install</source>
         <translation>批量安裝</translation>
     </message>
