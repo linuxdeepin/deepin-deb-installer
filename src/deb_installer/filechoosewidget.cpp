@@ -67,19 +67,12 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 #ifdef SHOWBORDER
     dndTips->setStyleSheet("QLabel{border:1px solid black;}");
 #endif
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     split_line = new DLabel(this);
     split_line->setObjectName("SplitLine");
-    if (themeType == DGuiApplicationHelper::LightType) {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
-    } else if (themeType == DGuiApplicationHelper::DarkType) {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_dark.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
-    } else {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
-    }
+    QIcon icon_install = QIcon::fromTheme("di_icon_install");
+    m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));
+    QIcon icon_split_line = QIcon::fromTheme("di_split_line");
+    split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
     split_line->setFixedHeight(3);
 
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
@@ -149,18 +142,10 @@ void FileChooseWidget::chooseFiles()
 
 void FileChooseWidget::themeChanged()
 {
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-
-    if (themeType == DGuiApplicationHelper::LightType) {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
-    } else if (themeType == DGuiApplicationHelper::DarkType) {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_dark.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line_dark.svg", QSize(220, 3)));
-    } else {
-        m_iconImage->setPixmap(Utils::renderSVG(":/images/icon_install_light.svg", QSize(160, 160)));
-        split_line->setPixmap(Utils::renderSVG(":/images/split_line.svg", QSize(220, 3)));
-    }
+    QIcon icon_install = QIcon::fromTheme("di_icon_install");
+    m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));
+    QIcon icon_split_line = QIcon::fromTheme("di_split_line");
+    split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
 }
 
 void FileChooseWidget::setChooseBtnFocus()

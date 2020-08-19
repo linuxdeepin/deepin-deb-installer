@@ -665,7 +665,7 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
     Ddialog->setTitle(tr("Unable to install"));
     Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
-    Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
     Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
