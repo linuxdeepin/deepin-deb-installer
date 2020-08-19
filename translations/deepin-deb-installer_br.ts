@@ -1,93 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en_AU">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="br" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Deepin Package Manager</source>
-        <translation type="vanished">Deepin Package Manager</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="118"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Stalier pakadoù</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="396"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouzhpennet endeo</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="597"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="598"/>
         <source>Bulk Install</source>
-        <translation>Bulk Install</translation>
+        <translation>Lies-staliañ</translation>
     </message>
 </context>
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="80"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Installation failed, please check your network connection</translation>
+        <translation>Staliadur c&apos;hwitet, gwirit ho kevreadenn ouzh ar genrouedad eta</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliadur c&apos;hwitet, sellit hag-eñ n&apos;eus hizivadur ebet er Greizenn Verañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="85"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="88"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="98"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliadur c&apos;hwitet, n&apos;eus ket trawalc&apos;h a blas war an disk</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="101"/>
         <source>Installation Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliadur c&apos;hwitet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
+        <source>Unable to install</source>
+        <translation>N&apos;heller ket distaliañ</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="667"/>
+        <source>This package does not have a valid digital signature</source>
+        <translation>N&apos;eus ket ur sinadur niverel dereat gant ar pakad-mañ</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="669"/>
+        <source>OK</source>
+        <translation>Mat eo</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="485"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="489"/>
         <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dalc&apos;hoù torret: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
-        <source>Unable to install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="667"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="669"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
+        <source>Authentication failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
         <source>Unmatched package architecture</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkitektouriezh ar pakadoù disheñvel</translation>
     </message>
 </context>
 <context>
@@ -95,12 +89,12 @@
     <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="57"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>Rinklit ho pakadoù deb amañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="83"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Diuzañ ur restr</translation>
     </message>
 </context>
 <context>
@@ -108,32 +102,32 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bihanaat</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Diskouez ar munudoù</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="102"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="103"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Echuet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="105"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Kent</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O staliañ an dalc&apos;hioù: %1</translation>
     </message>
 </context>
 <context>
@@ -141,37 +135,37 @@
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="76"/>
         <source>Installing</source>
-        <translation type="unfinished"></translation>
+        <translation>O staliañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="80"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="88"/>
         <source>Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>C&apos;hwitadenn</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="84"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>O c&apos;hortoz</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="241"/>
         <source>Same version installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hevelep stumm staliet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="244"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stumm war-lerc&apos;h staliet: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="247"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stumm kent staliet: %1</translation>
     </message>
 </context>
 <context>
@@ -179,7 +173,7 @@
     <message>
         <location filename="../src/deb_installer/packagelistview.cpp" line="139"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Dilemel</translation>
     </message>
 </context>
 <context>
@@ -187,7 +181,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bihanaat</translation>
     </message>
 </context>
 <context>
@@ -195,88 +189,88 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="596"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bihanaat</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="290"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="292"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Dilemel</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="294"/>
         <source>Reinstall</source>
-        <translation type="unfinished"></translation>
+        <translation>Adstaliañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="296"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Mat eo</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="298"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Kent</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="300"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Echuet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="693"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stumm war-lerc&apos;h staliet: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="697"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stumm kent staliet: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>O staliañ an dalc&apos;hioù: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
         <source>Version: </source>
-        <translation type="unfinished"></translation>
+        <translation>Stumm:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="567"/>
         <source>Installed successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Staliet gant berzh</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="573"/>
         <source>Uninstalled successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Distaliet gant berzh</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="545"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="586"/>
         <source>Uninstall Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Distaliañ c&apos;hwitet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>
         <source>Name: </source>
-        <translation type="unfinished"></translation>
+        <translation>Anv:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="690"/>
         <source>Same version installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hevelep stumm staliet</translation>
     </message>
 </context>
 <context>
@@ -286,7 +280,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="464"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="566"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Diskouez ar munudoù</translation>
     </message>
 </context>
 <context>
@@ -295,7 +289,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="478"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Diskouez ar munudoù</translation>
     </message>
 </context>
 <context>
@@ -303,34 +297,36 @@
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation>Bihanaat</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Diskouez ar pakadoù kevelet</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="60"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullañ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="62"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadarnat</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="130"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha sur oc&apos;h da gaout c&apos;hoant da zilemel %1?
+An holl dalc&apos;hioù a vo dilamet ivez</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha c&apos;hoant ho peus da zilemel %1?
+Ar sistem pe aplikasionoù all a vo diaes dezho mont en-dro mat</translation>
     </message>
 </context>
 <context>
@@ -339,12 +335,12 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb_installer/main.cpp" line="63"/>
         <location filename="../src/deb_installer/main.cpp" line="64"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>Stalier pakadoù</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ar stalier pakadoù a sikour an implijaderien da staliañ ha da zilemel ar pakadoù lec&apos;hel, hag e kemer e kont ar staliadur a-vloc&apos;had.</translation>
     </message>
 </context>
 </TS>
