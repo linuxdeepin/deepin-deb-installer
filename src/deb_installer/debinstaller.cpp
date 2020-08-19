@@ -919,6 +919,8 @@ void DebInstaller::ResetFocus(bool bFlag)
     }
 
     if (bFlag) {
+        // 重置tab标志，解决在安装时切换到infoControlButton后，下一次无法切换到菜单
+        bTabFlag = true;
         m_OptionWindow->setFocus();
     } else {
         bTabFlag = false;

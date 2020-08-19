@@ -5,7 +5,7 @@
 		<name>policy</name>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!message" line="0" />
-			<source>Authentication is required to install deepin-wine</source>
+			<source>Authentication is required to continue the configuration</source>
 			<translation type="unfinished" />
 		</message>
 		<message>
