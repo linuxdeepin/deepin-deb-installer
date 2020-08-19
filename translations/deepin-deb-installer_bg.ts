@@ -187,9 +187,7 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-==== BASE ====
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="597"/>
-==== BASE ====
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="596"/>
         <source>Collapse</source>
         <translation>Сриване</translation>
     </message>
