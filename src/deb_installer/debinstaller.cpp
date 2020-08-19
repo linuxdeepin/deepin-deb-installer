@@ -395,6 +395,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 // this is a suggestion, add Floating Message while package invalid
                 DFloatingMessage *msg = new DFloatingMessage;
                 msg->setMessage(tr("The deb package may be broken"));
+                msg->setIcon(QIcon::fromTheme("di_warning"));
                 DMessageManager::instance()->sendMessage(this, msg);
                 continue;
             }
@@ -408,6 +409,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
                 DFloatingMessage *msg = new DFloatingMessage;
                 msg->setMessage(tr("Already Added"));
+                msg->setIcon(QIcon::fromTheme("di_ok"));
                 DMessageManager::instance()->sendMessage(this, msg);
                 if (packages.size() == 1) {
                     return;
