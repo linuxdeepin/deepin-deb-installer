@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>La instal·lació ha fallat, comproveu si hi ha actualitzacions al Centre de control</translation>
+        <translation>La instal·lació ha fallat, comproveu si hi ha actualitzacions al Centre de control.</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="85"/>
@@ -52,7 +50,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat instal·lar %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -91,7 +89,7 @@
     <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="57"/>
         <source>Drag deb packages here</source>
-        <translation>Arrossegueu paquets deb aquí</translation>
+        <translation>Arrossegueu paquets deb aquí.</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/filechoosewidget.cpp" line="83"/>
@@ -109,7 +107,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
         <source>Show details</source>
-        <translation>Mostra els detalls</translation>
+        <translation>Mostra&apos;n els detalls</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="102"/>
@@ -129,7 +127,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;instal·len dependències: %1</translation>
     </message>
 </context>
 <context>
@@ -152,7 +150,7 @@
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="84"/>
         <source>Waiting</source>
-        <translation>S&apos;està esperant</translation>
+        <translation>S&apos;espera</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="241"/>
@@ -175,7 +173,7 @@
     <message>
         <location filename="../src/deb_installer/packagelistview.cpp" line="139"/>
         <source>Delete</source>
-        <translation>Suprimeix</translation>
+        <translation>Elimina</translation>
     </message>
 </context>
 <context>
@@ -236,12 +234,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;instal·len dependències: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat instal·lar %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -282,7 +280,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="464"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="566"/>
         <source>Show details</source>
-        <translation>Mostra els detalls</translation>
+        <translation>Mostra&apos;n els detalls</translation>
     </message>
 </context>
 <context>
@@ -291,7 +289,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="478"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
         <source>Show details</source>
-        <translation>Mostra els detalls</translation>
+        <translation>Mostra&apos;n els detalls</translation>
     </message>
 </context>
 <context>
@@ -304,7 +302,7 @@
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Show related packages</source>
-        <translation>Mostra els paquets relacionats</translation>
+        <translation>Mostra els paquets que s&apos;hi relacionen.</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="60"/>
@@ -342,7 +340,7 @@ Pot ser que el sistema o altres aplicacions no funcionin correctament.</translat
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>L&apos;Instal·lador de paquets ajuda als usuaris a instal·lar i eliminar paquets locals i admet la instal·lació massiva.</translation>
+        <translation>L&apos;Instal·lador de paquets ajuda els usuaris a instal·lar i eliminar paquets locals i admet la instal·lació massiva.</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Il pacchetto Deb potrebbe essere corrotto</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
@@ -52,7 +50,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Installazione fallita per %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Autenticazione fallita</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -104,7 +102,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
         <source>Collapse</source>
-        <translation>Non mostrare i dettagli</translation>
+        <translation>Collassa</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
@@ -129,7 +127,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Installazione dipendenze: %1</translation>
     </message>
 </context>
 <context>
@@ -191,7 +189,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="596"/>
         <source>Collapse</source>
-        <translation>Non mostrare i dettagli</translation>
+        <translation>Collassa</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="290"/>
@@ -236,12 +234,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Installazione dipendenze: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Installazione fallita per %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -272,7 +270,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="690"/>
         <source>Same version installed</source>
-        <translation>Medesima versione già installata</translation>
+        <translation>Medesima versione installata</translation>
     </message>
 </context>
 <context>
@@ -299,7 +297,7 @@
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>Non mostrare i dettagli</translation>
+        <translation>Collassa</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>

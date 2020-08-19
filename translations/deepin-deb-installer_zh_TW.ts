@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>請檢查deb包是否損壞</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
@@ -52,7 +50,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1安裝失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>配置授權失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -129,7 +127,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在安裝依賴：%1</translation>
     </message>
 </context>
 <context>
@@ -236,12 +234,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在安裝依賴：%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1安裝失敗</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -291,7 +289,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="478"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
         <source>Show details</source>
-        <translation>顯示詳細訊息</translation>
+        <translation>顯示卸載進程</translation>
     </message>
 </context>
 <context>
@@ -299,7 +297,7 @@
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
         <source>Collapse</source>
-        <translation>隱藏細節</translation>
+        <translation>隱藏</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="43"/>
@@ -337,7 +335,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb_installer/main.cpp" line="63"/>
         <location filename="../src/deb_installer/main.cpp" line="64"/>
         <source>Package Installer</source>
-        <translation>套裝軟體安裝器</translation>
+        <translation>軟體包安裝器</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>

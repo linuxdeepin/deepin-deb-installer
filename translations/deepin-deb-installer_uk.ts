@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="118"/>
         <source>Package Installer</source>
-        <translation>Встановлювач пакетів</translation>
+        <translation>Встановлювач пакунків</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Ймовірно, пакунок deb пошкоджено</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
@@ -52,12 +50,12 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося встановити %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
         <source>Unable to install</source>
-        <translation>Не вдалося встановити</translation>
+        <translation>Неможливо встановити</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="667"/>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося пройти розпізнавання</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -129,7 +127,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлення залежностей: %1</translation>
     </message>
 </context>
 <context>
@@ -236,12 +234,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Встановлення залежностей: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося встановити %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -262,7 +260,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="545"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="586"/>
         <source>Uninstall Failed</source>
-        <translation>Не вдалося видалити&#xa0;</translation>
+        <translation>Не вдалося видалити </translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>

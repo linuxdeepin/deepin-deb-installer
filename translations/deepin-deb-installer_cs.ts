@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
@@ -11,7 +9,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento deb balíček může být poškozený</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
@@ -52,7 +50,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se nainstalovat %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
@@ -78,7 +76,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ověření se nezdařilo</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -129,7 +127,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalují se součásti, na kterých závisí: %1</translation>
     </message>
 </context>
 <context>
@@ -236,12 +234,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalují se součásti, na kterých závisí: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se nainstalovat %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -342,7 +340,7 @@ Systém nebo ostatní aplikace by tím nemusely fungovat tak, jak mají</transla
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Instalátor balíčků slouží uživateli jako pomůcka pro instalaci a odebírání místních balíčků (tj. nepocházejících z repozitářů). Mimo jiné podporuje také hromadnou instalaci.</translation>
+        <translation>Instalátor balíčků slouží uživateli jako pomůcka pro instalaci a odebírání místních balíčků (tj. nepocházejících z repozitářů). Podporuje také hromadnou instalaci.</translation>
     </message>
 </context>
 </TS>
