@@ -391,11 +391,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             bool isValid =  m_pDebPackage->isValid();
             delete m_pDebPackage;
             if (!isValid) {
-                qWarning() << "package invalid: " << package;
+                qWarning() << "The deb package may be broken" << package;
                 // this is a suggestion, add Floating Message while package invalid
-//                DFloatingMessage *msg = new DFloatingMessage;
-//                msg->setMessage(tr("Package Invalid"));
-//                DMessageManager::instance()->sendMessage(this, msg);
+                DFloatingMessage *msg = new DFloatingMessage;
+                msg->setMessage(tr("The deb package may be broken"));
+                DMessageManager::instance()->sendMessage(this, msg);
                 continue;
             }
             DRecentData data;

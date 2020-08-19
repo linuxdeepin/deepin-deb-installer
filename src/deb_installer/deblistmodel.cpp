@@ -72,7 +72,7 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
 {
     if (errorCode == ConfigAuthCancel) {
         return QApplication::translate("DebListModel",
-                                       "Authorization cancelled");
+                                       "Authentication failed");
     }
     switch (errorCode) {
     case FetchError:
