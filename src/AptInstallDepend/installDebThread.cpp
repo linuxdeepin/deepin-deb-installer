@@ -32,31 +32,108 @@ InstallDebThread::~InstallDebThread()
     }
 }
 
+void InstallDebThread::setParam(QStringList tParam)
+{
+    m_listParam = tParam;
+}
+
+void InstallDebThread::getDescription()
+{
+    QString str = "sudo dpkg -e " + m_listParam[1] + " " + TEMPLATE_DIR;
+    system(str.toUtf8());
+
+    QFile file;
+    file.setFileName(TEMPLATE_PATH);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QString tmpData;
+        while (!file.atEnd()) {
+            tmpData = file.readLine().data();
+            if (tmpData.size() > 13) {
+                if (tmpData.contains("Description: ")) {
+                    QString str = tmpData.mid(13, tmpData.size() - 13);
+                    str.remove(QChar('\n'), Qt::CaseInsensitive);
+                    m_listDescribeData << str;
+                }
+            }
+        }
+
+        file.close();
+    }
+}
+
 void InstallDebThread::on_readoutput()
 {
     QString tmp = m_proc->readAllStandardOutput().data();
     qDebug() << tmp;
+
+    foreach (QString str, m_listDescribeData) {
+        if (tmp.contains(str)) {
+            char c_input[20];
+            while (fgets(c_input, 10, stdin)) {
+                QString str = c_input;
+                str.remove(QChar('\\'), Qt::CaseInsensitive);
+                str.remove(QChar('"'), Qt::CaseInsensitive);
+
+                m_proc->write(str.toLatin1().data());
+
+                m_proc->waitForFinished(1500);
+
+                break;
+            }
+        }
+    }
 }
 
 void InstallDebThread::onFinished(int num)
 {
     m_resultFlag = num;
+    if (num == 0) {
+        if (m_listParam.size() > 1)
+            if (m_listParam[0] == "InstallConfig") {
+                QProcess tmp;
+                tmp.start("sudo", QStringList() << "-S" <<  "dpkg" << "--unpack" << m_listParam[1]);
+                tmp.waitForFinished(-1);
+            }
+    }
 }
 
 void InstallDebThread::run()
 {
-    system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-    m_proc->start("sudo", QStringList() << "apt-get"
-                  << "install"
-                  << m_DependList
-                  << "deepin-wine-helper"
-                  << "--fix-missing"
-                  << "-y");
-    m_proc->waitForFinished(-1);
-    m_proc->close();
-}
+    if (m_listParam.size() > 0) {
+        if (m_listParam[0] == "InstallDeepinWine") {
+            qDebug() << "StartInstallDeepinwine";
+            QStringList depends;
 
-void InstallDebThread::setDependList(QStringList param)
-{
-    m_DependList = param;
+            for (int i = 1; i < m_listParam.size(); i++) {
+                depends << m_listParam[i];
+            }
+
+            system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
+            m_proc->start("sudo", QStringList() << "apt-get"
+                          << "install"
+                          << depends
+                          << "deepin-wine-helper"
+                          << "--fix-missing"
+                          << "-y");
+            m_proc->waitForFinished(-1);
+            m_proc->close();
+        } else if (m_listParam[0] == "InstallConfig") {
+            if (m_listParam.size() <= 1)
+                return;
+
+            qDebug() << "StartInstallAptConfig";
+
+            getDescription();
+
+            m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
+            m_proc->waitForFinished(-1);
+
+            QDir filePath(TEMPLATE_DIR);
+            if (filePath.exists()) {
+                filePath.removeRecursively();
+            }
+
+            m_proc->close();
+        }
+    }
 }

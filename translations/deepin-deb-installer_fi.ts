@@ -1,20 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="111"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="118"/>
         <source>Package Installer</source>
-        <translation>Pakettien asentaja</translation>
+        <translation>Asentaja</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="403"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="397"/>
+        <source>The deb package may be broken</source>
+        <translation>Deb-paketti voi olla rikki</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="410"/>
         <source>Already Added</source>
         <translation>Jo lisätty</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="591"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="597"/>
         <source>Bulk Install</source>
         <translation>Suora-asennus</translation>
     </message>
@@ -22,56 +25,61 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="89"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="80"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Asennus epäonnistui, tarkista verkkoyhteys</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="76"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation>Asennus epäonnistui, tarkista päivitykset ohjauspaneelista</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="79"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="92"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="85"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="88"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="98"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Asennus epäonnistui, levytilaa ei ollut riittävästi</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="101"/>
         <source>Installation Failed</source>
         <translation>Asennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="471"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kohteen %1 asentaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="654"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="666"/>
         <source>Unable to install</source>
         <translation>Ei voi asentaa</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="655"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="667"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="657"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="669"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="473"/>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="477"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="485"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="489"/>
         <source>Broken dependencies: %1</source>
         <translation>Rikkoutuneet riippuvuudet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="467"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
+        <source>Authentication failed</source>
+        <translation>Todennus epäonnistui</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
         <source>Unmatched package architecture</source>
         <translation>Ei yhteensopiva pakettijärjestelmä</translation>
     </message>
@@ -79,12 +87,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../src/deb_installer/filechoosewidget.cpp" line="56"/>
+        <location filename="../src/deb_installer/filechoosewidget.cpp" line="57"/>
         <source>Drag deb packages here</source>
         <translation>Vedä deb-paketteja tänne</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/filechoosewidget.cpp" line="89"/>
+        <location filename="../src/deb_installer/filechoosewidget.cpp" line="83"/>
         <source>Select File</source>
         <translation>Valitse tiedosto</translation>
     </message>
@@ -117,9 +125,9 @@
         <translation>Takaisin</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="351"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Riippuvuuksien asentaminen: %1</translation>
     </message>
 </context>
 <context>
@@ -179,88 +187,88 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="599"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="596"/>
         <source>Collapse</source>
         <translation>Pudotus</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="291"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="290"/>
         <source>Install</source>
         <translation>Asenna</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="293"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="292"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="295"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="294"/>
         <source>Reinstall</source>
         <translation>Uudelleen</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="297"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="296"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="299"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="298"/>
         <source>Back</source>
         <translation>Takaisin</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="301"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="300"/>
         <source>Done</source>
         <translation>Valmis</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="698"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="693"/>
         <source>Later version installed: %1</source>
         <translation>Uudempi versio asennettu: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="702"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="697"/>
         <source>Earlier version installed: %1</source>
         <translation>Aiempi versio asennettu: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="840"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="834"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Riippuvuuksien asentaminen: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="933"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="926"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kohteen %1 asentaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="172"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
         <source>Version: </source>
         <translation>Versio:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="571"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="567"/>
         <source>Installed successfully</source>
         <translation>Asennettu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="577"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="573"/>
         <source>Uninstalled successfully</source>
         <translation>Asennuksen poisto onnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="549"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="590"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="545"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="586"/>
         <source>Uninstall Failed</source>
         <translation>Poisto epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="165"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>
         <source>Name: </source>
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="695"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="690"/>
         <source>Same version installed</source>
         <translation>Sama versio on asennettu</translation>
     </message>
@@ -269,8 +277,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="466"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="570"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="464"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="566"/>
         <source>Show details</source>
         <translation>Näytä tiedot</translation>
     </message>
@@ -278,8 +286,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="480"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="576"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="478"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="572"/>
         <source>Show details</source>
         <translation>Näytä tiedot</translation>
     </message>
