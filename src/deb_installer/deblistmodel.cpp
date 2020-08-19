@@ -1075,3 +1075,8 @@ void DebListModel::ConfigInputWrite(QString str)
     m_procInstallConfig->write(str.toUtf8());
     m_procInstallConfig->write("\n");
 }
+
+bool DebListModel::reloadQAptCache()
+{
+    return m_packagesManager->reloadQApt();
+}

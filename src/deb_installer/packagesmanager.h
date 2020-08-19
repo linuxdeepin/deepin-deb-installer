@@ -127,6 +127,7 @@ public:
     bool appendPackage(QString debPackage);
 
     void removePackage(const int index, QList<int> listDependInstallMark);
+    bool reloadQApt() ;
 
     void reset();
     void resetPackageDependsStatus(const int index);
