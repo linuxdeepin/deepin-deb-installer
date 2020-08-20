@@ -256,9 +256,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 forground.setColor(palette.color(cg, DPalette::HighlightedText));
-            } else {
-                //fix bug: 43139
-                forground.setColor(palette.color(cg, DPalette::TextTips));
             }
         }
         painter->setPen(forground);
