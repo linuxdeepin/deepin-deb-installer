@@ -487,6 +487,10 @@ void SingleInstallPage::showInfomation()
     m_upDown = false;
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
+    if (!bKeyReturn) {
+        emit OutOfFocus(false);
+    }
+    bKeyReturn = false;
 }
 
 void SingleInstallPage::hideInfomation()
@@ -494,6 +498,10 @@ void SingleInstallPage::hideInfomation()
     m_upDown = true;
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
+    if (!bKeyReturn) {
+        emit OutOfFocus(false);
+    }
+    bKeyReturn = false;
 }
 
 void SingleInstallPage::showInfo()
@@ -781,25 +789,6 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
             m_MouseBtnRelease = 0;
             emit OutOfFocus(false);
         }
-        QList<DCommandLinkButton *> cmdbtnList = this->findChildren<DCommandLinkButton *>();
-        if (cmdbtnList.size() > 0) {
-            for (int num = 0; num < cmdbtnList.size(); num++) {
-                if (watched == cmdbtnList.at(num)) {
-                    this->releaseKeyboard();
-                    cmdbtnList.at(num)->click();
-                    m_MouseBtnRelease = 0;
-                    qApp->removeEventFilter(this);
-                    return QObject::eventFilter(watched, event);
-                }
-            }
-        }
-        if ((m_MouseBtnRelease + 1) >= cmdbtnList.size()) {
-            if (this->focusWidget() != nullptr) {
-                this->focusWidget()->clearFocus();
-            }
-            m_MouseBtnRelease = 0;
-            emit OutOfFocus(false);
-        }
     }
 
     if (event->type() == QEvent::KeyPress) {
@@ -965,6 +954,7 @@ void SingleInstallPage::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
         this->releaseKeyboard();
+        bKeyReturn = true;
 
         switch (m_currentFlag) {
         case 1: {

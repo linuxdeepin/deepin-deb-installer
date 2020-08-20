@@ -146,7 +146,8 @@ private:
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_pLoadingLabel;
-
+    //当鼠标触发详细信息按钮时清除事件
+    bool bKeyReturn = false;
 };
 
 #endif  // SINGLEINSTALLPAGE_H
