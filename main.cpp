@@ -47,7 +47,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    DApplication::loadDXcbPlugin();
+    //DApplication::loadDXcbPlugin();
 
     DApplication app(argc, argv);
 
@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
                                       "Package Installer helps users install and remove local packages, and supports bulk installation."));
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
-    if(!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope))
-    {
+    if (!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(), DGuiApplicationHelper::UserScope)) {
         qDebug() << "DGuiApplicationHelper::instance()->setSingleInstance";
         exit(0);
     }
@@ -96,8 +95,7 @@ int main(int argc, char *argv[])
     w.show();
 
     // select files from args
-    if (!file_list.isEmpty())
-    {
+    if (!file_list.isEmpty()) {
         QMetaObject::invokeMethod(&w, "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, file_list));
     }
 
