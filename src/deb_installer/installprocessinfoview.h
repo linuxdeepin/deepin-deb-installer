@@ -12,7 +12,7 @@ class InstallProcessInfoView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit InstallProcessInfoView(QWidget *parent = nullptr);
+    explicit InstallProcessInfoView(int w, int h, QWidget *parent = nullptr);
     virtual ~InstallProcessInfoView() override;
 
     void appendText(QString text);
@@ -24,7 +24,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void initUI();
+    void initUI(int w, int h);
 
     QTextEdit *m_editor;
     DPalette::ColorType m_colorType;

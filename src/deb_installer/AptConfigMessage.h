@@ -4,11 +4,10 @@
 #include "installprocessinfoview.h"
 
 #include <QWidget>
-#include <DPushButton>
+#include <DSuggestButton>
 #include <DMainWindow>
 #include <DLabel>
-#include <QTextEdit>
-#include <QLineEdit>
+#include <DLineEdit>
 #include <QVBoxLayout>
 #include <DIconButton>
 DWIDGET_USE_NAMESPACE
@@ -44,8 +43,8 @@ protected:
 private:
 
     DIconButton *m_picon;
-    QLineEdit *m_inputEdit;
-    QPushButton *m_pushbutton;
+    DLineEdit *m_inputEdit;
+    DSuggestButton *m_pushbutton;
     DLabel *m_pQuestionLabel;
     static AptConfigMessage *aptConfig;
 

@@ -41,7 +41,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_tips(new DLabel(this))
     , m_infoWrapperWidget(new QWidget(this))
     , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse"), this))
-    , m_dependsInfomation(new InstallProcessInfoView(this))
+    , m_dependsInfomation(new InstallProcessInfoView(440, 190, this))
     , m_cancelBtn(new DPushButton(this))
     , m_confirmBtn(new DPushButton(this))
 {

@@ -5,7 +5,6 @@
 #include <DGuiApplicationHelper>
 #include <DRecentManager>
 #include <DTitlebar>
-#include <DIconButton>
 #include <QScreen>
 #include <QMessageBox>
 #include <QDebug>
@@ -18,9 +17,9 @@ DWIDGET_USE_NAMESPACE
 AptConfigMessage::AptConfigMessage(QWidget *parent)
     : DMainWindow(parent)
 {
-    initTitlebar();
     initControl();
     initUI();
+    initTitlebar();
     connect(m_pushbutton, &QPushButton::clicked, this, &AptConfigMessage::dealInput);
 }
 
@@ -36,49 +35,55 @@ void AptConfigMessage::initTitlebar()
 
 void AptConfigMessage::initControl()
 {
-    m_textEdit = new InstallProcessInfoView();
+    m_textEdit = new InstallProcessInfoView(360, 196);
     m_textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_textEdit->setTextFontSize(14, QFont::Medium);
-    m_textEdit->setFixedSize(360, 152);
+    m_textEdit->setFixedSize(360, 196);
+    m_textEdit->setFocusPolicy(Qt::NoFocus);
 
-    m_inputEdit = new QLineEdit();
-    m_inputEdit->setFixedSize(360, 36);
+    m_inputEdit = new DLineEdit();
+    m_inputEdit->setFixedSize(220, 36);
+    m_inputEdit->setFocusPolicy(Qt::StrongFocus);
 
     //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
-    QRegExp regExp("[0-9]{1,2}");
-    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
+    //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
+    //    QRegExp regExp("[0-9]{1,2}");
+    //    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
 
-    m_pQuestionLabel = new DLabel();
+    m_pQuestionLabel = new DLabel("请输入序号进行配置:");
     m_pQuestionLabel->setMaximumWidth(360);
 
-    m_pushbutton = new QPushButton("确定");
+    m_pushbutton = new DSuggestButton("确定");
     m_pushbutton->setDefault(true);
-    m_pushbutton->setFixedSize(360, 36);
+    m_pushbutton->setFixedSize(130, 36);
+
+    connect(m_inputEdit, &DLineEdit::returnPressed, this, [=] {
+        m_pushbutton->clicked();
+    });
 }
 void AptConfigMessage::initUI()
 {
-    setMinimumSize(380, 330);
+    setFixedSize(380, 332);
     setTitlebarShadowEnabled(false);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->setSpacing(10);
-    centralLayout->addStretch();
+    centralLayout->addStretch(10);
 
     centralLayout->addWidget(m_textEdit);
-    centralLayout->addSpacing(15);
 
     centralLayout->addWidget(m_pQuestionLabel);
-    centralLayout->addStretch();
+    centralLayout->addStretch(10);
 
-    centralLayout->addWidget(m_inputEdit);
-    centralLayout->addStretch();
+    QHBoxLayout *pInputLayout = new QHBoxLayout;
+    pInputLayout->addWidget(m_inputEdit);
+    m_inputEdit->setFocus();
+    pInputLayout->addStretch(10);
+    pInputLayout->addWidget(m_pushbutton);
+    centralLayout->addLayout(pInputLayout);
+    centralLayout->addStretch(10);
+    centralLayout->setContentsMargins(10, 10, 10, 10);
 
-    centralLayout->addWidget(m_pushbutton);
-    centralLayout->addStretch();
-
-    centralLayout->setContentsMargins(10, 0, 10, 0);
-
-//    setLayout(centralLayout);
+    //    setLayout(centralLayout);
     QWidget *wrapWidget = new QWidget(this);
     wrapWidget->setLayout(centralLayout);
     setCentralWidget(wrapWidget);
@@ -128,8 +133,7 @@ void AptConfigMessage::appendTextEdit(QString str)
     text.remove(QChar('\"'), Qt::CaseInsensitive);
     int num = text.indexOf("\\n");
     if (num == -1) {
-        m_textEdit->appendText(Utils::holdTextInRect(m_textEdit->font(), str, m_textEdit->width()));
-        m_pQuestionLabel->setText(Utils::holdTextInRect(m_pQuestionLabel->font(), str, m_pQuestionLabel->width()));
+        m_textEdit->appendText(str);
         m_textEdit->appendText("\n");
         return;
     }
@@ -142,7 +146,7 @@ void AptConfigMessage::appendTextEdit(QString str)
         text = text.mid(num + 2, size - num - 3);
 
         if (strFilter[0] == '\t') strFilter.remove(0, 1);
-        m_textEdit->appendText(Utils::holdTextInRect(m_textEdit->font(), strFilter, m_textEdit->width()));
+        m_textEdit->appendText(strFilter);
         qDebug() << "strFilter" << strFilter;
         if (!strFilter.isEmpty())
             question = strFilter;
@@ -151,10 +155,6 @@ void AptConfigMessage::appendTextEdit(QString str)
         }
     }
     qDebug() << "end after while";
-    if (num == -1 && text.size() > 0 && !text.contains("\n")) {
-        m_pQuestionLabel->setText(Utils::holdTextInRect(m_pQuestionLabel->font(), question, m_pQuestionLabel->width()));
-    }
-    m_textEdit->appendText("\n");
 }
 
 /**
@@ -195,7 +195,7 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
                     for (int k = 0; k < wLayout->count(); ++k) {
                         QWidget *widget = wLayout->itemAt(k)->widget();
                         if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
-                            //widget->setFocusPolicy(Qt::NoFocus);
+                            widget->setFocusPolicy(Qt::NoFocus);
                             if ("Dtk::Widget::DWindowOptionButton" == QString(widget->metaObject()->className())) {
                                 widget->setVisible(false);
                             }

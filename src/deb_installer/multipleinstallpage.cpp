@@ -42,14 +42,14 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_contentLayout(new QVBoxLayout(this))
     , m_centralLayout(new QVBoxLayout(this))
     , m_appsListView(new PackagesListView(this))
-    , m_installProcessInfoView(new InstallProcessInfoView(this))
+    , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
     , m_installButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
-      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {

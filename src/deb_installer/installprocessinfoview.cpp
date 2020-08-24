@@ -6,20 +6,20 @@
 
 #include <DApplicationHelper>
 
-InstallProcessInfoView::InstallProcessInfoView(QWidget *parent)
+InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     : QWidget(parent)
     , m_editor(new QTextEdit(this))
 {
-    initUI();
+    initUI(w, h);
     connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
         m_editor->moveCursor(QTextCursor::End);
     });
 }
 
-void InstallProcessInfoView::initUI()
+void InstallProcessInfoView::initUI(int w, int h)
 {
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
-    bgFrame->setFixedSize(440, 190);
+    bgFrame->setFixedSize(w, h);
 
     QVBoxLayout *editLayout = new QVBoxLayout(this);
     editLayout->setSpacing(0);
