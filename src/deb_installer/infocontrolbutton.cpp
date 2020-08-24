@@ -51,7 +51,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     QFontInfo fontinfo = m_tipsText->fontInfo();
     int fontsize = fontinfo.pixelSize();
     if (fontsize >= 16) {
-        m_tipsText->setFixedHeight(25);
+        m_tipsText->setFixedHeight(28);
     } else {
         m_tipsText->setFixedHeight(15);
     }
