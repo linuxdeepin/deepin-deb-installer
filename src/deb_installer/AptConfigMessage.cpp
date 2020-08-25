@@ -40,7 +40,7 @@ void AptConfigMessage::initControl()
 
     m_textEdit = new InstallProcessInfoView(360, 196);
     m_textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_textEdit->setTextFontSize(14, QFont::Medium);
+    m_textEdit->setTextFontSize(12, QFont::Medium);
     m_textEdit->setFixedSize(360, 196);
     m_textEdit->setFocusPolicy(Qt::NoFocus);
 
@@ -84,7 +84,7 @@ void AptConfigMessage::initUI()
     pInputLayout->addWidget(m_pushbutton);
     centralLayout->addLayout(pInputLayout);
     centralLayout->addStretch(10);
-    centralLayout->setContentsMargins(10, 10, 10, 10);
+    centralLayout->setContentsMargins(10, 0, 10, 10);
 
     //    setLayout(centralLayout);
     QWidget *wrapWidget = new QWidget(this);
