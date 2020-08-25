@@ -35,6 +35,9 @@ void AptConfigMessage::initTitlebar()
 
 void AptConfigMessage::initControl()
 {
+    qApp->installEventFilter(this);
+    this->setFocusPolicy(Qt::NoFocus);
+
     m_textEdit = new InstallProcessInfoView(360, 196);
     m_textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_textEdit->setTextFontSize(14, QFont::Medium);
@@ -43,7 +46,6 @@ void AptConfigMessage::initControl()
 
     m_inputEdit = new DLineEdit();
     m_inputEdit->setFixedSize(220, 36);
-    m_inputEdit->setFocusPolicy(Qt::StrongFocus);
 
     //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
     //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
@@ -52,6 +54,7 @@ void AptConfigMessage::initControl()
 
     m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "));
     m_pQuestionLabel->setMaximumWidth(360);
+    m_pQuestionLabel->setFocusPolicy(Qt::NoFocus);
 
     m_pushbutton = new DSuggestButton(tr("OK"));
     m_pushbutton->setDefault(true);
@@ -119,6 +122,7 @@ bool AptConfigMessage::dealWrongAnswer(QString question, QString output)
 
 void AptConfigMessage::appendTextEdit(QString str)
 {
+    m_inputEdit->lineEdit()->setFocus();
     qDebug() << "str" << str << "str.size" << str.size();
     if (str.isEmpty() || str == "\\n")
         return;
@@ -198,15 +202,19 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
                             widget->setFocusPolicy(Qt::NoFocus);
                             if ("Dtk::Widget::DWindowOptionButton" == QString(widget->metaObject()->className())) {
                                 widget->setVisible(false);
+                                m_OptionWindow = widget;
                             }
                             if ("Dtk::Widget::DWindowMinButton" == QString(widget->metaObject()->className())) {
                                 widget->setVisible(false);
+                                m_MinWindow = widget;
                             }
                             if ("Dtk::Widget::DWindowCloseButton" == QString(widget->metaObject()->className())) {
                                 widget->setVisible(false);
+                                m_closeWindow = widget;
                             }
                             if ("Dtk::Widget::DWindowMaxButton" == QString(widget->metaObject()->className())) {
                                 widget->setVisible(false);
+                                m_MaxWindow = widget;
                             }
                         }
                     }
@@ -220,4 +228,21 @@ void AptConfigMessage::clearTexts()
 {
     m_textEdit->clearText();
     m_inputEdit->clear();
+}
+
+bool AptConfigMessage::eventFilter(QObject *watched, QEvent *event)
+{
+    QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
+    if (event->type() == QEvent::KeyPress) {
+        if (key_event->key() == Qt::Key_Tab) {
+            if (m_inputEdit->lineEdit()->hasFocus())
+                m_pushbutton->setFocus();
+            else {
+                m_inputEdit->lineEdit()->setFocus();
+            }
+            releaseKeyboard();
+            return true;
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }

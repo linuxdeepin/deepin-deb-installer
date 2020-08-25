@@ -57,6 +57,15 @@ private:
     void initTitlebar();
     void initControl();
 
+    // QObject interface
+public:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
+private:
+    QWidget *m_OptionWindow; //titlebar main menu
+    QWidget *m_MinWindow;
+    QWidget *m_closeWindow;
+    QWidget *m_MaxWindow;
 };
 
 #endif // APTCONFIGMESSAGE_H
