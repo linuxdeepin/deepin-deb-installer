@@ -382,10 +382,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
             bool isValid =  m_pDebPackage->isValid();
             delete m_pDebPackage;
-            qDebug() << "reload cache result" << m_fileListModel->reloadQAptCache();
             if (!isValid) {
                 qWarning() << "The deb package may be broken" << package;
-                // this is a suggestion, add Floating Message while package invalid
+                //add Floating Message while package invalid
                 DFloatingMessage *msg = new DFloatingMessage;
                 msg->setMessage(tr("The deb package may be broken"));
                 msg->setIcon(QIcon::fromTheme("di_warning"));

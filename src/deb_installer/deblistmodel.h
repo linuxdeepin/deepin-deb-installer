@@ -121,8 +121,6 @@ public:
     void initPrepareStatus();
     void initDependsStatus(int index = 0);
 
-    bool reloadQAptCache();
-
 public:
     int getInstallFileSize();
 

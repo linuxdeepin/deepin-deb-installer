@@ -885,15 +885,6 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     return nullptr;
 }
 
-/**
- * @brief PackagesManager::reloadQApt 重置库,在判断invalide之后，库的状态不会被改变导致第二次打开的包也会被误认为invalid
- * @return 重置库后端的结果。
- */
-bool PackagesManager::reloadQApt()
-{
-    return m_backendFuture.result()->init();
-}
-
 PackagesManager::~PackagesManager()
 {
     delete dthread;
