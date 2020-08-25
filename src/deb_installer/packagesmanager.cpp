@@ -510,7 +510,18 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         }
 
         // TODO: upgrade?
-        if (!dep->installedVersion().isEmpty()) return;
+        //        if (!dep->installedVersion().isEmpty()) return;
+        //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
+        qDebug() << dep->installedVersion();
+        qDebug() << Package::compareVersion(dep->installedVersion(), info.packageVersion());
+        if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
+            Backend *b = m_backendFuture.result();
+            Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
+            if (p)
+                choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+            else
+                choosed_set << dep->name() + " not found";
+        }
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
             qDebug() << "conflict error in choose candidate" << dep->name();

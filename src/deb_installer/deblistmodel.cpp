@@ -628,7 +628,19 @@ void DebListModel::installDebs()
 
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
         // 获取到所有的依赖包 准备安装
-        for (auto const &p : availableDepends) backend->markPackageForInstall(p);
+        //        for (auto const &p : availableDepends) backend->markPackageForInstall(p);
+        for (auto const &p : availableDepends) {
+            if (p.contains(" not found")) {
+                refreshOperatingPackageStatus(Failed);
+                m_packageFailCode.insert(m_operatingStatusIndex, DownloadDisallowedError);
+                m_packageFailReason.insert(m_operatingStatusIndex, p);
+                emit appendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);
+                bumpInstallIndex();
+                return;
+            }
+
+            backend->markPackageForInstall(p);
+        }
 
         //安装
 
