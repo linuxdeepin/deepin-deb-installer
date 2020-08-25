@@ -50,10 +50,10 @@ void AptConfigMessage::initControl()
     //    QRegExp regExp("[0-9]{1,2}");
     //    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
 
-    m_pQuestionLabel = new DLabel("请输入序号进行配置:");
+    m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "));
     m_pQuestionLabel->setMaximumWidth(360);
 
-    m_pushbutton = new DSuggestButton("确定");
+    m_pushbutton = new DSuggestButton(tr("OK"));
     m_pushbutton->setDefault(true);
     m_pushbutton->setFixedSize(130, 36);
 
