@@ -523,6 +523,10 @@ void DebInstaller::reset()
     m_lastPage->deleteLater();
     m_UninstallPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
+
+    //fix bug: 44801  https://pms.uniontech.com/zentao/bug-view-44801.html
+    this->setAcceptDrops(true);
+    m_fileChooseWidget->setAcceptDrops(true);
 }
 
 /**
