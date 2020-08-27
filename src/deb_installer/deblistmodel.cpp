@@ -681,6 +681,8 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    btnOK->setFocusPolicy(Qt::WheelFocus);
+    btnOK->setFocus();
     connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
         if (preparedPackages().size() > 1)
         {
