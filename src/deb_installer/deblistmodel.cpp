@@ -708,18 +708,7 @@ bool DebListModel::checkDigitalSignature()
     qDebug() << "QDBusResult" << deviceMode;
     if (deviceMode)
         return true;
-    int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
-    switch (digitalSigntual) {
-    case Utils::VerifySuccess:
-        return true;
-    case Utils::DebfileInexistence:
-    case Utils::ExtractDebFail:
-    case Utils::DebVerifyFail:
-    case Utils::OtherError:
-        return false;
-    default:
-        return false;
-    }
+    return Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
 }
 void DebListModel::installNextDeb()
 {

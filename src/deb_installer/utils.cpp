@@ -322,6 +322,7 @@ bool Utils::Digital_Verify(QString filepath_name)
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify ";
+        filepath_name = "\"" + filepath_name + "\"";
         program = program + filepath_name;
         proc.start(program);
         qDebug() << "program:" << program;
