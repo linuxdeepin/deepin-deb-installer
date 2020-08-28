@@ -25,6 +25,7 @@
 
 #include <QPainter>
 #include <QShortcut>
+#include <QScroller>
 
 PackagesListView::PackagesListView(QWidget *parent)
     : DListView(parent)
@@ -41,6 +42,9 @@ PackagesListView::PackagesListView(QWidget *parent)
 
 void PackagesListView::initUI()
 {
+    //fix bug: 44726 https://pms.uniontech.com/zentao/bug-view-44726.html
+    QScroller::grabGesture(this, QScroller::TouchGesture);
+
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(QListView::SingleSelection);
     setAutoScroll(true);

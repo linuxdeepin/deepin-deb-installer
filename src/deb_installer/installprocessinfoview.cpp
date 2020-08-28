@@ -3,6 +3,7 @@
 #include "utils.h"
 
 #include <QVBoxLayout>
+#include <QScroller>
 
 #include <DApplicationHelper>
 
@@ -11,6 +12,10 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     , m_editor(new QTextEdit(this))
 {
     initUI(w, h);
+
+    //fix bug: 44726 https://pms.uniontech.com/zentao/bug-view-44726.html
+    QScroller::grabGesture(m_editor, QScroller::TouchGesture);
+
     connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
         m_editor->moveCursor(QTextCursor::End);
     });
