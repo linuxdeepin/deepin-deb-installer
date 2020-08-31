@@ -177,6 +177,16 @@ private:
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
     QMap<QString, QString> specialPackage();
+
+private:
+    //使用软连接方式解决文件路径中存在空格的问题。
+    QString SymbolicLink(QString previousName, QString packageName);
+    QString link(QString linkPath, QString packageName);
+    bool mkTempDir();
+    bool rmTempDir();
+
+private:
+    const QString m_tempLinkDir = "/tmp/LinkTemp/";
 };
 
 #endif  // PACKAGESMANAGER_H
