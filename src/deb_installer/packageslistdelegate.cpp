@@ -245,9 +245,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                 info_str =
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
+            forground.setColor(palette.color(cg, DPalette::TextTips));
         } else {
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
-            forground.setColor(palette.color(cg, DPalette::ToolTipText));
+            forground.setColor(palette.color(cg, DPalette::TextTips));
 
         }
         if (option.state & DStyle::State_Enabled) {
