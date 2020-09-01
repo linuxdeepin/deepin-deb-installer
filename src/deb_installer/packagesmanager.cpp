@@ -956,21 +956,22 @@ QString PackagesManager::link(QString linkPath, QString packageName)
     //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
     //删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
     int count = 1;
+    QString tempName = packageName;
     while (true) {
-        QFile tempLinkPath(m_tempLinkDir + packageName);
+        QFile tempLinkPath(m_tempLinkDir + tempName);
         if (tempLinkPath.exists()) {
             qDebug() << tempLinkPath.fileName();
-            packageName = packageName + "_" + QString::number(count);
+            tempName = packageName + "_" + QString::number(count);
             qWarning() << "A file with the same name exists in the current temporary directory,"
                           "and the current file name is changed to"
-                       << packageName;
+                       << tempName;
             count++;
         } else {
             break;
         }
     }
-    if (linkDeb.link(linkPath, m_tempLinkDir + packageName))
-        return m_tempLinkDir + packageName;
+    if (linkDeb.link(linkPath, m_tempLinkDir + tempName))
+        return m_tempLinkDir + tempName;
     else {
         qWarning() << "Failed to create Symbolick link error.";
         return linkPath;
