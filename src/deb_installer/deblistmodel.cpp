@@ -673,6 +673,7 @@ void DebListModel::installDebs()
 void DebListModel::showNoDigitalErrWindow()
 {
     DDialog *Ddialog = new DDialog();
+    Ddialog->setFocusPolicy(Qt::WheelFocus);
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
     Ddialog->setTitle(tr("Unable to install"));

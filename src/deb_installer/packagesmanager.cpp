@@ -21,11 +21,13 @@
 
 #include "packagesmanager.h"
 #include "deblistmodel.h"
+#include "utils.h"
 
 #include <QPair>
 #include <QSet>
 #include <QtConcurrent>
-#include "utils.h"
+#include <QDir>
+
 using namespace QApt;
 
 QString relationName(const RelationType type)
@@ -421,7 +423,6 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
             qDebug() << deb->packageName();
             for (auto ditem : deb->depends()) {
                 for (auto dinfo : ditem) {
-                    qDebug() << dinfo.packageName();
                     dependList << dinfo.packageName() + ":" + deb->architecture();
                 }
             }
@@ -712,7 +713,14 @@ void PackagesManager::removeLastPackage()
 
 bool PackagesManager::appendPackage(QString debPackage)
 {
-    qDebug() << "debPackage" << debPackage;
+    qDebug() << "append Package" << debPackage;
+    // 创建软链接，修复路径中存在空格时可能会安装失败的问题。
+    if (debPackage.contains(" ")) {
+        QApt::DebFile *p = new DebFile(debPackage);
+        debPackage = SymbolicLink(debPackage, p->packageName());
+        qDebug() << "symbolick Link" << debPackage;
+        delete p;
+    }
     QApt::DebFile *p = new DebFile(debPackage);
 
     const auto md5 = p->md5Sum();
@@ -770,9 +778,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         qDebug() << "depends break because package" << package_name << "not available";
         return PackageDependsStatus::_break(package_name);
     }
-
-    qDebug() << DependencyInfo::typeName(dependencyInfo.dependencyType()) << package_name << p->architecture()
-             << relationName(dependencyInfo.relationType()) << dependencyInfo.packageVersion();
 
     const RelationType relation = dependencyInfo.relationType();
     const QString &installedVersion = p->installedVersion();
@@ -871,7 +876,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch,
                                           const QString &annotation)
 {
-    qDebug() << "package with arch" << packageName << sysArch << annotation;
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
     do {
@@ -892,12 +896,101 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     for (auto *ap : b->availablePackages())
         if (ap->name() != packageName && ap->providesList().contains(packageName))
             return packageWithArch(ap->name(), sysArch, annotation);
-
     return nullptr;
+}
+
+/**
+ * @brief PackagesManager::SymbolicLink 创建软连接
+ * @param previousName 原始路径
+ * @param packageName 软件包的包名
+ * @return 软链接的路径
+ */
+QString PackagesManager::SymbolicLink(QString previousName, QString packageName)
+{
+    if (!mkTempDir()) {
+        qWarning() << "Failed to create temporary folder";
+        return previousName;
+    }
+    return link(previousName, packageName);
+}
+
+/**
+ * @brief PackagesManager::mkTempDir 创建软链接存放的临时目录
+ * @return 创建目录的结果
+ */
+bool PackagesManager::mkTempDir()
+{
+    QDir tempPath(m_tempLinkDir);
+    if (!tempPath.exists()) {
+        return tempPath.mkdir(m_tempLinkDir);
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief PackagesManager::rmTempDir 删除存放软链接的临时目录
+ * @return 删除临时目录的结果
+ */
+bool PackagesManager::rmTempDir()
+{
+    QDir tempPath(m_tempLinkDir);
+    if (tempPath.exists()) {
+        return tempPath.removeRecursively();
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief PackagesManager::link 创建软链接
+ * @param linkPath              原文件的路径
+ * @param packageName           包的packageName
+ * @return                      软链接之后的路径
+ */
+QString PackagesManager::link(QString linkPath, QString packageName)
+{
+    QFile linkDeb(linkPath);
+    qDebug() << packageName;
+
+    //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
+    //删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
+    int count = 1;
+    while (true) {
+        QFile tempLinkPath(m_tempLinkDir + packageName);
+        if (tempLinkPath.exists()) {
+            qDebug() << tempLinkPath.fileName();
+            packageName = packageName + "_" + QString::number(count);
+            qWarning() << "A file with the same name exists in the current temporary directory,"
+                          "and the current file name is changed to"
+                       << packageName;
+            count++;
+        } else {
+            break;
+        }
+    }
+    if (linkDeb.link(linkPath, m_tempLinkDir + packageName))
+        return m_tempLinkDir + packageName;
+    else {
+        qWarning() << "Failed to create Symbolick link error.";
+        return linkPath;
+    }
 }
 
 PackagesManager::~PackagesManager()
 {
+    // 删除 临时目录，会尝试四次，四次失败后退出。
+    int rmTempDirCount = 0;
+    while (true) {
+        if (rmTempDir())
+            break;
+        qWarning() << "Failed to delete temporary folder， Current attempts:" << rmTempDirCount << "/3";
+        if (rmTempDirCount > 3) {
+            qWarning() << "Failed to delete temporary folder, Exit application";
+            break;
+        }
+        rmTempDirCount++;
+    }
     delete dthread;
 }
 
