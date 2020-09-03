@@ -524,8 +524,8 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
     m_installProcessView->appendText(output.trimmed());
     if (!m_infoControlButton->isVisible())
         m_infoControlButton->setVisible(true);
-    // pump progress
-    if (m_progress->value() < 90) m_progress->setValue(m_progress->value() + 10);
+    // 如果当前要输出的信息是dpkg running,waitting... 进度不增加。
+    if (m_progress->value() < 90 && !output.contains("dpkg running, waitting...")) m_progress->setValue(m_progress->value() + 10);
 
     if (!m_workerStarted) {
         m_workerStarted = true;
@@ -722,6 +722,8 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    //等待dpkg启动但是授权取消后，如果详细信息是expend状态，则shrink
+    m_infoControlButton->shrink();
     m_infoControlButton->setVisible(false);
     m_progressFrame->setVisible(false);
     if (m_operate == Install) {

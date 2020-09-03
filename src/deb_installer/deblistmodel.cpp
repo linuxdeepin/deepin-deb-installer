@@ -599,13 +599,15 @@ void DebListModel::installDebs()
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
+    //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
+    emit onStartInstall();
     if (isDpkgRunning()) {
         qDebug() << "dpkg running, waitting...";
-        QTimer::singleShot(1000 * 5, this, &DebListModel::installNextDeb);
+        // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
+        QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
+        emit appendOutputInfo("dpkg running, waitting...");
         return;
     }
-
-    emit onStartInstall();
 
     // fetch next deb
     auto *const backend = m_packagesManager->m_backendFuture.result();

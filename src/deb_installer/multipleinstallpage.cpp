@@ -49,7 +49,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_acceptButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
-    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -298,6 +298,7 @@ void MultipleInstallPage::afterGetAutherFalse()
     m_infoControlButton->setVisible(false);
     //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
+    m_infoControlButton->shrink();
 }
 
 void MultipleInstallPage::onScrollSlotFinshed()
