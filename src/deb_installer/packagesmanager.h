@@ -64,7 +64,12 @@ class PackageDependsStatus
 {
 public:
     static PackageDependsStatus ok();
-    static PackageDependsStatus available();
+    /**
+     * @brief available 获取并返回依赖的状态
+     * @param package 当前依赖包的包名。
+     * @return 当前依赖的状态
+     */
+    static PackageDependsStatus available(const QString &package);
     static PackageDependsStatus _break(const QString &package);
 
     PackageDependsStatus();
