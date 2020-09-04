@@ -58,6 +58,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     initUI();
     initConnections();
     initTabOrder();
+    //添加后默认可以调用右键删除菜单。
+    m_appsListView->setRightMenuShowStatus(true);
 }
 
 void MultipleInstallPage::initContentLayout()
@@ -229,6 +231,8 @@ void MultipleInstallPage::onWorkerFinshed()
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
     m_processFrame->setVisible(false);
+    //当前安装结束后，不允许调出右键菜单
+    m_appsListView->setRightMenuShowStatus(false);
 }
 
 void MultipleInstallPage::onOutputAvailable(const QString &output)
@@ -296,6 +300,8 @@ void MultipleInstallPage::hideInfo()
 
 void MultipleInstallPage::hiddenCancelButton()
 {
+    //安装开始后不允许调出右键菜单。
+    m_appsListView->setRightMenuShowStatus(false);
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
 }

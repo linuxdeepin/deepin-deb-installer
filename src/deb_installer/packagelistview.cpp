@@ -135,7 +135,8 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
     if ((event->modifiers() == Qt::AltModifier) && (event->key() == Qt::Key_M)) {
         if (this->selectionModel()->currentIndex().row() > -1) {
             m_bShortcutDelete = false;
-            if (this->hasFocus()) {
+            //增加右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
+            if (this->hasFocus() && m_bIsRightMenuShow) {
                 // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
 
                 m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
@@ -165,24 +166,11 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
     m_bShortcutDelete = false;
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
-    /*
-    connect(rightMenu, &DMenu::aboutToHide, this, [ = ] {
-        this->grabKeyboard();//在packagelist中添加焦点
-    });
-    connect(rightMenu, &DMenu::aboutToShow, this, [ = ] {
-        this->releaseKeyboard();//在packagelist中移除焦点
-    });
-    */
-
-    const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
-    if ((DebListModel::Success == operate_stat ||
-            DebListModel::Waiting == operate_stat ||
-            DebListModel::Operating == operate_stat) || DebListModel::Failed == operate_stat) {
-        return;
+    //修改右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
+    if (m_bIsRightMenuShow) {
+        //在当前鼠标位置显示右键菜单
+        rightMenu->exec(QCursor::pos());
     }
-
-    //在当前鼠标位置显示右键菜单
-    rightMenu->exec(QCursor::pos());
 }
 
 void PackagesListView::onShortcutDeleteAction()
@@ -232,4 +220,13 @@ void PackagesListView::getPos(QRect rect, int index)
         m_rightMenuPos.setX(rect.x() + rect.width() - 162);
         m_rightMenuPos.setY(rect.y() + rect.height() / 2);
     }
+}
+
+/**
+ * @brief PackagesListView::setRightMenuShowStatus 设置是否可以显示右键菜单
+ * @param isShow
+ */
+void PackagesListView::setRightMenuShowStatus(bool isShow)
+{
+    m_bIsRightMenuShow = isShow;
 }

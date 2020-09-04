@@ -37,6 +37,12 @@ public:
     explicit PackagesListView(QWidget *parent = nullptr);
     void setInitConfig();
 
+    /**
+     * @brief setRightMenuShowStatus 根据安装进程来设置是否显示右键菜单
+     * @param isShow 是否显示右键菜单
+     */
+    void setRightMenuShowStatus(bool isShow);
+
 signals:
     void onShowHideTopBg(bool bShow);
     void onShowHideBottomBg(bool bShow);
@@ -83,6 +89,11 @@ private:
 
     QPoint m_rightMenuPos; //确定的右键菜单出现的位置
     int m_currentIndex; //当前选中的index.row
+
+    /**
+     * @brief m_bIsRightMenuShow 当前是否能够调出右键菜单标识，由MultiPage工作状态决定，并传入
+     */
+    bool m_bIsRightMenuShow = false;
 };
 
 #endif  // PACKAGESLISTVIEW_H
