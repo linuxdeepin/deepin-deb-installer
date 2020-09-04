@@ -12,6 +12,10 @@
 #include <DIconButton>
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief The AptConfigMessage class
+ * 配置包安装界面
+ */
 class AptConfigMessage : public DMainWindow
 {
     Q_OBJECT
@@ -28,6 +32,10 @@ public:
         return aptConfig;
     }
 public:
+    /**
+     * @brief appendTextEdit 获取安装进程返回的信息
+     * @param str 安装进程的详细信息
+     */
     void appendTextEdit(QString str);
     void clearTexts();
 
@@ -57,15 +65,10 @@ private:
     void initTitlebar();
     void initControl();
 
-    // QObject interface
-public:
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
-private:
-    QWidget *m_OptionWindow; //titlebar main menu
-    QWidget *m_MinWindow;
-    QWidget *m_closeWindow;
-    QWidget *m_MaxWindow;
+    /**
+     * @brief initTabOrder 初始化tab切换焦点的顺序
+     */
+    void initTabOrder();
 };
 
 #endif // APTCONFIGMESSAGE_H

@@ -17,6 +17,10 @@ class ChooseFileButton : public DCommandLinkButton
 public:
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
     explicit ChooseFileButton(QString text, QWidget *parent = nullptr);
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // CHOOSEFILEBUTTON_H

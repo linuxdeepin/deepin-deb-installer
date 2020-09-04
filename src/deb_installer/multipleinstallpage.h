@@ -51,19 +51,10 @@ public:
 
     void DealDependResult(int iAuthRes, QString dependName);
 
-    void setInitSelect();
-
 signals:
     void back() const;
 
     void requestRemovePackage(const int index) const;
-
-    void hideAutoBarTitle();
-
-    void OutOfFocus(bool) const;
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void onScrollSlotFinshed();
@@ -79,12 +70,11 @@ private slots:
     void onAutoScrollInstallList(int opIndex);
     void hiddenCancelButton();
 
-    void ResetFocus(bool);
-
 private:
     void initUI();
     void initConnections();
     void initContentLayout();
+    void initTabOrder();
 
 private:
     DebListModel *m_debListModel;
@@ -102,10 +92,11 @@ private:
     WorkerProgress *m_installProgress;
     QPropertyAnimation *m_progressAnimation;
 
-    DPushButton *m_installButton;
-    DPushButton *m_acceptButton;
-    DPushButton *m_backButton;
     InfoControlButton *m_infoControlButton;
+    DPushButton *m_installButton;
+    DPushButton *m_backButton;
+    DPushButton *m_acceptButton;
+
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsLabel;

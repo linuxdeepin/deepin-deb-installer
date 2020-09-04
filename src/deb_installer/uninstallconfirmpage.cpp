@@ -61,8 +61,14 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_cancelBtn->setFixedSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
     m_confirmBtn->setFixedSize(120, 36);
-    m_confirmBtn->setFocusPolicy(Qt::NoFocus);
-    m_cancelBtn->setFocusPolicy(Qt::NoFocus);
+
+    // 添加确认和返回按钮的焦点策略
+    m_confirmBtn->setFocusPolicy(Qt::TabFocus);
+    m_cancelBtn->setFocusPolicy(Qt::TabFocus);
+
+    //添加确认和返回按钮的enter触发
+    m_confirmBtn->setAutoDefault(true);
+    m_cancelBtn->setAutoDefault(true);
 
     // When uninstalling dependent packages, if there are prompts for dependent packages.
     m_dependsInfomation->setVisible(false);

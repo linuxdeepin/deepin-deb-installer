@@ -36,8 +36,8 @@ PackagesListView::PackagesListView(QWidget *parent)
     initConnections();
     initRightContextMenu();
     initShortcuts();
-    //this->grabKeyboard();//在packagelist中添加焦点
-    this->setFocusPolicy(Qt::StrongFocus);
+    //获取焦点控制
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 void PackagesListView::initUI()
@@ -131,6 +131,17 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
 void PackagesListView::keyPressEvent(QKeyEvent *event)
 {
     m_bLeftMouse = true;
+    // 添加 右键菜单快捷键
+    if ((event->modifiers() == Qt::AltModifier) && (event->key() == Qt::Key_M)) {
+        if (this->selectionModel()->currentIndex().row() > -1) {
+            m_bShortcutDelete = false;
+            if (this->hasFocus()) {
+                // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
+
+                m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
+            }
+        }
+    }
     DListView::keyPressEvent(event);
 }
 
@@ -208,74 +219,6 @@ void PackagesListView::setInitConfig()
     if (this->count() > 0)
         m_currModelIndex = this->model()->index(0, 0);
 }
-
-bool PackagesListView::eventFilter(QObject *watched, QEvent *event)
-{
-    if (QEvent::WindowDeactivate == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
-        }
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-    if (QEvent::WindowActivate == event->type()) {
-        this->repaint();
-        this->update();
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
-        if (key_event->key() == Qt::Key_Escape) {
-            if (m_rightMenu->isVisible())
-                m_rightMenu->hide();
-            return true;
-        }
-        if ((key_event->modifiers() == Qt::AltModifier) && (key_event->key() == Qt::Key_M)) {
-            if (this->selectionModel()->currentIndex().row() > -1) {
-                m_bShortcutDelete = false;
-                if (this->hasFocus()) {
-                    // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
-                    m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
-                }
-            }
-            return true;
-        }
-
-        if (key_event->key() == Qt::Key_Return) {
-            if (m_rightMenu->isActiveWindow()) {
-                m_rightMenu->activeAction()->trigger();
-                m_rightMenu->hide();
-                this->releaseKeyboard();
-            }
-        }
-
-        if (key_event->key() == Qt::Key_Down || key_event->key() == Qt::Key_Up) {
-            if (m_rightMenu->isVisible()) {
-                m_rightMenu->setActiveAction(m_rightMenu->actions().at(0));
-                return true;
-            } else {
-                if (key_event->key() == Qt::Key_Down) {
-                    int row = this->model()->rowCount();
-                    int currentNum = this->currentIndex().row();
-                    if (currentNum < (row - 1)) {
-                        this->setCurrentIndex(this->model()->index(currentNum + 1, 0));
-                    }
-                }
-                if (key_event->key() == Qt::Key_Up) {
-                    int currentNum = this->currentIndex().row();
-                    if (currentNum > 0) {
-                        this->setCurrentIndex(this->model()->index(currentNum - 1, 0));
-                    }
-                }
-            }
-        }
-        return QObject::eventFilter(watched, event);
-    }
-    return QObject::eventFilter(watched, event);
-}
-
 /**
  * @brief PackagesListView::getPos
  * @param rect 某一个Item的rect

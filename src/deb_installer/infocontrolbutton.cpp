@@ -26,6 +26,7 @@
 #include <DApplicationHelper>
 
 #include <QVBoxLayout>
+#include <QKeyEvent>
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QIcon>
@@ -39,6 +40,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
 {
+    this->setFocusPolicy(Qt::TabFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_arrowIcon->setAlignment(Qt::AlignCenter);
 
@@ -85,6 +87,19 @@ void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
     QWidget::mouseReleaseEvent(e);
 
     onMouseRelease();
+}
+
+/**
+ * @brief InfoControlButton::keyPressEvent 添加键盘事件响应
+ * @param event
+ */
+void InfoControlButton::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) {
+        if (this->hasFocus()) {
+            m_tipsText->clicked();
+        }
+    }
 }
 /**
  * @brief InfoControlButton::onMouseRelease

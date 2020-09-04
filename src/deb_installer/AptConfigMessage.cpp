@@ -20,9 +20,18 @@ AptConfigMessage::AptConfigMessage(QWidget *parent)
     initControl();
     initUI();
     initTitlebar();
+    initTabOrder();
     connect(m_pushbutton, &QPushButton::clicked, this, &AptConfigMessage::dealInput);
 }
 
+/**
+ * @brief AptConfigMessage::initTabOrder 初始化tab切换焦点的顺序。
+ */
+void AptConfigMessage::initTabOrder()
+{
+    QWidget::setTabOrder(m_pushbutton, m_inputEdit->lineEdit());
+    QWidget::setTabOrder(m_inputEdit->lineEdit(), m_pushbutton);
+}
 void AptConfigMessage::initTitlebar()
 {
     DTitlebar *tb = titlebar();
@@ -35,7 +44,6 @@ void AptConfigMessage::initTitlebar()
 
 void AptConfigMessage::initControl()
 {
-    qApp->installEventFilter(this);
     this->setFocusPolicy(Qt::NoFocus);
 
     m_textEdit = new InstallProcessInfoView(360, 196);
@@ -60,7 +68,7 @@ void AptConfigMessage::initControl()
     m_pushbutton->setDefault(true);
     m_pushbutton->setFixedSize(130, 36);
 
-    connect(m_inputEdit, &DLineEdit::returnPressed, this, [=] {
+    connect(m_inputEdit, &DLineEdit::returnPressed, this, [ = ] {
         m_pushbutton->clicked();
     });
 }
@@ -89,6 +97,7 @@ void AptConfigMessage::initUI()
     //    setLayout(centralLayout);
     QWidget *wrapWidget = new QWidget(this);
     wrapWidget->setLayout(centralLayout);
+    wrapWidget->setFocusPolicy(Qt::NoFocus);
     setCentralWidget(wrapWidget);
 
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));
@@ -200,22 +209,8 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
                         QWidget *widget = wLayout->itemAt(k)->widget();
                         if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
                             widget->setFocusPolicy(Qt::NoFocus);
-                            if ("Dtk::Widget::DWindowOptionButton" == QString(widget->metaObject()->className())) {
-                                widget->setVisible(false);
-                                m_OptionWindow = widget;
-                            }
-                            if ("Dtk::Widget::DWindowMinButton" == QString(widget->metaObject()->className())) {
-                                widget->setVisible(false);
-                                m_MinWindow = widget;
-                            }
-                            if ("Dtk::Widget::DWindowCloseButton" == QString(widget->metaObject()->className())) {
-                                widget->setVisible(false);
-                                m_closeWindow = widget;
-                            }
-                            if ("Dtk::Widget::DWindowMaxButton" == QString(widget->metaObject()->className())) {
-                                widget->setVisible(false);
-                                m_MaxWindow = widget;
-                            }
+                            // 隐藏标题栏所有的控件。
+                            widget->setVisible(false);
                         }
                     }
                 }
@@ -230,19 +225,3 @@ void AptConfigMessage::clearTexts()
     m_inputEdit->clear();
 }
 
-bool AptConfigMessage::eventFilter(QObject *watched, QEvent *event)
-{
-    QKeyEvent *key_event = static_cast<QKeyEvent *>(event);
-    if (event->type() == QEvent::KeyPress) {
-        if (key_event->key() == Qt::Key_Tab) {
-            if (m_inputEdit->lineEdit()->hasFocus())
-                m_pushbutton->setFocus();
-            else {
-                m_inputEdit->lineEdit()->setFocus();
-            }
-            releaseKeyboard();
-            return true;
-        }
-    }
-    return QObject::eventFilter(watched, event);
-}

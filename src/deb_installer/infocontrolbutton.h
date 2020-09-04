@@ -51,7 +51,8 @@ signals:
     void shrink();
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void onMouseRelease();

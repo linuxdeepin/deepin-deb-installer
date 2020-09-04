@@ -45,10 +45,11 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
-    , m_installButton(new DPushButton(this))
-    , m_acceptButton(new DPushButton(this))
-    , m_backButton(new DPushButton(this))
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
+    , m_installButton(new DPushButton(this))
+    , m_backButton(new DPushButton(this))
+    , m_acceptButton(new DPushButton(this))
+
       // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
@@ -56,6 +57,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     initContentLayout();
     initUI();
     initConnections();
+    initTabOrder();
 }
 
 void MultipleInstallPage::initContentLayout()
@@ -78,6 +80,7 @@ void MultipleInstallPage::initContentLayout()
 
 void MultipleInstallPage::initUI()
 {
+    this->setFocusPolicy(Qt::NoFocus);
     PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
 
     //获取currentIndex的坐标位置，用于键盘触发右键菜单
@@ -92,6 +95,7 @@ void MultipleInstallPage::initUI()
     m_appsListView->setModel(m_debListModel);
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsListView->setItemDelegate(delegate);
+    m_appsListView->setFocusPolicy(Qt::TabFocus);
     appsViewLayout->addSpacing(10);
     appsViewLayout->addWidget(m_appsListView);
 
@@ -112,9 +116,15 @@ void MultipleInstallPage::initUI()
     Utils::bindFontBySizeAndWeight(m_acceptButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
 
-    m_installButton->setFocusPolicy(Qt::NoFocus);
-    m_acceptButton->setFocusPolicy(Qt::NoFocus);
-    m_backButton->setFocusPolicy(Qt::NoFocus);
+    // 修改焦点控制
+    m_installButton->setFocusPolicy(Qt::TabFocus);
+    m_acceptButton->setFocusPolicy(Qt::TabFocus);
+    m_backButton->setFocusPolicy(Qt::TabFocus);
+
+    //增加键盘enter控制按钮
+    m_installButton->setAutoDefault(true);
+    m_acceptButton->setAutoDefault(true);
+    m_backButton->setAutoDefault(true);
 
     m_tipsLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -181,6 +191,17 @@ void MultipleInstallPage::initUI()
 
     m_contentLayout->addWidget(btnsFrame);
 }
+/**
+ * @brief MultipleInstallPage::initTabOrder 初始化tab焦点切换顺序。
+ */
+void MultipleInstallPage::initTabOrder()
+{
+
+    QWidget::setTabOrder(m_installProcessInfoView, m_infoControlButton);
+    QWidget::setTabOrder(m_infoControlButton, m_installButton);
+    QWidget::setTabOrder(m_infoControlButton, m_backButton);
+    QWidget::setTabOrder(m_backButton, m_acceptButton);
+}
 
 void MultipleInstallPage::initConnections()
 {
@@ -192,7 +213,6 @@ void MultipleInstallPage::initConnections()
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
-    connect(m_appsListView, &PackagesListView::OutOfFocus, this, &MultipleInstallPage::ResetFocus);
 
     connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
     connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
@@ -217,8 +237,6 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
 
     // change to install
     if (!m_installButton->isVisible()) {
-        //m_installButton->setVisible(false);
-//        m_processFrame->setVisible(true);
         m_infoControlButton->setVisible(true);
     }
 }
@@ -254,31 +272,26 @@ void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
     const int r = index.row();
 
     emit requestRemovePackage(r);
-
-    //When deleted to the last only one, switch focus
-    if (m_appsListView->count() == 1) {
-        emit OutOfFocus(false);
-    }
 }
 
 void MultipleInstallPage::showInfo()
 {
+    m_appsListView->setFocusPolicy(Qt::NoFocus);
     m_upDown = false;
     m_contentLayout->setContentsMargins(20, 0, 20, 0);
     m_appsListViewBgFrame->setVisible(false);
     m_appsListView->setVisible(false);
     m_installProcessInfoView->setVisible(true);
-    emit hideAutoBarTitle();
 }
 
 void MultipleInstallPage::hideInfo()
 {
+    m_appsListView->setFocusPolicy(Qt::TabFocus);
     m_upDown = true;
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
     m_appsListViewBgFrame->setVisible(true);
     m_appsListView->setVisible(true);
     m_installProcessInfoView->setVisible(false);
-    emit hideAutoBarTitle();
 }
 
 void MultipleInstallPage::hiddenCancelButton()
@@ -296,7 +309,6 @@ void MultipleInstallPage::afterGetAutherFalse()
 {
     m_processFrame->setVisible(false);
     m_infoControlButton->setVisible(false);
-    //    m_backButton->setVisible(true);//取消安装之后，只显示安装按钮，
     m_installButton->setVisible(true);
     m_infoControlButton->shrink();
 }
@@ -374,138 +386,4 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
     default:
         break;
     }
-}
-
-void MultipleInstallPage::setInitSelect()
-{
-    int num = m_appsListView->currentIndex().row();
-    if (num == -1) {
-        m_appsListView->setCurrentIndex(m_debListModel->index(0, 0));
-        m_appsListView->setInitConfig();
-    }
-    if (m_appsListView->isVisible()) {
-        m_appsListView->setFocus();
-        m_appsListView->grabKeyboard();
-        qApp->installEventFilter(m_appsListView);
-    } else {
-        if (m_infoControlButton->isVisible())
-            m_infoControlButton->setFocus();
-    }
-}
-
-bool MultipleInstallPage::eventFilter(QObject *watched, QEvent *event)
-{
-    if (QEvent::WindowDeactivate == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
-        }
-        emit OutOfFocus(false);
-        this->releaseKeyboard();
-        return QObject::eventFilter(watched, event);
-    }
-    if (QEvent::WindowActivate == event->type()) {
-        this->repaint();
-        this->update();
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-
-    if (QEvent::MouseButtonRelease == event->type()) {
-        m_MouseBtnRelease++;
-        QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
-        if (btnList.size() > 0) {
-            for (int num = 0; num < btnList.size(); num++) {
-                if (watched == btnList.at(num)) {
-                    this->releaseKeyboard();
-                    btnList.at(num)->click();
-                    m_MouseBtnRelease = 0;
-                    qApp->removeEventFilter(this);
-                    return QObject::eventFilter(watched, event);
-                }
-            }
-        }
-        if ((m_MouseBtnRelease + 1) >= btnList.size()) {
-            if (this->focusWidget() != nullptr) {
-                this->focusWidget()->clearFocus();
-            }
-            m_MouseBtnRelease = 0;
-            emit OutOfFocus(false);
-        }
-    }
-
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
-        if (key_event->key() == Qt::Key_Tab) {
-            if (m_installButton->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_acceptButton->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_backButton->hasFocus()) {
-                m_acceptButton->setFocus();
-                //emit OutOfFocus(false);
-            }
-
-            if (m_infoControlButton->hasFocus()) {
-                if (m_backButton->isVisible())
-                    m_backButton->setFocus();
-                else
-                    emit OutOfFocus(true);
-            }
-            if (m_appsListView->hasFocus()) {
-                if (m_currentFlag == 1) {
-                    // fix bug: 42340 安装过程中，点击tab键循环切换时，有一次切换未focus任何控件
-                    //切换时 当正在下载依赖，infoControlButton不可见会造成焦点丢失。
-                    if (m_installButton->isVisible()) {
-                        m_installButton->setFocus();
-                    } else if (m_infoControlButton->isVisible()) {
-                        m_infoControlButton->setFocus();
-                    } else {
-                        emit OutOfFocus(true);
-                    }
-                }
-                if (m_currentFlag == 2) {
-                    //m_backButton->setFocus();
-                    m_infoControlButton->setFocus();
-                }
-                m_appsListView->releaseKeyboard();
-                qApp->removeEventFilter(m_appsListView);
-            }
-            return true;
-        } else if (key_event->key() == Qt::Key_Return) {
-            this->releaseKeyboard();
-            if (m_installButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_installButton->click();
-            }
-            if (m_backButton->hasFocus()) {
-                m_backButton->click();
-                emit OutOfFocus(false);
-            }
-            if (m_acceptButton->hasFocus()) {
-                m_acceptButton->click();
-            }
-
-            if (m_infoControlButton->hasFocus()) {
-                m_infoControlButton->m_tipsText->click();
-            }
-            return true;
-        } else
-            return true;
-    }
-
-    return QObject::eventFilter(watched, event);
-}
-
-void MultipleInstallPage::ResetFocus(bool bFlag)
-{
-    Q_UNUSED(bFlag)
-    qApp->removeEventFilter(m_appsListView);
-    m_appsListView->clearFocus();
-    // 修复当appListView Focus时，切换到其他应用，键盘无响应的问题
-    m_appsListView->releaseKeyboard();
-    emit OutOfFocus(false);
 }

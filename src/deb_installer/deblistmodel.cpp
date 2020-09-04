@@ -675,7 +675,7 @@ void DebListModel::installDebs()
 void DebListModel::showNoDigitalErrWindow()
 {
     DDialog *Ddialog = new DDialog();
-    Ddialog->setFocusPolicy(Qt::WheelFocus);
+    Ddialog->setFocusPolicy(Qt::TabFocus);
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
     Ddialog->setTitle(tr("Unable to install"));
@@ -686,7 +686,7 @@ void DebListModel::showNoDigitalErrWindow()
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
 
     // fix bug:44837 https://pms.uniontech.com/zentao/bug-view-44837.html
-    btnOK->setFocusPolicy(Qt::WheelFocus);
+    btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
     connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
         if (preparedPackages().size() > 1)

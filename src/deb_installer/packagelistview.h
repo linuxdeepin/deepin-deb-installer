@@ -59,8 +59,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
     void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
-
     void paintEvent(QPaintEvent *event);
 
 private:

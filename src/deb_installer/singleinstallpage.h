@@ -53,17 +53,12 @@ public:
     void afterGetAutherFalse();
     void setEnableButton(bool bEnable);
     void DealDependResult(int iAuthRes, QString dependName);
-    void setInfoControlButtonFocus();
-    void setInitFocus();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
 signals:
     void back() const;
     void requestUninstallConfirm() const;
-    void OutOfFocus(bool) const;
 
 public slots:
     void uninstallCurrentPackage();
@@ -82,6 +77,20 @@ private:
     void initPkgInfoView(int fontinfosize);
     void initPkgInstallProcessView(int fontinfosize);
     void initConnections();
+    /**
+     * @brief initTabOrder 设置tab切换焦点的顺序
+     */
+    void initTabOrder();
+
+    /**
+     * @brief initButtonFocusPolicy 设置按钮的焦点策略
+     */
+    void initButtonFocusPolicy();
+
+    /**
+     * @brief initButtonAutoDefault 设置按钮的回车触发
+     */
+    void initButtonAutoDefault();
     int initLabelWidth(int fontinfo);
 
     void setPackageInfo();
@@ -130,11 +139,6 @@ private:
     DPushButton *m_backButton;
     DPushButton *m_doneButton;
 
-    //Current interface identification
-    //install:1;uninstall/reinstall:2;back/done:3;back/confirm:4
-    int m_currentFlag = 0;
-    int m_MouseBtnRelease = 0;
-
 private:
     QVBoxLayout *m_contentLayout;
     QVBoxLayout *m_centralLayout;
@@ -146,8 +150,6 @@ private:
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_pLoadingLabel;
-    //当鼠标触发详细信息按钮时清除事件
-    bool bKeyReturn = false;
 };
 
 #endif  // SINGLEINSTALLPAGE_H

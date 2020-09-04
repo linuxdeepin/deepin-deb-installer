@@ -58,7 +58,6 @@ protected:
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     /**
@@ -151,12 +150,6 @@ private slots:
      *
      */
     void reset();
-
-    /**
-     * @brief ResetFocus
-     * @param bFlag
-     */
-    void ResetFocus(bool bFlag);
 
     /**
      * @brief enableCloseButton

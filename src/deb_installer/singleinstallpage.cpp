@@ -264,6 +264,52 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 #endif
 }
 
+/**
+ * @brief SingleInstallPage::initTabOrder 设置tab切换焦点的顺序。
+ */
+void SingleInstallPage::initTabOrder()
+{
+    QWidget::setTabOrder(m_infoControlButton, m_installButton);
+    QWidget::setTabOrder(m_infoControlButton, m_backButton);
+    QWidget::setTabOrder(m_infoControlButton, m_uninstallButton);
+
+    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);
+
+    QWidget::setTabOrder(m_backButton, m_doneButton);
+    QWidget::setTabOrder(m_backButton, m_confirmButton);
+
+}
+
+/**
+ * @brief SingleInstallPage::initButtonFocusPolicy 添加各个控件的焦点获取策略
+ */
+void SingleInstallPage::initButtonFocusPolicy()
+{
+    this->setFocusPolicy(Qt::NoFocus);
+    m_infoControlButton->setFocusPolicy(Qt::TabFocus);
+    m_installButton->setFocusPolicy(Qt::TabFocus);
+    m_uninstallButton->setFocusPolicy(Qt::TabFocus);
+    m_reinstallButton->setFocusPolicy(Qt::TabFocus);
+    m_confirmButton->setFocusPolicy(Qt::TabFocus);
+    m_backButton->setFocusPolicy(Qt::TabFocus);
+    m_doneButton->setFocusPolicy(Qt::TabFocus);
+}
+
+/**
+ * @brief SingleInstallPage::initButtonAutoDefault 给各个按钮添加回车触发。
+ * 没有infoControlButton ,因为属于自定义控件，已经在控件内部实现。
+ */
+void SingleInstallPage::initButtonAutoDefault()
+{
+    m_installButton->setAutoDefault(true);
+    m_uninstallButton->setAutoDefault(true);
+    m_reinstallButton->setAutoDefault(true);
+    m_confirmButton->setAutoDefault(true);
+    m_backButton->setAutoDefault(true);
+    m_doneButton->setAutoDefault(true);
+
+}
+
 void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
     int fontinfosizetemp = 0;
@@ -307,12 +353,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_confirmButton->setFixedSize(120, 36);
     m_backButton->setFixedSize(120, 36);
     m_doneButton->setFixedSize(120, 36);
-    m_installButton->setFocusPolicy(Qt::NoFocus);
-    m_uninstallButton->setFocusPolicy(Qt::NoFocus);
-    m_reinstallButton->setFocusPolicy(Qt::NoFocus);
-    m_confirmButton->setFocusPolicy(Qt::NoFocus);
-    m_backButton->setFocusPolicy(Qt::NoFocus);
-    m_doneButton->setFocusPolicy(Qt::NoFocus);
+
+    m_contentLayout->addWidget(m_infoControlButton);
+
+    initButtonFocusPolicy();
+    initButtonAutoDefault();
+    initTabOrder();
 
     m_packageDescription->setFixedHeight(65);
     m_packageDescription->setFixedWidth(270);
@@ -360,7 +406,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_doneButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
-    m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
@@ -487,10 +532,6 @@ void SingleInstallPage::showInfomation()
     m_upDown = false;
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
-    if (!bKeyReturn) {
-        emit OutOfFocus(false);
-    }
-    bKeyReturn = false;
 }
 
 void SingleInstallPage::hideInfomation()
@@ -498,10 +539,6 @@ void SingleInstallPage::hideInfomation()
     m_upDown = true;
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
-    if (!bKeyReturn) {
-        emit OutOfFocus(false);
-    }
-    bKeyReturn = false;
 }
 
 void SingleInstallPage::showInfo()
@@ -555,6 +592,7 @@ void SingleInstallPage::OnCommitErrorFinished()
 
 void SingleInstallPage::onWorkerFinished()
 {
+    m_infoControlButton->setVisible(true);
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     m_uninstallButton->setVisible(false);
@@ -566,8 +604,6 @@ void SingleInstallPage::onWorkerFinished()
 
     if (stat == DebListModel::Success) {
         m_doneButton->setVisible(true);
-
-        m_currentFlag = 3;
 
         if (m_operate == Install || m_operate == Reinstall) {
             qDebug() << "Installed successfully";
@@ -583,8 +619,6 @@ void SingleInstallPage::onWorkerFinished()
         }
 
     } else if (stat == DebListModel::Failed) {
-        m_currentFlag = 4;
-
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -620,7 +654,6 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 
 void SingleInstallPage::setPackageInfo()
 {
-    qDebug() << "set package info";
     qApp->processEvents();
     QFontInfo fontinfosize = this->fontInfo();
     int fontlabelsize = fontinfosize.pixelSize();
@@ -674,8 +707,6 @@ void SingleInstallPage::setPackageInfo()
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
-
-        m_currentFlag = 4;
         return;
     }
     const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
@@ -686,11 +717,6 @@ void SingleInstallPage::setPackageInfo()
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
-
-    if (!installed)
-        m_currentFlag = 1;   //install
-    else
-        m_currentFlag = 2;
 
     if (installed) {
         if (installStat == DebListModel::InstalledSameVersion) {
@@ -746,90 +772,6 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
-}
-
-bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::FontChange && watched == this) {
-        QFontInfo fontinfo = this->fontInfo();
-        emit fontinfo.pixelSize();
-    }
-
-    if (QEvent::WindowDeactivate == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
-        }
-        emit OutOfFocus(false);
-        this->releaseKeyboard();
-        return QObject::eventFilter(watched, event);
-    }
-    if (QEvent::WindowActivate == event->type()) {
-        this->repaint();
-        this->update();
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-
-    if (QEvent::MouseButtonRelease == event->type()) {
-        m_MouseBtnRelease++;
-        QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
-        if (btnList.size() > 0) {
-            for (int num = 0; num < btnList.size(); num++) {
-                if (watched == btnList.at(num)) {
-                    this->releaseKeyboard();
-                    btnList.at(num)->click();
-                    m_MouseBtnRelease = 0;
-                    qApp->removeEventFilter(this);
-                    return QObject::eventFilter(watched, event);
-                }
-            }
-        }
-        if ((m_MouseBtnRelease + 1) >= btnList.size()) {
-            if (this->focusWidget() != nullptr) {
-                this->focusWidget()->clearFocus();
-            }
-            m_MouseBtnRelease = 0;
-            emit OutOfFocus(false);
-        }
-    }
-
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
-        if (key_event->key() == Qt::Key_Tab) {
-            if (m_installButton->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_reinstallButton->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_uninstallButton->hasFocus()) {
-                m_reinstallButton->setFocus();
-            }
-            if (m_doneButton->hasFocus() || m_confirmButton->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_backButton->hasFocus()) {
-                if (m_currentFlag == 3) {
-                    m_doneButton->setFocus();
-                }
-                if (m_currentFlag == 4) {
-                    m_confirmButton->setFocus();
-                }
-            }
-            if (m_infoControlButton->hasFocus()) {
-                if (m_backButton->isVisible())
-                    m_backButton->setFocus();
-                else
-                    emit OutOfFocus(true);
-            }
-            return true;
-        }
-    }
-
-    return QObject::eventFilter(watched, event);
 }
 
 void SingleInstallPage::setAuthConfirm(QString dependName)
@@ -938,97 +880,5 @@ void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         break;
     default:
         break;
-    }
-}
-
-void SingleInstallPage::setInfoControlButtonFocus()
-{
-    // fix bug: 42340 安装过程中，点击tab键循环切换时，有一次切换未focus任何控件
-    //切换时 当正在下载依赖，infoControlButton不可见会造成焦点丢失。
-    if (m_infoControlButton->isVisible()) {
-        m_infoControlButton->setFocus();
-    } else {
-        emit OutOfFocus(true);
-    }
-}
-
-void SingleInstallPage::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Return) {
-        this->releaseKeyboard();
-        bKeyReturn = true;
-
-        switch (m_currentFlag) {
-        case 1: {
-            if (m_installButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_installButton->click();
-            }
-
-            if (m_infoControlButton->hasFocus()) {
-                m_infoControlButton->m_tipsText->click();
-            }
-            break;
-        }
-        case 2: {
-            if (m_uninstallButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_uninstallButton->click();
-            }
-            if (m_reinstallButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_reinstallButton->click();
-            }
-
-            if (m_infoControlButton->hasFocus()) {
-                m_infoControlButton->m_tipsText->click();
-            }
-            break;
-        }
-        case 3: {
-            if (m_infoControlButton->hasFocus()) {
-                m_infoControlButton->m_tipsText->click();
-            }
-
-            if (m_backButton->hasFocus()) {
-                m_backButton->click();
-                emit OutOfFocus(false);
-            }
-            if (m_doneButton->hasFocus()) {
-                m_doneButton->click();
-            }
-            break;
-        }
-        case 4: {
-            if (m_infoControlButton->hasFocus()) {
-                m_infoControlButton->m_tipsText->click();
-            }
-
-            if (m_backButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_backButton->click();
-            }
-            if (m_confirmButton->hasFocus()) {
-                emit OutOfFocus(false);
-                m_confirmButton->click();
-            }
-            break;
-        }
-        default:
-            break;
-        }
-    }
-}
-
-void SingleInstallPage::setInitFocus()
-{
-    if (m_infoControlButton->isVisible())
-        m_infoControlButton->setFocus();
-    else if (m_backButton->isVisible()) {
-        m_backButton->setFocus();
-    } else if (m_installButton->isVisible()) {
-        m_installButton->setFocus();
-    } else if (m_uninstallButton->isVisible()) {
-        m_uninstallButton->setFocus();
     }
 }
