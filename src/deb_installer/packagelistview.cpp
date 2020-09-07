@@ -68,25 +68,12 @@ void PackagesListView::initShortcuts()
     connect(deleteShortcut, SIGNAL(activated()), this, SLOT(onShortcutDeleteAction()));
 }
 
-void PackagesListView::leaveEvent(QEvent *e)
-{
-    DListView::leaveEvent(e);
-
-    emit entered(QModelIndex());
-}
-
-void PackagesListView::mouseMoveEvent(QMouseEvent *event)
-{
-    DListView::mouseMoveEvent(event);
-}
-
 void PackagesListView::scrollContentsBy(int dx, int dy)
 {
     if (-1 == m_highlightIndex.row()) {
         QListView::scrollContentsBy(dx, dy);
         return;
     }
-
     QListView::scrollContentsBy(dx, dy);
 }
 
@@ -97,7 +84,6 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
     } else {
         m_bLeftMouse = false;
     }
-
     DListView::mousePressEvent(event);
 }
 
@@ -138,7 +124,6 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
             //增加右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
             if (this->hasFocus() && m_bIsRightMenuShow) {
                 // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
-
                 m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
             }
         }
@@ -197,16 +182,11 @@ void PackagesListView::onRightMenuDeleteAction()
 
 void PackagesListView::paintEvent(QPaintEvent *event)
 {
-    //获取cuurentIndex并保存，用于右键菜单的定位。
+    //获取currentIndex并保存，用于右键菜单的定位。
     m_currentIndex = this->currentIndex().row();
     DListView::paintEvent(event);
 }
 
-void PackagesListView::setInitConfig()
-{
-    if (this->count() > 0)
-        m_currModelIndex = this->model()->index(0, 0);
-}
 /**
  * @brief PackagesListView::getPos
  * @param rect 某一个Item的rect
@@ -229,4 +209,19 @@ void PackagesListView::getPos(QRect rect, int index)
 void PackagesListView::setRightMenuShowStatus(bool isShow)
 {
     m_bIsRightMenuShow = isShow;
+}
+
+/**
+ * @brief PackagesListView::focusInEvent 焦点FocusIn事件
+ * @param event
+ * 当焦点切换到PackListView时，默认选中第一项。
+ */
+void PackagesListView::focusInEvent(QFocusEvent *event)
+{
+    if (event->reason() == Qt::TabFocusReason) {
+        if (this->count() > 0) {
+            m_currModelIndex = this->model()->index(0, 0);
+            this->setCurrentIndex(m_currModelIndex);
+        }
+    }
 }

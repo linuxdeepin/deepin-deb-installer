@@ -35,7 +35,6 @@ class PackagesListView : public DListView
     Q_OBJECT
 public:
     explicit PackagesListView(QWidget *parent = nullptr);
-    void setInitConfig();
 
     /**
      * @brief setRightMenuShowStatus 根据安装进程来设置是否显示右键菜单
@@ -56,16 +55,18 @@ signals:
 public slots:
     void getPos(QRect rect, int index); //获取到的当前Item的位置和row
 protected:
-    void leaveEvent(QEvent *e);
-
-    void scrollContentsBy(int dx, int dy);
-
-    void mouseMoveEvent(QMouseEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command);
-    void keyPressEvent(QKeyEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void scrollContentsBy(int dx, int dy)override;
+    void mousePressEvent(QMouseEvent *event)override;
+    void mouseReleaseEvent(QMouseEvent *event)override;
+    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)override;
+    void keyPressEvent(QKeyEvent *event)override;
+    void paintEvent(QPaintEvent *event)override;
+    /**
+     * @brief focusInEvent
+     * @param event
+     * 当焦点切换到当前控件时，默认选中第一项。
+     */
+    void focusInEvent(QFocusEvent *event) override;
 
 private:
     void initUI();
@@ -94,6 +95,7 @@ private:
      * @brief m_bIsRightMenuShow 当前是否能够调出右键菜单标识，由MultiPage工作状态决定，并传入
      */
     bool m_bIsRightMenuShow = false;
+
 };
 
 #endif  // PACKAGESLISTVIEW_H
