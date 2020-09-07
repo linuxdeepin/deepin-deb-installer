@@ -36,8 +36,6 @@ PackagesListView::PackagesListView(QWidget *parent)
     initConnections();
     initRightContextMenu();
     initShortcuts();
-    //获取焦点控制
-    this->setFocusPolicy(Qt::NoFocus);
 }
 
 void PackagesListView::initUI()
