@@ -38,12 +38,14 @@ class FileChooseWidget : public QWidget
 
 public:
     explicit FileChooseWidget(QWidget *parent = nullptr);
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    void setChooseBtnFocus();
+
+    /**
+     * @brief clearChooseFileBtnFocus 清除文件选择按钮的焦点。
+     */
+    void clearChooseFileBtnFocus();
 
 signals:
     void packagesSelected(const QStringList files) const;
-    void OutOfFocus(bool) const;
 
 private slots:
     void chooseFiles();

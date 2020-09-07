@@ -523,6 +523,9 @@ void DebInstaller::reset()
     //fix bug: 44801  https://pms.uniontech.com/zentao/bug-view-44801.html
     this->setAcceptDrops(true);
     m_fileChooseWidget->setAcceptDrops(true);
+    // 安装完成后，清除文件选择按钮的焦点
+    // fix bug:https://pms.uniontech.com/zentao/bug-view-46525.html
+    m_fileChooseWidget->clearChooseFileBtnFocus();
 }
 
 /**

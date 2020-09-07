@@ -148,68 +148,12 @@ void FileChooseWidget::themeChanged()
     split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
 }
 
-void FileChooseWidget::setChooseBtnFocus()
+/**
+ * @brief FileChooseWidget::clearChooseFileBtnFocus 在返回文件选择界面的时候清除文件选择按钮的焦点
+ * fix bug: https://pms.uniontech.com/zentao/bug-view-46525.html
+ */
+void FileChooseWidget::clearChooseFileBtnFocus()
 {
-    m_chooseFileBtn->setFocus();
+    m_chooseFileBtn->clearFocus();
 }
 
-bool FileChooseWidget::eventFilter(QObject *watched, QEvent *event)
-{
-    if (QEvent::WindowDeactivate == event->type()) {
-        if (this->focusWidget() != nullptr) {
-            this->focusWidget()->clearFocus();
-        }
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-    if (QEvent::WindowActivate == event->type()) {
-        this->repaint();
-        this->update();
-        emit OutOfFocus(false);
-        return QObject::eventFilter(watched, event);
-    }
-
-    if (QEvent::MouseButtonRelease == event->type()) {
-        m_MouseBtnRelease++;
-        QList<ChooseFileButton *> btnList = this->findChildren<ChooseFileButton *>();
-        if (btnList.size() > 0) {
-            for (int num = 0; num < btnList.size(); num++) {
-                if (watched == btnList.at(num)) {
-                    this->releaseKeyboard();
-                    btnList.at(num)->click();
-                    m_MouseBtnRelease = 0;
-                    qApp->removeEventFilter(this);
-                    return QObject::eventFilter(watched, event);
-                }
-            }
-        }
-
-        if (m_MouseBtnRelease >= (btnList.size() + 1)) {
-            if (this->focusWidget() != nullptr) {
-                this->focusWidget()->clearFocus();
-            }
-            m_MouseBtnRelease = 0;
-            emit OutOfFocus(false);
-        }
-    }
-
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
-        if (key_event->key() == Qt::Key_Tab) {
-            if (m_chooseFileBtn->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            return true;
-        } else if (key_event->key() == Qt::Key_Return) {
-            this->releaseKeyboard();
-            if (m_chooseFileBtn->hasFocus()) {
-                m_chooseFileBtn->click();
-            }
-            return true;
-        } else
-            return true;
-    }
-
-    return QObject::eventFilter(watched, event);
-}
