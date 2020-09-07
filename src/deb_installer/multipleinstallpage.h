@@ -27,8 +27,8 @@
 #include "installprocessinfoview.h"
 
 #include <QPropertyAnimation>
-
 #include <QWidget>
+
 #include <DPushButton>
 #include <DProgressBar>
 #include <DSpinner>
@@ -96,7 +96,6 @@ private:
     DPushButton *m_installButton;
     DPushButton *m_backButton;
     DPushButton *m_acceptButton;
-
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsLabel;
