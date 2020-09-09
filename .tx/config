@@ -17,3 +17,9 @@ preTranlate_file = src/deb_installer/deepin-deb-installer.desktop
 source_lang = en
 type = QT
 
+[deepin-package-manager.deepin-deb-installer-policy-ts]
+file_filter = translations/policy/policy_<lang>.ts
+source_file = translations/policy/policy.ts
+source_lang = en
+type = QT
+

@@ -4,35 +4,35 @@
 <context>
     <name>AptConfigMessage</name>
     <message>
-        <location filename="../src/deb_installer/AptConfigMessage.cpp" line="53"/>
+        <location filename="../src/deb_installer/AptConfigMessage.cpp" line="63"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation>Jepni numrin për formësim:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/AptConfigMessage.cpp" line="56"/>
+        <location filename="../src/deb_installer/AptConfigMessage.cpp" line="67"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="110"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="108"/>
         <source>Package Installer</source>
         <translation>Instalues Paketash</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="389"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="386"/>
         <source>The deb package may be broken</source>
         <translation>Paketa deb mund të jetë e dëmtuar</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="403"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="400"/>
         <source>Already Added</source>
         <translation>E shtuar Tashmë</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/debinstaller.cpp" line="591"/>
+        <location filename="../src/deb_installer/debinstaller.cpp" line="593"/>
         <source>Bulk Install</source>
         <translation>Instalim Në Masë</translation>
     </message>
@@ -68,17 +68,17 @@
         <translation>S’u arrit të instalohej %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="678"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="681"/>
         <source>Unable to install</source>
         <translation>S’arrihet të instalohet</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="679"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="682"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Kjo paketë s’ka një nënshkrim dixhital të vlefshëm</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/deblistmodel.cpp" line="681"/>
+        <location filename="../src/deb_installer/deblistmodel.cpp" line="684"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -115,32 +115,32 @@
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="48"/>
         <source>Collapse</source>
         <translation>Tkurre</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="51"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="48"/>
         <source>Show details</source>
         <translation>Shfaq hollësi</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="102"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="108"/>
         <source>Install</source>
         <translation>Instaloje</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="103"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="109"/>
         <source>Done</source>
         <translation>U bë</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="105"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="111"/>
         <source>Back</source>
         <translation>Mbrapsht</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="350"/>
+        <location filename="../src/deb_installer/multipleinstallpage.cpp" line="369"/>
         <source>Installing dependencies: %1</source>
         <translation>Po instalohen varësi: %1</translation>
     </message>
@@ -186,7 +186,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb_installer/packagelistview.cpp" line="139"/>
+        <location filename="../src/deb_installer/packagelistview.cpp" line="138"/>
         <source>Delete</source>
         <translation>Fshije</translation>
     </message>
@@ -202,57 +202,57 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="604"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="638"/>
         <source>Collapse</source>
         <translation>Tkurre</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="290"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="336"/>
         <source>Install</source>
         <translation>Instaloje</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="292"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="338"/>
         <source>Remove</source>
         <translation>Hiqe</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="294"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="340"/>
         <source>Reinstall</source>
         <translation>Riinstaloje</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="296"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="342"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="298"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="344"/>
         <source>Back</source>
         <translation>Mbrapsht</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="300"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="346"/>
         <source>Done</source>
         <translation>U bë</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="701"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="727"/>
         <source>Later version installed: %1</source>
         <translation>Version më i vonshëm i instaluar: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="705"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="731"/>
         <source>Earlier version installed: %1</source>
         <translation>Version më i hershëm i instaluar: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="842"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="786"/>
         <source>Installing dependencies: %1</source>
         <translation>Po instalohen varësi: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="934"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="878"/>
         <source>Failed to install %1</source>
         <translation>S’u arrit të instalohej %1</translation>
     </message>
@@ -262,18 +262,18 @@
         <translation>Version: </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="575"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="611"/>
         <source>Installed successfully</source>
         <translation>U instalua me sukses</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="581"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="617"/>
         <source>Uninstalled successfully</source>
         <translation>U çinstalua me sukses</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="553"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="594"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="590"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="628"/>
         <source>Uninstall Failed</source>
         <translation>Çinstalimi Dështoi</translation>
     </message>
@@ -283,7 +283,7 @@
         <translation>Emër: </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="698"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="724"/>
         <source>Same version installed</source>
         <translation>Version i njëjtë i instaluar</translation>
     </message>
@@ -292,8 +292,8 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="60"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="464"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="574"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="509"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="610"/>
         <source>Show details</source>
         <translation>Shfaq hollësi</translation>
     </message>
@@ -301,8 +301,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="478"/>
-        <location filename="../src/deb_installer/singleinstallpage.cpp" line="580"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="523"/>
+        <location filename="../src/deb_installer/singleinstallpage.cpp" line="616"/>
         <source>Show details</source>
         <translation>Shfaq hollësi</translation>
     </message>
@@ -330,14 +330,14 @@
         <translation>Ripohojeni</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="130"/>
+        <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="136"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>Jeni i sigurt se doni të çinstalohet %1?
 Do të hiqen krejt varësitë</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="132"/>
+        <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="138"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Jeni i sigurt se doni të çinstalohet %1?
