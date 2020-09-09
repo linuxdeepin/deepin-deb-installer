@@ -43,7 +43,8 @@ SOURCES += \
     choosefilebutton.cpp \
     debinfolabel.cpp \
     singleInstallerApplication.cpp \
-    AptConfigMessage.cpp
+    AptConfigMessage.cpp \
+    InfoCommandLinkButton.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -64,7 +65,8 @@ HEADERS += \
     choosefilebutton.h \
     debinfolabel.h \
     singleInstallerApplication.h \
-    AptConfigMessage.h
+    AptConfigMessage.h \
+    InfoCommandLinkButton.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

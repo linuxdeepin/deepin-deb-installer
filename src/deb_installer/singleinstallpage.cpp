@@ -286,7 +286,6 @@ void SingleInstallPage::initTabOrder()
 void SingleInstallPage::initButtonFocusPolicy()
 {
     this->setFocusPolicy(Qt::NoFocus);
-    m_infoControlButton->setFocusPolicy(Qt::TabFocus);
     m_installButton->setFocusPolicy(Qt::TabFocus);
     m_uninstallButton->setFocusPolicy(Qt::TabFocus);
     m_reinstallButton->setFocusPolicy(Qt::TabFocus);

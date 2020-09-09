@@ -20,6 +20,7 @@
  */
 
 #include "infocontrolbutton.h"
+#include "InfoCommandLinkButton.h"
 #include "utils.h"
 
 #include <DStyleHelper>
@@ -34,13 +35,14 @@
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent)
-    , m_tipsText(new DCommandLinkButton("", this))
+    , m_tipsText(new InfoCommandLinkButton("", this))
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
 {
-    this->setFocusPolicy(Qt::TabFocus);
+    this->setFocusPolicy(Qt::NoFocus);
+    this->m_tipsText->setFocusPolicy(Qt::TabFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_arrowIcon->setAlignment(Qt::AlignCenter);
 

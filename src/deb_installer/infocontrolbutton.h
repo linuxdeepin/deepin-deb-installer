@@ -32,6 +32,7 @@ DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
 #define THEME_LIGHT 1//"light"
 
+class InfoCommandLinkButton;
 class InfoControlButton : public QWidget
 {
     Q_OBJECT
@@ -44,7 +45,7 @@ public:
 
 public:
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
-    DCommandLinkButton *m_tipsText;
+    InfoCommandLinkButton *m_tipsText;
 
 signals:
     void expand();
