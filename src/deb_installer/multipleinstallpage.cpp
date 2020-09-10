@@ -193,8 +193,9 @@ void MultipleInstallPage::initTabOrder()
 {
     // 修改焦点切换的顺序
     QWidget::setTabOrder(m_appsListView, m_infoControlButton);
-    QWidget::setTabOrder(m_infoControlButton, m_installButton);
-    QWidget::setTabOrder(m_infoControlButton, m_backButton);
+    //焦点从infoCommandLinkButton直接切换到安装或返回按钮
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);
     QWidget::setTabOrder(m_backButton, m_acceptButton);
 }
 

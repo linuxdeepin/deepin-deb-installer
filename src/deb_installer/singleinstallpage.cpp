@@ -269,9 +269,11 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
  */
 void SingleInstallPage::initTabOrder()
 {
-    QWidget::setTabOrder(m_infoControlButton, m_installButton);
-    QWidget::setTabOrder(m_infoControlButton, m_backButton);
-    QWidget::setTabOrder(m_infoControlButton, m_uninstallButton);
+    // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-46968.html
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);
 
     QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);
 

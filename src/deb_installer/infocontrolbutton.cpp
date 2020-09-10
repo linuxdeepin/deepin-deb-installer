@@ -35,11 +35,11 @@
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent)
-    , m_tipsText(new InfoCommandLinkButton("", this))
     , m_expand(false)
     , m_expandTips(expandTips)
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
+    , m_tipsText(new InfoCommandLinkButton("", this))
 {
     this->setFocusPolicy(Qt::NoFocus);
     this->m_tipsText->setFocusPolicy(Qt::TabFocus);
@@ -82,6 +82,15 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_tipsText->setStyleSheet("QLabel{background: cyan;}");
     m_arrowIcon->setStyleSheet("QLabel{background: red;}");
 #endif
+}
+
+/**
+ * @brief InfoControlButton::controlButton
+ * @return 当前使用的CommandLinkButton
+ */
+QAbstractButton *InfoControlButton::controlButton()
+{
+    return m_tipsText;
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)

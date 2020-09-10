@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 
 #include <DLabel>
-#include <DCommandLinkButton>
+#include <QAbstractButton>
 
 DWIDGET_USE_NAMESPACE
 #define THEME_DARK 2//"dark"
@@ -44,8 +44,11 @@ public:
     void setExpandTips(const QString text);
 
 public:
-    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
-    InfoCommandLinkButton *m_tipsText;
+    /**
+     * @brief linkButton 返回当前使用的CommandLinkButton
+     * @return 当前使用的CommandLinkButton
+     */
+    QAbstractButton *controlButton();
 
 signals:
     void expand();
@@ -66,6 +69,9 @@ private:
 
     DLabel *m_arrowIcon;
     QVBoxLayout *centralLayout;
+
+    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    InfoCommandLinkButton *m_tipsText;
 };
 
 #endif // INFOCONTROLBUTTON_H
