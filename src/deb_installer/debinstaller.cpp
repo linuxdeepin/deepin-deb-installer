@@ -375,8 +375,17 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         return;
     } else {
         qDebug() << "append Package";
-        for (const auto &package : packages) {
+        //调整参数类型，如果为相对路径，便于改动。
+        for (auto package : packages) {
             QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
+
+            // 判断当前是否为绝对路径，如果是相对路径，则将相对路径转换为绝对路径。
+            if (package[0] != "/") {
+                QFileInfo packageAbsolutePath(package);
+                package = packageAbsolutePath.absoluteFilePath();
+                qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
+            }
+
             bool isValid =  m_pDebPackage->isValid();
             delete m_pDebPackage;
             if (!isValid) {
