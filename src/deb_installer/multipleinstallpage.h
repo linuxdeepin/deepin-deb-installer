@@ -113,6 +113,9 @@ private:
     //install:1    finish:2
     int m_currentFlag = 1;
     int m_MouseBtnRelease = 0;
+
+    //安装开始，是否启用各个按钮焦点的标志位，在启用后更改为false。此后不再启用。
+    bool startInstall = true;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

@@ -199,6 +199,12 @@ private:
     bool mkdir();
     void rmdir();
 
+    /**
+     * @brief enableTitleBarFocus
+     * 启用TitleBar焦点切换策略
+     */
+    void enableTitleBarFocus();
+
 private:
     int m_workerStatus;
     int m_operatingIndex;

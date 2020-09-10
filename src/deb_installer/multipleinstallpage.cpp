@@ -215,6 +215,7 @@ void MultipleInstallPage::setButtonFocusPolicy(bool focusPolicy)
     m_installButton->setFocusPolicy(focus);
     m_acceptButton->setFocusPolicy(focus);
     m_backButton->setFocusPolicy(focus);
+    m_infoControlButton->controlButton()->setFocusPolicy(focus);
 
     //增加键盘enter控制按钮
     m_installButton->setAutoDefault(true);
@@ -264,6 +265,11 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
 
 void MultipleInstallPage::onProgressChanged(const int progress)
 {
+// startInstall 为true ,表明当前按钮已经被禁用焦点，安装开始后，将启用各个按钮的焦点。并将此标志改为false
+    if (startInstall) {
+        setButtonFocusPolicy(true);
+        startInstall = false;
+    }
     m_progressAnimation->setStartValue(m_installProgress->value());
     m_progressAnimation->setEndValue(progress);
     m_progressAnimation->start();

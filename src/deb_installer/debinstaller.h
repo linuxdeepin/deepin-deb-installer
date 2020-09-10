@@ -158,6 +158,11 @@ private slots:
      */
     void enableCloseButton(bool enable);
 
+    /**
+     * @brief enableTitleFocus 开启标题栏焦点。
+     */
+    void enableTitleFocus();
+
 private:
     /**
      * @brief initUI

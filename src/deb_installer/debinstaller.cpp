@@ -185,6 +185,19 @@ void DebInstaller::initConnections()
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
+
+    //在开始安装的时候，启用标题栏焦点。点击安装按钮之后禁用焦点 解决授权成功之后标题栏焦点出现的问题
+    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
+}
+
+/**
+ * @brief DebInstaller::enableTitleFocus 开启标题栏焦点。
+ */
+void DebInstaller::enableTitleFocus()
+{
+    //开启标题栏焦点 取消信号和槽的链接
+    setTitleBarFocusPolicy(true);
+    disconnect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
 }
 
 void DebInstaller::enableCloseButton(bool enable)
@@ -245,9 +258,8 @@ void DebInstaller::enableCloseAndExit()
 //after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
-    //Solve flash problems when installing and reinstalling
-    m_OptionWindow->clearFocus();
-
+    //点击安装按钮之后，设置标题栏焦点策略为NoFocus
+    setTitleBarFocusPolicy(false);
     disableCloseAndExit();
 }
 

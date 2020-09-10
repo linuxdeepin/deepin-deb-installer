@@ -291,8 +291,10 @@ void SingleInstallPage::initButtonFocusPolicy(bool focusPolicy)
     auto focus = Qt::TabFocus;
     if (focusPolicy)
         focus = Qt::TabFocus;
-    else
+    else {
+        startInstall = true;
         focus = Qt::NoFocus;
+    }
 
     m_installButton->setFocusPolicy(focus);
     m_uninstallButton->setFocusPolicy(focus);
@@ -300,6 +302,7 @@ void SingleInstallPage::initButtonFocusPolicy(bool focusPolicy)
     m_confirmButton->setFocusPolicy(focus);
     m_backButton->setFocusPolicy(focus);
     m_doneButton->setFocusPolicy(focus);
+    m_infoControlButton->controlButton()->setFocusPolicy(focus);
 }
 
 /**
@@ -650,6 +653,11 @@ void SingleInstallPage::onWorkerFinished()
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
+    // startInstall 为true ,表明当前按钮已经被禁用焦点，安装开始后，将启用各个按钮的焦点。并将此标志改为false
+    if (startInstall) {
+        startInstall = false;
+        initButtonFocusPolicy(true);
+    }
     qDebug() << progress << endl;
     if (progress < m_progress->value()) {
         return;
