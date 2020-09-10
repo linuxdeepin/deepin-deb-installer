@@ -338,6 +338,9 @@ void MultipleInstallPage::afterGetAutherFalse()
     //授权取消或授权失败后先关闭焦点。
     //fix bug:https://pms.uniontech.com/zentao/bug-view-46813.html
     setButtonFocusPolicy(false);
+
+    //授权取消或授权失败后，允许右键菜单弹出
+    m_appsListView->setRightMenuShowStatus(true);
 }
 
 void MultipleInstallPage::onScrollSlotFinshed()
