@@ -211,6 +211,12 @@ private:
      */
     SingleInstallPage *backToSinglePage();
 
+    /**
+     * @brief setTitleBarFocusPolicy 设置标题栏控件按钮的焦点策略
+     * @param focusPolicy 是否启用标题栏按钮控件
+     */
+    void setTitleBarFocusPolicy(bool focusPolicy);
+
 private:
     DebListModel *m_fileListModel;
     FileChooseWidget *m_fileChooseWidget;

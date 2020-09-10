@@ -76,6 +76,12 @@ private:
     void initContentLayout();
     void initTabOrder();
 
+    /**
+     * @brief setButtonFocusPolicy 设置按钮的焦点策略
+     * @param focusPolicy 是否启用焦点
+     */
+    void setButtonFocusPolicy(bool focusPolicy);
+
 private:
     DebListModel *m_debListModel;
 

@@ -371,7 +371,8 @@ void DebListModel::onTransactionErrorOccurred()
         // reset env
         emit AuthCancel();
         emit lockForAuth(false);
-        emit EnableReCancelBtn(false);
+        //EnableReCancelBtn在信号在checkBoxStatus已发送，修改为enableCloseButton
+        emit enableCloseButton(true);
         m_workerStatus = WorkerPrepare;
         m_workerStatus_temp = m_workerStatus;
         return;

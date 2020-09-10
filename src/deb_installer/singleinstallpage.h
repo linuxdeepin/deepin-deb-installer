@@ -84,8 +84,9 @@ private:
 
     /**
      * @brief initButtonFocusPolicy 设置按钮的焦点策略
+     * @param focusPolicy 是否启用焦点
      */
-    void initButtonFocusPolicy();
+    void initButtonFocusPolicy(bool focusPolicy);
 
     /**
      * @brief initButtonAutoDefault 设置按钮的回车触发

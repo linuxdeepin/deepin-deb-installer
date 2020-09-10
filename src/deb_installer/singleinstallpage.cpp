@@ -283,15 +283,21 @@ void SingleInstallPage::initTabOrder()
 /**
  * @brief SingleInstallPage::initButtonFocusPolicy 添加各个控件的焦点获取策略
  */
-void SingleInstallPage::initButtonFocusPolicy()
+void SingleInstallPage::initButtonFocusPolicy(bool focusPolicy)
 {
     this->setFocusPolicy(Qt::NoFocus);
-    m_installButton->setFocusPolicy(Qt::TabFocus);
-    m_uninstallButton->setFocusPolicy(Qt::TabFocus);
-    m_reinstallButton->setFocusPolicy(Qt::TabFocus);
-    m_confirmButton->setFocusPolicy(Qt::TabFocus);
-    m_backButton->setFocusPolicy(Qt::TabFocus);
-    m_doneButton->setFocusPolicy(Qt::TabFocus);
+    auto focus = Qt::TabFocus;
+    if (focusPolicy)
+        focus = Qt::TabFocus;
+    else
+        focus = Qt::NoFocus;
+
+    m_installButton->setFocusPolicy(focus);
+    m_uninstallButton->setFocusPolicy(focus);
+    m_reinstallButton->setFocusPolicy(focus);
+    m_confirmButton->setFocusPolicy(focus);
+    m_backButton->setFocusPolicy(focus);
+    m_doneButton->setFocusPolicy(focus);
 }
 
 /**
@@ -355,8 +361,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     m_contentLayout->addWidget(m_infoControlButton);
 
-    initButtonFocusPolicy();
+    //启用焦点切换。
+    initButtonFocusPolicy(true);
+    // 设置按钮回车触发
     initButtonAutoDefault();
+    // 初始化按钮焦点切换策略。
     initTabOrder();
 
     m_packageDescription->setFixedHeight(65);
@@ -743,6 +752,9 @@ void SingleInstallPage::setEnableButton(bool bEnable)
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
+
+    //授权框取消后，启用焦点。
+    initButtonFocusPolicy(true);
 }
 
 void SingleInstallPage::afterGetAutherFalse()
@@ -760,6 +772,8 @@ void SingleInstallPage::afterGetAutherFalse()
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }
+    // 授权失败或授权取消后，禁用焦点。
+    initButtonFocusPolicy(false);
 }
 
 void SingleInstallPage::paintEvent(QPaintEvent *event)

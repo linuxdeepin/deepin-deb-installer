@@ -654,6 +654,9 @@ void DebInstaller::setEnableButton(bool bEnable)
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setEnableButton(bEnable);
     }
+    // 启用焦点切换
+    // fix bug:https://pms.uniontech.com/zentao/bug-view-46813.html
+    setTitleBarFocusPolicy(true);
 }
 
 /**
@@ -662,10 +665,10 @@ void DebInstaller::setEnableButton(bool bEnable)
  */
 void DebInstaller::showHiddenButton()
 {
-    //After the installation is complete, the hidden button is displayed and the close button is available
-    enableCloseAndExit();
+    //取消授权后禁用焦点
+    //fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
+    setTitleBarFocusPolicy(false);
     m_fileListModel->reset_filestatus();
-
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         singlePage->afterGetAutherFalse();
@@ -707,3 +710,19 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     }
 }
 
+/**
+ * @brief DebInstaller::setTitleBarFocusPolicy 设置当前标题栏的焦点切换策略
+ * @param focusPolicy 是否允许焦点切换。
+ */
+void DebInstaller::setTitleBarFocusPolicy(bool focusPolicy)
+{
+    auto focus = Qt::TabFocus;
+    if (focusPolicy)
+        focus = Qt::TabFocus;
+    else
+        focus = Qt::NoFocus;
+
+    m_OptionWindow->setFocusPolicy(focus);
+    m_MinWindow->setFocusPolicy(focus);
+    m_closeWindow->setFocusPolicy(focus);
+}
