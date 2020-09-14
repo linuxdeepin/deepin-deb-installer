@@ -22,12 +22,12 @@
 #ifndef DEBINSTALLER_H
 #define DEBINSTALLER_H
 
+#include <DMainWindow>
+
 #include <QPointer>
 #include <QSettings>
 #include <QStackedLayout>
 #include <QApt/DebFile>
-
-#include <DMainWindow>
 #include <QWidget>
 
 DWIDGET_USE_NAMESPACE
