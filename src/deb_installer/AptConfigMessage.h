@@ -3,13 +3,15 @@
 
 #include "installprocessinfoview.h"
 
-#include <QWidget>
-#include <DSuggestButton>
-#include <DMainWindow>
 #include <DLabel>
 #include <DLineEdit>
-#include <QVBoxLayout>
+#include <DMainWindow>
 #include <DIconButton>
+#include <DSuggestButton>
+
+#include <QWidget>
+#include <QVBoxLayout>
+
 DWIDGET_USE_NAMESPACE
 
 /**

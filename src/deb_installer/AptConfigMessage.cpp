@@ -1,18 +1,20 @@
 #include "AptConfigMessage.h"
 #include "utils.h"
-#include <QGuiApplication>
-#include <QDesktopWidget>
+
 #include <DGuiApplicationHelper>
 #include <DRecentManager>
 #include <DTitlebar>
+
+#include <QGuiApplication>
+#include <QDesktopWidget>
 #include <QScreen>
 #include <QMessageBox>
 #include <QDebug>
 
 AptConfigMessage *AptConfigMessage::aptConfig = nullptr;
+
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
-
 
 AptConfigMessage::AptConfigMessage(QWidget *parent)
     : DMainWindow(parent)
