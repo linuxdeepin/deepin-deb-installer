@@ -26,6 +26,7 @@
 #include "singleinstallpage.h"
 #include "uninstallconfirmpage.h"
 #include "AptConfigMessage.h"
+#include "TitleBarFocusMonitor.h"
 #include "utils.h"
 
 #include <DInputDialog>
@@ -98,6 +99,9 @@ void DebInstaller::initUI()
     tb->setDisableFlags(Qt::CustomizeWindowHint);
     //fix bug 4329, reset focusPolicy
     handleFocusPolicy();
+
+    //标题栏焦点监测线程。
+    m_pMonitorFocusThread = new TitleBarFocusMonitor(m_OptionWindow);
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
@@ -186,18 +190,18 @@ void DebInstaller::initConnections()
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 
-    //在开始安装的时候，启用标题栏焦点。点击安装按钮之后禁用焦点 解决授权成功之后标题栏焦点出现的问题
-    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
+    //监测到安装进度，停止监测标题栏菜单键焦点。
+    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::stopMonitorTitleBarFocus);
 }
 
 /**
- * @brief DebInstaller::enableTitleFocus 开启标题栏焦点。
+ * @brief DebInstaller::stopMonitorTitleBarFocus 停止监测标题栏焦点。
  */
-void DebInstaller::enableTitleFocus()
+void DebInstaller::stopMonitorTitleBarFocus()
 {
-    //开启标题栏焦点 取消信号和槽的链接
-    setTitleBarFocusPolicy(true);
-    disconnect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
+    if (m_pMonitorFocusThread->isRunning()) {
+        m_pMonitorFocusThread->stopMonitor();
+    }
 }
 
 void DebInstaller::enableCloseButton(bool enable)
@@ -258,8 +262,8 @@ void DebInstaller::enableCloseAndExit()
 //after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
-    //点击安装按钮之后，设置标题栏焦点策略为NoFocus
-    setTitleBarFocusPolicy(false);
+    //开始监测标题栏菜单键的焦点
+    m_pMonitorFocusThread->start();
     disableCloseAndExit();
 }
 
@@ -486,6 +490,7 @@ void DebInstaller::showUninstallConfirmPage()
 void DebInstaller::onUninstallAccepted()
 {
     // uninstall begin
+    m_pMonitorFocusThread->start();
     SingleInstallPage *p = backToSinglePage();
     m_fileChooseWidget->setAcceptDrops(true);
     p->uninstallCurrentPackage();
@@ -675,9 +680,8 @@ void DebInstaller::setEnableButton(bool bEnable)
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setEnableButton(bEnable);
     }
-    // 启用焦点切换
-    // fix bug:https://pms.uniontech.com/zentao/bug-view-46813.html
-    setTitleBarFocusPolicy(true);
+    //授权取消后 停止监测标题栏菜单键的焦点。
+    m_pMonitorFocusThread->stopMonitor();
 }
 
 /**
@@ -686,9 +690,6 @@ void DebInstaller::setEnableButton(bool bEnable)
  */
 void DebInstaller::showHiddenButton()
 {
-    //取消授权后禁用焦点
-    //fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
-    setTitleBarFocusPolicy(false);
     m_fileListModel->reset_filestatus();
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -731,19 +732,3 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     }
 }
 
-/**
- * @brief DebInstaller::setTitleBarFocusPolicy 设置当前标题栏的焦点切换策略
- * @param focusPolicy 是否允许焦点切换。
- */
-void DebInstaller::setTitleBarFocusPolicy(bool focusPolicy)
-{
-    auto focus = Qt::TabFocus;
-    if (focusPolicy)
-        focus = Qt::TabFocus;
-    else
-        focus = Qt::NoFocus;
-
-    m_OptionWindow->setFocusPolicy(focus);
-    m_MinWindow->setFocusPolicy(focus);
-    m_closeWindow->setFocusPolicy(focus);
-}

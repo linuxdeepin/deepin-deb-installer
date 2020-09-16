@@ -84,9 +84,8 @@ private:
 
     /**
      * @brief initButtonFocusPolicy 设置按钮的焦点策略
-     * @param focusPolicy 是否启用焦点
      */
-    void initButtonFocusPolicy(bool focusPolicy);
+    void initButtonFocusPolicy();
 
     /**
      * @brief initButtonAutoDefault 设置按钮的回车触发
@@ -151,9 +150,6 @@ private:
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_pLoadingLabel;
-
-    //安装开始，是否启用各个按钮焦点的标志位，在启用后更改为false。如果焦点被禁用则在下一次安装时启用。
-    bool startInstall = true;
 };
 
 #endif  // SINGLEINSTALLPAGE_H
