@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="br">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="br" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="63"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="67"/>
@@ -24,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="386"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="400"/>
@@ -65,7 +63,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="681"/>
@@ -91,7 +89,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -254,7 +252,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="878"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>

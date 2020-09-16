@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -275,7 +273,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="590"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="628"/>
         <source>Uninstall Failed</source>
-        <translation>Не вдалося видалити&#xa0;</translation>
+        <translation>Не вдалося видалити </translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>

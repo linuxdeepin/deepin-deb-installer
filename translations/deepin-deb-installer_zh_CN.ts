@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -122,7 +120,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="48"/>
         <source>Show details</source>
-        <translation>显示卸载进程</translation>
+        <translation>显示详细信息</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="108"/>
@@ -295,7 +293,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="509"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="610"/>
         <source>Show details</source>
-        <translation>显示卸载进程</translation>
+        <translation>显示详细信息</translation>
     </message>
 </context>
 <context>
