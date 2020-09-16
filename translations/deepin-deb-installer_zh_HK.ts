@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_HK">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -304,7 +302,7 @@
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="523"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="616"/>
         <source>Show details</source>
-        <translation>顯示詳細訊息</translation>
+        <translation>顯示卸載進程</translation>
     </message>
 </context>
 <context>

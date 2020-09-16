@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="63"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation>Введите номер чтобы сконфигурировать</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="67"/>
@@ -24,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="386"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Пакет deb может быть поврежден</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="400"/>
@@ -43,7 +41,7 @@
         <location filename="../src/deb_installer/deblistmodel.cpp" line="80"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Установка не удалась, проверьте ваше интернет подключение</translation>
+        <translation>Установка не удалась, проверьте ваше интернет соединение</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
@@ -60,12 +58,12 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="101"/>
         <source>Installation Failed</source>
-        <translation>Ошибка Установки</translation>
+        <translation>Установка не удалась</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось установить %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="681"/>
@@ -75,7 +73,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="682"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>Пакет не имеет действительной цифровой подписи</translation>
+        <translation>Пакет не имеет действующей цифровой подписи</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="684"/>
@@ -91,7 +89,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Аутентификация не удалась</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>
@@ -142,7 +140,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="369"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка зависимостей: %1</translation>
     </message>
 </context>
 <context>
@@ -175,7 +173,7 @@
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="244"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Более поздняя версия  уже установлена: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/packageslistdelegate.cpp" line="247"/>
@@ -239,7 +237,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="727"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Более поздняя версия  уже установлена: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="731"/>
@@ -249,12 +247,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="786"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка зависимостей: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="878"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось установить %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -341,7 +339,7 @@ All dependencies will also be removed</source>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Вы действительно хотите удалить %1?
-Система или другие приложения могут работать неправильно</translation>
+Это может привести к неправильной работе системы и других приложений. </translation>
     </message>
 </context>
 <context>
@@ -355,7 +353,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Установщик Пакетов используется для помощи пользователям в установке и удалении программного обеспечения и поддерживает массовую установку.</translation>
+        <translation>Установщик Пакетов используется для  установки и удаления программного обеспечения и поддерживает массовую установку приложений.</translation>
     </message>
 </context>
 </TS>

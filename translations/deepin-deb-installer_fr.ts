@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -259,7 +257,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
         <source>Version: </source>
-        <translation>Version&#xa0;:</translation>
+        <translation>Version :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="611"/>
@@ -280,7 +278,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>
         <source>Name: </source>
-        <translation>Nom&#xa0;:</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="724"/>

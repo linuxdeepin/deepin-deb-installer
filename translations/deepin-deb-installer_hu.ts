@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -132,7 +130,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="109"/>
         <source>Done</source>
-        <translation>Sikerült.</translation>
+        <translation>Kész</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="111"/>
@@ -234,7 +232,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="346"/>
         <source>Done</source>
-        <translation>Sikerült.</translation>
+        <translation>Kész</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="727"/>
