@@ -261,6 +261,7 @@ void DebInstaller::onStartInstallRequested()
     //点击安装按钮之后，设置标题栏焦点策略为NoFocus
     setTitleBarFocusPolicy(false);
     disableCloseAndExit();
+    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
 }
 
 /**
