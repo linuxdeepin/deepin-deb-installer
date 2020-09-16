@@ -44,7 +44,8 @@ SOURCES += \
     debinfolabel.cpp \
     singleInstallerApplication.cpp \
     AptConfigMessage.cpp \
-    InfoCommandLinkButton.cpp
+    InfoCommandLinkButton.cpp \
+    TitleBarFocusMonitor.cpp
 
 HEADERS += \
     debinstaller.h \
@@ -66,7 +67,8 @@ HEADERS += \
     debinfolabel.h \
     singleInstallerApplication.h \
     AptConfigMessage.h \
-    InfoCommandLinkButton.h
+    InfoCommandLinkButton.h \
+    TitleBarFocusMonitor.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

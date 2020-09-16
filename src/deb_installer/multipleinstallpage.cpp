@@ -119,7 +119,8 @@ void MultipleInstallPage::initUI()
     Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
 
     //把按钮的焦点策略整合到一起，便于解决焦点闪现的问题
-    setButtonFocusPolicy(true);
+    setButtonFocusPolicy();
+    setButtonAutoDefault();
 
     m_tipsLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -203,26 +204,27 @@ void MultipleInstallPage::initTabOrder()
  * @brief MultipleInstallPage::setButtonFocusPolicy 设置按钮的焦点策略
  * @param focusPolicy 是否启用焦点
  */
-void MultipleInstallPage::setButtonFocusPolicy(bool focusPolicy)
+void MultipleInstallPage::setButtonFocusPolicy()
 {
     // 修改焦点控制 启用焦点设置为TabFouce
     auto focus = Qt::TabFocus;
-    if (focusPolicy)
-        focus = Qt::TabFocus;
-    else
-        focus = Qt::NoFocus;
-
     m_installButton->setFocusPolicy(focus);
     m_acceptButton->setFocusPolicy(focus);
     m_backButton->setFocusPolicy(focus);
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
+}
 
+/**
+ * @brief MultipleInstallPage::setButtonAutoDefault  设置按钮可以被enter和Return键触发
+ */
+void MultipleInstallPage::setButtonAutoDefault()
+{
     //增加键盘enter控制按钮
     m_installButton->setAutoDefault(true);
     m_acceptButton->setAutoDefault(true);
     m_backButton->setAutoDefault(true);
-
 }
+
 void MultipleInstallPage::initConnections()
 {
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
@@ -265,11 +267,6 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
 
 void MultipleInstallPage::onProgressChanged(const int progress)
 {
-// startInstall 为true ,表明当前按钮已经被禁用焦点，安装开始后，将启用各个按钮的焦点。并将此标志改为false
-    if (startInstall) {
-        setButtonFocusPolicy(true);
-        startInstall = false;
-    }
     m_progressAnimation->setStartValue(m_installProgress->value());
     m_progressAnimation->setEndValue(progress);
     m_progressAnimation->start();
@@ -334,8 +331,6 @@ void MultipleInstallPage::hiddenCancelButton()
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
     m_installButton->setEnabled(bEnable);
-    // 授权框取消后 设置启用焦点。
-    setButtonFocusPolicy(true);
 }
 
 void MultipleInstallPage::afterGetAutherFalse()
@@ -344,9 +339,6 @@ void MultipleInstallPage::afterGetAutherFalse()
     m_infoControlButton->setVisible(false);
     m_installButton->setVisible(true);
     m_infoControlButton->shrink();
-    //授权取消或授权失败后先关闭焦点。
-    //fix bug:https://pms.uniontech.com/zentao/bug-view-46813.html
-    setButtonFocusPolicy(false);
 
     //授权取消或授权失败后，允许右键菜单弹出
     m_appsListView->setRightMenuShowStatus(true);

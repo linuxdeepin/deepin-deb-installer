@@ -285,17 +285,10 @@ void SingleInstallPage::initTabOrder()
 /**
  * @brief SingleInstallPage::initButtonFocusPolicy 添加各个控件的焦点获取策略
  */
-void SingleInstallPage::initButtonFocusPolicy(bool focusPolicy)
+void SingleInstallPage::initButtonFocusPolicy()
 {
     this->setFocusPolicy(Qt::NoFocus);
     auto focus = Qt::TabFocus;
-    if (focusPolicy)
-        focus = Qt::TabFocus;
-    else {
-        startInstall = true;
-        focus = Qt::NoFocus;
-    }
-
     m_installButton->setFocusPolicy(focus);
     m_uninstallButton->setFocusPolicy(focus);
     m_reinstallButton->setFocusPolicy(focus);
@@ -367,7 +360,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(m_infoControlButton);
 
     //启用焦点切换。
-    initButtonFocusPolicy(true);
+    initButtonFocusPolicy();
     // 设置按钮回车触发
     initButtonAutoDefault();
     // 初始化按钮焦点切换策略。
@@ -662,11 +655,6 @@ void SingleInstallPage::onWorkerFinished()
 
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
-    // startInstall 为true ,表明当前按钮已经被禁用焦点，安装开始后，将启用各个按钮的焦点。并将此标志改为false
-    if (startInstall) {
-        startInstall = false;
-        initButtonFocusPolicy(true);
-    }
     qDebug() << progress << endl;
     if (progress < m_progress->value()) {
         return;
@@ -771,9 +759,6 @@ void SingleInstallPage::setEnableButton(bool bEnable)
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
     m_uninstallButton->setEnabled(bEnable);
-
-    //授权框取消后，启用焦点。
-    initButtonFocusPolicy(true);
 }
 
 void SingleInstallPage::afterGetAutherFalse()
@@ -791,8 +776,6 @@ void SingleInstallPage::afterGetAutherFalse()
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
     }
-    // 授权失败或授权取消后，禁用焦点。
-    initButtonFocusPolicy(false);
 }
 
 void SingleInstallPage::paintEvent(QPaintEvent *event)
