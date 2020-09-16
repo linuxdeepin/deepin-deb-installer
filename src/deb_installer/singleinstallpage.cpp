@@ -498,6 +498,9 @@ int SingleInstallPage::initLabelWidth(int fontinfo)
 
 void SingleInstallPage::reinstall()
 {
+    // 重装按钮点击后清除焦点
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
+    m_reinstallButton->clearFocus();
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -509,6 +512,9 @@ void SingleInstallPage::reinstall()
 }
 void SingleInstallPage::install()
 {
+    // 安装按钮点击后清除焦点
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
+    m_installButton->clearFocus();
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
     m_tipsLabel->setVisible(false);
@@ -521,6 +527,9 @@ void SingleInstallPage::install()
 
 void SingleInstallPage::uninstallCurrentPackage()
 {
+    // 卸载按钮点击后清除焦点
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
+    m_uninstallButton->clearFocus();
     m_tipsLabel->setVisible(false);
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);

@@ -321,6 +321,8 @@ void MultipleInstallPage::hideInfo()
 void MultipleInstallPage::hiddenCancelButton()
 {
     //安装开始后不允许调出右键菜单。
+    //安装按钮点击后清除其焦点。解决授权框消失后标题栏菜单键被focus的问题
+    m_installButton->clearFocus();
     m_appsListView->setRightMenuShowStatus(false);
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
