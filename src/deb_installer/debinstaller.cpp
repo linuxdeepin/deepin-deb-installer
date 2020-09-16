@@ -265,7 +265,6 @@ void DebInstaller::onStartInstallRequested()
     //开始监测标题栏菜单键的焦点
     m_pMonitorFocusThread->start();
     disableCloseAndExit();
-    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::enableTitleFocus);
 }
 
 /**
