@@ -19,6 +19,10 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
         m_editor->moveCursor(QTextCursor::End);
     });
+    //设置TextEdit和InfoView为无焦点
+    //fix bug:https://pms.uniontech.com/zentao/bug-view-48235.html
+    this->setFocusPolicy(Qt::NoFocus);
+    m_editor->setFocusPolicy(Qt::NoFocus);
 }
 
 void InstallProcessInfoView::initUI(int w, int h)
