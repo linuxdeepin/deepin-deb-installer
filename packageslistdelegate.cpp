@@ -24,6 +24,7 @@
 #include "utils.h"
 
 #include <QPixmap>
+#include <QPainterPath>
 
 #include <DSvgRenderer>
 #include <DPalette>
@@ -64,8 +65,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QRect lineRect;
         lineRect.setX(content_x);
         int itemHeight = 48;
-        lineRect.setY(option.rect.y()+itemHeight-1);
-        lineRect.setWidth(option.rect.width()-content_x-10);
+        lineRect.setY(option.rect.y() + itemHeight - 1);
+        lineRect.setWidth(option.rect.width() - content_x - 10);
         lineRect.setHeight(1);
 
         DStyleHelper styleHelper;
@@ -78,14 +79,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package icon
         const int x = 6;
-        int y = bg_rect.y()+yOffset+1;
+        int y = bg_rect.y() + yOffset + 1;
 
         icon.paint(painter, x, y, 32, 32);
 
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y()+yOffset);
+        name_rect.setY(bg_rect.y() + yOffset);
         name_rect.setHeight(20);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
@@ -113,7 +114,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         version_rect.setRight(option.rect.right() - 85);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
-        const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, bg_rect.width()-m_packageIcon.width()-240);
+        const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, bg_rect.width() - m_packageIcon.width() - 240);
         painter->setPen(styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText));
         QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
         version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
@@ -125,7 +126,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
-            install_status_rect.setTop(version_y+yOffset - 10);
+            install_status_rect.setTop(version_y + yOffset - 10);
 
             DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
@@ -133,22 +134,22 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             stat_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
             painter->setFont(stat_font);
             switch (operate_stat) {
-                case DebListModel::Operating:
-                    painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                    painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
-                    break;
-                case DebListModel::Success:
-                    painter->setPen(QPen(pa.color(DPalette::LightLively)));
-                    painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
-                    break;
-                case DebListModel::Waiting:
-                    painter->setPen(QPen(pa.color(DPalette::TextLively)));
-                    painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
-                    break;
-                default:
-                    painter->setPen(QPen(pa.color(DPalette::TextWarning)));
-                    painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
-                    break;
+            case DebListModel::Operating:
+                painter->setPen(QPen(pa.color(DPalette::TextLively)));
+                painter->drawText(install_status_rect, tr("Installing"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            case DebListModel::Success:
+                painter->setPen(QPen(pa.color(DPalette::LightLively)));
+                painter->drawText(install_status_rect, tr("Installed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            case DebListModel::Waiting:
+                painter->setPen(QPen(pa.color(DPalette::TextLively)));
+                painter->drawText(install_status_rect, tr("Waiting"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
+            default:
+                painter->setPen(QPen(pa.color(DPalette::TextWarning)));
+                painter->drawText(install_status_rect, tr("Failed"), Qt::AlignVCenter | Qt::AlignRight);
+                break;
             }
         }
 
@@ -156,7 +157,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QString info_str;
         QRect info_rect = option.rect;
         info_rect.setLeft(content_x);
-        info_rect.setTop(name_rect.bottom()+2);
+        info_rect.setTop(name_rect.bottom() + 2);
 
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 //        QColor penColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), pa, DPalette::TextTips);
@@ -185,9 +186,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
 
         painter->restore();
-    }
-    else
-    {
+    } else {
         DStyledItemDelegate::paint(painter, option, index);
     }
 }
