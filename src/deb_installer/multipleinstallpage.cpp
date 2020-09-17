@@ -54,12 +54,49 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
+    initControlAccessibleName();//自动化测试
     initContentLayout();
     initUI();
     initConnections();
     initTabOrder();
     //添加后默认可以调用右键删除菜单。
     m_appsListView->setRightMenuShowStatus(true);
+}
+
+/**
+ * @brief MultipleInstallPage::initControlAccessibleName 添加控件的AccessibleName
+ */
+void MultipleInstallPage::initControlAccessibleName()
+{
+    m_contentFrame->setObjectName("contentFrame");
+    m_contentFrame->setAccessibleName("contentFrame");
+
+    m_processFrame->setObjectName("processFrame");
+    m_processFrame->setAccessibleName("processFrame");
+
+    m_installProcessInfoView->setObjectName("InstallProcessInfoView");
+    m_installProcessInfoView->setAccessibleName("InstallProcessInfoView");
+
+    m_infoControlButton->setObjectName("InfoControlButton");
+    m_infoControlButton->setAccessibleName("InfoControlButton");
+
+    m_installButton->setObjectName("MultipageInstallButton");
+    m_installButton->setAccessibleName("MultipageInstallButton");
+
+    m_backButton->setObjectName("MultipageBackButton");
+    m_backButton->setAccessibleName("MultipageBackButton");
+
+    m_acceptButton->setObjectName("MultipageAcceptButton");
+    m_acceptButton->setAccessibleName("MultipageAcceptButton");
+
+    m_infoControlButton->setObjectName("MultipageInfoControlButton");
+    m_infoControlButton->setAccessibleName("MultipageInfoControlButton");
+
+    m_appsListViewBgFrame->setObjectName("AppListViewBgFrame");
+    m_appsListViewBgFrame->setAccessibleName("AppListViewBgFrame");
+
+    m_tipsLabel->setObjectName("TipsCommandLinkButton");
+    m_tipsLabel->setAccessibleName("TipsCommandLinkButton");
 }
 
 void MultipleInstallPage::initContentLayout()

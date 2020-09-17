@@ -20,6 +20,7 @@
  */
 
 #include "debinstaller.h"
+#include "accessible.h"
 #include "utils.h"
 
 #include <QCommandLineParser>
@@ -72,6 +73,8 @@ int main(int argc, char *argv[])
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
+
+    QAccessible::installFactory(accessibleFactory);//自动化测试
 
     qDebug() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
 

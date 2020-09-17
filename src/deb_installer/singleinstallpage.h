@@ -100,6 +100,11 @@ private:
     void setCancelAuthOrAuthDependsErr();
     void setAuthDependsSuccess();
 
+    /**
+     * @brief initControlAccessibleName 初始化控件的AccessibleName
+     */
+    void initControlAccessibleName();
+
 private slots:
     void install();
     void reinstall();

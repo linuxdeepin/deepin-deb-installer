@@ -12,7 +12,8 @@ ChooseFileButton::ChooseFileButton(QString text, QWidget *parent)
     Utils::bindFontBySizeAndWeight(this, fontFamily, 12, QFont::ExtraLight);
 
     this->setFocusPolicy(Qt::TabFocus);
-
+    this->setObjectName("ChooseFileButton");
+    this->setAccessibleName("ChooseFileButton");
 }
 
 /**

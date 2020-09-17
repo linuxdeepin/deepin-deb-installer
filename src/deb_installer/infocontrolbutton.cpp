@@ -41,6 +41,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_arrowIcon(new DLabel(this))
     , m_tipsText(new InfoCommandLinkButton("", this))
 {
+    m_arrowIcon->setObjectName("arrowIcon");
+    m_arrowIcon->setAccessibleName("arrowIcon");
     this->setFocusPolicy(Qt::NoFocus);
     this->m_tipsText->setFocusPolicy(Qt::TabFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);

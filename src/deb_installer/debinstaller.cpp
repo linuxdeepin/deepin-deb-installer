@@ -78,8 +78,13 @@ void DebInstaller::initUI()
     //Hide the shadow under the title bar
     setTitlebarShadowEnabled(false);
 
+    this->setObjectName("DebInstaller");
+    this->setAccessibleName("DebInstaller");
+
     //file choose widget settings
     m_fileChooseWidget->setObjectName("FileChooseWidget");
+    m_fileChooseWidget->setAccessibleName("FileChooseWidget");
+
     m_centralLayout->addWidget(m_fileChooseWidget);
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);

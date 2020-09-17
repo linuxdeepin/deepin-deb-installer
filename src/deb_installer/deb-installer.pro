@@ -68,7 +68,9 @@ HEADERS += \
     singleInstallerApplication.h \
     AptConfigMessage.h \
     InfoCommandLinkButton.h \
-    TitleBarFocusMonitor.h
+    TitleBarFocusMonitor.h \
+    accessible.h \
+    accessibledefine.h
 
 DISTFILES += \
     deepin-deb-installer.applications \

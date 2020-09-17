@@ -52,6 +52,10 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
+    //自动化测试
+    m_icon->setObjectName("UninstallPageIcon");
+    m_icon->setAccessibleName("UninstallPageIcon");
+
     m_tips->setFixedHeight(120);
     m_tips->setFixedWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);

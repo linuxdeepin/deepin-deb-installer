@@ -71,6 +71,11 @@ private:
      * @brief initTabOrder 初始化tab切换焦点的顺序
      */
     void initTabOrder();
+
+    /**
+     * @brief initAccessibleName 初始化AccessibleName
+     */
+    void initAccessibleName();
 };
 
 #endif // APTCONFIGMESSAGE_H

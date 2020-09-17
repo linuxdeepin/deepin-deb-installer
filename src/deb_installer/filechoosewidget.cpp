@@ -46,6 +46,8 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     DPalette palette;
 
     m_iconImage = new DLabel(this);
+    m_iconImage->setObjectName("iconImage");
+    m_iconImage->setAccessibleName("iconImage");
     m_iconImage->setFixedSize(160, 160);
 
 #ifdef SHOWBORDER
@@ -69,6 +71,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 #endif
     split_line = new DLabel(this);
     split_line->setObjectName("SplitLine");
+    split_line->setAccessibleName("SplitLine");
     QIcon icon_install = QIcon::fromTheme("di_icon_install");
     m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));
     QIcon icon_split_line = QIcon::fromTheme("di_split_line");
@@ -80,6 +83,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     m_chooseFileBtn = new ChooseFileButton("", this);
     m_chooseFileBtn->setFixedHeight(28);
     m_chooseFileBtn->setObjectName("FileChooseButton");
+    m_chooseFileBtn->setAccessibleName("FileChooseButton");
     m_chooseFileBtn->setText(tr("Select File"));
 #ifdef SHOWBORDER
     m_chooseFileBtn->setStyleSheet("QPushButton{border:1px solid black;}");

@@ -87,6 +87,11 @@ private:
      */
     void setButtonAutoDefault();
 
+    /**
+     * @brief initControlAccessibleName 给控件添加AccessibleName
+     */
+    void initControlAccessibleName();
+
 
 private:
     DebListModel *m_debListModel;

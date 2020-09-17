@@ -13,6 +13,8 @@ DRoundBgFrame::DRoundBgFrame(QWidget *parent, int bgOffsetTop, int bgOffsetBotto
     , m_bgOffsetTop(bgOffsetTop)
     , m_bgOffsetBottom(bgOffsetBottom)
 {
+    this->setObjectName("DRoundBgFrame");
+    this->setAccessibleName("DRoundBgFrame");
 }
 
 void DRoundBgFrame::paintEvent(QPaintEvent *event)

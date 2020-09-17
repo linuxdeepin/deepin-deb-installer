@@ -70,6 +70,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_pLoadingLabel(new DCommandLinkButton("", this))
 {
     initUI();
+    initControlAccessibleName();// 自动化测试
 }
 
 void SingleInstallPage::initUI()
@@ -98,6 +99,31 @@ void SingleInstallPage::initUI()
         system(File_transfer_Action.toStdString().c_str());
         qDebug() << "删除目标文件夹：" << File_transfer_Action;
     }
+}
+
+/**
+ * @brief SingleInstallPage::initControlAccessibleName 初始化控件的AccessibleName
+ * 兼容自动化测试
+ */
+void SingleInstallPage::initControlAccessibleName()
+{
+    m_packageName->setObjectName("SinglePagePackageName");
+    m_packageName->setAccessibleName("SinglePagePackageName");
+
+    m_packageIcon->setObjectName("SinglePagePackageIcon");
+    m_packageIcon->setAccessibleName("SinglePagePackageIcon");
+
+    m_packageVersion->setObjectName("SinglePagePackageVersion");
+    m_packageVersion->setAccessibleName("SinglePagePackageVersion");
+
+    m_packageDescription->setObjectName("SinglePagePackageDescription");
+    m_packageDescription->setAccessibleName("SinglePagePackageDescription");
+
+    m_tipsLabel->setObjectName("SinglePagePackageStatusTips");
+    m_tipsLabel->setAccessibleName("SinglePagePackageStatusTips");
+
+    m_pLoadingLabel->setObjectName("SinglePagePackageLoadingTips");
+    m_pLoadingLabel->setAccessibleName("SinglePagePackageLoadingTips");
 }
 
 void SingleInstallPage::initContentLayout()
@@ -152,8 +178,6 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
         fontinfosizetemp = 20;
         fontinfosizetemp_version = 20;
     }
-    m_packageName->setObjectName("PackageName");
-    m_packageVersion->setObjectName("PackageVersion");
 
     m_packageIcon->setText("icon");
     m_packageIcon->setFixedSize(64, 64);
@@ -322,8 +346,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
         fontinfosizetemp = 18;
     }
     m_infoControlButton->setObjectName("InfoControlButton");
+    m_infoControlButton->setAccessibleName("InfoControlButton");
     m_installProcessView->setObjectName("WorkerInformation");
+    m_installProcessView->setAccessibleName("WorkerInformation");
     m_packageDescription->setObjectName("PackageDescription");
+    m_packageDescription->setAccessibleName("PackageDescription");
 
     m_tipsLabel->setFixedHeight(fontinfosizetemp);
     m_tipsLabel->setAlignment(Qt::AlignCenter);

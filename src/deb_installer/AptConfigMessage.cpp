@@ -20,6 +20,7 @@ AptConfigMessage::AptConfigMessage(QWidget *parent)
     : DMainWindow(parent)
 {
     initControl();
+    initAccessibleName(); //自动化测试，为控件添加AccessibleName
     initUI();
     initTitlebar();
     initTabOrder();
@@ -227,3 +228,20 @@ void AptConfigMessage::clearTexts()
     m_inputEdit->clear();
 }
 
+/**
+ * @brief AptConfigMessage::initAccessibleName 初始化AccessibleName
+ */
+void AptConfigMessage::initAccessibleName()
+{
+    this->setObjectName("AptConfigMessage");
+    this->setAccessibleName("AptConfigMessage");
+
+    m_textEdit->setObjectName("InstallInfoEdit");
+    m_textEdit->setAccessibleName("InstallInfoEdit");
+
+    m_inputEdit->setObjectName("ConfigInputEdit");
+    m_inputEdit->setAccessibleName("ConfigInputEdit");
+
+    m_pushbutton->setObjectName("ConfigConfirmButton");
+    m_pushbutton->setAccessibleName("ConfigConfirmButton");
+}

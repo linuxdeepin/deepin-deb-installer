@@ -10,6 +10,8 @@ DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags f)
     , m_colorType(DPalette::NoType)
     , m_bUserColorType(false)
 {
+    this->setAccessibleName("DebInfoLabel");
+    this->setObjectName("DebInfoLabel");
 }
 
 /**
