@@ -597,6 +597,8 @@ void DebInstaller::MulRefreshPage(int index)
  */
 void DebInstaller::refreshInstallPage(int index)
 {
+    //刷新页面之前先清除掉文件选择按钮的焦点，防止在文件选择按钮有焦点的时候添加包，焦点转移到其他控件
+    m_fileChooseWidget->clearChooseFileBtnFocus();
     m_fileListModel->reset_filestatus();
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
@@ -636,6 +638,9 @@ void DebInstaller::refreshInstallPage(int index)
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
+
+    // 刷新之后清除标题栏菜单键的焦点，防止在多次安装成功后再次添加包时，焦点偶尔出现在标题栏菜单键上。
+    m_OptionWindow->clearFocus();
 }
 
 /**
