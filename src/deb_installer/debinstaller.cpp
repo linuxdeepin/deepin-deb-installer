@@ -337,7 +337,8 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
         for (const auto &item : mime->urls()) {
             const QFileInfo info(item.path());
             if (info.isDir()) return e->accept();
-            if (info.isFile() && info.suffix() == "deb") return e->accept();
+            //fix bug: https://pms.uniontech.com/zentao/bug-view-48801.html
+            if (info.isFile() && info.suffix().toLower() == "deb") return e->accept();//忽略后缀大小写
         }
 
         e->ignore();
@@ -359,7 +360,8 @@ void DebInstaller::dropEvent(QDropEvent *e)
         const QString local_path = url.toLocalFile();
         const QFileInfo info(local_path);
 
-        if (info.isFile() && info.suffix() == "deb")
+        //fix bug: https://pms.uniontech.com/zentao/bug-view-48801.html
+        if (info.isFile() && info.suffix().toLower() == "deb")// 忽略后缀大小写
             file_list << local_path;
         else if (info.isDir()) {
             for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
