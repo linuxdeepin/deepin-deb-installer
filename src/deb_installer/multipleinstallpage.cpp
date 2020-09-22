@@ -159,6 +159,8 @@ void MultipleInstallPage::initUI()
     setButtonFocusPolicy();
     setButtonAutoDefault();
 
+    //修复依赖安装提示语会有焦点的问题。
+    m_tipsLabel->setFocusPolicy(Qt::NoFocus);
     m_tipsLabel->setFixedHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);

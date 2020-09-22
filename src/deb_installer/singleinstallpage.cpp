@@ -157,7 +157,8 @@ void SingleInstallPage::initInstallWineLoadingLayout()
 
     m_pLoadingLayout->addSpacing(4); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
     m_pLoadingLabel->setVisible(false);
-    m_pLoadingLayout->setEnabled(false);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
+    m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
+    m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
     m_pLoadingLabel->setFixedHeight(24);
@@ -837,6 +838,7 @@ void SingleInstallPage::setAuthBefore()
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
         m_confirmButton->setEnabled(false);
@@ -908,13 +910,13 @@ void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
     case DebListModel::AuthBefore:
         setAuthBefore();
         break;
-    case DebListModel::CancelAuth:
     case DebListModel::AnalysisErr:
         setCancelAuthOrAuthDependsErr();
         break;
     case DebListModel::AuthDependsSuccess:
         setCancelAuthOrAuthDependsErr();
         break;
+    case DebListModel::CancelAuth://授权取消和授权失败的提示语公用，修复授权取消后无提示的问题
     case DebListModel::AuthDependsErr:
         setCancelAuthOrAuthDependsErr();
         m_tipsLabel->setText(tr("Failed to install %1").arg(dependName));
