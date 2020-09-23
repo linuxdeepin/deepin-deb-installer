@@ -340,7 +340,6 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
             //fix bug: https://pms.uniontech.com/zentao/bug-view-48801.html
             if (info.isFile() && info.suffix().toLower() == "deb") return e->accept();//忽略后缀大小写
         }
-
         e->ignore();
     }
 }
@@ -731,9 +730,11 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     } else {
         this->setAcceptDrops(true);
     }
-    //Refresh the page after successful installation.
-    if (iAuthRes == DebListModel::AuthDependsSuccess)
-        refreshInstallPage();
+
+    if (iAuthRes == DebListModel::AuthDependsSuccess) { //依赖下载成功
+        m_fileListModel->reset_filestatus();//清除包的状态和包的错误原因
+        m_fileListModel->initPrepareStatus();//重置包的prepare状态。
+    }
     //Refresh the display effect of different pages
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -741,6 +742,7 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->DealDependResult(iAuthRes, dependName);
+        multiplePage->setScrollBottom(-1);// 滚动到最后一行。
     }
 }
 

@@ -120,7 +120,8 @@ void MultipleInstallPage::initContentLayout()
 void MultipleInstallPage::initUI()
 {
     this->setFocusPolicy(Qt::NoFocus);
-    PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
+    //直接传入debListModel 修复多次创建packageManager导致崩溃的问题
+    PackagesListDelegate *delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
 
     //获取currentIndex的坐标位置，用于键盘触发右键菜单
     connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::getPos);

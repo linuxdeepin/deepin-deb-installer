@@ -426,7 +426,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                     dependList << dinfo.packageName() + ":" + deb->architecture();
                 }
             }
-            qDebug() << ret.package << ret.status << "\n";
+            // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
             //fix bug: https://pms.uniontech.com/zentao/bug-view-45734.html
             if (ret.status != DebListModel::DependsOk) {
@@ -515,8 +515,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         // TODO: upgrade?
         //        if (!dep->installedVersion().isEmpty()) return;
         //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-        qDebug() << dep->installedVersion();
-        qDebug() << Package::compareVersion(dep->installedVersion(), info.packageVersion());
+	// 删除无用冗余的日志
         if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
             Backend *b = m_backendFuture.result();
             Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
@@ -615,14 +614,14 @@ void PackagesManager::reset()
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
     m_appendedPackagesMd5.clear();
-    m_backendFuture.result()->reloadCache();
+    //重置时无需重新loadCache 删除
 }
 
 void PackagesManager::resetInstallStatus()
 {
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
-    m_backendFuture.result()->reloadCache();
+    //重置安装状态无需重新loadCache 删除
 }
 
 void PackagesManager::resetPackageDependsStatus(const int index)
@@ -635,8 +634,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
         }
     }
     // reload backend cache
-    m_backendFuture.result()->reloadCache();
-
+    //重置依赖状态无需重新loadCache 删除
     m_packageDependsStatus.remove(index);
 }
 

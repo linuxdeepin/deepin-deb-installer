@@ -31,7 +31,8 @@ class PackagesListDelegate : public DStyledItemDelegate
     Q_OBJECT
 
 public:
-    explicit PackagesListDelegate(QAbstractItemView *parent = nullptr);
+    //delegate使用传入的model而非重新new一个对象 解决多次创建model packagemanager导致崩溃的问题
+    explicit PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent = nullptr);
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 signals:
