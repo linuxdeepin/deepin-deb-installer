@@ -166,9 +166,6 @@ void MultipleInstallPage::initUI()
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);
 
-    //fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
-    m_tipsLabel->setEnabled(false);
-
     m_dSpinner->setMinimumSize(20, 20);
     m_dSpinner->hide();
 
