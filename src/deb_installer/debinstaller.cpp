@@ -57,7 +57,7 @@ DWIDGET_USE_NAMESPACE
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
-    , m_fileChooseWidget(new FileChooseWidget)
+    , m_fileChooseWidget(new FileChooseWidget(this)) // 指定父对象
     , m_centralLayout(new QStackedLayout(this))
     , m_dragflag(-1)
 {

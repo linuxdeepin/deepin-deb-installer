@@ -57,7 +57,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_progressFrame(new QWidget(this))
     , m_progress(new WorkerProgress(this))
     , m_installProcessView(new InstallProcessInfoView(this))
-    , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
+    , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse"), this))   //增加父对象指针
     , m_installButton(new DPushButton(this))
     , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))

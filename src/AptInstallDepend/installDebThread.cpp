@@ -19,7 +19,7 @@
 
 InstallDebThread::InstallDebThread()
 {
-    m_proc = new QProcess;
+    m_proc = new QProcess(this); //增加父对象指针
     connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
 }
@@ -47,11 +47,11 @@ void InstallDebThread::run()
 {
     system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
     m_proc->start("sudo", QStringList() << "apt-get"
-                                        << "install"
-                                        << m_DependList
-                                        << "deepin-wine-helper"
-                                        << "--fix-missing"
-                                        << "-y");
+                  << "install"
+                  << m_DependList
+                  << "deepin-wine-helper"
+                  << "--fix-missing"
+                  << "-y");
     m_proc->waitForFinished(-1);
     m_proc->close();
 }

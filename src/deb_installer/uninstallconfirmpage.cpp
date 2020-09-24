@@ -69,16 +69,6 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    //layout of buttons
-    QHBoxLayout *btnsLayout = new QHBoxLayout();
-    btnsLayout->setSpacing(0);
-    btnsLayout->setContentsMargins(0, 0, 0, 0);
-    btnsLayout->addStretch();
-    btnsLayout->addWidget(m_cancelBtn);
-    btnsLayout->addSpacing(20);
-    btnsLayout->addWidget(m_confirmBtn);
-    btnsLayout->addStretch();
-
     //Layout of icons and tips
     QVBoxLayout *contentLayout = new QVBoxLayout(this);
     contentLayout->setSpacing(0);
@@ -89,6 +79,16 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     contentLayout->setAlignment(m_icon, Qt::AlignHCenter);
     contentLayout->addWidget(m_tips);
     contentLayout->addStretch();
+
+    //layout of buttons
+    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
+    btnsLayout->setSpacing(0);
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
+    btnsLayout->addStretch();
+    btnsLayout->addWidget(m_cancelBtn);
+    btnsLayout->addSpacing(20);
+    btnsLayout->addWidget(m_confirmBtn);
+    btnsLayout->addStretch();
 
     m_infoWrapperWidget->setLayout(contentLayout);
 
