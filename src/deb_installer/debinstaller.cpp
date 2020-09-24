@@ -588,6 +588,8 @@ void DebInstaller::MulRefreshPage(int index)
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setScrollBottom(index);
     }
+    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
+    m_fileListModel->refreshAllDependsStatus();
 }
 
 /**
@@ -636,6 +638,8 @@ void DebInstaller::refreshInstallPage(int index)
         m_centralLayout->addWidget(multiplePage);
         m_dragflag = 1;
         m_Filterflag = 1;
+        //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
+        m_fileListModel->refreshAllDependsStatus();
     }
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);

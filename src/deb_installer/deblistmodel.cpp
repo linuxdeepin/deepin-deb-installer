@@ -235,6 +235,16 @@ void DebListModel::installPackages()
     installNextDeb();
 }
 
+/**
+ * @brief DebListModel::refreshAllDependsStatus 刷新获取所有依赖的状态
+ */
+void DebListModel::refreshAllDependsStatus()
+{
+    // 遍历获取所有依赖的状态
+    for (int i = 0; i < preparedPackages().size(); i++) {
+        m_packagesManager->packageDependsStatus(i);
+    }
+}
 void DebListModel::uninstallPackage(const int idx)
 {
     Q_ASSERT(idx == 0);

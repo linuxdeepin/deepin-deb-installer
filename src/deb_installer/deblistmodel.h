@@ -124,6 +124,10 @@ public:
 public:
     int getInstallFileSize();
 
+    /**
+     * @brief refreshAllDependsStatus 获取所有依赖的状态。
+     */
+    void refreshAllDependsStatus();
 signals:
     //    void workerStarted() const;
     void lockForAuth(const bool lock) const;
@@ -204,6 +208,8 @@ private:
      * 启用TitleBar焦点切换策略
      */
     void enableTitleBarFocus();
+
+
 
 private:
     int m_workerStatus;

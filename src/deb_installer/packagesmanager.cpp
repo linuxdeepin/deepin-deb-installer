@@ -515,7 +515,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         // TODO: upgrade?
         //        if (!dep->installedVersion().isEmpty()) return;
         //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-	// 删除无用冗余的日志
+        // 删除无用冗余的日志
         if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
             Backend *b = m_backendFuture.result();
             Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
@@ -614,14 +614,17 @@ void PackagesManager::reset()
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
     m_appendedPackagesMd5.clear();
-    //重置时无需重新loadCache 删除
+
+    //reloadCache必须要加
+    m_backendFuture.result()->reloadCache();
 }
 
 void PackagesManager::resetInstallStatus()
 {
     m_packageInstallStatus.clear();
     m_packageDependsStatus.clear();
-    //重置安装状态无需重新loadCache 删除
+    //reloadCache必须要加
+    m_backendFuture.result()->reloadCache();
 }
 
 void PackagesManager::resetPackageDependsStatus(const int index)
@@ -634,7 +637,8 @@ void PackagesManager::resetPackageDependsStatus(const int index)
         }
     }
     // reload backend cache
-    //重置依赖状态无需重新loadCache 删除
+    //reloadCache必须要加
+    m_backendFuture.result()->reloadCache();
     m_packageDependsStatus.remove(index);
 }
 
