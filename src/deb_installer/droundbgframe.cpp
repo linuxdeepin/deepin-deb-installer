@@ -5,6 +5,7 @@
 #include <DApplicationHelper>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QModelIndex>
 #include <QDebug>
 

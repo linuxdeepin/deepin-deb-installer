@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
 {
     SingleInstallerApplication app(argc, argv);
 
+    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
     app.setApplicationVersion(DApplication::buildVersion("3.0"));
