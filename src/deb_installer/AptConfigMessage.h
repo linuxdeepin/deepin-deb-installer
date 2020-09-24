@@ -39,12 +39,22 @@ public:
      * @param str 安装进程的详细信息
      */
     void appendTextEdit(QString str);
+
+    /**
+     * @brief clearTexts 清除输入框和信息框中的内容
+     */
     void clearTexts();
 
 public slots:
+    /**
+     * @brief dealInput 处理筛选输入的内容
+     */
     void dealInput();
 
 signals:
+    /**
+     * @brief AptConfigInputStr 将输入的序号或者选项传输给命令
+     */
     void AptConfigInputStr(QString);
 
 protected:
@@ -52,19 +62,37 @@ protected:
 
 private:
 
-    DIconButton *m_picon;
-    DLineEdit *m_inputEdit;
-    DSuggestButton *m_pushbutton;
-    DLabel *m_pQuestionLabel;
+    DIconButton *m_picon;                   // 图标信息
+    DLineEdit *m_inputEdit;                 //输入框
+    DSuggestButton *m_pushbutton;           //确定输入按钮
+    DLabel *m_pQuestionLabel;               //提示信息
     static AptConfigMessage *aptConfig;
 
     // QWidget interface
 private:
+    /**
+     * @brief dealWrongAnswer   处理输入错误的情况
+     * @param question          当前的问题
+     * @param output            获取到的输出
+     * @return                  是否输入错误
+     * 此函数已废弃 目前提示信息的问题已经固定
+     */
     bool dealWrongAnswer(QString question, QString output);
 
 private:
+    /**
+     * @brief initUI 初始化UI界面的格局
+     */
     void initUI();
+
+    /**
+     * @brief initTitlebar 修改标题栏，去除标题栏的各种按钮
+     */
     void initTitlebar();
+
+    /**
+     * @brief initControl 初始化各种控件
+     */
     void initControl();
 
     /**
