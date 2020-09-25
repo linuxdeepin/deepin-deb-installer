@@ -725,11 +725,15 @@ bool DebListModel::checkDigitalSignature()
 }
 void DebListModel::installNextDeb()
 {
-    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();
-    } else {
-        installDebs();
-    }
+    // KLU 分支 去除签名，此部分代码废弃
+//    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
+//        showNoDigitalErrWindow();
+//    } else {
+//        installDebs();
+//    }
+
+    //不验证签名与开发者模式，直接安装
+    installDebs();
 }
 
 void DebListModel::onTransactionOutput()
