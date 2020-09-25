@@ -54,11 +54,11 @@ public:
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
 protected:
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
-    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;           //按键事件
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;    //拖入事件
+    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;              //拖入放下事件
+    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;      //拖进事件
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;        //关闭事件 PS:没有实质的用处，之后删除
 
 private slots:
     /**
@@ -218,22 +218,22 @@ private:
     SingleInstallPage *backToSinglePage();
 
 private:
-    DebListModel *m_fileListModel;
-    FileChooseWidget *m_fileChooseWidget;
-    QStackedLayout *m_centralLayout;
-    QPointer<QWidget> m_lastPage;
+    DebListModel *m_fileListModel;                  //model 类
+    FileChooseWidget *m_fileChooseWidget;           //文件选择的widget
+    QStackedLayout *m_centralLayout;                //单包、批量、卸载的widget
+    QPointer<QWidget> m_lastPage;                   //存放上一个页面的指针
 
-    int m_dragflag = -1;
+    int m_dragflag = -1;                            //当前是否允许拖入的标志位
 
-    int m_iOptionWindowFlag = 0; //判断菜单栏是否手动弹出
-    bool bTabFlag = false;          //Control focus is re-identified from titlebar
-    bool bActiveWindowFlag = true;  //Window activation id
-    int m_Filterflag = -1; //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+    int m_iOptionWindowFlag = 0;                    //判断菜单栏是否手动弹出
+    bool bTabFlag = false;                          //Control focus is re-identified from titlebar
+    bool bActiveWindowFlag = true;                  //Window activation id
+    int m_Filterflag = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
-    QPointer<QWidget> m_UninstallPage; //Store uninstall page
-    QWidget *m_OptionWindow;  //titlebar main menu
-    QWidget *m_MinWindow;
-    QWidget *m_closeWindow;
+    QPointer<QWidget> m_UninstallPage;              //Store uninstall page
+    QWidget *m_OptionWindow;                        //titlebar main menu
+    QWidget *m_MinWindow;                           //最小化窗口按钮
+    QWidget *m_closeWindow;                         //关闭窗口按钮
 
     TitleBarFocusMonitor *m_pMonitorFocusThread; //标题栏监测线程。
 };
