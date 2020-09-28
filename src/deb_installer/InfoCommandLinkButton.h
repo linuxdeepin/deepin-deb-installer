@@ -17,6 +17,7 @@
 #ifndef INFOCOMMANDLINKBUTTON_H
 #define INFOCOMMANDLINKBUTTON_H
 #include <DCommandLinkButton>
+
 #include <QWidget>
 
 DWIDGET_USE_NAMESPACE
