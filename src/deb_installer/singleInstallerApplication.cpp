@@ -54,7 +54,7 @@ void SingleInstallerApplication::activateWindow()
         m_qspMainWnd.reset(new DebInstaller());
         Dtk::Widget::moveToCenter(m_qspMainWnd.get());
 
-        m_qspMainWnd->show();
+//        m_qspMainWnd->show();
     } else {
         m_qspMainWnd->setWindowState(Qt::WindowActive);
         m_qspMainWnd->activateWindow(); // Reactive main window
