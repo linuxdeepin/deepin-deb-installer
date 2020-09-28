@@ -22,10 +22,9 @@
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
 
-#include <QSettings>
-#include <QVBoxLayout>
-
 #include <DLabel>
+
+#include <QVBoxLayout>
 #include <QAbstractButton>
 
 DWIDGET_USE_NAMESPACE
@@ -40,7 +39,16 @@ class InfoControlButton : public QWidget
 public:
     explicit InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent = nullptr);
 
+    /**
+     * @brief setShrinkTips 设置收缩的提示语
+     * @param text  提示语
+     */
     void setShrinkTips(const QString text);
+
+    /**
+     * @brief setExpandTips 设置展开的提示语
+     * @param text  提示语
+     */
     void setExpandTips(const QString text);
 
 public:
@@ -51,27 +59,51 @@ public:
     QAbstractButton *controlButton();
 
 signals:
+    /**
+     * @brief expand    展开的信号
+     */
     void expand();
+
+    /**
+     * @brief shrink    收缩的信号
+     */
     void shrink();
 
 protected:
+
+    /**
+     * @brief mouseReleaseEvent     重写鼠标事件
+     */
     void mouseReleaseEvent(QMouseEvent *) override;
+
+    /**
+     * @brief keyPressEvent         重写按键事件 增加对回车、换行、空格的兼容
+     * @param event
+     */
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
+
+    /**
+     * @brief onMouseRelease        鼠标事件的具体实现
+     */
     void onMouseRelease();
+
+    /**
+     * @brief themeChanged          主题变化后，图标等的变化
+     */
     void themeChanged();
 
 private:
-    bool m_expand;
-    QString m_expandTips;
-    QString m_shrinkTips;
+    bool m_expand;                      // 当前是需要扩展还是收缩的标志位
+    QString m_expandTips;               // 展开的提示语
+    QString m_shrinkTips;               // 收缩的提示语
 
-    DLabel *m_arrowIcon;
-    QVBoxLayout *centralLayout;
+    DLabel *m_arrowIcon;                // 展开或收缩的图标
+    QVBoxLayout *centralLayout;         // 布局
 
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
-    InfoCommandLinkButton *m_tipsText;
+    InfoCommandLinkButton *m_tipsText;  //
 };
 
 #endif // INFOCONTROLBUTTON_H
