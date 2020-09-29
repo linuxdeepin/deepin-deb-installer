@@ -436,8 +436,6 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                             dthread->run();
                         }
                     }
-                    ret.status = DebListModel::DependsBreak;
-                    return  ret;
                 }
             }
         }
