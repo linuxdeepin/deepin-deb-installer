@@ -485,7 +485,6 @@ void SingleInstallPage::initConnections()
     });
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
     connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
-    // 抛弃 CommitErrorFinished 与OnCommitErrorFinished 在listModel中修改为信号workerFinished。
     connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
 
@@ -611,26 +610,6 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
         m_workerStarted = true;
         showInfo();
     }
-}
-
-/**
- * @brief SingleInstallPage::OnCommitErrorFinished
- * transaction 返回CommitError时的槽函数，目前不再使用
- * 暂时留用，待下个版本测试后，如果正常，删除。
- */
-void SingleInstallPage::OnCommitErrorFinished()
-{
-    m_tipsLabel->setVisible(true);
-    m_progressFrame->setVisible(false);
-    m_uninstallButton->setVisible(false);
-    m_reinstallButton->setVisible(false);
-    m_backButton->setVisible(true);
-
-    m_confirmButton->setVisible(true);
-    m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-
-    if (m_operate == Uninstall)
-        m_tipsLabel->setText(tr("Uninstall Failed"));
 }
 
 void SingleInstallPage::onWorkerFinished()

@@ -232,11 +232,6 @@ signals:
     void workerFinished() const;
 
     /**
-     * @brief CommitErrorFinished 此信号已经被废弃
-     */
-    void CommitErrorFinished();
-
-    /**
      * @brief transactionProgressChanged
      * 某一个包的安装进度改变
      * @param progress

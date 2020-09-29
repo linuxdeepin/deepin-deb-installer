@@ -117,7 +117,6 @@ private slots:
 
     void onWorkerFinished();
     void onWorkerProgressChanged(const int progress);
-    void OnCommitErrorFinished();
 
 private:
     int m_operate;
