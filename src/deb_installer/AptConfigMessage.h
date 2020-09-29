@@ -68,17 +68,6 @@ private:
     DLabel *m_pQuestionLabel;               //提示信息
     static AptConfigMessage *aptConfig;
 
-    // QWidget interface
-private:
-    /**
-     * @brief dealWrongAnswer   处理输入错误的情况
-     * @param question          当前的问题
-     * @param output            获取到的输出
-     * @return                  是否输入错误
-     * 此函数已废弃 目前提示信息的问题已经固定
-     */
-    bool dealWrongAnswer(QString question, QString output);
-
 private:
     /**
      * @brief initUI 初始化UI界面的格局

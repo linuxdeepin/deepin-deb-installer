@@ -129,34 +129,6 @@ void AptConfigMessage::initUI()
 }
 
 /**
- * @brief AptConfigMessage::dealWrongAnswer 判断当前输入的回答是否正确。
- * @param question m_QuestionLabel 中显示的问题
- * @param output 当前返回的提示
- * @return 当前提示是否与问题相同。
- * 当输入的回答错误时，程序将会返回再次返回问题，让用户回答。
- * 我们以此来判断当前输入的回答是否正确。
- * 输入回答错误时，不添加任何内容。
- * 此函数目前已经被废弃
- */
-bool AptConfigMessage::dealWrongAnswer(QString question, QString output)
-{
-    QString strText(output);                //获取安装程序返回的输出
-    strText.replace("\\n", "");             //去除换行
-    strText = strText.trimmed();            //去除字符串开头和结尾的空格
-
-    QString quesText(question);             //获取当前窗口展示的问题
-    quesText.replace("-\n", "");            //去除换行
-
-    //如果当前的问题与返回的输出是一致的，意味着当前输入的序号是错误的。
-    //ps:dpkg 配置时，如果给出的配置序号是错误的，则dpkg会再次返回问题。
-    if (strText == quesText) {
-        qDebug() << "return;";
-        return true;                        //当前的输入是错误的，返回true
-    }
-    return false;                           //当前的输入是正确的
-}
-
-/**
  * @brief AptConfigMessage::appendTextEdit  向配置信息展示窗口添加配置信息的数据
  * @param str                               配置信息数据
  */
@@ -165,9 +137,6 @@ void AptConfigMessage::appendTextEdit(QString str)
     m_inputEdit->lineEdit()->setFocus();                    //保证焦点在输入框上
     qDebug() << "str" << str << "str.size" << str.size();
     if (str.isEmpty() || str == "\\n")                      //如果添加的数据是空的或者只有换行，则不添加
-        return;
-
-    if (dealWrongAnswer(m_pQuestionLabel->text(), str))     //判断前一次的输入是否是正确的  PS:已经被废弃
         return;
 
     QString text;                                           //存放配置信息去除空格后的结果
