@@ -424,7 +424,7 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                     dependList << dinfo.packageName() + ":" + deb->architecture();
                 }
             }
-            if (ret.status == DebListModel::DependsBreak) {
+            if (ret.status != DebListModel::DependsOk) {
                 qDebug() << "Unsatisfied dependency:" << ret.package;
                 if (ret.package.contains("deepin-wine")) {
                     if (!m_dependInstallMark.contains(index)) {
@@ -436,6 +436,8 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
                             dthread->run();
                         }
                     }
+                    ret.status = DebListModel::DependsBreak;
+                    return  ret;
                 }
             }
         }
@@ -793,7 +795,9 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 if (dependencyVersionMatch(mirror_result, relation)) {
                     qDebug() << "availble by upgrade package" << p->name() << p->architecture() << "from"
                              << installedVersion << "to" << mirror_version;
-                    return PackageDependsStatus::available();
+                    // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
+                    return PackageDependsStatus::available(p->name());
+
                 }
             }
 
@@ -868,7 +872,9 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
         qDebug() << "Check finshed for package" << p->name();
 
-        return PackageDependsStatus::available();
+        // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
+        return PackageDependsStatus::available(p->name());
+
     }
 }
 
@@ -993,7 +999,11 @@ PackagesManager::~PackagesManager()
 
 PackageDependsStatus PackageDependsStatus::ok() { return {DebListModel::DependsOk, QString()}; }
 
-PackageDependsStatus PackageDependsStatus::available() { return {DebListModel::DependsAvailable, QString()}; }
+PackageDependsStatus PackageDependsStatus::available(const QString &package)
+{
+    // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
+    return {DebListModel::DependsAvailable, package};
+}
 
 PackageDependsStatus PackageDependsStatus::_break(const QString &package)
 {
