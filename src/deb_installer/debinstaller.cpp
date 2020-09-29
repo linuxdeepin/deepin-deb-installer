@@ -519,6 +519,8 @@ void DebInstaller::removePackage(const int index)
  */
 void DebInstaller::MulRefreshPage(int index)
 {
+    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
+    m_fileListModel->refreshAllDependsStatus();
     if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setScrollBottom(index);
@@ -535,6 +537,8 @@ void DebInstaller::refreshInstallPage(int index)
 {
     m_fileListModel->reset_filestatus();
     m_fileListModel->initPrepareStatus();
+    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
+    m_fileListModel->refreshAllDependsStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();
 
@@ -661,8 +665,10 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
         this->setAcceptDrops(true);
     }
     //Refresh the page after successful installation.
-    if (iAuthRes == DebListModel::AuthDependsSuccess)
-        refreshInstallPage();
+    if (iAuthRes == DebListModel::AuthDependsSuccess) {
+        m_fileListModel->reset_filestatus();//清除包的状态和包的错误原因
+        m_fileListModel->initPrepareStatus();//重置包的prepare状态。
+    }
     //Refresh the display effect of different pages
     if (m_dragflag == 2) {
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -670,5 +676,6 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     } else if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->DealDependResult(iAuthRes, dependName);
+        multiplePage->setScrollBottom(-1);// 滚动到最后一行。
     }
 }

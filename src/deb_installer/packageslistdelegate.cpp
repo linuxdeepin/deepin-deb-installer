@@ -33,10 +33,10 @@
 
 DWIDGET_USE_NAMESPACE
 
-PackagesListDelegate::PackagesListDelegate(QAbstractItemView *parent)
+PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_parentView(parent)
-    , m_fileListModel(new DebListModel(this))
+    , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
     qApp->installEventFilter(this);
     QFontInfo fontinfo = m_parentView->fontInfo();

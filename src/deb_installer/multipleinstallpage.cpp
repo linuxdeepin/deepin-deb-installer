@@ -49,7 +49,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_acceptButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
-    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -78,7 +78,8 @@ void MultipleInstallPage::initContentLayout()
 
 void MultipleInstallPage::initUI()
 {
-    PackagesListDelegate *delegate = new PackagesListDelegate(m_appsListView);
+    //直接传入debListModel 修复多次创建packageManager导致崩溃的问题
+    PackagesListDelegate *delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
 
     //fix bug:33730
     m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);

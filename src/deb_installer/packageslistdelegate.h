@@ -31,7 +31,7 @@ class PackagesListDelegate : public DStyledItemDelegate
     Q_OBJECT
 
 public:
-    explicit PackagesListDelegate(QAbstractItemView *parent = nullptr);
+    explicit PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent = nullptr);
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:

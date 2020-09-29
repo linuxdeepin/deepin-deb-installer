@@ -893,3 +893,13 @@ void DebListModel::upWrongStatusRow()
     //update scroll
     emit onChangeOperateIndex(-1);
 }
+/**
+ * @brief DebListModel::refreshAllDependsStatus 刷新获取所有依赖的状态
+ */
+void DebListModel::refreshAllDependsStatus()
+{
+    // 遍历获取所有依赖的状态
+    for (int i = 0; i < preparedPackages().size(); i++) {
+        m_packagesManager->packageDependsStatus(i);
+    }
+}

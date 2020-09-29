@@ -120,6 +120,10 @@ public:
 
 public:
     int getInstallFileSize();
+    /**
+     * @brief refreshAllDependsStatus 获取所有依赖的状态。
+     */
+    void refreshAllDependsStatus();
 
 signals:
     //    void workerStarted() const;
