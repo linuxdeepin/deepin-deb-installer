@@ -43,18 +43,26 @@ private:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
+    /**
+     * @brief refreshDebItemStatus 刷新每个item 包的状态
+     * @param operate_stat         操作状态
+     * @param install_status_rect  安装状态的位置
+     * @param painter
+     * @param isSelect              是否被选中
+     * @param isEnable              是否可用
+     */
     void refreshDebItemStatus(const int operate_stat,
                               QRect install_status_rect,
                               QPainter *painter,
                               bool isSelect, bool isEnable) const;
 
 private:
-    QPixmap m_packageIcon;
-    QSettings m_qsettings;
+    QPixmap m_packageIcon;                  //包的图标
+    QSettings m_qsettings;                  //废弃变量
     QAbstractItemView *m_parentView;
-    int m_itemHeight;
-    DebListModel *m_fileListModel;
-    int dependsStat_temp;
+    int m_itemHeight;                       //item的高度
+    DebListModel *m_fileListModel;          //传入的model
+    int dependsStat_temp;                   //依赖状态
 };
 
 #endif  // PACKAGESLISTDELEGATE_H

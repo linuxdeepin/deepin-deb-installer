@@ -39,16 +39,24 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_parentView(parent)
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
-    qApp->installEventFilter(this);
-    QFontInfo fontinfo = m_parentView->fontInfo();
+    qApp->installEventFilter(this);                     //事件筛选
+    QFontInfo fontinfo = m_parentView->fontInfo();      //获取字体
     int fontsize = fontinfo.pixelSize();
-    if (fontsize >= 16) {
+    if (fontsize >= 16) {                               //根据字体大小设置高度
         m_itemHeight = 52;
     } else {
         m_itemHeight = 48;
     }
 }
 
+/**
+ * @brief PackagesListDelegate::refreshDebItemStatus
+ * @param operate_stat         操作状态
+ * @param install_status_rect  安装状态的位置
+ * @param painter
+ * @param isSelect              是否被选中
+ * @param isEnable              是否可用
+ */
 void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
                                                 QRect install_status_rect,
                                                 QPainter *painter,
@@ -59,48 +67,50 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
-    QPen forground;
+    QPen forground;                         //前景色
 
-    QColor color;
-    QString showText;
+    QColor color;                           //画笔颜色
+    QString showText;                       //要显示的文本信息（安装状态）
 
     DPalette::ColorGroup cg;
-    if (DApplication::activeWindow()) {
-        cg = DPalette::Active;
+    if (DApplication::activeWindow()) {     //当前处于激活状态
+        cg = DPalette::Active;              //设置Palette为激活状态
     } else {
-        cg = DPalette::Inactive;
+        cg = DPalette::Inactive;            //设置Palette为非激活状态
     }
 
+    //根据操作的状态显示提示语
     switch (operate_stat) {
-    case DebListModel::Operating:
+    case DebListModel::Operating:                                   //正在安装
         painter->setPen(QPen(pa.color(DPalette::TextLively)));
         showText = tr("Installing");
         break;
-    case DebListModel::Success:
+    case DebListModel::Success:                                     //安装成功
         painter->setPen(QPen(pa.color(DPalette::LightLively)));
         showText = tr("Installed");
         break;
-    case DebListModel::Waiting:
+    case DebListModel::Waiting:                                     //等待安装
         painter->setPen(QPen(pa.color(DPalette::TextLively)));
         showText = tr("Waiting");
         break;
-    default:
+    default:                                                        //安装失败
         painter->setPen(QPen(pa.color(DPalette::TextWarning)));
         showText = tr("Failed");
         break;
     }
 
-    if (isSelect && isEnable) {
+    if (isSelect && isEnable) {                                     //当前被选中 未被选中使用默认颜色
         forground.setColor(palette.color(cg, DPalette::HighlightedText));
         painter->setPen(forground);
     }
-    painter->drawText(install_status_rect, showText, Qt::AlignVCenter | Qt::AlignRight);
+    painter->drawText(install_status_rect, showText, Qt::AlignVCenter | Qt::AlignRight);    //在item上添加安装提示
 }
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
-    if (index.isValid()) {
+
+    if (index.isValid()) {//判断传入的index是否有效
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 
@@ -116,13 +126,13 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QBrush background;
         QPen forground;
         DPalette::ColorGroup cg;
-        if (!(option.state & DStyle::State_Enabled)) {
+        if (!(option.state & DStyle::State_Enabled)) {                      //当前appListView not enable
             cg = DPalette::Disabled;
         } else {
-            if (!DApplication::activeWindow()) {
+            if (!DApplication::activeWindow()) {                            //当前窗口未被激活
                 cg = DPalette::Inactive;
             } else {
-                cg = DPalette::Active;
+                cg = DPalette::Active;                                      //当前窗口被激活
             }
         }
         if (option.features & QStyleOptionViewItem::Alternate) {
@@ -131,6 +141,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             background = palette.color(cg, DPalette::Base);
         }
 
+        //被选中时设置颜色高亮
         forground.setColor(palette.color(cg, DPalette::Text));
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
@@ -207,7 +218,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
         // install status
-        const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+        const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();        //获取包的状态
 //        qDebug() << "index:::::" << index.row() << operate_stat;
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
@@ -217,6 +228,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             QFont stat_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium);
             stat_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
             painter->setFont(stat_font);
+            //刷新添加包状态的提示
             refreshDebItemStatus(operate_stat, install_status_rect, painter, (option.state & DStyle::State_Selected), (option.state & DStyle::State_Enabled));
         }
 
@@ -227,33 +239,40 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_rect.setLeft(content_x);
         info_rect.setTop(name_rect.bottom() + 2);
 
+        //获取包的版本
         const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+
+        //获取包的依赖状态
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
+        //未被选中，设置正常的颜色
         forground.setColor(palette.color(cg, DPalette::ToolTipText));
+
         if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
                 || (dependsStat == DebListModel::DependsAuthCancel)) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            forground.setColor(palette.color(cg, DPalette::TextWarning));
-
+            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
         } else if (install_stat != DebListModel::NotInstalled) {
-            if (install_stat == DebListModel::InstalledSameVersion) {
+            //获取安装版本
+            if (install_stat == DebListModel::InstalledSameVersion) {       //安装了相同版本
                 info_str = tr("Same version installed");
-            } else if (install_stat == DebListModel::InstalledLaterVersion) {
+            } else if (install_stat == DebListModel::InstalledLaterVersion) {//安装了更新的版本
                 info_str =
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-            } else {
+            } else {                                                        //安装了较早的版本
                 info_str =
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
             }
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
-        } else {
+        } else {//当前没有安装过
+            //获取包的描述
             info_str = index.data(DebListModel::PackageDescriptionRole).toString();
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         }
+        //当前选中 设置高亮
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 forground.setColor(palette.color(cg, DPalette::HighlightedText));
@@ -265,7 +284,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
         painter->setFont(info_font);
         info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
-        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);
+        painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);       //将提示绘制到item上
 
         painter->restore();
     } else {
@@ -273,14 +292,27 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     }
 }
 
+/**
+ * @brief PackagesListDelegate::sizeHint 设置item的高度
+ * @param option
+ * @param index
+ * @return
+ */
 QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     Q_UNUSED(option);
 
-    QSize itemSize = QSize(0, m_itemHeight);
+    QSize itemSize = QSize(0, m_itemHeight); //设置Item的高度
     return itemSize;
 }
+
+/**
+ * @brief PackagesListDelegate::eventFilter 获取字体改变的事件
+ * @param watched
+ * @param event
+ * @return
+ */
 bool PackagesListDelegate::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::FontChange && watched == this) {
