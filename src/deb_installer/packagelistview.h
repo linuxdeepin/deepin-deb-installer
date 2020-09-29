@@ -43,58 +43,161 @@ public:
     void setRightMenuShowStatus(bool isShow);
 
 signals:
+    /**
+     * @brief onShowHideTopBg   信号已经被废弃
+     * @param bShow
+     */
     void onShowHideTopBg(bool bShow);
+
+    /**
+     * @brief onShowHideBottomBg    信号已经被废弃
+     * @param bShow
+     */
     void onShowHideBottomBg(bool bShow);
 
+    /**
+     * @brief onClickItemAtIndex    信号已经被废弃
+     * @param index
+     */
     void onClickItemAtIndex(QModelIndex index);
+
+    /**
+     * @brief onShowContextMenu 显示右键菜单
+     * @param index             显示右键菜单的index
+     */
     void onShowContextMenu(QModelIndex index);
+
+    /**
+     * @brief onRemoveItemClicked      删除该item
+     * @param index   要删除的item的index
+     */
     void onRemoveItemClicked(QModelIndex index);
 
+    /**
+     * @brief OutOfFocus  此信号已经被废弃
+     */
     void OutOfFocus(bool);
 
 public slots:
+
+    /**
+     * @brief getPos 获取到的当前Item的位置和row
+     * @param rect   当前item的rect
+     * @param index  当前item的下标
+     */
     void getPos(QRect rect, int index); //获取到的当前Item的位置和row
 protected:
+
+    /**
+     * @brief scrollContentsBy  无具体实际作用，可以忽略删除
+     * @param dx
+     * @param dy
+     */
     void scrollContentsBy(int dx, int dy)override;
+
+    /**
+     * @brief mousePressEvent 鼠标按下事件
+     * 如果是左键按下，如果右键菜单出现，则取消右键菜单
+     */
     void mousePressEvent(QMouseEvent *event)override;
+
+    /**
+     * @brief mouseReleaseEvent 鼠标释放事件
+     * @param event
+     */
     void mouseReleaseEvent(QMouseEvent *event)override;
+
+    /**
+     * @brief setSelection 选中事件
+     * @param rect
+     * @param command
+     * 选中时，允许跳出右键菜单。置标志位为true
+     */
     void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)override;
+
+    /**
+     * @brief keyPressEvent 键盘按下事件
+     * @param event
+     * 添加alt+m 快捷键触发右键菜单
+     */
     void keyPressEvent(QKeyEvent *event)override;
+
+    /**
+     * @brief paintEvent   绘制事件
+     * @param event
+     */
     void paintEvent(QPaintEvent *event)override;
     /**
-     * @brief focusInEvent
+     * @brief focusInEvent 焦点进入事件
      * @param event
      * 当焦点切换到当前控件时，默认选中第一项。
      */
     void focusInEvent(QFocusEvent *event) override;
 
 private:
+
+    /**
+     * @brief initUI
+     * 初始化 listview的各个属性参数
+     */
     void initUI();
+
+    /**
+     * @brief initConnections
+     * 链接listView的信号和槽
+     */
     void initConnections();
+
+    /**
+     * @brief initRightContextMenu
+     * 初始化右键菜单
+     */
     void initRightContextMenu();
+
+    /**
+     * @brief initShortcuts
+     * 初始化快捷键
+     */
     void initShortcuts();
 
+    /**
+     * @brief handleHideShowSelection 此函数已经被废弃
+     *
+     */
     void handleHideShowSelection();
 
 private slots:
+
+    /**
+     * @brief onListViewShowContextMenu 弹出右键菜单
+     * @param index 点击右键菜单的index的位置
+     */
     void onListViewShowContextMenu(QModelIndex index);
+
+    /**
+     * @brief onRightMenuDeleteAction   删除某一个包
+     */
     void onRightMenuDeleteAction();
+
+    /**
+     * @brief onShortcutDeleteAction  使用快捷键删除
+     */
     void onShortcutDeleteAction();
 
 private:
-    bool m_bLeftMouse;
-    bool m_bShortcutDelete;
-    QModelIndex m_currModelIndex;
-    DMenu *m_rightMenu {nullptr};
-    QModelIndex m_highlightIndex;
+    bool m_bLeftMouse;              //左键按下，取消右键菜单标识
+    bool m_bShortcutDelete;         //快捷删除标识
+    QModelIndex m_currModelIndex;   //当前选中的index
+    DMenu *m_rightMenu {nullptr};   //右键菜单
+    QModelIndex m_highlightIndex;   //当前选中的index
 
-    QPoint m_rightMenuPos; //确定的右键菜单出现的位置
-    int m_currentIndex; //当前选中的index.row
+    QPoint m_rightMenuPos;          //确定的右键菜单出现的位置
+    int m_currentIndex;             //当前选中的index.row
 
     /**
      * @brief m_bIsRightMenuShow 当前是否能够调出右键菜单标识，由MultiPage工作状态决定，并传入
      */
-    bool m_bIsRightMenuShow = false;
+    bool m_bIsRightMenuShow = false;//当前是否允许右键菜单显示
 
 };
 
