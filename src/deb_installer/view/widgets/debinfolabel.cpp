@@ -1,5 +1,5 @@
 #include "debinfolabel.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #include <QPainter>
 #include <QDebug>

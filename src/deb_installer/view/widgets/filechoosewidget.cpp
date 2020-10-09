@@ -20,8 +20,8 @@
  */
 
 #include "filechoosewidget.h"
-#include "choosefilebutton.h"
-#include "utils.h"
+#include "view/widgets/choosefilebutton.h"
+#include "utils/utils.h"
 
 #include <QDebug>
 #include <QDir>

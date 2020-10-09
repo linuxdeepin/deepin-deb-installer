@@ -22,9 +22,9 @@
 #ifndef MULTIPLEINSTALLPAGE_H
 #define MULTIPLEINSTALLPAGE_H
 
-#include "infocontrolbutton.h"
-#include "droundbgframe.h"
-#include "installprocessinfoview.h"
+#include "view/widgets/infocontrolbutton.h"
+#include "view/widgets/droundbgframe.h"
+#include "view/widgets/installprocessinfoview.h"
 
 #include <QPropertyAnimation>
 #include <QWidget>

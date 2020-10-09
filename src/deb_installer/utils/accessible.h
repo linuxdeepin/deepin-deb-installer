@@ -1,23 +1,24 @@
 #ifndef ACCESSIBLE_H
 #define ACCESSIBLE_H
 
-#include "accessibledefine.h"
+#include "utils/accessibledefine.h"
+#include "view/pages/singleinstallpage.h"
+#include "view/pages/uninstallconfirmpage.h"
+#include "view/pages/multipleinstallpage.h"
+#include "view/pages/AptConfigMessage.h"
+#include "view/widgets/choosefilebutton.h"
+#include "view/widgets/debinfolabel.h"
+#include "view/pages/debinstaller.h"
+#include "view/widgets/workerprogress.h"
+#include "view/widgets/droundbgframe.h"
+#include "view/widgets/filechoosewidget.h"
+#include "view/widgets/InfoCommandLinkButton.h"
+#include "view/widgets/infocontrolbutton.h"
+#include "view/widgets/installprocessinfoview.h"
+#include "model/packagelistview.h"
+#include "model/deblistmodel.h"
 
-#include "AptConfigMessage.h"
-#include "choosefilebutton.h"
-#include "debinfolabel.h"
-#include "debinstaller.h"
-#include "deblistmodel.h"
-#include "droundbgframe.h"
-#include "filechoosewidget.h"
-#include "InfoCommandLinkButton.h"
-#include "infocontrolbutton.h"
-#include "installprocessinfoview.h"
-#include "multipleinstallpage.h"
-#include "packagelistview.h"
-#include "singleinstallpage.h"
-#include "uninstallconfirmpage.h"
-#include "workerprogress.h"
+
 
 #include <DSwitchButton>
 #include <DBackgroundGroup>
@@ -40,21 +41,20 @@
 
 DWIDGET_USE_NAMESPACE
 //using namespace DCC_NAMESPACE;
-
+SET_FORM_ACCESSIBLE(SingleInstallPage, "SingleInstallPage")
+SET_FORM_ACCESSIBLE(UninstallConfirmPage, "UninstallConfirmPage")
+SET_FORM_ACCESSIBLE(MultipleInstallPage, "MultipleInstallPage")
 SET_FORM_ACCESSIBLE(AptConfigMessage, "AptConfigMessage")
 SET_FORM_ACCESSIBLE(ChooseFileButton, "ChooseFileButton")
 SET_FORM_ACCESSIBLE(DebInfoLabel, "DebInfoLabel")
 SET_FORM_ACCESSIBLE(DebInstaller, "DebInstaller")
+SET_FORM_ACCESSIBLE(WorkerProgress, "WorkerProgress")
 SET_FORM_ACCESSIBLE(DRoundBgFrame, "DRoundBgFrame")
 SET_FORM_ACCESSIBLE(FileChooseWidget, "FileChooseWidget")
 SET_FORM_ACCESSIBLE(InfoCommandLinkButton, "InfoCommandLinkButton")
 SET_FORM_ACCESSIBLE(InfoControlButton, "InfoControlButton")
 SET_FORM_ACCESSIBLE(InstallProcessInfoView, "InstallProcessInfoView")
-SET_FORM_ACCESSIBLE(MultipleInstallPage, "MultipleInstallPage")
 SET_FORM_ACCESSIBLE(PackagesListView, "PackagesListView")
-SET_FORM_ACCESSIBLE(SingleInstallPage, "SingleInstallPage")
-SET_FORM_ACCESSIBLE(UninstallConfirmPage, "UninstallConfirmPage")
-SET_FORM_ACCESSIBLE(WorkerProgress, "WorkerProgress")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())

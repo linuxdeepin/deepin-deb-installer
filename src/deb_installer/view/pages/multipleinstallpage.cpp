@@ -20,11 +20,11 @@
  */
 
 #include "multipleinstallpage.h"
-#include "deblistmodel.h"
-#include "packagelistview.h"
-#include "packageslistdelegate.h"
-#include "workerprogress.h"
-#include "utils.h"
+#include "model/deblistmodel.h"
+#include "model/packagelistview.h"
+#include "model/packageslistdelegate.h"
+#include "view/widgets/workerprogress.h"
+#include "utils/utils.h"
 
 #include <QApplication>
 #include <QPropertyAnimation>

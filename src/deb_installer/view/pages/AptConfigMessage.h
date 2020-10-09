@@ -1,7 +1,7 @@
 #ifndef APTCONFIGMESSAGE_H
 #define APTCONFIGMESSAGE_H
 
-#include "installprocessinfoview.h"
+#include "view/widgets/installprocessinfoview.h"
 
 #include <DLabel>
 #include <DLineEdit>

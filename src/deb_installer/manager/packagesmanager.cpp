@@ -20,8 +20,11 @@
  */
 
 #include "packagesmanager.h"
-#include "deblistmodel.h"
-#include "utils.h"
+#include "DealDependThread.h"
+#include "PackageDependsStatus.h"
+
+#include "model/deblistmodel.h"
+#include "utils/utils.h"
 
 #include <QPair>
 #include <QSet>
@@ -115,90 +118,13 @@ Backend *init_backend()
 //    return nullptr;
 }
 
-dealDependThread::dealDependThread(QObject *parent)
-{
-    Q_UNUSED(parent);
-    proc = new QProcess(this);
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &dealDependThread::onFinished);
-    connect(proc, &QProcess::readyReadStandardOutput, this, &dealDependThread::on_readoutput);
-}
-
-dealDependThread::~dealDependThread()
-{
-    delete proc;
-}
-
-void dealDependThread::setDependsList(QStringList dependList, int index)
-{
-    m_index = index;
-    m_dependsList = dependList;
-}
-
-void dealDependThread::setBrokenDepend(QString dependName)
-{
-    m_brokenDepend = dependName;
-}
-void dealDependThread::on_readoutput()
-{
-    QString tmp = proc->readAllStandardOutput().data();
-    qDebug() << "安装依赖输出数据:" << tmp;
-
-    if (tmp.contains("StartInstallDeepinwine")) {
-        emit DependResult(DebListModel::AuthConfirm, m_index, m_brokenDepend);
-        return;
-    }
-
-    if (tmp.contains("Not authorized")) {
-        bDependsStatusErr = true;
-        emit DependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
-    }
-}
-
-void dealDependThread::onFinished(int num = -1)
-{
-    if (bDependsStatusErr) {
-        bDependsStatusErr = false;
-        return;
-    }
-
-    if (num == 0) {
-        if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
-            bDependsStatusErr = false;
-            return;
-        }
-        qDebug() << m_dependsList << "安装成功";
-        emit DependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
-    } else {
-        if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
-            bDependsStatusErr = false;
-            return;
-        }
-        qDebug() << m_dependsList << "install error" << num;
-        emit DependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
-    }
-    emit enableCloseButton(true);
-}
-
-void dealDependThread::run()
-{
-    proc->setProcessChannelMode(QProcess::MergedChannels);
-    msleep(100);
-
-    emit DependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
-    qDebug() << "run m_dependList" << m_dependsList;
-    proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall"  << "InstallDeepinWine" << m_dependsList);
-    emit enableCloseButton(false);
-}
-
 PackagesManager::PackagesManager(QObject *parent)
     : QObject(parent)
 {
     m_backendFuture = QtConcurrent::run(init_backend);
-    dthread = new dealDependThread();
-    connect(dthread, &dealDependThread::DependResult, this, &PackagesManager::DealDependResult);
-    connect(dthread, &dealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
+    dthread = new DealDependThread();
+    connect(dthread, &DealDependThread::DependResult, this, &PackagesManager::DealDependResult);
+    connect(dthread, &DealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
@@ -383,7 +309,7 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
     emit DependResult(iAuthRes, iIndex, dependName);
 }
 
-PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
+PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index)) {
         return m_packageDependsStatus[index];
@@ -681,8 +607,8 @@ void PackagesManager::removePackage(const int index, QList<int> listDependInstal
     //m_packageDependsStatus.clear();
     if (m_packageDependsStatus.contains(index)) {
         if (m_packageDependsStatus.size() > 1) {
-            QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packageDependsStatus);
-            QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
+            QMapIterator<int, PackageDependsStatus> MapIteratorpackageDependsStatus(m_packageDependsStatus);
+            QList<PackageDependsStatus> listpackageDependsStatus;
             int iDependIndex = 0;
             while (MapIteratorpackageDependsStatus.hasNext()) {
                 MapIteratorpackageDependsStatus.next();
@@ -1001,64 +927,3 @@ PackagesManager::~PackagesManager()
     delete dthread;
 }
 
-PackageDependsStatus PackageDependsStatus::ok() { return {DebListModel::DependsOk, QString()}; }
-
-PackageDependsStatus PackageDependsStatus::available(const QString &package)
-{
-    // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
-    return {DebListModel::DependsAvailable, package};
-}
-
-PackageDependsStatus PackageDependsStatus::_break(const QString &package)
-{
-    return {DebListModel::DependsBreak, package};
-}
-
-PackageDependsStatus::PackageDependsStatus()
-    : PackageDependsStatus(DebListModel::DependsOk, QString()) {}
-
-PackageDependsStatus::PackageDependsStatus(const int status, const QString &package)
-    : status(status)
-    , package(package) {}
-
-PackageDependsStatus PackageDependsStatus::operator=(const PackageDependsStatus &other)
-{
-    status = other.status;
-    package = other.package;
-
-    return *this;
-}
-
-PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other)
-{
-    if (other.status > status) *this = other;
-
-    return *this;
-}
-
-PackageDependsStatus PackageDependsStatus::maxEq(const PackageDependsStatus &other)
-{
-    if (other.status >= status) *this = other;
-
-    return *this;
-}
-
-PackageDependsStatus PackageDependsStatus::min(const PackageDependsStatus &other)
-{
-    if (other.status < status) *this = other;
-
-    return *this;
-}
-
-PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &other)
-{
-    if (other.status <= status) *this = other;
-
-    return *this;
-}
-
-bool PackageDependsStatus::isBreak() const { return status == DebListModel::DependsBreak; }
-
-bool PackageDependsStatus::isAuthCancel() const { return status == DebListModel::DependsAuthCancel; }
-
-bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }

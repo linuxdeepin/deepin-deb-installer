@@ -21,7 +21,7 @@
 
 #include "dtkwidget_global.h"
 #include "dobject.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #include <QProgressBar>
 

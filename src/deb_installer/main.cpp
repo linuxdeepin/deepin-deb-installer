@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "debinstaller.h"
-#include "accessible.h"
-#include "utils.h"
+#include "model/deblistmodel.h"
+#include "utils/accessible.h"
+#include "utils/utils.h"
+#include "singleInstallerApplication.h"
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -35,7 +36,7 @@
 
 #include <QDBusConnection>
 #include <QDBusInterface>
-#include "singleInstallerApplication.h"
+
 
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE

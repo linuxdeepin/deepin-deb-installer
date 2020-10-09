@@ -20,8 +20,8 @@
  */
 
 #include "packagelistview.h"
-#include "deblistmodel.h"
-#include "utils.h"
+#include "model/deblistmodel.h"
+#include "utils/utils.h"
 
 #include <QPainter>
 #include <QShortcut>

@@ -1,9 +1,10 @@
 #include "singleInstallerApplication.h"
+#include "view/pages/debinstaller.h"
 #include <QCommandLineParser>
 
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
-#include "debinstaller.h"
+
 
 DCORE_USE_NAMESPACE
 

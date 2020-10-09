@@ -20,9 +20,10 @@
  */
 
 #include "deblistmodel.h"
-#include "packagesmanager.h"
-#include "AptConfigMessage.h"
-#include "utils.h"
+#include "manager/packagesmanager.h"
+#include "manager/PackageDependsStatus.h"
+#include "view/pages/AptConfigMessage.h"
+#include "utils/utils.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -251,7 +252,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     case PackageVersionStatusRole:
         return m_packagesManager->packageInstallStatus(r);          //获取当前index包的安装状态
     case PackageDependsStatusRole:
-        return m_packagesManager->packageDependsStatus(r).status;   //获取当前index包的依赖状态
+        return m_packagesManager->getPackageDependsStatus(r).status;   //获取当前index包的依赖状态
     case PackageInstalledVersionRole:
         return m_packagesManager->packageInstalledVersion(r);       //获取当前index包在系统中安装的版本
     case PackageAvailableDependsListRole:
@@ -306,7 +307,7 @@ void DebListModel::refreshAllDependsStatus()
 {
     // 遍历获取所有依赖的状态
     for (int i = 0; i < preparedPackages().size(); i++) {
-        m_packagesManager->packageDependsStatus(i);
+        m_packagesManager->getPackageDependsStatus(i);
     }
 }
 
@@ -616,7 +617,7 @@ void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOper
  */
 QString DebListModel::packageFailedReason(const int idx) const
 {
-    const auto stat = m_packagesManager->packageDependsStatus(idx);                         //获取包的依赖状态
+    const auto stat = m_packagesManager->getPackageDependsStatus(idx);                         //获取包的依赖状态
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
     if (stat.isBreak() || stat.isAuthCancel()) {                                            //依赖状态错误
         if (!stat.package.isEmpty()) {
@@ -787,7 +788,7 @@ void DebListModel::installDebs()
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
 
     // check available dependencies
-    const auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingStatusIndex);
+    const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
     if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
         m_packageFailCode.insert(m_operatingStatusIndex, -1);           //保存错误原因
@@ -1252,8 +1253,8 @@ void DebListModel::upWrongStatusRow()
 
     //change  m_packageDependsStatus sort.
     //对依赖状态进行排序
-    QMapIterator<int, PackagesManagerDependsStatus::PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
-    QList<PackagesManagerDependsStatus::PackageDependsStatus> listpackageDependsStatus;
+    QMapIterator<int, PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
+    QList<PackageDependsStatus> listpackageDependsStatus;
     iIndex = 0;
     while (MapIteratorpackageDependsStatus.hasNext()) {
         MapIteratorpackageDependsStatus.next();
@@ -1308,6 +1309,7 @@ void DebListModel::ConfigInstallFinish(int flag)
     AptConfigMessage::getInstance()->clearTexts();                  //清楚配置信息
     m_procInstallConfig->terminate();                               //结束配置
     m_procInstallConfig->close();
+
 }
 
 /**

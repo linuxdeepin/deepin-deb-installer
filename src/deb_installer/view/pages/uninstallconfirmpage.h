@@ -22,8 +22,8 @@
 #ifndef UNINSTALLCONFIRMPAGE_H
 #define UNINSTALLCONFIRMPAGE_H
 
-#include "infocontrolbutton.h"
-#include "installprocessinfoview.h"
+#include "view/widgets/infocontrolbutton.h"
+#include "view/widgets/installprocessinfoview.h"
 
 #include <DLabel>
 #include <DPushButton>

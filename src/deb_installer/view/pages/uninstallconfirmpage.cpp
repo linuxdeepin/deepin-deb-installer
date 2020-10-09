@@ -20,7 +20,7 @@
  */
 
 #include "uninstallconfirmpage.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #include <QDebug>
 #include <QVBoxLayout>

@@ -20,14 +20,14 @@
  */
 
 #include "debinstaller.h"
-#include "deblistmodel.h"
-#include "filechoosewidget.h"
-#include "multipleinstallpage.h"
-#include "singleinstallpage.h"
-#include "uninstallconfirmpage.h"
-#include "AptConfigMessage.h"
-#include "TitleBarFocusMonitor.h"
-#include "utils.h"
+#include "model/deblistmodel.h"
+#include "view/widgets/filechoosewidget.h"
+#include "view/pages/multipleinstallpage.h"
+#include "view/pages/singleinstallpage.h"
+#include "view/pages/uninstallconfirmpage.h"
+#include "view/pages/AptConfigMessage.h"
+#include "view/widgets/TitleBarFocusMonitor.h"
+#include "utils/utils.h"
 
 #include <DInputDialog>
 #include <DRecentManager>

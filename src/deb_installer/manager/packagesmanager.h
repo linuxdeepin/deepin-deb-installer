@@ -22,7 +22,7 @@
 #ifndef PACKAGESMANAGER_H
 #define PACKAGESMANAGER_H
 
-#include "result.h"
+#include "utils/result.h"
 
 #include <QFuture>
 #include <QObject>
@@ -34,66 +34,9 @@
 
 typedef Result<QString> ConflictResult;
 
-namespace  PackagesManagerDependsStatus {
-
-class dealDependThread : public QThread
-{
-    Q_OBJECT
-public:
-    dealDependThread(QObject *parent = nullptr);
-    virtual ~dealDependThread();
-    void setDependsList(QStringList dependList, int index);
-    void setBrokenDepend(QString dependName);
-    void run();
-signals:
-    void DependResult(int, int, QString);
-    void enableCloseButton(bool);
-
-public slots:
-    void onFinished(int);
-    void on_readoutput();
-private:
-    QProcess *proc;
-    int m_index = -1;
-    QStringList m_dependsList;
-    bool bDependsStatusErr = false;
-    QString m_brokenDepend;
-};
-
-class PackageDependsStatus
-{
-public:
-    static PackageDependsStatus ok();
-    /**
-     * @brief available 获取并返回依赖的状态
-     * @param package 当前依赖包的包名。
-     * @return 当前依赖的状态
-     */
-    static PackageDependsStatus available(const QString &package);
-    static PackageDependsStatus _break(const QString &package);
-
-    PackageDependsStatus();
-    PackageDependsStatus(const int status, const QString &package);
-    PackageDependsStatus operator=(const PackageDependsStatus &other);
-
-    PackageDependsStatus max(const PackageDependsStatus &other);
-    PackageDependsStatus maxEq(const PackageDependsStatus &other);
-    PackageDependsStatus min(const PackageDependsStatus &other);
-    PackageDependsStatus minEq(const PackageDependsStatus &other);
-
-    bool isBreak() const;
-    bool isAuthCancel() const;
-    bool isAvailable() const;
-
-public:
-    int status;
-    QString package;
-};
-}
-
-using namespace  PackagesManagerDependsStatus;
-
+class PackageDependsStatus;
 class DebListModel;
+class DealDependThread;
 class PackagesManager : public QObject
 {
     Q_OBJECT
@@ -123,7 +66,7 @@ public:
     const ConflictResult packageConflictStat(const int index);
 
     const QStringList packageAvailableDepends(const int index);
-    PackageDependsStatus packageDependsStatus(const int index);
+    PackageDependsStatus getPackageDependsStatus(const int index);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
     QString package(const int index) const { return m_preparedPackages[index]; }
@@ -174,7 +117,7 @@ private:
     QMap<int, PackageDependsStatus> m_packageDependsStatus;
 
     int m_DealDependIndex = -1;
-    dealDependThread *dthread = nullptr;
+    DealDependThread *dthread = nullptr;
     QList<int> m_dependInstallMark;
 
 private:

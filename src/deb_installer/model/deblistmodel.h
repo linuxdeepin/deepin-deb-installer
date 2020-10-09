@@ -91,7 +91,7 @@ public:
      * @brief The PackageDependsStatus enum
      * 当前包的依赖状态
      */
-    enum PackageDependsStatus {
+    enum DependsStatus {
         DependsOk,              //依赖满足
         DependsAvailable,       //依赖可用但是需要下载
         DependsBreak,           //依赖不满足

@@ -1,6 +1,6 @@
 #include "installprocessinfoview.h"
 #include "droundbgframe.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #include <QVBoxLayout>
 #include <QScroller>
