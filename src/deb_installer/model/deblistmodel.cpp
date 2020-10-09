@@ -1369,7 +1369,6 @@ void DebListModel::ConfigInputWrite(QString str)
  */
 void DebListModel::checkInstallStatus(QString str)
 {
-    qDebug() << "test" << str;
     // 判断当前的信息是否是错误提示信息
     if (str.contains("Cannot run program deepin-deb-installer-dependsInstall: No such file or directory")) {
         emit appendOutputInfo(str);                                 //输出安装错误的原因
@@ -1382,5 +1381,4 @@ void DebListModel::checkInstallStatus(QString str)
         bumpInstallIndex();
         return;
     }
-
 }

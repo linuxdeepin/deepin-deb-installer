@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="63"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"/>
+        <translation>विन्यास हेतु अंक दर्ज करें :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="67"/>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="386"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>संभवतः DEB पैकेज विकृत है </translation>
     </message>
     <message>
         <location filename="../src/deb_installer/debinstaller.cpp" line="400"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="74"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>प्रमाणीकरण विफल</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="480"/>

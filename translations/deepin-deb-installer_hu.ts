@@ -41,34 +41,34 @@
         <location filename="../src/deb_installer/deblistmodel.cpp" line="80"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="95"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Telepítés sikertelen, kérlek ellenőrizd a hálózati kapcsolatot</translation>
+        <translation>A telepítés sikertelen, kérjük ellenőrizze a hálózati kapcsolatot</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="82"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Telepítés sikertelen, kérem ellenőrizze a frissítéseket a Vezérlőközpontban</translation>
+        <translation>A telepítés sikertelen, kérjük ellenőrizze a frissítéseket a Vezérlőközpontban</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="85"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="88"/>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="98"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Telepítés sikertelen, nincs elég hely a lemezen</translation>
+        <translation>A telepítés sikertelen, nincs elég hely a lemezen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="101"/>
         <source>Installation Failed</source>
-        <translation>Telepítés sikertelen</translation>
+        <translation>A telepítés sikertelen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="484"/>
         <source>Failed to install %1</source>
-        <translation>%1 telepítése sikertelen</translation>
+        <translation>A %1 telepítése sikertelen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="681"/>
         <source>Unable to install</source>
-        <translation>Telepítés nem lehetséges</translation>
+        <translation>A telepítés nem lehetséges</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/deblistmodel.cpp" line="682"/>
@@ -140,7 +140,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="369"/>
         <source>Installing dependencies: %1</source>
-        <translation>Függőségek telepítése: %1</translation>
+        <translation>Telepítési függőségek: %1</translation>
     </message>
 </context>
 <context>
@@ -247,12 +247,12 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="786"/>
         <source>Installing dependencies: %1</source>
-        <translation>Függőségek telepítése: %1</translation>
+        <translation>Telepítési függőségek: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="878"/>
         <source>Failed to install %1</source>
-        <translation>%1 telepítése sikertelen</translation>
+        <translation>A %1 telepítése sikertelen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
@@ -267,13 +267,13 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="617"/>
         <source>Uninstalled successfully</source>
-        <translation>Sikertelen telepítés</translation>
+        <translation>Sikeresen eltávolítva</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="590"/>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="628"/>
         <source>Uninstall Failed</source>
-        <translation>Eltávolítás sikertelen</translation>
+        <translation>Az eltávolítás sikertelen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="60"/>
         <source>Cancel</source>
-        <translation>Mégse</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="62"/>
@@ -331,7 +331,8 @@
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="136"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Biztosan el kívánja távolítani %1? Minden csomagfüggősége szintén eltávolításra kerül</translation>
+        <translation>Biztosan el kívánja távolítani %1-t?
+Minden csomagfüggősége szintén eltávolításra kerül</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/uninstallconfirmpage.cpp" line="138"/>

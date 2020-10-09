@@ -140,7 +140,7 @@
     <message>
         <location filename="../src/deb_installer/multipleinstallpage.cpp" line="369"/>
         <source>Installing dependencies: %1</source>
-        <translation>Abhängigkeiten installieren: %1</translation>
+        <translation>Abhängigkeiten werden installiert: %1</translation>
     </message>
 </context>
 <context>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="786"/>
         <source>Installing dependencies: %1</source>
-        <translation>Abhängigkeiten installieren: %1</translation>
+        <translation>Abhängigkeiten werden installiert: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="878"/>

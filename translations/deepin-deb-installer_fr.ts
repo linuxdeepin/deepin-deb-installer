@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="63"/>
         <source>Enter the number to configure: </source>
-        <translation>Entrer le numéro à configurer :</translation>
+        <translation>Entrer le numéro à configurer:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/AptConfigMessage.cpp" line="67"/>
@@ -257,7 +257,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="171"/>
         <source>Version: </source>
-        <translation>Version :</translation>
+        <translation>Version:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="611"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="164"/>
         <source>Name: </source>
-        <translation>Nom :</translation>
+        <translation>Nom:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/singleinstallpage.cpp" line="724"/>
@@ -353,7 +353,7 @@ Le système ou d&apos;autres applications peuvent ne pas fonctionner correctemen
     <message>
         <location filename="../src/deb_installer/main.cpp" line="65"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Le programme d&apos;installation de paquets aide les utilisateurs à installer, supprimer des paquets locaux et à prend en charge l&apos;installation en bloc.</translation>
+        <translation>L&apos;installateur de paquets aide les utilisateurs à installer et à supprimer des paquets locaux, prend aussi en charge l&apos;installation multiple.</translation>
     </message>
 </context>
 </TS>
