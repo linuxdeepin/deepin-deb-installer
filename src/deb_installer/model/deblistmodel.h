@@ -489,7 +489,13 @@ private:
      */
     void enableTitleBarFocus();
 
-
+    /**
+     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
+     * @param str  命令返回的安装信息
+     * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
+     * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
+     */
+    void checkInstallStatus(QString str);
 
 private:
     int m_workerStatus;                                 //当前工作状态

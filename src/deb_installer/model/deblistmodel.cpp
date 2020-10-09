@@ -1309,7 +1309,6 @@ void DebListModel::ConfigInstallFinish(int flag)
     AptConfigMessage::getInstance()->clearTexts();                  //清楚配置信息
     m_procInstallConfig->terminate();                               //结束配置
     m_procInstallConfig->close();
-
 }
 
 /**
@@ -1319,6 +1318,10 @@ void DebListModel::ConfigInstallFinish(int flag)
 void DebListModel::ConfigReadOutput()
 {
     QString tmp = m_procInstallConfig->readAllStandardOutput().data();                  //获取配置读取到的信息
+
+    //检查命令返回的结果，如果是 没有发现命令。直接报错，安装失败
+    checkInstallStatus(tmp);
+
     tmp.remove(QChar('"'), Qt::CaseInsensitive);
     tmp.remove(QChar('\n'), Qt::CaseInsensitive);
 
@@ -1356,4 +1359,28 @@ void DebListModel::ConfigInputWrite(QString str)
 {
     m_procInstallConfig->write(str.toUtf8());                                          //将用户输入的配置项写入到配置安装进程中。
     m_procInstallConfig->write("\n");                                                  //写入换行，配置生效
+}
+
+/**
+ * @brief DebListModel::checkInstallStatus  根据命令返回的消息判断安装状态
+ * @param str 命令返回的安装信息
+ * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
+ * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
+ */
+void DebListModel::checkInstallStatus(QString str)
+{
+    qDebug() << "test" << str;
+    // 判断当前的信息是否是错误提示信息
+    if (str.contains("Cannot run program deepin-deb-installer-dependsInstall: No such file or directory")) {
+        emit appendOutputInfo(str);                                 //输出安装错误的原因
+        m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
+        m_workerStatus_temp = m_workerStatus;
+        refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
+        m_packageOperateStatus[m_operatingIndex] = Failed;
+        m_packageFailCode.insert(m_operatingIndex, 0);       //保存失败原因
+        m_packageFailReason.insert(m_operatingIndex, "");
+        bumpInstallIndex();
+        return;
+    }
+
 }
