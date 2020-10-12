@@ -154,6 +154,8 @@ DebListModel::DebListModel(QObject *parent)
 
     //安装wine依赖的时候不允许程序退出
     connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
+
+    m_isVerifyDigital = checkSystemVersion();
 }
 
 /**
@@ -916,29 +918,26 @@ void DebListModel::showNoDigitalErrWindow()
  * 社区版默认开发者模式，不验证签名。
  * 此部分修改，无法影响control依赖，服务器版与社区版需要在Control文件中去除deepin-elf-sign-tool依赖
  * 已经有更新的接口，稍后需要更新
+ * PS: 2020/10/12 已经更新
  */
 bool DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
-    bool isVerifyDigital = false;                           //默认不需要验证数字签名
-    switch (Dtk::Core::DSysInfo::deepinType()) {            //获取系统的类型
-    case Dtk::Core::DSysInfo::DeepinDesktop:                //社区版 不验证签名
-        isVerifyDigital = false;
-        break;
-    case Dtk::Core::DSysInfo::DeepinPersonal:               //个人版
-    case Dtk::Core::DSysInfo::DeepinProfessional:           //专业版
-        isVerifyDigital = true;
-        break;
-    case Dtk::Core::DSysInfo::DeepinServer:                 //服务器版
-        isVerifyDigital = false;
-        break;
-    default:
-        isVerifyDigital = true;
+    // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
+    switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
+    case Dtk::Core::DSysInfo::UosProfessional:               //专业版
+    case Dtk::Core::DSysInfo::UosHome: {                     //个人版
+        QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        qDebug() << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+        return deviceMode;
     }
-
-    qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
-    qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
-    return isVerifyDigital;
+    case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
+    case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
+        return false;
+    default:
+        return true;
+    }
 }
 
 /**
@@ -949,10 +948,7 @@ bool DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
-    QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
-    qDebug() << "QDBusResult" << deviceMode;
-    if (deviceMode)                                                                             //处于开发者模式，直接返回验证成功
+    if (m_isVerifyDigital)
         return true;
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
     switch (digitalSigntual) {
@@ -975,7 +971,7 @@ bool DebListModel::checkDigitalSignature()
  */
 void DebListModel::installNextDeb()
 {
-    if (checkSystemVersion() && !checkDigitalSignature()) {     //非开发者模式且数字签名验证失败
+    if (!checkDigitalSignature()) {     //非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();                               //演出错误窗口
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];

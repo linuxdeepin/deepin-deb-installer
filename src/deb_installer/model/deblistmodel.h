@@ -517,6 +517,8 @@ private:
     bool QverifyResult;                                 //此变量已被废弃
     QProcess *m_procInstallConfig;                      // 配置安装进程
     const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
+
+    bool m_isVerifyDigital = true;                      // 签名验证的标志变量
 };
 
 #endif  // DEBLISTMODEL_H
