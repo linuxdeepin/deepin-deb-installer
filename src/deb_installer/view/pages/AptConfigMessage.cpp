@@ -207,17 +207,17 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
     QLayout *layout = titlebar()->layout();
     for (int i = 0; i < layout->count(); ++i) {
         QWidget *widget = layout->itemAt(i)->widget();
-        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
+        if (widget != nullptr && QString(widget->metaObject()->className()) ==  "QWidget") {
             QLayout *widgetLayout = widget->layout();
             for (int j = 0; j < widgetLayout->count(); ++j) {
-                QWidget *widget = widgetLayout->itemAt(j)->widget();
-                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
-                    QLayout *wLayout = widget->layout();
+                QWidget *topwidget = widgetLayout->itemAt(j)->widget();
+                if (topwidget != nullptr && QString(topwidget->metaObject()->className()) ==  "QWidget") {
+                    QLayout *wLayout = topwidget->layout();
                     for (int k = 0; k < wLayout->count(); ++k) {
-                        QWidget *widget = wLayout->itemAt(k)->widget();
-                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
-                            widget->setFocusPolicy(Qt::NoFocus);        //设置标题栏所有的控件无焦点
-                            widget->setVisible(false);                  // 隐藏标题栏所有的控件。
+                        QWidget *bottomWidget = wLayout->itemAt(k)->widget();
+                        if (bottomWidget != nullptr && QString(bottomWidget->metaObject()->className()).contains("Button")) {
+                            bottomWidget->setFocusPolicy(Qt::NoFocus);        //设置标题栏所有的控件无焦点
+                            bottomWidget->setVisible(false);                  // 隐藏标题栏所有的控件。
                         }
                     }
                 }
