@@ -54,7 +54,7 @@ ColoredProgressBar::ColoredProgressBar(QWidget *parent)
 {
     themeChanged();
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
-                        this, &ColoredProgressBar::themeChanged);
+                     this, &ColoredProgressBar::themeChanged);
 }
 
 void ColoredProgressBar::themeChanged()
@@ -63,10 +63,9 @@ void ColoredProgressBar::themeChanged()
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
     m_themeType = themeType;
-    if(themeType == DGuiApplicationHelper::LightType) {
+    if (themeType == DGuiApplicationHelper::LightType) {
         d->threshmap.clear();
-    }
-    else if(themeType == DGuiApplicationHelper::DarkType) {
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
         DPalette pa = DebApplicationHelper::instance()->palette(this);
 
         QColor colorStart = pa.color(QPalette::Highlight);
@@ -74,8 +73,7 @@ void ColoredProgressBar::themeChanged()
 
         d->threshmap.insert(0, QBrush(colorStart));
         d->threshmap.insert(1, QBrush(colorEnd));
-    }
-    else {
+    } else {
         d->threshmap.clear();
     }
 }
@@ -117,10 +115,9 @@ QList<int> ColoredProgressBar::thresholds() const
 void ColoredProgressBar::paintEvent(QPaintEvent *event)
 {
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
-    if(themeType == DGuiApplicationHelper::LightType) {
+    if (themeType == DGuiApplicationHelper::LightType) {
         QProgressBar::paintEvent(event);
-    }
-    else if(themeType == DGuiApplicationHelper::DarkType) {
+    } else if (themeType == DGuiApplicationHelper::DarkType) {
 
         D_D(ColoredProgressBar);
         QStylePainter painter(this);
@@ -141,8 +138,7 @@ void ColoredProgressBar::paintEvent(QPaintEvent *event)
         if (styopt.textVisible && styopt.orientation == Qt::Horizontal) {
             painter.drawControl(QStyle::ControlElement::CE_ProgressBarLabel, styopt);
         }
-    }
-    else {
+    } else {
         QProgressBar::paintEvent(event);
     }
 }
