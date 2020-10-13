@@ -37,7 +37,7 @@ PackageDependsStatus::PackageDependsStatus(const int status, const QString &pack
     : status(status)
     , package(package) {}
 
-PackageDependsStatus PackageDependsStatus::operator=(const PackageDependsStatus &other)
+PackageDependsStatus &PackageDependsStatus::operator=(const PackageDependsStatus &other)
 {
     status = other.status;
     package = other.package;

@@ -49,7 +49,7 @@ public:
      * @param other 要赋值的依赖的状态
      * @return 赋值后的依赖的状态
      */
-    PackageDependsStatus operator=(const PackageDependsStatus &other);
+    PackageDependsStatus &operator=(const PackageDependsStatus &other);
 
     /**
      * @brief max   状态的比较
