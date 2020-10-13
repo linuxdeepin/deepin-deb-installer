@@ -25,50 +25,58 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    debinstaller.cpp \
-    deblistmodel.cpp \
-    filechoosewidget.cpp \
-    infocontrolbutton.cpp \
+    model/packageslistdelegate.cpp \
+    model/deblistmodel.cpp \
+    model/packagelistview.cpp \
+    view/pages/debinstaller.cpp \
+    view/pages/multipleinstallpage.cpp \
+    view/pages/singleinstallpage.cpp \
+    view/pages/uninstallconfirmpage.cpp \
+    view/pages/AptConfigMessage.cpp \
+    view/widgets/choosefilebutton.cpp \
+    view/widgets/coloredprogressbar.cpp \
+    view/widgets/debinfolabel.cpp \
+    view/widgets/droundbgframe.cpp \
+    view/widgets/filechoosewidget.cpp \
+    view/widgets/InfoCommandLinkButton.cpp \
+    view/widgets/infocontrolbutton.cpp \
+    view/widgets/installprocessinfoview.cpp \
+    view/widgets/TitleBarFocusMonitor.cpp \
+    view/widgets/workerprogress.cpp \
+    utils/utils.cpp \
+    manager/DealDependThread.cpp \
+    manager/PackageDependsStatus.cpp \
+    manager/packagesmanager.cpp \
     main.cpp \
-    multipleinstallpage.cpp \
-    packagelistview.cpp \
-    packageslistdelegate.cpp \
-    packagesmanager.cpp \
-    singleinstallpage.cpp \
-    uninstallconfirmpage.cpp \
-    workerprogress.cpp \
-    utils.cpp \
-    droundbgframe.cpp \
-    installprocessinfoview.cpp \
-    choosefilebutton.cpp \
-    debinfolabel.cpp \
-    singleInstallerApplication.cpp \
-    AptConfigMessage.cpp \
-    InfoCommandLinkButton.cpp \
-    TitleBarFocusMonitor.cpp
+    singleInstallerApplication.cpp
 
 HEADERS += \
-    debinstaller.h \
-    deblistmodel.h \
-    filechoosewidget.h \
-    infocontrolbutton.h \
-    multipleinstallpage.h \
-    packagelistview.h \
-    packageslistdelegate.h \
-    packagesmanager.h \
-    result.h \
-    singleinstallpage.h \
-    uninstallconfirmpage.h \
-    workerprogress.h \
-    utils.h \
-    droundbgframe.h \
-    installprocessinfoview.h \
-    choosefilebutton.h \
-    debinfolabel.h \
-    singleInstallerApplication.h \
-    AptConfigMessage.h \
-    InfoCommandLinkButton.h \
-    TitleBarFocusMonitor.h
+    manager/packagesmanager.h \
+    manager/DealDependThread.h \
+    manager/PackageDependsStatus.h \
+    model/packageslistdelegate.h \
+    model/deblistmodel.h \
+    model/packagelistview.h \
+    view/pages/debinstaller.h \
+    view/pages/multipleinstallpage.h \
+    view/pages/singleinstallpage.h \
+    view/pages/uninstallconfirmpage.h \
+    view/pages/AptConfigMessage.h \
+    view/widgets/choosefilebutton.h \
+    view/widgets/coloredprogressbar.h \
+    view/widgets/debinfolabel.h \
+    view/widgets/droundbgframe.h \
+    view/widgets/filechoosewidget.h \
+    view/widgets/InfoCommandLinkButton.h \
+    view/widgets/infocontrolbutton.h \
+    view/widgets/installprocessinfoview.h \
+    view/widgets/TitleBarFocusMonitor.h \
+    view/widgets/workerprogress.h \
+    utils/accessibledefine.h \
+    utils/result.h \
+    utils/accessible.h \
+    utils/utils.h \
+    singleInstallerApplication.h
 
 DISTFILES += \
     deepin-deb-installer.applications \
