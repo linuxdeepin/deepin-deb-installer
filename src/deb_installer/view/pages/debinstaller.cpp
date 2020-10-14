@@ -135,24 +135,24 @@ void DebInstaller::handleFocusPolicy()
         if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
             QLayout *widgetLayout = widget->layout();
             for (int j = 0; j < widgetLayout->count(); ++j) {
-                QWidget *widget = widgetLayout->itemAt(j)->widget();
-                if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
-                    QLayout *wLayout = widget->layout();
+                QWidget *topWidget = widgetLayout->itemAt(j)->widget();
+                if (topWidget != nullptr && QString(topWidget->metaObject()->className()) ==  QString("QWidget")) {
+                    QLayout *wLayout = topWidget->layout();
                     for (int k = 0; k < wLayout->count(); ++k) {
-                        QWidget *widget = wLayout->itemAt(k)->widget();
-                        if (widget != nullptr && QString(widget->metaObject()->className()).contains("Button")) {
+                        QWidget *bottomWidget = wLayout->itemAt(k)->widget();
+                        if (bottomWidget != nullptr && QString(bottomWidget->metaObject()->className()).contains("Button")) {
                             //widget->setFocusPolicy(Qt::NoFocus);
                             // 获取菜单栏按钮
-                            if ("Dtk::Widget::DWindowOptionButton" == QString(widget->metaObject()->className())) {
-                                m_OptionWindow = widget;
+                            if ("Dtk::Widget::DWindowOptionButton" == QString(bottomWidget->metaObject()->className())) {
+                                m_OptionWindow = bottomWidget;
                             }
                             // 获取最小化窗口按钮
-                            if ("Dtk::Widget::DWindowMinButton" == QString(widget->metaObject()->className())) {
-                                m_MinWindow = widget;
+                            if ("Dtk::Widget::DWindowMinButton" == QString(bottomWidget->metaObject()->className())) {
+                                m_MinWindow = bottomWidget;
                             }
                             // 获取关闭窗口按钮
-                            if ("Dtk::Widget::DWindowCloseButton" == QString(widget->metaObject()->className())) {
-                                m_closeWindow = widget;
+                            if ("Dtk::Widget::DWindowCloseButton" == QString(bottomWidget->metaObject()->className())) {
+                                m_closeWindow = bottomWidget;
                             }
                         }
                     }

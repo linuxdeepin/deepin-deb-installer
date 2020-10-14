@@ -48,67 +48,6 @@ Utils::~Utils()
 {
 }
 
-QString Utils::getQssContent(const QString &filePath)
-{
-    QFile file(filePath);
-    QString qss;
-
-    if (file.open(QIODevice::ReadOnly)) {
-        qss = file.readAll();
-    }
-
-    return qss;
-}
-
-QString Utils::getConfigPath()
-{
-    QDir dir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first())
-             .filePath(qApp->organizationName()));
-
-    return dir.filePath(qApp->applicationName());
-}
-
-bool Utils::isFontMimeType(const QString &filePath)
-{
-    const QString mimeName = QMimeDatabase().mimeTypeForFile(filePath).name();
-
-    if (mimeName.startsWith("font/") ||
-            mimeName.startsWith("application/x-font")) {
-        return true;
-    }
-    return false;
-}
-
-QString Utils::suffixList()
-{
-    return QString("Font Files (*.ttf *.ttc *.otf)");
-}
-
-QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
-{
-    if (m_imgCacheHash.contains(filePath)) {
-        return m_imgCacheHash.value(filePath);
-    }
-
-    QImageReader reader;
-    QPixmap pixmap;
-
-    reader.setFileName(filePath);
-
-    if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
-        reader.setScaledSize(size * ratio);
-        pixmap = QPixmap::fromImage(reader.read());
-        pixmap.setDevicePixelRatio(ratio);
-    } else {
-        pixmap.load(filePath);
-    }
-
-    m_imgCacheHash.insert(filePath, pixmap);
-
-    return pixmap;
-}
-
 QString Utils::loadFontFamilyByType(FontType fontType)
 {
     QString fontFileName = "";
@@ -209,35 +148,6 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fon
     fontManager->bind(widget, sizeType, fontWeight);
 }
 
-int Utils::returnfileIsempty(QString strfilepath, QString strfilename)
-{
-    QDir dir(strfilepath);
-    QString filename = strfilename + ".postinst";
-    do {
-        if (!dir.exists()) {
-            qDebug() << "文件夹不存在";
-            return 0;
-        }
-        dir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-        QFileInfoList list = dir.entryInfoList();
-        int file_count = list.count();
-        qDebug() << "file_count                 " << file_count;
-        if (file_count <= 0) {
-            qDebug() << "当前文件夹为空";
-            return 0;
-        }
-        QStringList string_list;
-        for (int i = 0; i < list.count(); i++) {
-            QFileInfo file_info = list.at(i);
-            if (file_info.fileName() == filename) {
-                qDebug() << "文件路径：  " << file_info.path() << "           " << "文件名：  " << file_info.fileName();
-                break;
-            }
-        }
-    } while (0);
-    return 1;
-}
-
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
     bool bFlag = inputStr.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -253,40 +163,6 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
         return inputStr;
     }
 }
-
-bool Utils::File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename)
-{
-    QDir dir(Targetfilepath);
-    QString filename = strfilename + ".postinst";
-    QString File_transfer_Action1 = "";
-    QString File_transfer_Action2 = "";
-
-    File_transfer_Action1 = "mkdir " + Targetfilepath;
-    qDebug() << "创建文件夹：" << File_transfer_Action1;
-    QFile file(Targetfilepath);
-    if (!file.exists()) {
-        system(File_transfer_Action1.toStdString().c_str());
-    }
-    File_transfer_Action2 = "cp " + Sourcefilepath + "/" + filename + " " + Targetfilepath;
-    system(File_transfer_Action2.toStdString().c_str());
-    qDebug() << "文件复制转移：" << File_transfer_Action2;
-    return true;
-}
-
-bool Utils::Modify_transferfile(QString Targetfilepath, QString strfilename)
-{
-    QDir dir(Targetfilepath);
-    QString filename = strfilename + ".postinst";
-    QString File_modify_Action = "";
-    File_modify_Action = "sed -i '1,$s/su /#su /g' " + Targetfilepath + "/" + filename;
-    qDebug() << "修改文件内容：" << File_modify_Action;
-    QFile file(Targetfilepath + "/" + filename);
-    if (file.exists()) {
-        system(File_modify_Action.toStdString().c_str());
-    }
-    return true;
-}
-
 bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
 {
     QDir dir(strfilepath);

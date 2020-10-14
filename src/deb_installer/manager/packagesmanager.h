@@ -103,7 +103,6 @@ private:
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
 
-    void removeLastPackage();
     void resetInstallStatus();
 
 private:

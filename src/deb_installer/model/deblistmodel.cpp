@@ -56,12 +56,10 @@ bool isDpkgRunning()
     proc.waitForFinished();
 
     // 获取进程信息的数据
-    const QString output = proc.readAllStandardOutput();
+    const QString processOutput = proc.readAllStandardOutput();
 
     // 查看进程信息中是否存在dpkg 存在说明已经正在安装其他包
-    for (const auto &item : output.split('\n'))
-        if (item == "dpkg")
-            return true;
+    if (processOutput.contains("dpkg")) return true;   //更换判断的方式
 
     return false;
 }

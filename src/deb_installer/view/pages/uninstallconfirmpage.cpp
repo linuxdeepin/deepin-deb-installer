@@ -25,16 +25,6 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-const QString uninstallTextInRect(const QFont &font, QString srcText, const QSize &size)
-{
-
-    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
-    if (!bContainsChinese) {
-        return srcText;
-    }
-    return Utils::holdTextInRect(font, srcText, size);
-}
-
 UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     : QWidget(parent)
     , m_icon(new DLabel(this))
@@ -145,7 +135,6 @@ void UninstallConfirmPage::setPackage(const QString &name)
     }
     const QSize boundingSize = QSize(m_tips->width(), 340);
     m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));//2020.0210修改中英文状态下描述输出自动换行
-//    m_tips->setText(uninstallTextInRect(m_tips->font(),tips.arg(name),boundingSize));
 }
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
@@ -176,10 +165,6 @@ void UninstallConfirmPage::hideDetail()
     m_dependsInfomation->setVisible(false);
 }
 
-void UninstallConfirmPage::initSetFocus()
-{
-    m_cancelBtn->setFocus();
-}
 
 bool UninstallConfirmPage::eventFilter(QObject *watched, QEvent *event)
 {

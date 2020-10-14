@@ -79,11 +79,6 @@ public:
     static QHash<QString, QPixmap> m_imgCacheHash;
     static QHash<QString, QString> m_fontNameCache;
 
-    static QString getQssContent(const QString &filePath);//暂未使用
-    static QString getConfigPath();//暂未使用
-    static bool isFontMimeType(const QString &filePath);//暂未使用
-    static QString suffixList();//暂未使用
-    static QPixmap renderSVG(const QString &filePath, const QSize &size);//处理图标
     static QString loadFontFamilyByType(FontType fontType);//加载字体类型
     static QFont loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight);//设置字体大小等
     static void bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight);//绑定字体大小等
@@ -91,8 +86,6 @@ public:
     static QString holdTextInRect(const QFont &font, QString srcText, const QSize &size);//针对字体截断处理函数
     static QString holdTextInRect(const QFont &font, QString srcText, const int &width);//针对配置界面字体截断处理函数
     static int returnfileIsempty(QString strfilepath, QString strfilename); //返回文件是否存在
-    static bool Modify_transferfile(QString Targetfilepath, QString strfilename); //修改文件权限
-    static bool File_transfer(QString Sourcefilepath, QString Targetfilepath, QString strfilename); //将源文件复制出来
     static VerifyResultCode Digital_Verify(QString filepath_name); //验证deb数字签名
     static bool Return_Digital_Verify(QString strfilepath, QString strfilename); //返回验证工具是否存在
 };
