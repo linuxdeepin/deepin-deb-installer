@@ -91,18 +91,6 @@ void SingleInstallPage::initUI()
         QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
 
     m_upDown = true;                            //当前是收缩的
-
-    // 删除创建的临时文件夹
-    // 此部分可以优化，使用QProcess 而非 system命令
-    QString File_transfer_Action;               //命令存放的变量
-    QString Targetfilepath = "/tmp/.UOS_Installer_build";   //临时文件夹的路径
-    QFileInfo fi(Targetfilepath);                           //获取临时文件夹的路径信息
-    bool exist = fi.exists();
-    if (!exist) {                                           //判断临时文件夹是否存在
-        File_transfer_Action = "rm -rf " + Targetfilepath;
-        system(File_transfer_Action.toStdString().c_str()); //存在则删除
-        qDebug() << "删除目标文件夹：" << File_transfer_Action;
-    }
 }
 
 /**
@@ -528,14 +516,7 @@ void SingleInstallPage::initConnections()
     connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
     connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
-//    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
-    // 此处可优化
-    connect(m_doneButton, &DPushButton::clicked, qApp, [ = ] {
-        QString Targetfilepath = "/tmp/.UOS_Installer_build";
-        QString delete_action = "rm -rf " + Targetfilepath;
-        system(delete_action.toStdString().c_str());
-        QApplication::quit();
-    });
+    connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     // model 安装进程信息的展示
     connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);

@@ -38,7 +38,6 @@ public:
 
     void setPackage(const QString &name);
     void setRequiredList(const QStringList &requiredList);
-    void initSetFocus();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;

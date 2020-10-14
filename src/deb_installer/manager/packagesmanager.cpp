@@ -33,27 +33,6 @@
 
 using namespace QApt;
 
-QString relationName(const RelationType type)
-{
-    switch (type) {
-    case LessOrEqual:
-        return "<=";
-    case GreaterOrEqual:
-        return ">=";
-    case LessThan:
-        return "<";
-    case GreaterThan:
-        return ">";
-    case Equals:
-        return "=";
-    case NotEqual:
-        return "!=";
-    default:;
-    }
-
-    return QString();
-}
-
 bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType)
 {
     Q_UNUSED(multiArchType);
@@ -120,8 +99,8 @@ Backend *init_backend()
 
 PackagesManager::PackagesManager(QObject *parent)
     : QObject(parent)
+    , m_backendFuture(QtConcurrent::run(init_backend))
 {
-    m_backendFuture = QtConcurrent::run(init_backend);
     dthread = new DealDependThread();
     connect(dthread, &DealDependThread::DependResult, this, &PackagesManager::DealDependResult);
     connect(dthread, &DealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
@@ -625,20 +604,6 @@ void PackagesManager::removePackage(const int index, QList<int> listDependInstal
             m_packageDependsStatus.clear();
         }
     }
-}
-
-void PackagesManager::removeLastPackage()
-{
-    qDebug() << "start remove last, curr m_preparedPackages size:" << m_preparedPackages.size();
-    //DebFile *deb = m_preparedPackages.last();
-    //qDebug() << " remove package name is:" << deb->packageName();
-    //const auto md5 = deb->md5Sum();
-
-    m_appendedPackagesMd5.remove(m_preparedMd5.last());
-    m_preparedPackages.removeLast();
-    m_preparedMd5.removeLast();
-    m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
 }
 
 bool PackagesManager::appendPackage(QString debPackage)
