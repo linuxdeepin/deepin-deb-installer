@@ -66,11 +66,8 @@ DebInstaller::DebInstaller(QWidget *parent)
     //fix klu 软件包安装器最大化后窗口大小不变，窗口显示到左上角的问题
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowMinMaxButtonsHint);
     this->setAttribute(Qt::WA_NativeWindow);
-    this->windowHandle()->setProperty("_d_dwayland_window-type", "wallpaper");
-    this->windowHandle()->setProperty("_d_dwayland_minimizable", false);
     this->windowHandle()->setProperty("_d_dwayland_maximizable", false);
     this->windowHandle()->setProperty("_d_dwayland_resizable", false);
-
 
     initUI();
     initConnections();
