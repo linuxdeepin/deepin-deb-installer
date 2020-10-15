@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#pragma once
 #include "dtkwidget_global.h"
-#include "dobject.h"
 #include "utils/utils.h"
+
+#include<DObject>
 
 #include <QProgressBar>
 
