@@ -27,14 +27,14 @@ TitleBarFocusMonitor::TitleBarFocusMonitor(QWidget *widget)
 void TitleBarFocusMonitor::run()
 {
     m_monitoring = true;
-    qDebug() << "Monitor option Widget";
+    qDebug() << "TitleBarFocusMonitor:" << "Monitor option Widget";
     while (m_monitoring) {
         if (m_pOptionWidget->hasFocus()) {
             m_pOptionWidget->clearFocus();
-            qDebug() << "clear Focus";
+            qDebug() << "TitleBarFocusMonitor:" "clear Focus";
         }
     }
-    qDebug() << "stop monitor titlebar focus";
+    qDebug() << "TitleBarFocusMonitor:" "stop monitor titlebar focus";
 }
 
 /**

@@ -65,7 +65,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_doneButton(new DPushButton(this))
     , m_contentLayout(new QVBoxLayout(m_contentFrame))
-    , m_centralLayout(new QVBoxLayout(this))
+    , m_centralLayout(new QVBoxLayout())
     , m_pDSpinner(new DSpinner(this))
     , m_pLoadingLabel(new DCommandLinkButton("", this))
 {
@@ -150,7 +150,7 @@ void SingleInstallPage::initContentLayout()
  */
 void SingleInstallPage::initInstallWineLoadingLayout()
 {
-    QVBoxLayout *m_pLoadingLayout = new QVBoxLayout(this);      //依赖安装的布局
+    QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();      //依赖安装的布局
 
     m_pDSpinner->setMinimumSize(24, 24);                        //设置动画的大小
     m_pDSpinner->setVisible(false);                             //隐藏等待动画
@@ -216,19 +216,19 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);//垂直居中，水平靠左
 
     //此处可优化
-    QVBoxLayout *packageNameVLayout = new QVBoxLayout(this);        //包名提示的布局
+    QVBoxLayout *packageNameVLayout = new QVBoxLayout();        //包名提示的布局
     packageNameVLayout->setSpacing(0);                              //设置控件间距
     packageNameVLayout->setContentsMargins(0, 0, 0, 0);             //设置四周边距
     packageNameVLayout->addSpacing(4);
     packageNameVLayout->addWidget(packageName);                     //添加控件
 
-    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout(this);        //实际获取到包名
+    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout();        //实际获取到包名
     pkgNameValueLayout->setSpacing(0);                              //设置控件间距
     pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
     pkgNameValueLayout->addSpacing(4 + 4);                          //增加空间
     pkgNameValueLayout->addWidget(m_packageName);                   //添加控件
 
-    QHBoxLayout *pkgNameLayout = new QHBoxLayout(this);             //包名的控件布局
+    QHBoxLayout *pkgNameLayout = new QHBoxLayout();             //包名的控件布局
     pkgNameLayout->setSpacing(0);
     pkgNameLayout->setContentsMargins(0, 0, 0, 0);                  //设置边距
     pkgNameLayout->addSpacing(2);
@@ -236,7 +236,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     pkgNameLayout->addLayout(pkgNameValueLayout);                   //添加实际获取到的包名的label
     pkgNameLayout->addStretch();                                    //添加弹簧
 
-    QHBoxLayout *pkgVersionLayout = new QHBoxLayout(this);          //包版本的控件布局
+    QHBoxLayout *pkgVersionLayout = new QHBoxLayout();          //包版本的控件布局
     pkgVersionLayout->setSpacing(0);
     pkgVersionLayout->setContentsMargins(0, 0, 0, 0);               //设置四周边距
     pkgVersionLayout->addSpacing(2);
@@ -244,13 +244,13 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     pkgVersionLayout->addWidget(m_packageVersion);                  //添加包实际版本的label
     pkgVersionLayout->addStretch();
 
-    QVBoxLayout *itemInfoLayout = new QVBoxLayout(this);            //包名和包版本的布局
+    QVBoxLayout *itemInfoLayout = new QVBoxLayout();            //包名和包版本的布局
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);                 //设置四周边距
     itemInfoLayout->addLayout(pkgNameLayout);                       //添加包名布局
     itemInfoLayout->addLayout(pkgVersionLayout);                    //添加包版本布局
 
-    QHBoxLayout *itemBlockLayout = new QHBoxLayout(this);           //单包安装上半部分布局（包名，包版本和图标）
+    QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
     itemBlockLayout->addSpacing(112 - 20 - 10);                     //与标题栏保持一定的间距
@@ -260,14 +260,14 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QWidget *itemInfoWidget = new QWidget(this);
     itemInfoWidget->setLayout(itemBlockLayout);                     //保存成一个widget
 
-    QHBoxLayout *packageDescLayout = new QHBoxLayout(this);         //包描述的 布局
+    QHBoxLayout *packageDescLayout = new QHBoxLayout();         //包描述的 布局
     packageDescLayout->addStretch();
     packageDescLayout->addWidget(m_packageDescription);             //添加包描述的Label
     packageDescLayout->addStretch();
     packageDescLayout->setSpacing(0);
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
-    QVBoxLayout *itemLayout = new QVBoxLayout(this);                //整合包信息的布局
+    QVBoxLayout *itemLayout = new QVBoxLayout();                //整合包信息的布局
     itemLayout->addSpacing(45);
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
@@ -430,12 +430,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     //各个按钮的布局
-    QVBoxLayout *btnsFrameLayout = new QVBoxLayout(this);
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
 
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
-    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
+    QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_installButton);
     btnsLayout->addWidget(m_uninstallButton);
@@ -448,7 +448,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
     //进度条 布局
-    QVBoxLayout *progressLayout = new QVBoxLayout(this);
+    QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
     progressLayout->setContentsMargins(0, 8, 0, 0);
     progressLayout->addWidget(m_progress);
@@ -746,17 +746,16 @@ void SingleInstallPage::onWorkerFinished()
     if (stat == DebListModel::Success) {                        //操作成功
         m_doneButton->setVisible(true);
         if (m_operate == Install || m_operate == Reinstall) {  // 安装成功
-            qDebug() << "Installed successfully";
+            qDebug() << "SingleInstallPage:" << "Installed successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));//添加提示
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
         } else {                                               //卸载成功
-            qDebug() << "Uninstalled successfully";
+            qDebug() << "SingleInstallPage:" << "Uninstalled successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
             m_tipsLabel->setText(tr("Uninstalled successfully"));//添加提示
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         }
-
     } else if (stat == DebListModel::Failed) {                   //安装/卸载失败
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -772,7 +771,6 @@ void SingleInstallPage::onWorkerFinished()
         qDebug() << "Operate Status Error. current"
                  << "index=" << index.row() << "stat=" << stat;
     }
-
     if (!m_upDown)
         m_infoControlButton->setShrinkTips(tr("Collapse"));
 }
@@ -783,16 +781,11 @@ void SingleInstallPage::onWorkerFinished()
  */
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
-    qDebug() << progress << endl;
     if (progress < m_progress->value()) {       //进度不后退
         return;
     }
 
     m_progress->setValue(progress);             //进度增加
-    if (progress == m_progress->maximum()) {    //安装完成
-        qDebug() << "onWorkerProgressChanged" << progress;
-        QTimer::singleShot(100, this, &SingleInstallPage::onWorkerFinished);
-    }
 }
 
 /**
@@ -844,8 +837,7 @@ void SingleInstallPage::setPackageInfo()
     //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
     //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    qDebug() << "set package info"
-             << "depend status" << dependsStat;
+    qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "depend status:" << dependsStat;
     // 根据依赖状态调整显示效果
     if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
@@ -860,7 +852,7 @@ void SingleInstallPage::setPackageInfo()
 
     //获取版本状态
     const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-
+    qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "install status:" << installStat;
     //根据安装状态调整显示效果
     const bool installed = installStat != DebListModel::NotInstalled;
     m_installButton->setVisible(!installed);
@@ -1014,21 +1006,19 @@ void SingleInstallPage::setAuthBefore()
  */
 void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
-    qDebug() << "set Cancel Auth or Auth Depends Error";
+    qDebug() << "SingleInstallPage:" << "set Cancel Auth or Auth Depends Error";
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
 
     //获取依赖状态
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    qDebug() << "cancel Auth" << dependsStat;
-
     //根据依赖状态 调整界面显示
     if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-        qDebug() << "confirm button";
+        qDebug() << "SingleInstallPage:" <<  "depends Break or Revoke installation authorization";
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
         m_confirmButton->setEnabled(true);
@@ -1081,7 +1071,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
  */
 void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
-    qDebug() << "Deal DependResult" << iAuthRes;
+    qDebug() << "SingleInstallPage:" << "Deal DependResult" << iAuthRes;
     switch (iAuthRes) {
     case DebListModel::AuthConfirm:     //授权成功
         setAuthConfirm(dependName);

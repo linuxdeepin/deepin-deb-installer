@@ -39,8 +39,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_contentFrame(new QWidget(this))
     , m_processFrame(new QWidget(this))
-    , m_contentLayout(new QVBoxLayout(this))
-    , m_centralLayout(new QVBoxLayout(this))
+    , m_contentLayout(new QVBoxLayout())
+    , m_centralLayout(new QVBoxLayout())
     , m_appsListView(new PackagesListView(this))
     , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
     , m_installProgress(nullptr)
@@ -165,7 +165,7 @@ void MultipleInstallPage::initUI()
     m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
 
     // listview的布局
-    QVBoxLayout *appsViewLayout = new QVBoxLayout(this);
+    QVBoxLayout *appsViewLayout = new QVBoxLayout();
     appsViewLayout->setSpacing(0);
 
     //设置边距
@@ -225,7 +225,7 @@ void MultipleInstallPage::initUI()
     m_infoControlButton->setVisible(false);                                                     //详细按钮展开收缩默认不可见
 
     //进度布局
-    QVBoxLayout *progressFrameLayout = new QVBoxLayout(this);
+    QVBoxLayout *progressFrameLayout = new QVBoxLayout();
     progressFrameLayout->setSpacing(0);
     progressFrameLayout->setContentsMargins(0, 0, 0, 0);                                        //设置边距
     m_processFrame->setLayout(progressFrameLayout);
@@ -240,12 +240,12 @@ void MultipleInstallPage::initUI()
     m_processFrame->setFixedHeight(53);                                                         //设置固定高度
 
     // 按钮布局
-    QVBoxLayout *btnsFrameLayout = new QVBoxLayout(this);
+    QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);                                            //设置边距
 
     //按钮布局为水平布局
-    QHBoxLayout *btnsLayout = new QHBoxLayout(this);
+    QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();                                                                   //前后增加弹簧
     btnsLayout->addWidget(m_installButton);                                                     //添加安装按钮
     btnsLayout->addWidget(m_backButton);                                                        //添加返回按钮

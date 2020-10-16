@@ -60,7 +60,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
-    , m_centralLayout(new QStackedLayout(this))
+    , m_centralLayout(new QStackedLayout())
     , m_dragflag(-1)
 {
     initUI();
@@ -178,7 +178,7 @@ void DebInstaller::initConnections()
 
     //show dpkg details
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [ = ](const QString & output) {
-        qDebug() << "append output info:*****" << output.trimmed();
+        qDebug() << "Process:" << output.trimmed();
     });
 
     //During installing/uninstalling, drag is not allowed
@@ -221,7 +221,6 @@ void DebInstaller::stopMonitorTitleBarFocus()
  */
 void DebInstaller::enableCloseButton(bool enable)
 {
-    qDebug() << "enable close and exit? " << enable;
     if (enable) {
         enableCloseAndExit();                           //启用关闭按钮
     } else {
@@ -236,8 +235,6 @@ void DebInstaller::enableCloseButton(bool enable)
 // closed is forbidden during install/uninstall
 void DebInstaller::disableCloseAndExit()
 {
-
-    qDebug() << "disableCloseAndExit";
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
     QMenu *titleMenu = titlebar()->menu();
     QList<QAction *> actions = titleMenu->actions();
@@ -256,7 +253,6 @@ void DebInstaller::disableCloseAndExit()
 // closed is allowed after install/uninstall
 void DebInstaller::enableCloseAndExit()
 {
-    qDebug() << "enableCloseAndExit";
     titlebar()->setDisableFlags(titlebar()->windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowCloseButtonHint);    //设置标题栏的关闭按钮可用
 
     QMenu *titleMenu = titlebar()->menu();
@@ -407,17 +403,17 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
     int packageCountInit = m_fileListModel->preparedPackages().size();  //查看当前是否已经有包被添加
-    qDebug() << "m_fileListModel->m_workerStatus_temp+++++++" << m_fileListModel->m_workerStatus_temp;
+    qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
     // 如果此时处于正在安装或者卸载状态，则不添加
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
-        qDebug() << "return";
+        qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
         return;
     } else {
-        qDebug() << "append Package";
+        qDebug() << "DebInstaller:" << "Ready to add the package to the package installer";
         //调整参数类型，如果为相对路径，便于改动。
         //循环遍历所有的包 并添加符合要求的包
         for (auto package : packages) {
@@ -433,7 +429,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             bool isValid =  m_pDebPackage->isValid();                                       //查看这个包是否损坏
             delete m_pDebPackage;
             if (!isValid) {
-                qWarning() << "The deb package may be broken" << package;
+                qWarning() << "DebInstaller:" << "The deb package may be broken" << package;
                 //add Floating Message while package invalid
                 DFloatingMessage *msg = new DFloatingMessage;
                 msg->setMessage(tr("The deb package may be broken"));
@@ -447,7 +443,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             DRecentManager::addItem(package, data);
             // Decide how to add according to the number of packages in the application
             if (!m_fileListModel->appendPackage(package)) {                                 //判断md5sum 如果相同则说明已经添加
-                qWarning() << "package is Exist! ";
+                qWarning() << "DebInstaller:" << "package is Exist! ";
 
                 DFloatingMessage *msg = new DFloatingMessage;
                 msg->setMessage(tr("Already Added"));
