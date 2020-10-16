@@ -158,7 +158,9 @@ void FileChooseWidget::chooseFiles()
         historyDir = QDir::homePath();
     }
 
-    DFileDialog dialog;                                                     //获取FileDialog
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-50992.html
+    // 为DFileDialog指定父对象
+    DFileDialog dialog(this);                                                //获取文件
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);                                        //设置打开的路径为保存的路径
