@@ -254,7 +254,7 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
         QString strArg = arguments.at(i);
         if (!strArg.contains("deb-installer")) {
             const QFileInfo info(strArg);
-            if (info.isFile() && info.suffix() == "deb") {
+            if (info.isFile() && info.suffix().toLower() == "deb") {// 兼容非纯小写后缀
                 debFileList << strArg;
             }
         }
@@ -301,7 +301,7 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
         for (const auto &item : mime->urls()) {
             const QFileInfo info(item.path());
             if (info.isDir()) return e->accept();
-            if (info.isFile() && info.suffix() == "deb") return e->accept();
+            if (info.isFile() && info.suffix().toLower() == "deb") return e->accept();// 兼容非纯小写后缀
         }
 
         e->ignore();
@@ -323,7 +323,7 @@ void DebInstaller::dropEvent(QDropEvent *e)
         const QString local_path = url.toLocalFile();
         const QFileInfo info(local_path);
 
-        if (info.isFile() && info.suffix() == "deb")
+        if (info.isFile() && info.suffix().toLower() == "deb")// 兼容非纯小写后缀
             file_list << local_path;
         else if (info.isDir()) {
             for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
