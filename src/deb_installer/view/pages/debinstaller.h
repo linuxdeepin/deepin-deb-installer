@@ -217,6 +217,13 @@ private:
      */
     SingleInstallPage *backToSinglePage();
 
+    /**
+     * @brief checkSuffix 检查文件后缀
+     * @param filePath 文件路径
+     * @return 文件后缀是否是.deb
+     */
+    bool checkSuffix(QString filePath);
+
 private:
     DebListModel *m_fileListModel;                  //model 类
     FileChooseWidget *m_fileChooseWidget;           //文件选择的widget

@@ -295,8 +295,7 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     for (int i = 0; i < arguments.size(); i++) {
         QString strArg = arguments.at(i);                       //某个deb包
         if (!strArg.contains("deb-installer")) {
-            const QFileInfo info(strArg);
-            if (info.isFile() && info.suffix() == "deb") {      //判断当前这个包的信息是否是deb后缀
+            if (checkSuffix(strArg)) {                          //检查拖入包的后缀
                 debFileList << strArg;                          //添加到临时列表中
             }
         }
@@ -348,7 +347,7 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *e)
             const QFileInfo info(item.path());
             if (info.isDir()) return e->accept();
             //fix bug: https://pms.uniontech.com/zentao/bug-view-48801.html
-            if (info.isFile() && info.suffix().toLower() == "deb") return e->accept();//忽略后缀大小写
+            if (checkSuffix(item.path())) return e->accept();//检查拖入包的后缀
         }
         e->ignore();
     }
@@ -370,7 +369,7 @@ void DebInstaller::dropEvent(QDropEvent *e)
         const QFileInfo info(local_path);
 
         //fix bug: https://pms.uniontech.com/zentao/bug-view-48801.html
-        if (info.isFile() && info.suffix().toLower() == "deb")// 忽略后缀大小写
+        if (checkSuffix(local_path))//检查拖入包的后缀
             file_list << local_path;
         else if (info.isDir()) {
             for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
@@ -786,3 +785,17 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     }
 }
 
+/**
+ * @brief DebInstaller::checkSuffix 检查文件类型是否正确
+ * @param filePath 文件路径
+ * @return 后缀是否正确
+ */
+bool DebInstaller::checkSuffix(QString filePath)
+{
+    const QFileInfo info(filePath);
+    if (info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
+        return true;
+    }
+    return false;
+
+}
