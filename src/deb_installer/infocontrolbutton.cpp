@@ -39,6 +39,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
 {
+    this->setFocusPolicy(Qt::NoFocus);
+    m_tipsText->setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();

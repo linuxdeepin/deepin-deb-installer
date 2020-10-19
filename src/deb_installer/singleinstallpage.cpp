@@ -791,6 +791,9 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     qDebug() << "cancel Auth" << dependsStat;
     if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
         qDebug() << "confirm button";
+        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
         m_confirmButton->setEnabled(true);
@@ -806,7 +809,23 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         if (installStat == DebListModel::NotInstalled) {
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
+            m_tipsLabel->setVisible(false);
         } else {
+            // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
+            //增加提示 依赖安装完成后的提示
+            if (installStat == DebListModel::InstalledSameVersion) {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Same version installed"));
+            } else if (installStat == DebListModel::InstalledLaterVersion) {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Later version installed: %1")
+                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            } else {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Earlier version installed: %1")
+                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            }
+
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);
             m_reinstallButton->setEnabled(true);
