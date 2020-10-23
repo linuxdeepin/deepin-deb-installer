@@ -23,6 +23,7 @@
 #include "model/deblistmodel.h"
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
+#include "utils/DebugTimeManager.h"
 
 #include <QApplication>
 #include <QDebug>

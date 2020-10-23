@@ -24,6 +24,7 @@
 #include "manager/PackageDependsStatus.h"
 #include "view/pages/AptConfigMessage.h"
 #include "utils/utils.h"
+#include "utils/DebugTimeManager.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -322,13 +323,14 @@ void DebListModel::uninstallPackage(const int idx)
     Q_ASSERT(idx == 0);
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
+    PERF_PRINT_BEGIN("POINT-04", QString::number(deb->installedSize()));        //卸载包开始
+
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
     m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = idx;                             //获取卸载的包的indx
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = idx;                       //刷新操作状态的index
-
-    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());     //检查是否有应用依赖到该包
     Backend *b = m_packagesManager->m_backendFuture.result();
@@ -483,11 +485,16 @@ void DebListModel::onTransactionErrorOccurred()
         emit enableCloseButton(true);
         m_workerStatus = WorkerPrepare;                                             // 重置工作状态为准备态
         m_workerStatus_temp = m_workerStatus;
+
+        PERF_PRINT_END("POINT-04");                                                 //安装时间
+        PERF_PRINT_END("POINT-05");                                                 //授权框消失时间
+
         return;
     }
 
     // DO NOT install next, this action will finished and will be install next automatic.
     trans->setProperty("exitStatus", QApt::ExitFailed);                             //设置trans的退出状态为 失败
+    PERF_PRINT_END("POINT-04");                                                     //安装时间
 }
 
 /**
@@ -570,12 +577,14 @@ void DebListModel::bumpInstallIndex()
         emit workerFinished();                                                  //发送安装完成信号
         emit workerProgressChanged(100);                                        //修改安装进度
         emit transactionProgressChanged(100);
+        PERF_PRINT_END("POINT-04");                                             //安装时间
         return;
     }
     ++ m_operatingStatusIndex;
     emit onChangeOperateIndex(m_operatingIndex);                                //修改当前操作的下标
     // install next
     qDebug() << "DebListModel:" << "install next deb package";
+    PERF_PRINT_END("POINT-04");                                                 //安装时间
     installNextDeb();                                                           //安装下一个包
 }
 
@@ -750,6 +759,7 @@ void DebListModel::checkBoxStatus()
 void DebListModel::installDebs()
 {
     DebFile deb(m_packagesManager->package(m_operatingIndex)) ;
+    PERF_PRINT_BEGIN("POINT-04", QString::number(deb.installedSize()));         //安装时间
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
@@ -809,6 +819,7 @@ void DebListModel::installDebs()
         //开始安装当前包
         qDebug() << "DebListModel:" << "starting to install package: " << deb.packageName();
 
+        PERF_PRINT_BEGIN("POINT-05", QString::number(deb.installedSize()));
         trans = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         // 进度变化和结束过程处理
@@ -1047,6 +1058,7 @@ void DebListModel::onTransactionOutput()
     refreshOperatingPackageStatus(Operating);                       //刷新当前包的操作状态
 
     disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::onTransactionOutput);
+    PERF_PRINT_END("POINT-05");                                     //授权框时间
 }
 
 /**
@@ -1073,6 +1085,7 @@ void DebListModel::uninstallFinished()
     }
     emit workerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
     trans->deleteLater();
+    PERF_PRINT_END("POINT-04");                                     //安装时间
 }
 
 /**

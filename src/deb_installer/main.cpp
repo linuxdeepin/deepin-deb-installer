@@ -24,6 +24,7 @@
 #include "utils/utils.h"
 #include "singleInstallerApplication.h"
 #include "environments.h"
+#include "utils/DebugTimeManager.h"
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -37,7 +38,6 @@
 
 #include <QDBusConnection>
 #include <QDBusInterface>
-
 
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
@@ -53,6 +53,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    PERF_PRINT_BEGIN("POINT-01", "");		//打开应用，添加记录点
     SingleInstallerApplication app(argc, argv);
 
     app.setOrganizationName("deepin");
@@ -84,6 +85,7 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/DebInstaller", &app, QDBusConnection::ExportScriptableSlots);
         app.parseCmdLine();
         app.activateWindow();
+        PERF_PRINT_END("POINT-01");		//打开应用， 添加记录点
         return app.exec();
     } else {
         QCommandLineParser parser;
@@ -92,6 +94,7 @@ int main(int argc, char *argv[])
         debInstallPathList << parser.positionalArguments();
         QDBusInterface notification("com.deepin.DebInstaller", "/com/deepin/DebInstaller", "com.deepin.DebInstaller", QDBusConnection::sessionBus());
         QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
+        PERF_PRINT_END("POINT-01");		//打开应用， 添加记录点
         return 0;
     }
 }

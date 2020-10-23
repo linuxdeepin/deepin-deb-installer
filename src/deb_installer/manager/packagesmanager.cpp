@@ -25,6 +25,7 @@
 
 #include "model/deblistmodel.h"
 #include "utils/utils.h"
+#include "utils/DebugTimeManager.h"
 
 #include <QPair>
 #include <QSet>
@@ -884,5 +885,6 @@ PackagesManager::~PackagesManager()
         rmTempDirCount++;
     }
     delete dthread;
+    PERF_PRINT_END("POINT-02");         //关闭应用
 }
 

@@ -28,6 +28,7 @@
 #include "view/pages/AptConfigMessage.h"
 #include "view/widgets/TitleBarFocusMonitor.h"
 #include "utils/utils.h"
+#include "utils/DebugTimeManager.h"
 
 #include <DInputDialog>
 #include <DRecentManager>
@@ -302,7 +303,6 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     }
 
     if (debFileList.size() > 0) {
-        qDebug() << debFileList << endl;
         onPackagesSelected(debFileList);                        //添加到安装器中
     }
 
@@ -399,6 +399,14 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
+    //根据不同的包的数量开启不同的记录点
+    if (packages.size() == 1) {				//单包安装记录当前包的大小
+        QApt::DebFile *m_pDebPackage = new QApt::DebFile(packages[0]);
+        PERF_PRINT_BEGIN("POINT-03", QString::number(m_pDebPackage->installedSize()));
+        delete m_pDebPackage;
+    } else {						//批量安装记录包的数量
+        PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
+    }
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
     int packageCountInit = m_fileListModel->preparedPackages().size();  //查看当前是否已经有包被添加
@@ -410,6 +418,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
         qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
+        if (packages.size() == 1) {
+            PERF_PRINT_END("POINT-03");		//不添加结束记录点
+        } else {
+            PERF_PRINT_END("POINT-06");		//不添加结束记录点
+        }
         return;
     } else {
         qDebug() << "DebInstaller:" << "Ready to add the package to the package installer";
@@ -417,7 +430,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         //循环遍历所有的包 并添加符合要求的包
         for (auto package : packages) {
             QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
-
             // 判断当前是否为绝对路径，如果是相对路径，则将相对路径转换为绝对路径。
             if (package[0] != "/") {
                 QFileInfo packageAbsolutePath(package);
@@ -449,6 +461,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 msg->setIcon(QIcon::fromTheme("di_ok"));
                 DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
                 if (packages.size() == 1) {                                                 //如果当前只有一个包，且已添加则直接返回，不再刷新
+                    PERF_PRINT_END("POINT-03");//添加单个包，但是包已经存在，添加记录点
                     return;
                 }
             }
@@ -457,10 +470,20 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         const int packageCount = m_fileListModel->preparedPackages().size();                //获取添加后的包的数量
         // There is already one package and there will be multiple packages to be added
         if (packageCount == packageCountInit) {                                             //添加前后包的数量一致，说明此次未添加新的包，直接返回，部署爱心
+            if (packages.size() == 1) {		//未添加成功单个包，添加记录点
+                PERF_PRINT_END("POINT-03");
+            } else {
+                PERF_PRINT_END("POINT-06");	//未成功添加多个包，添加记录点
+            }
             return;
         }
         if (packageCount == 1 || packages.size() > 1) {                                     //如果添加了一个包或者要添加的包的数量大于1 刷新包的数量
             refreshInstallPage(packageCount);
+            if (packages.size() == 1) {
+                PERF_PRINT_END("POINT-03");	//添加成功，添加记录点
+            } else {
+                PERF_PRINT_END("POINT-06");	//添加多个包成功，添加记录点
+            }
             return;
         }
         // There was a package from the beginning and it was added
@@ -472,6 +495,11 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->initDependsStatus(packageCountInit);
             MulRefreshPage(packageCount);
         }
+    }
+    if (packages.size() == 1) {
+        PERF_PRINT_END("POINT-03");		//添加单个包成功，添加记录点
+    } else {
+        PERF_PRINT_END("POINT-06");		//批量添加成功，添加记录点
     }
 }
 

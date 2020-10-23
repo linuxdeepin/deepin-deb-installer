@@ -1,10 +1,11 @@
 #include "singleInstallerApplication.h"
 #include "view/pages/debinstaller.h"
-#include <QCommandLineParser>
+#include "utils/DebugTimeManager.h"
 
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
 
+#include <QCommandLineParser>
 
 DCORE_USE_NAMESPACE
 
@@ -17,6 +18,7 @@ SingleInstallerApplication::SingleInstallerApplication(int &argc, char **argv)
 
 SingleInstallerApplication::~SingleInstallerApplication()
 {
+    PERF_PRINT_BEGIN("POINT-02", "");			//关闭应用，添加记录点
 }
 
 bool SingleInstallerApplication::parseCmdLine()
