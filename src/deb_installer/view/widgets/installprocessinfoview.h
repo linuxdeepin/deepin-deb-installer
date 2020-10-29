@@ -1,3 +1,20 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+*
+* Author:     cuizhen <cuizhen@uniontech.com>
+* Maintainer:  cuizhen <cuizhen@uniontech.com>
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef INSTALLPROCESSINFOVIEW_H
 #define INSTALLPROCESSINFOVIEW_H
 
@@ -7,6 +24,8 @@
 #include <DPalette>
 
 DGUI_USE_NAMESPACE
+
+class ShowInstallInfoTextEdit;
 
 class InstallProcessInfoView : public QWidget
 {
@@ -52,7 +71,7 @@ private:
      */
     void initUI(int w, int h);
 
-    QTextEdit *m_editor;                               //展示框
+    ShowInstallInfoTextEdit *m_editor;                               //展示框 修改为自写控件
     DPalette::ColorType m_colorType;                   //显示的字体的颜色类型
 };
 
