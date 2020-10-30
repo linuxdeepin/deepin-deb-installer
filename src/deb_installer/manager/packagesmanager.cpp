@@ -321,30 +321,42 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         } else {
             QSet<QString> choose_set;
             choose_set << deb->packageName();
-            ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
-            qDebug() << "PackagesManager:" << "Check" << deb->packageName() << "depends:" << ret.status;
             QStringList dependList;
+            bool isWineApplication = false;             //判断是否是wine应用
             for (auto ditem : deb->depends()) {
                 for (auto dinfo : ditem) {
-                    dependList << dinfo.packageName() + ":" + deb->architecture();
-                }
-            }
-            // 删除无用冗余的日志
-            //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
-            //fix bug: https://pms.uniontech.com/zentao/bug-view-45734.html
-            if (ret.status != DebListModel::DependsOk) {
-                qDebug() << "PackagesManager:" << "Unsatisfied dependency: " << ret.package;
-                if (ret.package.contains("deepin-wine")) {
-                    if (!m_dependInstallMark.contains(index)) {
-                        if (!dthread->isRunning()) {
-                            m_dependInstallMark.append(index);
-                            qDebug() << "PackagesManager:" << "command install depends:" << dependList;
-                            dthread->setDependsList(dependList, index);
-                            dthread->setBrokenDepend(ret.package);
-                            dthread->run();
+                    Package *depend = packageWithArch(dinfo.packageName(), deb->architecture());
+                    if (depend) {
+                        if (depend->name() == "deepin-elf-verify") {    //deepi-elf-verify 是amd64架构非i386
+                            dependList << depend->name();
+                        } else {
+                            dependList << depend->name() + ":" + depend->architecture();
+                        }
+                        if (dinfo.packageName().contains("deepin-wine")) {              // 如果依赖中出现deepin-wine字段。则是wine应用
+                            qDebug() << deb->packageName() << "is a wine Application";
+                            isWineApplication = true;
                         }
                     }
                 }
+            }
+            ret = checkDependsPackageStatus(choose_set, deb->architecture(), deb->depends());
+            qDebug() << "PackagesManager:" << "Check" << deb->packageName() << "depends:" << ret.status;
+
+            // 删除无用冗余的日志
+            //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
+            //fix bug: https://pms.uniontech.com/zentao/bug-view-45734.html
+            if (isWineApplication && ret.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
+                qDebug() << "PackagesManager:" << "Unsatisfied dependency: " << ret.package;
+                if (!m_dependInstallMark.contains(index)) {
+                    if (!dthread->isRunning()) {
+                        m_dependInstallMark.append(index);
+                        qDebug() << "PackagesManager:" << "command install depends:" << dependList;
+                        dthread->setDependsList(dependList, index);
+                        dthread->setBrokenDepend(ret.package);
+                        dthread->run();
+                    }
+                }
+                ret.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
             }
         }
     }

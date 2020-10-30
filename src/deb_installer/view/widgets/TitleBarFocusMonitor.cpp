@@ -31,7 +31,7 @@ void TitleBarFocusMonitor::run()
     while (m_monitoring) {
         if (m_pOptionWidget->hasFocus()) {
             m_pOptionWidget->clearFocus();
-            qDebug() << "TitleBarFocusMonitor:" "clear Focus";
+            qDebug() << "TitleBarFocusMonitor:" << "clear Focus";
         }
     }
     qDebug() << "TitleBarFocusMonitor:" "stop monitor titlebar focus";

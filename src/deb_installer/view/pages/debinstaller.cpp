@@ -203,7 +203,7 @@ void DebInstaller::initConnections()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 
     //监测到安装进度，停止监测标题栏菜单键焦点。
-    connect(m_fileListModel, &DebListModel::transactionProgressChanged, this, &DebInstaller::stopMonitorTitleBarFocus);
+    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, &DebInstaller::stopMonitorTitleBarFocus);
 }
 
 /**
@@ -215,6 +215,7 @@ void DebInstaller::stopMonitorTitleBarFocus()
         m_pMonitorFocusThread->stopMonitor();
     }
 }
+
 
 /**
  * @brief DebInstaller::enableCloseButton 当安装、卸载开始或结束后，根据传递的值启用或禁用关闭按钮
@@ -400,11 +401,11 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //根据不同的包的数量开启不同的记录点
-    if (packages.size() == 1) {				//单包安装记录当前包的大小
+    if (packages.size() == 1) {             //单包安装记录当前包的大小
         QApt::DebFile *m_pDebPackage = new QApt::DebFile(packages[0]);
         PERF_PRINT_BEGIN("POINT-03", QString::number(m_pDebPackage->installedSize()));
         delete m_pDebPackage;
-    } else {						//批量安装记录包的数量
+    } else {                        //批量安装记录包的数量
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
     }
     this->showNormal();                                                 //非特效模式下激活窗口
@@ -419,9 +420,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
         qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
         if (packages.size() == 1) {
-            PERF_PRINT_END("POINT-03");		//不添加结束记录点
+            PERF_PRINT_END("POINT-03");     //不添加结束记录点
         } else {
-            PERF_PRINT_END("POINT-06");		//不添加结束记录点
+            PERF_PRINT_END("POINT-06");     //不添加结束记录点
         }
         return;
     } else {
@@ -470,19 +471,19 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         const int packageCount = m_fileListModel->preparedPackages().size();                //获取添加后的包的数量
         // There is already one package and there will be multiple packages to be added
         if (packageCount == packageCountInit) {                                             //添加前后包的数量一致，说明此次未添加新的包，直接返回，部署爱心
-            if (packages.size() == 1) {		//未添加成功单个包，添加记录点
+            if (packages.size() == 1) {     //未添加成功单个包，添加记录点
                 PERF_PRINT_END("POINT-03");
             } else {
-                PERF_PRINT_END("POINT-06");	//未成功添加多个包，添加记录点
+                PERF_PRINT_END("POINT-06"); //未成功添加多个包，添加记录点
             }
             return;
         }
         if (packageCount == 1 || packages.size() > 1) {                                     //如果添加了一个包或者要添加的包的数量大于1 刷新包的数量
             refreshInstallPage(packageCount);
             if (packages.size() == 1) {
-                PERF_PRINT_END("POINT-03");	//添加成功，添加记录点
+                PERF_PRINT_END("POINT-03"); //添加成功，添加记录点
             } else {
-                PERF_PRINT_END("POINT-06");	//添加多个包成功，添加记录点
+                PERF_PRINT_END("POINT-06"); //添加多个包成功，添加记录点
             }
             return;
         }
@@ -497,9 +498,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
         }
     }
     if (packages.size() == 1) {
-        PERF_PRINT_END("POINT-03");		//添加单个包成功，添加记录点
+        PERF_PRINT_END("POINT-03");     //添加单个包成功，添加记录点
     } else {
-        PERF_PRINT_END("POINT-06");		//批量添加成功，添加记录点
+        PERF_PRINT_END("POINT-06");     //批量添加成功，添加记录点
     }
 }
 

@@ -979,8 +979,6 @@ void SingleInstallPage::setAuthBefore()
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
-        m_confirmButton->setEnabled(false);
-        m_backButton->setEnabled(false);
     } else {    //依赖正常
         if (m_operate == Install) {
             m_installButton->setVisible(true);
