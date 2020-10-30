@@ -201,11 +201,11 @@ Utils::VerifyResultCode Utils::Digital_Verify(QString filepath_name)
         filepath_name = "\"" + filepath_name + "\"";
         program = program + filepath_name;
         proc.start(program);
-        qDebug() << "program:" << program;
+        qInfo() << "签名校验command:" << program;
         proc.waitForFinished();
         const QString output = proc.readAllStandardOutput();
         const QString output1 = proc.readAllStandardError();
-        qDebug() << output1;
+        qInfo() << "签名校验结果：" << output1;
         for (const auto &item : output1.split('\n')) {
             if (item.toLatin1() == "[INFO] signature verified!") {
                 return VerifySuccess;
