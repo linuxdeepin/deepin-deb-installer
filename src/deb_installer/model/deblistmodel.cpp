@@ -860,6 +860,7 @@ void DebListModel::installDebs()
  * @brief DebListModel::checkDigitalVerifyFailReason 检查当前验证错误的原因
  * @return
  * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
+ * 暂时未使用，后续如需要逻辑优化再启用
  */
 bool DebListModel::checkDigitalVerifyFailReason()
 {
@@ -902,12 +903,14 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
 
     // 如果所有的错误都是由于没有数字签名造成的，且当前是最后一个包 弹出进入控制中心的弹窗，否则不显示
-    if (checkDigitalVerifyFailReason() && m_operatingIndex == preparedPackages().size() - 1) {
-        Ddialog->show();
-    } else {
-        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
-        digitalVerifyFailed(NoDigitalSignature);
-    }
+    // PS： 目前未使用此逻辑，待后续如需优化时再启用，如无需优化，则在版本稳定后删除。
+//    if (checkDigitalVerifyFailReason() && m_operatingIndex == preparedPackages().size() - 1) {
+//        Ddialog->show();
+//    } else {
+//        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+//        digitalVerifyFailed(NoDigitalSignature);
+//    }
+    Ddialog->show();    //显示弹窗
 
     //取消按钮
     QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
@@ -1031,13 +1034,11 @@ void DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
-    m_isDevelopMode = false;
     if (m_isDevelopMode) {
         qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
         return true;
     }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
-    digitalSigntual = Utils::DebfileInexistence;
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
         qInfo() << "Digital signature verification succeed";
