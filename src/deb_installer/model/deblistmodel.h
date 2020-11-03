@@ -35,7 +35,6 @@
 #include <DPushButton>
 #include <DSysInfo>
 #include <QProcess>
-#define ConfigAuthCancel 127
 
 class PackagesManager;
 class DebListModel : public QAbstractListModel
@@ -126,6 +125,12 @@ public:
         AnalysisErr,        //解析错误
     };
 
+    enum ErrorCode {
+        NoDigitalSignature = 101,               //无有效的数字签名
+        DigitalSignatureError,                  //数字签名校验失败
+        ConfigAuthCancel   = 127,               //配置安装授权被取消
+    };
+
     /**
      * @brief reset
      * 重置包的工作状态、安装状态
@@ -209,7 +214,6 @@ public:
      */
     void refreshAllDependsStatus();
 signals:
-    //    void workerStarted() const;
     /**
      * @brief lockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
      * @param lock 启用/禁用按钮
@@ -337,6 +341,7 @@ public slots:
      */
     void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
+public slots:
     /**
      * @brief ConfigReadOutput 处理配置包的输出并显示
      */
@@ -353,6 +358,14 @@ public slots:
      * @param str 输入的数据（一般是输入的选项）
      */
     void ConfigInputWrite(QString str);
+
+    /**
+     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
+     * @param str  命令返回的安装信息
+     * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
+     * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
+     */
+    void checkInstallStatus(QString str);
 
 private slots:
 
@@ -440,12 +453,12 @@ private:
      */
     void initRowStatus();
 
+private:
     /**
      * @brief checkSystemVersion  check 当前操作系统的版本
-     * @return 当前版本的操作系统是否需要验证数字签名
      * 个人版专业版需要验证数字签名，其余版本不需要
      */
-    bool checkSystemVersion();
+    void checkSystemVersion();
 
     /**
      * @brief checkDigitalSignature  检查数字签名
@@ -457,6 +470,30 @@ private:
      * @brief showNoDigitalErrWindow 弹出无数字签名的错误弹窗
      */
     void showNoDigitalErrWindow();
+
+    /**
+     * @brief showNoDigitalErrWindow 弹出数字签名校验错误的错误弹窗
+     */
+    void showDigitalErrWindow();
+
+    /**
+     * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
+     */
+    void digitalVerifyFailed(ErrorCode code);
+
+    /**
+     * @brief checkDigitalVerifyFailReason 检查当前验证错误的原因
+     * @return
+     * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
+     */
+    bool checkDigitalVerifyFailReason();
+
+    /**
+     * @brief showDevelopModeWindow 打开控制中心通用界面
+     */
+    void showDevelopModeWindow();
+
+private:
 
     /**
      * @brief checkTemplate 检查是否需要配置
@@ -489,13 +526,8 @@ private:
      */
     void enableTitleBarFocus();
 
-    /**
-     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
-     * @param str  命令返回的安装信息
-     * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
-     * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
-     */
-    void checkInstallStatus(QString str);
+
+
 
 private:
     int m_workerStatus;                                 //当前工作状态
@@ -518,7 +550,7 @@ private:
     QProcess *m_procInstallConfig;                      // 配置安装进程
     const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
 
-    bool m_isVerifyDigital = true;                      // 签名验证的标志变量
+    bool m_isDevelopMode = true;                      // 开发者模式的标志变量 ps：部分系统版本无需签名验证，默认开发者模式
 };
 
 #endif  // DEBLISTMODEL_H

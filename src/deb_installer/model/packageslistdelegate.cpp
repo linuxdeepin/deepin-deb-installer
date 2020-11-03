@@ -167,7 +167,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Shadow);
         painter->fillRect(lineRect, fillColor);
 
-
         QRect bg_rect = option.rect;
 
         QIcon icon = QIcon::fromTheme("application-x-deb");
@@ -249,11 +248,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         //未被选中，设置正常的颜色
         forground.setColor(palette.color(cg, DPalette::ToolTipText));
 
-        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
-                || (dependsStat == DebListModel::DependsAuthCancel)) {
-            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
-        } else if (install_stat != DebListModel::NotInstalled) {
+        //安装状态
+        if (install_stat != DebListModel::NotInstalled) {
             //获取安装版本
             if (install_stat == DebListModel::InstalledSameVersion) {       //安装了相同版本
                 info_str = tr("Same version installed");
@@ -272,6 +268,16 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         }
+
+        if (operate_stat == DebListModel::Failed) {
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
+        }
+        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::DependsVerifyFailed) {
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
+        }
+
         //当前选中 设置高亮
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {

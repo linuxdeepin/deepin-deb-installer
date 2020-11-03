@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="lt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation>གོ་རིམ་ཨང་གྲངས་འཇུག་ནས་བགོ་སྒྲིག་བྱ་རྒྱུ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="82"/>
         <source>OK</source>
-        <translation>Gerai</translation>
+        <translation>ཆོག</translation>
     </message>
 </context>
 <context>
@@ -19,22 +17,22 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="121"/>
         <source>Package Installer</source>
-        <translation>Paketų diegimo programa</translation>
+        <translation>མཉེན་ཆས་ཁུག་སྒྲིག་སྦྱོར་ཆས།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="447"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>debཁུག་གནོད་སྐྱོན་ཤོར་ཡོད་མེད་ཞིབ་བཤེར་གནང་རོགས།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="461"/>
         <source>Already Added</source>
-        <translation>Jau pridėta</translation>
+        <translation>སྣོན་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="682"/>
         <source>Bulk Install</source>
-        <translation>Masinis įdiegimas</translation>
+        <translation>མང་པོ་མཉམ་དུ་སྒྲིག་སྦྱོར་བྱེད་པ།</translation>
     </message>
 </context>
 <context>
@@ -43,90 +41,90 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="95"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="112"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Įdiegimas nepavyko, prašome patikrinti savo tinklo ryšį</translation>
+        <translation>སྒྲིག་སྦྱོར་མི་ཐུབ། ཁྱེད་ཀྱི་དྲ་བ་མཐུད་ཡོད་མེད་ཞིབ་བཤེར་གནང་དང་།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="97"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Įdiegimas nepavyko, patikrinkite Valdymo centre ar nėra atnaujinimų</translation>
+        <translation>སྒྲིག་སྦྱོར་མི་ཐུབ། ཚོད་འཛིན་ལྟེ་གནས་སུ་གསར་སྒྱུར་ཞིབ་བཤེར་གནང་རོགས།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="100"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="104"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="116"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Įdiegimas nepavyko, trūksta vietos diske</translation>
+        <translation>སྒྲིག་སྦྱོར་མི་ཐུབ། སྡུད་སྡེར་གྱི་བར་སྣང་འདང་གི་མིན་འདུག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
         <source>No digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="133"/>
         <source>Installation Failed</source>
-        <translation>Įdiegimas nepavyko</translation>
+        <translation>སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="627"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="897"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="898"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="901"/>
         <source>Cancel</source>
-        <translation type="unfinished">Atsisakyti</translation>
+        <translation>འདོར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="902"/>
         <source>Proceed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="951"/>
         <source>Unable to install</source>
-        <translation>Nepavyko įdiegti</translation>
+        <translation>སྒྲིག་སྦྱོར་བྱེད་ཐབས་མེད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="952"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>སྒྲིག་སྦྱོར་ཁུག་འདིར་ནང་དུ་ཕན་ནུས་ལྡན་པའི་ཨང་ཀིའི་མཚན་རྟགས་མེད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="954"/>
         <source>OK</source>
-        <translation>Gerai</translation>
+        <translation>ཆོག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
         <source>Broken dependencies: %1</source>
-        <translation>Sugadintos priklausomybės: %1</translation>
+        <translation>བརྟེན་པའི་འབྲེལ་བ་མི་འདང་། %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>བགོ་སྒྲིག་དབང་བརྩལ་བྱེད་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
-        <translation>Neatitinkanti paketo architektūra</translation>
+        <translation>མཉེན་ཆས་ཁུག་གི་གཞི་སྒྲོམ་སྙོམ་འགྲིག་མི་ཐུབ།</translation>
     </message>
 </context>
 <context>
@@ -134,12 +132,12 @@
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="64"/>
         <source>Drag deb packages here</source>
-        <translation>Vilkite čia deb paketus</translation>
+        <translation>མཉེན་ཆས་ཁུག་འདི་རུ་འཇོག་དང་།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="106"/>
         <source>Select File</source>
-        <translation>Pasirinkti failą</translation>
+        <translation>ཡིག་ཆ་འདེམས་པ།</translation>
     </message>
 </context>
 <context>
@@ -147,32 +145,32 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="48"/>
         <source>Collapse</source>
-        <translation>Suskleisti</translation>
+        <translation>བསྡུ་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="48"/>
         <source>Show details</source>
-        <translation>Rodyti išsamiau</translation>
+        <translation>ཞིབ་ཕྲའི་ཆ་འཕྲིན་འཆར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="191"/>
         <source>Install</source>
-        <translation>Įdiegti</translation>
+        <translation>སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="192"/>
         <source>Done</source>
-        <translation>Atlikta</translation>
+        <translation>ལེགས་གྲུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="194"/>
         <source>Back</source>
-        <translation>Atgal</translation>
+        <translation>ཕྱིར་ལོག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="559"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>བརྟེན་པའི་འབྲེལ་བ་བཙུགས་བཞིན་པ། %1</translation>
     </message>
 </context>
 <context>
@@ -180,37 +178,37 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="86"/>
         <source>Installing</source>
-        <translation>Įdiegiama</translation>
+        <translation>སྒྲིག་སྦྱོར་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="90"/>
         <source>Installed</source>
-        <translation>Įdiegta</translation>
+        <translation>སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="98"/>
         <source>Failed</source>
-        <translation>Nepavyko</translation>
+        <translation>སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="94"/>
         <source>Waiting</source>
-        <translation>Laukiama</translation>
+        <translation>སྒྲིག་སྦྱོར་སྒུག་བཞིན་པ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="255"/>
         <source>Same version installed</source>
-        <translation>Įdiegta ta pati versija</translation>
+        <translation>པར་གཞི་འདྲ་མཚུངས་སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="258"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ཅུང་གསར་པའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="261"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ཅུང་སྔ་བའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
 </context>
 <context>
@@ -218,7 +216,7 @@
     <message>
         <location filename="../src/deb_installer/model/packagelistview.cpp" line="179"/>
         <source>Delete</source>
-        <translation>Ištrinti</translation>
+        <translation>སུབ་པ།</translation>
     </message>
 </context>
 <context>
@@ -226,7 +224,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation>Suskleisti</translation>
+        <translation>བསྡུ་བ།</translation>
     </message>
 </context>
 <context>
@@ -234,90 +232,90 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="776"/>
         <source>Collapse</source>
-        <translation>Suskleisti</translation>
+        <translation>བསྡུ་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="386"/>
         <source>Install</source>
-        <translation>Įdiegti</translation>
+        <translation>སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="390"/>
         <source>Remove</source>
-        <translation>Šalinti</translation>
+        <translation>བཤིག་འདོན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="394"/>
         <source>Reinstall</source>
-        <translation>Įdiegti iš naujo</translation>
+        <translation>ཡང་བསྐྱར་སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="398"/>
         <source>OK</source>
-        <translation>Gerai</translation>
+        <translation>ཆོག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="402"/>
         <source>Back</source>
-        <translation>Atgal</translation>
+        <translation>ཕྱིར་ལོག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="406"/>
         <source>Done</source>
-        <translation>Atlikta</translation>
+        <translation>ལེགས་གྲུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="872"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1046"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ཅུང་གསར་པའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="876"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1050"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ཅུང་སྔ་བའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>བརྟེན་པའི་འབྲེལ་བ་བཙུགས་བཞིན་པ། %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="206"/>
         <source>Version: </source>
-        <translation>Versija: </translation>
+        <translation>པར་གཞི།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="752"/>
         <source>Installed successfully</source>
-        <translation>Sėkmingai įdiegta</translation>
+        <translation>སྒྲིག་སྦྱོར་ཐུབ་སོང་།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="757"/>
         <source>Uninstalled successfully</source>
-        <translation>Sėkmingai pašalinta</translation>
+        <translation>བཤིག་འདོན་ཐུབ་སོང་།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="767"/>
         <source>Uninstall Failed</source>
-        <translation>Šalinimas nepavyko</translation>
+        <translation>བཤིག་འདོན་མི་ཐུབ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="199"/>
         <source>Name: </source>
-        <translation>Pavadinimas: </translation>
+        <translation>མིང་།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="869"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1043"/>
         <source>Same version installed</source>
-        <translation>Įdiegta ta pati versija</translation>
+        <translation>པར་གཞི་འདྲ་མཚུངས་སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
 </context>
 <context>
@@ -328,7 +326,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="622"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Show details</source>
-        <translation>Rodyti išsamiau</translation>
+        <translation>ཞིབ་ཕྲའི་ཆ་འཕྲིན་འཆར་བ།</translation>
     </message>
 </context>
 <context>
@@ -337,7 +335,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="649"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="756"/>
         <source>Show details</source>
-        <translation>Rodyti išsamiau</translation>
+        <translation>བཤིག་འདོན་བྱེད་རིམ་འཆར་བ།</translation>
     </message>
 </context>
 <context>
@@ -345,36 +343,36 @@
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation>Suskleisti</translation>
+        <translation>བསྡུ་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Show related packages</source>
-        <translation>Rodyti susijusius paketus</translation>
+        <translation>འབྲེལ་ཡོད་མཉེན་ཆས་ཁུག་འཆར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>
         <source>Cancel</source>
-        <translation>Atsisakyti</translation>
+        <translation>འདོར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>
         <source>Confirm</source>
-        <translation>Patvirtinti</translation>
+        <translation>བཤིག་འདོན་གཏན་འཁེལ་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Ar tikrai norite pašalinti %1?
-Tuo pačiu bus pašalintos ir visos priklausomybės</translation>
+        <translation>ཁྱེད་ཀྱིས་%1བཤིག་འདོན་བྱ་རྒྱུ་གཏན་འཁེལ་ལམ།
+བརྟེན་པའི་འབྲེལ་བ་ཚང་མ་མཉམ་དུ་སྤོ་འབུད་བྱེད་སྲིད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="134"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>Ar tikrai norite pašalinti %1?
-Sistema arba kitos programos gali tinkamai neveikti</translation>
+        <translation>ཁྱེད་ཀྱིས་%1བཤིག་འདོན་བྱ་རྒྱུ་གཏན་འཁེལ་ལམ།
+མཉེན་ཆས་འདི་བཤིག་འདོན་བྱས་ཚེ་མ་ལག་གམ་མཉེན་ཆས་གཞན་དག་རྒྱུན་གཏན་ལྟར་སྤྱོད་ཐབས་མེད་པར་གྱུར་སྲིད།</translation>
     </message>
 </context>
 <context>
@@ -383,12 +381,12 @@ Sistema arba kitos programos gali tinkamai neveikti</translation>
         <location filename="../src/deb_installer/main.cpp" line="66"/>
         <location filename="../src/deb_installer/main.cpp" line="67"/>
         <source>Package Installer</source>
-        <translation>Paketų diegimo programa</translation>
+        <translation>མཉེན་ཆས་ཁུག་སྒྲིག་སྦྱོར་ཆས།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Paketų diegimo programa padeda naudotojams įdiegti ir šalinti vietinius paketus bei palaiko masinį įdiegimą.</translation>
+        <translation>མཉེན་ཆས་ཁུག་སྒྲིག་སྦྱོར་ཆས་ནི་སྤྱོད་མཁན་ལ་རང་སའི་མཉེན་ཆས་སྒྲིག་སྦྱོར་དང་བཤིག་འདོན་བྱེད་རོགས་བྱེད་པའི་ཡོ་བྱད་ཅིག་རེད་ལ། ཉེར་སྤྱོད་མང་པོ་མཉམ་དུ་སྒྲིག་སྦྱོར་བྱ་ཐུབ།</translation>
     </message>
 </context>
 </TS>

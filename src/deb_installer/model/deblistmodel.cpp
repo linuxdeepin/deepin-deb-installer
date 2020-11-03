@@ -89,11 +89,6 @@ const QStringList netErrors()
  */
 const QString workerErrorString(const int errorCode, const QString errorInfo)
 {
-    // 安装配置包时，没有得到授权
-    if (errorCode == ConfigAuthCancel) {
-        return QApplication::translate("DebListModel",
-                                       "Authentication failed");
-    }
     switch (errorCode) {
     case FetchError:
     case DownloadDisallowedError:
@@ -120,6 +115,19 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
         if (errorInfo.contains("No space left on device")) {
             return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
         }
+        break;
+    // 无数字签名的错误
+    case DebListModel::NoDigitalSignature:
+        return QApplication::translate("DebListModel", "No digital signature");
+
+    //无有效的数字签名
+    case DebListModel::DigitalSignatureError:
+        return QApplication::translate("DebListModel", "Invalid digital signature");
+
+    // 安装配置包时，没有得到授权
+    case DebListModel::ConfigAuthCancel:
+        return QApplication::translate("DebListModel",
+                                       "Authentication failed");
     }
     //其余错误，暂不提示具体的错误原因
     return QApplication::translate("DebListModel", "Installation Failed");
@@ -154,7 +162,8 @@ DebListModel::DebListModel(QObject *parent)
     //安装wine依赖的时候不允许程序退出
     connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 
-    m_isVerifyDigital = checkSystemVersion();
+    //检查系统版本与是否开启了开发者模式
+    checkSystemVersion();
 }
 
 /**
@@ -848,9 +857,84 @@ void DebListModel::installDebs()
 }
 
 /**
- * @brief DebListModel::showNoDigitalErrWindow 没有有效的数字签名时弹出对应的错误窗口
+ * @brief DebListModel::checkDigitalVerifyFailReason 检查当前验证错误的原因
+ * @return
+ * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
+ */
+bool DebListModel::checkDigitalVerifyFailReason()
+{
+    for (auto errorCode : m_packageFailCode) {  //遍历所有的错误代码
+        if (errorCode != NoDigitalSignature) {  //如果错误代码中存在其他错误
+            return false;                       //则不弹出前往控制中心的弹窗
+        }
+    }
+    return true;                                //所有错误代码都是没有数字签名的代码 则返回true
+}
+
+/**
+ * @brief DebListModel::digitalVerifyFailed 数字签名校验失败的处理槽函数
+ */
+void DebListModel::digitalVerifyFailed(ErrorCode code)
+{
+    if (preparedPackages().size() > 1) {                        //批量安装
+        refreshOperatingPackageStatus(Failed);                  //刷新操作状态
+        m_packageFailCode.insert(m_operatingStatusIndex, code); //记录错误代码与错误原因
+        m_packageFailReason.insert(m_operatingStatusIndex, "");
+        bumpInstallIndex();                                     //跳过当前包
+    } else if (preparedPackages().size() == 1) {
+        exit(0);                                                //单包安装 直接退出
+    }
+}
+
+/**
+ * @brief DebListModel::showNoDigitalErrWindow 无数字签名
  */
 void DebListModel::showNoDigitalErrWindow()
+{
+    DDialog *Ddialog = new DDialog();                   //弹出窗口
+    Ddialog->setModal(true);
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);   //窗口一直置顶
+    Ddialog->setTitle(tr("Unable to install - no digital signature"));
+    Ddialog->setMessage(QString(tr("Please go to Control Center to enable developer mode and try again. Proceed?")));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+
+    Ddialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);     //添加取消按钮
+    Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
+
+    // 如果所有的错误都是由于没有数字签名造成的，且当前是最后一个包 弹出进入控制中心的弹窗，否则不显示
+    if (checkDigitalVerifyFailReason() && m_operatingIndex == preparedPackages().size() - 1) {
+        Ddialog->show();
+    } else {
+        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+        digitalVerifyFailed(NoDigitalSignature);
+    }
+
+    //取消按钮
+    QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    connect(btnCancel, &DPushButton::clicked, this, [ = ] {
+        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+        digitalVerifyFailed(NoDigitalSignature);
+    });
+
+    //前往按钮
+    QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
+    connect(btnProceedControlCenter, &DPushButton::clicked, this, [ = ] {
+        //前往控制中心
+        showDevelopModeWindow();
+        exit(0);
+    });
+
+    //关闭图标
+    connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
+        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+        digitalVerifyFailed(NoDigitalSignature);
+    });
+}
+
+/**
+ * @brief DebListModel::showDigitalErrWindow 无有效的数字签名
+ */
+void DebListModel::showDigitalErrWindow()
 {
     DDialog *Ddialog = new DDialog();
     //设置窗口焦点
@@ -874,36 +958,40 @@ void DebListModel::showNoDigitalErrWindow()
     // fix bug:44837 https://pms.uniontech.com/zentao/bug-view-44837.html
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
-    // 点击弹出窗口的关闭按钮
+    // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
-        if (preparedPackages().size() > 1)                          //批量安装
-        {
-            refreshOperatingPackageStatus(VerifyFailed);            //刷新操作状态
-            bumpInstallIndex();                                     //跳过当前包
-            return;
-        } else if (preparedPackages().size() == 1)
-        {
-            exit(0);                                                //单包安装 直接退出
-        }
+        //刷新当前包的操作状态，失败原因为数字签名校验失败
+        digitalVerifyFailed(DigitalSignatureError);
     });
 
     //点击弹出窗口的确定按钮
     connect(btnOK, &DPushButton::clicked, this, [ = ] {
-        if (preparedPackages().size() > 1)                          //批量安装
-        {
-            refreshOperatingPackageStatus(VerifyFailed);            //刷新操作状态
-            bumpInstallIndex();                                     //跳过当前包
-            return;
-        } else if (preparedPackages().size() == 1)                  //单包安装
-        {
-            exit(0);                                                //直接退出
-        }
+        //刷新当前包的操作状态，失败原因为数字签名校验失败
+        digitalVerifyFailed(DigitalSignatureError);
     });
 }
 
 /**
+ * @brief DebListModel::showDevelopModeWindow 打开控制中心通用界面
+ */
+void DebListModel::showDevelopModeWindow()
+{
+    //弹出设置 通用窗口
+    QString command = " dbus-send --print-reply "
+                      "--dest=com.deepin.dde.ControlCenter "
+                      "/com/deepin/dde/ControlCenter "
+                      "com.deepin.dde.ControlCenter.ShowModule "
+                      "\"string:commoninfo\"";
+    QProcess *unlock = new QProcess(this);
+
+    connect(unlock, static_cast<void (QProcess::*)(int)>(&QProcess::finished), unlock, &QProcess::deleteLater);
+
+    unlock->startDetached(command);
+    return;
+}
+
+/**
  * @brief DebListModel::checkSystemVersion 检查当前操作系统的版本，判断是否需要验证签名
- * @return 是否需要验证签名
  *
  * 个人版专业版 非开模式需要验证签名
  * 服务器版 没有开发者模式，默认不验证签名
@@ -912,7 +1000,7 @@ void DebListModel::showNoDigitalErrWindow()
  * 已经有更新的接口，稍后需要更新
  * PS: 2020/10/12 已经更新
  */
-bool DebListModel::checkSystemVersion()
+void DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
@@ -921,14 +1009,17 @@ bool DebListModel::checkSystemVersion()
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
         QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
-        qDebug() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
-        return deviceMode;
+        qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+        m_isDevelopMode = deviceMode;
+        break;
     }
     case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
-        return false;
+        m_isDevelopMode =  false;
+        break;
     default:
-        return true;
+        m_isDevelopMode =  true;
+        break;
     }
 }
 
@@ -940,18 +1031,31 @@ bool DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
-    if (m_isVerifyDigital)
+    m_isDevelopMode = false;
+    if (m_isDevelopMode) {
+        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
         return true;
+    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
+    digitalSigntual = Utils::DebfileInexistence;
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
+        qInfo() << "Digital signature verification succeed";
         return true;
-    case Utils::DebfileInexistence:
+    case Utils::DebfileInexistence:                                                             //无签名文件
+        qInfo() << "No signature file was found in the application";
+        showNoDigitalErrWindow();
+        return false;
     case Utils::ExtractDebFail:
+        showDigitalErrWindow();
+        qInfo() << "An error occurred while verifying the signature";                           //无有效的数字签名
+        return false;
     case Utils::DebVerifyFail:
     case Utils::OtherError:
+        qInfo() << "Signature file verification failed";                                        //其他原因造成的签名校验失败
         return false;
-    default:
+    default:                                                                                    //其他未知错误
+        qInfo() << "unknown mistake";
         return false;
     }
 }
@@ -963,8 +1067,8 @@ bool DebListModel::checkDigitalSignature()
  */
 void DebListModel::installNextDeb()
 {
-    if (!checkDigitalSignature()) {     //非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();                               //演出错误窗口
+    if (!checkDigitalSignature()) {                             //非开发者模式且数字签名验证失败
+        return;
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         QStringList strFilePath;
