@@ -332,14 +332,15 @@ void DebListModel::uninstallPackage(const int idx)
     Q_ASSERT(idx == 0);
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
-    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
-    PERF_PRINT_BEGIN("POINT-04", QString::number(deb->installedSize()));        //卸载包开始
-
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
     m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = idx;                             //获取卸载的包的indx
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = idx;                       //刷新操作状态的index
+
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
+    // 添加详细的大小信息
+    PERF_PRINT_BEGIN("POINT-04", "pkgsize=" + QString::number(deb->installedSize()) + "b");    //卸载包开始
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());     //检查是否有应用依赖到该包
     Backend *b = m_packagesManager->m_backendFuture.result();
