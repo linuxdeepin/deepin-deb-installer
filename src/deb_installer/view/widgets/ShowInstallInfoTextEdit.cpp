@@ -199,7 +199,7 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             QFont font = this->font();
 
             /*开根号时数值越大衰减比例越大*/
-            qreal direction = diffpos > 0 ? 1.0 : -1.0;
+            qreal direction = diffpos < 0 ? 1.0 : -1.0;
             slideGesture(-direction * sqrt(abs(diffpos)) / font.pointSize());
 
             /*预算惯性滑动时间*/

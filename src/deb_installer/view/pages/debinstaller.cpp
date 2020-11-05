@@ -403,7 +403,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     //根据不同的包的数量开启不同的记录点
     if (packages.size() == 1) {             //单包安装记录当前包的大小
         QApt::DebFile *m_pDebPackage = new QApt::DebFile(packages[0]);
-        PERF_PRINT_BEGIN("POINT-03", QString::number(m_pDebPackage->installedSize()));
+        PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
         delete m_pDebPackage;
     } else {                        //批量安装记录包的数量
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
