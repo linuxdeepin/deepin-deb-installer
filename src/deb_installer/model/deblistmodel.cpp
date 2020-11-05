@@ -1053,6 +1053,7 @@ bool DebListModel::checkDigitalSignature()
         return false;
     case Utils::DebVerifyFail:
     case Utils::OtherError:
+        showDigitalErrWindow();
         qInfo() << "Signature file verification failed";                                        //其他原因造成的签名校验失败
         return false;
     default:                                                                                    //其他未知错误
