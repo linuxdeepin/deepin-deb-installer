@@ -323,14 +323,14 @@ void DebListModel::uninstallPackage(const int idx)
     Q_ASSERT(idx == 0);
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
-    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
-    PERF_PRINT_BEGIN("POINT-04", QString::number(deb->installedSize()));        //卸载包开始
-
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
     m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = idx;                             //获取卸载的包的indx
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = idx;                       //刷新操作状态的index
+
+    DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
+    PERF_PRINT_BEGIN("POINT-04", "packsize=" + QString::number(deb->installedSize()) + "b");   //卸载包开始
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());     //检查是否有应用依赖到该包
     Backend *b = m_packagesManager->m_backendFuture.result();
@@ -759,7 +759,7 @@ void DebListModel::checkBoxStatus()
 void DebListModel::installDebs()
 {
     DebFile deb(m_packagesManager->package(m_operatingIndex)) ;
-    PERF_PRINT_BEGIN("POINT-04", QString::number(deb.installedSize()));         //安装时间
+    PERF_PRINT_BEGIN("POINT-04", "packsize=" + QString::number(deb.installedSize()) + "b");         //安装时间
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
 
@@ -819,7 +819,7 @@ void DebListModel::installDebs()
         //开始安装当前包
         qDebug() << "DebListModel:" << "starting to install package: " << deb.packageName();
 
-        PERF_PRINT_BEGIN("POINT-05", QString::number(deb.installedSize()));
+        PERF_PRINT_BEGIN("POINT-05", "packsize=" + QString::number(deb.installedSize()) + "b");
         trans = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         // 进度变化和结束过程处理

@@ -199,7 +199,7 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             QFont font = this->font();
 
             /*开根号时数值越大衰减比例越大*/
-            qreal direction = diffpos < 0 ? 1.0 : -1.0;
+            qreal direction = diffpos > 0 ? 1.0 : -1.0;
             slideGesture(-direction * sqrt(abs(diffpos)) / font.pointSize());
 
             /*预算惯性滑动时间*/
@@ -207,7 +207,7 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             duration = sqrt(abs(m_stepSpeed)) * 1000;
 
             /*预算惯性滑动距离,4.0为调优数值*/
-            m_stepSpeed /= sqrt(font.pointSize() * 10.0);
+            m_stepSpeed /= sqrt(font.pointSize() * 4.0);
             change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
         }
     }
