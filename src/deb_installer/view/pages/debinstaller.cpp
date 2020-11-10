@@ -401,11 +401,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //根据不同的包的数量开启不同的记录点
-    if (packages.size() == 1) {             //单包安装记录当前包的大小
-        QApt::DebFile *m_pDebPackage = new QApt::DebFile(packages[0]);
-        PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
-        delete m_pDebPackage;
-    } else {                        //批量安装记录包的数量
+    if (packages.size() > 1) {             //单包安装记录当前包的大小
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
     }
     this->showNormal();                                                 //非特效模式下激活窗口
@@ -419,9 +415,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
         qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
-        if (packages.size() == 1) {
-            PERF_PRINT_END("POINT-03");     //不添加结束记录点
-        } else {
+        if (packages.size() > 1) {
             PERF_PRINT_END("POINT-06");     //不添加结束记录点
         }
         return;
@@ -449,6 +443,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
                 continue;
             }
+            if (packages.size() == 1)
+                PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
             DRecentData data;
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
