@@ -433,6 +433,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             }
 
             bool isValid =  m_pDebPackage->isValid();                                       //查看这个包是否损坏
+            if (packages.size() == 1 && isValid)
+                PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
             delete m_pDebPackage;
             if (!isValid) {
                 qWarning() << "DebInstaller:" << "The deb package may be broken" << package;
@@ -443,8 +445,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
                 DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
                 continue;
             }
-            if (packages.size() == 1)
-                PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
             DRecentData data;
             data.appName = "Deepin Deb Installer";
             data.appExec = "deepin-deb-installer";
