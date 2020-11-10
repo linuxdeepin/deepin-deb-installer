@@ -298,6 +298,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
  */
 void DebListModel::installPackages()
 {
+    qInfo() << "[Performance Testing] Click the install button";
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
 
@@ -830,6 +831,7 @@ void DebListModel::installDebs()
         qDebug() << "DebListModel:" << "starting to install package: " << deb.packageName();
 
         PERF_PRINT_BEGIN("POINT-05", QString::number(deb.installedSize()));
+        qInfo() << "[Performance Testing]：install Files";
         trans = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         // 进度变化和结束过程处理
@@ -854,6 +856,8 @@ void DebListModel::installDebs()
     connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
 
     m_currentTransaction = trans;
+
+    qInfo() << "[Performance Testing] Pop up authorization box";
     m_currentTransaction->run();
 }
 

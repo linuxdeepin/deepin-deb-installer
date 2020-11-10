@@ -626,7 +626,9 @@ bool PackagesManager::appendPackage(QString debPackage)
     }
     QApt::DebFile *p = new DebFile(debPackage);
 
+    qInfo() << "[Performance Testing]: Before get the value of MD5 Sum";
     const auto md5 = p->md5Sum();
+    qInfo() << "[Performance Testing]: After get the value of MD5 Sum";
     if (m_appendedPackagesMd5.contains(md5)) return false;
 
     m_preparedPackages << debPackage;
