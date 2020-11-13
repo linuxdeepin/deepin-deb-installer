@@ -26,6 +26,7 @@
 ShowInstallInfoTextEdit::ShowInstallInfoTextEdit(QWidget *parent):
     QTextEdit(parent)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents);             //接受触控事件
     grabGesture(Qt::TapGesture);                        //获取触控点击事件
     grabGesture(Qt::TapAndHoldGesture);                 //获取触控点击长按事件
 
@@ -199,7 +200,7 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             QFont font = this->font();
 
             /*开根号时数值越大衰减比例越大*/
-            qreal direction = diffpos > 0 ? 1.0 : -1.0;
+            qreal direction = diffpos < 0 ? 1.0 : -1.0;         //确定滑动方向
             slideGesture(-direction * sqrt(abs(diffpos)) / font.pointSize());
 
             /*预算惯性滑动时间*/
@@ -207,9 +208,10 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             duration = sqrt(abs(m_stepSpeed)) * 1000;
 
             /*预算惯性滑动距离,4.0为调优数值*/
-            m_stepSpeed /= sqrt(font.pointSize() * 10.0);
+            m_stepSpeed /= sqrt(font.pointSize() * 4.0);
             change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
         }
+        return;         //此时屏蔽其他触控效果
     }
     QTextEdit::mouseMoveEvent(e);
 }
@@ -241,7 +243,7 @@ void FlashTween::start(qreal t, qreal b, qreal c, qreal d, FunSlideInertial f)
 
     m_lastValue = 0;
     m_fSlideGesture = f;
-    m_direction = m_changeValue < 0 ? 1 : -1;
+    m_direction = m_changeValue > 0 ? 1 : -1;       //确定滑动方向
 
     m_timer->stop();
     m_timer->start(CELL_TIME);

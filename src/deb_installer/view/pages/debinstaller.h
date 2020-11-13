@@ -69,6 +69,23 @@ private slots:
     void onPackagesSelected(const QStringList &packages);
 
     /**
+     * @brief showInvalidePackageMessage 弹出无效包的消息通知
+     */
+    void showInvalidePackageMessage();
+
+    /**
+     * @brief showPkgExistMessage 弹出包已存在的消息通知
+     */
+    void showPkgExistMessage();
+
+    /**
+     * @brief refreshPage 刷新页面
+     * @param 此次添加前包的数量
+     * @param 此次添加的包的数量
+     */
+    void refreshPage(int, int);
+
+    /**
      * @brief onNewAppOpen
      * @param pid 进程号
      * @param arguments 要安装的包的全路径的列表

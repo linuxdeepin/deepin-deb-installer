@@ -32,7 +32,8 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     initUI(w, h);
 
     //fix bug: 44726 https://pms.uniontech.com/zentao/bug-view-44726.html
-    QScroller::grabGesture(m_editor, QScroller::TouchGesture);
+    //使用自写控件实现滑动，废弃
+//    QScroller::grabGesture(m_editor, QScroller::TouchGesture);
 
     //数据更新后，直接跳转到最后一行
     connect(m_editor, &QTextEdit::textChanged, this, [ = ] {

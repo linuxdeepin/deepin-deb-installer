@@ -401,11 +401,7 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
     //根据不同的包的数量开启不同的记录点
-    if (packages.size() == 1) {             //单包安装记录当前包的大小
-        QApt::DebFile *m_pDebPackage = new QApt::DebFile(packages[0]);
-        PERF_PRINT_BEGIN("POINT-03", QString::number(m_pDebPackage->installedSize()));
-        delete m_pDebPackage;
-    } else {                        //批量安装记录包的数量
+    if (packages.size() > 1) {             //单包安装记录当前包的大小
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
     }
     this->showNormal();                                                 //非特效模式下激活窗口
@@ -419,9 +415,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
         qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
-        if (packages.size() == 1) {
-            PERF_PRINT_END("POINT-03");     //不添加结束记录点
-        } else {
+        if (packages.size() > 1) {
             PERF_PRINT_END("POINT-06");     //不添加结束记录点
         }
         return;
@@ -439,14 +433,12 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             }
 
             bool isValid =  m_pDebPackage->isValid();                                       //查看这个包是否损坏
+            if (packages.size() == 1 && isValid)
+                PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
             delete m_pDebPackage;
             if (!isValid) {
                 qWarning() << "DebInstaller:" << "The deb package may be broken" << package;
-                //add Floating Message while package invalid
-                DFloatingMessage *msg = new DFloatingMessage;
-                msg->setMessage(tr("The deb package may be broken"));
-                msg->setIcon(QIcon::fromTheme("di_warning"));
-                DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
+                showInvalidePackageMessage();
                 continue;
             }
             DRecentData data;
@@ -455,54 +447,85 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             DRecentManager::addItem(package, data);
             // Decide how to add according to the number of packages in the application
             if (!m_fileListModel->appendPackage(package)) {                                 //判断md5sum 如果相同则说明已经添加
-                qWarning() << "DebInstaller:" << "package is Exist! ";
-
-                DFloatingMessage *msg = new DFloatingMessage;
-                msg->setMessage(tr("Already Added"));
-                msg->setIcon(QIcon::fromTheme("di_ok"));
-                DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
+                showPkgExistMessage();
                 if (packages.size() == 1) {                                                 //如果当前只有一个包，且已添加则直接返回，不再刷新
                     PERF_PRINT_END("POINT-03");//添加单个包，但是包已经存在，添加记录点
                     return;
                 }
             }
         }
-        //fix bug29948 服务器版
-        const int packageCount = m_fileListModel->preparedPackages().size();                //获取添加后的包的数量
-        // There is already one package and there will be multiple packages to be added
-        if (packageCount == packageCountInit) {                                             //添加前后包的数量一致，说明此次未添加新的包，直接返回，部署爱心
-            if (packages.size() == 1) {     //未添加成功单个包，添加记录点
-                PERF_PRINT_END("POINT-03");
-            } else {
-                PERF_PRINT_END("POINT-06"); //未成功添加多个包，添加记录点
-            }
-            return;
-        }
-        if (packageCount == 1 || packages.size() > 1) {                                     //如果添加了一个包或者要添加的包的数量大于1 刷新包的数量
-            refreshInstallPage(packageCount);
-            if (packages.size() == 1) {
-                PERF_PRINT_END("POINT-03"); //添加成功，添加记录点
-            } else {
-                PERF_PRINT_END("POINT-06"); //添加多个包成功，添加记录点
-            }
-            return;
-        }
-        // There was a package from the beginning and it was added
-        if (packageCountInit == 1 && packageCount > 1) {                                    //之前已经有一个包，之后又添加了包，刷新页面
-            refreshInstallPage(packageCount);
-        } else {
-            m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
-            MulRefreshPage(packageCount);
-            m_fileListModel->initDependsStatus(packageCountInit);
-            MulRefreshPage(packageCount);
-        }
+        refreshPage(packageCountInit, packages.size());
     }
-    if (packages.size() == 1) {
+
+}
+
+/**
+ * @brief DebInstaller::refreshPage 刷新页面
+ * @param packageCountInit  添加之前应用内包的数量
+ * @param packageSize   此次要添加的包的数量
+ */
+void DebInstaller::refreshPage(int packageCountInit, int packageSize)
+{
+    //fix bug29948 服务器版
+    const int packageCount = m_fileListModel->preparedPackages().size();                //获取添加后的包的数量
+    // There is already one package and there will be multiple packages to be added
+    if (packageCount == packageCountInit) {                                             //添加前后包的数量一致，说明此次未添加新的包，直接返回，部署爱心
+        if (packageSize == 1) {     //未添加成功单个包，添加记录点
+            PERF_PRINT_END("POINT-03");
+        } else {
+            PERF_PRINT_END("POINT-06"); //未成功添加多个包，添加记录点
+        }
+        return;
+    }
+    if (packageCount == 1 || packageSize > 1) {                                     //如果添加了一个包或者要添加的包的数量大于1 刷新包的数量
+        refreshInstallPage(packageCount);
+        if (packageSize == 1) {
+            PERF_PRINT_END("POINT-03"); //添加成功，添加记录点
+        } else {
+            PERF_PRINT_END("POINT-06"); //添加多个包成功，添加记录点
+        }
+        return;
+    }
+    // There was a package from the beginning and it was added
+    if (packageCountInit == 1 && packageCount > 1) {                                    //之前已经有一个包，之后又添加了包，刷新页面
+        refreshInstallPage(packageCount);
+    } else {
+        m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
+        MulRefreshPage(packageCount);
+        m_fileListModel->initDependsStatus(packageCountInit);
+        MulRefreshPage(packageCount);
+    }
+    if (packageSize == 1) {
         PERF_PRINT_END("POINT-03");     //添加单个包成功，添加记录点
     } else {
         PERF_PRINT_END("POINT-06");     //批量添加成功，添加记录点
     }
 }
+
+/**
+ * @brief DebInstaller::showInvalidePackageMessage 弹出无效包的消息通知
+ */
+void DebInstaller::showInvalidePackageMessage()
+{
+    //add Floating Message while package invalid
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("The deb package may be broken"));
+    msg->setIcon(QIcon::fromTheme("di_warning"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
+}
+
+/**
+ * @brief DebInstaller::showPkgExistMessage 弹出添加相同包的消息通知
+ */
+void DebInstaller::showPkgExistMessage()
+{
+    qWarning() << "DebInstaller:" << "package is Exist! ";
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("Already Added"));
+    msg->setIcon(QIcon::fromTheme("di_ok"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
+}
+
 
 /**
  * @brief showUninstallConfirmPage
