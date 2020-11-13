@@ -1027,6 +1027,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_uninstallButton->setVisible(false);
     } else {
         //依赖安装成功
+        m_tipsLabel->clear();                   //依赖安装成功后，去除依赖错误的提示信息。
         m_confirmButton->setVisible(false);
         m_backButton->setVisible(false);
         //fix bug 42285: 在升级安装wine应用（wine->wine5）,依赖安装后，界面显示错乱。
