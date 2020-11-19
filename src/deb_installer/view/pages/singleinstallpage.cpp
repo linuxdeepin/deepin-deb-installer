@@ -867,14 +867,17 @@ void SingleInstallPage::setPackageInfo()
         if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
+            m_reinstallButton->setText(tr("Reinstall"));
         } else if (installStat == DebListModel::InstalledLaterVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Later version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_reinstallButton->setText(tr("Downgrade"));
         } else {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Earlier version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_reinstallButton->setText(tr("Update"));
         }
         return;
     }
