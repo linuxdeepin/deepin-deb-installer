@@ -96,6 +96,7 @@ public:
         DependsBreak,           //依赖不满足
         DependsVerifyFailed,    //签名验证失败
         DependsAuthCancel,      //依赖授权失败（wine依赖）
+        ArchBreak,              //架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
     };
 
     /**
@@ -290,6 +291,41 @@ signals:
      */
     void enableCloseButton(bool);
 
+    /**
+     * @brief invalidPackage 无效包的信号
+     */
+    void invalidPackage();
+
+    /**
+     * @brief packageAlreadyExists 包已添加的信号
+     */
+    void packageAlreadyExists();
+
+    /**
+     * @brief refreshSinglePage 刷新单包安装界面的信号
+     */
+    void refreshSinglePage();
+
+    /**
+     * @brief refreshMultiPage 刷新批量安装model的信号
+     */
+    void refreshMultiPage();
+
+    /**
+     * @brief single2MultiPage 刷新批量安装的信号
+     */
+    void single2MultiPage();
+
+    /**
+     * @brief appendStart 正在添加的信号
+     */
+    void appendStart();
+
+    /**
+     * @brief appendFinished 添加结束的信号
+     */
+    void appendFinished();
+
 public slots:
 
     /**
@@ -320,7 +356,7 @@ public slots:
      * @param package 添加的包的路径
      * @return 是否添加成功（主要是判断是否重复添加）
      */
-    bool appendPackage(QString package);
+    void appendPackage(QStringList packages);
 
     /**
      * @brief onTransactionErrorOccurred 安装过程中出现错误

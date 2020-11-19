@@ -481,6 +481,9 @@ void MultipleInstallPage::hiddenCancelButton()
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
     m_installButton->setEnabled(bEnable);//设置按钮是否可用
+    if (bEnable) {                     //按钮可用时刷新一次model 保证所有的包都能显示出来
+        m_appsListView->reset();
+    }
 }
 
 /**
@@ -498,38 +501,11 @@ void MultipleInstallPage::afterGetAutherFalse()
 }
 
 /**
- * @brief MultipleInstallPage::onScrollSlotFinshed 滚动item的槽函数
+ * @brief MultipleInstallPage::refreshModel 刷新model
  */
-void MultipleInstallPage::onScrollSlotFinshed()
+void MultipleInstallPage::refreshModel()
 {
-    int row = m_appsListView->count();      //获取appListView中Item的数量
-    QModelIndex currIndex;
-    if (m_index == -1) {                    //如果未传入要移动到的index
-        if (row > 0) {
-            currIndex = m_debListModel->index(row - 1); //滚动到最后
-            m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-        }
-    } else {                                //传入了要移动到的index
-        if (m_index == 0) {
-            currIndex = m_debListModel->index(0);   //移动的位置是首项
-        } else if (m_index == row) {                //移动到的位置是末项
-            currIndex = m_debListModel->index(m_index - 1);
-        } else {                                    //移动到中间位置
-            currIndex = m_debListModel->index(m_index);
-        }
-        m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-    }
-    m_appsListView->reset();                        //reset
-}
-
-/**
- * @brief MultipleInstallPage::setScrollBottom 每次触发只移动一次
- * @param index 要移动到的位置
- */
-void MultipleInstallPage::setScrollBottom(int index)
-{
-    m_index = index;
-    QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);     //防止添加多个时不断触发
+    m_appsListView->reset();
 }
 
 /**

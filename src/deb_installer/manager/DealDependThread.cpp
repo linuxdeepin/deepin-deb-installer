@@ -30,16 +30,29 @@ DealDependThread::~DealDependThread()
     delete proc;
 }
 
+/**
+ * @brief DealDependThread::setDependsList 设置依赖列表
+ * @param dependList 需要下载的依赖列表
+ * @param index
+ */
 void DealDependThread::setDependsList(QStringList dependList, int index)
 {
     m_index = index;
     m_dependsList = dependList;
 }
 
+/**
+ * @brief DealDependThread::setBrokenDepend
+ * @param dependName
+ */
 void DealDependThread::setBrokenDepend(QString dependName)
 {
     m_brokenDepend = dependName;
 }
+
+/**
+ * @brief DealDependThread::on_readoutput
+ */
 void DealDependThread::on_readoutput()
 {
     QString tmp = proc->readAllStandardOutput().data();
@@ -56,6 +69,10 @@ void DealDependThread::on_readoutput()
     }
 }
 
+/**
+ * @brief DealDependThread::onFinished
+ * @param num
+ */
 void DealDependThread::onFinished(int num = -1)
 {
     if (bDependsStatusErr) {
@@ -83,6 +100,9 @@ void DealDependThread::onFinished(int num = -1)
     emit enableCloseButton(true);
 }
 
+/**
+ * @brief DealDependThread::run
+ */
 void DealDependThread::run()
 {
     proc->setProcessChannelMode(QProcess::MergedChannels);

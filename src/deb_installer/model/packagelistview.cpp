@@ -53,7 +53,6 @@ void PackagesListView::initUI()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
 }
 
-
 /**
  * @brief PackagesListView::initConnections 初始化链接
  */

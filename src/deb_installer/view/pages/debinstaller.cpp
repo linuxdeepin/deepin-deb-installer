@@ -169,6 +169,27 @@ void DebInstaller::handleFocusPolicy()
  */
 void DebInstaller::initConnections()
 {
+    //接收到添加无效包的信号则弹出无效包的弹窗
+    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
+
+    //接收到包已经添加的信号则弹出已添加的弹窗
+    connect(m_fileListModel, &DebListModel::packageAlreadyExists, this, &DebInstaller::showPkgExistMessage);
+
+    //刷新单包安装界面的信号
+    connect(m_fileListModel, &DebListModel::refreshSinglePage, this, &DebInstaller::refreshSingle);
+
+    //刷新批量安装mode的信号
+    connect(m_fileListModel, &DebListModel::refreshMultiPage, this, &DebInstaller::refreshMulti);
+
+    //刷新批量安装界面的信号
+    connect(m_fileListModel, &DebListModel::single2MultiPage, this, &DebInstaller::single2Multi);
+
+    //正在添加的信号
+    connect(m_fileListModel, &DebListModel::appendStart, this, &DebInstaller::appendPackageStart);
+
+    //此次添加完成的信号
+    connect(m_fileListModel, &DebListModel::appendFinished, this, &DebInstaller::appendFinished);
+
     //Append packages via file-choose-widget's file-choose-button
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
 
@@ -406,7 +427,6 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     }
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
-    int packageCountInit = m_fileListModel->preparedPackages().size();  //查看当前是否已经有包被添加
     qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
@@ -416,90 +436,24 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
         qDebug() << "DebInstaller:" << "The program state is wrong and the package is not allowed to be added to the application";
         if (packages.size() > 1) {
-            PERF_PRINT_END("POINT-06");     //不添加结束记录点
+            PERF_PRINT_END("POINT-06");     //添加结束记录点
         }
-        return;
     } else {
         qDebug() << "DebInstaller:" << "Ready to add the package to the package installer";
-        //调整参数类型，如果为相对路径，便于改动。
-        //循环遍历所有的包 并添加符合要求的包
-        for (auto package : packages) {
-            QApt::DebFile *m_pDebPackage = new QApt::DebFile(package);
-            // 判断当前是否为绝对路径，如果是相对路径，则将相对路径转换为绝对路径。
-            if (package[0] != "/") {
-                QFileInfo packageAbsolutePath(package);
-                package = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
-                qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
-            }
-
-            bool isValid =  m_pDebPackage->isValid();                                       //查看这个包是否损坏
-            if (packages.size() == 1 && isValid)
-                PERF_PRINT_BEGIN("POINT-03", "packsize=" + QString::number(m_pDebPackage->installedSize()) + "b");
-            delete m_pDebPackage;
-            if (!isValid) {
-                qWarning() << "DebInstaller:" << "The deb package may be broken" << package;
-                showInvalidePackageMessage();
-                continue;
-            }
-            DRecentData data;
-            data.appName = "Deepin Deb Installer";
-            data.appExec = "deepin-deb-installer";
-            DRecentManager::addItem(package, data);
-            // Decide how to add according to the number of packages in the application
-            if (!m_fileListModel->appendPackage(package)) {                                 //判断md5sum 如果相同则说明已经添加
-                showPkgExistMessage();
-                if (packages.size() == 1) {                                                 //如果当前只有一个包，且已添加则直接返回，不再刷新
-                    PERF_PRINT_END("POINT-03");//添加单个包，但是包已经存在，添加记录点
-                    return;
-                }
-            }
-        }
-        refreshPage(packageCountInit, packages.size());
+        //开始添加包，将要添加的包传递到后端，添加包由后端处理
+        m_fileListModel->appendPackage(packages);
     }
-
 }
 
 /**
- * @brief DebInstaller::refreshPage 刷新页面
- * @param packageCountInit  添加之前应用内包的数量
- * @param packageSize   此次要添加的包的数量
+ * @brief DebInstaller::refreshMulti 刷新批量安装model
+ * 在批量安装直接添加包
  */
-void DebInstaller::refreshPage(int packageCountInit, int packageSize)
+void DebInstaller::refreshMulti()
 {
-    //fix bug29948 服务器版
-    const int packageCount = m_fileListModel->preparedPackages().size();                //获取添加后的包的数量
-    // There is already one package and there will be multiple packages to be added
-    if (packageCount == packageCountInit) {                                             //添加前后包的数量一致，说明此次未添加新的包，直接返回，部署爱心
-        if (packageSize == 1) {     //未添加成功单个包，添加记录点
-            PERF_PRINT_END("POINT-03");
-        } else {
-            PERF_PRINT_END("POINT-06"); //未成功添加多个包，添加记录点
-        }
-        return;
-    }
-    if (packageCount == 1 || packageSize > 1) {                                     //如果添加了一个包或者要添加的包的数量大于1 刷新包的数量
-        refreshInstallPage(packageCount);
-        if (packageSize == 1) {
-            PERF_PRINT_END("POINT-03"); //添加成功，添加记录点
-        } else {
-            PERF_PRINT_END("POINT-06"); //添加多个包成功，添加记录点
-        }
-        return;
-    }
-    // There was a package from the beginning and it was added
-    if (packageCountInit == 1 && packageCount > 1) {                                    //之前已经有一个包，之后又添加了包，刷新页面
-        refreshInstallPage(packageCount);
-    } else {
-        m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
-        MulRefreshPage(packageCount);
-        m_fileListModel->initDependsStatus(packageCountInit);
-        MulRefreshPage(packageCount);
-    }
-    if (packageSize == 1) {
-        PERF_PRINT_END("POINT-03");     //添加单个包成功，添加记录点
-    } else {
-        PERF_PRINT_END("POINT-06");     //批量添加成功，添加记录点
-    }
+    qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
+    m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
+    MulRefreshPage();
 }
 
 /**
@@ -642,10 +596,35 @@ void DebInstaller::removePackage(const int index)
     m_fileListModel->removePackage(index);                                          // 后端删除某个下表的包
     const int packageCount = m_fileListModel->preparedPackages().size();            // 获取删除后的包的数量
     if (packageCount == 1) {                                                        // 删除后包的数量只有一个，从批量安装页面刷新成单包安装页面
-        refreshInstallPage(index);
+        refreshSingle();
     }
     if (packageCount > 1)                                                           // 删除后仍然有多个包，直接刷新批量安装界面
-        MulRefreshPage(index);
+        MulRefreshPage();
+}
+
+/**
+ * @brief DebInstaller::appendPackageStart 正在添加包
+ */
+void DebInstaller::appendPackageStart()
+{
+    packageAppending = true;
+    MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+    if (multiplePage)
+        multiplePage->setEnableButton(false);
+}
+
+/**
+ * @brief DebInstaller::appendFinished 添加包结束
+ */
+void DebInstaller::appendFinished()
+{
+    qDebug() << "[DebInstaller]" << "[appendFinished]" << "append package finished";
+    MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+    if (multiplePage) {
+        multiplePage->setEnableButton(true);
+    }
+    packageAppending = false;
+    PERF_PRINT_END("POINT-06");     //添加结束记录点
 }
 
 /**
@@ -654,11 +633,11 @@ void DebInstaller::removePackage(const int index)
  *
  * 刷新multiInstallPage并在刷新后滚动到下标处
  */
-void DebInstaller::MulRefreshPage(int index)
+void DebInstaller::MulRefreshPage()
 {
     if (m_dragflag == 1) {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);        //获取批量安装类的指针
-        multiplePage->setScrollBottom(index);
+        multiplePage->refreshModel();
     }
     //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
     m_fileListModel->refreshAllDependsStatus();
@@ -668,9 +647,45 @@ void DebInstaller::MulRefreshPage(int index)
  * @brief refreshInstallPage
  * @param index 某一个包的下标
  * 刷新安装界面 多用于singleInstallPage 转换到 multiSinglePage
- * 如果传入的下标不为-1， 则刷新时滚动到下标处
  */
-void DebInstaller::refreshInstallPage(int index)
+
+void DebInstaller::single2Multi()
+{
+    // 刷新文件的状态，初始化包的状态为准备状态
+    qDebug() << "refresh single 2 multiPage";
+    m_fileListModel->reset_filestatus();
+    m_fileListModel->initPrepareStatus();
+    if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
+
+    // multiple packages install
+
+    titlebar()->setTitle(tr("Bulk Install"));
+
+    MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
+    multiplePage->setObjectName("MultipleInstallPage");
+
+    connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
+    connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
+    multiplePage->refreshModel();
+    m_lastPage = multiplePage;
+    m_centralLayout->addWidget(multiplePage);
+    m_dragflag = 1;
+    m_Filterflag = 1;
+    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
+    m_fileListModel->refreshAllDependsStatus();
+
+    // switch to new page.
+    m_centralLayout->setCurrentIndex(1);
+
+    // 刷新之后清除标题栏菜单键的焦点，防止在多次安装成功后再次添加包时，焦点偶尔出现在标题栏菜单键上。
+    m_OptionWindow->clearFocus();
+
+}
+
+/**
+ * @brief DebInstaller::refreshSingle   刷新单包安装界面
+ */
+void DebInstaller::refreshSingle()
 {
     //刷新页面之前先清除掉文件选择按钮的焦点，防止在文件选择按钮有焦点的时候添加包，焦点转移到其他控件
     m_fileChooseWidget->clearChooseFileBtnFocus();
@@ -680,43 +695,21 @@ void DebInstaller::refreshInstallPage(int index)
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
+    //安装器中只有一个包，刷新单包安装页面
+    // single package install
+    titlebar()->setTitle(QString());
 
-    const int packageCount = m_fileListModel->preparedPackages().size();    //查看目前安装器中包的数量
-    // no packages found
-    if (packageCount == 0) return;                                          //安装器中没有包
+    SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
+    singlePage->setObjectName("SingleInstallPage");
+    connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
+    connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
 
-    if (packageCount == 1) {                                                //安装器中只有一个包，刷新单包安装页面
-        // single package install
-        titlebar()->setTitle(QString());
+    m_lastPage = singlePage;
+    m_centralLayout->addWidget(singlePage);
 
-        SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
-        singlePage->setObjectName("SingleInstallPage");
-        connect(singlePage, &SingleInstallPage::back, this, &DebInstaller::reset);
-        connect(singlePage, &SingleInstallPage::requestUninstallConfirm, this, &DebInstaller::showUninstallConfirmPage);
-
-        m_lastPage = singlePage;
-        m_centralLayout->addWidget(singlePage);
-
-        // 重置安装器拖入的状态与工作的状态
-        m_dragflag = 2;
-        m_Filterflag = 2;
-    } else {                                                            //安装器中有多个包，刷新批量安装页面
-        // multiple packages install
-        titlebar()->setTitle(tr("Bulk Install"));
-
-        MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
-        multiplePage->setObjectName("MultipleInstallPage");
-
-        connect(multiplePage, &MultipleInstallPage::back, this, &DebInstaller::reset);
-        connect(multiplePage, &MultipleInstallPage::requestRemovePackage, this, &DebInstaller::removePackage);
-        multiplePage->setScrollBottom(index);
-        m_lastPage = multiplePage;
-        m_centralLayout->addWidget(multiplePage);
-        m_dragflag = 1;
-        m_Filterflag = 1;
-        //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
-        m_fileListModel->refreshAllDependsStatus();
-    }
+    // 重置安装器拖入的状态与工作的状态
+    m_dragflag = 2;
+    m_Filterflag = 2;
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 
@@ -769,6 +762,9 @@ void DebInstaller::changeDragFlag()
  */
 void DebInstaller::setEnableButton(bool bEnable)
 {
+    //如果正在添加包，则启用按钮
+    if (packageAppending)
+        return;
     //Set button enabled after installation canceled
     if (m_dragflag == 2) {//单包安装按钮的启用与禁用
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -833,7 +829,7 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
     } else if (m_dragflag == 1) {//批量安装处理依赖下载授权情况
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->DealDependResult(iAuthRes, dependName);
-        multiplePage->setScrollBottom(-1);// 滚动到最后一行。
+        multiplePage->refreshModel();// 滚动到最后一行。
     }
 }
 

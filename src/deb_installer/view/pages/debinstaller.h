@@ -79,13 +79,6 @@ private slots:
     void showPkgExistMessage();
 
     /**
-     * @brief refreshPage 刷新页面
-     * @param 此次添加前包的数量
-     * @param 此次添加的包的数量
-     */
-    void refreshPage(int, int);
-
-    /**
      * @brief onNewAppOpen
      * @param pid 进程号
      * @param arguments 要安装的包的全路径的列表
@@ -194,21 +187,36 @@ private:
      */
     void initConnections();
 
-    /**
-     * @brief refreshInstallPage
-     * @param index 某一个包的下标
-     * 刷新安装界面 多用于singleInstallPage 转换到 multiSinglePage
-     * 如果传入的下标不为-1， 则刷新时滚动到下标处
-     */
-    void refreshInstallPage(int index = -1);
 
     /**
-     * @brief MulRefreshPage
-     * @param index 某一个包的下标位置
-     *
-     * 刷新multiInstallPage并在刷新后滚动到下标处
+     * @brief refreshSingle 刷新单包安装界面
      */
-    void MulRefreshPage(int index);
+    void refreshSingle();
+
+    /**
+     * @brief single2Multi 刷新批量安装界面
+     */
+    void single2Multi();
+
+    /**
+     * @brief refreshMulti 刷新批量安装model
+     */
+    void refreshMulti();
+
+    /**
+     * @brief appendPackageStart 正在添加多个包的界面处理函数
+     */
+    void appendPackageStart();
+
+    /**
+     * @brief appendFinished 批量添加结束界面处理函数
+     */
+    void appendFinished();
+
+    /**
+     * @brief MulRefreshPage 刷新批量安装model
+     */
+    void MulRefreshPage();
 
     /**
      * @brief handleFocusPolicy
@@ -260,6 +268,8 @@ private:
     QWidget *m_closeWindow;                         //关闭窗口按钮
 
     TitleBarFocusMonitor *m_pMonitorFocusThread; //标题栏监测线程。
+
+    bool packageAppending = false;
 };
 
 #endif  // DEBINSTALLER_H

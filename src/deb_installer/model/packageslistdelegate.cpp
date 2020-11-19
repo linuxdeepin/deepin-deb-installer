@@ -218,7 +218,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // install status
         const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();        //获取包的状态
-//        qDebug() << "index:::::" << index.row() << operate_stat;
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);

@@ -54,7 +54,6 @@ SET_FORM_ACCESSIBLE(FileChooseWidget, "FileChooseWidget")
 SET_FORM_ACCESSIBLE(InfoCommandLinkButton, "InfoCommandLinkButton")
 SET_FORM_ACCESSIBLE(InfoControlButton, "InfoControlButton")
 SET_FORM_ACCESSIBLE(InstallProcessInfoView, "InstallProcessInfoView")
-SET_FORM_ACCESSIBLE(PackagesListView, "PackagesListView")
 
 // Qt控件
 SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectName())
@@ -95,7 +94,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InfoControlButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InstallProcessInfoView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MultipleInstallPage);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), PackagesListView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SingleInstallPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), UninstallConfirmPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), WorkerProgress);

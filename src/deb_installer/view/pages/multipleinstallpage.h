@@ -56,10 +56,9 @@ public:
     void afterGetAutherFalse();
 
     /**
-     * @brief setScrollBottom 滚动item到底部或index的位置
-     * @param index 要滚到的index
+     * @brief refreshModel 刷新model
      */
-    void setScrollBottom(int index);
+    void refreshModel();
 
     /**
      * @brief DealDependResult  处理依赖处理授权的结果
@@ -81,11 +80,6 @@ signals:
     void requestRemovePackage(const int index) const;
 
 private slots:
-
-    /**
-     * @brief onScrollSlotFinshed   滚动item的槽函数
-     */
-    void onScrollSlotFinshed();
 
     /**
      * @brief onWorkerFinshed   批量安装结束，调整页面展示效果
