@@ -847,3 +847,25 @@ bool DebInstaller::checkSuffix(QString filePath)
     return false;
 
 }
+
+/**
+ * @brief DebInstaller::event
+ * @param event
+ * @return
+ */
+bool DebInstaller::event(QEvent *event)
+{
+    //fix bug: https://pms.uniontech.com/zentao/bug-view-55563.html
+
+    if (event->type() == QEvent::WindowActivate) {      //重新激活时，清除全部的焦点。
+        if (this->focusWidget()) {
+            qDebug() << "clear focus widget";
+            this->focusWidget()->clearFocus();
+        }
+        if (m_OptionWindow->hasFocus()) {
+            qDebug() << "clear option window focus widget";
+            m_OptionWindow->clearFocus();
+        }
+    }
+    return QWidget::event(event);
+}
