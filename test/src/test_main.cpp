@@ -26,6 +26,7 @@ using namespace std;
 #include <QApplication>
 //  gtest的入口函数
 int main(int argc, char **argv) {
+    qputenv("QT_QPA_PLATFORM","offscreen");
     QApplication a(argc,argv);
     ::testing::InitGoogleTest(&argc, argv);
     auto c= RUN_ALL_TESTS();
