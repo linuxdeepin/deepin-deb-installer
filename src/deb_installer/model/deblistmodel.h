@@ -210,10 +210,6 @@ public:
      */
     int getInstallFileSize();
 
-    /**
-     * @brief refreshAllDependsStatus 获取所有依赖的状态。
-     */
-    void refreshAllDependsStatus();
 signals:
     /**
      * @brief lockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮

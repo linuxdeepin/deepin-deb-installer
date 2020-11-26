@@ -408,6 +408,8 @@ private:
 
     int m_validPackageCount = 0;
 
+    qint64 dependsStatusTotalTime = 0;
+
 };
 
 #endif  // PACKAGESMANAGER_H

@@ -331,17 +331,6 @@ void DebListModel::installPackages()
 }
 
 /**
- * @brief DebListModel::refreshAllDependsStatus 刷新获取所有依赖的状态
- */
-void DebListModel::refreshAllDependsStatus()
-{
-    // 遍历获取所有依赖的状态
-    for (int i = 0; i < preparedPackages().size(); i++) {
-        m_packagesManager->getPackageDependsStatus(i);
-    }
-}
-
-/**
  * @brief DebListModel::uninstallPackage 卸载某一个包
  * @param idx   要卸载的包的index
  */

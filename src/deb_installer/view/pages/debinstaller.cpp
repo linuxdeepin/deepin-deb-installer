@@ -639,8 +639,6 @@ void DebInstaller::MulRefreshPage()
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);        //获取批量安装类的指针
         multiplePage->refreshModel();
     }
-    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
-    m_fileListModel->refreshAllDependsStatus();
 }
 
 /**
@@ -671,8 +669,6 @@ void DebInstaller::single2Multi()
     m_centralLayout->addWidget(multiplePage);
     m_dragflag = 1;
     m_Filterflag = 1;
-    //刷新页面时 刷新所有依赖的状态，防止有时依赖刷新不成功导致安装闪退
-    m_fileListModel->refreshAllDependsStatus();
 
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
@@ -856,12 +852,17 @@ bool DebInstaller::checkSuffix(QString filePath)
 bool DebInstaller::event(QEvent *event)
 {
     //fix bug: https://pms.uniontech.com/zentao/bug-view-55563.html
+//    qInfo()<<"event:"<<event->type();
     if (event->type() == QEvent::WindowActivate) {      //重新激活时，清除全部的焦点。
-        if (this->focusWidget()) {
-            this->focusWidget()->clearFocus();
-        }
-        if (m_OptionWindow->hasFocus()) {
+        qInfo()<<"WindowActive";
+        if (m_OptionWindow) {
+            qInfo()<<"Option Window clear focus";
             m_OptionWindow->clearFocus();
+        }
+        if (this->focusWidget()) {
+            qInfo()<<"focus Widget clear focus";
+            qInfo()<<focusWidget()->objectName();
+            this->focusWidget()->clearFocus();
         }
     }
     return QWidget::event(event);

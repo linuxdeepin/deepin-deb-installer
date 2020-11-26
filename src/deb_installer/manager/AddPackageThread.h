@@ -128,6 +128,8 @@ private:
     void checkInvalid();
 
     int m_validPackageCount = 0;        //有效文件的数量
+
+    qint64 md5SumTotalTime = 0;         //性能测试临时变量，获取md5Sum总耗时
 };
 
 #endif // ADDPACKAGETHREAD_H

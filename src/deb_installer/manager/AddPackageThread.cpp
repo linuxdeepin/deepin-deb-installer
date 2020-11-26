@@ -72,6 +72,8 @@ void AddPackageThread::checkInvalid()
  */
 void AddPackageThread::run()
 {
+    QTime time;
+    time.start();
     qDebug() << "[AddPackageThread]" << "[run]" << "start add packages";
     checkInvalid();     //运行之前先计算有效文件的数量
     for (QString debPackage : m_packages) {                 //通过循环添加所有的包
@@ -107,11 +109,13 @@ void AddPackageThread::run()
             continue;
         }
 
+        QTime getMD5;
+        getMD5.start();
         // 获取当前文件的md5的值,防止重复添加
-        qInfo() << "[Performance Testing]: Before get the value of MD5 Sum";
         const auto md5 = pkgFile->md5Sum();
-        qInfo() << "[Performance Testing]: After get the value of MD5 Sum";
-
+        int md5Time = getMD5.elapsed();
+        qInfo() << "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time<<" ms";
+        md5SumTotalTime += md5Time;
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
@@ -126,6 +130,10 @@ void AddPackageThread::run()
     }
 
     //所有包都添加结束.
+    int totalTime = time.elapsed();
+    qInfo()<<"当前添加"<<m_validPackageCount<<"个包，获取md5Sum总用时"<< md5SumTotalTime<<"ms";
+    qInfo()<<"当前添加"<<m_packages.size()<<"个包， 添加总用时"<<totalTime<<"ms"
+          <<"除去获取MD5外用时"<<totalTime-md5SumTotalTime<<"ms";
     emit appendFinished();
 }
 

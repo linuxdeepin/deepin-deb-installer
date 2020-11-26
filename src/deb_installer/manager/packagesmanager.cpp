@@ -321,6 +321,9 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
     //更换依赖的存储方式
+    QTime dependsTime;
+    dependsTime.start();
+
     if (m_packageMd5DependsStatus.contains(m_packageMd5[index])) {
         return m_packageMd5DependsStatus[m_packageMd5[index]];
     }
@@ -333,6 +336,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         ret.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
         ret.package = deb->packageName();
         m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);//更换依赖的存储方式
+        qInfo()<<deb->packageName()<<"架构错误，获取依赖状态用时"<<dependsTime.elapsed()<<"ms";
         return PackageDependsStatus::_break(deb->packageName());
     }
 
@@ -396,10 +400,10 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 
     m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);
 
-    if (ret.status == DebListModel::DependsAvailable) {
-        const auto list = packageAvailableDepends(index);
-        qDebug() << "PackagesManager:"  << "Available depends list:" << list.size() << list;
-    }
+    int getDependsTime = dependsTime.elapsed();
+    qInfo()<<"获取'"<<deb->packageName()<<"'依赖状态(依赖数量："<<deb->depends().size()<<")用时"<<getDependsTime<<"ms";
+    dependsStatusTotalTime += getDependsTime;
+    qInfo()<<"目前获取依赖总用时"<<dependsStatusTotalTime<<"ms";
     delete deb;
     return ret;
 }
@@ -466,10 +470,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
             Backend *b = m_backendFuture.result();
             Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p)
+            if (p){
                 choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            else
+            }else{
                 choosed_set << dep->name() + " not found";
+            }
         }
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
@@ -605,9 +610,19 @@ void PackagesManager::resetPackageDependsStatus(const int index)
  */
 void PackagesManager::removePackage(const int index)
 {
+    if(index<0 || index >= m_preparedPackages.size())
+    {
+        qInfo()<<"[PackagesManager]"<<"[removePackage]"<<"Subscript boundary check error";
+        return;
+    }
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const auto md5 = deb->md5Sum();
     delete deb;
+
+    //提前删除标记list中的md5 否则在删除最后一个的时候会崩溃
+    if (m_dependInstallMark.contains(m_packageMd5[index]))      //如果这个包是wine包，则在wine标记list中删除
+        m_dependInstallMark.removeOne(m_packageMd5[index]);
+
     m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
 
@@ -615,8 +630,7 @@ void PackagesManager::removePackage(const int index)
     m_packageMd5DependsStatus.remove(m_packageMd5[index]);      //删除指定包的依赖状态
     m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
 
-    if (m_dependInstallMark.contains(m_packageMd5[index]))      //如果这个包是wine包，则在wine标记list中删除
-        m_dependInstallMark.removeOne(m_packageMd5[index]);
+
 
     m_packageInstallStatus.clear();
 }
@@ -701,9 +715,10 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 
         PERF_PRINT_BEGIN("POINT-03", "pkgsize=" + QString::number(pkgFile->installedSize()) + "b");
         // 获取当前文件的md5的值,防止重复添加
-        qInfo() << "[Performance Testing]: Before get the value of MD5 Sum";
+        QTime md5Time;
+        md5Time.start();
         const auto md5 = pkgFile->md5Sum();
-        qInfo() << "[Performance Testing]: After get the value of MD5 Sum";
+        qInfo() << "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time.elapsed()<<" ms";
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
@@ -757,10 +772,10 @@ void PackagesManager::refreshPage(int validPkgCount)
  */
 void PackagesManager::appendPackageFinished()
 {
-    //刷新所有添加的包的依赖状态
-    for (int i = 0; i < m_preparedPackages.size(); i++) {
-        getPackageDependsStatus(i);
-    }
+    //刷新所有添加的包的依赖状态 此处代码需要验证几个版本，之前的bug 不复现后删除
+//    for (int i = 0; i < m_preparedPackages.size(); i++) {
+//        getPackageDependsStatus(i);
+//    }
     //告诉前端，此次添加已经结束
     emit appendFinished();
 }
