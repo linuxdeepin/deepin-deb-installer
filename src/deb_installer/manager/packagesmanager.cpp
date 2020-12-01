@@ -734,8 +734,12 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
     }
 
     //所有包都添加结束.
-    if (allPackageSize == 1)
+    if (allPackageSize == 1){
+        //fix bug: https://pms.uniontech.com/zentao/bug-view-56307.html
+        // 添加一个包时 发送添加结束信号,启用安装按钮
+        emit appendFinished();
         PERF_PRINT_END("POINT-03");
+    }
 }
 
 /**
