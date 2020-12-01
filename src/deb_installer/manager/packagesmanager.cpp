@@ -714,7 +714,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         QTime md5Time;
         md5Time.start();
         const auto md5 = pkgFile->md5Sum();
-        qInfo() << "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time.elapsed()<<" ms";
+        qInfo() <<"[appendNoThread]"<< "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time.elapsed()<<" ms";
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {

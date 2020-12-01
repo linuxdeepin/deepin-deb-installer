@@ -114,7 +114,7 @@ void AddPackageThread::run()
         // 获取当前文件的md5的值,防止重复添加
         const auto md5 = pkgFile->md5Sum();
         int md5Time = getMD5.elapsed();
-        qInfo() << "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time<<" ms";
+        qInfo() <<"[run]"<<"获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time<<" ms";
         md5SumTotalTime += md5Time;
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
@@ -125,6 +125,7 @@ void AddPackageThread::run()
         }
         // 可以添加,发送添加信号
 
+        m_appendedPackagesMd5 << md5;   // 添加到set中，用来判断重复
         emit addedPackage(m_validPackageCount, debPackage, md5);
         delete pkgFile;
     }
