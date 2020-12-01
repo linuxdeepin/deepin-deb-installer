@@ -840,7 +840,9 @@ void SingleInstallPage::setPackageInfo()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "depend status:" << dependsStat;
     // 根据依赖状态调整显示效果
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -977,7 +979,9 @@ void SingleInstallPage::setAuthBefore()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
     //依赖不满足或依赖授权被取消
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
@@ -1016,7 +1020,9 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     //根据依赖状态 调整界面显示
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);

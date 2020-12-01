@@ -273,7 +273,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
         }
-        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::DependsVerifyFailed) {
+        if (dependsStat == DebListModel::DependsBreak
+                || dependsStat == DebListModel::DependsAuthCancel
+                || dependsStat == DebListModel::DependsVerifyFailed
+                || dependsStat == DebListModel::ArchBreak) {// 添加对架构不匹配的处理
+
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
         }
