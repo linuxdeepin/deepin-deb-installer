@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QModelIndex>
 #include <QDebug>
+#include <QPainterPath>
 
 DRoundBgFrame::DRoundBgFrame(QWidget *parent, int bgOffsetTop, int bgOffsetBottom)
     : QWidget(parent)

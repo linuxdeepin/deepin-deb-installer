@@ -30,6 +30,8 @@
 #include <DStyleHelper>
 #include <DApplicationHelper>
 #include <DApplication>
+#include <QPainterPath>
+
 
 DWIDGET_USE_NAMESPACE
 
