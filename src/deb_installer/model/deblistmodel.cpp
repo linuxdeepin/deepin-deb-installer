@@ -786,6 +786,9 @@ void DebListModel::installDebs()
     if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
         m_packageFailCode.insert(m_operatingStatusIndex, -1);           //保存错误原因
+
+	// 记录详细错误原因
+        m_packageFailReason.insert(m_operatingStatusIndex,packageFailedReason(m_operatingStatusIndex));
         bumpInstallIndex();                                             //开始下一步的安装流程
         return;
     } else if (dependsStat.isAvailable()) {
