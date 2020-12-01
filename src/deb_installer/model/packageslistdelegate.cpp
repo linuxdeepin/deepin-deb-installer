@@ -24,6 +24,7 @@
 #include "utils/utils.h"
 
 #include <QPixmap>
+#include <QPainterPath>
 
 #include <DSvgRenderer>
 #include <DPalette>
