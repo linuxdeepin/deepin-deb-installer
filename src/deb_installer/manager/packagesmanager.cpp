@@ -543,16 +543,12 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
             Package *subPackage = packageWithArch(r, sysArch);
-
-            //如果没有获取到对应的包，则直接跳过
-            if (!subPackage)
-                continue;
             // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
             // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
-            if (!subPackage->requiredByList().isEmpty()) {
+            if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
                 testQueue.append(subPackage->requiredByList());
             }
-            if (!subPackage->isInstalled())
+            if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
                 continue;
             if (subPackage->recommendsList().contains(item))
                 continue;
