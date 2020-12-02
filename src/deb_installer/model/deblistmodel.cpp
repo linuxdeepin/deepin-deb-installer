@@ -889,6 +889,12 @@ void DebListModel::digitalVerifyFailed(ErrorCode code)
  */
 void DebListModel::showNoDigitalErrWindow()
 {
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    //task:https://pms.uniontech.com/zentao/task-view-48443.html
+    if(m_operatingIndex < m_packagesManager->m_preparedPackages.size()-1){
+        digitalVerifyFailed(NoDigitalSignature);//刷新安装错误，并记录错误原因
+        return;
+    }
     DDialog *Ddialog = new DDialog();                   //弹出窗口
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);   //窗口一直置顶
@@ -927,6 +933,12 @@ void DebListModel::showNoDigitalErrWindow()
  */
 void DebListModel::showDigitalErrWindow()
 {
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    //task:https://pms.uniontech.com/zentao/task-view-48443.html
+    if(m_operatingIndex < m_packagesManager->m_preparedPackages.size()-1){
+        digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
+        return;
+    }
     DDialog *Ddialog = new DDialog();
     //设置窗口焦点
     //fix bug:https://pms.uniontech.com/zentao/bug-view-44837.html
