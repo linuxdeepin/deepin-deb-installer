@@ -318,6 +318,28 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
     emit DependResult(iAuthRes, iIndex, dependName);
 }
 
+/**
+ * @brief PackagesManager::getPackageMd5 获取某个包的md5 值
+ * @param index 包的下表
+ * @return  包的md5
+ * 现在包的状态与md5绑定，下标再与md5绑定，而非直接与下标绑定
+ * 这种做法的优点在于，不需要在前端再去调整所有包的顺序，只需要获取对应下标的md5即可,调整大多数状态不需要担心状态与下标对应错乱
+ * 缺点是：每次获取状态都需要读md5.频繁读取会造成性能影响
+ */
+QByteArray PackagesManager::getPackageMd5(const int index)
+{
+    if(index < m_packageMd5.size())
+    {
+        return m_packageMd5[index];
+    }
+    return nullptr;
+}
+
+/**
+ * @brief PackagesManager::getPackageDependsStatus 获取某个包的依赖状态
+ * @param index 包的下标
+ * @return 包的依赖状态
+ */
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
     //更换依赖的存储方式

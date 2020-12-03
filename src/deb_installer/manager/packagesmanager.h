@@ -187,6 +187,13 @@ public:
     PackageDependsStatus getPackageDependsStatus(const int index);
 
     /**
+     * @brief getPackageMd5 获取包的md5值
+     * @param index 下标
+     * @return 包的MD5值
+     */
+    QByteArray getPackageMd5(const int index);
+
+    /**
      * @brief packageReverseDependsList 获取依赖于此包的所有应用名称
      * @param packageName 需要检查的包的包名
      * @param sysArch 包的架构
