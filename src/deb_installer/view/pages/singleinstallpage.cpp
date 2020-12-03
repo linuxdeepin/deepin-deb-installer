@@ -1048,17 +1048,21 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         } else {// 已经安装过其他版本
             // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
             //增加提示 依赖安装完成后的提示
+            // fix bug: https://pms.uniontech.com/zentao/bug-view-56754.html
             if (installStat == DebListModel::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Same version installed"));
+                m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == DebListModel::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Later version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Downgrade"));
             } else {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Earlier version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Update"));
             }
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);
