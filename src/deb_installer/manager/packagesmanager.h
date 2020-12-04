@@ -32,12 +32,47 @@
 #include <QThread>
 #include <QProcess>
 
+using namespace QApt;
+
 typedef Result<QString> ConflictResult;
 
 class PackageDependsStatus;
 class DebListModel;
 class DealDependThread;
 class AddPackageThread;
+
+/**
+ * @brief isArchMatches 判断包的架构是否符合系统要求
+ * @param sysArch       系统架构
+ * @param packageArch   包的架构
+ * @param multiArchType 系统多架构类型
+ * @return 是否符合多架构要求
+ */
+bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType);
+
+/**
+ * @brief resolvMultiArchAnnotation
+ * @param annotation
+ * @param debArch
+ * @param multiArchType
+ * @return
+ */
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
+                                  const int multiArchType = InvalidMultiArchType);
+
+/**
+ * @brief dependencyVersionMatch
+ * @param result
+ * @param relation
+ * @return
+ */
+bool dependencyVersionMatch(const int result, const RelationType relation);
+
+/**
+ * @brief init_backend
+ * @return
+ */
+Backend *init_backend();
 
 class PackagesManager : public QObject
 {

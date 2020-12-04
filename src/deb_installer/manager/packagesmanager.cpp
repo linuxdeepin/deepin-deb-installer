@@ -58,8 +58,7 @@ bool isArchMatches(QString sysArch, const QString &packageArch, const int multiA
     return sysArch == packageArch;
 }
 
-QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                  const int multiArchType = InvalidMultiArchType)
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,const int multiArchType)
 {
     if (annotation == "native" || annotation == "any") return QString();
     if (annotation == "all") return QString();
@@ -473,15 +472,12 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
                                              const DependencyItem &candidateList)
 {
-    bool choosed = false;
-
     for (const auto &info : candidateList) {
         Package *dep = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
         if (!dep) continue;
 
         const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
         if (choosed_set.contains(choosed_name)) {
-            choosed = true;
             break;
         }
 
@@ -513,13 +509,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             continue;
         }
 
-        choosed = true;
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, dep->depends());
         break;
     }
 
-//    Q_ASSERT(choosed);
 }
 
 QMap<QString, QString> PackagesManager::specialPackage()
@@ -534,7 +528,6 @@ QMap<QString, QString> PackagesManager::specialPackage()
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
     Package *package = packageWithArch(packageName, sysArch);
-    Q_ASSERT(package);
 
     QSet<QString> ret{packageName};
     QQueue<QString> testQueue;
