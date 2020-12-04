@@ -64,7 +64,8 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     QFontInfo fontinfo = m_tipsText->fontInfo();
 
     //设置提示语的高度
-    m_tipsText->setFixedHeight(28);
+
+    m_tipsText->setMinimumHeight(28);
 
     //设置提示的字体颜色与字体大小
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);

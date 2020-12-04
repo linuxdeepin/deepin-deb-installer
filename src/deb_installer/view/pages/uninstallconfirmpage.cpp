@@ -46,15 +46,15 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setObjectName("UninstallPageIcon");
     m_icon->setAccessibleName("UninstallPageIcon");
 
-    m_tips->setFixedHeight(120);
-    m_tips->setFixedWidth(440);
+    m_tips->setMinimumHeight(120);
+    m_tips->setMinimumWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);
 
     // cancel button settings
     m_cancelBtn->setText(tr("Cancel"));
-    m_cancelBtn->setFixedSize(120, 36);
+    m_cancelBtn->setMinimumSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
-    m_confirmBtn->setFixedSize(120, 36);
+    m_confirmBtn->setMinimumSize(120, 36);
 
     // 添加确认和返回按钮的焦点策略
     m_confirmBtn->setFocusPolicy(Qt::TabFocus);

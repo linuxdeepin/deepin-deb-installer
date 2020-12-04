@@ -61,12 +61,12 @@ void AptConfigMessage::initControl()
     m_textEdit = new InstallProcessInfoView(360, 196);
     m_textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_textEdit->setTextFontSize(12, QFont::Medium);
-    m_textEdit->setFixedSize(360, 196);
+    m_textEdit->setMinimumSize(360, 196);
     m_textEdit->setFocusPolicy(Qt::NoFocus);
 
     // 初始化输入框
     m_inputEdit = new DLineEdit();
-    m_inputEdit->setFixedSize(220, 36);
+    m_inputEdit->setMinimumSize(220, 36);
 
     //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
     //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
@@ -81,7 +81,7 @@ void AptConfigMessage::initControl()
     //初始化提交信息按钮
     m_pushbutton = new DSuggestButton(tr("OK"));
     m_pushbutton->setDefault(true);
-    m_pushbutton->setFixedSize(130, 36);
+    m_pushbutton->setMinimumSize(130, 36);
 
     //焦点在信息输入框时，按回车触发提交信息。
     connect(m_inputEdit, &DLineEdit::returnPressed, this, [ = ] {
@@ -116,7 +116,6 @@ void AptConfigMessage::initUI()
     centralLayout->addLayout(pInputLayout);             //把输入框和按钮的布局放到整体布局中
     centralLayout->addStretch(10);                      //增加下边距
     centralLayout->setContentsMargins(10, 0, 10, 10);   //设置整体的上下左右的边距
-
 
     // 增加一个widget 放置上述布局，并将此widget设置为中心窗口
     QWidget *wrapWidget = new QWidget(this);

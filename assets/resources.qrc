@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>font/SourceHanSansCN-Medium.ttf</file>
-        <file>font/SourceHanSansCN-Normal.ttf</file>
         <file>icons/deepin/builtin/dark/icons/deepin-deb-installer.svg</file>
         <file>icons/deepin/builtin/dark/icons/di_active_tab_close_hover_16px.svg</file>
         <file>icons/deepin/builtin/dark/icons/di_active_tab_close_normal_16px.svg</file>

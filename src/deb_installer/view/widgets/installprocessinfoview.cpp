@@ -56,7 +56,7 @@ void InstallProcessInfoView::initUI(int w, int h)
 {
     //设置控件背景色
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
-    bgFrame->setFixedSize(w, h);
+    bgFrame->setMinimumSize(w,h);
 
     //edit的布局
     QVBoxLayout *editLayout = new QVBoxLayout(this);

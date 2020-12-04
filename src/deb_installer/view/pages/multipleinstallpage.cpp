@@ -184,9 +184,9 @@ void MultipleInstallPage::initUI()
     appsViewLayout->addSpacing(10);
     appsViewLayout->addWidget(m_appsListView);
 
-    m_installButton->setFixedSize(120, 36);     //设置安装按钮的大小
-    m_acceptButton->setFixedSize(120, 36);      //设置确认按钮的大小
-    m_backButton->setFixedSize(120, 36);        //设置返回按钮的大小
+    m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
+    m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
+    m_backButton->setMinimumSize(120, 36);        //设置返回按钮的大小
 
     m_installButton->setText(tr("Install"));    //设置安装按钮的提示语
     m_acceptButton->setText(tr("Done"));        //设置完成按钮的提示
@@ -209,7 +209,7 @@ void MultipleInstallPage::initUI()
 
     //修复依赖安装提示语会有焦点的问题。
     m_tipsLabel->setFocusPolicy(Qt::NoFocus);
-    m_tipsLabel->setFixedHeight(24);
+    m_tipsLabel->setMinimumHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);             //调整wine依赖安装提示的字体
 
@@ -219,7 +219,7 @@ void MultipleInstallPage::initUI()
     // 设置安装信息的信息展示框
     m_installProcessInfoView->setVisible(false);
     m_installProcessInfoView->setAcceptDrops(false);
-    m_installProcessInfoView->setFixedHeight(200);                                              //设置固定高度
+    m_installProcessInfoView->setMinimumHeight(200);                                              //设置固定高度
     m_installProcessInfoView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_infoControlButton->setVisible(false);                                                     //详细按钮展开收缩默认不可见
@@ -237,7 +237,7 @@ void MultipleInstallPage::initUI()
 
     m_processFrame->setVisible(false);                                                          //进度条默认隐藏
     m_processFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_processFrame->setFixedHeight(53);                                                         //设置固定高度
+    m_processFrame->setMinimumHeight(53);                                                         //设置固定高度
 
     // 按钮布局
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout();

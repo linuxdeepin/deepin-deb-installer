@@ -50,39 +50,9 @@ Utils::~Utils()
 
 QString Utils::loadFontFamilyByType(FontType fontType)
 {
-    QString fontFileName = "";
-    switch (fontType) {
-    case SourceHanSansMedium:
-        fontFileName = ":/font/SourceHanSansCN-Medium.ttf";
-        break;
-    case SourceHanSansNormal:
-        fontFileName = ":/font/SourceHanSansCN-Normal.ttf";
-        break;
-    case DefautFont:
-        QFont font;
-        return font.family();
-    }
-
-    if (m_fontNameCache.contains(fontFileName)) {
-        return m_fontNameCache.value(fontFileName);
-    }
-
-    QString fontFamilyName = "";
-    QFile fontFile(fontFileName);
-    if (!fontFile.open(QIODevice::ReadOnly)) {
-        qDebug() << "Open font file error";
-        return fontFamilyName;
-    }
-
-    int loadedFontID = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
-    QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(loadedFontID);
-    if (!loadedFontFamilies.empty()) {
-        fontFamilyName = loadedFontFamilies.at(0);
-    }
-    fontFile.close();
-
-    m_fontNameCache.insert(fontFileName, fontFamilyName);
-    return fontFamilyName;
+    Q_UNUSED(fontType);
+    QFont font;
+    return font.family();
 }
 
 QFont Utils::loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight)
