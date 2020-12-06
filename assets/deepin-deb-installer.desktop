@@ -1,5 +1,6 @@
 [Desktop Entry]
 Categories=System;
+Keywords=package;installer;deepin;dde;dpkg;apt;
 Comment=Package Installer helps users install and remove local packages, and supports bulk installation.
 Exec=deepin-deb-installer %F
 GenericName=Package Installer
