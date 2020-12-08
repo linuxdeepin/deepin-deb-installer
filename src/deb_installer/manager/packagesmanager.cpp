@@ -52,13 +52,12 @@ bool isArchMatches(QString sysArch, const QString &packageArch, const int multiA
     Q_UNUSED(multiArchType);
 
     if (sysArch.startsWith(':')) sysArch.remove(0, 1);
-
     if (sysArch == "all" || sysArch == "any") return true;
 
     return sysArch == packageArch;
 }
 
-QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,const int multiArchType)
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType)
 {
     if (annotation == "native" || annotation == "any") return QString();
     if (annotation == "all") return QString();
@@ -327,8 +326,7 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
  */
 QByteArray PackagesManager::getPackageMd5(const int index)
 {
-    if(index < m_packageMd5.size())
-    {
+    if (index < m_packageMd5.size()) {
         return m_packageMd5[index];
     }
     return nullptr;
@@ -357,7 +355,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         ret.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
         ret.package = deb->packageName();
         m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);//更换依赖的存储方式
-        qInfo()<<deb->packageName()<<"架构错误，获取依赖状态用时"<<dependsTime.elapsed()<<"ms";
+        qInfo() << deb->packageName() << "架构错误，获取依赖状态用时" << dependsTime.elapsed() << "ms";
         return PackageDependsStatus::_break(deb->packageName());
     }
 
@@ -422,9 +420,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);
 
     int getDependsTime = dependsTime.elapsed();
-    qInfo()<<"获取'"<<deb->packageName()<<"'依赖状态(依赖数量："<<deb->depends().size()<<")用时"<<getDependsTime<<"ms";
+    qInfo() << "获取'" << deb->packageName() << "'依赖状态(依赖数量：" << deb->depends().size() << ")用时" << getDependsTime << "ms";
     dependsStatusTotalTime += getDependsTime;
-    qInfo()<<"目前获取依赖总用时"<<dependsStatusTotalTime<<"ms";
+    qInfo() << "目前获取依赖总用时" << dependsStatusTotalTime << "ms";
     delete deb;
     return ret;
 }
@@ -488,9 +486,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
             Backend *b = m_backendFuture.result();
             Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p){
+            if (p) {
                 choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            }else{
+            } else {
                 choosed_set << dep->name() + " not found";
             }
         }
@@ -621,9 +619,8 @@ void PackagesManager::resetPackageDependsStatus(const int index)
  */
 void PackagesManager::removePackage(const int index)
 {
-    if(index<0 || index >= m_preparedPackages.size())
-    {
-        qInfo()<<"[PackagesManager]"<<"[removePackage]"<<"Subscript boundary check error";
+    if (index < 0 || index >= m_preparedPackages.size()) {
+        qInfo() << "[PackagesManager]" << "[removePackage]" << "Subscript boundary check error";
         return;
     }
     DebFile *deb = new DebFile(m_preparedPackages[index]);
@@ -729,7 +726,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         QTime md5Time;
         md5Time.start();
         const auto md5 = pkgFile->md5Sum();
-        qInfo() <<"[appendNoThread]"<< "获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time.elapsed()<<" ms";
+        qInfo() << "[appendNoThread]" << "获取" << pkgFile->packageName() << "的MD5 用时" << md5Time.elapsed() << " ms";
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
@@ -745,7 +742,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
     }
 
     //所有包都添加结束.
-    if (allPackageSize == 1){
+    if (allPackageSize == 1) {
         //fix bug: https://pms.uniontech.com/zentao/bug-view-56307.html
         // 添加一个包时 发送添加结束信号,启用安装按钮
         emit appendFinished();

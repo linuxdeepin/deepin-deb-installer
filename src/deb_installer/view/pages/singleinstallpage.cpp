@@ -132,7 +132,7 @@ void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 0, 20, 30);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 0, 20, 20);         //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -399,7 +399,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setWordWrap(true);        //允许内容自动换行
 
     // 设置各个按钮的大小
-    m_installButton->setMinimumSize(120,36);
+    m_installButton->setMinimumSize(120, 36);
     m_uninstallButton->setMinimumSize(120, 36);
     m_reinstallButton->setMinimumSize(120, 36);
     m_confirmButton->setMinimumSize(120, 36);
@@ -800,7 +800,7 @@ void SingleInstallPage::setPackageInfo()
     m_packageName->setText(m_packageName->fontMetrics()
                            .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
     m_packageVersion->setText(m_packageVersion->fontMetrics()
-                           .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                              .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
 
 
     // package install status
