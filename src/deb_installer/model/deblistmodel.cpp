@@ -1281,20 +1281,19 @@ void DebListModel::upWrongStatusRow()
 
     // 先将包与md5 绑定
     // 后续要对根据MD5对包的路径进行排序，保证包名和md5的下标统一
-    // PS: 不排序应该也ok  先注释掉。后续无问题后删除
-//    QMap<QByteArray, QString> md5Packages;
-//    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
-//        md5Packages.insert(m_packagesManager->m_packageMd5[i], m_packagesManager->m_preparedPackages[i]);
-//    }
+    QMap<QByteArray, QString> md5Packages;
+    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+        md5Packages.insert(m_packagesManager->m_packageMd5[i], m_packagesManager->m_preparedPackages[i]);
+    }
 
     m_packagesManager->m_packageMd5.clear();
     m_packagesManager->m_packageMd5.append(installErrorPackages);
     m_packagesManager->m_packageMd5.append(installSuccessPackages);
 
-//    m_packagesManager->m_preparedPackages.clear();
-//    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
-//        m_packagesManager->m_preparedPackages.append(md5Packages[m_packagesManager->m_packageMd5[i]]);
-//    }
+    m_packagesManager->m_preparedPackages.clear();
+    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+        m_packagesManager->m_preparedPackages.append(md5Packages[m_packagesManager->m_packageMd5[i]]);
+    }
 
     //update view
     const QModelIndex idxStart = index(0);
