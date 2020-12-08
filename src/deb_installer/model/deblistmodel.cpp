@@ -196,7 +196,7 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
-        m_packageOperateStatus[iIndex] = Prepare;           //取消授权后，缺失wine依赖的包的操作状态修改为prepare
+        m_packageOperateStatus[m_packagesManager->getPackageMd5(iIndex)] = Prepare;           //取消授权后，缺失wine依赖的包的操作状态修改为prepare
         break;
     case DebListModel::AuthConfirm:                         //确认授权后，状态的修改由debinstaller进行处理
         break;
@@ -292,11 +292,13 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return Utils::fromSpecialEncoding(shortDescription);        //获取当前index包的短描述
     case PackageFailReasonRole:
         return packageFailedReason(r);                              //获取当前index包的安装失败的原因
-    case PackageOperateStatusRole:
-        if (m_packageOperateStatus.contains(r))                     //获取当前包的操作状态
-            return m_packageOperateStatus[r];
+    case PackageOperateStatusRole: {
+        auto md5 = m_packagesManager->getPackageMd5(r);
+        if (m_packageOperateStatus.contains(md5))                     //获取当前包的操作状态
+            return m_packageOperateStatus[md5];
         else
             return Prepare;
+    }
     case Qt::SizeHintRole:                                          //设置当前index的大小
         return QSize(0, 48);
 
@@ -322,9 +324,8 @@ void DebListModel::installPackages()
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                                               //初始化当前操作的index
     m_operatingStatusIndex = 0;
-    m_InitRowStatus = false;                                            //当前未初始化每个包的操作状态
-    // start first
 
+    // start first
     initRowStatus();                                                    //初始化包的操作状态
     installNextDeb();                                                   //开始安装
 }
@@ -421,7 +422,7 @@ void DebListModel::removePackage(const int idx)
     int packageOperateStatusCount = m_packageOperateStatus.size() - 1;
     m_packageOperateStatus.clear();
     for (int i = 0; i < packageOperateStatusCount; i++) {
-        m_packageOperateStatus[i] = DebListModel::Prepare;
+        m_packageOperateStatus[m_packagesManager->getPackageMd5(i)] = DebListModel::Prepare;
     }
 
     qDebug() << "DebListModel:" << "operate Status remove";
@@ -453,7 +454,7 @@ void DebListModel::onTransactionErrorOccurred()
     //fix bug:39834
     //失败时刷新操作状态为failed,并记录失败原因
     refreshOperatingPackageStatus(Failed);
-    m_packageOperateStatus[m_operatingStatusIndex] = Failed;
+    m_packageOperateStatus[getPackageMd5()] = Failed;
 
     //记录失败代码与失败原因
     // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
@@ -595,7 +596,7 @@ void DebListModel::bumpInstallIndex()
  */
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
 {
-    m_packageOperateStatus[m_operatingStatusIndex] = stat;  //将失败包的索引和状态修改保存,用于更新
+    m_packageOperateStatus[getPackageMd5()] = stat;  //将失败包的索引和状态修改保存,用于更新
 
     const QModelIndex idx = index(m_operatingStatusIndex);
 
@@ -624,8 +625,9 @@ QString DebListModel::packageFailedReason(const int idx) const
         const auto conflict = m_packagesManager->packageConflictStat(idx);                  //获取冲突情况
         if (!conflict.is_ok()) return tr("Broken dependencies: %1").arg(conflict.unwrap()); //依赖冲突
     }
-    Q_ASSERT(m_packageOperateStatus.contains(idx));
-    Q_ASSERT(m_packageOperateStatus[idx] == Failed);
+
+    Q_ASSERT(m_packageOperateStatus.contains(md5));
+    Q_ASSERT(m_packageOperateStatus[md5] == Failed);
     //判断当前这个包是否错误
     if (!m_packageFailCode.contains(md5))
         qInfo() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
@@ -664,14 +666,15 @@ void DebListModel::onTransactionFinished()
         //刷新操作状态
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
-    } else if (m_packageOperateStatus.contains(m_operatingStatusIndex) &&
-               m_packageOperateStatus[m_operatingStatusIndex] != Failed) {
+    } else if (m_packageOperateStatus.contains(getPackageMd5()) &&
+               m_packageOperateStatus[getPackageMd5()] != Failed) {
         //安装成功
         refreshOperatingPackageStatus(Success);
 
         //准备安装下一个包，修改下一个包的状态为正在安装状态
         if (m_operatingStatusIndex < m_packagesManager->m_preparedPackages.size() - 1) {
-            m_packageOperateStatus[m_operatingStatusIndex + 1] = Waiting;
+            auto md5 = m_packagesManager->getPackageMd5(m_operatingIndex + 1);
+            m_packageOperateStatus[md5] = Waiting;
         }
     }
     //    delete trans;
@@ -788,19 +791,19 @@ void DebListModel::installDebs()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {          //依赖不满足或者下载wine依赖时授权被取消
+    if (dependsStat.isBreak() || dependsStat.isAuthCancel() || dependsStat.status == DebListModel::ArchBreak) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
         m_packageFailCode.insert(getPackageMd5(), -1);           //保存错误原因
         // 记录详细错误原因
-        m_packageFailReason.insert(getPackageMd5(),packageFailedReason(m_operatingStatusIndex));
+        m_packageFailReason.insert(getPackageMd5(), packageFailedReason(m_operatingStatusIndex));
 
         bumpInstallIndex();                                             //开始下一步的安装流程
         return;
     } else if (dependsStat.isAvailable()) {
         // 依赖可用 但是需要下载
-        Q_ASSERT_X(m_packageOperateStatus[m_operatingStatusIndex], Q_FUNC_INFO,
+        Q_ASSERT_X(m_packageOperateStatus[getPackageMd5()], Q_FUNC_INFO,
                    "package operate status error when start install availble dependencies");
 
         // 获取到所有的依赖包 准备安装
@@ -900,7 +903,7 @@ void DebListModel::showNoDigitalErrWindow()
 {
     //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     //task:https://pms.uniontech.com/zentao/task-view-48443.html
-    if(m_operatingIndex < m_packagesManager->m_preparedPackages.size()-1){
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         digitalVerifyFailed(NoDigitalSignature);//刷新安装错误，并记录错误原因
         return;
     }
@@ -944,7 +947,7 @@ void DebListModel::showDigitalErrWindow()
 {
     //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     //task:https://pms.uniontech.com/zentao/task-view-48443.html
-    if(m_operatingIndex < m_packagesManager->m_preparedPackages.size()-1){
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
         return;
     }
@@ -1191,12 +1194,12 @@ void DebListModel::uninstallFinished()
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
-        m_packageOperateStatus[m_operatingIndex] = Failed;
+        m_packageOperateStatus[getPackageMd5()] = Failed;
     } else {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Success);                     //刷新当前包的卸载状态
-        m_packageOperateStatus[m_operatingIndex] = Success;
+        m_packageOperateStatus[getPackageMd5()] = Success;
     }
     emit workerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
     trans->deleteLater();
@@ -1225,7 +1228,8 @@ void DebListModel::initPrepareStatus()
 {
     qDebug() << "DebListModel: " << "Reresh all package operate status to Prepare";
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_packageOperateStatus.insert(i, Prepare);                          //刷新当前所有包的状态为Prepare
+        auto md5 = m_packagesManager->getPackageMd5(i);
+        m_packageOperateStatus.insert(md5, Prepare);                          //刷新当前所有包的状态为Prepare
     }
 }
 
@@ -1256,86 +1260,41 @@ void DebListModel::upWrongStatusRow()
     if (m_packagesManager->m_preparedPackages.size() == 1)
         return;
 
-    QList<int> listWrongIndex;
-    int iIndex = 0;
+    QList<QByteArray> installErrorPackages;         //安装错误的包的list
+    QList<QByteArray> installSuccessPackages;       //安装成功的包的list
 
-    //find wrong index
-    // 找到操作错误的包的下标
-    QMapIterator<int, int> iteratorpackageOperateStatus(m_packageOperateStatus);
-    QList<int> listpackageOperateStatus;
+    //根据包的操作状态，分别找到所有安装成功的包与安装失败的包
+    QMapIterator<QByteArray, int> iteratorpackageOperateStatus(m_packageOperateStatus);
     while (iteratorpackageOperateStatus.hasNext()) {
         iteratorpackageOperateStatus.next();
+        // 保存安装成功的包
         if (iteratorpackageOperateStatus.value() == Failed || iteratorpackageOperateStatus.value() == VerifyFailed) {   //安装失败或签名验证失败
-            listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key());                                          //保存下标
-            listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());                            //保存状态
-        } else if (iteratorpackageOperateStatus.value() == Success)                                                     //安装成功的只保存状态
-            listpackageOperateStatus.append(iteratorpackageOperateStatus.value());
-        else
-            return;
+            installErrorPackages.append(iteratorpackageOperateStatus.key());                                          //保存下标
+        }
+        // 保存安装失败的包
+        if (iteratorpackageOperateStatus.value() == Success) {
+            installSuccessPackages.append(iteratorpackageOperateStatus.key());
+        }
     }
-
-    if (listWrongIndex.size() == 0)       //全部安装成功 直接退出
+    if (installErrorPackages.size() == 0)       //全部安装成功 直接退出
         return;
 
-    QList<QByteArray> t_errorIndex;                                                                //临时变量，保存安装wine依赖错误的下标
-    //change  m_preparedPackages, m_packageOperateStatus sort.
-    QList<QString> listTempDebFile;
-    QList<QByteArray> listTempPreparedMd5;
-    iIndex = 0;
-    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_packageOperateStatus[i] = listpackageOperateStatus[i];
-        if (listWrongIndex.contains(i)) {
-            t_errorIndex.push_back(m_packagesManager->m_packageMd5[iIndex]);                                                 //保存错误的下标
-            //保存安装失败的文件路径
-            //注意 此处用的是insert 到iIndex位置，也就是说 安装失败的包会被放到前面
-            listTempDebFile.insert(iIndex, m_packagesManager->m_preparedPackages[i]);
-            //保存安装失败的MD5的值
-            //注意 此处用的是insert 到iIndex位置，也就是说 安装失败的包会被放到前面
-            //此处iIndex++ 则是将index +1 开始对下一个包进行排序
-            listTempPreparedMd5.insert(iIndex++, m_packagesManager->m_packageMd5[i]);        //对md5进行重新排序
-        } else {
-            // 所有安装成功的包会被append到后面
-            listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);               //保存安装成功的文件路径
-            listTempPreparedMd5.append(m_packagesManager->m_packageMd5[i]);                //保存安装成功的md5的值
-        }
-    }
+    // 先将包与md5 绑定
+    // 后续要对根据MD5对包的路径进行排序，保证包名和md5的下标统一
+    // PS: 不排序应该也ok  先注释掉。后续无问题后删除
+//    QMap<QByteArray, QString> md5Packages;
+//    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+//        md5Packages.insert(m_packagesManager->m_packageMd5[i], m_packagesManager->m_preparedPackages[i]);
+//    }
 
-    //保存排序后的prepaed 和md5
-    m_packagesManager->m_preparedPackages = listTempDebFile;
+    m_packagesManager->m_packageMd5.clear();
+    m_packagesManager->m_packageMd5.append(installErrorPackages);
+    m_packagesManager->m_packageMd5.append(installSuccessPackages);
 
-    //Reupdates the index that failed to install Deepin-Wine
-    if (m_packagesManager->m_errorIndex.size() > 0) {
-        m_packagesManager->m_errorIndex.clear();
-        m_packagesManager->m_errorIndex = t_errorIndex;
-    }
-
-    //change  m_packageInstallStatus sort.
-    //对安装状态进行排序
-    QList<int> listpackageInstallStatus;
-    iIndex = 0;
-    for (int i = 0; i < m_packagesManager->m_packageInstallStatus.size(); i++) {
-        if (listWrongIndex.contains(i)) {
-            listpackageInstallStatus.insert(iIndex++, m_packagesManager->m_packageInstallStatus[m_packagesManager->m_packageMd5[i]]);
-        } else {
-            listpackageInstallStatus.append(m_packagesManager->m_packageInstallStatus[m_packagesManager->m_packageMd5[i]]);
-        }
-    }
-    for (int i = 0; i < listpackageInstallStatus.size(); i++)
-        m_packagesManager->m_packageInstallStatus[m_packagesManager->m_packageMd5[i]] = listpackageInstallStatus[i];
-
-    //对依赖状态进行排序
-    QList<PackageDependsStatus> listpackageDependsStatus;
-    iIndex = 0;
-    for (int i = 0; i < m_packagesManager->m_packageMd5DependsStatus.size(); i++) {
-        if (listWrongIndex.contains(i)) {
-            listpackageDependsStatus.insert(iIndex++, m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[i]]);
-        } else {
-            listpackageDependsStatus.append(m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[i]]);
-        }
-    }
-    for (int i = 0; i < listpackageDependsStatus.size(); i++)
-        m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[i]] = listpackageDependsStatus[i];
-
+//    m_packagesManager->m_preparedPackages.clear();
+//    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+//        m_packagesManager->m_preparedPackages.append(md5Packages[m_packagesManager->m_packageMd5[i]]);
+//    }
 
     //update view
     const QModelIndex idxStart = index(0);
@@ -1448,7 +1407,7 @@ void DebListModel::checkInstallStatus(QString str)
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageOperateStatus[m_operatingIndex] = Failed;
+        m_packageOperateStatus[getPackageMd5()] = Failed;
         m_packageFailCode.insert(getPackageMd5(), 0);       //保存失败原因
         m_packageFailReason.insert(getPackageMd5(), "");
         bumpInstallIndex();
@@ -1464,7 +1423,7 @@ QByteArray DebListModel::getPackageMd5()
 {
     QByteArray md5 = m_packagesManager->m_packageMd5[m_operatingIndex];
     // 如果 没有获取到对应的md5的值，则直接使用下标进行处理
-    if(md5.isEmpty()){
+    if (md5.isEmpty()) {
         return QString::number(m_operatingIndex).toLocal8Bit();
     }
     // 返回包的md5的值

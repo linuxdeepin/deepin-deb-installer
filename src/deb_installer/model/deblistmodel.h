@@ -573,16 +573,13 @@ private:
 
     QPointer<QApt::Transaction> m_currentTransaction;   //当前正在运行的Trans
 
-    QMap<int, int> m_packageOperateStatus;              //所有包的操作状态Map
+    // 修改 operateStatus的存放结构，现在与Md5绑定。
+    QMap<QByteArray, int> m_packageOperateStatus;              //所有包的操作状态Map
 
-     // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
     QMap<QByteArray, int> m_packageFailCode;                   //FailCode 错误代码 ，trans返回的错误代码
     QMap<QByteArray, QString> m_packageFailReason;             //FailReason , trans返回的详细错误信息
 
-    bool m_InitRowStatus;                               //当前的操作状态是否初始化过
-    bool bModifyFailedReason = false;                   //此变量已被废弃
-
-    bool QverifyResult;                                 //此变量已被废弃
     QProcess *m_procInstallConfig;                      // 配置安装进程
     const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
 
