@@ -11,6 +11,7 @@
 #include <stub.h>
 #include <QApt/DebFile>
 #include <QDir>
+#include <QDebug>
 using namespace QApt;
 
 TEST(AddPackageThread_Test, AddPackageThread_UT_001)
@@ -45,7 +46,9 @@ bool isValid()
 }
 TEST(AddPackageThread_Test, AddPackageThread_UT_003)
 {
+    qDebug() << "ut0003";
     Stub stub;
+
     QSet<QByteArray> md5;
     md5 << "24b0ce68d7af97ede709f3b723e686af";
     AddPackageThread *addPkgThread = new AddPackageThread(md5);
@@ -56,9 +59,12 @@ TEST(AddPackageThread_Test, AddPackageThread_UT_003)
 
     stub.set(ADDR(DebFile, isValid), isValid);
 
-//    addPkgThread->checkInvalid();
+    qDebug() << "ut0003" << "stub";
+    addPkgThread->checkInvalid();
 
-//    ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
+    qDebug() << "ut0003" << "stub" << "ASSERT";
+    ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
+    qDebug() << "ut0003" << "stub" << "ASSERT END";
 }
 QByteArray md5sum()
 {
