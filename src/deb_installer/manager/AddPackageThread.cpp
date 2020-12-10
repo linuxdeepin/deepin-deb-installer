@@ -40,7 +40,8 @@ AddPackageThread::AddPackageThread(QSet<QByteArray> appendedPackagesMd5)
  */
 void AddPackageThread::setPackages(QStringList packages)
 {
-    m_packages = packages;
+    m_packages.clear();
+    m_packages.append(packages);
 }
 
 /**
@@ -114,7 +115,7 @@ void AddPackageThread::run()
         // 获取当前文件的md5的值,防止重复添加
         const auto md5 = pkgFile->md5Sum();
         int md5Time = getMD5.elapsed();
-        qInfo() <<"[run]"<<"获取"<<pkgFile->packageName()<<"的MD5 用时"<<md5Time<<" ms";
+        qInfo() << "[run]" << "获取" << pkgFile->packageName() << "的MD5 用时" << md5Time << " ms";
         md5SumTotalTime += md5Time;
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
@@ -132,9 +133,9 @@ void AddPackageThread::run()
 
     //所有包都添加结束.
     int totalTime = time.elapsed();
-    qInfo()<<"当前添加"<<m_validPackageCount<<"个包，获取md5Sum总用时"<< md5SumTotalTime<<"ms";
-    qInfo()<<"当前添加"<<m_packages.size()<<"个包， 添加总用时"<<totalTime<<"ms"
-          <<"除去获取MD5外用时"<<totalTime-md5SumTotalTime<<"ms";
+    qInfo() << "当前添加" << m_validPackageCount << "个包，获取md5Sum总用时" << md5SumTotalTime << "ms";
+    qInfo() << "当前添加" << m_packages.size() << "个包， 添加总用时" << totalTime << "ms"
+            << "除去获取MD5外用时" << totalTime - md5SumTotalTime << "ms";
     emit appendFinished();
 }
 
