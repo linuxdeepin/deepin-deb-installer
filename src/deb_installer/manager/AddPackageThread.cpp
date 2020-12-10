@@ -60,11 +60,11 @@ void AddPackageThread::checkInvalid()
 {
     m_validPackageCount = 0; //每次添加时都清零
     for (QString package : m_packages) {
-        QApt::DebFile *pkgFile = new DebFile(package);
-        if (pkgFile && pkgFile->isValid()) {            //只有有效文件才会计入
+        QApt::DebFile pkgFile(package);
+        if (pkgFile.isValid()) {            //只有有效文件才会计入
             m_validPackageCount ++;
         }
-        delete pkgFile;
+        //delete pkgFile;
     }
 }
 
