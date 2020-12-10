@@ -1,12 +1,6 @@
 #include <gtest/gtest.h>
 
-#define private public  // hack complier
-#define protected public
-
 #include "../deb_installer/manager/DealDependThread.h"
-
-#undef private
-#undef protected
 
 #include <stub.h>
 #include <QProcess>
@@ -14,28 +8,28 @@
 
 
 
-TEST(DealDependThread_Test, DealDependThread_UT_001)
+TEST(DealDependThread_Test, DealDependThread_UT_setDependsList)
 {
     DealDependThread *dThread = new DealDependThread();
 
     QStringList dependsList;
-    dependsList <<"package1"<<"package";
+    dependsList << "package1" << "package";
     dThread->setDependsList(dependsList, 0);
 
-    ASSERT_EQ(dThread->m_dependsList.size(),2);
+    ASSERT_EQ(dThread->m_dependsList.size(), 2);
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_002)
+TEST(DealDependThread_Test, DealDependThread_UT_setBrokenDepend)
 {
     DealDependThread *dThread = new DealDependThread();
 
 
     dThread->setBrokenDepend("package");
 
-    ASSERT_STREQ(dThread->m_brokenDepend.toLocal8Bit(),"package");
+    ASSERT_STREQ(dThread->m_brokenDepend.toLocal8Bit(), "package");
 }
 
-void proc_start(const QString &program, const QStringList &arguments,QIODevice::OpenModeFlag mode)
+void proc_start(const QString &program, const QStringList &arguments, QIODevice::OpenModeFlag mode)
 {
     Q_UNUSED(program);
     Q_UNUSED(arguments);
@@ -43,7 +37,7 @@ void proc_start(const QString &program, const QStringList &arguments,QIODevice::
     return;
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_003)
+TEST(DealDependThread_Test, DealDependThread_UT_start)
 {
     DealDependThread *dThread = new DealDependThread();
 
@@ -52,10 +46,12 @@ TEST(DealDependThread_Test, DealDependThread_UT_003)
     //(int(A::*)(int))ADDR(A,foo)
     //stub.set((int(A::*)(double))ADDR(A,foo), foo_stub_double);
     stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), proc_start);
+
+    dThread->start();
     dThread->terminate();
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_004)
+TEST(DealDependThread_Test, DealDependThread_UT_onFinished)
 {
     DealDependThread *dThread = new DealDependThread();
 
@@ -66,7 +62,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_004)
 
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_005)
+TEST(DealDependThread_Test, DealDependThread_UT_finished)
 {
     DealDependThread *dThread = new DealDependThread();
 

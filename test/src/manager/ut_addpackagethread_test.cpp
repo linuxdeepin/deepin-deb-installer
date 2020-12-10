@@ -1,12 +1,7 @@
 #include <gtest/gtest.h>
 
-#define private public  // hack complier
-#define protected public
-
 #include "../deb_installer/manager/AddPackageThread.h"
 
-#undef private
-#undef protected
 
 #include <stub.h>
 #include <QApt/DebFile>
@@ -14,7 +9,7 @@
 #include <QDebug>
 using namespace QApt;
 
-TEST(AddPackageThread_Test, AddPackageThread_UT_001)
+TEST(AddPackageThread_Test, UT_AddPackageThread_setPackage)
 {
     QSet<QByteArray> md5;
     md5 << "24b0ce68d7af97ede709f3b723e686af";
@@ -27,7 +22,7 @@ TEST(AddPackageThread_Test, AddPackageThread_UT_001)
     ASSERT_EQ(addPkgThread->m_packages.size(), 2);
 }
 
-TEST(AddPackageThread_Test, AddPackageThread_UT_002)
+TEST(AddPackageThread_Test, UT_AddPackageThread_setAppendPackagesMd5)
 {
     QSet<QByteArray> md5;
     md5 << "24b0ce68d7af97ede709f3b723e686af";
@@ -44,9 +39,8 @@ bool isValid()
 {
     return true;
 }
-TEST(AddPackageThread_Test, AddPackageThread_UT_003)
+TEST(AddPackageThread_Test, UT_AddPackageThread_checkInvalid)
 {
-    qDebug() << "ut0003";
     Stub stub;
 
     QSet<QByteArray> md5;
@@ -59,12 +53,9 @@ TEST(AddPackageThread_Test, AddPackageThread_UT_003)
 
     stub.set(ADDR(DebFile, isValid), isValid);
 
-    qDebug() << "ut0003" << "stub";
     addPkgThread->checkInvalid();
 
-    qDebug() << "ut0003" << "stub" << "ASSERT";
     ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
-    qDebug() << "ut0003" << "stub" << "ASSERT END";
 }
 QByteArray md5sum()
 {
@@ -76,7 +67,7 @@ QString packagename()
     return "name";
 }
 
-TEST(AddPackageThread_Test, AddPackageThread_UT_004)
+TEST(AddPackageThread_Test, UT_AddPackageThread_run)
 {
     Stub stub;
     QSet<QByteArray> md5;
@@ -105,7 +96,7 @@ bool apt_exits()
 {
     return true;
 }
-TEST(AddPackageThread_Test, AddPackageThread_UT_005)
+TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
 {
     Stub stub;
     QSet<QByteArray> md5;
@@ -127,7 +118,7 @@ TEST(AddPackageThread_Test, AddPackageThread_UT_005)
 }
 
 
-TEST(AddPackageThread_Test, AddPackageThread_UT_006)
+TEST(AddPackageThread_Test, UT_AddPackageThread_mkTempDir)
 {
     Stub stub;
     QSet<QByteArray> md5;
@@ -148,7 +139,7 @@ TEST(AddPackageThread_Test, AddPackageThread_UT_006)
     ASSERT_TRUE(addPkgThread->mkTempDir());
 }
 
-TEST(AddPackageThread_Test, AddPackageThread_UT_007)
+TEST(AddPackageThread_Test, UT_AddPackageThread_link)
 {
     Stub stub;
     QSet<QByteArray> md5;

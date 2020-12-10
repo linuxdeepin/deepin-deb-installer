@@ -8,4 +8,7 @@ project(deepin_deb_installer)
 option(DMAN_RELEAE OFF "Install dman resources to system or not")
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb_installer)
-add_subdirectory(test)
+
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+    add_subdirectory(test)
+endif()

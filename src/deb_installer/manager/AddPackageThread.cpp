@@ -58,19 +58,13 @@ void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5
  */
 void AddPackageThread::checkInvalid()
 {
-    qDebug() << "ut0003" << "m_validPackage Count";
     m_validPackageCount = 0; //每次添加时都清零
     for (QString package : m_packages) {
-        qDebug() << "ut0003" << "create object";
         QApt::DebFile pkgFile(package);
-        qDebug() << "check invalid before";
         if (pkgFile.isValid()) {            //只有有效文件才会计入
-            qDebug() << "ut0003" << "check valid  true";
             m_validPackageCount ++;
         }
-        //delete pkgFile;
     }
-    qDebug() << "ut0003" << "checkInvalid end";
 }
 
 /**
