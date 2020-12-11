@@ -219,7 +219,7 @@ void MultipleInstallPage::initUI()
     // 设置安装信息的信息展示框
     m_installProcessInfoView->setVisible(false);
     m_installProcessInfoView->setAcceptDrops(false);
-    m_installProcessInfoView->setMinimumHeight(200);                                              //设置固定高度
+    m_installProcessInfoView->setFixedHeight(200);                                              //设置固定高度
     m_installProcessInfoView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     m_infoControlButton->setVisible(false);                                                     //详细按钮展开收缩默认不可见
@@ -252,7 +252,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 30);                                                //底部间距30
+    btnsLayout->setContentsMargins(0, 0, 0, 20);                                                //底部间距30
 
     QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);                                                 //进度布局添加到btn布局中（二者互斥，一定不能同时出现）
