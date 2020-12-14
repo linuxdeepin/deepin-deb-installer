@@ -559,7 +559,21 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
             // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
             // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
             if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
-                testQueue.append(subPackage->requiredByList());
+                QStringList rdepends = subPackage->requiredByList();
+
+                //对添加到testQueue的包进行检查，
+                for (QString depend : rdepends) {
+                    Package *pkg = packageWithArch(depend, sysArch);
+                    if (!pkg || !pkg->isInstalled())      //增加对package指针的检查
+                        continue;
+                    if (pkg->recommendsList().contains(r))
+                        continue;
+                    if (pkg->suggestsList().contains(r))
+                        continue;
+                    //只添加和当前依赖是依赖关系的包
+                    testQueue.append(depend);
+                }
+
             }
             if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
                 continue;
