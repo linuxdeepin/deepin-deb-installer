@@ -598,6 +598,7 @@ void PackagesManager::reset()
     m_packageInstallStatus.clear();
     m_packageMd5DependsStatus.clear();  //修改依赖状态的存储结构，此处清空存储的依赖状态数据
     m_appendedPackagesMd5.clear();
+    m_packageMd5.clear();
 
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
@@ -607,6 +608,7 @@ void PackagesManager::resetInstallStatus()
 {
     m_packageInstallStatus.clear();
     m_packageMd5DependsStatus.clear();          //修改依赖状态的存储结构，此处清空存储的依赖状态数据
+    m_packageMd5.clear();
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
 }
