@@ -210,8 +210,11 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             /*预算惯性滑动距离,4.0为调优数值*/
             m_stepSpeed /= sqrt(font.pointSize() * 4.0);
             change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
+            // fix bug: https://pms.uniontech.com/zentao/bug-view-55665.html
+            // 如果放到外面会屏蔽掉选中
+            return;    //此时屏蔽其他触控效果
+
         }
-        return;
     }
     QTextEdit::mouseMoveEvent(e);
 }

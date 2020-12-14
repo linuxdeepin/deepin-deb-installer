@@ -34,7 +34,6 @@ DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
-class TitleBarFocusMonitor;
 
 using QApt::DebFile;
 
@@ -159,11 +158,6 @@ private slots:
      */
     void enableCloseButton(bool enable);
 
-    /**
-     * @brief stopMonitorTitleBarFocus 停止监测标题栏焦点
-     */
-    void stopMonitorTitleBarFocus();
-
 private:
     /**
      * @brief initUI
@@ -192,12 +186,6 @@ private:
      * 刷新multiInstallPage并在刷新后滚动到下标处
      */
     void MulRefreshPage(int index);
-
-    /**
-     * @brief handleFocusPolicy
-     * 获取titleBar的控件 optionButton minButton closeButton
-     */
-    void handleFocusPolicy();
 
     //Disable/enable close button and exit in menu
     /**
@@ -242,7 +230,6 @@ private:
     QWidget *m_MinWindow;                           //最小化窗口按钮
     QWidget *m_closeWindow;                         //关闭窗口按钮
 
-    TitleBarFocusMonitor *m_pMonitorFocusThread; //标题栏监测线程。
 };
 
 #endif  // DEBINSTALLER_H

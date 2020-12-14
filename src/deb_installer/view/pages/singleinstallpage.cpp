@@ -200,6 +200,11 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);    //垂直居中，水平靠左显示
     packageName->setObjectName("PackageNameTitle");                 //添加ObjectName
 
+    //设置包名的样式，但是后续再设置显示的内容
+    m_packageName->setCustomQPalette(QPalette::WindowText);         //设置字体样式
+    m_packageName->setFixedHeight(fontinfosizetemp);                //根据字体大小设置高度
+    m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);      //垂直靠上，水平靠左
+
     DebInfoLabel *packageVersion = new DebInfoLabel(this);          //包版本的描述性文字
     packageVersion->setCustomQPalette(QPalette::WindowText);        //设置字体颜色
     packageVersion->setFixedHeight(fontinfosizetemp_version);       //根据字体大小设置高度
@@ -207,10 +212,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft); //垂直居中，水平靠左
     packageVersion->setObjectName("PackageVersionTitle");           //添加ObjectName
 
-    //设置包名的样式，但是后续再设置显示的内容
-    m_packageName->setCustomQPalette(QPalette::WindowText);         //设置字体样式
-    m_packageName->setFixedHeight(fontinfosizetemp);                //根据字体大小设置高度
-    m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);      //垂直靠上，水平靠左
+
 
     m_packageVersion->setCustomQPalette(QPalette::WindowText);      //设置字体样式
     m_packageVersion->setFixedHeight(fontinfosizetemp_version);     //根据字体大小设置高度
@@ -821,17 +823,10 @@ void SingleInstallPage::setPackageInfo()
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
     packageversion_description = Utils::fromSpecialEncoding(package->version());
     delete package;
-    if (fontlabelsize > 18) {       //根据字体大小确定 label的大小
-        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
-        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 23);
-        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
-    } else {
-        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
-        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 20);
-        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
-    }
+    m_packageName->setText(m_packageName->fontMetrics()
+                           .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+    m_packageVersion->setText(m_packageVersion->fontMetrics()
+                              .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);

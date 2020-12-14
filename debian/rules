@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-
+export QT_SELECT := 5
 # see FEATURE AREAS in dpkg-buildflags(1)
 #export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 # see ENVIRONMENT in dpkg-buildflags(1)
