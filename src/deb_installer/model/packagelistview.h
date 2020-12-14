@@ -160,12 +160,6 @@ private:
      */
     void initShortcuts();
 
-    /**
-     * @brief handleHideShowSelection 此函数已经被废弃
-     *
-     */
-    void handleHideShowSelection();
-
 private slots:
 
     /**
