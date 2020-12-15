@@ -68,6 +68,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_dependsInfomation->setMinimumHeight(200);
 
     //layout of buttons
     QHBoxLayout *btnsLayout = new QHBoxLayout();
