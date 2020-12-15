@@ -1020,7 +1020,7 @@ void DebListModel::checkSystemVersion()
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
-    case Dtk::Core::DSysInfo::UosProfessional:               //专业版
+    case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
         QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
@@ -1028,7 +1028,7 @@ void DebListModel::checkSystemVersion()
         m_isDevelopMode = deviceMode;
         break;
     }
-    case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
+    case Dtk::Core::DSysInfo::UosCommunity: //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
         m_isDevelopMode =  false;
         break;

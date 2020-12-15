@@ -496,7 +496,6 @@ void DebInstaller::showPkgExistMessage()
  */
 void DebInstaller::showUninstallConfirmPage()
 {
-    Q_ASSERT(m_centralLayout->count() == 2);
     m_fileListModel->m_workerStatus_temp = DebListModel::WorkerUnInstall;                       //刷新当前安装器的工作状态
 
     this->setAcceptDrops(false);                                                                //卸载页面不允许添加/拖入包
@@ -507,14 +506,12 @@ void DebInstaller::showUninstallConfirmPage()
     UninstallConfirmPage *p = new UninstallConfirmPage(this);                                   //初始化卸载页面
     p->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList()); //查看是否有包依赖于当前要卸载的包，病获取列表
     p->setPackage(index.data().toString());                                                     //添加卸载提示语
-
     m_Filterflag = 3; //Uninstall the page
     m_UninstallPage = p;                                                                        //保存卸载页面
 
     m_centralLayout->addWidget(p);                                                              //添加卸载页面到主界面中
     m_centralLayout->setCurrentIndex(2);                                                        //显示卸载页面
     p->setAcceptDrops(false);                                                                   //卸载页面不允许拖入包
-
     connect(p, &UninstallConfirmPage::accepted, this, &DebInstaller::onUninstallAccepted);      //卸载页面确认卸载
     connect(p, &UninstallConfirmPage::canceled, this, &DebInstaller::onUninstallCancel);        //卸载页面取消卸载
 }
@@ -575,7 +572,6 @@ void DebInstaller::reset()
 {
     //reset page status
     Q_ASSERT(m_centralLayout->count() == 2);
-    Q_ASSERT(!m_lastPage.isNull());
     m_fileListModel->m_workerStatus_temp = 0;                               // 当前工作状态
     m_dragflag = -1;                                                        // 是否被允许拖入或添加
     m_Filterflag = -1;                                                      // 当前显示的页面
@@ -583,7 +579,9 @@ void DebInstaller::reset()
     m_fileListModel->reset();                                               // 重置model
 
     // 删除所有的页面
-    m_lastPage->deleteLater();
+    if (!m_lastPage.isNull()) {
+        m_lastPage->deleteLater();
+    }
     m_UninstallPage->deleteLater();
     m_centralLayout->setCurrentIndex(0);
 
@@ -703,7 +701,7 @@ void DebInstaller::refreshSingle()
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
     //安装器中只有一个包，刷新单包安装页面
     // single package install
-    titlebar()->setTitle(QString());
+    //    titlebar()->setTitle(QString());
 
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");
@@ -730,8 +728,6 @@ void DebInstaller::refreshSingle()
  */
 SingleInstallPage *DebInstaller::backToSinglePage()
 {
-    Q_ASSERT(m_centralLayout->count() == 3);
-
     // 获取当前的页面并删除
     QWidget *confirmPage = m_centralLayout->widget(2);
     m_centralLayout->removeWidget(confirmPage);
@@ -739,11 +735,13 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 
     SingleInstallPage *p = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));           //获取单包安装widget
 
+    if (!p) {
+        return nullptr;
+    }
     // 返回单包安装页面时，允许添加包
     p->setAcceptDrops(true);
     m_fileChooseWidget->setAcceptDrops(true);
     this->setAcceptDrops(true);
-    Q_ASSERT(p);
 
     return p;
 }

@@ -723,11 +723,37 @@ TEST(deblistmodel_Test, deblistmodel_UT_initRowStatus)
     ASSERT_EQ(model->m_operatingStatusIndex, 0);
 }
 
-static Dtk::Core::DSysInfo::UosEdition model_uosEditionType()
+static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosEnterprise()
 {
     return Dtk::Core::DSysInfo::UosEnterprise;
 }
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion)
+
+static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosProfessional()
+{
+    return Dtk::Core::DSysInfo::UosProfessional;
+}
+
+static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosHome()
+{
+    return Dtk::Core::DSysInfo::UosHome;
+}
+
+static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosCommunity()
+{
+    return Dtk::Core::DSysInfo::UosCommunity;
+}
+
+static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_default()
+{
+    return Dtk::Core::DSysInfo::UosEditionUnknown;
+}
+
+bool stud_toBool()
+{
+    return true;
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), model_backend_init);
@@ -759,7 +785,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion)
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
 
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -771,6 +797,192 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion)
     model->checkSystemVersion();
 
     ASSERT_FALSE(model->m_isDevelopMode);
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosProfessional)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosProfessional);
+    stub.set(ADDR(QVariant, toBool), stud_toBool);
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->checkSystemVersion();
+
+    ASSERT_TRUE(model->m_isDevelopMode);
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosHome)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosHome);
+    stub.set(ADDR(QVariant, toBool), stud_toBool);
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->checkSystemVersion();
+
+    ASSERT_TRUE(model->m_isDevelopMode);
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosCommunity)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosCommunity);
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->checkSystemVersion();
+
+    ASSERT_FALSE(model->m_isDevelopMode);
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_default)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_default);
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->checkSystemVersion();
+
+    ASSERT_TRUE(model->m_isDevelopMode);
 }
 
 Utils::VerifyResultCode model_Digital_Verify(QString filepath_name)
@@ -813,7 +1025,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
 
     stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify);
 
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -865,7 +1077,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_showNoDigitalErrWindow)
 
     stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
 
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -917,7 +1129,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_removePackage)
 
     stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
 
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -1012,7 +1224,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
 
     stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
 
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -1021,7 +1233,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
 //    list << "/";
 //    model->appendPackage(list);
 
-
+    model->checkSystemVersion();
     model->m_workerStatus = DebListModel::WorkerProcessing;
     model->onTransactionErrorOccurred();
 

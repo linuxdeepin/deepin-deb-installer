@@ -256,7 +256,6 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
     if (lineCount > 0) {
         text += tempText;
     }
-
     return text;
 }
 
