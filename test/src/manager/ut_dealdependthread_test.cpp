@@ -71,3 +71,17 @@ TEST(DealDependThread_Test, DealDependThread_UT_finished)
     ASSERT_FALSE(dThread->bDependsStatusErr);
 
 }
+
+QByteArray readAllStandardOutput_success()
+{
+    return "Not authorized";
+}
+
+TEST(DealDependThread_Test, DealDependThread_UT_on_readoutput)
+{
+    DealDependThread *dThread = new DealDependThread();
+    Stub stub;
+    stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
+    dThread->start();
+    dThread->terminate();
+}
