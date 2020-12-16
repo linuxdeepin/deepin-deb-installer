@@ -16,11 +16,18 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
+#include "../deb_installer/view/widgets/InfoCommandLinkButton.h"
 #include "utils/utils.h"
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+void ut_bindFontBySizeAndWeight()
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
+    btn->setFocusPolicy(Qt::TabFocus);
+    QString fontfamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(btn, fontfamily, 12, QFont::ExtraLight);
+}
+
+TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_setFamily)
+{
+    ut_bindFontBySizeAndWeight();
 }

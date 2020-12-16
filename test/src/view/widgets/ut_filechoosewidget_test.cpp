@@ -16,11 +16,32 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
-#include "utils/utils.h"
+#include "../deb_installer/view/widgets/filechoosewidget.h"
+#include <stub.h>
+#include <DFileDialog>
+typedef int (*DFileDialogfptr)(QDialog *);
+DFileDialogfptr DDialog_exec = (DFileDialogfptr)(&QDialog::exec);
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+int stub_exec()
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    return 0;
+}
+QStringList fileLists()
+{
+    QStringList list;
+    return list;
+}
+TEST(FileChooseWidget_TEST, FileChooseWidget_UT_themeChanged)
+{
+    FileChooseWidget *fchooseWidget = new FileChooseWidget;
+    fchooseWidget->themeChanged();
+}
+
+TEST(FileChooseWidget_TEST, FileChooseWidget_UT_chooseFiles)
+{
+    FileChooseWidget *fchooseWidget = new FileChooseWidget;
+    Stub stub;
+    stub.set(DDialog_exec, stub_exec);
+    fchooseWidget->chooseFiles();
+    fchooseWidget->clearChooseFileBtnFocus();
 }

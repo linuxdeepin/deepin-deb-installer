@@ -16,11 +16,13 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
-#include "utils/utils.h"
+#include "../deb_installer/view/widgets/debinfolabel.h"
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+TEST(DebInfoLabel_TEST, DebInfoLabel_UT_setCustomQPalette)
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    DebInfoLabel *label = new DebInfoLabel;
+    label->setCustomQPalette(QPalette::WindowText);
+    label->setCustomQPalette(QPalette::BrightText);
+    label->setCustomDPalette();
+    label->setCustomDPalette(DPalette::TextLively);
 }

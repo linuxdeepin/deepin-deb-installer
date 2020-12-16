@@ -16,11 +16,26 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
-#include "utils/utils.h"
+#include "../deb_installer/view/widgets/ShowInstallInfoTextEdit.h"
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_slideGesture)
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    edit->slideGesture(5);
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_onSelectionArea)
+{
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    edit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
+    QTextCursor cursor = edit->textCursor();
+    cursor.selectedText() = "//";
+    edit->onSelectionArea();
+}
+
+TEST(FlashTween_TEST, FlashTween_UT_start)
+{
+    FlashTween flash;
+    flash.start(0, 0, 1, 0, 0);
+    flash.start(0, 0, 1, 1, 0);
 }

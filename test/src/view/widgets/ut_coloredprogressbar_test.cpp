@@ -16,11 +16,29 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
+#include "../deb_installer/view/widgets/coloredprogressbar.h"
 #include "utils/utils.h"
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_themeChanged)
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    bar->themeChanged();
+}
+
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_addThreshold)
+{
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    bar->addThreshold(0, QBrush(nullptr));
+}
+
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_removeThreshold)
+{
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    bar->removeThreshold(1);
+}
+
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_thresholds)
+{
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    qDebug() << bar->thresholds();
 }
