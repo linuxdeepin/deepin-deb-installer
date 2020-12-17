@@ -144,6 +144,12 @@ void stud_appendNoThread(QStringList packages, int allPackageSize)
     Q_UNUSED(packages);
     Q_UNUSED(allPackageSize);
 }
+
+QList<QAction *> stud_actions()
+{
+    return QList<QAction *> {new QAction(), new QAction()};
+}
+
 class Debinstaller_UT : public UT_HEAD
 {
 public:
@@ -166,6 +172,7 @@ public:
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
+        delete deb;
     }
     DebInstaller *deb;
 };
@@ -173,8 +180,6 @@ public:
 TEST_F(Debinstaller_UT, total_UT)
 {
     Stub stub;
-    stub.set(ADDR(DebInstaller, disableCloseAndExit), stud_disableCloseAndExit);
-    stub.set(ADDR(DebInstaller, enableCloseAndExit), stud_enableCloseAndExit);
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
     stub.set(ADDR(TitleBarFocusMonitor, isRunning), stud_isRunning);
     stub.set(ADDR(TitleBarFocusMonitor, stopMonitor), stud_stopMonitor);
@@ -191,6 +196,7 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, version), stud_version);
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
+    stub.set(ADDR(QMenu, actions), stud_actions);
 
     deb->stopMonitorTitleBarFocus();
     deb->enableCloseButton(false);
@@ -227,11 +233,12 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->setEnableButton(false);
     deb->showHiddenButton();
     deb->m_dragflag = 1;
-    deb->packageAppending = true;
     deb->DealDependResult(DebListModel::AuthBefore, "test");
     deb->setEnableButton(true);
     deb->setEnableButton(false);
     deb->showHiddenButton();
+    deb->packageAppending = true;
+    deb->setEnableButton(true);
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 }
 
