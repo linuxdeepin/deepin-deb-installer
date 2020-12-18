@@ -44,7 +44,7 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     QFontInfo fontinfo = m_parentView->fontInfo();      //获取字体
     int fontsize = fontinfo.pixelSize();
     if (fontsize >= 16) {                               //根据字体大小设置高度
-        m_itemHeight = 52;
+        m_itemHeight = 56;
     } else {
         m_itemHeight = 48;
     }
@@ -181,7 +181,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y() + yOffset);
+        name_rect.setY(bg_rect.y() + yOffset - 5);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
         QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -191,7 +191,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
         pkg_name_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
 
-        name_rect.setHeight(pkg_name_font.pixelSize() + 2);
+        name_rect.setHeight(pkg_name_font.pixelSize() + 7);
 
         painter->setFont(pkg_name_font);
         QFontMetrics fontMetric(pkg_name_font);
