@@ -86,7 +86,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     contentLayout->setContentsMargins(0, 0, 0, 0);
     contentLayout->addStretch();
     contentLayout->addWidget(m_icon);
-    contentLayout->addSpacing(15);
+    contentLayout->addSpacing(10);
     contentLayout->setAlignment(m_icon, Qt::AlignHCenter);
     contentLayout->addWidget(m_tips);
     contentLayout->addStretch();
