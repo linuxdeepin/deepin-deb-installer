@@ -43,6 +43,11 @@ bool stud_isRunning()
     return true;
 };
 
+void stud_removePackage(const int idx)
+{
+    Q_UNUSED(idx);
+}
+
 void stud_disableCloseAndExit()
 {
 }
@@ -131,11 +136,6 @@ bool stud_reloadCache()
     return true;
 }
 
-void stud_removePackage(const int idx)
-{
-    Q_UNUSED(idx);
-}
-
 void stud_reset()
 {
 }
@@ -169,7 +169,7 @@ public:
         stub.set(ADDR(Backend, init), stud_run);
         stub.set(ADDR(PackagesManager, appendNoThread), stud_appendNoThread);
         deb = new DebInstaller();
-        usleep(100 * 1000);
+        usleep(1000 * 1000);
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown
@@ -189,7 +189,11 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebListModel, preparedPackages), stud_preparedPackages);
     stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
     stub.set(ADDR(DebListModel, reset), stud_reset);
+    stub.set(ADDR(DebListModel, initPrepareStatus), stud_reset);
     stub.set(ADDR(MultipleInstallPage, refreshModel), stud_refreshModel);
+    stub.set(ADDR(MultipleInstallPage, setEnableButton), stud_setEnableButton);
+    stub.set(ADDR(MultipleInstallPage, DealDependResult), stud_DealDependResult);
+    stub.set(ADDR(MultipleInstallPage, afterGetAutherFalse), stud_afterGetAutherFalse);
     stub.set(ADDR(SingleInstallPage, uninstallCurrentPackage), stud_uninstallCurrentPackage);
     stub.set(ADDR(SingleInstallPage, afterGetAutherFalse), stud_afterGetAutherFalse);
     stub.set(ADDR(SingleInstallPage, setEnableButton), stud_setEnableButton);
@@ -244,22 +248,9 @@ TEST_F(Debinstaller_UT, total_UT)
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 }
 
-TEST_F(Debinstaller_UT, onPackagesSelected_UT)
-{
-    Stub stub;
-    stub.set(ADDR(DebListModel, preparedPackages), stud1_preparedPackages);
-    stub.set(ADDR(DebFile, packageName), stud_packageName);
-    stub.set(ADDR(DebFile, version), stud_version);
-    stub.set(ADDR(DebFile, longDescription), stud_longDescription);
-    stub.set(ADDR(MultipleInstallPage, refreshModel), stud_refreshModel);
-
-    deb->removePackage(1);
-}
-
 TEST_F(Debinstaller_UT, checkSuffix_UT)
 {
     Stub stub;
-
     stub.set(ADDR(QFileInfo, isFile), stud_isFile);
     EXPECT_EQ(deb->checkSuffix("test.deb"), true);
     EXPECT_EQ(deb->checkSuffix("test"), false);

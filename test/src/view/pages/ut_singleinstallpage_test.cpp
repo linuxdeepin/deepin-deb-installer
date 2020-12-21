@@ -120,8 +120,8 @@ public:
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
-        delete model;
         delete page;
+        delete model;
     }
     SingleInstallPage *page;
     DebListModel *model;
@@ -204,10 +204,11 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
 
     model = new DebListModel();
+    usleep(100 * 1000);
     model->m_packagesManager->m_preparedPackages.append("test");
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
-
+    usleep(100 * 1000);
     stub.set(ADDR(QVariant, toInt), stud_failedtoInt);
     page->m_operate = SingleInstallPage::Uninstall;
     page->onWorkerFinished();
@@ -231,10 +232,11 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
 
     model = new DebListModel();
+    usleep(100 * 1000);
     model->m_packagesManager->m_preparedPackages.append("test");
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
-
+    usleep(100 * 1000);
     page->setPackageInfo();
     stub.set(ADDR(QVariant, toInt), stud_successtoInt);
     page->onWorkerFinished();

@@ -30,6 +30,7 @@ TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_appendText)
 {
     InstallProcessInfoView *view = new InstallProcessInfoView(100, 50);
     view->appendText("");
+    view->repaint();
 }
 
 TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_clearText)

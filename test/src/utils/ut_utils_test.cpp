@@ -11,8 +11,15 @@
 
 DWIDGET_USE_NAMESPACE
 
+QString stud_family()
+{
+    return "test";
+}
+
 TEST(Utils_Test, Utils_UT_loadFontFamilyByType)
 {
+    Stub stub;
+    stub.set(ADDR(QFont, family), stud_family);
     Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 }
 

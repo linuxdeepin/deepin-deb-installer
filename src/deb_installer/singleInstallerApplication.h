@@ -16,7 +16,7 @@ class SingleInstallerApplication : public DApplication
 public:
     explicit SingleInstallerApplication(int &argc, char **argv);
 
-    ~SingleInstallerApplication();
+    virtual ~SingleInstallerApplication();
 
     void activateWindow();
     bool parseCmdLine();

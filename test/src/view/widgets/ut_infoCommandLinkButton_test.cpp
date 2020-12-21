@@ -23,8 +23,6 @@ void ut_bindFontBySizeAndWeight()
 {
     InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
     btn->setFocusPolicy(Qt::TabFocus);
-    QString fontfamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    Utils::bindFontBySizeAndWeight(btn, fontfamily, 12, QFont::ExtraLight);
 }
 
 TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_setFamily)

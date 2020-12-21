@@ -39,6 +39,7 @@ public:
     void SetUp() //TEST跑之前会执行SetUp
     {
         aptConfig = new AptConfigMessage();
+        usleep(100 * 1000);
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown

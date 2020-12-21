@@ -19,24 +19,31 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/uninstallconfirmpage.h"
+#include "../deb_installer/singleInstallerApplication.h"
+#include "../deb_installer/utils/utils.h"
 #include "../deb_installer/view/pages/debinstaller.h"
 
 #include <stub.h>
 #include <ut_Head.h>
 
 #include <QDebug>
-#include <QEvent>
+#include <QCommandLineParser>
+#include <QScopedPointer>
 
 #include <gtest/gtest.h>
-using namespace QApt;
 
-QEvent::Type stud_uninstalltype()
+void stud_singleaAppProcess(const QCoreApplication &app)
 {
-    return QEvent::MouseButtonRelease;
+    Q_UNUSED(app);
 }
 
-class UnInstallConfirmPage_UT : public UT_HEAD
+static QString stud_singleApploadFontFamilyByType(Utils::FontType fontType)
+{
+    Q_UNUSED(fontType);
+    return "test";
+}
+
+class SingleInstallerApplication_UT : public UT_HEAD
 {
 public:
     //添加日志
@@ -50,22 +57,26 @@ public:
     }
     void SetUp() //TEST跑之前会执行SetUp
     {
-        uninstallPage = new UninstallConfirmPage();
+        int a = 1;
+        int &argc = a;
+        char argv[] = "abc";
+        char argv1[] = "123";
+        char *pArgv[] = {argv, argv1};
+        singleInstaller = new SingleInstallerApplication(argc, pArgv);
         usleep(100 * 1000);
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
-        delete uninstallPage;
     }
-    UninstallConfirmPage *uninstallPage;
+    SingleInstallerApplication *singleInstaller;
 };
 
-TEST_F(UnInstallConfirmPage_UT, total_UT)
+TEST_F(SingleInstallerApplication_UT, test_UT)
 {
     Stub stub;
-    stub.set(ADDR(QEvent, type), stud_uninstalltype);
-    uninstallPage->installEventFilter(uninstallPage);
-    uninstallPage->showDetail();
-    uninstallPage->hideDetail();
+    stub.set((void (QCommandLineParser::*)(const QCoreApplication &))ADDR(QCommandLineParser, process), stud_singleaAppProcess);
+    singleInstaller->parseCmdLine();
+    singleInstaller->InstallerDeb(QStringList() << "test.deb");
+    singleInstaller->activateWindow();
 }

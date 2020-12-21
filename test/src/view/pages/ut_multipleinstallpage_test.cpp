@@ -55,13 +55,15 @@ public:
         Stub stub;
         stub.set(ADDR(Backend, init), stud_init);
         debListModel = new DebListModel();
+        usleep(100 * 1000);
         multiplepage = new MultipleInstallPage(debListModel);
+        usleep(100 * 1000);
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
-        delete debListModel;
         delete multiplepage;
+        delete debListModel;
     }
     MultipleInstallPage *multiplepage;
     DebListModel *debListModel;
