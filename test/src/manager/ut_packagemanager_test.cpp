@@ -53,7 +53,7 @@ bool deb_isValid()
 
 QByteArray deb_md5Sum()
 {
-    return nullptr;
+    return "0010";
 }
 
 int deb_installSize()
@@ -147,7 +147,7 @@ TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
     stub.set(ADDR(Backend, init), backend_init);
 
     PackagesManager *p = new PackagesManager();
-    usleep(10 * 1000);
+    usleep(50 * 1000);
     ASSERT_TRUE(p->isBackendReady());
     delete p;
 }
