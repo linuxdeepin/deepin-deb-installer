@@ -194,10 +194,14 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
             const QString name = conflict.packageName();
-            Package *p = packageWithArch(name, arch, conflict.multiArchAnnotation());
 
-            if (!p || !p->isInstalled()) continue;
+            // 修复provides和conflict 中存在同一个虚包导致依赖判断错误的问题
+            Package *p = m_backendFuture.result()->package(name);
 
+            if (!p || !p->isInstalled()) {
+                qInfo() << "PackageManager:" << "package error or package not installed" << p;
+                continue;
+            }
             // arch error, conflicts
             if (!isArchMatches(arch, p->architecture(), p->multiArchType())) {
                 qDebug() << "PackagesManager:" << "conflicts package installed: " << arch << p->name() << p->architecture()
