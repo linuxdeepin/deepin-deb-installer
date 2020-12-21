@@ -77,22 +77,6 @@ void PackagesListView::initShortcuts()
 }
 
 /**
- * @brief PackagesListView::scrollContentsBy 滚动相关
- * @param dx
- * @param dy
- *
- * 此函数无实际意义。稍后废弃
- */
-void PackagesListView::scrollContentsBy(int dx, int dy)
-{
-    if (-1 == m_highlightIndex.row()) {                         //判断无意义
-        QListView::scrollContentsBy(dx, dy);                    //还是调用了QList的滚动方法
-        return;
-    }
-    QListView::scrollContentsBy(dx, dy);                        //就算判断是false也是调用的QList的滚动方法
-}
-
-/**
  * @brief PackagesListView::mousePressEvent 鼠标按下事件
  * @param event
  * 如果左键按下，则置标志位为true

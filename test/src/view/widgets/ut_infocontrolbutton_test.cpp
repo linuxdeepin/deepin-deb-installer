@@ -45,6 +45,15 @@ TEST_F(InfoControlButton_Test, InfoControlButton_UT_setShrinkTips)
     btn->setShrinkTips("");
 }
 
+TEST_F(InfoControlButton_Test, InfoControlButton_UT_onMouseRelease)
+{
+    btn = new InfoControlButton("", "");
+    btn->onMouseRelease();
+    btn->m_expand = true;
+    btn->onMouseRelease();
+    EXPECT_FALSE(btn->m_expand);
+}
+
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_themeChanged)
 {
     btn = new InfoControlButton("", "");

@@ -79,3 +79,11 @@ TEST(packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)
     PackagesListView *listview = new PackagesListView;
     listview->setRightMenuShowStatus(true);
 }
+
+TEST(packagelistview_Test, packagelistview_UT_setSelection)
+{
+    PackagesListView *listview = new PackagesListView;
+    QItemSelectionModel::SelectionFlags command;
+    listview->setSelection(QRect(10, 10, 10, 10), command);
+    ASSERT_FALSE(listview->m_bShortcutDelete);
+}

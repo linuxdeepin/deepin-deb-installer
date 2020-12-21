@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/ShowInstallInfoTextEdit.h"
+#include <stub.h>
 
 TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_slideGesture)
 {
@@ -38,4 +39,27 @@ TEST(FlashTween_TEST, FlashTween_UT_start)
     FlashTween flash;
     flash.start(0, 0, 1, 0, 0);
     flash.start(0, 0, 1, 1, 0);
+    flash.m_timer->start(5);
+    usleep(5000);
+    flash.m_timer->stop();
+}
+
+int states = 1;
+
+int state()
+{
+    return states;
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_tapGestureTriggered)
+{
+    Stub stub;
+    stub.set(ADDR(QGesture, state), state);
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    while (states <= 4) {
+        edit->tapGestureTriggered(nullptr);
+        if (states != 2 && states != 4)
+            edit->tapAndHoldGestureTriggered(nullptr);
+        states++;
+    }
 }

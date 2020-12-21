@@ -365,7 +365,10 @@ TEST(PackageManager_UT, PackageManager_UT_DealDependResult)
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
+    p->m_dependInstallMark.append("test success");
     p->DealDependResult(4, 0, "");
+    p->DealDependResult(2, 0, "");
+    p->DealDependResult(5, 0, "");
     delete p;
 }
 
@@ -378,6 +381,16 @@ QList<DependencyItem> deb_depends()
     conflicts << dependencyItem;
 
     return conflicts;
+}
+
+bool isInstalled()
+{
+    return true;
+}
+
+bool ut_isArchError(int index)
+{
+    return true;
 }
 
 TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
@@ -398,6 +411,7 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -408,7 +422,7 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
 
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
-
+    stub.set(ADDR(Package, isInstalled), isInstalled);
     PackageDependsStatus pd = p->getPackageDependsStatus(0);
 
     ASSERT_TRUE(pd.isBreak());
@@ -681,6 +695,10 @@ TEST(PackageManager_UT, PackageManager_UT_removePackage)
     delete p;
 }
 
+bool ut_mktempDir()
+{
+    return false;
+}
 
 TEST(PackageManager_UT, PackageManager_UT_rmTempDir)
 {
@@ -693,6 +711,8 @@ TEST(PackageManager_UT, PackageManager_UT_rmTempDir)
     usleep(10 * 1000);
     p->rmTempDir();
     ASSERT_STREQ(p->SymbolicLink("test", "test").toLocal8Bit(), (QString("/tmp/LinkTemp/") + QString("test")).toLocal8Bit());
+    //    stub.set(ADDR(PackagesManager, mkTempDir),ut_mktempDir);
+    //    p->SymbolicLink("test", "test");
     delete p;
 }
 TEST(PackageManager_UT, PackageManager_UT_020)
@@ -769,6 +789,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageWithArch)
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
+    p->appendPackage(QStringList() << "test");
 
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
@@ -841,3 +862,9 @@ TEST(PackageManager_UT, PackageManager_UT_package)
     delete p;
 }
 
+TEST(PackageManager_UT, PackageManager_UT_checkDependsPackageStatus)
+{
+    PackagesManager *p = new PackagesManager;
+    QSet<QString> set;
+    p->checkDependsPackageStatus(set, "", conflicts());
+}

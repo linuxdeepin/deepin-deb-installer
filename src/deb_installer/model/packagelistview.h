@@ -89,13 +89,6 @@ public slots:
 protected:
 
     /**
-     * @brief scrollContentsBy  无具体实际作用，可以忽略删除
-     * @param dx
-     * @param dy
-     */
-    void scrollContentsBy(int dx, int dy)override;
-
-    /**
      * @brief mousePressEvent 鼠标按下事件
      * 如果是左键按下，如果右键菜单出现，则取消右键菜单
      */

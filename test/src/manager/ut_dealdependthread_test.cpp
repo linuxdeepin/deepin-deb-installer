@@ -55,7 +55,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_onFinished)
 {
     DealDependThread *dThread = new DealDependThread();
 
-    dThread->bDependsStatusErr = true;
+    dThread->bDependsStatusErr = false;
     dThread->onFinished(-1);
 
     ASSERT_FALSE(dThread->bDependsStatusErr);
@@ -82,6 +82,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_on_readoutput)
     DealDependThread *dThread = new DealDependThread();
     Stub stub;
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
-    dThread->start();
-    dThread->terminate();
+    dThread->on_readoutput();
+    //    dThread->start();
+    //    dThread->terminate();
 }

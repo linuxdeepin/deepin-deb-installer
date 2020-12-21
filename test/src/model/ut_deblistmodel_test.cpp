@@ -338,6 +338,8 @@ TEST(deblistmodel_Test, deblistmodel_UT_data)
 
     QModelIndex index = model->index(0);
     ASSERT_TRUE(model->data(index, DebListModel::WorkerIsPrepareRole).toBool());
+    model->data(index, DebListModel::ItemIsCurrentRole);
+    model->data(index, DebListModel::PackageNameRole);
 }
 
 TEST(deblistmodel_Test, deblistmodel_UT_initPrepareStatus)
@@ -1239,4 +1241,13 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
 
 
     ASSERT_EQ(model->m_packageFailCode.size(), 1);
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
+{
+    DebListModel *model = new DebListModel;
+    model->DealDependResult(4, 0, "");
+    model->DealDependResult(5, 0, "");
+    model->DealDependResult(2, 0, "");
+    model->DealDependResult(3, 0, "");
 }
