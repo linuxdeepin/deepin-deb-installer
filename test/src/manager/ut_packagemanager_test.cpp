@@ -216,12 +216,18 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError_1)
     delete p;
 }
 
+Package *package_package(const QString &name)
+{
+    return nullptr;
+}
+
 TEST(PackageManager_UT, PackageManager_UT_packageConflictStat)
 {
     Stub stub;
     stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set(ADDR(Backend, architectures), backend_architectures);
     stub.set(ADDR(Backend, init), backend_init);
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, isValid), deb_isValid);
     stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
     stub.set(ADDR(DebFile, installedSize), deb_installSize);
@@ -244,6 +250,8 @@ TEST(PackageManager_UT, PackageManager_UT_packageConflictStat)
 TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy)
 {
     Stub stub;
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+
     stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set(ADDR(Backend, architectures), backend_architectures);
     stub.set(ADDR(Backend, init), backend_init);
@@ -268,6 +276,8 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy)
 TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
 {
     Stub stub;
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+
     stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set(ADDR(Backend, architectures), backend_architectures);
     stub.set(ADDR(Backend, init), backend_init);
@@ -309,7 +319,8 @@ int package_compareVersion()
     return 0;
 }
 
-Package *package_package(const QString &name)
+
+Package *backend_package(const QString &name)
 {
     return nullptr;
 }
@@ -322,7 +333,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageInstallStatus)
     stub.set(ADDR(Backend, architectures), backend_architectures);
     stub.set(ADDR(Backend, init), backend_init);
     //(int(A::*)(int))ADDR(A,foo)
-    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), backend_package);
     stub.set(ADDR(DebFile, isValid), deb_isValid);
     stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
     stub.set(ADDR(DebFile, installedSize), deb_installSize);
