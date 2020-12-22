@@ -14,11 +14,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/filechoosewidget.h"
 #include <stub.h>
+
 #include <DFileDialog>
+
+#include <gtest/gtest.h>
 typedef int (*DFileDialogfptr)(QDialog *);
 DFileDialogfptr DDialog_exec = (DFileDialogfptr)(&QDialog::exec);
 
@@ -44,4 +46,5 @@ TEST(FileChooseWidget_TEST, FileChooseWidget_UT_chooseFiles)
     stub.set(DDialog_exec, stub_exec);
     fchooseWidget->chooseFiles();
     fchooseWidget->clearChooseFileBtnFocus();
+    delete fchooseWidget;
 }

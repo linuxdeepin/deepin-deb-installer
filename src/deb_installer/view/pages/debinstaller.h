@@ -176,7 +176,7 @@ private slots:
     /**
      * @brief stopMonitorTitleBarFocus 停止监测标题栏焦点
      */
-    void stopMonitorTitleBarFocus();
+    //    void stopMonitorTitleBarFocus();
 
 private:
     /**

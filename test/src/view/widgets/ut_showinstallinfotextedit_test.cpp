@@ -14,10 +14,19 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/ShowInstallInfoTextEdit.h"
 #include <stub.h>
+
+#include <QGestureEvent>
+#include <QMouseEvent>
+
+#include <gtest/gtest.h>
+
+Qt::MouseEventSource stud_source()
+{
+    return Qt::MouseEventSynthesizedByQt;
+}
 
 TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_slideGesture)
 {
@@ -37,6 +46,7 @@ TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_onSelectionArea)
 TEST(FlashTween_TEST, FlashTween_UT_start)
 {
     FlashTween flash;
+    EXPECT_EQ(flash.sinusoidalEaseOut(1.0, 1.0, 1.0, 1.0), 1.0 * sin(1.0 / 1.0 * (3.14 / 2)) + 1.0);
     flash.start(0, 0, 1, 0, 0);
     flash.start(0, 0, 1, 1, 0);
     flash.m_timer->start(5);
@@ -62,4 +72,36 @@ TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_tapGestureTriggere
             edit->tapAndHoldGestureTriggered(nullptr);
         states++;
     }
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_gestureEvent)
+{
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    QGestureEvent gestureEvent(QList<QGesture *> {new QGesture(), new QGesture()});
+    edit->gestureEvent(&gestureEvent);
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
+{
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    edit->mouseReleaseEvent(&releaseEvent);
+    delete edit;
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseMoveEvent)
+{
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    edit->mouseMoveEvent(&moveEvent);
+}
+
+TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseMoveEvent_source)
+{
+    Stub stub;
+    stub.set(ADDR(QMouseEvent, source), stud_source);
+    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+    edit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
+    QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    edit->mouseMoveEvent(&moveEvent);
 }

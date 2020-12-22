@@ -24,6 +24,7 @@
 #include <ut_Head.h>
 
 #include <QDebug>
+#include <QPaintEvent>
 
 #include <gtest/gtest.h>
 
@@ -41,17 +42,18 @@ public:
     }
     void SetUp() //TEST跑之前会执行SetUp
     {
-        frame = new DRoundBgFrame();
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
-        delete frame;
     }
     DRoundBgFrame *frame;
 };
 
 TEST_F(DRoundBgFrame_UT, total_UT)
 {
-    frame->repaint();
+    frame = new DRoundBgFrame();
+    QPaintEvent paint(QRect(frame->rect()));
+    frame->paintEvent(&paint);
+    delete frame;
 }

@@ -14,10 +14,21 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/coloredprogressbar.h"
+#include <stub.h>
 #include "utils/utils.h"
+
+#include <DGuiApplicationHelper>
+
+#include <QPaintEvent>
+
+#include <gtest/gtest.h>
+
+DGuiApplicationHelper::ColorType stub_themeType()
+{
+    return DGuiApplicationHelper::DarkType;
+}
 
 TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_themeChanged)
 {
@@ -41,4 +52,22 @@ TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_thresholds)
 {
     ColoredProgressBar *bar = new ColoredProgressBar;
     qDebug() << bar->thresholds();
+}
+
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_paintEvent_Light)
+{
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    QPaintEvent paint(QRect(bar->rect()));
+    bar->paintEvent(&paint);
+    delete bar;
+}
+
+TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_paintEvent_Dark)
+{
+    Stub stub;
+    stub.set(ADDR(DGuiApplicationHelper, themeType), stub_themeType);
+    ColoredProgressBar *bar = new ColoredProgressBar;
+    QPaintEvent paint(QRect(bar->rect()));
+    bar->paintEvent(&paint);
+    delete bar;
 }

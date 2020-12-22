@@ -14,11 +14,16 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/infocontrolbutton.h"
 
 #include <ut_Head.h>
+
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QCoreApplication>
+
+#include <gtest/gtest.h>
 
 class InfoControlButton_Test : public UT_HEAD
 {
@@ -61,4 +66,18 @@ TEST_F(InfoControlButton_Test, InfoControlButton_UT_themeChanged)
     btn->m_expand = true;
     btn->themeChanged();
     EXPECT_TRUE(btn->m_expand);
+}
+
+TEST_F(InfoControlButton_Test, InfoControlButton_UT_mouseReleaseEvent)
+{
+    btn = new InfoControlButton("", "");
+    QMouseEvent mouseReleaseEvent(QEvent::MouseButtonRelease, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    btn->mouseReleaseEvent(&mouseReleaseEvent);
+}
+
+TEST_F(InfoControlButton_Test, InfoControlButton_UT_keyPressEvent)
+{
+    btn = new InfoControlButton("", "");
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QCoreApplication::sendEvent(btn, &keyPressEvent);
 }

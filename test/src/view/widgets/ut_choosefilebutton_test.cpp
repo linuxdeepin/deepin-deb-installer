@@ -14,13 +14,24 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/choosefilebutton.h"
 #include "utils/utils.h"
+
+#include <QKeyEvent>
+
+#include <gtest/gtest.h>
 
 TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
 {
     ChooseFileButton *btn = new ChooseFileButton("");
     btn->setText("");
+}
+
+TEST(ChooseFileButton_TEST, ChooseFileButton_UT_keyPressEvent)
+{
+    ChooseFileButton *btn = new ChooseFileButton("");
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QCoreApplication::sendEvent(btn, &keyPressEvent);
+    delete btn;
 }

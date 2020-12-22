@@ -16,7 +16,6 @@
 */
 
 #include "../deb_installer/view/pages/debinstaller.h"
-#include "../deb_installer/view/widgets/TitleBarFocusMonitor.h"
 #include "../deb_installer/model/deblistmodel.h"
 #include "../deb_installer/view/pages/multipleinstallpage.h"
 #include "../deb_installer/view/pages/singleinstallpage.h"
@@ -33,6 +32,7 @@
 #include <QFileInfo>
 #include <QtConcurrent>
 #include <QFuture>
+#include <QUrl>
 
 #include <gtest/gtest.h>
 
@@ -183,8 +183,6 @@ TEST_F(Debinstaller_UT, total_UT)
 {
     Stub stub;
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
-    stub.set(ADDR(TitleBarFocusMonitor, isRunning), stud_isRunning);
-    stub.set(ADDR(TitleBarFocusMonitor, stopMonitor), stud_stopMonitor);
     stub.set(ADDR(DebListModel, appendPackage), stud_appendPackage);
     stub.set(ADDR(DebListModel, preparedPackages), stud_preparedPackages);
     stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
@@ -204,7 +202,6 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
     stub.set(ADDR(QMenu, actions), stud_actions);
 
-    deb->stopMonitorTitleBarFocus();
     deb->enableCloseButton(false);
     deb->enableCloseButton(true);
     deb->handleFocusPolicy();
@@ -254,4 +251,25 @@ TEST_F(Debinstaller_UT, checkSuffix_UT)
     stub.set(ADDR(QFileInfo, isFile), stud_isFile);
     EXPECT_EQ(deb->checkSuffix("test.deb"), true);
     EXPECT_EQ(deb->checkSuffix("test"), false);
+}
+
+TEST_F(Debinstaller_UT, keyPressEvent_UT)
+{
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
+    QCoreApplication::sendEvent(deb, &keyPressEvent);
+}
+
+TEST_F(Debinstaller_UT, dragEnterEvent_UT)
+{
+    QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(deb, &enterEvent);
+}
+
+TEST_F(Debinstaller_UT, dropEvent_UT)
+{
+    QByteArray csvData = "test";
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("text/csv", csvData);
+    QDropEvent dropEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(deb, &dropEvent);
 }

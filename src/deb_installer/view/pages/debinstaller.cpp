@@ -26,7 +26,6 @@
 #include "view/pages/singleinstallpage.h"
 #include "view/pages/uninstallconfirmpage.h"
 #include "view/pages/AptConfigMessage.h"
-#include "view/widgets/TitleBarFocusMonitor.h"
 #include "utils/utils.h"
 #include "utils/DebugTimeManager.h"
 
@@ -235,13 +234,12 @@ void DebInstaller::initConnections()
 /**
  * @brief DebInstaller::stopMonitorTitleBarFocus 停止监测标题栏焦点。
  */
-void DebInstaller::stopMonitorTitleBarFocus()
-{
-    if (m_pMonitorFocusThread->isRunning()) {
-        m_pMonitorFocusThread->stopMonitor();
-    }
-}
-
+//void DebInstaller::stopMonitorTitleBarFocus()
+//{
+//    if (m_pMonitorFocusThread->isRunning()) {
+//        m_pMonitorFocusThread->stopMonitor();
+//    }
+//}
 
 /**
  * @brief DebInstaller::enableCloseButton 当安装、卸载开始或结束后，根据传递的值启用或禁用关闭按钮

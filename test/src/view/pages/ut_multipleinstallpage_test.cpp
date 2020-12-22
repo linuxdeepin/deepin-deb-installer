@@ -85,6 +85,8 @@ TEST_F(MultipleInstallPage_UT, total_UT)
     multiplepage->hiddenCancelButton();
     multiplepage->setEnableButton(true);
     multiplepage->refreshModel();
+    multiplepage->hideInfo();
+    multiplepage->afterGetAutherFalse();
 
     multiplepage->DealDependResult(2, "test");
     multiplepage->DealDependResult(3, "test");

@@ -14,18 +14,29 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/InfoCommandLinkButton.h"
 #include "utils/utils.h"
+
+#include <QKeyEvent>
+
+#include <gtest/gtest.h>
 
 void ut_bindFontBySizeAndWeight()
 {
     InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
     btn->setFocusPolicy(Qt::TabFocus);
+    delete btn;
 }
 
 TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_setFamily)
 {
     ut_bindFontBySizeAndWeight();
+}
+
+TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_keyPressEvent)
+{
+    InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QCoreApplication::sendEvent(btn, &keyPressEvent);
 }

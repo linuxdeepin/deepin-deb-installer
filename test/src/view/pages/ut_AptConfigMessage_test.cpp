@@ -59,3 +59,9 @@ TEST_F(AptConfigMessage_UT, total_UT)
     aptConfig->dealInput();
     aptConfig->clearTexts();
 }
+
+TEST_F(AptConfigMessage_UT, paintEvent_UT)
+{
+    QPaintEvent paint(QRect(aptConfig->rect()));
+    aptConfig->paintEvent(&paint);
+}

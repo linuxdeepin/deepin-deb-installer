@@ -18,6 +18,8 @@
 
 #include "../deb_installer/view/widgets/debinfolabel.h"
 
+#include <QPaintEvent>
+
 TEST(DebInfoLabel_TEST, DebInfoLabel_UT_setCustomQPalette)
 {
     DebInfoLabel *label = new DebInfoLabel;
@@ -25,4 +27,7 @@ TEST(DebInfoLabel_TEST, DebInfoLabel_UT_setCustomQPalette)
     label->setCustomQPalette(QPalette::BrightText);
     label->setCustomDPalette();
     label->setCustomDPalette(DPalette::TextLively);
+    QPaintEvent paint(QRect(label->rect()));
+    label->paintEvent(&paint);
+    delete label;
 }

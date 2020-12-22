@@ -14,11 +14,12 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <gtest/gtest.h>
 
 #include "../deb_installer/view/widgets/installprocessinfoview.h"
 #include "../deb_installer/view/widgets/ShowInstallInfoTextEdit.h"
 #include <stub.h>
+
+#include <gtest/gtest.h>
 
 TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_setTextColor)
 {
