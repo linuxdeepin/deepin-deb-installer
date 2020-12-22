@@ -269,8 +269,11 @@ int PackagesManager::packageInstallStatus(const int index)
     //修改安装状态的存放方式，将安装状态与MD5绑定，而非与index绑定
     //如果此时已经刷新过安装状态，则直接返回。
     //PS: 修改原因见头文件
-    if (m_packageInstallStatus.contains(m_packageMd5[index]))
-        return m_packageInstallStatus[m_packageMd5[index]];
+
+    //提前获取当前的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+    if (m_packageInstallStatus.contains(currentPackageMd5))
+        return m_packageInstallStatus[currentPackageMd5];
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
 
@@ -299,7 +302,7 @@ int PackagesManager::packageInstallStatus(const int index)
 
     //存储包的安装状态
     //2020-11-19 修改安装状态的存储绑定方式
-    m_packageInstallStatus[m_packageMd5[index]] = ret;
+    m_packageInstallStatus[currentPackageMd5] = ret;
     delete deb;
     return ret;
 }
@@ -356,8 +359,11 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     QTime dependsTime;
     dependsTime.start();
 
-    if (m_packageMd5DependsStatus.contains(m_packageMd5[index])) {
-        return m_packageMd5DependsStatus[m_packageMd5[index]];
+    //提前获取需要的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+
+    if (m_packageMd5DependsStatus.contains(currentPackageMd5)) {
+        return m_packageMd5DependsStatus[currentPackageMd5];
     }
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
@@ -367,7 +373,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     if (isArchError(index)) {
         ret.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
         ret.package = deb->packageName();
-        m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);//更换依赖的存储方式
+        m_packageMd5DependsStatus.insert(currentPackageMd5, ret);//更换依赖的存储方式
         qInfo() << deb->packageName() << "架构错误，获取依赖状态用时" << dependsTime.elapsed() << "ms";
         return PackageDependsStatus::_break(deb->packageName());
     }
@@ -415,9 +421,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             //fix bug: https://pms.uniontech.com/zentao/bug-view-45734.html
             if (isWineApplication && ret.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                 qDebug() << "PackagesManager:" << "Unsatisfied dependency: " << ret.package;
-                if (!m_dependInstallMark.contains(m_packageMd5[index])) {           //更换判断依赖错误的标记
+                if (!m_dependInstallMark.contains(currentPackageMd5)) {           //更换判断依赖错误的标记
                     if (!dthread->isRunning()) {
-                        m_dependInstallMark.append(m_packageMd5[index]);            //依赖错误的软件包的标记 更改为md5取代验证下标
+                        m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
                         qDebug() << "PackagesManager:" << "command install depends:" << dependList;
                         dthread->setDependsList(dependList, index);
                         dthread->setBrokenDepend(ret.package);
@@ -430,7 +436,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
-    m_packageMd5DependsStatus.insert(m_packageMd5[index], ret);
+    m_packageMd5DependsStatus.insert(currentPackageMd5, ret);
 
     int getDependsTime = dependsTime.elapsed();
     qInfo() << "获取'" << deb->packageName() << "'依赖状态(依赖数量：" << deb->depends().size() << ")用时" << getDependsTime << "ms";
@@ -443,8 +449,6 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 const QString PackagesManager::packageInstalledVersion(const int index)
 {
     //更换安装状态的存储结构
-    Q_ASSERT(m_packageInstallStatus.contains(m_packageMd5[index]));
-
     DebFile *deb = new DebFile(m_preparedPackages[index]);
 
     const QString packageName = deb->packageName();
@@ -629,17 +633,20 @@ void PackagesManager::resetInstallStatus()
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
     // 查看此包是否已经存储依赖状态。
-    if (!m_packageMd5DependsStatus.contains(m_packageMd5[index])) return;   //更改依赖状态的存储结构
+    //提前获取package 的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+    if (!m_packageMd5DependsStatus.contains(currentPackageMd5)) return;   //更改依赖状态的存储结构
     else {
         // 针对wine依赖做一个特殊处理，如果wine依赖break,则直接返回。
-        if ((m_packageMd5DependsStatus[m_packageMd5[index]].package == "deepin-wine") && m_packageMd5DependsStatus[m_packageMd5[index]].status != DebListModel::DependsOk) {
+        if ((m_packageMd5DependsStatus[currentPackageMd5].package == "deepin-wine") &&
+                m_packageMd5DependsStatus[currentPackageMd5].status != DebListModel::DependsOk) {
             return;
         }
     }
     // reload backend cache
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();;
-    m_packageMd5DependsStatus.remove(m_packageMd5[index]);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
+    m_packageMd5DependsStatus.remove(currentPackageMd5);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
 }
 
 /**
@@ -657,17 +664,15 @@ void PackagesManager::removePackage(const int index)
     delete deb;
 
     //提前删除标记list中的md5 否则在删除最后一个的时候会崩溃
-    if (m_dependInstallMark.contains(m_packageMd5[index]))      //如果这个包是wine包，则在wine标记list中删除
-        m_dependInstallMark.removeOne(m_packageMd5[index]);
+    if (m_dependInstallMark.contains(md5))      //如果这个包是wine包，则在wine标记list中删除
+        m_dependInstallMark.removeOne(md5);
 
     m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
 
-    m_appendedPackagesMd5.remove(m_packageMd5[index]);          //在判断是否重复的md5的集合中删除掉当前包的md5
-    m_packageMd5DependsStatus.remove(m_packageMd5[index]);      //删除指定包的依赖状态
+    m_appendedPackagesMd5.remove(md5);          //在判断是否重复的md5的集合中删除掉当前包的md5
+    m_packageMd5DependsStatus.remove(md5);      //删除指定包的依赖状态
     m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
-
-
 
     m_packageInstallStatus.clear();
 }
@@ -774,7 +779,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
     if (allPackageSize == 1) {
         //fix bug: https://pms.uniontech.com/zentao/bug-view-56307.html
         // 添加一个包时 发送添加结束信号,启用安装按钮
-        emit appendFinished();
+        emit appendFinished(m_packageMd5);
         PERF_PRINT_END("POINT-03");
     }
 }
@@ -813,12 +818,9 @@ void PackagesManager::refreshPage(int validPkgCount)
  */
 void PackagesManager::appendPackageFinished()
 {
-    //刷新所有添加的包的依赖状态 此处代码需要验证几个版本，之前的bug 不复现后删除
-//    for (int i = 0; i < m_preparedPackages.size(); i++) {
-//        getPackageDependsStatus(i);
-//    }
     //告诉前端，此次添加已经结束
-    emit appendFinished();
+    //向model传递 md5
+    emit appendFinished(m_packageMd5);
 }
 
 void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum)

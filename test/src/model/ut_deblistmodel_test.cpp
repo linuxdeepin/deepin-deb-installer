@@ -1252,6 +1252,8 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
 
     model->checkSystemVersion();
     model->m_workerStatus = DebListModel::WorkerProcessing;
+    model->m_packageMd5.insert(0, "00000");
+    model->m_operatingIndex = 0;
     model->onTransactionErrorOccurred();
 
 

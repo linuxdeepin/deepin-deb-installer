@@ -124,8 +124,9 @@ signals:
 
     /**
      * @brief appendFinished 批量安装添加包结束的信号
+     * @param packageMd5List 添加后的md5列表
      */
-    void appendFinished();
+    void appendFinished(QList<QByteArray> packageMd5List);
 
 //// 界面刷新相关信号
 signals:

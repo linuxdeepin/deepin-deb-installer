@@ -181,7 +181,7 @@ DebListModel::DebListModel(QObject *parent)
     connect(m_packagesManager, &PackagesManager::appendStart, this, &DebListModel::appendStart);
 
     //提示前端当前已经添加完成
-    connect(m_packagesManager, &PackagesManager::appendFinished, this, &DebListModel::appendFinished);
+    connect(m_packagesManager, &PackagesManager::appendFinished, this, &DebListModel::getPackageMd5);
     //检查系统版本与是否开启了开发者模式
     checkSystemVersion();
 }
@@ -324,6 +324,7 @@ void DebListModel::installPackages()
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                                               //初始化当前操作的index
     m_operatingStatusIndex = 0;
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
 
     // start first
     initRowStatus();                                                    //初始化包的操作状态
@@ -342,6 +343,7 @@ void DebListModel::uninstallPackage(const int idx)
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
     m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = idx;                             //获取卸载的包的indx
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = idx;                       //刷新操作状态的index
 
@@ -454,12 +456,12 @@ void DebListModel::onTransactionErrorOccurred()
     //fix bug:39834
     //失败时刷新操作状态为failed,并记录失败原因
     refreshOperatingPackageStatus(Failed);
-    m_packageOperateStatus[getPackageMd5()] = Failed;
+    m_packageOperateStatus[m_operatingPackageMd5] = Failed;
 
     //记录失败代码与失败原因
     // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-    m_packageFailCode[getPackageMd5()] = trans->error();
-    m_packageFailReason[getPackageMd5()] = trans->errorString();
+    m_packageFailCode[m_operatingPackageMd5] = trans->error();
+    m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
     //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
     //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
     //授权错误不再输出到详细信息中
@@ -541,6 +543,7 @@ void DebListModel::reset()
     m_workerStatus = WorkerPrepare;                     //工作状态重置为准备态
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                               //当前操作的index置为0
+    m_operatingPackageMd5 = nullptr;
     m_operatingStatusIndex = 0;                         //当前操作状态的index置为0
 
     m_packageOperateStatus.clear();                     //清空操作状态列表
@@ -583,6 +586,7 @@ void DebListModel::bumpInstallIndex()
         return;
     }
     ++ m_operatingStatusIndex;
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     emit onChangeOperateIndex(m_operatingIndex);                                //修改当前操作的下标
     // install next
     qDebug() << "DebListModel:" << "install next deb package";
@@ -596,7 +600,7 @@ void DebListModel::bumpInstallIndex()
  */
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
 {
-    m_packageOperateStatus[getPackageMd5()] = stat;  //将失败包的索引和状态修改保存,用于更新
+    m_packageOperateStatus[m_operatingPackageMd5] = stat;  //将失败包的索引和状态修改保存,用于更新
 
     const QModelIndex idx = index(m_operatingStatusIndex);
 
@@ -617,7 +621,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
     if (stat.isBreak() || stat.isAuthCancel()) {                                            //依赖状态错误
         if (!stat.package.isEmpty()) {
-            if (m_packagesManager->m_errorIndex.contains(m_packagesManager->m_packageMd5[idx]))     //修改wine依赖的标记方式
+            if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
                 return tr("Failed to install %1").arg(stat.package);                        //wine依赖安装失败
             return tr("Broken dependencies: %1").arg(stat.package);                         //依赖不满足
         }
@@ -646,6 +650,7 @@ void DebListModel::onTransactionFinished()
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Transaction *trans = static_cast<Transaction *>(sender());                              // 获取trans指针
 
+
     // prevent next signal
     disconnect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);  //不再接收trans结束的信号
 
@@ -660,14 +665,14 @@ void DebListModel::onTransactionFinished()
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
         //保存错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode[getPackageMd5()] = trans->error();
-        m_packageFailReason[getPackageMd5()] = trans->errorString();
+        m_packageFailCode[m_operatingPackageMd5] = trans->error();
+        m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
 
         //刷新操作状态
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
-    } else if (m_packageOperateStatus.contains(getPackageMd5()) &&
-               m_packageOperateStatus[getPackageMd5()] != Failed) {
+    } else if (m_packageOperateStatus.contains(m_operatingPackageMd5) &&
+               m_packageOperateStatus[m_operatingPackageMd5] != Failed) {
         //安装成功
         refreshOperatingPackageStatus(Success);
 
@@ -701,8 +706,8 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
         // record error
         // 记录错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode[getPackageMd5()] = trans->error();
-        m_packageFailReason[getPackageMd5()] = trans->errorString();
+        m_packageFailCode[m_operatingPackageMd5] = trans->error();
+        m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
         refreshOperatingPackageStatus(Failed);                                  // 刷新操作状态
         emit appendOutputInfo(trans->errorString());
     }
@@ -795,15 +800,15 @@ void DebListModel::installDebs()
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode.insert(getPackageMd5(), -1);           //保存错误原因
+        m_packageFailCode.insert(m_operatingPackageMd5, -1);           //保存错误原因
         // 记录详细错误原因
-        m_packageFailReason.insert(getPackageMd5(), packageFailedReason(m_operatingStatusIndex));
+        m_packageFailReason.insert(m_operatingPackageMd5, packageFailedReason(m_operatingStatusIndex));
 
         bumpInstallIndex();                                             //开始下一步的安装流程
         return;
     } else if (dependsStat.isAvailable()) {
         // 依赖可用 但是需要下载
-        Q_ASSERT_X(m_packageOperateStatus[getPackageMd5()], Q_FUNC_INFO,
+        Q_ASSERT_X(m_packageOperateStatus[m_operatingPackageMd5], Q_FUNC_INFO,
                    "package operate status error when start install availble dependencies");
 
         // 获取到所有的依赖包 准备安装
@@ -814,8 +819,8 @@ void DebListModel::installDebs()
             if (p.contains(" not found")) {                             //依赖安装失败
                 refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
                 // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-                m_packageFailCode.insert(getPackageMd5(), DownloadDisallowedError);                       //记录错误代码与错误原因
-                m_packageFailReason.insert(getPackageMd5(), p);
+                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
+                m_packageFailReason.insert(m_operatingPackageMd5, p);
                 emit appendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
                 bumpInstallIndex();                                     //开始安装下一个包或结束安装
                 return;
@@ -888,8 +893,8 @@ void DebListModel::digitalVerifyFailed(ErrorCode code)
     if (preparedPackages().size() > 1) {                        //批量安装
         refreshOperatingPackageStatus(Failed);                  //刷新操作状态
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode.insert(getPackageMd5(), code); //记录错误代码与错误原因
-        m_packageFailReason.insert(getPackageMd5(), "");
+        m_packageFailCode.insert(m_operatingPackageMd5, code); //记录错误代码与错误原因
+        m_packageFailReason.insert(m_operatingPackageMd5, "");
         bumpInstallIndex();                                     //跳过当前包
     } else if (preparedPackages().size() == 1) {
         exit(0);                                                //单包安装 直接退出
@@ -1194,12 +1199,12 @@ void DebListModel::uninstallFinished()
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
-        m_packageOperateStatus[getPackageMd5()] = Failed;
+        m_packageOperateStatus[m_operatingPackageMd5] = Failed;
     } else {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Success);                     //刷新当前包的卸载状态
-        m_packageOperateStatus[getPackageMd5()] = Success;
+        m_packageOperateStatus[m_operatingPackageMd5] = Success;
     }
     emit workerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
     trans->deleteLater();
@@ -1329,8 +1334,8 @@ void DebListModel::ConfigInstallFinish(int flag)
             refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态为失败
 
             // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-            m_packageFailCode.insert(getPackageMd5(), flag);       //保存失败原因
-            m_packageFailReason.insert(getPackageMd5(), "Authentication failed");
+            m_packageFailCode.insert(m_operatingPackageMd5, flag);       //保存失败原因
+            m_packageFailReason.insert(m_operatingPackageMd5, "Authentication failed");
             bumpInstallIndex();                                     //开始安装下一个
         }
     }
@@ -1406,9 +1411,9 @@ void DebListModel::checkInstallStatus(QString str)
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageOperateStatus[getPackageMd5()] = Failed;
-        m_packageFailCode.insert(getPackageMd5(), 0);       //保存失败原因
-        m_packageFailReason.insert(getPackageMd5(), "");
+        m_packageOperateStatus[m_operatingPackageMd5] = Failed;
+        m_packageFailCode.insert(m_operatingPackageMd5, 0);       //保存失败原因
+        m_packageFailReason.insert(m_operatingPackageMd5, "");
         bumpInstallIndex();
         return;
     }
@@ -1418,13 +1423,9 @@ void DebListModel::checkInstallStatus(QString str)
  * @brief DebListModel::getPackageMd5 获取当前正在处理的包的md5值
  * @return 包的md5值
  */
-QByteArray DebListModel::getPackageMd5()
+void DebListModel::getPackageMd5(QList<QByteArray> md5)
 {
-    QByteArray md5 = m_packagesManager->m_packageMd5[m_operatingIndex];
-    // 如果 没有获取到对应的md5的值，则直接使用下标进行处理
-    if (md5.isEmpty()) {
-        return QString::number(m_operatingIndex).toLocal8Bit();
-    }
-    // 返回包的md5的值
-    return md5;
+    m_packageMd5.clear();
+    m_packageMd5 = md5;
+    emit appendFinished();
 }

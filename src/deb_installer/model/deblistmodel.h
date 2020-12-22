@@ -560,12 +560,12 @@ private:
 
     /**
      * @brief getPackageMd5 获取当前操作的包的md5值
-     * @return 包的md5
      */
-    QByteArray getPackageMd5();
+    void getPackageMd5(QList<QByteArray> md5);
 private:
     int m_workerStatus;                                 //当前工作状态
     int m_operatingIndex;                               //当前正在操作的index
+    QByteArray m_operatingPackageMd5;                   //当前正在处理的包的md5
     int m_operatingStatusIndex;                         //当前正在操作的状态的index
 
     QModelIndex m_currentIdx;                           //当前的index
@@ -584,6 +584,8 @@ private:
     const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
 
     bool m_isDevelopMode = true;                      // 开发者模式的标志变量 ps：部分系统版本无需签名验证，默认开发者模式
+
+    QList<QByteArray> m_packageMd5;
 };
 
 #endif  // DEBLISTMODEL_H
