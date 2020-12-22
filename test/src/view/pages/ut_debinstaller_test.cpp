@@ -48,6 +48,10 @@ void stud_removePackage(const int idx)
     Q_UNUSED(idx);
 }
 
+void stud_installDebs()
+{
+}
+
 void stud_disableCloseAndExit()
 {
 }
@@ -201,6 +205,7 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
     stub.set(ADDR(QMenu, actions), stud_actions);
+    stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
 
     deb->enableCloseButton(false);
     deb->enableCloseButton(true);

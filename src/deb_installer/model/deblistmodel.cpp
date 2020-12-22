@@ -572,8 +572,9 @@ void DebListModel::reset_filestatus()
  */
 void DebListModel::bumpInstallIndex()
 {
-    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
-
+    if (m_currentTransaction.isNull()) {
+        qInfo() << "previous transaction not finished";
+    }
 
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
@@ -647,7 +648,9 @@ QString DebListModel::packageFailedReason(const int idx) const
  */
 void DebListModel::onTransactionFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());                              // 获取trans指针
 
 
@@ -695,7 +698,9 @@ void DebListModel::onTransactionFinished()
  */
 void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满足
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());                                  //获取transaction指针
 
     const auto ret = trans->exitStatus();

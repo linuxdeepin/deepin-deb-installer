@@ -878,4 +878,5 @@ TEST(PackageManager_UT, PackageManager_UT_checkDependsPackageStatus)
     PackagesManager *p = new PackagesManager;
     QSet<QString> set;
     p->checkDependsPackageStatus(set, "", conflicts());
+    delete p;
 }
