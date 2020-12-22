@@ -97,7 +97,8 @@ const QList<QString> stud_preparedPackages()
 const QList<QString> stud1_preparedPackages()
 {
     return QList<QString> {QStringList() << "test.deb"
-                                         << "test1.deb"};
+                           << "test1.deb"
+                          };
 }
 
 void stud_afterGetAutherFalse()
@@ -168,6 +169,7 @@ public:
         stub.set(ADDR(Backend, init), stud_run);
         stub.set(ADDR(PackagesManager, appendNoThread), stud_appendNoThread);
         deb = new DebInstaller();
+        usleep(100 * 1000);
         qDebug() << "SetUp" << endl;
     }
     void TearDown() //TEST跑完之后会执行TearDown
@@ -206,12 +208,12 @@ TEST_F(Debinstaller_UT, total_UT)
 
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerProcessing;
     deb->onPackagesSelected(QStringList() << "test.deb"
-                                          << "test1.deb");
+                            << "test1.deb");
     deb->onNewAppOpen(2222, QStringList() << "deb-installer"
-                                          << "test.deb");
+                      << "test.deb");
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerFinished;
     deb->onPackagesSelected(QStringList() << "test.deb"
-                                          << "test1.deb");
+                            << "test1.deb");
 
     deb->refreshMulti();
     deb->showInvalidePackageMessage();

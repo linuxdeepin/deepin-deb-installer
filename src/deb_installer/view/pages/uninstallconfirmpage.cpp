@@ -68,7 +68,6 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setVisible(false);
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_dependsInfomation->setMinimumHeight(200);
 
     //layout of buttons
     QHBoxLayout *btnsLayout = new QHBoxLayout();
@@ -86,7 +85,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     contentLayout->setContentsMargins(0, 0, 0, 0);
     contentLayout->addStretch();
     contentLayout->addWidget(m_icon);
-    contentLayout->addSpacing(10);
+    contentLayout->addStretch(0);
     contentLayout->setAlignment(m_icon, Qt::AlignHCenter);
     contentLayout->addWidget(m_tips);
     contentLayout->addStretch();
@@ -103,8 +102,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     //fix bug: https://pms.uniontech.com/zentao/bug-view-46864.html
-    //卸载页面上边距增加10px
-    centralLayout->setContentsMargins(20, 10, 20, 30);
+    //卸载页面上边距增加15px  底边距变为20,适应大字体
+    centralLayout->setContentsMargins(20, 15, 20, 20);
 
 
     //Set font and size

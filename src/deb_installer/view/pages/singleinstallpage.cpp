@@ -130,9 +130,8 @@ void SingleInstallPage::initControlAccessibleName()
  */
 void SingleInstallPage::initContentLayout()
 {
-    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 0, 20, 20);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 10, 20, 16);         //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
