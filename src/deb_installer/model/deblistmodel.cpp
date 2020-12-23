@@ -1179,7 +1179,9 @@ void DebListModel::getDebian(QString debPath)
  */
 void DebListModel::onTransactionOutput()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());
     Q_ASSERT(trans == m_currentTransaction.data());
 
@@ -1194,7 +1196,9 @@ void DebListModel::onTransactionOutput()
  */
 void DebListModel::uninstallFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
 
     //增加卸载失败的情况
     //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
