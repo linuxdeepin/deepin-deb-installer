@@ -87,3 +87,18 @@ TEST(packagelistview_Test, packagelistview_UT_setSelection)
     listview->setSelection(QRect(10, 10, 10, 10), command);
     ASSERT_FALSE(listview->m_bShortcutDelete);
 }
+
+TEST(packagelistview_Test, packagelistview_UT_mousePressEvent)
+{
+    PackagesListView *listview = new PackagesListView;
+    QMouseEvent mousePressEvent(QEvent::MouseButtonRelease, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    listview->mousePressEvent(&mousePressEvent);
+}
+
+TEST(packagelistview_Test, packagelistview_UT_PaintEvent)
+{
+    PackagesListView *listview = new PackagesListView;
+    QPaintEvent paint(QRect(listview->rect()));
+    listview->paintEvent(&paint);
+    delete listview;
+}

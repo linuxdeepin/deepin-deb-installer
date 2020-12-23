@@ -1063,7 +1063,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
     model->appendPackage(list);
 
     model->m_isDevelopMode = false;
-
     //    ASSERT_TRUE(model->checkDigitalSignature());
 }
 
@@ -1595,8 +1594,12 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionFinished)
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     DebListModel *model = new DebListModel;
     usleep(100 * 1000);
+    model->m_operatingIndex = 0;
+    model->m_packageMd5.append("test");
+    model->m_packageMd5.append("test1");
     model->onTransactionFinished();
 }
 
@@ -1625,6 +1628,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_onDependsInstallTransactionFinished)
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     DebListModel *model = new DebListModel;
     usleep(100 * 1000);
     model->onDependsInstallTransactionFinished();

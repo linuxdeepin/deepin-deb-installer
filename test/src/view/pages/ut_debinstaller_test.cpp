@@ -192,6 +192,7 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
     stub.set(ADDR(DebListModel, reset), stud_reset);
     stub.set(ADDR(DebListModel, initPrepareStatus), stud_reset);
+    stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
     stub.set(ADDR(MultipleInstallPage, refreshModel), stud_refreshModel);
     stub.set(ADDR(MultipleInstallPage, setEnableButton), stud_setEnableButton);
     stub.set(ADDR(MultipleInstallPage, DealDependResult), stud_DealDependResult);
@@ -205,7 +206,6 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
     stub.set(ADDR(QMenu, actions), stud_actions);
-    stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
 
     deb->enableCloseButton(false);
     deb->enableCloseButton(true);
