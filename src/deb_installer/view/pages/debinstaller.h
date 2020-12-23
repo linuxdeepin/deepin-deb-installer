@@ -53,10 +53,6 @@ public:
     DebInstaller(QWidget *parent = nullptr);
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
-    // QObject interface
-public:
-    bool event(QEvent *event) override;
-
 protected:
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;           //按键事件
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;    //拖入事件

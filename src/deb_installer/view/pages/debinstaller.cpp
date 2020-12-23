@@ -714,10 +714,6 @@ void DebInstaller::refreshSingle()
     m_Filterflag = 2;
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
-
-        //屏蔽焦点监控  如之后版本不复现55563 删除
-    // 刷新之后清除标题栏菜单键的焦点，防止在多次安装成功后再次添加包时，焦点偶尔出现在标题栏菜单键上。
-//    m_OptionWindow->clearFocus();
 }
 
 /**
@@ -776,9 +772,6 @@ void DebInstaller::setEnableButton(bool bEnable)
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
         multiplePage->setEnableButton(bEnable);
     }
-        //屏蔽焦点监控  如之后版本不复现55563 删除
-    //授权取消后 停止监测标题栏菜单键的焦点。
-//    m_pMonitorFocusThread->stopMonitor();
 }
 
 /**
@@ -787,6 +780,7 @@ void DebInstaller::setEnableButton(bool bEnable)
  */
 void DebInstaller::showHiddenButton()
 {
+    enableCloseAndExit();
     m_fileListModel->reset_filestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (m_dragflag == 2) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -850,29 +844,4 @@ bool DebInstaller::checkSuffix(QString filePath)
     }
     return false;
 
-}
-
-/**
- * @brief DebInstaller::event
- * @param event
- * @return
- */
-bool DebInstaller::event(QEvent *event)
-{
-    //fix bug: https://pms.uniontech.com/zentao/bug-view-55563.html
-//    qInfo()<<"event:"<<event->type();
-    if (event->type() == QEvent::WindowActivate) {      //重新激活时，清除全部的焦点。
-            //之后版本不复现55563 删除
-//        qInfo()<<"WindowActive";
-//        if (m_OptionWindow) {
-//            qInfo()<<"Option Window clear focus";
-//            m_OptionWindow->clearFocus();
-//        }
-        if (this->focusWidget()) {
-            qInfo()<<"focus Widget clear focus";
-            qInfo()<<focusWidget()->objectName();
-            this->focusWidget()->clearFocus();
-        }
-    }
-    return QWidget::event(event);
 }
