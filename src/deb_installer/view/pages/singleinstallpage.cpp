@@ -86,11 +86,7 @@ void SingleInstallPage::initUI()
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
-    if (m_packagesModel->isReady())             //判断当前是否已经准备好可以安装，如果可以安装显示包的信息
-        setPackageInfo();
-    else                                        //当前暂时还没有准备好，等120ms后再显示信息
-        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
-
+    setPackageInfo();
     m_upDown = true;                            //当前是收缩的
 }
 
@@ -770,6 +766,14 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
  */
 void SingleInstallPage::setPackageInfo()
 {
+    // 如果显示时后端未加载完成，则不断callback访问 直到加载完成
+    // 可以增加一个时间限制并且添加message提示。
+    if (!m_packagesModel->isReady()) {
+        qInfo() << "The backend is not loaded, please wait";
+        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
+        return;
+    }
+
     qApp->processEvents();                                  //界面实时刷新
     QFontInfo fontinfosize = this->fontInfo();              //获取系统字体
     int fontlabelsize = fontinfosize.pixelSize();
