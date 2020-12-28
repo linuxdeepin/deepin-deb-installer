@@ -153,6 +153,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setPen(forground);
         painter->fillPath(bgPath, background);
 
+        //设置包名和版本号的字体颜色 fix bug: 59390
+        forground.setColor(palette.color(cg, DPalette::ToolTipText));
         int yOffset = 6;
 
         //绘制分割线
@@ -198,7 +200,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
 
-        painter->setPen(/*styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText)*/forground);
+        painter->setPen(forground);
         painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
         // draw package version
@@ -211,7 +213,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
         const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, 195);
-        painter->setPen(/*styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText)*/forground);
+        painter->setPen(forground);
         QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
         version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
         painter->setFont(version_font);
