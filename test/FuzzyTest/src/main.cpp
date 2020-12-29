@@ -15,6 +15,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 
     DebFile *debfile = new DebFile(reinterpret_cast<char *>(const_cast<uint8_t *>(data)));
     debfile->isValid();
+    delete debfile;
     return 0;
 }
 
