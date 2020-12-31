@@ -172,6 +172,8 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
     p->appendPackage({"/1"});
 
     ASSERT_FALSE(p->m_packageMd5.isEmpty());
+    p->appendPackage(QStringList() << "/1"
+                                   << "/2");
 
     delete p;
 }

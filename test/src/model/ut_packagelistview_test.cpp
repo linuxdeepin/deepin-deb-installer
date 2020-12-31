@@ -91,7 +91,7 @@ TEST(packagelistview_Test, packagelistview_UT_setSelection)
 TEST(packagelistview_Test, packagelistview_UT_mousePressEvent)
 {
     PackagesListView *listview = new PackagesListView;
-    QMouseEvent mousePressEvent(QEvent::MouseButtonRelease, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     listview->mousePressEvent(&mousePressEvent);
 }
 
@@ -100,5 +100,21 @@ TEST(packagelistview_Test, packagelistview_UT_PaintEvent)
     PackagesListView *listview = new PackagesListView;
     QPaintEvent paint(QRect(listview->rect()));
     listview->paintEvent(&paint);
+    delete listview;
+}
+
+TEST(packagelistview_Test, packagelistview_UT_keyPressEvent)
+{
+    PackagesListView *listview = new PackagesListView;
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QCoreApplication::sendEvent(listview, &keyPressEvent);
+    delete listview;
+}
+
+TEST(packagelistview_Test, packagelistview_UT_focusInEvent)
+{
+    PackagesListView *listview = new PackagesListView;
+    QFocusEvent focus(QFocusEvent::FocusIn);
+    QCoreApplication::sendEvent(listview, &focus);
     delete listview;
 }
