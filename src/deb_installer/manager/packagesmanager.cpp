@@ -232,7 +232,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qDebug() << "PackagesManager:" << "conflicts package installed: "
                          << arch << p->name() << p->architecture()
                          << p->multiArchTypeString();
-                delete p;
                 return ConflictResult::err(name);
             }
 
@@ -254,11 +253,9 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qDebug() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << p->name() << p->architecture()
                          << p->multiArchTypeString() << mirror_version << conflict_version;
-                delete p;
                 return ConflictResult::err(name);
             }
 
-            delete p;
         }
     }
     return ConflictResult::ok(QString());
