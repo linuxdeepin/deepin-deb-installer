@@ -824,7 +824,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 
     model->checkSystemVersion();
 
-    ASSERT_FALSE(model->m_isDevelopMode);
+    ASSERT_TRUE(model->m_isDevelopMode);
 }
 
 TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosProfessional)
@@ -964,7 +964,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosCommunity)
 
     model->checkSystemVersion();
 
-    ASSERT_FALSE(model->m_isDevelopMode);
+    ASSERT_TRUE(model->m_isDevelopMode);
 }
 
 TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_default)

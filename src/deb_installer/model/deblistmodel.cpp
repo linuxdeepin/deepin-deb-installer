@@ -1040,7 +1040,7 @@ void DebListModel::checkSystemVersion()
     }
     case Dtk::Core::DSysInfo::UosCommunity: //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
-        m_isDevelopMode =  false;
+        m_isDevelopMode = true;
         break;
     default:
         m_isDevelopMode =  true;
