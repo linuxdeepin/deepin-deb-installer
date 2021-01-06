@@ -32,7 +32,6 @@
 #include <DApplication>
 #include <QPainterPath>
 
-
 DWIDGET_USE_NAMESPACE
 
 //delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
