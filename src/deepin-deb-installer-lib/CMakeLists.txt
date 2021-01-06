@@ -50,7 +50,10 @@ target_link_libraries(${APP_BIN_NAME}
 
 set(CMAKE_INSTALL_PREFIX /usr)
 # Install files
-install(TARGETS deepin-deb-installer DESTINATION lib)
+
+SET_TARGET_PROPERTIES(${APP_BIN_NAME} PROPERTIES VERSION 1.0.0 SOVERSION 1)
+
+install(TARGETS ${APP_BIN_NAME} LIBRARY DESTINATION lib)
 
 install(FILES ${APP_INCLUDE} DESTINATION  include/deepin-deb-installer)
 
