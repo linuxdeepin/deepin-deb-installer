@@ -143,10 +143,4 @@ set(CMAKE_INSTALL_PREFIX /usr)
 
 # Install files
 install(TARGETS deepin-deb-installer DESTINATION bin)
-
-file(GLOB APP_QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
-install(FILES ${APP_QM_FILES} DESTINATION share/deepin-deb-installer/translations)
-install(FILES ${APP_DESKTOP} DESTINATION share/applications)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
-install(FILES ${CMAKE_SOURCE_DIR}/assets/com.deepin.pkexec.aptInstallDepend.policy
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/polkit-1/actions)

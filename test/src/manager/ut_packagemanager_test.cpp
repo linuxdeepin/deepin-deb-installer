@@ -877,7 +877,22 @@ TEST(PackageManager_UT, PackageManager_UT_package)
 
 TEST(PackageManager_UT, PackageManager_UT_checkDependsPackageStatus)
 {
-    PackagesManager *p = new PackagesManager;
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    PackagesManager *p = new PackagesManager();
+    usleep(10 * 1000);
     QSet<QString> set;
     p->checkDependsPackageStatus(set, "", conflicts());
     delete p;
