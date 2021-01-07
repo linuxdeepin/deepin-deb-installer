@@ -81,6 +81,12 @@ void DebInstaller::initUI()
     this->setObjectName("DebInstaller");
     this->setAccessibleName("DebInstaller");
 
+    setFixedSize(480, 380);
+
+    DWidget *mainWidget = new DWidget(this);
+    mainWidget->setGeometry(0, 0, this->width(), this->height());
+    mainWidget->setAutoFillBackground(true);
+
     //file choose widget settings
     m_fileChooseWidget->setObjectName("FileChooseWidget");
     m_fileChooseWidget->setAccessibleName("FileChooseWidget");
@@ -107,7 +113,7 @@ void DebInstaller::initUI()
 
     addContent(wrapWidget);
     setAcceptDrops(true);          //启用了drop事件
-    setFixedSize(480, 380);
+
     //    setWindowTitle(tr("Package Installer"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());

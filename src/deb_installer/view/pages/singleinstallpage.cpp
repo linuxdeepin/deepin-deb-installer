@@ -57,7 +57,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_packageDescription(new DLabel(this))
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
-    , m_installProcessView(new InstallProcessInfoView(440, 190, this))
+    , m_installProcessView(new InstallProcessInfoView(420, 190, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
     , m_installButton(new DPushButton(this))
     //    , m_uninstallButton(new DPushButton(this))
@@ -436,7 +436,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 8, 0, 0);
+    progressLayout->setContentsMargins(0, 23, 0, 18);
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);

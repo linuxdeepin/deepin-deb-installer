@@ -51,6 +51,8 @@ void PackagesListView::initUI()
     setAutoScroll(true);                                                //允许自动滚动
     setMouseTracking(true);                                             //设置鼠标跟踪
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
+    setFixedHeight(170);
+    setAutoFillBackground(true);
 }
 
 /**

@@ -36,13 +36,13 @@
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
     , m_debListModel(model)
-    , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
+    , m_appsListViewBgFrame(new DRoundBgFrame(this, 0, 0))
     , m_contentFrame(new QWidget(this))
     , m_processFrame(new QWidget(this))
     , m_contentLayout(new QVBoxLayout())
     , m_centralLayout(new QVBoxLayout())
     , m_appsListView(new PackagesListView(this))
-    , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
+    , m_installProcessInfoView(new InstallProcessInfoView(420, 190, this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
@@ -50,7 +50,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
 
-      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -162,7 +162,7 @@ void MultipleInstallPage::initUI()
     //获取currentIndex的坐标位置，用于键盘触发右键菜单
     connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::getPos);
     //fix bug:33730
-    m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
+    m_appsListViewBgFrame->setFixedSize(440, 186 /* + 10*/ + 5);
 
     // listview的布局
     QVBoxLayout *appsViewLayout = new QVBoxLayout();
@@ -181,7 +181,7 @@ void MultipleInstallPage::initUI()
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
-    appsViewLayout->addSpacing(10);
+    //    appsViewLayout->addSpacing(10);
     appsViewLayout->addWidget(m_appsListView);
 
     m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
