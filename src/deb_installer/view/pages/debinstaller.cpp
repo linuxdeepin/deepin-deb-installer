@@ -99,7 +99,8 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
-
+    setIcon(QIcon::fromTheme("deepin-deb-installer"));
+    setCloseButtonVisible(false);
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     //Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
@@ -107,7 +108,7 @@ void DebInstaller::initUI()
     addContent(wrapWidget);
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
-    setWindowTitle(tr("Package Installer"));
+    //    setWindowTitle(tr("Package Installer"));
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }

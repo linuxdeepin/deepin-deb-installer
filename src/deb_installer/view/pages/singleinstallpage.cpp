@@ -60,7 +60,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_installProcessView(new InstallProcessInfoView(440, 190, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
     , m_installButton(new DPushButton(this))
-    , m_uninstallButton(new DPushButton(this))
+    //    , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))
     , m_confirmButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
@@ -296,9 +296,9 @@ void SingleInstallPage::initTabOrder()
     // fix bug: https://pms.uniontech.com/zentao/bug-view-46968.html
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
-    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
+    //    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
 
-    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
+    //    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
 
     QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
     QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
@@ -313,7 +313,7 @@ void SingleInstallPage::initButtonFocusPolicy()
     this->setFocusPolicy(Qt::NoFocus);                              //主界面不接受焦点
     auto focus = Qt::TabFocus;                                      //其余控件焦点为tabFocus
     m_installButton->setFocusPolicy(focus);
-    m_uninstallButton->setFocusPolicy(focus);
+    //    m_uninstallButton->setFocusPolicy(focus);
     m_reinstallButton->setFocusPolicy(focus);
     m_confirmButton->setFocusPolicy(focus);
     m_backButton->setFocusPolicy(focus);
@@ -328,7 +328,7 @@ void SingleInstallPage::initButtonFocusPolicy()
 void SingleInstallPage::initButtonAutoDefault()
 {
     m_installButton->setAutoDefault(true);
-    m_uninstallButton->setAutoDefault(true);
+    //    m_uninstallButton->setAutoDefault(true);
     m_reinstallButton->setAutoDefault(true);
     m_confirmButton->setAutoDefault(true);
     m_backButton->setAutoDefault(true);
@@ -372,8 +372,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_installButton->setVisible(false);
 
     //卸载按钮
-    m_uninstallButton->setText(tr("Remove"));
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setText(tr("Remove"));
+    //    m_uninstallButton->setVisible(false);
 
     //重新安装按钮
     m_reinstallButton->setText(tr("Reinstall"));
@@ -384,8 +384,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_confirmButton->setVisible(false);
 
     //返回按钮
-    m_backButton->setText(tr("Back"));
-    m_backButton->setVisible(false);
+    m_backButton->setText(tr("Cancel"));
+    m_backButton->setVisible(true);
 
     //完成按钮
     m_doneButton->setText(tr("Done"));
@@ -395,7 +395,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     // 设置各个按钮的大小
     m_installButton->setMinimumSize(120, 36);
-    m_uninstallButton->setMinimumSize(120, 36);
+    //    m_uninstallButton->setMinimumSize(120, 36);
     m_reinstallButton->setMinimumSize(120, 36);
     m_confirmButton->setMinimumSize(120, 36);
     m_backButton->setMinimumSize(120, 36);
@@ -423,10 +423,10 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();
-    btnsLayout->addWidget(m_installButton);
-    btnsLayout->addWidget(m_uninstallButton);
-    btnsLayout->addWidget(m_reinstallButton);
     btnsLayout->addWidget(m_backButton);
+    btnsLayout->addWidget(m_installButton);
+    //    btnsLayout->addWidget(m_uninstallButton);
+    btnsLayout->addWidget(m_reinstallButton);
     btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addWidget(m_doneButton);
     btnsLayout->addStretch();
@@ -456,7 +456,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //设置各个按钮的字体大小与样式
     Utils::bindFontBySizeAndWeight(m_tipsLabel, normalFontFamily, 12, QFont::Normal);
     Utils::bindFontBySizeAndWeight(m_installButton, mediumFontFamily, 14, QFont::Medium);
-    Utils::bindFontBySizeAndWeight(m_uninstallButton, mediumFontFamily, 14, QFont::Medium);
+    //    Utils::bindFontBySizeAndWeight(m_uninstallButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_reinstallButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_confirmButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
@@ -486,8 +486,8 @@ void SingleInstallPage::initConnections()
     //各个按钮的触发事件
     connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::install);
     connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::reinstall);
-    connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
-    connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
+    //    connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
+    connect(m_backButton, &DPushButton::clicked, qApp, &QApplication::quit);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
     connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
@@ -557,7 +557,7 @@ void SingleInstallPage::reinstall()
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setVisible(false);
 
     //安装开始 隐藏包信息提示
     m_tipsLabel->setVisible(false);
@@ -609,13 +609,13 @@ void SingleInstallPage::uninstallCurrentPackage()
 {
     // 卸载按钮点击后清除焦点
     // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
-    m_uninstallButton->clearFocus();
+    //    m_uninstallButton->clearFocus();
 
     //隐藏不需要的按钮
     m_tipsLabel->setVisible(false);
     m_backButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setVisible(false);
 
     //卸载开始 显示进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
@@ -665,7 +665,7 @@ void SingleInstallPage::showInfo()
     //隐藏按钮
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setVisible(false);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
     m_backButton->setVisible(false);
@@ -708,9 +708,9 @@ void SingleInstallPage::onWorkerFinished()
     m_progressFrame->setVisible(false);
 
     //显示需要显示的按钮
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_backButton->setVisible(true);
+    m_backButton->setVisible(false);
 
     //获取当前包的安装结果
     QModelIndex index = m_packagesModel->first();
@@ -832,7 +832,7 @@ void SingleInstallPage::setPackageInfo()
     //根据安装状态调整显示效果
     const bool installed = installStat != DebListModel::NotInstalled;
     m_installButton->setVisible(!installed);
-    m_uninstallButton->setVisible(installed);
+    //    m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
@@ -871,7 +871,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
     // 设置各个按钮的可用性
     m_installButton->setEnabled(bEnable);
     m_reinstallButton->setEnabled(bEnable);
-    m_uninstallButton->setEnabled(bEnable);
+    //    m_uninstallButton->setEnabled(bEnable);
 }
 
 /**
@@ -889,10 +889,12 @@ void SingleInstallPage::afterGetAutherFalse()
         m_installButton->setVisible(true);
     } else if (m_operate == Uninstall) {
         m_reinstallButton->setVisible(true);
-        m_uninstallButton->setVisible(true);
+        //        m_uninstallButton->setVisible(true);
+        m_backButton->setVisible(true);
     } else if (m_operate == Reinstall) {
         m_reinstallButton->setVisible(true);
-        m_uninstallButton->setVisible(true);
+        //        m_uninstallButton->setVisible(true);
+        m_backButton->setVisible(true);
     }
 }
 
@@ -920,7 +922,7 @@ void SingleInstallPage::setAuthConfirm(QString dependName)
     //调整按钮的显示效果
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
-    m_uninstallButton->setVisible(false);
+    //    m_uninstallButton->setVisible(false);
     m_confirmButton->setVisible(false);
     m_backButton->setVisible(false);
 
@@ -962,16 +964,19 @@ void SingleInstallPage::setAuthBefore()
     } else {    //依赖正常
         if (m_operate == Install) {
             m_installButton->setVisible(true);
+            m_backButton->setVisible(true);
         } else if (m_operate == Uninstall) {
             m_reinstallButton->setVisible(true);
-            m_uninstallButton->setVisible(true);
+            //            m_uninstallButton->setVisible(true);
+            m_backButton->setVisible(true);
         } else if (m_operate == Reinstall) {
             m_reinstallButton->setVisible(true);
-            m_uninstallButton->setVisible(true);
+            //            m_uninstallButton->setVisible(true);
+            m_backButton->setVisible(true);
         }
         m_installButton->setEnabled(false);
         m_reinstallButton->setEnabled(false);
-        m_uninstallButton->setEnabled(false);
+        //        m_uninstallButton->setEnabled(false);
     }
 
     // 依赖下载 进度显示
@@ -1006,7 +1011,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_backButton->setEnabled(true);
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
-        m_uninstallButton->setVisible(false);
+        //        m_uninstallButton->setVisible(false);
     } else {
         //依赖安装成功
         m_tipsLabel->clear();                   //依赖安装成功后，去除依赖错误的提示信息。
@@ -1038,9 +1043,10 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
                 m_reinstallButton->setText(tr("Update"));
             }
             m_reinstallButton->setVisible(true);
-            m_uninstallButton->setVisible(true);
+            //            m_uninstallButton->setVisible(true);
+            m_backButton->setVisible(true);
             m_reinstallButton->setEnabled(true);
-            m_uninstallButton->setEnabled(true);
+            //            m_uninstallButton->setEnabled(true);
         }
     }
 

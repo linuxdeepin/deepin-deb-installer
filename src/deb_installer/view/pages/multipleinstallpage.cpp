@@ -191,9 +191,8 @@ void MultipleInstallPage::initUI()
     m_installButton->setText(tr("Install"));    //设置安装按钮的提示语
     m_acceptButton->setText(tr("Done"));        //设置完成按钮的提示
     m_acceptButton->setVisible(false);          //默认隐藏完成按钮
-    m_backButton->setText(tr("Back"));          //设置返回按钮的提示
-    m_backButton->setVisible(false);            //隐藏返回按钮
-
+    m_backButton->setText(tr("Cancel")); //设置返回按钮的提示
+    m_backButton->setVisible(true); //隐藏返回按钮
 
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
@@ -247,8 +246,8 @@ void MultipleInstallPage::initUI()
     //按钮布局为水平布局
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();                                                                   //前后增加弹簧
-    btnsLayout->addWidget(m_installButton);                                                     //添加安装按钮
     btnsLayout->addWidget(m_backButton);                                                        //添加返回按钮
+    btnsLayout->addWidget(m_installButton); //添加安装按钮
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
@@ -333,8 +332,8 @@ void MultipleInstallPage::initConnections()
     //开始安装后隐藏安装按钮等
     connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::hiddenCancelButton);
 
-    //返回到文件选择窗口
-    connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
+    //退出应用程序
+    connect(m_backButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     //退出应用程序
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
@@ -369,7 +368,7 @@ void MultipleInstallPage::onWorkerFinshed()
 
     //安装结束显示返回和确认按钮
     m_acceptButton->setVisible(true);
-    m_backButton->setVisible(true);
+    //    m_backButton->setVisible(true);
     m_processFrame->setVisible(false);                  //隐藏进度条
     //当前安装结束后，不允许调出右键菜单
     m_appsListView->setRightMenuShowStatus(false);      //安装结束不允许删除包

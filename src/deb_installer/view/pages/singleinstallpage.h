@@ -258,7 +258,7 @@ private:
 
     InfoControlButton *m_infoControlButton;             //安装信息显示/隐藏控制按钮
     DPushButton *m_installButton;                       //安装按钮
-    DPushButton *m_uninstallButton;                     //卸载按钮
+    //    DPushButton *m_uninstallButton;                     //卸载按钮
     DPushButton *m_reinstallButton;                     //重新安装按钮
     DPushButton *m_confirmButton;                       //确认按钮
     DPushButton *m_backButton;                          //返回按钮

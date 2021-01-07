@@ -73,7 +73,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
     //将控件设置布局
     centralLayout = new QVBoxLayout(this);
-    centralLayout->setSpacing(5);
+    centralLayout->setSpacing(0);
 
     // 设置上下左右边界
     centralLayout->setContentsMargins(0, 0, 0, 0);
