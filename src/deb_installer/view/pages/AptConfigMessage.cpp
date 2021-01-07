@@ -68,11 +68,6 @@ void AptConfigMessage::initControl()
     m_inputEdit = new DLineEdit();
     m_inputEdit->setMinimumSize(220, 36);
 
-    //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
-    //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
-    //    QRegExp regExp("[0-9]{1,2}");
-    //    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
-
     // 初始化提示信息lable
     m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "));
     m_pQuestionLabel->setMaximumWidth(360);

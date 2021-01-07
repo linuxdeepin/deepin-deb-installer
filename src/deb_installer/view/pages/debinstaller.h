@@ -23,6 +23,7 @@
 #define DEBINSTALLER_H
 
 #include <DMainWindow>
+#include <DDialog>
 
 #include <QPointer>
 #include <QSettings>
@@ -45,7 +46,7 @@ using QApt::DebFile;
  * 承担各安装界面的切换，包的添加，删除等功能
  * M-V-C 中的 View
  */
-class DebInstaller : public Dtk::Widget::DMainWindow
+class DebInstaller : public Dtk::Widget::DDialog
 {
     Q_OBJECT
 
@@ -58,7 +59,6 @@ protected:
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;    //拖入事件
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;              //拖入放下事件
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;      //拖进事件
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;        //关闭事件 PS:没有实质的用处，之后删除
 
 private slots:
     /**
@@ -115,12 +115,6 @@ private slots:
      */
     void onUninstallCancel();
 
-    /**
-     * @brief onStartInstallRequested
-     * 安装开始后，所有的关闭按钮都会被禁止
-     * SP3新增，解决安装开始时焦点闪现的问题。
-     */
-    void onStartInstallRequested();
 
     /**
      * @brief setEnableButton
@@ -161,18 +155,6 @@ private slots:
      *
      */
     void reset();
-
-    /**
-     * @brief enableCloseButton
-     * @param enable 是否禁用关闭按钮
-     * 下载依赖时，关闭按钮不可用，下载依赖成功后，依赖按钮可用
-     */
-    void enableCloseButton(bool enable);
-
-    /**
-     * @brief stopMonitorTitleBarFocus 停止监测标题栏焦点
-     */
-    //    void stopMonitorTitleBarFocus();
 
 private:
     /**
@@ -218,23 +200,6 @@ private:
      */
     void MulRefreshPage();
 
-    /**
-     * @brief handleFocusPolicy
-     * 获取titleBar的控件 optionButton minButton closeButton
-     */
-    void handleFocusPolicy();
-
-    //Disable/enable close button and exit in menu
-    /**
-     * @brief disableCloseAndExit
-     * 设置退出和关闭按钮为不可用
-     */
-    void disableCloseAndExit();
-    /**
-     * @brief enableCloseAndExit
-     * 设置退出和关闭按钮可用
-     */
-    void enableCloseAndExit();
 
     /**
      * @brief backToSinglePage 返回单包安装界面

@@ -3,6 +3,7 @@
 
 #include <DApplication>
 #include <DMainWindow>
+#include <DDialog>
 #include <QCommandLineParser>
 
 #include <QDebug>
@@ -27,7 +28,7 @@ public slots:
 private:
     QStringList m_selectedFiles;
 
-    QScopedPointer<DMainWindow> m_qspMainWnd;  // MainWindow ptr
+    QScopedPointer<DDialog> m_qspMainWnd;  // MainWindow ptr
 };
 
 #endif // SINGLEFONTAPPLICATION_H

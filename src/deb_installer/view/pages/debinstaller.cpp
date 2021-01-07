@@ -57,7 +57,7 @@ DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
-    : DMainWindow(parent)
+    : DDialog(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout())
@@ -76,7 +76,7 @@ DebInstaller::~DebInstaller() {}
 void DebInstaller::initUI()
 {
     //Hide the shadow under the title bar
-    setTitlebarShadowEnabled(false);
+//    setTitlebarShadowEnabled(false);
 
     this->setObjectName("DebInstaller");
     this->setAccessibleName("DebInstaller");
@@ -99,23 +99,12 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
-    //title bar settings
-    DTitlebar *tb = titlebar();
-    tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
-    tb->setTitle("");
-    tb->setAutoFillBackground(true);
-    tb->setDisableFlags(Qt::CustomizeWindowHint);
-    //fix bug 4329, reset focusPolicy
-    // 屏蔽对标题栏焦点的处理
-    //handleFocusPolicy();                                                        //获取标题栏的控件按钮
 
-    //标题栏焦点监测线程。
-    //m_pMonitorFocusThread = new TitleBarFocusMonitor(m_OptionWindow);           //初始化标题栏焦点检测线程
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     //Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
 
-    setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
+    addContent(wrapWidget);
     setAcceptDrops(true);          //启用了drop事件
     setFixedSize(480, 380);
     setWindowTitle(tr("Package Installer"));
@@ -123,47 +112,6 @@ void DebInstaller::initUI()
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }
 
-/**
- * @brief handleFocusPolicy
- * 获取titleBar的控件 optionButton minButton closeButton
- * fix bug: https://pms.uniontech.com/zentao/bug-view-55563.html
- * 暂时放弃对titleBar控件的处理， 后续几个版本稳定后 删除
- */
-void DebInstaller::handleFocusPolicy()
-{
-    //Cancel all window focus
-    QLayout *layout = titlebar()->layout();
-    for (int i = 0; i < layout->count(); ++i) {
-        QWidget *widget = layout->itemAt(i)->widget();
-        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
-            QLayout *widgetLayout = widget->layout();
-            for (int j = 0; j < widgetLayout->count(); ++j) {
-                QWidget *topWidget = widgetLayout->itemAt(j)->widget();
-                if (topWidget != nullptr && QString(topWidget->metaObject()->className()) ==  QString("QWidget")) {
-                    QLayout *wLayout = topWidget->layout();
-                    for (int k = 0; k < wLayout->count(); ++k) {
-                        QWidget *bottomWidget = wLayout->itemAt(k)->widget();
-                        if (bottomWidget != nullptr && QString(bottomWidget->metaObject()->className()).contains("Button")) {
-                            //widget->setFocusPolicy(Qt::NoFocus);
-                            // 获取菜单栏按钮
-                            if ("Dtk::Widget::DWindowOptionButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_OptionWindow = bottomWidget;
-                            }
-                            // 获取最小化窗口按钮
-                            if ("Dtk::Widget::DWindowMinButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_MinWindow = bottomWidget;
-                            }
-                            // 获取关闭窗口按钮
-                            if ("Dtk::Widget::DWindowCloseButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_closeWindow = bottomWidget;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 /**
  * @brief initConnections
@@ -202,8 +150,7 @@ void DebInstaller::initConnections()
 
     //show dpkg details
     connect(m_fileListModel, &DebListModel::appendOutputInfo, this, [ = ](const QString & output) {
-        this->titlebar()->update();
-        qDebug() << "Process:" << output.trimmed();
+        qInfo() << "Process:" << output.trimmed();
     });
 
     //During installing/uninstalling, drag is not allowed
@@ -212,100 +159,18 @@ void DebInstaller::initConnections()
     //When the authorization is revoked, show install/uninstall/reinstall button which hidden during authorizing
     connect(m_fileListModel, &DebListModel::AuthCancel, this, &DebInstaller::showHiddenButton);
 
-    //When starting the installation, the install button is not available
-    connect(m_fileListModel, &DebListModel::onStartInstall, this, &DebInstaller::onStartInstallRequested);
-
     //When the authorization box pops up, the install button is not available.
     connect(m_fileListModel, &DebListModel::EnableReCancelBtn, this, &DebInstaller::setEnableButton);
 
     //When installing deepin-wine for the first time, set the button display according to the progress of the installation
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
-    connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
-
-    //监测到安装进度，停止监测标题栏菜单键焦点。
-    //放弃监测标题栏 55563不复现之后再删除
-//    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, &DebInstaller::stopMonitorTitleBarFocus);
 }
 
-/**
- * @brief DebInstaller::stopMonitorTitleBarFocus 停止监测标题栏焦点。
- */
-//void DebInstaller::stopMonitorTitleBarFocus()
-//{
-//    if (m_pMonitorFocusThread->isRunning()) {
-//        m_pMonitorFocusThread->stopMonitor();
-//    }
-//}
 
-/**
- * @brief DebInstaller::enableCloseButton 当安装、卸载开始或结束后，根据传递的值启用或禁用关闭按钮
- * @param enable 启用还是禁用关闭按钮的标识
- */
-void DebInstaller::enableCloseButton(bool enable)
-{
-    if (enable) {
-        enableCloseAndExit();                           //启用关闭按钮
-    } else {
-        disableCloseAndExit();                          //禁用关闭按钮
-    }
-}
-
-/**
- * @brief disableCloseAndExit
- * 设置退出和关闭按钮为不可用
- */
-// closed is forbidden during install/uninstall
-void DebInstaller::disableCloseAndExit()
-{
-    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
-    QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();                                   //获取标题栏菜单的关闭按钮
-    action->setDisabled(true);                                          //设置标题栏菜单中的关闭按钮不可用
-
-    // 36215可能是DTK的问题，且此问题会引发55563 因此暂时取消此处理
-    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
-//    titlebar()->setFocusPolicy(Qt::NoFocus);
-//    this->setFocusPolicy(Qt::NoFocus);
-}
-
-/**
- * @brief enableCloseAndExit
- * 设置退出和关闭按钮可用
- */
-// closed is allowed after install/uninstall
-void DebInstaller::enableCloseAndExit()
-{
-    titlebar()->setDisableFlags(titlebar()->windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowCloseButtonHint);    //设置标题栏的关闭按钮可用
-
-    QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();                                       //获取标题栏菜单中的关闭按钮
-    action->setDisabled(false);                                             //设置标题栏菜单中的关闭按钮不可用
-
-    // 36215可能是DTK的问题，且此问题会引发55563 因此暂时取消此处理
-//    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
-//    titlebar()->setFocusPolicy(Qt::NoFocus);
-//    this->setFocusPolicy(Qt::NoFocus);
-}
-
-/**
- * @brief onStartInstallRequested
- * 安装开始后，所有的关闭按钮都会被禁止
- * SP3新增，解决安装开始时焦点闪现的问题。
- */
-//after start installing,all close button is forbidden.
-void DebInstaller::onStartInstallRequested()
-{
-    //开始监测标题栏菜单键的焦点
-    // 暂时取消对菜单栏的监控，选用其他方式处理  如果55563不复现 则删除
-//    m_pMonitorFocusThread->start();
-    disableCloseAndExit();                                          //安装开始后，关闭按钮不可用，并开始检测标题栏菜单键的焦点
-}
 
 /**
  * @brief onNewAppOpen
@@ -521,15 +386,10 @@ void DebInstaller::showUninstallConfirmPage()
  */
 void DebInstaller::onUninstallAccepted()
 {
-    // uninstall begin
-    //屏蔽焦点监控 如果此后55563不复现则删除
-//    m_pMonitorFocusThread->start();                                                             // 确认卸载后开启标题栏焦点监控线程。
+    // uninstall begin                                                           // 确认卸载后开启标题栏焦点监控线程。
     SingleInstallPage *p = backToSinglePage();                                                  // 获取单包安装界面(卸载页面其实也是单包安装页面的一种)
     m_fileChooseWidget->setAcceptDrops(true);                                                   // 设置文件选择界面可以拖入包
     p->uninstallCurrentPackage();                                                               // 显示正在卸载页面
-
-    //set close button disabled while uninstalling
-    disableCloseAndExit();                                                                      // 卸载时不允许关闭或退出
 
     m_Filterflag = m_dragflag;
 }
@@ -573,7 +433,7 @@ void DebInstaller::reset()
     m_fileListModel->m_workerStatus_temp = 0;                               // 当前工作状态
     m_dragflag = -1;                                                        // 是否被允许拖入或添加
     m_Filterflag = -1;                                                      // 当前显示的页面
-    titlebar()->setTitle(QString());                                        // 重置标题栏
+//    titlebar()->setTitle(QString());                                        // 重置标题栏
     m_fileListModel->reset();                                               // 重置model
 
     // 删除所有的页面
@@ -662,8 +522,6 @@ void DebInstaller::single2Multi()
 
     // multiple packages install
 
-    titlebar()->setTitle(tr("Bulk Install"));
-
     MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
     multiplePage->setObjectName("MultipleInstallPage");
 
@@ -677,10 +535,6 @@ void DebInstaller::single2Multi()
 
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
-
-    //屏蔽焦点监控  如之后版本不复现55563 删除
-    // 刷新之后清除标题栏菜单键的焦点，防止在多次安装成功后再次添加包时，焦点偶尔出现在标题栏菜单键上。
-//    m_OptionWindow->clearFocus();
 
 }
 
@@ -697,9 +551,6 @@ void DebInstaller::refreshSingle()
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
-    //安装器中只有一个包，刷新单包安装页面
-    // single package install
-    //    titlebar()->setTitle(QString());
 
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");
@@ -748,8 +599,6 @@ void DebInstaller::changeDragFlag()
 {
     repaint();
     m_dragflag = 0;                                 //允许包被拖入且此时程序中没有包
-
-    enableCloseAndExit();
 }
 
 /**
@@ -780,7 +629,6 @@ void DebInstaller::setEnableButton(bool bEnable)
  */
 void DebInstaller::showHiddenButton()
 {
-    enableCloseAndExit();
     m_fileListModel->reset_filestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (m_dragflag == 2) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
@@ -791,14 +639,6 @@ void DebInstaller::showHiddenButton()
     }
 }
 
-/**
- * @brief DebInstaller::closeEvent 关闭事件
- * @param event
- */
-void DebInstaller::closeEvent(QCloseEvent *event)
-{
-    DMainWindow::closeEvent(event);
-}
 
 /**
  * @brief DealDependResult

@@ -207,10 +207,6 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
     stub.set(ADDR(QMenu, actions), stud_actions);
 
-    deb->enableCloseButton(false);
-    deb->enableCloseButton(true);
-    deb->handleFocusPolicy();
-    deb->onStartInstallRequested();
 
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerProcessing;
     deb->onPackagesSelected(QStringList() << "test.deb"
