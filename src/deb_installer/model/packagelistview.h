@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <DMenu>
 #include <QWidget>
+#include <QEvent>
 #include <DListView>
 
 DWIDGET_USE_NAMESPACE
@@ -48,6 +49,12 @@ signals:
      * @param bShow
      */
     void onShowHideTopBg(bool bShow);
+
+    /**
+     * @brief setItemHeight    设置item高度
+     * @param height item高度
+     */
+    void setItemHeight(int height);
 
     /**
      * @brief onShowHideBottomBg    信号已经被废弃
@@ -127,6 +134,11 @@ protected:
      */
     void focusInEvent(QFocusEvent *event) override;
 
+    /**
+     * @brief event 事件
+     */
+    virtual bool event(QEvent *event) override;
+
 private:
 
     /**
@@ -185,7 +197,6 @@ private:
      * @brief m_bIsRightMenuShow 当前是否能够调出右键菜单标识，由MultiPage工作状态决定，并传入
      */
     bool m_bIsRightMenuShow = false;//当前是否允许右键菜单显示
-
 };
 
 #endif  // PACKAGESLISTVIEW_H

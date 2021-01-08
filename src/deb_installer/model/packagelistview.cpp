@@ -27,6 +27,8 @@
 #include <QShortcut>
 #include <QScroller>
 
+#include <DFontSizeManager>
+
 PackagesListView::PackagesListView(QWidget *parent)
     : DListView(parent)
     , m_bLeftMouse(false)
@@ -51,7 +53,7 @@ void PackagesListView::initUI()
     setAutoScroll(true);                                                //允许自动滚动
     setMouseTracking(true);                                             //设置鼠标跟踪
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
-    setFixedHeight(170);
+    setFixedHeight(174);
     setAutoFillBackground(true);
 }
 
@@ -264,4 +266,21 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
             this->setCurrentIndex(m_currModelIndex);        //存在焦点时，默认选入第一项
         }
     }
+}
+
+/**
+ * @brief event 事件
+ */
+bool PackagesListView::event(QEvent *event)
+{
+    //字体变化事件
+    if (event->type() == QEvent::FontChange) {
+        qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
+        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 16) { //当前字体大小是否小于16
+            emit setItemHeight(48);
+        } else {
+            emit setItemHeight(48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16));
+        }
+    }
+    return DListView::event(event);
 }

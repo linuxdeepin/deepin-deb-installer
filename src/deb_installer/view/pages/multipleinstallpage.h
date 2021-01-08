@@ -25,6 +25,7 @@
 #include "view/widgets/infocontrolbutton.h"
 #include "view/widgets/droundbgframe.h"
 #include "view/widgets/installprocessinfoview.h"
+#include "model/packageslistdelegate.h"
 
 #include <QPropertyAnimation>
 #include <QWidget>
@@ -188,6 +189,8 @@ private:
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_tipsLabel;                    //依赖安装提示按钮
     DSpinner *m_dSpinner;                               //依赖安装动画
+
+    PackagesListDelegate *delegate;
 
     int m_index = -1;                                   //当前添加的index
 

@@ -22,7 +22,6 @@
 #include "multipleinstallpage.h"
 #include "model/deblistmodel.h"
 #include "model/packagelistview.h"
-#include "model/packageslistdelegate.h"
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
 
@@ -119,7 +118,7 @@ void MultipleInstallPage::initContentLayout()
     //子布局设置控件间的间距为0
     m_contentLayout->setSpacing(0);
     //子布局设定上下左右的编剧
-    m_contentLayout->setContentsMargins(10, 0, 10, 0);
+    m_contentLayout->setContentsMargins(0, 0, 0, 0);
 
     //添加子布局到主布局中
     m_contentFrame->setLayout(m_contentLayout);
@@ -157,13 +156,12 @@ void MultipleInstallPage::initUI()
 {
     this->setFocusPolicy(Qt::NoFocus);
     //直接传入debListModel 修复多次创建packageManager导致崩溃的问题
-    PackagesListDelegate *delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
+    delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
 
     //获取currentIndex的坐标位置，用于键盘触发右键菜单
     connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::getPos);
     //fix bug:33730
-    m_appsListViewBgFrame->setFixedSize(440, 186 /* + 10*/ + 5);
-
+    m_appsListViewBgFrame->setFixedSize(460, 186 /* + 10*/ + 5);
     // listview的布局
     QVBoxLayout *appsViewLayout = new QVBoxLayout();
     appsViewLayout->setSpacing(0);
@@ -178,6 +176,9 @@ void MultipleInstallPage::initUI()
 
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
+
+    //监听字体大小变化,设置高度
+    connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
@@ -441,7 +442,7 @@ void MultipleInstallPage::showInfo()
 {
     m_appsListView->setFocusPolicy(Qt::NoFocus);            //详细信息出现后 设置appListView不接受焦点
     m_upDown = false;                                       //未使用
-    m_contentLayout->setContentsMargins(20, 0, 20, 0);      //设置上下左右边距
+    m_contentLayout->setContentsMargins(0, 0, 0, 0); //设置上下左右边距
     m_appsListViewBgFrame->setVisible(false);               //隐藏applistView
     m_appsListView->setVisible(false);
     m_installProcessInfoView->setVisible(true);             //显示相关安装进度信息
@@ -454,7 +455,7 @@ void MultipleInstallPage::hideInfo()
 {
     m_appsListView->setFocusPolicy(Qt::TabFocus);           //隐藏详细信息后，设置appListView的焦点策略
     m_upDown = true;
-    m_contentLayout->setContentsMargins(10, 0, 10, 0);      //设置边距
+    m_contentLayout->setContentsMargins(0, 0, 0, 0); //设置边距
     m_appsListViewBgFrame->setVisible(true);                //显示appListView
     m_appsListView->setVisible(true);
     m_installProcessInfoView->setVisible(false);            //隐藏安装过程信息

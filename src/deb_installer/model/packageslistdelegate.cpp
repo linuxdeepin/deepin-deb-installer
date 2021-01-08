@@ -41,13 +41,7 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
     qApp->installEventFilter(this);                     //事件筛选
-    QFontInfo fontinfo = m_parentView->fontInfo();      //获取字体
-    int fontsize = fontinfo.pixelSize();
-    if (fontsize >= 16) {                               //根据字体大小设置高度
-        m_itemHeight = 56;
-    } else {
-        m_itemHeight = 48;
-    }
+    m_itemHeight = 48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16); //根据字体初始化item高度
 }
 
 /**
@@ -209,7 +203,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const int version_y = version_rect.top();
         version_rect.setLeft(200);
         version_rect.setTop(version_y - 1);
-        version_rect.setRight(option.rect.right() - 85);
+        version_rect.setRight(option.rect.right() - 80);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
         const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, 195);
@@ -332,4 +326,12 @@ bool PackagesListDelegate::eventFilter(QObject *watched, QEvent *event)
         emit fontinfo.pixelSize();
     }
     return QObject::eventFilter(watched, event);
+}
+
+/**
+ * @brief getItemHeight item高度
+ */
+void PackagesListDelegate::getItemHeight(int height)
+{
+    m_itemHeight = height;
 }
