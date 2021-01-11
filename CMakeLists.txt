@@ -8,8 +8,6 @@ project(deepin_deb_installer)
 option(DMAN_RELEAE OFF "Install dman resources to system or not")
 
 find_package(Qt5LinguistTools REQUIRED)
-
-set(DESKTOP_FILE ${CMAKE_PROJECT_NAME}.desktop)
 set(POLICY_FILE com.deepin.pkexec.aptInstallDepend.policy)
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb_installer)

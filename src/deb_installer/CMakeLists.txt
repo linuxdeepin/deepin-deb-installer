@@ -144,3 +144,5 @@ set(CMAKE_INSTALL_PREFIX /usr)
 # Install files
 install(TARGETS deepin-deb-installer DESTINATION bin)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
+install(FILES ${APP_DESKTOP} DESTINATION share/applications)
+

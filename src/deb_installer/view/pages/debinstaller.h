@@ -251,9 +251,6 @@ private:
     int m_Filterflag = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     QPointer<QWidget> m_UninstallPage;              //Store uninstall page
-    QWidget *m_OptionWindow;                        //titlebar main menu
-    QWidget *m_MinWindow;                           //最小化窗口按钮
-    QWidget *m_closeWindow;                         //关闭窗口按钮
 
     bool packageAppending = false;
 };
