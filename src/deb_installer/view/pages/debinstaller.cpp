@@ -105,15 +105,8 @@ void DebInstaller::initUI()
     tb->setTitle("");
     tb->setAutoFillBackground(true);
     tb->setDisableFlags(Qt::CustomizeWindowHint);
-    //fix bug 4329, reset focusPolicy
-    // 屏蔽对标题栏焦点的处理
-    //handleFocusPolicy();                                                        //获取标题栏的控件按钮
-
-    //标题栏焦点监测线程。
-    //m_pMonitorFocusThread = new TitleBarFocusMonitor(m_OptionWindow);           //初始化标题栏焦点检测线程
 
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-    //Utils::bindFontBySizeAndWeight(tb, fontFamily, 14, QFont::Medium);
 
     setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
     setAcceptDrops(true);          //启用了drop事件
@@ -123,47 +116,6 @@ void DebInstaller::initUI()
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }
 
-/**
- * @brief handleFocusPolicy
- * 获取titleBar的控件 optionButton minButton closeButton
- * fix bug: https://pms.uniontech.com/zentao/bug-view-55563.html
- * 暂时放弃对titleBar控件的处理， 后续几个版本稳定后 删除
- */
-void DebInstaller::handleFocusPolicy()
-{
-    //Cancel all window focus
-    QLayout *layout = titlebar()->layout();
-    for (int i = 0; i < layout->count(); ++i) {
-        QWidget *widget = layout->itemAt(i)->widget();
-        if (widget != nullptr && QString(widget->metaObject()->className()) ==  QString("QWidget")) {
-            QLayout *widgetLayout = widget->layout();
-            for (int j = 0; j < widgetLayout->count(); ++j) {
-                QWidget *topWidget = widgetLayout->itemAt(j)->widget();
-                if (topWidget != nullptr && QString(topWidget->metaObject()->className()) ==  QString("QWidget")) {
-                    QLayout *wLayout = topWidget->layout();
-                    for (int k = 0; k < wLayout->count(); ++k) {
-                        QWidget *bottomWidget = wLayout->itemAt(k)->widget();
-                        if (bottomWidget != nullptr && QString(bottomWidget->metaObject()->className()).contains("Button")) {
-                            //widget->setFocusPolicy(Qt::NoFocus);
-                            // 获取菜单栏按钮
-                            if ("Dtk::Widget::DWindowOptionButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_OptionWindow = bottomWidget;
-                            }
-                            // 获取最小化窗口按钮
-                            if ("Dtk::Widget::DWindowMinButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_MinWindow = bottomWidget;
-                            }
-                            // 获取关闭窗口按钮
-                            if ("Dtk::Widget::DWindowCloseButton" == QString(bottomWidget->metaObject()->className())) {
-                                m_closeWindow = bottomWidget;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 /**
  * @brief initConnections
@@ -225,21 +177,7 @@ void DebInstaller::initConnections()
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
-
-    //监测到安装进度，停止监测标题栏菜单键焦点。
-    //放弃监测标题栏 55563不复现之后再删除
-//    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, &DebInstaller::stopMonitorTitleBarFocus);
 }
-
-/**
- * @brief DebInstaller::stopMonitorTitleBarFocus 停止监测标题栏焦点。
- */
-//void DebInstaller::stopMonitorTitleBarFocus()
-//{
-//    if (m_pMonitorFocusThread->isRunning()) {
-//        m_pMonitorFocusThread->stopMonitor();
-//    }
-//}
 
 /**
  * @brief DebInstaller::enableCloseButton 当安装、卸载开始或结束后，根据传递的值启用或禁用关闭按钮
@@ -266,11 +204,6 @@ void DebInstaller::disableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();                                   //获取标题栏菜单的关闭按钮
     action->setDisabled(true);                                          //设置标题栏菜单中的关闭按钮不可用
-
-    // 36215可能是DTK的问题，且此问题会引发55563 因此暂时取消此处理
-    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
-//    titlebar()->setFocusPolicy(Qt::NoFocus);
-//    this->setFocusPolicy(Qt::NoFocus);
 }
 
 /**
@@ -286,11 +219,6 @@ void DebInstaller::enableCloseAndExit()
     QList<QAction *> actions = titleMenu->actions();
     QAction *action = actions.last();                                       //获取标题栏菜单中的关闭按钮
     action->setDisabled(false);                                             //设置标题栏菜单中的关闭按钮不可用
-
-    // 36215可能是DTK的问题，且此问题会引发55563 因此暂时取消此处理
-//    // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
-//    titlebar()->setFocusPolicy(Qt::NoFocus);
-//    this->setFocusPolicy(Qt::NoFocus);
 }
 
 /**
@@ -301,9 +229,6 @@ void DebInstaller::enableCloseAndExit()
 //after start installing,all close button is forbidden.
 void DebInstaller::onStartInstallRequested()
 {
-    //开始监测标题栏菜单键的焦点
-    // 暂时取消对菜单栏的监控，选用其他方式处理  如果55563不复现 则删除
-//    m_pMonitorFocusThread->start();
     disableCloseAndExit();                                          //安装开始后，关闭按钮不可用，并开始检测标题栏菜单键的焦点
 }
 
@@ -522,8 +447,6 @@ void DebInstaller::showUninstallConfirmPage()
 void DebInstaller::onUninstallAccepted()
 {
     // uninstall begin
-    //屏蔽焦点监控 如果此后55563不复现则删除
-//    m_pMonitorFocusThread->start();                                                             // 确认卸载后开启标题栏焦点监控线程。
     SingleInstallPage *p = backToSinglePage();                                                  // 获取单包安装界面(卸载页面其实也是单包安装页面的一种)
     m_fileChooseWidget->setAcceptDrops(true);                                                   // 设置文件选择界面可以拖入包
     p->uninstallCurrentPackage();                                                               // 显示正在卸载页面
@@ -677,10 +600,6 @@ void DebInstaller::single2Multi()
 
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
-
-    //屏蔽焦点监控  如之后版本不复现55563 删除
-    // 刷新之后清除标题栏菜单键的焦点，防止在多次安装成功后再次添加包时，焦点偶尔出现在标题栏菜单键上。
-//    m_OptionWindow->clearFocus();
 
 }
 
