@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="512"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Das deb-Paket könnte beschädigt sein</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="524"/>
@@ -41,7 +41,7 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="95"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="112"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Installation fehlgeschlagen, bitte prüfen sie Ihre Internetverbindung</translation>
+        <translation>Installation fehlgeschlagen, bitte überprüfen Sie Ihre Netzwerkverbindung</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="97"/>
@@ -58,12 +58,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Keine digitale Signatur</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Ungültige digitale Signatur</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="133"/>
@@ -93,7 +93,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="908"/>
         <source>Proceed</source>
-        <translation type="unfinished"/>
+        <translation>Fortfahren</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="959"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>Authentifizierung fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="625"/>
