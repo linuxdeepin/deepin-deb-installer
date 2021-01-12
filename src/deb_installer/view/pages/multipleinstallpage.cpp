@@ -237,7 +237,7 @@ void MultipleInstallPage::initUI()
 
     m_processFrame->setVisible(false);                                                          //进度条默认隐藏
     m_processFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_processFrame->setMinimumHeight(53);                                                         //设置固定高度
+    m_processFrame->setMinimumHeight(20); //设置固定高度
 
     // 按钮布局
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
@@ -442,7 +442,7 @@ void MultipleInstallPage::showInfo()
 {
     m_appsListView->setFocusPolicy(Qt::NoFocus);            //详细信息出现后 设置appListView不接受焦点
     m_upDown = false;                                       //未使用
-    m_contentLayout->setContentsMargins(0, 0, 0, 0); //设置上下左右边距
+    m_contentLayout->setContentsMargins(20, 0, 0, 0); //设置上下左右边距
     m_appsListViewBgFrame->setVisible(false);               //隐藏applistView
     m_appsListView->setVisible(false);
     m_installProcessInfoView->setVisible(true);             //显示相关安装进度信息

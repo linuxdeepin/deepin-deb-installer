@@ -127,7 +127,7 @@ void SingleInstallPage::initControlAccessibleName()
 void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(0, 10, 0, 16); //设置四周边距
+    m_contentLayout->setContentsMargins(20, 10, 0, 16); //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -385,7 +385,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     //返回按钮
     m_backButton->setText(tr("Cancel"));
-    m_backButton->setVisible(true);
+    m_backButton->setVisible(false);
 
     //完成按钮
     m_doneButton->setText(tr("Done"));
@@ -723,6 +723,7 @@ void SingleInstallPage::onWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
             m_tipsLabel->setText(tr("Installed successfully"));//添加提示
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
+            m_backButton->setVisible(false);
         } else {                                               //卸载成功
             qDebug() << "SingleInstallPage:" << "Uninstalled successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
@@ -822,7 +823,7 @@ void SingleInstallPage::setPackageInfo()
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
+        m_backButton->setVisible(false);
         return;
     }
 
@@ -834,6 +835,7 @@ void SingleInstallPage::setPackageInfo()
     m_installButton->setVisible(!installed);
     //    m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
+    m_backButton->setVisible(installed);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
 
@@ -960,7 +962,7 @@ void SingleInstallPage::setAuthBefore()
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
+        m_backButton->setVisible(false);
     } else {    //依赖正常
         if (m_operate == Install) {
             m_installButton->setVisible(true);
@@ -1006,7 +1008,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         qDebug() << "SingleInstallPage:" <<  "depends Break or Revoke installation authorization";
         m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
+        m_backButton->setVisible(false);
         m_confirmButton->setEnabled(true);
         m_backButton->setEnabled(true);
         m_installButton->setVisible(false);
