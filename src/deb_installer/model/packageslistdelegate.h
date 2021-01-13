@@ -34,6 +34,10 @@ public:
     //delegate使用传入的model而非重新new一个对象 解决多次创建model packagemanager导致崩溃的问题
     explicit PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent = nullptr);
     bool eventFilter(QObject *watched, QEvent *event) override;
+    /**
+     * @brief getItemHeight item高度
+     */
+    void getItemHeight(int height);
 
 signals:
     // 用来发送当前Item的位置参数和row。确定右键菜单的位置。

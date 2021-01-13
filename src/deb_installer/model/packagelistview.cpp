@@ -263,3 +263,20 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
         }
     }
 }
+
+/**
+ * @brief event 事件
+ */
+bool PackagesListView::event(QEvent *event)
+{
+    //字体变化事件
+    if (event->type() == QEvent::FontChange) {
+        qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
+        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 16) { //当前字体大小是否小于16
+            emit setItemHeight(48);
+        } else {
+            emit setItemHeight(48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16));
+        }
+    }
+    return DListView::event(event);
+}

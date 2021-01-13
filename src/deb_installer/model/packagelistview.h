@@ -50,6 +50,12 @@ signals:
     void onShowHideTopBg(bool bShow);
 
     /**
+     * @brief setItemHeight    设置item高度
+     * @param height item高度
+     */
+    void setItemHeight(int height);
+
+    /**
      * @brief onShowHideBottomBg    信号已经被废弃
      * @param bShow
      */
@@ -126,6 +132,11 @@ protected:
      * 当焦点切换到当前控件时，默认选中第一项。
      */
     void focusInEvent(QFocusEvent *event) override;
+
+    /**
+     * @brief event 事件
+     */
+    virtual bool event(QEvent *event) override;
 
 private:
 
