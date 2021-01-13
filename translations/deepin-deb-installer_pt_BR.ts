@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="512"/>
         <source>The deb package may be broken</source>
-        <translation>O pacote .deb pode estar quebrado</translation>
+        <translation>O pacote .deb pode estar corrompido</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="524"/>
@@ -32,7 +32,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="705"/>
         <source>Bulk Install</source>
-        <translation>Instalação em Massa</translation>
+        <translation>Instalação em massa</translation>
     </message>
 </context>
 <context>
@@ -41,19 +41,19 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="95"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="112"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Erro na Instalação! Verifique sua conexão</translation>
+        <translation>A instalação falhou; verifique a conexão de rede</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="97"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Erro na instalação. Verifique se há atualizações no Centro de Controle.</translation>
+        <translation>A instalação falhou; verifique se há atualizações disponíveis</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="100"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="104"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="116"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Erro na Instalação! Espaço insuficiente no disco</translation>
+        <translation>A instalação falhou; espaço insuficiente em disco</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="64"/>
         <source>Drag deb packages here</source>
-        <translation>Arraste os pacotes .deb aqui</translation>
+        <translation>Arraste e solte os pacotes .deb aqui</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="106"/>
@@ -274,7 +274,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="875"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Downgrade</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="878"/>
@@ -285,7 +285,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="880"/>
         <source>Update</source>
-        <translation type="unfinished"/>
+        <translation>Atualizar</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="957"/>
@@ -383,7 +383,7 @@ Todas as dependências serão removidas</translation>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Desinstalar %1?
-O sistema ou outros aplicativos podem não funcionar corretamente</translation>
+O sistema e/ou outros aplicativos podem não funcionar corretamente</translation>
     </message>
 </context>
 <context>
@@ -397,7 +397,7 @@ O sistema ou outros aplicativos podem não funcionar corretamente</translation>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>O Instalador de Pacotes ajuda os usuários a instalar e remover pacotes locais e suporta a instalação em massa.</translation>
+        <translation>O Instalador de Pacotes auxilia os usuários a instalar e remover pacotes, e permite a instalação em massa.</translation>
     </message>
 </context>
 </TS>

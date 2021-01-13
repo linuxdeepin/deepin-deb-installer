@@ -11,7 +11,7 @@
 <message>
     <location filename="Desktop Entry]Comment" line="0"/>
     <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-    <translation>O Instalador de Pacotes ajuda os usuários a instalar e remover pacotes locais e suporta a instalação em massa.</translation>
+    <translation>O Instalador de Pacotes auxilia os usuários a instalar e remover pacotes, e permite a instalação em massa.</translation>
 </message>
 </context>
 </TS>
