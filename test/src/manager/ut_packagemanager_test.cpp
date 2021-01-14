@@ -175,6 +175,7 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
     p->appendPackage(QStringList() << "/1"
                                    << "/2");
 
+    usleep(10 * 1000);
     delete p;
 }
 

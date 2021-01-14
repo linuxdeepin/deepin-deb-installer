@@ -1105,6 +1105,7 @@ PackagesManager::~PackagesManager()
 
     //先取消当前异步计算的后端。
     m_backendFuture.cancel();
+    delete m_pAddPackageThread;
 
     Backend *b = m_backendFuture.result();
 

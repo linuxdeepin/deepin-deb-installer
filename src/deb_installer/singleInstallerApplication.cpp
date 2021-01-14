@@ -11,7 +11,6 @@ DCORE_USE_NAMESPACE
 
 SingleInstallerApplication::SingleInstallerApplication(int &argc, char **argv)
     : DApplication(argc, argv)
-    , m_qspMainWnd(nullptr)
 {
 
 }

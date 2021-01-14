@@ -147,6 +147,8 @@ DebListModel::DebListModel(QObject *parent)
     m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
     m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
 
+    configWindow = new AptConfigMessage;
+
     // 配置安装结束
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
 
@@ -154,7 +156,7 @@ DebListModel::DebListModel(QObject *parent)
     connect(m_procInstallConfig, &QProcess::readyReadStandardOutput, this, &DebListModel::ConfigReadOutput);
 
     // 向安装进程中写入配置信息（一般是配置的序号）
-    connect(AptConfigMessage::getInstance(), &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
+    connect(configWindow, &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
 
     //处理wine依赖安装的过程
     connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
@@ -1032,10 +1034,11 @@ void DebListModel::checkSystemVersion()
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
-        QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-        bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
+        delete dbusInterFace;
         break;
     }
     case Dtk::Core::DSysInfo::UosCommunity: //社区版 不验证签名
@@ -1160,18 +1163,20 @@ bool DebListModel::mkdir()
  */
 void DebListModel::getDebian(QString debPath)
 {
-    QProcess *m_pDpkg = new QProcess;
+
 
     if (!mkdir()) {                                                             //创建临时路径
         qWarning() << "check error mkdir" << tempPath << "failed";              //创建失败
         return;
     }
+    QProcess *m_pDpkg = new QProcess(this);
     m_pDpkg->start("dpkg", QStringList() << "-e" << debPath << tempPath);       //获取DEBIAN文件，查看当前包是否需要配置
     m_pDpkg->waitForFinished();
     QString getDebianProcessErrInfo = m_pDpkg->readAllStandardError();
     if (!getDebianProcessErrInfo.isEmpty()) {
         qDebug() << "DebListModel:" << "Failed to decompress the main control file" << getDebianProcessErrInfo;
     }
+    delete m_pDpkg;
 }
 
 /**
@@ -1348,8 +1353,8 @@ void DebListModel::ConfigInstallFinish(int flag)
             bumpInstallIndex();                                     //开始安装下一个
         }
     }
-    AptConfigMessage::getInstance()->hide();                        //隐藏配置窗口
-    AptConfigMessage::getInstance()->clearTexts();                  //清楚配置信息
+    configWindow->hide();                        //隐藏配置窗口
+    configWindow->clearTexts();                  //清楚配置信息
     m_procInstallConfig->terminate();                               //结束配置
     m_procInstallConfig->close();
 }
@@ -1371,12 +1376,12 @@ void DebListModel::ConfigReadOutput()
     if (tmp.contains("StartInstallAptConfig")) {                                        //获取到当前正在安装配置
         emit onStartInstall();
         refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
-        AptConfigMessage::getInstance()->show();                                        //显示配置窗口
+        configWindow->show();                                        //显示配置窗口
         QString startFlagStr = "StartInstallAptConfig";
         int num = tmp.indexOf(startFlagStr) + startFlagStr.size();
         int iCutoutNum = tmp.size() - num;
         if (iCutoutNum > 0)
-            AptConfigMessage::getInstance()->appendTextEdit(tmp.mid(num, iCutoutNum));  //显示配置信息
+            configWindow->appendTextEdit(tmp.mid(num, iCutoutNum));  //显示配置信息
         return;
     }
 
@@ -1387,9 +1392,9 @@ void DebListModel::ConfigReadOutput()
     appendInfoStr.replace("\n\n", "\n");
     emit appendOutputInfo(appendInfoStr);                                               //将信息同步显示到安装信息中
     if (tmp.contains("Not authorized")) {
-        AptConfigMessage::getInstance()->close();                                       //没有授权，关闭配置窗口
+        configWindow->close();                                       //没有授权，关闭配置窗口
     } else {
-        AptConfigMessage::getInstance()->appendTextEdit(tmp);                           //授权成功，继续配置
+        configWindow->appendTextEdit(tmp);                           //授权成功，继续配置
     }
 }
 
@@ -1437,4 +1442,12 @@ void DebListModel::getPackageMd5(QList<QByteArray> md5)
     m_packageMd5.clear();
     m_packageMd5 = md5;
     emit appendFinished();
+}
+
+
+DebListModel::~DebListModel()
+{
+    delete m_packagesManager;
+    delete configWindow;
+    delete m_procInstallConfig;
 }

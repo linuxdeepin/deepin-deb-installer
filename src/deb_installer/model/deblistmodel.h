@@ -37,12 +37,16 @@
 #include <QProcess>
 
 class PackagesManager;
+class AptConfigMessage;
+
 class DebListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
     explicit DebListModel(QObject *parent = nullptr);
+
+    ~DebListModel();
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
@@ -586,6 +590,8 @@ private:
     bool m_isDevelopMode = true;                      // 开发者模式的标志变量 ps：部分系统版本无需签名验证，默认开发者模式
 
     QList<QByteArray> m_packageMd5;
+
+    AptConfigMessage *configWindow = nullptr;
 };
 
 #endif  // DEBLISTMODEL_H

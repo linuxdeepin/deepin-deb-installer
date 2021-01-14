@@ -59,9 +59,8 @@ DWIDGET_USE_NAMESPACE
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
-    , m_fileChooseWidget(new FileChooseWidget)
-    , m_centralLayout(new QStackedLayout())
-    , m_dragflag(-1)
+    , m_fileChooseWidget(new FileChooseWidget(this))
+    , m_centralLayout(new QStackedLayout(this))
 {
     initUI();
     initConnections();
@@ -115,7 +114,6 @@ void DebInstaller::initUI()
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 }
-
 
 /**
  * @brief initConnections
