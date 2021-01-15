@@ -769,8 +769,7 @@ void SingleInstallPage::setPackageInfo()
     // 如果显示时后端未加载完成，则不断callback访问 直到加载完成
     // 可以增加一个时间限制并且添加message提示。
     if (!m_packagesModel->isReady()) {
-        qInfo() << "The backend is not loaded, please wait";
-        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
+        QTimer::singleShot(10, this, &SingleInstallPage::setPackageInfo);
         return;
     }
 

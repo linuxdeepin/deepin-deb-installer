@@ -276,6 +276,69 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy)
     delete p;
 }
 
+
+TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_01)
+{
+    Stub stub;
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+
+    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    PackagesManager *p = new PackagesManager();
+
+    p->appendPackage({"/1"});
+    usleep(10 * 1000);
+    ConflictResult cr = p->isConflictSatisfy("i386", conflicts());
+    ASSERT_TRUE(cr.is_ok());
+    delete p;
+}
+
+bool package_isInstalled()
+{
+    return true;
+}
+
+TEST(PackageManager_UT, PackageManager_UT_isInstalledConflict)
+{
+    Stub stub;
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+
+    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(Backend, availablePackages), backend_availablePackages);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+
+    stub.set(ADDR(Package, isInstalled), package_isInstalled);
+
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    PackagesManager *p = new PackagesManager();
+
+    p->appendPackage({"/1"});
+    usleep(10 * 1000);
+    ConflictResult cr = p->isInstalledConflict("package name","packageversion","i386");
+    ASSERT_TRUE(cr.is_ok());
+    delete p;
+}
+
+
+
 TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
 {
     Stub stub;
@@ -827,9 +890,15 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackageFinished)
     delete p;
 }
 
-TEST(PackageManager_UT, PackageManager_UT_025)
+TEST(PackageManager_UT, PackageManager_UT_isArchMatches_01)
 {
     ASSERT_TRUE(isArchMatches("all", "", 0));
+
+}
+
+TEST(PackageManager_UT, PackageManager_UT_isArchMatches_02)
+{
+    ASSERT_FALSE(isArchMatches("amd64", "", 0));
 
 }
 
@@ -838,10 +907,51 @@ TEST(PackageManager_UT, PackageManager_UT_resolvMultiArchAnnotation)
     ASSERT_STREQ(resolvMultiArchAnnotation("all", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
+TEST(PackageManager_UT, PackageManager_UT_resolvMultiArchAnnotation_01)
+{
+    ASSERT_STREQ(resolvMultiArchAnnotation("testAnnotation", "", InvalidMultiArchType).toLocal8Bit(), ":testAnnotation");
+}
+
+TEST(PackageManager_UT, PackageManager_UT_resolvMultiArchAnnotation_02)
+{
+    ASSERT_STREQ(resolvMultiArchAnnotation(":i386", "", InvalidMultiArchType).toLocal8Bit(), ":i386");
+}
+
 TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch)
 {
     ASSERT_TRUE(dependencyVersionMatch(0, Equals));
 }
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_01)
+{
+    ASSERT_TRUE(dependencyVersionMatch(0, LessOrEqual));
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_02)
+{
+    ASSERT_TRUE(dependencyVersionMatch(-1, LessThan));
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_03)
+{
+    ASSERT_TRUE(dependencyVersionMatch(1, GreaterThan));
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_04)
+{
+    ASSERT_TRUE(dependencyVersionMatch(1, NotEqual));
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_05)
+{
+    ASSERT_TRUE(dependencyVersionMatch(1, GreaterOrEqual));
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dependencyVersionMatch_06)
+{
+    ASSERT_TRUE(dependencyVersionMatch(1, NoOperand));
+}
+
 
 TEST(PackageManager_UT, PackageManager_UT_backend)
 {
