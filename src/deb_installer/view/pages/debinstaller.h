@@ -74,6 +74,11 @@ private slots:
     void showInvalidePackageMessage();
 
     /**
+     * @brief showInvalidePackageMessage1 平板模式弹出无效包的消息通知
+     */
+    void showInvalidePackageMessage1();
+
+    /**
      * @brief showPkgExistMessage 弹出包已存在的消息通知
      */
     void showPkgExistMessage();

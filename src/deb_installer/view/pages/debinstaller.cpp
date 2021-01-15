@@ -127,7 +127,10 @@ void DebInstaller::initUI()
 void DebInstaller::initConnections()
 {
     //接收到添加无效包的信号则弹出无效包的弹窗
-    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
+    //    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
+
+    //平板模式添加无效包
+    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage1);
 
     //接收到包已经添加的信号则弹出已添加的弹窗
     connect(m_fileListModel, &DebListModel::packageAlreadyExists, this, &DebInstaller::showPkgExistMessage);
@@ -344,6 +347,18 @@ void DebInstaller::showInvalidePackageMessage()
     msg->setMessage(tr("The deb package may be broken"));
     msg->setIcon(QIcon::fromTheme("di_warning"));
     DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
+}
+
+void DebInstaller::showInvalidePackageMessage1()
+{
+    DDialog *Ddialog = new DDialog(); //弹出窗口
+    Ddialog->setModal(true);
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint); //窗口一直置顶
+    Ddialog->setMessage(QString(tr("The deb package may be broken")));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+
+    Ddialog->addButton(QString(tr("Ok")), true, DDialog::ButtonNormal); //添加取消按钮
+    Ddialog->show(); //显示弹窗
 }
 
 /**

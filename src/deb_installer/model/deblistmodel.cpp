@@ -1056,10 +1056,11 @@ void DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
-    if (m_isDevelopMode) {
-        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
-        return true;
-    }
+    //平板模式无需验证开发者模式，判断数字签名即可
+    //    if (m_isDevelopMode) {
+    //        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
+    //        return true;
+    //    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
@@ -1067,7 +1068,7 @@ bool DebListModel::checkDigitalSignature()
         return true;
     case Utils::DebfileInexistence:                                                             //无签名文件
         qInfo() << "No signature file was found in the application";
-        showNoDigitalErrWindow();
+        showDigitalErrWindow(); //平板模式无需进入开发者模式，使用数字签名
         return false;
     case Utils::ExtractDebFail:
         showDigitalErrWindow();
