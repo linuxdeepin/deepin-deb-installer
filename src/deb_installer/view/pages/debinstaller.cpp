@@ -357,8 +357,14 @@ void DebInstaller::showInvalidePackageMessage1()
     Ddialog->setMessage(QString(tr("The deb package may be broken")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
-    Ddialog->addButton(QString(tr("Ok")), true, DDialog::ButtonNormal); //添加取消按钮
+    Ddialog->addButton(QString(tr("Ok")), true, DDialog::ButtonNormal);
     Ddialog->show(); //显示弹窗
+
+    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    btnOK->setFocusPolicy(Qt::TabFocus);
+    btnOK->setFocus();
+    //点击弹出窗口的确定按钮
+    connect(btnOK, &DPushButton::clicked, qApp, [=] { qApp->quit(); });
 }
 
 /**
