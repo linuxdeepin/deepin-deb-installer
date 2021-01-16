@@ -130,7 +130,7 @@ void DebInstaller::initConnections()
     //    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
 
     //平板模式添加无效包
-    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage1);
+    connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage_tablet);
 
     //接收到包已经添加的信号则弹出已添加的弹窗
     connect(m_fileListModel, &DebListModel::packageAlreadyExists, this, &DebInstaller::showPkgExistMessage);
@@ -335,6 +335,8 @@ void DebInstaller::refreshMulti()
     qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
     m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
     MulRefreshPage();
+    this->showNormal();
+    this->activateWindow();
 }
 
 /**
@@ -349,8 +351,12 @@ void DebInstaller::showInvalidePackageMessage()
     DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
 }
 
-void DebInstaller::showInvalidePackageMessage1()
+/**
+ * @brief DebInstaller::showInvalidePackageMessage_tablet 平板模式弹出无效包的消息通知
+ */
+void DebInstaller::showInvalidePackageMessage_tablet()
 {
+    //平板模式若包损坏，不显示安装界面，弹出提示框
     DDialog *Ddialog = new DDialog(); //弹出窗口
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint); //窗口一直置顶
@@ -363,8 +369,12 @@ void DebInstaller::showInvalidePackageMessage1()
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
-    //点击弹出窗口的确定按钮
-    connect(btnOK, &DPushButton::clicked, qApp, [=] { qApp->quit(); });
+    //判断当前应用内包的数量，如果为0则隐藏且点击OK后退出，如果不为0则点击ok后关闭弹窗
+    if (m_fileListModel->getInstallFileSize() == 0) {
+        this->hide();
+        //若应用内无包，点击弹出窗口的确定按钮退出应用
+        connect(btnOK, &DPushButton::clicked, qApp, [=] { qApp->quit(); });
+    }
 }
 
 /**
@@ -593,6 +603,9 @@ void DebInstaller::refreshSingle()
     m_Filterflag = 2;
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
+
+    this->showNormal();
+    this->activateWindow(); //单包安装刷新显示
 }
 
 /**

@@ -57,11 +57,11 @@ void SingleInstallerApplication::activateWindow()
         m_qspMainWnd.reset(new DebInstaller());
         Dtk::Widget::moveToCenter(m_qspMainWnd.get());
 
-        m_qspMainWnd->show();
+        //        m_qspMainWnd->show();
     } else {
         m_qspMainWnd->setWindowState(Qt::WindowActive);
-        m_qspMainWnd->activateWindow(); // Reactive main window
-        m_qspMainWnd->showNormal();     //非特效模式下激活窗口
+        //        m_qspMainWnd->activateWindow(); // Reactive main window
+        //        m_qspMainWnd->showNormal();     //非特效模式下激活窗口
     }
 
     if (m_selectedFiles.size() > 0) {
@@ -78,8 +78,8 @@ void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
     } else {
         //启动栏或者桌面启动空的软件包安装器后激活原有的窗口
         if (m_qspMainWnd.get()) {                   //先判断当前是否已经存在一个进程。
-            m_qspMainWnd.get()->activateWindow();   //特效模式下激活窗口
-            m_qspMainWnd.get()->showNormal();       //无特效激活窗口
+            //            m_qspMainWnd.get()->activateWindow();   //特效模式下激活窗口
+            //            m_qspMainWnd.get()->showNormal();       //无特效激活窗口
         }
     }
 }
