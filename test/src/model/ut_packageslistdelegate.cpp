@@ -27,6 +27,113 @@
 
 #include <stub.h>
 
+using namespace QApt;
+
+bool delegate_backend_init()
+{
+    return true;
+}
+
+void delegate_checkSystemVersion()
+{
+}
+
+bool delegate_reloadCache()
+{
+    return true;
+}
+
+bool delegate_backendReady()
+{
+    return true;
+}
+
+QString delegate_deb_arch_i386()
+{
+    return "i386";
+}
+
+QStringList delegate_architectures()
+{
+    return {"i386", "amd64"};
+}
+
+bool delegate_deb_isValid()
+{
+    return true;
+}
+
+QByteArray delegate_deb_md5Sum()
+{
+    return nullptr;
+}
+
+int delegate_deb_installSize()
+{
+    return 0;
+}
+
+QString delegate_deb_packageName()
+{
+    return "";
+}
+
+QString delegate_deb_longDescription()
+{
+    return "longDescription";
+}
+
+QString delegate_deb_shortDescription()
+{
+    return "shortDescription";
+}
+
+QString delegate_deb_version()
+{
+    return "version";
+}
+
+QList<DependencyItem> delegate_deb_conflicts()
+{
+    DependencyInfo info("packageName", "0.0", RelationType::Equals, Depends);
+    QList<DependencyInfo> dependencyItem;
+    dependencyItem << info;
+    QList<DependencyItem> conflicts;
+    conflicts << dependencyItem;
+
+    return conflicts;
+}
+
+Package *delegate_packageWithArch(QString, QString, QString)
+{
+    return nullptr;
+}
+
+PackageList delegate_backend_availablePackages()
+{
+    return {};
+}
+
+QLatin1String delegate_package_name()
+{
+    return QLatin1String("name");
+}
+
+QString delegate_package_version()
+{
+    return "version";
+}
+
+QString delegate_package_architecture()
+{
+    return "i386";
+}
+
+QStringList delegate_backend_architectures()
+{
+    return {"i386", "amd64"};
+}
+
 TEST(packageslistdelegate_Test, packageslistdelegate_UT_getItemHeight)
 {
     PackagesListView *listview = new PackagesListView;
@@ -53,6 +160,23 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
     PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
     QPainter painter(listview);
     QStyleOptionViewItem option;
+    Stub stub;
+    stub.set(ADDR(Backend, init), delegate_backend_init);
+    stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
+    stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
+
+    stub.set(ADDR(DebFile, architecture), delegate_deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), delegate_backend_architectures);
+    stub.set(ADDR(QModelIndex, isValid), delegate_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), delegate_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), delegate_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), delegate_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), delegate_deb_longDescription);
+    stub.set(ADDR(DebFile, version), delegate_deb_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), delegate_packageWithArch);
+    stub.set(ADDR(PackagesManager, removePackage), delegate_checkSystemVersion);
+
+    stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
     model->appendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
@@ -66,6 +190,25 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
     PackagesListView *listview = new PackagesListView;
     PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
     QStyleOptionViewItem option;
+
+    Stub stub;
+    stub.set(ADDR(Backend, init), delegate_backend_init);
+    stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
+    stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
+
+    stub.set(ADDR(DebFile, architecture), delegate_deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), delegate_backend_architectures);
+    stub.set(ADDR(Backend, init), delegate_backend_init);
+    stub.set(ADDR(DebFile, isValid), delegate_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), delegate_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), delegate_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), delegate_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), delegate_deb_longDescription);
+    stub.set(ADDR(DebFile, version), delegate_deb_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), delegate_packageWithArch);
+    stub.set(ADDR(PackagesManager, removePackage), delegate_checkSystemVersion);
+
+    stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
     model->appendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
