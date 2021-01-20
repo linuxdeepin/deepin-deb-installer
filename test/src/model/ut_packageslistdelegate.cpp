@@ -185,6 +185,12 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
     delete listview;
 }
 
+PackageDependsStatus delegate_getPackageDependsStatus(const int index)
+{
+    Q_UNUSED(index);
+    PackageDependsStatus status;
+    return status;
+}
 TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
 {
     PackagesListView *listview = new PackagesListView;
@@ -207,6 +213,8 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
     stub.set(ADDR(DebFile, version), delegate_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), delegate_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), delegate_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), delegate_getPackageDependsStatus);
+
 
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;

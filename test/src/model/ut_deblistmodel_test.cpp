@@ -218,6 +218,12 @@ QStringList model_backend_architectures()
 {
     return {"i386", "amd64"};
 }
+PackageDependsStatus model_getPackageDependsStatus(const int index)
+{
+    Q_UNUSED(index);
+    PackageDependsStatus status;
+    return status;
+}
 
 TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
 {
@@ -240,6 +246,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
     DebListModel *model = new DebListModel();
 
     usleep(5 * 1000);
@@ -269,6 +276,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_first)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -301,6 +309,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_rowCount)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -335,6 +344,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_data)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -374,6 +384,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_initPrepareStatus)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -405,12 +416,6 @@ QList<DependencyItem> model_deb_depends()
     return conflicts;
 }
 
-PackageDependsStatus model_getPackageDependsStatus(const int index)
-{
-    Q_UNUSED(index);
-    PackageDependsStatus status;
-    return status;
-}
 TEST(deblistmodel_Test, deblistmodel_UT_index)
 {
     Stub stub;
@@ -431,6 +436,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_index)
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), model_package_package);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
 
     stub.set(ADDR(DebFile, depends), model_deb_depends);
@@ -470,6 +476,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_getInstallFileSize)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -504,6 +511,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_setCurrentIndex)
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
@@ -634,6 +642,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_uninstallPackage)
     stub.set(ADDR(DebListModel, initRowStatus), model_initRowStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     DebListModel *model = new DebListModel();
 

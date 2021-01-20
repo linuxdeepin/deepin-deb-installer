@@ -152,6 +152,11 @@ TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
     delete p;
 }
 
+PackageDependsStatus stub_getPackageDependsStatus(const int )
+{
+    return PackageDependsStatus::ok();
+}
+
 
 TEST(PackageManager_UT, PackageManager_UT_appendPackage)
 {
@@ -165,6 +170,8 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
     stub.set(ADDR(DebFile, packageName), deb_packageName);
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     usleep(300);
     PackagesManager *p = new PackagesManager();
 
@@ -192,6 +199,7 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
@@ -212,6 +220,7 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError_1)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
@@ -239,6 +248,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageConflictStat)
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
@@ -266,6 +276,7 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy)
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
 
@@ -296,6 +307,7 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_01)
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     p->appendPackage({"/1"});
     usleep(10 * 1000);
     ConflictResult cr = p->isConflictSatisfy("i386", conflicts());
@@ -325,8 +337,8 @@ TEST(PackageManager_UT, PackageManager_UT_isInstalledConflict)
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
-
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
 
@@ -354,6 +366,7 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -407,7 +420,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageInstallStatus)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
-
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
@@ -470,6 +483,11 @@ bool ut_isArchError(int index)
     return true;
 }
 
+PackageDependsStatus packageManager_getPackageDependsStatus(const int )
+{
+    return PackageDependsStatus::_break("package");
+}
+
 TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
 {
     Stub stub;
@@ -489,6 +507,7 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), packageManager_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -525,6 +544,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageInstalledVersion)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -559,6 +579,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageAvailableDepends)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -590,6 +611,7 @@ TEST(PackageManager_UT, PackageManager_UT_specialPackage)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -627,6 +649,7 @@ TEST(PackageManager_UT, PackageManager_UT_packageReverseDependsList)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -668,6 +691,7 @@ TEST(PackageManager_UT, PackageManager_UT_reset)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -698,6 +722,7 @@ TEST(PackageManager_UT, PackageManager_UT_resetInstallStatus)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -728,6 +753,7 @@ TEST(PackageManager_UT, PackageManager_UT_resetPackageDependsStatus)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -759,6 +785,7 @@ TEST(PackageManager_UT, PackageManager_UT_removePackage)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
@@ -863,6 +890,8 @@ TEST(PackageManager_UT, PackageManager_UT_packageWithArch)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -977,6 +1006,7 @@ TEST(PackageManager_UT, PackageManager_UT_package)
     stub.set(ADDR(DebFile, packageName), deb_packageName);
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);

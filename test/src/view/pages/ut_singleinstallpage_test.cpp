@@ -102,6 +102,12 @@ int stud_failedtoInt(bool *ok = nullptr)
     return 3;
 }
 
+PackageDependsStatus stud_getPackageDependsStatus(const int )
+{
+    return PackageDependsStatus::_break("package");
+}
+
+
 class SingleInstallpage_UT : public UT_HEAD
 {
 public:
@@ -139,6 +145,7 @@ TEST_F(SingleInstallpage_UT, total_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
 
@@ -200,6 +207,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
 
@@ -228,6 +236,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
 

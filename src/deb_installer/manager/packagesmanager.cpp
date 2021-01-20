@@ -829,6 +829,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_preparedPackages.insert(0, packagePath);      //每次添加的包都放到最前面
     m_packageMd5.insert(0, packageMd5Sum);          //添加MD5Sum
     m_appendedPackagesMd5 << packageMd5Sum;         //将MD5添加到集合中，这里是为了判断包不再重复
+    getPackageDependsStatus(0);                     //刷新当前添加包的依赖
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
 }
 
