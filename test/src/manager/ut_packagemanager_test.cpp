@@ -488,6 +488,13 @@ PackageDependsStatus packageManager_getPackageDependsStatus(const int )
     return PackageDependsStatus::_break("package");
 }
 
+bool ut_isArchError_false(int index)
+{
+    Q_UNUSED(index);
+    return false;
+}
+
+
 TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
 {
     Stub stub;
@@ -506,9 +513,7 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
-    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), packageManager_getPackageDependsStatus);
-
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
@@ -522,6 +527,42 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
     PackageDependsStatus pd = p->getPackageDependsStatus(0);
 
     ASSERT_TRUE(pd.isBreak());
+
+    delete p;
+}
+
+TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus_01)
+{
+    Stub stub;
+
+    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    //(int(A::*)(int))ADDR(A,foo)
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(DebFile, depends), deb_depends);
+    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    PackagesManager *p = new PackagesManager();
+    usleep(10 * 1000);
+    p->appendPackage({"/"});
+    qInfo() << package_conflicts().size();
+
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), isInstalled);
+    PackageDependsStatus pd = p->getPackageDependsStatus(0);
+
+    ASSERT_EQ(pd.status, 5);
 
     delete p;
 }
