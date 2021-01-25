@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>Enter the number to configure: </source>
-        <translation>Entrer le numéro à configurer:</translation>
+        <translation>Entrer le numéro à configurer :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="82"/>
@@ -114,7 +114,7 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="630"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="634"/>
         <source>Broken dependencies: %1</source>
-        <translation>Dépendances cassée: %1</translation>
+        <translation>Dépendances cassée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
@@ -170,7 +170,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="559"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installation des dépendances: %1</translation>
+        <translation>Installation des dépendances : %1</translation>
     </message>
 </context>
 <context>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="258"/>
         <source>Later version installed: %1</source>
-        <translation>Version ultérieure installée: %1</translation>
+        <translation>Version ultérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="261"/>
         <source>Earlier version installed: %1</source>
-        <translation>Version antérieure installée: %1</translation>
+        <translation>Version antérieure installée : %1</translation>
     </message>
 </context>
 <context>
@@ -269,7 +269,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="873"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1050"/>
         <source>Later version installed: %1</source>
-        <translation>Version ultérieure installée: %1</translation>
+        <translation>Version ultérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="875"/>
@@ -280,7 +280,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="878"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1054"/>
         <source>Earlier version installed: %1</source>
-        <translation>Version antérieure installée: %1</translation>
+        <translation>Version antérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="880"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="957"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installation des dépendances: %1</translation>
+        <translation>Installation des dépendances : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1095"/>
@@ -300,7 +300,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="206"/>
         <source>Version: </source>
-        <translation>Version:</translation>
+        <translation>Version :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="752"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="199"/>
         <source>Name: </source>
-        <translation>Nom:</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="869"/>

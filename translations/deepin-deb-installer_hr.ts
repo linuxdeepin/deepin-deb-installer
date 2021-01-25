@@ -397,7 +397,7 @@ Sustav ili ostale aplikacije možda neće ispravno raditi</translation>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"/>
+        <translation>Instaler paketa pomaže korisnicima instalaciju i uklanjanje lokalnih paketa kao i skupno instaliranje.</translation>
     </message>
 </context>
 </TS>

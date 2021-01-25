@@ -58,12 +58,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>གྲངས་ཀའི་མིང་རྟགས་མེད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>གྲངས་ཀའི་མིང་རྟགས་ཕན་མེད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="133"/>
@@ -78,12 +78,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="903"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>སྒྲིག་འཇུག་བྱེད་ཐབས་བྲལ། སྒྲིག་འཇུག་ཁུག་མར་གྲངས་ཀའི་མིང་རྟགས་མེད། </translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="904"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation>ཚོད་འཛིན་ལྟེ་གནས་སུ་མཛུལ་ཏེ། གསར་སྤེལ་བའི་དཔེ་རྣམ་ཕྱེ་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱས་ནས་སྒྲིག་འཇུག་བྱེད། མུ་མཐུད་ཡིན་ནམ། </translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="907"/>
@@ -93,7 +93,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="908"/>
         <source>Proceed</source>
-        <translation type="unfinished"/>
+        <translation>མུ་མཐུད།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="959"/>
@@ -274,7 +274,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="875"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>པར་གཞི་རྙིང་པ་སྒྲིག་འཇུག་བྱེད་པ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="878"/>
@@ -285,7 +285,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="880"/>
         <source>Update</source>
-        <translation type="unfinished"/>
+        <translation>གསར་སྒྱུར།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="957"/>

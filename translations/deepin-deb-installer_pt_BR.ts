@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="512"/>
         <source>The deb package may be broken</source>
-        <translation>O pacote .deb pode estar corrompido</translation>
+        <translation>O pacote .deb pode estar quebrado</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="524"/>
