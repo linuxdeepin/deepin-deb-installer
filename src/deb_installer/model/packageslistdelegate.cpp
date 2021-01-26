@@ -154,6 +154,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         int yOffset = 6;
 
+        //设置包名和版本号的字体颜色 fix bug: 59390
+        forground.setColor(palette.color(cg, DPalette::ToolTipText));
+
         //绘制分割线
         QRect lineRect;
         lineRect.setX(content_x);
