@@ -24,6 +24,7 @@
 #include "utils/utils.h"
 
 #include <QPixmap>
+#include <QPainterPath>
 
 #include <DSvgRenderer>
 #include <DPalette>
@@ -40,13 +41,7 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
     qApp->installEventFilter(this);                     //事件筛选
-    QFontInfo fontinfo = m_parentView->fontInfo();      //获取字体
-    int fontsize = fontinfo.pixelSize();
-    if (fontsize >= 16) {                               //根据字体大小设置高度
-        m_itemHeight = 56;                              //增加最大字体下的高度，防止截断
-    } else {
-        m_itemHeight = 48;
-    }
+    m_itemHeight = 48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16); //根据字体初始化item高度
 }
 
 /**
@@ -109,7 +104,6 @@ void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
-
     if (index.isValid()) {//判断传入的index是否有效
         painter->save();
         painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
@@ -170,7 +164,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QColor fillColor = styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::Shadow);
         painter->fillRect(lineRect, fillColor);
 
-
         QRect bg_rect = option.rect;
 
         QIcon icon = QIcon::fromTheme("application-x-deb");
@@ -184,7 +177,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y() + yOffset - 5);      // 防止截断，往上偏移一点
+        name_rect.setY(bg_rect.y() + yOffset - 5);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
         QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -194,14 +187,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
         pkg_name_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
 
-        name_rect.setHeight(pkg_name_font.pixelSize() + 7);     //name_rect 高度增加，防止截断
+        name_rect.setHeight(pkg_name_font.pixelSize() + 7);
 
         painter->setFont(pkg_name_font);
         QFontMetrics fontMetric(pkg_name_font);
 
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
 
-        painter->setPen(/*styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::WindowText)*/forground);
+        painter->setPen(forground);
         painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
         // draw package version
@@ -210,11 +203,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         const int version_y = version_rect.top();
         version_rect.setLeft(200);
         version_rect.setTop(version_y - 1);
-        version_rect.setRight(option.rect.right() - 85);
+        version_rect.setRight(option.rect.right() - 80);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
         const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, 195);
-        painter->setPen(/*styleHelper.getColor(static_cast<const QStyleOption *>(&option), DPalette::BrightText)*/forground);
+        painter->setPen(forground);
         QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
         version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
         painter->setFont(version_font);
@@ -222,7 +215,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // install status
         const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();        //获取包的状态
-//        qDebug() << "index:::::" << index.row() << operate_stat;
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
@@ -252,11 +244,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         //未被选中，设置正常的颜色
         forground.setColor(palette.color(cg, DPalette::ToolTipText));
 
-        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
-                || (dependsStat == DebListModel::DependsAuthCancel)) {
-            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
-        } else if (install_stat != DebListModel::NotInstalled) {
+        //安装状态
+        if (install_stat != DebListModel::NotInstalled) {
             //获取安装版本
             if (install_stat == DebListModel::InstalledSameVersion) {       //安装了相同版本
                 info_str = tr("Same version installed");
@@ -275,6 +264,20 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         }
+
+        if (operate_stat == DebListModel::Failed) {
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
+        }
+        if (dependsStat == DebListModel::DependsBreak
+                || dependsStat == DebListModel::DependsAuthCancel
+                || dependsStat == DebListModel::DependsVerifyFailed
+                /*|| dependsStat == DebListModel::ArchBreak*/) {// 添加对架构不匹配的处理
+
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+            forground.setColor(palette.color(cg, DPalette::TextWarning));       //安装失败或依赖错误
+        }
+
         //当前选中 设置高亮
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
