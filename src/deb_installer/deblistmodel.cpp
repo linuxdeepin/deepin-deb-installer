@@ -694,6 +694,7 @@ bool DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 个人版专业版 非开模式需要验证签名， 服务器版 没有开发者模式，默认不验证签名， 社区版默认开发者模式，不验证签名。
+/*
     bool isVerifyDigital = false;
     switch (Dtk::Core::DSysInfo::deepinType()) {
     case Dtk::Core::DSysInfo::DeepinDesktop:
@@ -712,6 +713,10 @@ bool DebListModel::checkSystemVersion()
     qDebug() << "DeepinType:" << Dtk::Core::DSysInfo::deepinType();
     qDebug() << "Whether to verify the digital signature：" << isVerifyDigital;
     return isVerifyDigital;
+
+*/
+    // klu 使用主线方案，非开发者模式下验证签名
+    return true;
 }
 
 bool DebListModel::checkDigitalSignature()
@@ -726,14 +731,11 @@ bool DebListModel::checkDigitalSignature()
 void DebListModel::installNextDeb()
 {
     // KLU 分支 去除签名，此部分代码废弃
-//    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
-//        showNoDigitalErrWindow();
-//    } else {
-//        installDebs();
-//    }
-
-    //不验证签名与开发者模式，直接安装
-    installDebs();
+    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
+        showNoDigitalErrWindow();
+    } else {
+        installDebs();
+    }
 }
 
 void DebListModel::onTransactionOutput()
