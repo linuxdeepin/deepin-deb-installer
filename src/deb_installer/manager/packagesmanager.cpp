@@ -505,6 +505,8 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             } else {
                 choosed_set << dep->name() + " not found";
             }
+        } else { //若依赖包符合版本要求,则不进行升级
+            continue;
         }
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
