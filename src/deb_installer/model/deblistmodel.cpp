@@ -1100,7 +1100,12 @@ void DebListModel::installNextDeb()
         if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
             rmdir();                                            //删除临时路径
             qDebug() << "DebListModel:" << "command install" << sPackageName;
-            m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
+            //            m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
+            // 平板模式不进行配置,直接提示安装失败,多包安装时直接安装下一个包
+            refreshOperatingPackageStatus(Failed);
+            m_packageFailCode[m_operatingPackageMd5] = -1;
+            m_packageFailReason[m_operatingPackageMd5] = "install error";
+            bumpInstallIndex();
         } else {
             qDebug() << "DebListModel:" << "normal install" << sPackageName;
             installDebs();                                      //普通安装
