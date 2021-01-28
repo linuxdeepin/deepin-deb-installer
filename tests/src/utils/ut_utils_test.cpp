@@ -71,10 +71,13 @@ bool utils_exits()
 
 void util_setFilter(QDir::Filters filter)
 {
+    Q_UNUSED(filter);
     return;
 }
 QFileInfoList utils_entryInfoList(QDir::Filters filters = QDir::NoFilter, QDir::SortFlags sort = QDir::NoSort)
 {
+    Q_UNUSED(filters);
+    Q_UNUSED(sort);
     QList<QFileInfo> list;
 
     QFileInfo info;
@@ -201,6 +204,7 @@ TEST(Utils_Test, Utils_UT_DebApplicationHelper)
 {
     DebApplicationHelper *helper = DebApplicationHelper::instance();
 
+    Q_UNUSED(helper);
 }
 
 TEST(Utils_Test, Utils_UT_standardPalette)
