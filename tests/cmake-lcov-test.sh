@@ -15,7 +15,7 @@ pathname=$(find . -name obj*)
 
 echo $pathname
 
-cd $pathname/test
+cd $pathname/tests
 
 mkdir -p coverage
 
