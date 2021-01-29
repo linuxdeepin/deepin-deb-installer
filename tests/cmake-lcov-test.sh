@@ -1,6 +1,5 @@
 #!/bin/bash
 workspace=$1
-appname=$2
 
 cd $workspace
 
@@ -20,18 +19,20 @@ cd $pathname/test
 
 mkdir -p coverage
 
+#下面是覆盖率目录操作，正向操作
+extract_info="*/UT/src/*"  #针对当前目录进行覆盖率操作
+
+lcov -d ./coverage -c -o ./coverage/coverage.info
+
 lcov --directory ../ --capture --output-file ./coverage/coverage.info
 
-#以下几行是过滤一些我们不感兴趣的文件的覆盖率信息，各模块根据自模块实际情况填写过滤信息
-lcov --remove ./coverage/coverage.info '*/${project_name}_test_autogen/*' '*/${project_name}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*obj-x86_64-linux-gnu/*' '*/test/*' -o ./coverage/coverage.info
+lcov --extract ./coverage/coverage.info $extract_info --output-file  $/coverage.info
 
+lcov --list-full-path -e ./coverage/coverage.info –o ./coverage/coverage-stripped.info
+
+mkdir ../report
 genhtml -o ../report ./coverage/coverage.info
 
-cd ../report
+lcov -d $build_dir –z
 
-line=`cat index.html | grep headerCovTableEntryLo | awk '{print $2}'| cut -d '>' -f 2 | head -n 1`
-func=`cat index.html | grep headerCovTableEntryLo | awk '{print $2}' | cut -d '>' -f 2 | tail -n 1`
-
-cd $workspace
-touch $appname.csv
-echo $appname,"行覆盖率: "$line"% 函数覆盖率: "$func"%"> $appname.csv
+exit 0
