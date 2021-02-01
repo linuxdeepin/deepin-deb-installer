@@ -1061,7 +1061,8 @@ bool DebListModel::checkDigitalSignature()
     //        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
     //        return true;
     //    }
-    int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
+    //    int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
+    int digitalSigntual = Utils::VerifySuccess;
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
         qInfo() << "Digital signature verification succeed";
