@@ -113,6 +113,13 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+    /**
      * @brief packageAlreadyExists 包重复添加的信号
      */
     void packageAlreadyExists();
@@ -391,6 +398,11 @@ private:
      */
     void appendPackageFinished();
 
+    /**
+     * @brief appendNoThread 不通过线程，直接添加包到应用中
+     * @param packages 要添加的包
+     * @param allPackageSize 要添加的包的数量
+     */
     void appendNoThread(QStringList packages, int allPackageSize);
 
     /**
@@ -398,12 +410,39 @@ private:
      */
     void checkInvalid(QStringList packages);
 
+    /**
+     * @brief checkLocalFile 查看文件权限
+     * @param package 包的路径
+     * @return 当前文件是否有权限打开
+     *         true:  权限正常
+     *         false: 没有权限
+     */
+    bool checkLocalFile(QString package);
+
+
+    /**
+     * @brief dealInvalidPackage 处理包无效的情况
+     * @param packagePath 包的路径
+     * 判断包是否在本地，如果是远程包，发送 包不在本地的信号
+     * 如果包在本地，发送包损坏的信号
+     */
+    void dealInvalidPackage(QString packagePath);
+
+    /**
+     * @brief dealPackagePath 处理包的路径
+     * @param packagePath 包的路径
+     * @return 经过处理后的包的路径
+     * 处理两种情况
+     *      1： 相对路径             --------> 转化为绝对路径
+     *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+     */
+    QString dealPackagePath(QString packagePath);
+
 private:
     QFuture<QApt::Backend *> m_backendFuture;           //安装程序后端指针(异步加载)
 
     QList<QString> m_preparedPackages;          //存放包路径的列表
     QSet<QByteArray> m_appendedPackagesMd5;     //存放包MD5的集合
-
 
     QList<QByteArray> m_packageMd5;
 

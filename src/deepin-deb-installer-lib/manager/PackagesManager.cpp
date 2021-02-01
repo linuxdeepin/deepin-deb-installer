@@ -185,8 +185,6 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
 
     Package *packageFile = new Package(index, packagePath);
 
-
-
     qInfo() << "[PackagesManager]" << "getPackageInfo" << "package 构造用时" << md5Time.elapsed();
     if (!packageFile->getValid()) {
         qWarning() << "[PackagesManager]" << "getPackageInfo" << "packageFile->getValid()" << packageFile->getValid();
@@ -214,7 +212,6 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
     qInfo() << "[PackagesManager]<< getPackageInfo" << "append package " << packageFile << "to list";
     m_packagesMd5 << md5;
     m_packages.append(packageFile);
-
 
     if (!m_appendFinished) {
         m_appendFinished = true;

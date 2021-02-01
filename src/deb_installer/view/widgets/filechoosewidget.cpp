@@ -158,23 +158,19 @@ void FileChooseWidget::chooseFiles()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
-
     // fix bug: https://pms.uniontech.com/zentao/bug-view-50992.html
     // 为DFileDialog指定父对象
     DFileDialog dialog(this);                                                //获取文件
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);                                        //设置打开的路径为保存的路径
-
     auto mode = dialog.exec();                                         //打开文件选择窗口
 
     // save the directory string to config file.
     m_settings.setValue("history_dir", dialog.directoryUrl().toLocalFile());//保存当前文件路径
-
     if (mode != QDialog::Accepted) return;
 
     const QStringList selected_files = dialog.selectedFiles();              //获取选中的文件
-
     emit packagesSelected(selected_files);                                  //发送信号
 }
 

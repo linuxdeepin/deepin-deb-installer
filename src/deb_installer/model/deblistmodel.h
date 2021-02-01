@@ -297,6 +297,14 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+
+    /**
      * @brief packageAlreadyExists 包已添加的信号
      */
     void packageAlreadyExists();

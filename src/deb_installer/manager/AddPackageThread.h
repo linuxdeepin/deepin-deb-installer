@@ -70,6 +70,13 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+    /**
      * @brief packageAlreadyExists 当前包已经被添加到应用中
      */
     void packageAlreadyExists();
@@ -116,6 +123,35 @@ private:
      * @return 是否创建成功
      */
     bool mkTempDir();
+
+private:
+
+    /**
+     * @brief checkLocalFile 查看文件权限
+     * @param package 包的路径
+     * @return 当前文件是否有权限打开
+     *         true:  权限正常
+     *         false: 没有权限
+     */
+    bool checkLocalFile(QString package);
+
+    /**
+     * @brief dealInvalidPackage 处理包无效的情况
+     * @param packagePath 包的路径
+     * 判断包是否在本地，如果是远程包，发送 包不在本地的信号
+     * 如果包在本地，发送包损坏的信号
+     */
+    void dealInvalidPackage(QString packagePath);
+
+    /**
+     * @brief dealPackagePath 处理包的路径
+     * @param packagePath 包的路径
+     * @return 经过处理后的包的路径
+     * 处理两种情况
+     *      1： 相对路径             --------> 转化为绝对路径
+     *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+     */
+    QString dealPackagePath(QString packagePath);
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";             // 软链接的存放路径

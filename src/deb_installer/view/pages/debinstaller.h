@@ -73,6 +73,12 @@ private slots:
     void showInvalidePackageMessage();
 
     /**
+     * @brief showInvalidePackageMessage 弹出不是本地包的消息通知
+     */
+    void showNotLocalPackageMessage();
+
+
+    /**
      * @brief showPkgExistMessage 弹出包已存在的消息通知
      */
     void showPkgExistMessage();

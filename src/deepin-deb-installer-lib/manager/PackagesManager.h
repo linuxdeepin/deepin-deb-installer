@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QFuture>
 
-#include <QApt/Transaction>
 
 class PackageSigntureStatus;
 class Package;
@@ -109,6 +108,7 @@ private:
     QSet<QByteArray> m_packagesMd5;
 
     PackageStatus      *m_pPackageStatus;
+
     PackageInstaller   *m_pPackageInstaller;
 
     GetStatusThread    *m_pGetStatusThread;

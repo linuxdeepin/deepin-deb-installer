@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bo">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -15,22 +17,27 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="121"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="113"/>
         <source>Package Installer</source>
         <translation>མཉེན་ཆས་ཁུག་སྒྲིག་སྦྱོར་ཆས།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="512"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="398"/>
         <source>The deb package may be broken</source>
         <translation>debཁུག་གནོད་སྐྱོན་ཤོར་ཡོད་མེད་ཞིབ་བཤེར་གནང་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="524"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
+        <source>You can only install local deb packages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
         <source>Already Added</source>
         <translation>སྣོན་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="705"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="601"/>
         <source>Bulk Install</source>
         <translation>མང་པོ་མཉམ་དུ་སྒྲིག་སྦྱོར་བྱེད་པ།</translation>
     </message>
@@ -71,48 +78,48 @@
         <translation>སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="629"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="631"/>
         <source>Failed to install %1</source>
         <translation>%1སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="903"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
         <source>Unable to install - no digital signature</source>
         <translation>སྒྲིག་འཇུག་བྱེད་ཐབས་བྲལ། སྒྲིག་འཇུག་ཁུག་མར་གྲངས་ཀའི་མིང་རྟགས་མེད། </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="904"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>ཚོད་འཛིན་ལྟེ་གནས་སུ་མཛུལ་ཏེ། གསར་སྤེལ་བའི་དཔེ་རྣམ་ཕྱེ་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱས་ནས་སྒྲིག་འཇུག་བྱེད། མུ་མཐུད་ཡིན་ནམ། </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="907"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="932"/>
         <source>Cancel</source>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="908"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="933"/>
         <source>Proceed</source>
         <translation>མུ་མཐུད།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="959"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="981"/>
         <source>Unable to install</source>
         <translation>སྒྲིག་སྦྱོར་བྱེད་ཐབས་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="960"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="982"/>
         <source>This package does not have a valid digital signature</source>
         <translation>སྒྲིག་སྦྱོར་ཁུག་འདིར་ནང་དུ་ཕན་ནུས་ལྡན་པའི་ཨང་ཀིའི་མཚན་རྟགས་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="962"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
         <source>OK</source>
         <translation>ཆོག</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="630"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="634"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="636"/>
         <source>Broken dependencies: %1</source>
         <translation>བརྟེན་པའི་འབྲེལ་བ་མི་འདང་། %1</translation>
     </message>
@@ -122,7 +129,7 @@
         <translation>བགོ་སྒྲིག་དབང་བརྩལ་བྱེད་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="625"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="627"/>
         <source>Unmatched package architecture</source>
         <translation>མཉེན་ཆས་ཁུག་གི་གཞི་སྒྲོམ་སྙོམ་འགྲིག་མི་ཐུབ།</translation>
     </message>
@@ -153,22 +160,22 @@
         <translation>ཞིབ་ཕྲའི་ཆ་འཕྲིན་འཆར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="191"/>
+        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="194"/>
         <source>Install</source>
         <translation>སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="192"/>
+        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="195"/>
         <source>Done</source>
         <translation>ལེགས་གྲུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="194"/>
+        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="197"/>
         <source>Back</source>
         <translation>ཕྱིར་ལོག</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="559"/>
+        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="538"/>
         <source>Installing dependencies: %1</source>
         <translation>བརྟེན་པའི་འབྲེལ་བ་བཙུགས་བཞིན་པ། %1</translation>
     </message>
@@ -176,37 +183,37 @@
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="86"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="81"/>
         <source>Installing</source>
         <translation>སྒྲིག་སྦྱོར་བྱེད་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="90"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="85"/>
         <source>Installed</source>
         <translation>སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="98"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="93"/>
         <source>Failed</source>
         <translation>སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="94"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="89"/>
         <source>Waiting</source>
         <translation>སྒྲིག་སྦྱོར་སྒུག་བཞིན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="255"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="251"/>
         <source>Same version installed</source>
         <translation>པར་གཞི་འདྲ་མཚུངས་སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="258"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="254"/>
         <source>Later version installed: %1</source>
         <translation>ཅུང་གསར་པའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="261"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="257"/>
         <source>Earlier version installed: %1</source>
         <translation>ཅུང་སྔ་བའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
@@ -214,7 +221,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb_installer/model/packagelistview.cpp" line="179"/>
+        <location filename="../src/deb_installer/model/packagelistview.cpp" line="162"/>
         <source>Delete</source>
         <translation>སུབ་པ།</translation>
     </message>
@@ -230,70 +237,73 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="776"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="748"/>
         <source>Collapse</source>
         <translation>བསྡུ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="386"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="371"/>
         <source>Install</source>
         <translation>སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="390"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="375"/>
         <source>Remove</source>
         <translation>བཤིག་འདོན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="870"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="379"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="844"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1027"/>
         <source>Reinstall</source>
         <translation>ཡང་བསྐྱར་སྒྲིག་སྦྱོར།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="398"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="383"/>
         <source>OK</source>
         <translation>ཆོག</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="402"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="387"/>
         <source>Back</source>
         <translation>ཕྱིར་ལོག</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="406"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="391"/>
         <source>Done</source>
         <translation>ལེགས་གྲུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="873"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1050"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1030"/>
         <source>Later version installed: %1</source>
         <translation>ཅུང་གསར་པའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="875"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
         <source>Downgrade</source>
         <translation>པར་གཞི་རྙིང་པ་སྒྲིག་འཇུག་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="878"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1054"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1035"/>
         <source>Earlier version installed: %1</source>
         <translation>ཅུང་སྔ་བའི་པར་གཞི་%1སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="880"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="854"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1037"/>
         <source>Update</source>
         <translation>གསར་སྒྱུར།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="957"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="931"/>
         <source>Installing dependencies: %1</source>
         <translation>བརྟེན་པའི་འབྲེལ་བ་བཙུགས་བཞིན་པ། %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1095"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1077"/>
         <source>Failed to install %1</source>
         <translation>%1སྒྲིག་སྦྱོར་མི་ཐུབ།</translation>
     </message>
@@ -303,28 +313,28 @@
         <translation>པར་གཞི།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="752"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="724"/>
         <source>Installed successfully</source>
         <translation>སྒྲིག་སྦྱོར་ཐུབ་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="757"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="729"/>
         <source>Uninstalled successfully</source>
         <translation>བཤིག་འདོན་ཐུབ་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="767"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="739"/>
         <source>Uninstall Failed</source>
         <translation>བཤིག་འདོན་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="199"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="194"/>
         <source>Name: </source>
         <translation>མིང་།</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="869"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1047"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="843"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1026"/>
         <source>Same version installed</source>
         <translation>པར་གཞི་འདྲ་མཚུངས་སྒྲིག་སྦྱོར་བྱས་ཟིན།</translation>
     </message>
@@ -333,9 +343,9 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="566"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="594"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="622"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="723"/>
         <source>Show details</source>
         <translation>ཞིབ་ཕྲའི་ཆ་འཕྲིན་འཆར་བ།</translation>
     </message>
@@ -343,8 +353,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="649"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="756"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="621"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="728"/>
         <source>Show details</source>
         <translation>བཤིག་འདོན་བྱེད་རིམ་འཆར་བ།</translation>
     </message>

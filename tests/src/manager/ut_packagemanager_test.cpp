@@ -23,6 +23,8 @@
 #include <stub.h>
 #include <QFuture>
 #include <QDir>
+#include <fstream>
+#include <QFileInfo>
 
 using namespace QApt;
 
@@ -139,6 +141,77 @@ Backend *ut_init_backend()
 {
     return nullptr;
 }
+
+
+bool stub_is_open()
+{
+    qDebug()<<"stb——is_open";
+    return true;
+}
+
+void stub_open(const std::string& __s,std::ios_base::openmode __mode)
+{
+    Q_UNUSED(__s);
+    Q_UNUSED(__mode);
+    qDebug()<<"stb——open";
+}
+
+void stub_close()
+{
+
+}
+
+PackageDependsStatus stub_getPackageDependsStatus(const int )
+{
+    return PackageDependsStatus::ok();
+}
+
+
+
+QString stub_SymbolicLink(QString previousName, QString packageName)
+{
+    Q_UNUSED(previousName);
+    Q_UNUSED(packageName);
+
+    return "";
+}
+
+QString stub_absoluteFilePath()
+{
+    return "";
+}
+
+bool stub_permission_true(QFile::Permissions permissions)
+{
+    Q_UNUSED(permissions);
+    return true;
+}
+
+bool stub_permission_false(QFile::Permissions permissions)
+{
+    Q_UNUSED(permissions);
+    return false;
+}
+
+bool stub_checkLocalFile_true(QString fileName)
+{
+    Q_UNUSED(fileName);
+    return true;
+}
+
+bool stub_checkLocalFile_false(QString fileName)
+{
+    Q_UNUSED(fileName);
+    return false;
+}
+
+QString stub_dealPackagePath(QString packagePath)
+{
+    Q_UNUSED(packagePath);
+    return "";
+}
+
+
 TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
 {
     Stub stub;
@@ -152,11 +225,167 @@ TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
     delete p;
 }
 
-PackageDependsStatus stub_getPackageDependsStatus(const int )
+TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_SymbolicLink)
 {
-    return PackageDependsStatus::ok();
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    usleep(300);
+
+//    stub.set(ADDR(PackagesManager, dealPackagePath),)
+
+    stub.set(ADDR(PackagesManager, SymbolicLink),stub_SymbolicLink);
+
+    PackagesManager *p = new PackagesManager();
+
+   ASSERT_STREQ("", p->dealPackagePath("/ ").toUtf8());
 }
 
+
+TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_AbsolutePath)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    usleep(300);
+
+
+    stub.set(ADDR(QFileInfo, absoluteFilePath),stub_absoluteFilePath);
+
+    stub.set(ADDR(PackagesManager, SymbolicLink),stub_SymbolicLink);
+
+
+    PackagesManager *p = new PackagesManager();
+
+    ASSERT_STREQ("", p->dealPackagePath(" ").toUtf8());
+
+}
+
+TEST(PackageManager_UT, PackageManager_UT_checkLocalFile_true)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+
+
+    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_is_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), stub_close);
+
+    stub.set(ADDR(QFileInfo,permission), stub_permission_true);
+
+    PackagesManager *p = new PackagesManager();
+    usleep(3000);
+    p->checkLocalFile("/1");
+
+    delete p;
+
+}
+
+TEST(PackageManager_UT, PackageManager_UT_checkLocalFile_false)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_is_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), stub_close);
+
+    stub.set(ADDR(QFileInfo,permission), stub_permission_false);
+
+    PackagesManager *p = new PackagesManager();
+    usleep(3000);
+
+    p->checkLocalFile("/1");
+
+    delete p;;
+
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dealInvalidPackage_true)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager,checkLocalFile), stub_checkLocalFile_true);
+
+    PackagesManager *p = new PackagesManager();
+    usleep(100);
+
+    p->dealInvalidPackage("/1");
+
+    delete p;;
+
+}
+
+TEST(PackageManager_UT, PackageManager_UT_dealInvalidPackage_false)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager,checkLocalFile), stub_checkLocalFile_false);
+
+    PackagesManager *p = new PackagesManager();
+    usleep(100);
+
+    p->dealInvalidPackage("/1");
+
+    delete p;
+}
 
 TEST(PackageManager_UT, PackageManager_UT_appendPackage)
 {
@@ -172,7 +401,11 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
     stub.set(ADDR(DebFile, version), deb_version);
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
-    usleep(300);
+
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
+
     PackagesManager *p = new PackagesManager();
 
     usleep(10 * 1000);
@@ -183,6 +416,77 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
                                    << "/2");
 
     usleep(10 * 1000);
+    delete p;
+}
+
+bool deb_isValid_false()
+{
+    return true;
+}
+
+TEST(PackageManager_UT, PackageManager_UT_appendPackage_invalid)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid_false);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    usleep(300);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
+
+    PackagesManager *p = new PackagesManager();
+
+    usleep(10 * 1000);
+    p->appendPackage({"/1"});
+
+    ASSERT_FALSE(p->m_packageMd5.isEmpty());
+    p->appendPackage(QStringList() << "/1"
+                                   << "/2");
+
+    usleep(10 * 1000);
+    delete p;
+}
+
+
+bool deb_open_failed()
+{
+    return false;
+}
+
+TEST(PackageManager_UT, PackageManager_UT_appendPackage_openFailed)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid_false);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    usleep(300);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
+
+    PackagesManager *p = new PackagesManager();
+
+    usleep(10 * 1000);
+    p->appendPackage({"/1"});
+
+    ASSERT_FALSE(p->m_packageMd5.isEmpty());
     delete p;
 }
 
@@ -200,6 +504,8 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError)
     stub.set(ADDR(DebFile, version), deb_version);
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
@@ -220,6 +526,8 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError_1)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
 
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
@@ -230,6 +538,7 @@ TEST(PackageManager_UT, PackageManager_UT_isArchError_1)
 
 Package *package_package(const QString &name)
 {
+    Q_UNUSED(name);
     return nullptr;
 }
 
@@ -250,6 +559,9 @@ TEST(PackageManager_UT, PackageManager_UT_packageConflictStat)
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
@@ -278,6 +590,9 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy)
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
 
     p->appendPackage({"/1"});
@@ -305,6 +620,9 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_01)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -340,6 +658,9 @@ TEST(PackageManager_UT, PackageManager_UT_isInstalledConflict)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
 
     p->appendPackage({"/1"});
@@ -369,6 +690,9 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
@@ -422,6 +746,9 @@ TEST(PackageManager_UT, PackageManager_UT_packageInstallStatus)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -453,6 +780,9 @@ TEST(PackageManager_UT, PackageManager_UT_DealDependResult)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->m_dependInstallMark.append("test success");
@@ -480,6 +810,7 @@ bool isInstalled()
 
 bool ut_isArchError(int index)
 {
+    Q_UNUSED(index);
     return true;
 }
 
@@ -515,6 +846,9 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -551,6 +885,9 @@ TEST(PackageManager_UT, PackageManager_UT_getPackageDependsStatus_01)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -588,6 +925,9 @@ TEST(PackageManager_UT, PackageManager_UT_packageInstalledVersion)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -623,6 +963,9 @@ TEST(PackageManager_UT, PackageManager_UT_packageAvailableDepends)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -655,6 +998,9 @@ TEST(PackageManager_UT, PackageManager_UT_specialPackage)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
 
     p->appendPackage({"/"});
@@ -693,6 +1039,9 @@ TEST(PackageManager_UT, PackageManager_UT_packageReverseDependsList)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -735,6 +1084,9 @@ TEST(PackageManager_UT, PackageManager_UT_reset)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -766,6 +1118,9 @@ TEST(PackageManager_UT, PackageManager_UT_resetInstallStatus)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -797,6 +1152,9 @@ TEST(PackageManager_UT, PackageManager_UT_resetPackageDependsStatus)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -829,6 +1187,9 @@ TEST(PackageManager_UT, PackageManager_UT_removePackage)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
+
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/"});
@@ -856,8 +1217,6 @@ TEST(PackageManager_UT, PackageManager_UT_rmTempDir)
     usleep(10 * 1000);
     p->rmTempDir();
     ASSERT_STREQ(p->SymbolicLink("test", "test").toLocal8Bit(), (QString("/tmp/LinkTemp/") + QString("test")).toLocal8Bit());
-    //    stub.set(ADDR(PackagesManager, mkTempDir),ut_mktempDir);
-    //    p->SymbolicLink("test", "test");
     delete p;
 }
 TEST(PackageManager_UT, PackageManager_UT_020)
@@ -932,6 +1291,8 @@ TEST(PackageManager_UT, PackageManager_UT_packageWithArch)
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
 
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
@@ -1048,12 +1409,13 @@ TEST(PackageManager_UT, PackageManager_UT_package)
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
 
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
 
-    ASSERT_STREQ(p->package(0).toLocal8Bit(), "/1");
+    ASSERT_STREQ(p->package(0).toLocal8Bit(), "");
     delete p;
 }
 

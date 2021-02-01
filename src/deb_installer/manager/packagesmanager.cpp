@@ -35,6 +35,8 @@
 #include <QtConcurrent>
 #include <QDir>
 
+#include <fstream>
+
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -122,6 +124,9 @@ PackagesManager::PackagesManager(QObject *parent)
 
     //转发无效包的信号
     connect(m_pAddPackageThread, &AddPackageThread::invalidPackage, this, &PackagesManager::invalidPackage);
+
+    //转发不是本地包的信号
+    connect(m_pAddPackageThread, &AddPackageThread::notLocalPackage, this, &PackagesManager::notLocalPackage);
 
     //转发包已经添加的信号
     connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyExists, this, &PackagesManager::packageAlreadyExists);
@@ -718,38 +723,102 @@ void PackagesManager::checkInvalid(QStringList packages)
     }
 }
 
+/**
+ * @brief PackagesManager::checkLocalFile 检查该文件的权限和其是否在本地
+ * @param packagePackage 包的路径
+ * @return 包是否是本地安装包
+ *         true:  deb包在本地包
+ *         false: deb包不在本地
+ */
+bool PackagesManager::checkLocalFile(QString packagePackage)
+{
+    QFileInfo debFileIfo(packagePackage);
+
+    // 使用fstream 查看包是否能够打开，无法打开说明包不在本地或无权限。
+    std::fstream outfile;
+    outfile.open(packagePackage.toUtf8());
+    qDebug()<<packagePackage<<"open Result: "<<outfile.is_open();
+
+    if(!outfile.is_open()){ // 打不开，文件不在本地或无权限
+
+        if(debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)){
+            // 文件有权限 打不开，说明不在本地
+            outfile.close();
+            return false;
+        }
+    }
+    // 能打开 或 因为没有权限打不开
+    outfile.close();
+    return true;
+}
+
+/**
+ * @brief PackagesManager::dealInvalidPackage 处理无效的安装包
+ * @param packagePath 包的路径
+ *
+ * 根据文件是否打开以及文件打开的权限发送不同的信号
+ */
+void PackagesManager::dealInvalidPackage(QString packagePath)
+{
+    // 检查文件无效的原因
+    // 检查文件权限与是否能够打开
+    if(checkLocalFile(packagePath))
+    {
+        // 文件无权限打不开 或 能打开
+        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is invalid";
+        emit invalidPackage();
+    }
+    else {
+        //文件有权限 但是打不开
+        emit notLocalPackage();
+        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is not loacal";
+    }
+}
+
+/**
+ * @brief PackagesManager::dealPackagePath 处理路径相关的问题
+ * @param packagePath 当前包的文件路径
+ * @return 处理后的文件路径
+ * 处理两种情况
+ *      1： 相对路径             --------> 转化为绝对路径
+ *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+ */
+QString PackagesManager::dealPackagePath(QString packagePath)
+{
+    //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
+    if (packagePath[0] != "/") {
+        QFileInfo packageAbsolutePath(packagePath);
+        packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
+        qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
+    }
+
+    // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
+    if (packagePath.contains(" ")) {
+        QApt::DebFile *p = new DebFile(packagePath);
+        packagePath = SymbolicLink(packagePath, p->packageName());
+        qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << packagePath;
+        delete p;
+    }
+    return packagePath;
+}
+
+/**
+ * @brief PackagesManager::appendNoThread
+ * @param packages
+ * @param allPackageSize
+ */
 void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 {
     qDebug() << "[PackagesManager]" << "[appendNoThread]" << "start add packages";
     for (QString debPackage : packages) {                 //通过循环添加所有的包
-        //判断此次添加的包是否是绝对路径,如果是相对路径则转换为绝对路径
-        if (debPackage[0] != "/") {
-            QFileInfo packageAbsolutePath(debPackage);
-            debPackage = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
-            qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
-        }
-
-        //管理最近文件列表
-        DRecentData data;
-        data.appName = "Deepin Deb Installer";
-        data.appExec = "deepin-deb-installer";
-        DRecentManager::addItem(debPackage, data);
-
-        // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
-        if (debPackage.contains(" ")) {
-            QApt::DebFile *p = new DebFile(debPackage);
-            debPackage = SymbolicLink(debPackage, p->packageName());
-            qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << debPackage;
-            delete p;
-        }
+        //处理package文件路径相关问题
+        debPackage = dealPackagePath(debPackage);
 
         QApt::DebFile *pkgFile = new DebFile(debPackage);
-
         //判断当前文件是否是无效文件
         if (pkgFile && !pkgFile->isValid()) {
-            //处理无效文件
-            qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is invalid";
-            emit invalidPackage();
+            // 根据文件无效的类型提示不同的文案
+            dealInvalidPackage(debPackage);
             delete pkgFile;
             continue;
         }
@@ -769,6 +838,12 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
             continue;
         }
         // 可以添加,发送添加信号
+
+        //管理最近文件列表
+        DRecentData data;
+        data.appName = "Deepin Deb Installer";
+        data.appExec = "deepin-deb-installer";
+        DRecentManager::addItem(debPackage, data);
 
         addPackage(m_validPackageCount, debPackage, md5);
         delete pkgFile;

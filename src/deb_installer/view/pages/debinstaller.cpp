@@ -124,6 +124,9 @@ void DebInstaller::initConnections()
     //接收到添加无效包的信号则弹出无效包的弹窗
     connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
 
+    //接收到添加无效包的信号则弹出无效包的弹窗
+    connect(m_fileListModel, &DebListModel::notLocalPackage, this, &DebInstaller::showNotLocalPackageMessage);
+
     //接收到包已经添加的信号则弹出已添加的弹窗
     connect(m_fileListModel, &DebListModel::packageAlreadyExists, this, &DebInstaller::showPkgExistMessage);
 
@@ -393,6 +396,18 @@ void DebInstaller::showInvalidePackageMessage()
     //add Floating Message while package invalid
     DFloatingMessage *msg = new DFloatingMessage;
     msg->setMessage(tr("The deb package may be broken"));
+    msg->setIcon(QIcon::fromTheme("di_warning"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
+}
+
+/**
+ * @brief DebInstaller::showNotLocalPackageMessage 弹出不是本地包的消息通知
+ */
+void DebInstaller::showNotLocalPackageMessage()
+{
+    //add Floating Message while package invalid
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("You can only install local deb packages"));
     msg->setIcon(QIcon::fromTheme("di_warning"));
     DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
 }

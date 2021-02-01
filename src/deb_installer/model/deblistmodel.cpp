@@ -167,6 +167,9 @@ DebListModel::DebListModel(QObject *parent)
     //添加的包是无效的包
     connect(m_packagesManager, &PackagesManager::invalidPackage, this, &DebListModel::invalidPackage);
 
+    //添加的包不在本地
+    connect(m_packagesManager, &PackagesManager::notLocalPackage, this, &DebListModel::notLocalPackage);
+
     //要添加的包早就已经被添加到程序中
     connect(m_packagesManager, &PackagesManager::packageAlreadyExists, this, &DebListModel::packageAlreadyExists);
 
