@@ -52,6 +52,10 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 
   # Enable Qt builtin debug mode
   add_definitions("-DQT_MESSAGELOGCONTEXT")
+
+  # 添加宏定义只在debug模式下输出性能打点日志
+  add_definitions("-DDEBUG")
+
 else()
   # -Wl, -O2 Enable linker optimizations
   # -Wl, --gc-sections Remove unused code resulting from -fdsta-sections and
