@@ -146,6 +146,7 @@ target_link_libraries(${APP_BIN_NAME}
 set(CMAKE_INSTALL_PREFIX /usr)
 
 # Install files
+install(DIRECTORY ${APP_RES_DIR}/deepin-deb-installer DESTINATION /usr/share/deepin-manual/manual-assets/application/)
 install(TARGETS deepin-deb-installer DESTINATION bin)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
 install(FILES ${APP_DESKTOP} DESTINATION share/applications)
