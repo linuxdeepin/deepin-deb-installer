@@ -247,6 +247,7 @@ TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_SymbolicLink)
 
     PackagesManager *p = new PackagesManager();
 
+    usleep(10*1000);
    ASSERT_STREQ("", p->dealPackagePath("/ ").toUtf8());
 }
 
@@ -275,6 +276,7 @@ TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_AbsolutePath)
 
     PackagesManager *p = new PackagesManager();
 
+    usleep(10*1000);
     ASSERT_STREQ("", p->dealPackagePath(" ").toUtf8());
 
 }
@@ -302,7 +304,7 @@ TEST(PackageManager_UT, PackageManager_UT_checkLocalFile_true)
     stub.set(ADDR(QFileInfo,permission), stub_permission_true);
 
     PackagesManager *p = new PackagesManager();
-    usleep(3000);
+    usleep(10*1000);
     p->checkLocalFile("/1");
 
     delete p;
@@ -330,7 +332,7 @@ TEST(PackageManager_UT, PackageManager_UT_checkLocalFile_false)
     stub.set(ADDR(QFileInfo,permission), stub_permission_false);
 
     PackagesManager *p = new PackagesManager();
-    usleep(3000);
+    usleep(10*1000);
 
     p->checkLocalFile("/1");
 
@@ -355,7 +357,7 @@ TEST(PackageManager_UT, PackageManager_UT_dealInvalidPackage_true)
     stub.set(ADDR(PackagesManager,checkLocalFile), stub_checkLocalFile_true);
 
     PackagesManager *p = new PackagesManager();
-    usleep(100);
+    usleep(10*1000);
 
     p->dealInvalidPackage("/1");
 
@@ -380,7 +382,7 @@ TEST(PackageManager_UT, PackageManager_UT_dealInvalidPackage_false)
     stub.set(ADDR(PackagesManager,checkLocalFile), stub_checkLocalFile_false);
 
     PackagesManager *p = new PackagesManager();
-    usleep(100);
+    usleep(10*1000);
 
     p->dealInvalidPackage("/1");
 
