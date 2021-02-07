@@ -6,6 +6,13 @@ endif ()
 
 project(deepin_deb_installer)
 option(DMAN_RELEAE OFF "Install dman resources to system or not")
+
+find_package(Qt5LinguistTools REQUIRED)
+set(POLICY_FILE com.deepin.pkexec.aptInstallDepend.policy)
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb_installer)
 add_subdirectory(test)
+add_subdirectory(src/deepin-deb-installer-lib)
+add_subdirectory(translations)
+#add_subdirectory(test/FuzzyTest)
+

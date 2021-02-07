@@ -22,34 +22,42 @@
 #include "packagesmanager.h"
 #include "DealDependThread.h"
 #include "PackageDependsStatus.h"
+#include "AddPackageThread.h"
 
 #include "model/deblistmodel.h"
 #include "utils/utils.h"
 #include "utils/DebugTimeManager.h"
+
+#include <DRecentManager>
 
 #include <QPair>
 #include <QSet>
 #include <QtConcurrent>
 #include <QDir>
 
+DCORE_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
+
 using namespace QApt;
 
+/**
+ * @brief isArchMatches 判断包的架构是否符合系统要求
+ * @param sysArch       系统架构
+ * @param packageArch   包的架构
+ * @param multiArchType 系统多架构类型
+ * @return 是否符合多架构要求
+ */
 bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType)
 {
     Q_UNUSED(multiArchType);
 
     if (sysArch.startsWith(':')) sysArch.remove(0, 1);
-
     if (sysArch == "all" || sysArch == "any") return true;
-
-    //    if (multiArchType == MultiArchForeign)
-    //        return true;
 
     return sysArch == packageArch;
 }
 
-QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                  const int multiArchType = InvalidMultiArchType)
+QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType)
 {
     if (annotation == "native" || annotation == "any") return QString();
     if (annotation == "all") return QString();
@@ -105,6 +113,21 @@ PackagesManager::PackagesManager(QObject *parent)
     dthread = new DealDependThread();
     connect(dthread, &DealDependThread::DependResult, this, &PackagesManager::DealDependResult);
     connect(dthread, &DealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
+
+    //批量打开 分批加载线程
+    m_pAddPackageThread = new AddPackageThread(m_appendedPackagesMd5);
+
+    //添加经过检查的包到软件中
+    connect(m_pAddPackageThread, &AddPackageThread::addedPackage, this, &PackagesManager::addPackage, Qt::AutoConnection);
+
+    //转发无效包的信号
+    connect(m_pAddPackageThread, &AddPackageThread::invalidPackage, this, &PackagesManager::invalidPackage);
+
+    //转发包已经添加的信号
+    connect(m_pAddPackageThread, &AddPackageThread::packageAlreadyExists, this, &PackagesManager::packageAlreadyExists);
+
+    //处理包添加结束的信号
+    connect(m_pAddPackageThread, &AddPackageThread::appendFinished, this, &PackagesManager::appendPackageFinished);
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
@@ -174,8 +197,6 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
 
         if (pkgName != packageName) continue;
 
-        qDebug() << pkgName << pkgVersion << pkgArch;
-
         // pass if arch not match
         if (!pkgArch.isEmpty() && pkgArch != packageArch && pkgArch != "any" && pkgArch != "native") continue;
 
@@ -194,13 +215,22 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
             const QString name = conflict.packageName();
-            Package *p = packageWithArch(name, arch, conflict.multiArchAnnotation());
 
-            if (!p || !p->isInstalled()) continue;
+            //修复依赖中 conflict与provides 存在相同 virtual package
+            //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
+            //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
+            //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
+            Package *p = m_backendFuture.result()->package(name);
 
+            if (!p || !p->isInstalled()) {
+                qDebug() << "PackageManager:" << "isConflictSatisfy"
+                         << "failed to build conflict package or confilict package not installed";
+                continue;
+            }
             // arch error, conflicts
             if (!isArchMatches(arch, p->architecture(), p->multiArchType())) {
-                qDebug() << "PackagesManager:" << "conflicts package installed: " << arch << p->name() << p->architecture()
+                qDebug() << "PackagesManager:" << "conflicts package installed: "
+                         << arch << p->name() << p->architecture()
                          << p->multiArchTypeString();
                 return ConflictResult::err(name);
             }
@@ -220,19 +250,27 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
             if (dependencyVersionMatch(mirror_result, type)) {
-                qDebug() << "PackagesManager:" <<  "conflicts package installed: " << arch << p->name() << p->architecture()
+                qDebug() << "PackagesManager:" <<  "conflicts package installed: "
+                         << arch << p->name() << p->architecture()
                          << p->multiArchTypeString() << mirror_version << conflict_version;
                 return ConflictResult::err(name);
             }
+
         }
     }
-
     return ConflictResult::ok(QString());
 }
 
 int PackagesManager::packageInstallStatus(const int index)
 {
-    if (m_packageInstallStatus.contains(index)) return m_packageInstallStatus[index];
+    //修改安装状态的存放方式，将安装状态与MD5绑定，而非与index绑定
+    //如果此时已经刷新过安装状态，则直接返回。
+    //PS: 修改原因见头文件
+
+    //提前获取当前的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+    if (m_packageInstallStatus.contains(currentPackageMd5))
+        return m_packageInstallStatus[currentPackageMd5];
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
 
@@ -259,7 +297,9 @@ int PackagesManager::packageInstallStatus(const int index)
             ret = DebListModel::InstalledEarlierVersion;
     } while (false);
 
-    m_packageInstallStatus.insert(index, ret);
+    //存储包的安装状态
+    //2020-11-19 修改安装状态的存储绑定方式
+    m_packageInstallStatus[currentPackageMd5] = ret;
     delete deb;
     return ret;
 }
@@ -268,19 +308,19 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
 {
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageDependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;//更换依赖的存储结构
         }
         m_errorIndex.clear();
     }
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageDependsStatus[m_dependInstallMark[num]].status = DebListModel::DependsAuthCancel;
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsAuthCancel;//更换依赖的存储结构
         }
         emit enableCloseButton(true);
     }
     if (iAuthRes == DebListModel::AuthDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageDependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;//更换依赖的存储结构
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.push_back(m_dependInstallMark[num]);
         }
@@ -289,20 +329,51 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
     emit DependResult(iAuthRes, iIndex, dependName);
 }
 
+/**
+ * @brief PackagesManager::getPackageMd5 获取某个包的md5 值
+ * @param index 包的下表
+ * @return  包的md5
+ * 现在包的状态与md5绑定，下标再与md5绑定，而非直接与下标绑定
+ * 这种做法的优点在于，不需要在前端再去调整所有包的顺序，只需要获取对应下标的md5即可,调整大多数状态不需要担心状态与下标对应错乱
+ * 缺点是：每次获取状态都需要读md5.频繁读取会造成性能影响
+ */
+QByteArray PackagesManager::getPackageMd5(const int index)
+{
+    if (index < m_packageMd5.size()) {
+        return m_packageMd5[index];
+    }
+    return nullptr;
+}
+
+/**
+ * @brief PackagesManager::getPackageDependsStatus 获取某个包的依赖状态
+ * @param index 包的下标
+ * @return 包的依赖状态
+ */
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
-    if (m_packageDependsStatus.contains(index)) {
-        return m_packageDependsStatus[index];
-    }
+    //更换依赖的存储方式
+    QTime dependsTime;
+    dependsTime.start();
 
-    if (isArchError(index)) {
-        m_packageDependsStatus[index].status = 2; // fix:24886
-        return PackageDependsStatus::_break(QString());
+    //提前获取需要的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+
+    if (m_packageMd5DependsStatus.contains(currentPackageMd5)) {
+        return m_packageMd5DependsStatus[currentPackageMd5];
     }
 
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const QString architecture = deb->architecture();
     PackageDependsStatus ret = PackageDependsStatus::ok();
+
+    if (isArchError(index)) {
+        ret.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
+        ret.package = deb->packageName();
+        m_packageMd5DependsStatus.insert(currentPackageMd5, ret);//更换依赖的存储方式
+        qInfo() << deb->packageName() << "架构错误，获取依赖状态用时" << dependsTime.elapsed() << "ms";
+        return PackageDependsStatus::_break(deb->packageName());
+    }
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
@@ -347,9 +418,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             //fix bug: https://pms.uniontech.com/zentao/bug-view-45734.html
             if (isWineApplication && ret.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                 qDebug() << "PackagesManager:" << "Unsatisfied dependency: " << ret.package;
-                if (!m_dependInstallMark.contains(index)) {
+                if (!m_dependInstallMark.contains(currentPackageMd5)) {           //更换判断依赖错误的标记
                     if (!dthread->isRunning()) {
-                        m_dependInstallMark.append(index);
+                        m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
                         qDebug() << "PackagesManager:" << "command install depends:" << dependList;
                         dthread->setDependsList(dependList, index);
                         dthread->setBrokenDepend(ret.package);
@@ -362,38 +433,37 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
     if (ret.isBreak()) Q_ASSERT(!ret.package.isEmpty());
 
-    m_packageDependsStatus[index] = ret;
+    m_packageMd5DependsStatus.insert(currentPackageMd5, ret);
 
-    if (ret.status == DebListModel::DependsAvailable) {
-        const auto list = packageAvailableDepends(index);
-        qDebug() << "PackagesManager:"  << "Available depends list:" << list.size() << list;
-    }
+    int getDependsTime = dependsTime.elapsed();
+    qInfo() << "获取'" << deb->packageName() << "'依赖状态(依赖数量：" << deb->depends().size() << ")用时" << getDependsTime << "ms";
+    dependsStatusTotalTime += getDependsTime;
+    qInfo() << "目前获取依赖总用时" << dependsStatusTotalTime << "ms";
     delete deb;
     return ret;
 }
 
 const QString PackagesManager::packageInstalledVersion(const int index)
 {
-    Q_ASSERT(m_packageInstallStatus.contains(index));
-//    Q_ASSERT(m_packageInstallStatus[index] == DebListModel::InstalledEarlierVersion ||
-//             m_packageInstallStatus[index] == DebListModel::InstalledLaterVersion);
-
+    //更换安装状态的存储结构
     DebFile *deb = new DebFile(m_preparedPackages[index]);
 
     const QString packageName = deb->packageName();
     const QString packageArch = deb->architecture();
     Backend *b = m_backendFuture.result();
     Package *p = b->package(packageName + ":" + packageArch);
-//    Package *p = b->package(m_preparedPackages[index]->packageName());
     delete  deb;
-    return p->installedVersion();
+
+    //修复可能某些包无法package的错误，如果遇到此类包，返回安装版本为空
+    if (p)
+        return p->installedVersion();   //能正常打包，返回包的安装版本
+    else {
+        return "";                      //此包无法正常package，返回空
+    }
 }
 
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
-    Q_ASSERT(m_packageDependsStatus.contains(index));
-    Q_ASSERT(m_packageDependsStatus[index].isAvailable());
-
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     QSet<QString> choose_set;
     const QString debArch = deb->architecture();
@@ -414,15 +484,12 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
                                              const DependencyItem &candidateList)
 {
-    bool choosed = false;
-
     for (const auto &info : candidateList) {
         Package *dep = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
         if (!dep) continue;
 
         const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
         if (choosed_set.contains(choosed_name)) {
-            choosed = true;
             break;
         }
 
@@ -433,10 +500,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
             Backend *b = m_backendFuture.result();
             Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p)
+            if (p) {
                 choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            else
+            } else {
                 choosed_set << dep->name() + " not found";
+            }
         }
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
@@ -453,13 +521,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             continue;
         }
 
-        choosed = true;
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, dep->depends());
         break;
     }
 
-    Q_ASSERT(choosed);
 }
 
 QMap<QString, QString> PackagesManager::specialPackage()
@@ -474,7 +540,6 @@ QMap<QString, QString> PackagesManager::specialPackage()
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
     Package *package = packageWithArch(packageName, sysArch);
-    Q_ASSERT(package);
 
     QSet<QString> ret{packageName};
     QQueue<QString> testQueue;
@@ -505,7 +570,26 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
             Package *subPackage = packageWithArch(r, sysArch);
-            if (!subPackage || !subPackage->isInstalled())
+            // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
+            // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
+            if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
+                QStringList rdepends = subPackage->requiredByList();
+
+                //对添加到testQueue的包进行检查，
+                for (QString depend : rdepends) {
+                    Package *pkg = packageWithArch(depend, sysArch);
+                    if (!pkg || !pkg->isInstalled())      //增加对package指针的检查
+                        continue;
+                    if (pkg->recommendsList().contains(r))
+                        continue;
+                    if (pkg->suggestsList().contains(r))
+                        continue;
+                    //只添加和当前依赖是依赖关系的包
+                    testQueue.append(depend);
+                }
+
+            }
+            if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
                 continue;
             if (subPackage->recommendsList().contains(item))
                 continue;
@@ -526,8 +610,9 @@ void PackagesManager::reset()
     m_dependInstallMark.clear();
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
+    m_packageMd5DependsStatus.clear();  //修改依赖状态的存储结构，此处清空存储的依赖状态数据
     m_appendedPackagesMd5.clear();
+    m_packageMd5.clear();
 
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
@@ -536,105 +621,215 @@ void PackagesManager::reset()
 void PackagesManager::resetInstallStatus()
 {
     m_packageInstallStatus.clear();
-    m_packageDependsStatus.clear();
+    m_packageMd5DependsStatus.clear();          //修改依赖状态的存储结构，此处清空存储的依赖状态数据
+    m_packageMd5.clear();
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
 }
 
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
-    if (!m_packageDependsStatus.contains(index)) return;
-
-    if (m_packageDependsStatus.contains(index)) {
-        if ((m_packageDependsStatus[index].package == "deepin-wine") && m_packageDependsStatus[index].status != DebListModel::DependsOk) {
+    // 查看此包是否已经存储依赖状态。
+    //提前获取package 的md5
+    auto currentPackageMd5 = m_packageMd5[index];
+    if (!m_packageMd5DependsStatus.contains(currentPackageMd5)) return;   //更改依赖状态的存储结构
+    else {
+        // 针对wine依赖做一个特殊处理，如果wine依赖break,则直接返回。
+        if ((m_packageMd5DependsStatus[currentPackageMd5].package == "deepin-wine") &&
+                m_packageMd5DependsStatus[currentPackageMd5].status != DebListModel::DependsOk) {
             return;
         }
     }
     // reload backend cache
     //reloadCache必须要加
-    m_backendFuture.result()->reloadCache();
-    m_packageDependsStatus.remove(index);
+    m_backendFuture.result()->reloadCache();;
+    m_packageMd5DependsStatus.remove(currentPackageMd5);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
 }
 
-void PackagesManager::removePackage(const int index, QList<int> listDependInstallMark)
+/**
+ * @brief PackagesManager::removePackage 删除指定下标的包
+ * @param index 指定的下标
+ */
+void PackagesManager::removePackage(const int index)
 {
+    if (index < 0 || index >= m_preparedPackages.size()) {
+        qInfo() << "[PackagesManager]" << "[removePackage]" << "Subscript boundary check error";
+        return;
+    }
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const auto md5 = deb->md5Sum();
     delete deb;
-    //m_appendedPackagesMd5.remove(m_preparedMd5[index]);
+
+    //提前删除标记list中的md5 否则在删除最后一个的时候会崩溃
+    if (m_dependInstallMark.contains(md5))      //如果这个包是wine包，则在wine标记list中删除
+        m_dependInstallMark.removeOne(md5);
+
     m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
-    m_preparedMd5.removeAt(index);
 
-    m_dependInstallMark.clear();
-    if (listDependInstallMark.size() > 1) {
-        for (int i = 0; i < listDependInstallMark.size(); i++) {
-            if (index > listDependInstallMark[i]) {
-                m_dependInstallMark.append(listDependInstallMark[i]);
-            } else if (index != listDependInstallMark[i]) {
-                m_dependInstallMark.append(listDependInstallMark[i] - 1);
-            }
-        }
-    }
-
-    QList<int> t_errorIndex;
-    if (m_errorIndex.size() > 0) {
-        for (int i = 0; i < m_errorIndex.size(); i++) {
-            if (index > m_errorIndex[i]) {
-                t_errorIndex.append(m_errorIndex[i]);
-            } else if (index != m_errorIndex[i]) {
-                t_errorIndex.append(m_errorIndex[i] - 1);
-            }
-        }
-    }
-    m_errorIndex.clear();
-    m_errorIndex = t_errorIndex;
+    m_appendedPackagesMd5.remove(md5);          //在判断是否重复的md5的集合中删除掉当前包的md5
+    m_packageMd5DependsStatus.remove(md5);      //删除指定包的依赖状态
+    m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
 
     m_packageInstallStatus.clear();
-    //m_packageDependsStatus.clear();
-    if (m_packageDependsStatus.contains(index)) {
-        if (m_packageDependsStatus.size() > 1) {
-            QMapIterator<int, PackageDependsStatus> MapIteratorpackageDependsStatus(m_packageDependsStatus);
-            QList<PackageDependsStatus> listpackageDependsStatus;
-            int iDependIndex = 0;
-            while (MapIteratorpackageDependsStatus.hasNext()) {
-                MapIteratorpackageDependsStatus.next();
-                if (index > MapIteratorpackageDependsStatus.key())
-                    listpackageDependsStatus.insert(iDependIndex++, MapIteratorpackageDependsStatus.value());
-                else if (index != MapIteratorpackageDependsStatus.key()) {
-                    listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
-                }
-            }
-            m_packageDependsStatus.clear();
-            for (int i = 0; i < listpackageDependsStatus.size(); i++)
-                m_packageDependsStatus.insert(i, listpackageDependsStatus[i]);
-        } else {
-            m_packageDependsStatus.clear();
-        }
+}
+
+/**
+ * @brief PackagesManager::appendPackage 将前端给的包，传输到添加线程中。并开始添加
+ * @param packages 要添加的包的列表
+ * 此处可以优化，如果只有一两个包直接添加
+ * 大于等于三个包，先添加两个再开始线程
+ */
+void PackagesManager::appendPackage(QStringList packages)
+{
+    checkInvalid(packages);     //运行之前先计算有效文件的数量
+    qDebug() << "PackagesManager:" << "append Package" << packages;
+    if (packages.size() == 1) {
+        appendNoThread(packages, packages.size());
+    } else {
+        QStringList subPackages;
+        subPackages << packages[0];
+        appendNoThread(subPackages, packages.size());
+        packages.removeAt(0);
+
+        if (packages.isEmpty())
+            return;
+        m_pAddPackageThread->setPackages(packages);                     //传递要添加的包到添加线程中
+        m_pAddPackageThread->setAppendPackagesMd5(m_appendedPackagesMd5);       //传递当前已经添加的包的MD5 判重时使用
+
+        m_pAddPackageThread->start();   //开始添加线程
     }
 }
 
-bool PackagesManager::appendPackage(QString debPackage)
+/**
+ * @brief AddPackageThread::checkInvalid 检查有效文件的数量
+ */
+void PackagesManager::checkInvalid(QStringList packages)
 {
-    qDebug() << "PackagesManager:" << "append Package" << debPackage;
-    // 创建软链接，修复路径中存在空格时可能会安装失败的问题。
-    if (debPackage.contains(" ")) {
-        QApt::DebFile *p = new DebFile(debPackage);
-        debPackage = SymbolicLink(debPackage, p->packageName());
-        qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << debPackage;
-        delete p;
+    m_validPackageCount = 0; //每次添加时都清零
+    for (QString package : packages) {
+        QApt::DebFile *pkgFile = new DebFile(package);
+        if (pkgFile && pkgFile->isValid()) {            //只有有效文件才会计入
+            m_validPackageCount ++;
+        }
+        delete pkgFile;
     }
-    QApt::DebFile *p = new DebFile(debPackage);
+}
 
-    const auto md5 = p->md5Sum();
-    if (m_appendedPackagesMd5.contains(md5)) return false;
+void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
+{
+    qDebug() << "[PackagesManager]" << "[appendNoThread]" << "start add packages";
+    for (QString debPackage : packages) {                 //通过循环添加所有的包
+        //判断此次添加的包是否是绝对路径,如果是相对路径则转换为绝对路径
+        if (debPackage[0] != "/") {
+            QFileInfo packageAbsolutePath(debPackage);
+            debPackage = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
+            qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
+        }
 
-    m_preparedPackages << debPackage;
-    m_appendedPackagesMd5 << md5;
-    m_preparedMd5 << md5;
+        //管理最近文件列表
+        DRecentData data;
+        data.appName = "Deepin Deb Installer";
+        data.appExec = "deepin-deb-installer";
+        DRecentManager::addItem(debPackage, data);
 
-    delete p;
-    return true;
+        // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
+        if (debPackage.contains(" ")) {
+            QApt::DebFile *p = new DebFile(debPackage);
+            debPackage = SymbolicLink(debPackage, p->packageName());
+            qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << debPackage;
+            delete p;
+        }
+
+        QApt::DebFile *pkgFile = new DebFile(debPackage);
+
+        //判断当前文件是否是无效文件
+        if (pkgFile && !pkgFile->isValid()) {
+            //处理无效文件
+            qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is invalid";
+            emit invalidPackage();
+            delete pkgFile;
+            continue;
+        }
+
+        PERF_PRINT_BEGIN("POINT-03", "pkgsize=" + QString::number(pkgFile->installedSize()) + "b");
+        // 获取当前文件的md5的值,防止重复添加
+        QTime md5Time;
+        md5Time.start();
+        const auto md5 = pkgFile->md5Sum();
+        qInfo() << "[appendNoThread]" << "获取" << pkgFile->packageName() << "的MD5 用时" << md5Time.elapsed() << " ms";
+
+        // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
+        if (m_appendedPackagesMd5.contains(md5)) {
+            //处理重复文件
+            emit packageAlreadyExists();
+            delete pkgFile;
+            continue;
+        }
+        // 可以添加,发送添加信号
+
+        addPackage(m_validPackageCount, debPackage, md5);
+        delete pkgFile;
+    }
+
+    //所有包都添加结束.
+    if (allPackageSize == 1) {
+        //fix bug: https://pms.uniontech.com/zentao/bug-view-56307.html
+        // 添加一个包时 发送添加结束信号,启用安装按钮
+        emit appendFinished(m_packageMd5);
+        PERF_PRINT_END("POINT-03");
+    }
+}
+
+/**
+ * @brief PackagesManager::refreshPage 根据添加包的情况 刷新页面
+ * @param validPkgCount 此次添加的包的数量（一次拖入或者打开【可能是多个包】【此处只是预计能够添加到程序中的包的数量】）
+ */
+void PackagesManager::refreshPage(int validPkgCount)
+{
+    // 获取当前已经添加到程序中的包的数量
+    int packageCount = m_preparedPackages.size();
+    if (packageCount == 1) {            //当前程序中只添加了一个包
+        if (validPkgCount == 1) {       //此次只有一个包将会被添加的程序中
+            emit refreshSinglePage();   //刷新单包安装界面
+
+        } else if (validPkgCount > 1) {  //当前程序中值添加了一个包，但是这次有不止一个包将会被添加到程序中
+            emit single2MultiPage();     //刷新批量安装界面
+            emit appendStart();          //开始批量添加
+        }
+    } else if (packageCount == 2) {
+        //当前程序中已经添加了两个包
+        //1.第一次是添加了一个包，第二次又添加了多于一个包
+
+        emit single2MultiPage();        //刷新批量安装界面
+        emit appendStart();             //发送批量添加信号
+    } else {
+        //此时批量安装界面已经刷新过。如果再添加，就只刷新model
+        emit refreshMultiPage();
+        emit appendStart();
+    }
+}
+
+/**
+ * @brief PackagesManager::appendPackageFinished 此次添加已经结束
+ */
+void PackagesManager::appendPackageFinished()
+{
+    //告诉前端，此次添加已经结束
+    //向model传递 md5
+    emit appendFinished(m_packageMd5);
+}
+
+void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum)
+{
+    qInfo() << "[PackagesManager]:" << "[addPackage]" << packagePath;
+    //一定要保持 m_preparedPacjages 和 packageMd5的下标保持一致
+    //二者一定是一一对应的。
+    //此后的依赖状态和安装状态都是与md5绑定的 md5是与index绑定
+    m_preparedPackages.insert(0, packagePath);      //每次添加的包都放到最前面
+    m_packageMd5.insert(0, packageMd5Sum);          //添加MD5Sum
+    m_appendedPackagesMd5 << packageMd5Sum;         //将MD5添加到集合中，这里是为了判断包不再重复
+    refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
@@ -797,6 +992,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     if (p) return p;
 
     qDebug() << "PackagesManager:" << "check virtual package providers for" << packageName << sysArch << annotation;
+
     // check virtual package providers
     for (auto *ap : b->availablePackages())
         if (ap->name() != packageName && ap->providesList().contains(packageName))
@@ -812,10 +1008,11 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
  */
 QString PackagesManager::SymbolicLink(QString previousName, QString packageName)
 {
-    if (!mkTempDir()) {
+    if (!mkTempDir()) {//如果创建临时目录失败,则提示
         qWarning() << "PackagesManager:" << "Failed to create temporary folder";
         return previousName;
     }
+    //成功则开始创建
     return link(previousName, packageName);
 }
 
@@ -826,23 +1023,10 @@ QString PackagesManager::SymbolicLink(QString previousName, QString packageName)
 bool PackagesManager::mkTempDir()
 {
     QDir tempPath(m_tempLinkDir);
-    if (!tempPath.exists()) {
+    if (!tempPath.exists()) {       //如果临时目录不存在则返回创建结果
         return tempPath.mkdir(m_tempLinkDir);
     } else {
-        return true;
-    }
-}
-
-/**
- * @brief PackagesManager::rmTempDir 删除存放软链接的临时目录
- * @return 删除临时目录的结果
- */
-bool PackagesManager::rmTempDir()
-{
-    QDir tempPath(m_tempLinkDir);
-    if (tempPath.exists()) {
-        return tempPath.removeRecursively();
-    } else {
+        //临时目录已经存在,直接返回创建成功
         return true;
     }
 }
@@ -858,13 +1042,16 @@ QString PackagesManager::link(QString linkPath, QString packageName)
     qDebug() << "PackagesManager: Create soft link for" << packageName;
     QFile linkDeb(linkPath);
 
-    //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
+    //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_i
     //删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
     int count = 1;
     QString tempName = packageName;
+
+    // 命名创建的软链接文件
     while (true) {
         QFile tempLinkPath(m_tempLinkDir + tempName);
-        if (tempLinkPath.exists()) {
+        //对已经存在重名文件的处理
+        if (tempLinkPath.exists()) {    //命名方式为在包名后+"_i" PS:i 为当前重复的数字,无实际意义,只是为了区别不同的包
             tempName = packageName + "_" + QString::number(count);
             qWarning() << "PackagesManager:" << "A file with the same name exists in the current temporary directory,"
                        "and the current file name is changed to"
@@ -874,11 +1061,29 @@ QString PackagesManager::link(QString linkPath, QString packageName)
             break;
         }
     }
+    //创建软链接
     if (linkDeb.link(linkPath, m_tempLinkDir + tempName))
-        return m_tempLinkDir + tempName;
+        return m_tempLinkDir + tempName;    //创建成功,返回创建的软链接的路径.
     else {
+        //创建失败,直接返回路径
         qWarning() << "PackagesManager:" << "Failed to create Symbolick link error.";
         return linkPath;
+    }
+}
+
+/**
+ * @brief PackagesManager::rmTempDir 删除存放软链接的临时目录
+ * @return 删除临时目录的结果
+ * PS: 移动创建临时目录 创建软链接的函数到 AddPackageThread中
+ *
+ */
+bool PackagesManager::rmTempDir()
+{
+    QDir tempPath(m_tempLinkDir);
+    if (tempPath.exists()) {            //如果临时目录存在，则删除临时目录
+        return tempPath.removeRecursively();
+    } else {
+        return true;                    //临时目录不存在，返回删除成功
     }
 }
 
@@ -887,16 +1092,26 @@ PackagesManager::~PackagesManager()
     // 删除 临时目录，会尝试四次，四次失败后退出。
     int rmTempDirCount = 0;
     while (true) {
-        if (rmTempDir())
+        if (rmTempDir())        //删除成功
             break;
         qWarning() << "PackagesManager:" << "Failed to delete temporary folder， Current attempts:" << rmTempDirCount << "/3";
-        if (rmTempDirCount > 3) {
+        if (rmTempDirCount > 3) {       //删除三次仍然失败则警告 不过每次重启都会删除临时目录
             qWarning() << "PackagesManager:" << "Failed to delete temporary folder, Exit application";
             break;
         }
         rmTempDirCount++;
     }
     delete dthread;
+
+    //先取消当前异步计算的后端。
+    m_backendFuture.cancel();
+    delete m_pAddPackageThread;
+
+    Backend *b = m_backendFuture.result();
+
+    // 删除与库的连接
+    b->deleteLater();
+    delete b;
     PERF_PRINT_END("POINT-02");         //关闭应用
 }
 

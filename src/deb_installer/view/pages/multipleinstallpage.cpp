@@ -176,6 +176,9 @@ void MultipleInstallPage::initUI()
     m_appsListView->setModel(m_debListModel);
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+    //监听字体大小变化,设置高度
+    connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
+
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
 
@@ -184,9 +187,9 @@ void MultipleInstallPage::initUI()
     appsViewLayout->addSpacing(10);
     appsViewLayout->addWidget(m_appsListView);
 
-    m_installButton->setFixedSize(120, 36);     //设置安装按钮的大小
-    m_acceptButton->setFixedSize(120, 36);      //设置确认按钮的大小
-    m_backButton->setFixedSize(120, 36);        //设置返回按钮的大小
+    m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
+    m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
+    m_backButton->setMinimumSize(120, 36);        //设置返回按钮的大小
 
     m_installButton->setText(tr("Install"));    //设置安装按钮的提示语
     m_acceptButton->setText(tr("Done"));        //设置完成按钮的提示
@@ -209,7 +212,7 @@ void MultipleInstallPage::initUI()
 
     //修复依赖安装提示语会有焦点的问题。
     m_tipsLabel->setFocusPolicy(Qt::NoFocus);
-    m_tipsLabel->setFixedHeight(24);
+    m_tipsLabel->setMinimumHeight(24);
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_tipsLabel, fontFamily, 12, QFont::ExtraLight);             //调整wine依赖安装提示的字体
 
@@ -237,7 +240,7 @@ void MultipleInstallPage::initUI()
 
     m_processFrame->setVisible(false);                                                          //进度条默认隐藏
     m_processFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_processFrame->setFixedHeight(53);                                                         //设置固定高度
+    m_processFrame->setMinimumHeight(53);                                                         //设置固定高度
 
     // 按钮布局
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
@@ -252,7 +255,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 30);                                                //底部间距30
+    btnsLayout->setContentsMargins(0, 0, 0, 20);                                                //底部间距30
 
     QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);                                                 //进度布局添加到btn布局中（二者互斥，一定不能同时出现）
@@ -481,6 +484,9 @@ void MultipleInstallPage::hiddenCancelButton()
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
     m_installButton->setEnabled(bEnable);//设置按钮是否可用
+    if (bEnable) {                     //按钮可用时刷新一次model 保证所有的包都能显示出来
+        m_appsListView->reset();
+    }
 }
 
 /**
@@ -498,38 +504,11 @@ void MultipleInstallPage::afterGetAutherFalse()
 }
 
 /**
- * @brief MultipleInstallPage::onScrollSlotFinshed 滚动item的槽函数
+ * @brief MultipleInstallPage::refreshModel 刷新model
  */
-void MultipleInstallPage::onScrollSlotFinshed()
+void MultipleInstallPage::refreshModel()
 {
-    int row = m_appsListView->count();      //获取appListView中Item的数量
-    QModelIndex currIndex;
-    if (m_index == -1) {                    //如果未传入要移动到的index
-        if (row > 0) {
-            currIndex = m_debListModel->index(row - 1); //滚动到最后
-            m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-        }
-    } else {                                //传入了要移动到的index
-        if (m_index == 0) {
-            currIndex = m_debListModel->index(0);   //移动的位置是首项
-        } else if (m_index == row) {                //移动到的位置是末项
-            currIndex = m_debListModel->index(m_index - 1);
-        } else {                                    //移动到中间位置
-            currIndex = m_debListModel->index(m_index);
-        }
-        m_appsListView->scrollTo(currIndex, QAbstractItemView::EnsureVisible);
-    }
-    m_appsListView->reset();                        //reset
-}
-
-/**
- * @brief MultipleInstallPage::setScrollBottom 每次触发只移动一次
- * @param index 要移动到的位置
- */
-void MultipleInstallPage::setScrollBottom(int index)
-{
-    m_index = index;
-    QTimer::singleShot(1, this, &MultipleInstallPage::onScrollSlotFinshed);     //防止添加多个时不断触发
+    m_appsListView->reset();
 }
 
 /**

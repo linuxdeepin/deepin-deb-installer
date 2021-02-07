@@ -86,11 +86,7 @@ void SingleInstallPage::initUI()
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
-    if (m_packagesModel->isReady())             //判断当前是否已经准备好可以安装，如果可以安装显示包的信息
-        setPackageInfo();
-    else                                        //当前暂时还没有准备好，等120ms后再显示信息
-        QTimer::singleShot(120, this, &SingleInstallPage::setPackageInfo);
-
+    setPackageInfo();
     m_upDown = true;                            //当前是收缩的
 }
 
@@ -130,9 +126,8 @@ void SingleInstallPage::initControlAccessibleName()
  */
 void SingleInstallPage::initContentLayout()
 {
-    m_contentLayout->addSpacing(10);
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 0, 20, 30);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 10, 20, 16);         //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -166,7 +161,7 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
-    m_pLoadingLabel->setFixedHeight(24);                        //设置高度
+    m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
 
@@ -191,29 +186,29 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     }
 
     m_packageIcon->setText("icon");         //图标
-    m_packageIcon->setFixedSize(64, 64);    //设置图标的大小
+    m_packageIcon->setMinimumSize(64, 64);    //设置图标的大小
 
     DebInfoLabel *packageName = new DebInfoLabel(this);             //包名的描述性文字
     packageName->setCustomQPalette(QPalette::WindowText);           //设置包名的字体颜色
-    packageName->setFixedHeight(fontinfosizetemp);                  //根据字体大小设置高度
+    packageName->setMinimumHeight(fontinfosizetemp);                  //根据字体大小设置高度
     packageName->setText(tr("Name: "));                             //设置具体的提示
     packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);    //垂直居中，水平靠左显示
     packageName->setObjectName("PackageNameTitle");                 //添加ObjectName
 
+    //设置包名的样式，但是后续再设置显示的内容
+    m_packageName->setCustomQPalette(QPalette::WindowText);         //设置字体样式
+    m_packageName->setMinimumHeight(fontinfosizetemp);                //根据字体大小设置高度
+    m_packageName->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);      //垂直靠上，水平靠左
+
     DebInfoLabel *packageVersion = new DebInfoLabel(this);          //包版本的描述性文字
     packageVersion->setCustomQPalette(QPalette::WindowText);        //设置字体颜色
-    packageVersion->setFixedHeight(fontinfosizetemp_version);       //根据字体大小设置高度
+    packageVersion->setMinimumHeight(fontinfosizetemp_version);       //根据字体大小设置高度
     packageVersion->setText(tr("Version: "));                       //添加具体的提示文字
     packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft); //垂直居中，水平靠左
     packageVersion->setObjectName("PackageVersionTitle");           //添加ObjectName
 
-    //设置包名的样式，但是后续再设置显示的内容
-    m_packageName->setCustomQPalette(QPalette::WindowText);         //设置字体样式
-    m_packageName->setFixedHeight(fontinfosizetemp);                //根据字体大小设置高度
-    m_packageName->setAlignment(Qt::AlignTop | Qt::AlignLeft);      //垂直靠上，水平靠左
-
     m_packageVersion->setCustomQPalette(QPalette::WindowText);      //设置字体样式
-    m_packageVersion->setFixedHeight(fontinfosizetemp_version);     //根据字体大小设置高度
+    m_packageVersion->setMinimumHeight(fontinfosizetemp_version);     //根据字体大小设置高度
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);//垂直居中，水平靠左
 
     //此处可优化
@@ -290,16 +285,6 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_itemInfoFrame->setVisible(false);
 
     m_contentLayout->addWidget(m_itemInfoFrame);                                                //添加到主窗口中
-
-#ifdef SHOWBGCOLOR
-    packageName->setStyleSheet("{background: blue;}");
-    packageVersion->setStyleSheet("{background: red;}");
-    m_itemInfoFrame->setStyleSheet("QFrame{background: green;}");
-    m_packageName->setStyleSheet("QLabel{background: blue;}");
-    m_packageVersion->setStyleSheet("QLabel{background: yellow;}");
-    m_packageDescription->setStyleSheet("QLabel{background: orange;}");
-    m_packageIcon->setStyleSheet("QLabel{background: brown;}");
-#endif
 }
 
 /**
@@ -371,7 +356,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setObjectName("PackageDescription");
     m_packageDescription->setAccessibleName("PackageDescription");
 
-    m_tipsLabel->setFixedHeight(fontinfosizetemp);                      //设置提示label的高度
+    m_tipsLabel->setMinimumHeight(fontinfosizetemp);                      //设置提示label的高度
     m_tipsLabel->setAlignment(Qt::AlignCenter);                         //提示居中显示
 
     m_progressFrame->setVisible(false);                                 //默认隐藏进度条view
@@ -379,7 +364,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     m_installProcessView->setVisible(false);                            //默认隐藏安装进程信息
     m_installProcessView->setAcceptDrops(false);                        //不接受拖入的数据
-    m_installProcessView->setFixedHeight(200);                          //设置高度
+    m_installProcessView->setMinimumHeight(200);                          //设置高度
     m_installProcessView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     // 安装按钮
@@ -409,12 +394,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setWordWrap(true);        //允许内容自动换行
 
     // 设置各个按钮的大小
-    m_installButton->setFixedSize(120, 36);
-    m_uninstallButton->setFixedSize(120, 36);
-    m_reinstallButton->setFixedSize(120, 36);
-    m_confirmButton->setFixedSize(120, 36);
-    m_backButton->setFixedSize(120, 36);
-    m_doneButton->setFixedSize(120, 36);
+    m_installButton->setMinimumSize(120, 36);
+    m_uninstallButton->setMinimumSize(120, 36);
+    m_reinstallButton->setMinimumSize(120, 36);
+    m_confirmButton->setMinimumSize(120, 36);
+    m_backButton->setMinimumSize(120, 36);
+    m_doneButton->setMinimumSize(120, 36);
 
     m_contentLayout->addWidget(m_infoControlButton);
 
@@ -426,8 +411,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     initTabOrder();
 
     //设置描述信息的size 与位置
-    m_packageDescription->setFixedHeight(65);
-    m_packageDescription->setFixedWidth(270);
+    m_packageDescription->setMinimumHeight(65);
+    m_packageDescription->setMinimumWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     //各个按钮的布局
@@ -459,7 +444,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     // 把所有的按钮合并成一个widget
     QWidget *btnsFrame = new QWidget(this);
-    btnsFrame->setFixedHeight(m_installButton->maximumHeight());
+    btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
     btnsFrameLayout->addWidget(m_progressFrame);
     btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);
@@ -487,19 +472,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
-
-#ifdef SHOWBGCOLOR
-    m_progressFrame->setStyleSheet("QFrame{background:blue}");
-    m_tipsLabel->setStyleSheet("QLabel{background: gray}");
-    btnsFrame->setStyleSheet("QFrame{background:red}");
-    m_infoControlButton->setStyleSheet("QFrame{background: purple}");
-    m_installButton->setStyleSheet("QPushButton{background: blue}");
-    m_uninstallButton->setStyleSheet("QPushButton{background: yellow}");
-    m_reinstallButton->setStyleSheet("QPushButton{background: purple}");
-    m_backButton->setStyleSheet("QPushButton{background: brown}");
-    m_confirmButton->setStyleSheet("QPushButton{background: pink}");
-    m_doneButton->setStyleSheet("QPushButton{background: cyan}");
-#endif
 }
 
 /**
@@ -794,6 +766,13 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
  */
 void SingleInstallPage::setPackageInfo()
 {
+    // 如果显示时后端未加载完成，则不断callback访问 直到加载完成
+    // 可以增加一个时间限制并且添加message提示。
+    if (!m_packagesModel->isReady()) {
+        QTimer::singleShot(10, this, &SingleInstallPage::setPackageInfo);
+        return;
+    }
+
     qApp->processEvents();                                  //界面实时刷新
     QFontInfo fontinfosize = this->fontInfo();              //获取系统字体
     int fontlabelsize = fontinfosize.pixelSize();
@@ -810,8 +789,6 @@ void SingleInstallPage::setPackageInfo()
     m_packageVersion->setText(package->version());
 
     // set package description
-    //    const QRegularExpression multiLine("\n+", QRegularExpression::MultilineOption);
-    //    const QString description = package->longDescription().replace(multiLine, "\n");
     const QString description = Utils::fromSpecialEncoding(package->longDescription());     //获取描述信息
     m_description = description;
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
@@ -821,17 +798,12 @@ void SingleInstallPage::setPackageInfo()
     packagename_description = Utils::fromSpecialEncoding(package->packageName());
     packageversion_description = Utils::fromSpecialEncoding(package->version());
     delete package;
-    if (fontlabelsize > 18) {       //根据字体大小确定 label的大小
-        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 23);
-        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 23);
-        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
-    } else {
-        const QSize package_boundingSize = QSize(initLabelWidth(fontlabelsize), 20);
-        m_packageName->setText(Utils::holdTextInRect(m_packageName->font(), packagename_description, package_boundingSize));
-        const QSize packageversion_boundingSize = QSize(initLabelWidth(fontlabelsize) - 10, 20);
-        m_packageVersion->setText(Utils::holdTextInRect(m_packageVersion->font(), packageversion_description, packageversion_boundingSize));
-    }
+
+    m_packageName->setText(m_packageName->fontMetrics()
+                           .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+    m_packageVersion->setText(m_packageVersion->fontMetrics()
+                              .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+
 
     // package install status
     const QModelIndex index = m_packagesModel->index(0);
@@ -840,7 +812,9 @@ void SingleInstallPage::setPackageInfo()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "depend status:" << dependsStat;
     // 根据依赖状态调整显示效果
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -867,14 +841,17 @@ void SingleInstallPage::setPackageInfo()
         if (installStat == DebListModel::InstalledSameVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Same version installed"));
+            m_reinstallButton->setText(tr("Reinstall"));
         } else if (installStat == DebListModel::InstalledLaterVersion) {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Later version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_reinstallButton->setText(tr("Downgrade"));
         } else {
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             m_tipsLabel->setText(tr("Earlier version installed: %1")
                                  .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+            m_reinstallButton->setText(tr("Update"));
         }
         return;
     }
@@ -974,7 +951,9 @@ void SingleInstallPage::setAuthBefore()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
     //依赖不满足或依赖授权被取消
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
@@ -1013,7 +992,9 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     QModelIndex index = m_packagesModel->first();
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     //根据依赖状态 调整界面显示
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel) {
+    if (dependsStat == DebListModel::DependsBreak ||
+            dependsStat == DebListModel::DependsAuthCancel ||
+            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -1039,17 +1020,21 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         } else {// 已经安装过其他版本
             // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
             //增加提示 依赖安装完成后的提示
+            // fix bug: https://pms.uniontech.com/zentao/bug-view-56754.html
             if (installStat == DebListModel::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Same version installed"));
+                m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == DebListModel::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Later version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Downgrade"));
             } else {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Earlier version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Update"));
             }
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);

@@ -46,15 +46,15 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_icon->setObjectName("UninstallPageIcon");
     m_icon->setAccessibleName("UninstallPageIcon");
 
-    m_tips->setFixedHeight(120);
-    m_tips->setFixedWidth(440);
+    m_tips->setMinimumHeight(120);
+    m_tips->setMinimumWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);
 
     // cancel button settings
     m_cancelBtn->setText(tr("Cancel"));
-    m_cancelBtn->setFixedSize(120, 36);
+    m_cancelBtn->setMinimumSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
-    m_confirmBtn->setFixedSize(120, 36);
+    m_confirmBtn->setMinimumSize(120, 36);
 
     // 添加确认和返回按钮的焦点策略
     m_confirmBtn->setFocusPolicy(Qt::TabFocus);
@@ -85,7 +85,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     contentLayout->setContentsMargins(0, 0, 0, 0);
     contentLayout->addStretch();
     contentLayout->addWidget(m_icon);
-    contentLayout->addSpacing(15);
+    contentLayout->addStretch(0);
     contentLayout->setAlignment(m_icon, Qt::AlignHCenter);
     contentLayout->addWidget(m_tips);
     contentLayout->addStretch();
@@ -102,8 +102,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     //fix bug: https://pms.uniontech.com/zentao/bug-view-46864.html
-    //卸载页面上边距增加10px
-    centralLayout->setContentsMargins(20, 10, 20, 30);
+    //卸载页面上边距增加15px  底边距变为20,适应大字体
+    centralLayout->setContentsMargins(20, 15, 20, 20);
 
 
     //Set font and size

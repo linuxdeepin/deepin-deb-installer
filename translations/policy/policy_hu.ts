@@ -9,7 +9,7 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!description" line="0"/>
 			<source>authentication</source>
-			<translation>hitelesítés</translation>
+			<translation>Hitelesítés</translation>
 		</message>
 	</context>
 </TS>

@@ -53,7 +53,6 @@ void PackagesListView::initUI()
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
 }
 
-
 /**
  * @brief PackagesListView::initConnections 初始化链接
  */
@@ -75,22 +74,6 @@ void PackagesListView::initShortcuts()
     QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);              //初始化快捷键
     deleteShortcut->setContext(Qt::ApplicationShortcut);                                //设置快捷键的显示提示
     connect(deleteShortcut, SIGNAL(activated()), this, SLOT(onShortcutDeleteAction())); //链接快捷键
-}
-
-/**
- * @brief PackagesListView::scrollContentsBy 滚动相关
- * @param dx
- * @param dy
- *
- * 此函数无实际意义。稍后废弃
- */
-void PackagesListView::scrollContentsBy(int dx, int dy)
-{
-    if (-1 == m_highlightIndex.row()) {                         //判断无意义
-        QListView::scrollContentsBy(dx, dy);                    //还是调用了QList的滚动方法
-        return;
-    }
-    QListView::scrollContentsBy(dx, dy);                        //就算判断是false也是调用的QList的滚动方法
 }
 
 /**
@@ -279,4 +262,21 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
             this->setCurrentIndex(m_currModelIndex);        //存在焦点时，默认选入第一项
         }
     }
+}
+
+/**
+ * @brief event 事件
+ */
+bool PackagesListView::event(QEvent *event)
+{
+    //字体变化事件
+    if (event->type() == QEvent::FontChange) {
+        qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
+        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 16) { //当前字体大小是否小于16
+            emit setItemHeight(48);
+        } else {
+            emit setItemHeight(48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16));
+        }
+    }
+    return DListView::event(event);
 }

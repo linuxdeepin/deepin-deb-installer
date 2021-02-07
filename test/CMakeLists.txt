@@ -18,6 +18,7 @@ project(${APP_BIN_NAME_TEST})
 
 
 ADD_COMPILE_OPTIONS(-fno-access-control)
+
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -26,7 +27,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "-Wl,--as-need -fPIE")
 set(CMAKE_EXE_LINKER_FLAGS "-pie")
-set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+#set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+#set(CMAKE_C_FLAGS "-g -fprofile-arcs -ftest-coverage")
 
 if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
@@ -47,7 +49,8 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
 endif()
 
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fprofile-arcs -ftest-coverage")
 
 #Generate the qm file
 execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
@@ -110,6 +113,11 @@ file(GLOB_RECURSE APP_SRCS
     )
 FILE(GLOB allTestSource
   src/*.cpp
+  src/manager/*.cpp
+  src/model/*.cpp
+  src/utils/*.cpp
+  src/view/pages/*.cpp
+  src/view/widgets/*.cpp
 )
 include_directories(src)
 include_directories( ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/)
@@ -136,14 +144,9 @@ target_link_libraries(${APP_BIN_NAME_TEST}
     ${GTEST_MAIN_LIBRARIES}
     pthread
 )
-set(CMAKE_INSTALL_PREFIX /usr)
 
-## Install files
-install(TARGETS deepin-deb-installer DESTINATION bin)
-
-file(GLOB APP_QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
-install(FILES ${APP_QM_FILES} DESTINATION share/deepin-deb-installer/translations)
-install(FILES ${APP_DESKTOP} DESTINATION share/applications)
-install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
-install(FILES ${CMAKE_SOURCE_DIR}/assets/com.deepin.pkexec.aptInstallDepend.policy
-                    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/polkit-1/actions)
+add_custom_target(test
+    COMMAND echo " =================== TEST BEGIN ==================== "
+    COMMAND ${CMAKE_BINARY_DIR}/test/${APP_BIN_NAME_TEST}
+    COMMAND echo " =================== TEST END ==================== "
+)

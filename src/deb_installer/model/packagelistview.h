@@ -50,6 +50,12 @@ signals:
     void onShowHideTopBg(bool bShow);
 
     /**
+     * @brief setItemHeight    设置item高度
+     * @param height item高度
+     */
+    void setItemHeight(int height);
+
+    /**
      * @brief onShowHideBottomBg    信号已经被废弃
      * @param bShow
      */
@@ -87,13 +93,6 @@ public slots:
      */
     void getPos(QRect rect, int index); //获取到的当前Item的位置和row
 protected:
-
-    /**
-     * @brief scrollContentsBy  无具体实际作用，可以忽略删除
-     * @param dx
-     * @param dy
-     */
-    void scrollContentsBy(int dx, int dy)override;
 
     /**
      * @brief mousePressEvent 鼠标按下事件
@@ -134,6 +133,11 @@ protected:
      */
     void focusInEvent(QFocusEvent *event) override;
 
+    /**
+     * @brief event 事件
+     */
+    virtual bool event(QEvent *event) override;
+
 private:
 
     /**
@@ -159,12 +163,6 @@ private:
      * 初始化快捷键
      */
     void initShortcuts();
-
-    /**
-     * @brief handleHideShowSelection 此函数已经被废弃
-     *
-     */
-    void handleHideShowSelection();
 
 private slots:
 

@@ -24,6 +24,7 @@ class AptConfigMessage : public DMainWindow
 
 public:
     explicit AptConfigMessage(QWidget *parent = nullptr);
+    ~AptConfigMessage() override;
     InstallProcessInfoView *m_textEdit;
 
     static AptConfigMessage *getInstance()
@@ -62,7 +63,6 @@ protected:
 
 private:
 
-    DIconButton *m_picon;                   // 图标信息
     DLineEdit *m_inputEdit;                 //输入框
     DSuggestButton *m_pushbutton;           //确定输入按钮
     DLabel *m_pQuestionLabel;               //提示信息

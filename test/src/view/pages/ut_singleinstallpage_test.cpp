@@ -1,0 +1,253 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     linxun <linxun@uniontech.com>
+*
+* Maintainer: linxun <linxun@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "../deb_installer/view/pages/singleinstallpage.h"
+#include "../deb_installer/model/deblistmodel.h"
+#include "../deb_installer/manager/packagesmanager.h"
+#include "../deb_installer/manager/PackageDependsStatus.h"
+#include "../deb_installer/view/widgets/workerprogress.h"
+
+#include <stub.h>
+#include <ut_Head.h>
+
+#include <QDebug>
+
+#include <gtest/gtest.h>
+using namespace QApt;
+
+void stud_installPackages()
+{
+}
+
+bool stud_singleinit()
+{
+    return true;
+}
+
+QString stud_singlepackageName()
+{
+    return "test";
+}
+
+QString stud_singleversion()
+{
+    return "1.0.0";
+}
+
+QString stud_singlelongDescription()
+{
+    return "this is test";
+}
+
+QString stud_singlearchitecture()
+{
+    return "x86";
+}
+
+QString stud_singlefilePath()
+{
+    return "/home";
+}
+
+QString stud_singleshortDescription()
+{
+    return "this is a short test";
+}
+
+PackageDependsStatus stud_singlegetPackageDependsStatus(const int index)
+{
+    Q_UNUSED(index);
+    PackageDependsStatus m_status;
+    m_status.status = 1;
+    return m_status;
+}
+
+int stud_singlepackageInstallStatus(const int index)
+{
+    Q_UNUSED(index);
+    return 1;
+}
+
+void stud_singleuninstallPackage(const int idx)
+{
+    Q_UNUSED(idx);
+}
+
+int stud_successtoInt(bool *ok = nullptr)
+{
+    Q_UNUSED(ok);
+    return 2;
+}
+int stud_failedtoInt(bool *ok = nullptr)
+{
+    Q_UNUSED(ok);
+    return 3;
+}
+
+class SingleInstallpage_UT : public UT_HEAD
+{
+public:
+    //添加日志
+    static void SetUpTestCase()
+    {
+        qDebug() << "SetUpTestCase" << endl;
+    }
+    static void TearDownTestCase()
+    {
+        qDebug() << "TearDownTestCase" << endl;
+    }
+    void SetUp() //TEST跑之前会执行SetUp
+    {
+        qDebug() << "SetUp" << endl;
+    }
+    void TearDown() //TEST跑完之后会执行TearDown
+    {
+        delete page;
+        delete model;
+    }
+    SingleInstallPage *page;
+    DebListModel *model;
+};
+
+TEST_F(SingleInstallpage_UT, total_UT)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), stud_singleinit);
+    stub.set(ADDR(DebFile, packageName), stud_singlepackageName);
+    stub.set(ADDR(DebFile, version), stud_singleversion);
+    stub.set(ADDR(DebFile, longDescription), stud_singlelongDescription);
+    stub.set(ADDR(DebFile, filePath), stud_singlefilePath);
+    stub.set(ADDR(DebFile, architecture), stud_singlearchitecture);
+    stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+
+    model = new DebListModel();
+    model->m_packagesManager->m_preparedPackages.append("test");
+    model->m_packagesManager->m_preparedPackages.append("test1");
+    page = new SingleInstallPage(model);
+    page->reinstall();
+
+    EXPECT_EQ(page->initLabelWidth(11), 260);
+    EXPECT_EQ(page->initLabelWidth(12), 255);
+    EXPECT_EQ(page->initLabelWidth(13), 250);
+    EXPECT_EQ(page->initLabelWidth(14), 250);
+    EXPECT_EQ(page->initLabelWidth(15), 240);
+    EXPECT_EQ(page->initLabelWidth(16), 240);
+    EXPECT_EQ(page->initLabelWidth(18), 230);
+    EXPECT_EQ(page->initLabelWidth(20), 220);
+    EXPECT_EQ(page->initLabelWidth(22), 220);
+
+    page->install();
+    page->uninstallCurrentPackage();
+    page->showInfomation();
+    page->hideInfomation();
+    page->showInfo();
+    page->onOutputAvailable("test");
+    page->m_upDown = false;
+    page->onWorkerFinished();
+
+    page->onWorkerProgressChanged(100);
+    page->m_progress->setValue(60);
+    page->onWorkerProgressChanged(50);
+
+    page->setEnableButton(false);
+    page->setEnableButton(true);
+
+    page->afterGetAutherFalse();
+    page->setAuthConfirm("test");
+    page->setAuthBefore();
+    page->setCancelAuthOrAuthDependsErr();
+    page->DealDependResult(1, "test");
+    page->m_operate = SingleInstallPage::Install;
+    page->setEnableButton(true);
+    page->setAuthBefore();
+    page->afterGetAutherFalse();
+    page->m_operate = SingleInstallPage::Reinstall;
+    page->setAuthBefore();
+    page->afterGetAutherFalse();
+}
+
+TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), stud_singleinit);
+    stub.set(ADDR(DebFile, packageName), stud_singlepackageName);
+    stub.set(ADDR(DebFile, version), stud_singleversion);
+    stub.set(ADDR(DebFile, longDescription), stud_singlelongDescription);
+    stub.set(ADDR(DebFile, filePath), stud_singlefilePath);
+    stub.set(ADDR(DebFile, architecture), stud_singlearchitecture);
+    stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+
+    model = new DebListModel();
+    usleep(100 * 1000);
+    model->m_packagesManager->m_preparedPackages.append("test");
+    model->m_packagesManager->m_preparedPackages.append("test1");
+    page = new SingleInstallPage(model);
+    usleep(100 * 1000);
+    stub.set(ADDR(QVariant, toInt), stud_failedtoInt);
+    page->m_operate = SingleInstallPage::Uninstall;
+    page->onWorkerFinished();
+    page->m_operate = SingleInstallPage::Install;
+    page->onWorkerFinished();
+}
+
+TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), stud_singleinit);
+    stub.set(ADDR(DebFile, packageName), stud_singlepackageName);
+    stub.set(ADDR(DebFile, version), stud_singleversion);
+    stub.set(ADDR(DebFile, longDescription), stud_singlelongDescription);
+    stub.set(ADDR(DebFile, filePath), stud_singlefilePath);
+    stub.set(ADDR(DebFile, architecture), stud_singlearchitecture);
+    stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+
+    model = new DebListModel();
+    usleep(100 * 1000);
+    model->m_packagesManager->m_preparedPackages.append("test");
+    model->m_packagesManager->m_preparedPackages.append("test1");
+    page = new SingleInstallPage(model);
+    usleep(100 * 1000);
+    page->setPackageInfo();
+    stub.set(ADDR(QVariant, toInt), stud_successtoInt);
+    page->onWorkerFinished();
+    page->m_operate = SingleInstallPage::Install;
+    page->onWorkerFinished();
+    page->m_operate = SingleInstallPage::Uninstall;
+    page->setAuthBefore();
+    page->DealDependResult(3, "test");
+    page->DealDependResult(2, "test");
+    page->DealDependResult(5, "test");
+    page->DealDependResult(4, "test");
+    page->DealDependResult(6, "test");
+    page->DealDependResult(0, "test");
+}

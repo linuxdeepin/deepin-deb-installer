@@ -34,7 +34,6 @@ DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
-class TitleBarFocusMonitor;
 
 using QApt::DebFile;
 
@@ -67,6 +66,16 @@ private slots:
      * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
      */
     void onPackagesSelected(const QStringList &packages);
+
+    /**
+     * @brief showInvalidePackageMessage 弹出无效包的消息通知
+     */
+    void showInvalidePackageMessage();
+
+    /**
+     * @brief showPkgExistMessage 弹出包已存在的消息通知
+     */
+    void showPkgExistMessage();
 
     /**
      * @brief onNewAppOpen
@@ -159,11 +168,6 @@ private slots:
      */
     void enableCloseButton(bool enable);
 
-    /**
-     * @brief stopMonitorTitleBarFocus 停止监测标题栏焦点
-     */
-    void stopMonitorTitleBarFocus();
-
 private:
     /**
      * @brief initUI
@@ -177,27 +181,36 @@ private:
      */
     void initConnections();
 
-    /**
-     * @brief refreshInstallPage
-     * @param index 某一个包的下标
-     * 刷新安装界面 多用于singleInstallPage 转换到 multiSinglePage
-     * 如果传入的下标不为-1， 则刷新时滚动到下标处
-     */
-    void refreshInstallPage(int index = -1);
 
     /**
-     * @brief MulRefreshPage
-     * @param index 某一个包的下标位置
-     *
-     * 刷新multiInstallPage并在刷新后滚动到下标处
+     * @brief refreshSingle 刷新单包安装界面
      */
-    void MulRefreshPage(int index);
+    void refreshSingle();
 
     /**
-     * @brief handleFocusPolicy
-     * 获取titleBar的控件 optionButton minButton closeButton
+     * @brief single2Multi 刷新批量安装界面
      */
-    void handleFocusPolicy();
+    void single2Multi();
+
+    /**
+     * @brief refreshMulti 刷新批量安装model
+     */
+    void refreshMulti();
+
+    /**
+     * @brief appendPackageStart 正在添加多个包的界面处理函数
+     */
+    void appendPackageStart();
+
+    /**
+     * @brief appendFinished 批量添加结束界面处理函数
+     */
+    void appendFinished();
+
+    /**
+     * @brief MulRefreshPage 刷新批量安装model
+     */
+    void MulRefreshPage();
 
     //Disable/enable close button and exit in menu
     /**
@@ -238,11 +251,8 @@ private:
     int m_Filterflag = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     QPointer<QWidget> m_UninstallPage;              //Store uninstall page
-    QWidget *m_OptionWindow;                        //titlebar main menu
-    QWidget *m_MinWindow;                           //最小化窗口按钮
-    QWidget *m_closeWindow;                         //关闭窗口按钮
 
-    TitleBarFocusMonitor *m_pMonitorFocusThread; //标题栏监测线程。
+    bool packageAppending = false;
 };
 
 #endif  // DEBINSTALLER_H

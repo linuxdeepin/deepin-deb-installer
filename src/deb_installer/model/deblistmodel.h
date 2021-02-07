@@ -35,15 +35,18 @@
 #include <DPushButton>
 #include <DSysInfo>
 #include <QProcess>
-#define ConfigAuthCancel 127
 
 class PackagesManager;
+class AptConfigMessage;
+
 class DebListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
     explicit DebListModel(QObject *parent = nullptr);
+
+    ~DebListModel();
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
@@ -97,6 +100,7 @@ public:
         DependsBreak,           //依赖不满足
         DependsVerifyFailed,    //签名验证失败
         DependsAuthCancel,      //依赖授权失败（wine依赖）
+        ArchBreak,              //架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
     };
 
     /**
@@ -124,6 +128,12 @@ public:
         AuthDependsSuccess, //安装成功
         AuthDependsErr,     //安装失败
         AnalysisErr,        //解析错误
+    };
+
+    enum ErrorCode {
+        NoDigitalSignature = 101,               //无有效的数字签名
+        DigitalSignatureError,                  //数字签名校验失败
+        ConfigAuthCancel   = 127,               //配置安装授权被取消
     };
 
     /**
@@ -204,12 +214,7 @@ public:
      */
     int getInstallFileSize();
 
-    /**
-     * @brief refreshAllDependsStatus 获取所有依赖的状态。
-     */
-    void refreshAllDependsStatus();
 signals:
-    //    void workerStarted() const;
     /**
      * @brief lockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
      * @param lock 启用/禁用按钮
@@ -286,6 +291,41 @@ signals:
      */
     void enableCloseButton(bool);
 
+    /**
+     * @brief invalidPackage 无效包的信号
+     */
+    void invalidPackage();
+
+    /**
+     * @brief packageAlreadyExists 包已添加的信号
+     */
+    void packageAlreadyExists();
+
+    /**
+     * @brief refreshSinglePage 刷新单包安装界面的信号
+     */
+    void refreshSinglePage();
+
+    /**
+     * @brief refreshMultiPage 刷新批量安装model的信号
+     */
+    void refreshMultiPage();
+
+    /**
+     * @brief single2MultiPage 刷新批量安装的信号
+     */
+    void single2MultiPage();
+
+    /**
+     * @brief appendStart 正在添加的信号
+     */
+    void appendStart();
+
+    /**
+     * @brief appendFinished 添加结束的信号
+     */
+    void appendFinished();
+
 public slots:
 
     /**
@@ -316,7 +356,7 @@ public slots:
      * @param package 添加的包的路径
      * @return 是否添加成功（主要是判断是否重复添加）
      */
-    bool appendPackage(QString package);
+    void appendPackage(QStringList packages);
 
     /**
      * @brief onTransactionErrorOccurred 安装过程中出现错误
@@ -337,6 +377,7 @@ public slots:
      */
     void DealDependResult(int iAuthRes, int iIndex, QString dependName);
 
+public slots:
     /**
      * @brief ConfigReadOutput 处理配置包的输出并显示
      */
@@ -353,6 +394,14 @@ public slots:
      * @param str 输入的数据（一般是输入的选项）
      */
     void ConfigInputWrite(QString str);
+
+    /**
+     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
+     * @param str  命令返回的安装信息
+     * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
+     * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
+     */
+    void checkInstallStatus(QString str);
 
 private slots:
 
@@ -440,12 +489,12 @@ private:
      */
     void initRowStatus();
 
+private:
     /**
      * @brief checkSystemVersion  check 当前操作系统的版本
-     * @return 当前版本的操作系统是否需要验证数字签名
      * 个人版专业版需要验证数字签名，其余版本不需要
      */
-    bool checkSystemVersion();
+    void checkSystemVersion();
 
     /**
      * @brief checkDigitalSignature  检查数字签名
@@ -457,6 +506,30 @@ private:
      * @brief showNoDigitalErrWindow 弹出无数字签名的错误弹窗
      */
     void showNoDigitalErrWindow();
+
+    /**
+     * @brief showNoDigitalErrWindow 弹出数字签名校验错误的错误弹窗
+     */
+    void showDigitalErrWindow();
+
+    /**
+     * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
+     */
+    void digitalVerifyFailed(ErrorCode code);
+
+    /**
+     * @brief checkDigitalVerifyFailReason 检查当前验证错误的原因
+     * @return
+     * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
+     */
+    bool checkDigitalVerifyFailReason();
+
+    /**
+     * @brief showDevelopModeWindow 打开控制中心通用界面
+     */
+    void showDevelopModeWindow();
+
+private:
 
     /**
      * @brief checkTemplate 检查是否需要配置
@@ -490,16 +563,13 @@ private:
     void enableTitleBarFocus();
 
     /**
-     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
-     * @param str  命令返回的安装信息
-     * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
-     * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
+     * @brief getPackageMd5 获取当前操作的包的md5值
      */
-    void checkInstallStatus(QString str);
-
+    void getPackageMd5(QList<QByteArray> md5);
 private:
     int m_workerStatus;                                 //当前工作状态
     int m_operatingIndex;                               //当前正在操作的index
+    QByteArray m_operatingPackageMd5;                   //当前正在处理的包的md5
     int m_operatingStatusIndex;                         //当前正在操作的状态的index
 
     QModelIndex m_currentIdx;                           //当前的index
@@ -507,18 +577,21 @@ private:
 
     QPointer<QApt::Transaction> m_currentTransaction;   //当前正在运行的Trans
 
-    QMap<int, int> m_packageOperateStatus;              //所有包的操作状态Map
-    QMap<int, int> m_packageFailCode;                   //FailCode 错误代码 ，trans返回的错误代码
-    QMap<int, QString> m_packageFailReason;             //FailReason , trans返回的详细错误信息
+    // 修改 operateStatus的存放结构，现在与Md5绑定。
+    QMap<QByteArray, int> m_packageOperateStatus;              //所有包的操作状态Map
 
-    bool m_InitRowStatus;                               //当前的操作状态是否初始化过
-    bool bModifyFailedReason = false;                   //此变量已被废弃
+    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+    QMap<QByteArray, int> m_packageFailCode;                   //FailCode 错误代码 ，trans返回的错误代码
+    QMap<QByteArray, QString> m_packageFailReason;             //FailReason , trans返回的详细错误信息
 
-    bool QverifyResult;                                 //此变量已被废弃
     QProcess *m_procInstallConfig;                      // 配置安装进程
     const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
 
-    bool m_isVerifyDigital = true;                      // 签名验证的标志变量
+    bool m_isDevelopMode = true;                      // 开发者模式的标志变量 ps：部分系统版本无需签名验证，默认开发者模式
+
+    QList<QByteArray> m_packageMd5;
+
+    AptConfigMessage *configWindow = nullptr;
 };
 
 #endif  // DEBLISTMODEL_H

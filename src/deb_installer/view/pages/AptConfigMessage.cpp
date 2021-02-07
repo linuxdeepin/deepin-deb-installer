@@ -58,15 +58,15 @@ void AptConfigMessage::initControl()
     this->setFocusPolicy(Qt::NoFocus);                                      //设置自身无焦点
 
     // 初始化 配置信息展示框的样式
-    m_textEdit = new InstallProcessInfoView(360, 196);
+    m_textEdit = new InstallProcessInfoView(360, 196, this);
     m_textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_textEdit->setTextFontSize(12, QFont::Medium);
-    m_textEdit->setFixedSize(360, 196);
+    m_textEdit->setMinimumSize(360, 196);
     m_textEdit->setFocusPolicy(Qt::NoFocus);
 
     // 初始化输入框
-    m_inputEdit = new DLineEdit();
-    m_inputEdit->setFixedSize(220, 36);
+    m_inputEdit = new DLineEdit(this);
+    m_inputEdit->setMinimumSize(220, 36);
 
     //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
     //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
@@ -74,14 +74,14 @@ void AptConfigMessage::initControl()
     //    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
 
     // 初始化提示信息lable
-    m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "));
+    m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "), this);
     m_pQuestionLabel->setMaximumWidth(360);
     m_pQuestionLabel->setFocusPolicy(Qt::NoFocus);
 
     //初始化提交信息按钮
-    m_pushbutton = new DSuggestButton(tr("OK"));
+    m_pushbutton = new DSuggestButton(tr("OK"), this);
     m_pushbutton->setDefault(true);
-    m_pushbutton->setFixedSize(130, 36);
+    m_pushbutton->setMinimumSize(130, 36);
 
     //焦点在信息输入框时，按回车触发提交信息。
     connect(m_inputEdit, &DLineEdit::returnPressed, this, [ = ] {
@@ -100,14 +100,14 @@ void AptConfigMessage::initUI()
     setTitlebarShadowEnabled(false);                    //设置标题栏无阴影
 
     //建立最大的整体布局
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->addStretch(10);                      //设置最小间距为10px
     centralLayout->addWidget(m_textEdit);               //添加配置信息展示框
     centralLayout->addWidget(m_pQuestionLabel);         //添加提示信息label
     centralLayout->addStretch(10);                      //添加弹簧最小间距为10px
 
     // 输入框和按钮小布局
-    QHBoxLayout *pInputLayout = new QHBoxLayout;
+    QHBoxLayout *pInputLayout = new QHBoxLayout(this);
     pInputLayout->addWidget(m_inputEdit);               //添加输入框
     m_inputEdit->setFocus();                            //输入框默认启动时带有焦点。
     pInputLayout->addStretch(10);                       //添加间距
@@ -116,7 +116,6 @@ void AptConfigMessage::initUI()
     centralLayout->addLayout(pInputLayout);             //把输入框和按钮的布局放到整体布局中
     centralLayout->addStretch(10);                      //增加下边距
     centralLayout->setContentsMargins(10, 0, 10, 10);   //设置整体的上下左右的边距
-
 
     // 增加一个widget 放置上述布局，并将此widget设置为中心窗口
     QWidget *wrapWidget = new QWidget(this);
@@ -251,4 +250,13 @@ void AptConfigMessage::initAccessibleName()
 
     m_pushbutton->setObjectName("ConfigConfirmButton");
     m_pushbutton->setAccessibleName("ConfigConfirmButton");
+}
+
+AptConfigMessage::~AptConfigMessage()
+{
+    delete m_textEdit;
+    delete m_inputEdit;
+    delete m_pushbutton;
+    delete m_pQuestionLabel;
+    delete aptConfig;
 }

@@ -89,11 +89,6 @@ const QStringList netErrors()
  */
 const QString workerErrorString(const int errorCode, const QString errorInfo)
 {
-    // 安装配置包时，没有得到授权
-    if (errorCode == ConfigAuthCancel) {
-        return QApplication::translate("DebListModel",
-                                       "Authentication failed");
-    }
     switch (errorCode) {
     case FetchError:
     case DownloadDisallowedError:
@@ -120,6 +115,19 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
         if (errorInfo.contains("No space left on device")) {
             return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
         }
+        break;
+    // 无数字签名的错误
+    case DebListModel::NoDigitalSignature:
+        return QApplication::translate("DebListModel", "No digital signature");
+
+    //无有效的数字签名
+    case DebListModel::DigitalSignatureError:
+        return QApplication::translate("DebListModel", "Invalid digital signature");
+
+    // 安装配置包时，没有得到授权
+    case DebListModel::ConfigAuthCancel:
+        return QApplication::translate("DebListModel",
+                                       "Authentication failed");
     }
     //其余错误，暂不提示具体的错误原因
     return QApplication::translate("DebListModel", "Installation Failed");
@@ -139,6 +147,8 @@ DebListModel::DebListModel(QObject *parent)
     m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
     m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
 
+    configWindow = new AptConfigMessage;
+
     // 配置安装结束
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
 
@@ -146,7 +156,7 @@ DebListModel::DebListModel(QObject *parent)
     connect(m_procInstallConfig, &QProcess::readyReadStandardOutput, this, &DebListModel::ConfigReadOutput);
 
     // 向安装进程中写入配置信息（一般是配置的序号）
-    connect(AptConfigMessage::getInstance(), &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
+    connect(configWindow, &AptConfigMessage::AptConfigInputStr, this, &DebListModel::ConfigInputWrite);
 
     //处理wine依赖安装的过程
     connect(m_packagesManager, &PackagesManager::DependResult, this, &DebListModel::DealDependResult);
@@ -154,7 +164,28 @@ DebListModel::DebListModel(QObject *parent)
     //安装wine依赖的时候不允许程序退出
     connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 
-    m_isVerifyDigital = checkSystemVersion();
+    //添加的包是无效的包
+    connect(m_packagesManager, &PackagesManager::invalidPackage, this, &DebListModel::invalidPackage);
+
+    //要添加的包早就已经被添加到程序中
+    connect(m_packagesManager, &PackagesManager::packageAlreadyExists, this, &DebListModel::packageAlreadyExists);
+
+    //刷新单包安装界面
+    connect(m_packagesManager, &PackagesManager::refreshSinglePage, this, &DebListModel::refreshSinglePage);
+
+    //刷新批量安装界面的model
+    connect(m_packagesManager, &PackagesManager::refreshMultiPage, this, &DebListModel::refreshMultiPage);
+
+    //刷新批量安装界面
+    connect(m_packagesManager, &PackagesManager::single2MultiPage, this, &DebListModel::single2MultiPage);
+
+    //告诉前端当前处在添加过程中
+    connect(m_packagesManager, &PackagesManager::appendStart, this, &DebListModel::appendStart);
+
+    //提示前端当前已经添加完成
+    connect(m_packagesManager, &PackagesManager::appendFinished, this, &DebListModel::getPackageMd5);
+    //检查系统版本与是否开启了开发者模式
+    checkSystemVersion();
 }
 
 /**
@@ -167,7 +198,7 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName
 {
     switch (iAuthRes) {
     case DebListModel::CancelAuth:
-        m_packageOperateStatus[iIndex] = Prepare;           //取消授权后，缺失wine依赖的包的操作状态修改为prepare
+        m_packageOperateStatus[m_packagesManager->getPackageMd5(iIndex)] = Prepare;           //取消授权后，缺失wine依赖的包的操作状态修改为prepare
         break;
     case DebListModel::AuthConfirm:                         //确认授权后，状态的修改由debinstaller进行处理
         break;
@@ -229,7 +260,6 @@ int DebListModel::rowCount(const QModelIndex &parent) const
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
-
     const DebFile *deb = new DebFile(m_packagesManager->package(r));
 
     QString packageName = deb->packageName();                       //包名
@@ -264,16 +294,15 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return Utils::fromSpecialEncoding(shortDescription);        //获取当前index包的短描述
     case PackageFailReasonRole:
         return packageFailedReason(r);                              //获取当前index包的安装失败的原因
-    case PackageOperateStatusRole:
-        if (m_packageOperateStatus.contains(r))                     //获取当前包的操作状态
-            return m_packageOperateStatus[r];
+    case PackageOperateStatusRole: {
+        auto md5 = m_packagesManager->getPackageMd5(r);
+        if (m_packageOperateStatus.contains(md5))                     //获取当前包的操作状态
+            return m_packageOperateStatus[md5];
         else
             return Prepare;
+    }
     case Qt::SizeHintRole:                                          //设置当前index的大小
         return QSize(0, 48);
-
-    case Qt::AccessibleTextRole:
-        return packageName;
 
     default:
         ;
@@ -289,6 +318,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
  */
 void DebListModel::installPackages()
 {
+    qInfo() << "[Performance Testing] Click the install button";
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
 
@@ -296,22 +326,11 @@ void DebListModel::installPackages()
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                                               //初始化当前操作的index
     m_operatingStatusIndex = 0;
-    m_InitRowStatus = false;                                            //当前未初始化每个包的操作状态
-    // start first
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
 
+    // start first
     initRowStatus();                                                    //初始化包的操作状态
     installNextDeb();                                                   //开始安装
-}
-
-/**
- * @brief DebListModel::refreshAllDependsStatus 刷新获取所有依赖的状态
- */
-void DebListModel::refreshAllDependsStatus()
-{
-    // 遍历获取所有依赖的状态
-    for (int i = 0; i < preparedPackages().size(); i++) {
-        m_packagesManager->getPackageDependsStatus(i);
-    }
 }
 
 /**
@@ -326,11 +345,13 @@ void DebListModel::uninstallPackage(const int idx)
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
     m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = idx;                             //获取卸载的包的indx
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = idx;                       //刷新操作状态的index
 
     DebFile *deb = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
-    PERF_PRINT_BEGIN("POINT-04", "packsize=" + QString::number(deb->installedSize()) + "b");   //卸载包开始
+    // 添加详细的大小信息
+    PERF_PRINT_BEGIN("POINT-04", "pkgsize=" + QString::number(deb->installedSize()) + "b");    //卸载包开始
 
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());     //检查是否有应用依赖到该包
     Backend *b = m_packagesManager->m_backendFuture.result();
@@ -397,49 +418,33 @@ void DebListModel::removePackage(const int idx)
 
     // 获取wine依赖不满足的包的下标
     //这个地方如果同时存在两个wine依赖不满足的包，删除之后可能会将两个包一起删除
-    const int packageCount = this->preparedPackages().size();           //获取prepare列表中包的数量
-    QList<int> listdependInstallMark;                                   //保存wine依赖的下表
-    for (int num = 0; num < packageCount; num++) {
-        int dependsStatus = this->index(num).data(DebListModel::PackageDependsStatusRole).toInt();      //判断依赖状态
-        if (dependsStatus != DependsOk) {                                                               //如果是wine依赖不满足，则标记
-            QString failStr = this->index(num).data(DebListModel::PackageFailReasonRole).toString();
-            if (failStr.contains("deepin-wine"))
-                listdependInstallMark.append(num);                                                      //将wine依赖不满足的包的下标放到标记列表中
-        }
-    }
+    //此处删除 标记
     qDebug() << "DebListModel:" << "remove package: operate Status" << m_packageOperateStatus;
 
     // 去除操作状态 中的index
-    // 由于map 中没有序号的区别，因此，需要对idx之后的需要-1来调整 operateIndex
-    // 删除的时候 package的状态一定是prepare 其实可以全部删除之后再次重新添加。
-    if (m_packageOperateStatus.size() > 1) {
-        QMapIterator<int, int> MapIteratorOperateStatus(m_packageOperateStatus);            //QMap指针
-        QMap<int, int> tmpOperateStatus;                                                    //临时列表
-        while (MapIteratorOperateStatus.hasNext()) {
-            MapIteratorOperateStatus.next();
-            // 删除operateStatus中的index
-            if (idx > MapIteratorOperateStatus.key())                                               // idx之前的下标不动
-                tmpOperateStatus[MapIteratorOperateStatus.key()] = MapIteratorOperateStatus.value();
-            else if (idx != MapIteratorOperateStatus.key()) {
-                tmpOperateStatus[MapIteratorOperateStatus.key() - 1] = MapIteratorOperateStatus.value();    //之后的下标全部-1
-            }
-        }
-        m_packageOperateStatus = tmpOperateStatus;
+    // 删除的时候 package的状态一定是prepare 全部删除之后再次重新添加。
+    int packageOperateStatusCount = m_packageOperateStatus.size() - 1;
+    m_packageOperateStatus.clear();
+    for (int i = 0; i < packageOperateStatusCount; i++) {
+        m_packageOperateStatus[m_packagesManager->getPackageMd5(i)] = DebListModel::Prepare;
     }
-    qDebug() << "DebListModel:" << "operate Status after remove" << m_packageOperateStatus;
 
-    m_packagesManager->removePackage(idx, listdependInstallMark);       //在packageManager中删除标记的下标
+    qDebug() << "DebListModel:" << "operate Status remove";
+    m_packagesManager->removePackage(idx);       //在packageManager中删除标记的下标
 }
 
 /**
  * @brief DebListModel::appendPackage 向安装器内部添加包
  * @param package   包的文件路径
- * @return 是否安装成功
+ * 修改返回方式为void
+ * 修改为在线程中添加
+ * 使用信号判断是否添加成功
+ * 修改直接将所有的包都传递到后端处理，前端只根据后端的处理结果刷新界面
  */
-bool DebListModel::appendPackage(QString package)
+void DebListModel::appendPackage(QStringList package)
 {
     Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
-    return m_packagesManager->appendPackage(package);      //添加包，并返回添加结果
+    m_packagesManager->appendPackage(package);      //添加包，并返回添加结果
 }
 
 /**
@@ -453,11 +458,12 @@ void DebListModel::onTransactionErrorOccurred()
     //fix bug:39834
     //失败时刷新操作状态为failed,并记录失败原因
     refreshOperatingPackageStatus(Failed);
-    m_packageOperateStatus[m_operatingStatusIndex] = Failed;
+    m_packageOperateStatus[m_operatingPackageMd5] = Failed;
 
     //记录失败代码与失败原因
-    m_packageFailCode[m_operatingIndex] = trans->error();
-    m_packageFailReason[m_operatingIndex] = trans->errorString();
+    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+    m_packageFailCode[m_operatingPackageMd5] = trans->error();
+    m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
     //fix bug: 点击重新后，授权码输入框弹出时反复取消输入，进度条已显示进度
     //取消安装后，Errorinfo被输出造成进度条进度不为0，现屏蔽取消授权错误。
     //授权错误不再输出到详细信息中
@@ -539,6 +545,7 @@ void DebListModel::reset()
     m_workerStatus = WorkerPrepare;                     //工作状态重置为准备态
     m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                               //当前操作的index置为0
+    m_operatingPackageMd5 = nullptr;
     m_operatingStatusIndex = 0;                         //当前操作状态的index置为0
 
     m_packageOperateStatus.clear();                     //清空操作状态列表
@@ -567,8 +574,9 @@ void DebListModel::reset_filestatus()
  */
 void DebListModel::bumpInstallIndex()
 {
-    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
-
+    if (m_currentTransaction.isNull()) {
+        qInfo() << "previous transaction not finished";
+    }
 
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         qDebug() << "congratulations, install finished !!!";
@@ -581,6 +589,7 @@ void DebListModel::bumpInstallIndex()
         return;
     }
     ++ m_operatingStatusIndex;
+    m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     emit onChangeOperateIndex(m_operatingIndex);                                //修改当前操作的下标
     // install next
     qDebug() << "DebListModel:" << "install next deb package";
@@ -594,7 +603,7 @@ void DebListModel::bumpInstallIndex()
  */
 void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus stat)
 {
-    m_packageOperateStatus[m_operatingStatusIndex] = stat;  //将失败包的索引和状态修改保存,用于更新
+    m_packageOperateStatus[m_operatingPackageMd5] = stat;  //将失败包的索引和状态修改保存,用于更新
 
     const QModelIndex idx = index(m_operatingStatusIndex);
 
@@ -611,25 +620,28 @@ void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOper
 QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->getPackageDependsStatus(idx);                         //获取包的依赖状态
+    const auto md5 = m_packagesManager->getPackageMd5(idx);                                 //获取包的md5值
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
     if (stat.isBreak() || stat.isAuthCancel()) {                                            //依赖状态错误
         if (!stat.package.isEmpty()) {
-            if (m_packagesManager->m_errorIndex.contains(idx))
+            if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
                 return tr("Failed to install %1").arg(stat.package);                        //wine依赖安装失败
             return tr("Broken dependencies: %1").arg(stat.package);                         //依赖不满足
         }
 
         const auto conflict = m_packagesManager->packageConflictStat(idx);                  //获取冲突情况
         if (!conflict.is_ok()) return tr("Broken dependencies: %1").arg(conflict.unwrap()); //依赖冲突
-        Q_UNREACHABLE();
     }
-    Q_ASSERT(m_packageOperateStatus.contains(idx));
-    Q_ASSERT(m_packageOperateStatus[idx] == Failed);
-    if (!m_packageFailCode.contains(idx))
-        qDebug() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
-    Q_ASSERT(m_packageFailCode.contains(idx));
 
-    return workerErrorString(m_packageFailCode[idx], m_packageFailReason[idx]);             //根据错误代码和错误原因返回具体的错误原因
+    Q_ASSERT(m_packageOperateStatus.contains(md5));
+    Q_ASSERT(m_packageOperateStatus[md5] == Failed);
+    //判断当前这个包是否错误
+    if (!m_packageFailCode.contains(md5))
+        qInfo() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
+    Q_ASSERT(m_packageFailCode.contains(md5));
+
+    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+    return workerErrorString(m_packageFailCode[md5], m_packageFailReason[md5]);             //根据错误代码和错误原因返回具体的错误原因
 }
 
 /**
@@ -638,8 +650,11 @@ QString DebListModel::packageFailedReason(const int idx) const
  */
 void DebListModel::onTransactionFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());                              // 获取trans指针
+
 
     // prevent next signal
     disconnect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);  //不再接收trans结束的信号
@@ -654,20 +669,22 @@ void DebListModel::onTransactionFinished()
         //安装失败
         qWarning() << trans->error() << trans->errorDetails() << trans->errorString();
         //保存错误原因和错误代码
-        m_packageFailCode[m_operatingStatusIndex] = trans->error();
-        m_packageFailReason[m_operatingStatusIndex] = trans->errorString();
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode[m_operatingPackageMd5] = trans->error();
+        m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
 
         //刷新操作状态
         refreshOperatingPackageStatus(Failed);
         emit appendOutputInfo(trans->errorString());
-    } else if (m_packageOperateStatus.contains(m_operatingStatusIndex) &&
-               m_packageOperateStatus[m_operatingStatusIndex] != Failed) {
+    } else if (m_packageOperateStatus.contains(m_operatingPackageMd5) &&
+               m_packageOperateStatus[m_operatingPackageMd5] != Failed) {
         //安装成功
         refreshOperatingPackageStatus(Success);
 
         //准备安装下一个包，修改下一个包的状态为正在安装状态
         if (m_operatingStatusIndex < m_packagesManager->m_preparedPackages.size() - 1) {
-            m_packageOperateStatus[m_operatingStatusIndex + 1] = Waiting;
+            auto md5 = m_packagesManager->getPackageMd5(m_operatingIndex + 1);
+            m_packageOperateStatus[md5] = Waiting;
         }
     }
     //    delete trans;
@@ -683,7 +700,9 @@ void DebListModel::onTransactionFinished()
  */
 void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满足
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());                                  //获取transaction指针
 
     const auto ret = trans->exitStatus();
@@ -693,8 +712,9 @@ void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满�
     if (ret) {
         // record error
         // 记录错误原因和错误代码
-        m_packageFailCode[m_operatingStatusIndex] = trans->error();
-        m_packageFailReason[m_operatingStatusIndex] = trans->errorString();
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode[m_operatingPackageMd5] = trans->error();
+        m_packageFailReason[m_operatingPackageMd5] = trans->errorString();
         refreshOperatingPackageStatus(Failed);                                  // 刷新操作状态
         emit appendOutputInfo(trans->errorString());
     }
@@ -783,14 +803,19 @@ void DebListModel::installDebs()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if (dependsStat.isBreak() || dependsStat.isAuthCancel()) {          //依赖不满足或者下载wine依赖时授权被取消
+    if (dependsStat.isBreak() || dependsStat.isAuthCancel() || dependsStat.status == DebListModel::ArchBreak) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
-        m_packageFailCode.insert(m_operatingStatusIndex, -1);           //保存错误原因
+
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode.insert(m_operatingPackageMd5, -1);           //保存错误原因
+        // 记录详细错误原因
+        m_packageFailReason.insert(m_operatingPackageMd5, packageFailedReason(m_operatingStatusIndex));
+
         bumpInstallIndex();                                             //开始下一步的安装流程
         return;
     } else if (dependsStat.isAvailable()) {
         // 依赖可用 但是需要下载
-        Q_ASSERT_X(m_packageOperateStatus[m_operatingStatusIndex], Q_FUNC_INFO,
+        Q_ASSERT_X(m_packageOperateStatus[m_operatingPackageMd5], Q_FUNC_INFO,
                    "package operate status error when start install availble dependencies");
 
         // 获取到所有的依赖包 准备安装
@@ -800,8 +825,9 @@ void DebListModel::installDebs()
         for (auto const &p : availableDepends) {
             if (p.contains(" not found")) {                             //依赖安装失败
                 refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
-                m_packageFailCode.insert(m_operatingStatusIndex, DownloadDisallowedError);                       //记录错误代码与错误原因
-                m_packageFailReason.insert(m_operatingStatusIndex, p);
+                // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
+                m_packageFailReason.insert(m_operatingPackageMd5, p);
                 emit appendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
                 bumpInstallIndex();                                     //开始安装下一个包或结束安装
                 return;
@@ -820,6 +846,7 @@ void DebListModel::installDebs()
         qDebug() << "DebListModel:" << "starting to install package: " << deb.packageName();
 
         PERF_PRINT_BEGIN("POINT-05", "packsize=" + QString::number(deb.installedSize()) + "b");
+        qInfo() << "[Performance Testing]：install Files";
         trans = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         // 进度变化和结束过程处理
@@ -844,14 +871,98 @@ void DebListModel::installDebs()
     connect(trans, &Transaction::errorOccurred, this, &DebListModel::onTransactionErrorOccurred);
 
     m_currentTransaction = trans;
+
+    qInfo() << "[Performance Testing] Pop up authorization box";
     m_currentTransaction->run();
 }
 
 /**
- * @brief DebListModel::showNoDigitalErrWindow 没有有效的数字签名时弹出对应的错误窗口
+ * @brief DebListModel::checkDigitalVerifyFailReason 检查当前验证错误的原因
+ * @return
+ * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
+ * 暂时未使用，后续如需要逻辑优化再启用
+ */
+bool DebListModel::checkDigitalVerifyFailReason()
+{
+    for (auto errorCode : m_packageFailCode) {  //遍历所有的错误代码
+        if (errorCode != NoDigitalSignature) {  //如果错误代码中存在其他错误
+            return false;                       //则不弹出前往控制中心的弹窗
+        }
+    }
+    return true;                                //所有错误代码都是没有数字签名的代码 则返回true
+}
+
+/**
+ * @brief DebListModel::digitalVerifyFailed 数字签名校验失败的处理槽函数
+ */
+void DebListModel::digitalVerifyFailed(ErrorCode code)
+{
+    if (preparedPackages().size() > 1) {                        //批量安装
+        refreshOperatingPackageStatus(Failed);                  //刷新操作状态
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode.insert(m_operatingPackageMd5, code); //记录错误代码与错误原因
+        m_packageFailReason.insert(m_operatingPackageMd5, "");
+        bumpInstallIndex();                                     //跳过当前包
+    } else if (preparedPackages().size() == 1) {
+        exit(0);                                                //单包安装 直接退出
+    }
+}
+
+/**
+ * @brief DebListModel::showNoDigitalErrWindow 无数字签名
  */
 void DebListModel::showNoDigitalErrWindow()
 {
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    //task:https://pms.uniontech.com/zentao/task-view-48443.html
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+        digitalVerifyFailed(NoDigitalSignature);//刷新安装错误，并记录错误原因
+        return;
+    }
+    DDialog *Ddialog = new DDialog();                   //弹出窗口
+    Ddialog->setModal(true);
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);   //窗口一直置顶
+    Ddialog->setTitle(tr("Unable to install - no digital signature"));
+    Ddialog->setMessage(QString(tr("Please go to Control Center to enable developer mode and try again. Proceed?")));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+
+    Ddialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);     //添加取消按钮
+    Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
+    Ddialog->show();    //显示弹窗
+
+    //取消按钮
+    QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    connect(btnCancel, &DPushButton::clicked, this, [ = ] {
+        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+        digitalVerifyFailed(NoDigitalSignature);
+    });
+
+    //前往按钮
+    QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
+    connect(btnProceedControlCenter, &DPushButton::clicked, this, [ = ] {
+        //前往控制中心
+        showDevelopModeWindow();
+        exit(0);
+    });
+
+    //关闭图标
+    connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
+        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
+        digitalVerifyFailed(NoDigitalSignature);
+    });
+}
+
+/**
+ * @brief DebListModel::showDigitalErrWindow 无有效的数字签名
+ */
+void DebListModel::showDigitalErrWindow()
+{
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    //task:https://pms.uniontech.com/zentao/task-view-48443.html
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+        digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
+        return;
+    }
     DDialog *Ddialog = new DDialog();
     //设置窗口焦点
     //fix bug:https://pms.uniontech.com/zentao/bug-view-44837.html
@@ -874,36 +985,40 @@ void DebListModel::showNoDigitalErrWindow()
     // fix bug:44837 https://pms.uniontech.com/zentao/bug-view-44837.html
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
-    // 点击弹出窗口的关闭按钮
+    // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
-        if (preparedPackages().size() > 1)                          //批量安装
-        {
-            refreshOperatingPackageStatus(VerifyFailed);            //刷新操作状态
-            bumpInstallIndex();                                     //跳过当前包
-            return;
-        } else if (preparedPackages().size() == 1)
-        {
-            exit(0);                                                //单包安装 直接退出
-        }
+        //刷新当前包的操作状态，失败原因为数字签名校验失败
+        digitalVerifyFailed(DigitalSignatureError);
     });
 
     //点击弹出窗口的确定按钮
     connect(btnOK, &DPushButton::clicked, this, [ = ] {
-        if (preparedPackages().size() > 1)                          //批量安装
-        {
-            refreshOperatingPackageStatus(VerifyFailed);            //刷新操作状态
-            bumpInstallIndex();                                     //跳过当前包
-            return;
-        } else if (preparedPackages().size() == 1)                  //单包安装
-        {
-            exit(0);                                                //直接退出
-        }
+        //刷新当前包的操作状态，失败原因为数字签名校验失败
+        digitalVerifyFailed(DigitalSignatureError);
     });
 }
 
 /**
+ * @brief DebListModel::showDevelopModeWindow 打开控制中心通用界面
+ */
+void DebListModel::showDevelopModeWindow()
+{
+    //弹出设置 通用窗口
+    QString command = " dbus-send --print-reply "
+                      "--dest=com.deepin.dde.ControlCenter "
+                      "/com/deepin/dde/ControlCenter "
+                      "com.deepin.dde.ControlCenter.ShowModule "
+                      "\"string:commoninfo\"";
+    QProcess *unlock = new QProcess(this);
+
+    connect(unlock, static_cast<void (QProcess::*)(int)>(&QProcess::finished), unlock, &QProcess::deleteLater);
+
+    unlock->startDetached(command);
+    return;
+}
+
+/**
  * @brief DebListModel::checkSystemVersion 检查当前操作系统的版本，判断是否需要验证签名
- * @return 是否需要验证签名
  *
  * 个人版专业版 非开模式需要验证签名
  * 服务器版 没有开发者模式，默认不验证签名
@@ -912,23 +1027,27 @@ void DebListModel::showNoDigitalErrWindow()
  * 已经有更新的接口，稍后需要更新
  * PS: 2020/10/12 已经更新
  */
-bool DebListModel::checkSystemVersion()
+void DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
-    case Dtk::Core::DSysInfo::UosProfessional:               //专业版
+    case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
-        QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-        bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
-        qDebug() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
-        return deviceMode;
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+        m_isDevelopMode = deviceMode;
+        delete dbusInterFace;
+        break;
     }
-    case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
+    case Dtk::Core::DSysInfo::UosCommunity: //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
-        return true;
+        m_isDevelopMode = true;
+        break;
     default:
-        return true;
+        m_isDevelopMode =  true;
+        break;
     }
 }
 
@@ -940,20 +1059,30 @@ bool DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
-    if (m_isVerifyDigital){
-        qInfo()<<"The developer mode is currently enabled, and the digital signature is not verified";
+    if (m_isDevelopMode) {
+        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
         return true;
     }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
+        qInfo() << "Digital signature verification succeed";
         return true;
-    case Utils::DebfileInexistence:
+    case Utils::DebfileInexistence:                                                             //无签名文件
+        qInfo() << "No signature file was found in the application";
+        showNoDigitalErrWindow();
+        return false;
     case Utils::ExtractDebFail:
+        showDigitalErrWindow();
+        qInfo() << "An error occurred while verifying the signature";                           //无有效的数字签名
+        return false;
     case Utils::DebVerifyFail:
     case Utils::OtherError:
+        showDigitalErrWindow();
+        qInfo() << "Signature file verification failed";                                        //其他原因造成的签名校验失败
         return false;
-    default:
+    default:                                                                                    //其他未知错误
+        qInfo() << "unknown mistake";
         return false;
     }
 }
@@ -965,8 +1094,8 @@ bool DebListModel::checkDigitalSignature()
  */
 void DebListModel::installNextDeb()
 {
-    if (!checkDigitalSignature()) {     //非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();                               //演出错误窗口
+    if (!checkDigitalSignature()) {                             //非开发者模式且数字签名验证失败
+        return;
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         QStringList strFilePath;
@@ -1034,18 +1163,20 @@ bool DebListModel::mkdir()
  */
 void DebListModel::getDebian(QString debPath)
 {
-    QProcess *m_pDpkg = new QProcess;
+
 
     if (!mkdir()) {                                                             //创建临时路径
         qWarning() << "check error mkdir" << tempPath << "failed";              //创建失败
         return;
     }
+    QProcess *m_pDpkg = new QProcess(this);
     m_pDpkg->start("dpkg", QStringList() << "-e" << debPath << tempPath);       //获取DEBIAN文件，查看当前包是否需要配置
     m_pDpkg->waitForFinished();
     QString getDebianProcessErrInfo = m_pDpkg->readAllStandardError();
     if (!getDebianProcessErrInfo.isEmpty()) {
         qDebug() << "DebListModel:" << "Failed to decompress the main control file" << getDebianProcessErrInfo;
     }
+    delete m_pDpkg;
 }
 
 /**
@@ -1053,7 +1184,9 @@ void DebListModel::getDebian(QString debPath)
  */
 void DebListModel::onTransactionOutput()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
     Transaction *trans = static_cast<Transaction *>(sender());
     Q_ASSERT(trans == m_currentTransaction.data());
 
@@ -1068,7 +1201,9 @@ void DebListModel::onTransactionOutput()
  */
 void DebListModel::uninstallFinished()
 {
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    if (m_workerStatus == WorkerProcessing) {
+        qInfo() << "installer status error";
+    }
 
     //增加卸载失败的情况
     //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
@@ -1078,12 +1213,12 @@ void DebListModel::uninstallFinished()
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
-        m_packageOperateStatus[m_operatingIndex] = Failed;
+        m_packageOperateStatus[m_operatingPackageMd5] = Failed;
     } else {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Success);                     //刷新当前包的卸载状态
-        m_packageOperateStatus[m_operatingIndex] = Success;
+        m_packageOperateStatus[m_operatingPackageMd5] = Success;
     }
     emit workerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
     trans->deleteLater();
@@ -1112,7 +1247,8 @@ void DebListModel::initPrepareStatus()
 {
     qDebug() << "DebListModel: " << "Reresh all package operate status to Prepare";
     for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_packageOperateStatus.insert(i, Prepare);                          //刷新当前所有包的状态为Prepare
+        auto md5 = m_packagesManager->getPackageMd5(i);
+        m_packageOperateStatus.insert(md5, Prepare);                          //刷新当前所有包的状态为Prepare
     }
 }
 
@@ -1143,110 +1279,40 @@ void DebListModel::upWrongStatusRow()
     if (m_packagesManager->m_preparedPackages.size() == 1)
         return;
 
-    QList<int> listWrongIndex;
-    int iIndex = 0;
+    QList<QByteArray> installErrorPackages;         //安装错误的包的list
+    QList<QByteArray> installSuccessPackages;       //安装成功的包的list
 
-    //find wrong index
-    // 找到操作错误的包的下标
-    QMapIterator<int, int> iteratorpackageOperateStatus(m_packageOperateStatus);
-    QList<int> listpackageOperateStatus;
+    //根据包的操作状态，分别找到所有安装成功的包与安装失败的包
+    QMapIterator<QByteArray, int> iteratorpackageOperateStatus(m_packageOperateStatus);
     while (iteratorpackageOperateStatus.hasNext()) {
         iteratorpackageOperateStatus.next();
+        // 保存安装成功的包
         if (iteratorpackageOperateStatus.value() == Failed || iteratorpackageOperateStatus.value() == VerifyFailed) {   //安装失败或签名验证失败
-            listWrongIndex.insert(iIndex, iteratorpackageOperateStatus.key());                                          //保存下标
-            listpackageOperateStatus.insert(iIndex++, iteratorpackageOperateStatus.value());                            //保存状态
-        } else if (iteratorpackageOperateStatus.value() == Success)                                                     //安装成功的只保存状态
-            listpackageOperateStatus.append(iteratorpackageOperateStatus.value());
-        else
-            return;
-    }
-
-    if (listWrongIndex.size() == 0)       //全部安装成功 直接退出
-        return;
-
-    QList<int> t_errorIndex;                                                                //临时变量，保存安装wine依赖错误的下标
-    //change  m_preparedPackages, m_packageOperateStatus sort.
-    QList<QString> listTempDebFile;
-    QList<QByteArray> listTempPreparedMd5;
-    iIndex = 0;
-    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_packageOperateStatus[i] = listpackageOperateStatus[i];
-        if (listWrongIndex.contains(i)) {
-            t_errorIndex.push_back(iIndex);                                                 //保存错误的下标
-            //保存安装失败的文件路径
-            //注意 此处用的是insert 到iIndex位置，也就是说 安装失败的包会被放到前面
-            listTempDebFile.insert(iIndex, m_packagesManager->m_preparedPackages[i]);
-            //保存安装失败的MD5的值
-            //注意 此处用的是insert 到iIndex位置，也就是说 安装失败的包会被放到前面
-            //此处iIndex++ 则是将index +1 开始对下一个包进行排序
-            listTempPreparedMd5.insert(iIndex++, m_packagesManager->m_preparedMd5[i]);
-        } else {
-            // 所有安装成功的包会被append到后面
-            listTempDebFile.append(m_packagesManager->m_preparedPackages[i]);               //保存安装成功的文件路径
-            listTempPreparedMd5.append(m_packagesManager->m_preparedMd5[i]);                //保存安装成功的md5的值
+            installErrorPackages.append(iteratorpackageOperateStatus.key());                                          //保存下标
+        }
+        // 保存安装失败的包
+        if (iteratorpackageOperateStatus.value() == Success) {
+            installSuccessPackages.append(iteratorpackageOperateStatus.key());
         }
     }
+    if (installErrorPackages.size() == 0)       //全部安装成功 直接退出
+        return;
 
-    //保存排序后的prepaed 和md5
-    m_packagesManager->m_preparedPackages = listTempDebFile;
-    m_packagesManager->m_preparedMd5 = listTempPreparedMd5;
-
-    //Reupdates the index that failed to install Deepin-Wine
-    if (m_packagesManager->m_errorIndex.size() > 0) {
-        m_packagesManager->m_errorIndex.clear();
-        m_packagesManager->m_errorIndex = t_errorIndex;
+    // 先将包与md5 绑定
+    // 后续要对根据MD5对包的路径进行排序，保证包名和md5的下标统一
+    QMap<QByteArray, QString> md5Packages;
+    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+        md5Packages.insert(m_packagesManager->m_packageMd5[i], m_packagesManager->m_preparedPackages[i]);
     }
 
+    m_packagesManager->m_packageMd5.clear();
+    m_packagesManager->m_packageMd5.append(installErrorPackages);
+    m_packagesManager->m_packageMd5.append(installSuccessPackages);
 
-    //change  m_packageFailCode sort.
-    QMap<int, int> mappackageFailReason;
-    QMapIterator<int, int> IteratorpackageFailReason(m_packageFailCode);
-    while (IteratorpackageFailReason.hasNext()) {
-        IteratorpackageFailReason.next();
-        // 获取安装错误失败代码的下标和错误值
-        int iIndexTemp = listWrongIndex.indexOf(IteratorpackageFailReason.key());
-        mappackageFailReason[iIndexTemp] = IteratorpackageFailReason.value();
+    m_packagesManager->m_preparedPackages.clear();
+    for (int i = 0; i < m_packagesManager->m_packageMd5.size(); i++) {
+        m_packagesManager->m_preparedPackages.append(md5Packages[m_packagesManager->m_packageMd5[i]]);
     }
-    m_packageFailCode.clear();
-    m_packageFailCode = mappackageFailReason;
-
-    //change  m_packageInstallStatus sort.
-    QMapIterator<int, int> MapIteratorpackageInstallStatus(m_packagesManager->m_packageInstallStatus);
-    QList<int> listpackageInstallStatus;
-    iIndex = 0;
-    while (MapIteratorpackageInstallStatus.hasNext()) {
-        MapIteratorpackageInstallStatus.next();
-        //对安装状态进行排序
-        //注意 此处用的是insert 到iIndex位置，也就是说 安装失败的包会被放到前面
-        if (listWrongIndex.contains(MapIteratorpackageInstallStatus.key()))
-
-            listpackageInstallStatus.insert(iIndex++, MapIteratorpackageInstallStatus.value());
-
-        //所有安装成功的包会被append到后面
-        else
-            listpackageInstallStatus.append(MapIteratorpackageInstallStatus.value());
-    }
-
-    //保存所有的安装状态
-    for (int i = 0; i < listpackageInstallStatus.size(); i++)
-        m_packagesManager->m_packageInstallStatus[i] = listpackageInstallStatus[i];
-
-    //change  m_packageDependsStatus sort.
-    //对依赖状态进行排序
-    QMapIterator<int, PackageDependsStatus> MapIteratorpackageDependsStatus(m_packagesManager->m_packageDependsStatus);
-    QList<PackageDependsStatus> listpackageDependsStatus;
-    iIndex = 0;
-    while (MapIteratorpackageDependsStatus.hasNext()) {
-        MapIteratorpackageDependsStatus.next();
-        // 对安装失败和安装成功的包分别排序
-        if (listWrongIndex.contains(MapIteratorpackageDependsStatus.key()))
-            listpackageDependsStatus.insert(iIndex++, MapIteratorpackageDependsStatus.value());
-        else
-            listpackageDependsStatus.append(MapIteratorpackageDependsStatus.value());
-    }
-    //保存所有包的安装状态
-    for (int i = 0; i < listpackageDependsStatus.size(); i++)
-        m_packagesManager->m_packageDependsStatus[i] = listpackageDependsStatus[i];
 
     //update view
     const QModelIndex idxStart = index(0);
@@ -1268,7 +1334,7 @@ void DebListModel::ConfigInstallFinish(int flag)
     emit workerProgressChanged(progressValue);
     qDebug() << "DebListModel:" << "config install result:" << flag;
     if (flag == 0) {        //安装成功
-        if (m_packagesManager->m_packageDependsStatus[m_operatingIndex].status == DependsOk) {
+        if (m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[m_operatingIndex]].status == DependsOk) {
             refreshOperatingPackageStatus(Success);                 //刷新安装状态
         }
         bumpInstallIndex();                                         //开始安装下一个
@@ -1280,13 +1346,15 @@ void DebListModel::ConfigInstallFinish(int flag)
         } else {
             //批量安装
             refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态为失败
-            m_packageFailCode.insert(m_operatingIndex, flag);       //保存失败原因
-            m_packageFailReason.insert(m_operatingIndex, "Authentication failed");
+
+            // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+            m_packageFailCode.insert(m_operatingPackageMd5, flag);       //保存失败原因
+            m_packageFailReason.insert(m_operatingPackageMd5, "Authentication failed");
             bumpInstallIndex();                                     //开始安装下一个
         }
     }
-    AptConfigMessage::getInstance()->hide();                        //隐藏配置窗口
-    AptConfigMessage::getInstance()->clearTexts();                  //清楚配置信息
+    configWindow->hide();                        //隐藏配置窗口
+    configWindow->clearTexts();                  //清楚配置信息
     m_procInstallConfig->terminate();                               //结束配置
     m_procInstallConfig->close();
 }
@@ -1308,12 +1376,12 @@ void DebListModel::ConfigReadOutput()
     if (tmp.contains("StartInstallAptConfig")) {                                        //获取到当前正在安装配置
         emit onStartInstall();
         refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
-        AptConfigMessage::getInstance()->show();                                        //显示配置窗口
+        configWindow->show();                                        //显示配置窗口
         QString startFlagStr = "StartInstallAptConfig";
         int num = tmp.indexOf(startFlagStr) + startFlagStr.size();
         int iCutoutNum = tmp.size() - num;
         if (iCutoutNum > 0)
-            AptConfigMessage::getInstance()->appendTextEdit(tmp.mid(num, iCutoutNum));  //显示配置信息
+            configWindow->appendTextEdit(tmp.mid(num, iCutoutNum));  //显示配置信息
         return;
     }
 
@@ -1324,9 +1392,9 @@ void DebListModel::ConfigReadOutput()
     appendInfoStr.replace("\n\n", "\n");
     emit appendOutputInfo(appendInfoStr);                                               //将信息同步显示到安装信息中
     if (tmp.contains("Not authorized")) {
-        AptConfigMessage::getInstance()->close();                                       //没有授权，关闭配置窗口
+        configWindow->close();                                       //没有授权，关闭配置窗口
     } else {
-        AptConfigMessage::getInstance()->appendTextEdit(tmp);                           //授权成功，继续配置
+        configWindow->appendTextEdit(tmp);                           //授权成功，继续配置
     }
 }
 
@@ -1355,10 +1423,31 @@ void DebListModel::checkInstallStatus(QString str)
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
-        m_packageOperateStatus[m_operatingIndex] = Failed;
-        m_packageFailCode.insert(m_operatingIndex, 0);       //保存失败原因
-        m_packageFailReason.insert(m_operatingIndex, "");
+
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageOperateStatus[m_operatingPackageMd5] = Failed;
+        m_packageFailCode.insert(m_operatingPackageMd5, 0);       //保存失败原因
+        m_packageFailReason.insert(m_operatingPackageMd5, "");
         bumpInstallIndex();
         return;
     }
+}
+
+/**
+ * @brief DebListModel::getPackageMd5 获取当前正在处理的包的md5值
+ * @return 包的md5值
+ */
+void DebListModel::getPackageMd5(QList<QByteArray> md5)
+{
+    m_packageMd5.clear();
+    m_packageMd5 = md5;
+    emit appendFinished();
+}
+
+
+DebListModel::~DebListModel()
+{
+    delete m_packagesManager;
+    delete configWindow;
+    delete m_procInstallConfig;
 }

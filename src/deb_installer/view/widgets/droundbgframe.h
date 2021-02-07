@@ -17,8 +17,8 @@ public slots:
     void onShowHideBottomBg(bool bShow);
 
 private:
-    int m_bgOffsetTop;
-    int m_bgOffsetBottom;
+    int m_bgOffsetTop = 0;
+    int m_bgOffsetBottom = 0;
 };
 
 #endif // DROUNDBGFRAME_H

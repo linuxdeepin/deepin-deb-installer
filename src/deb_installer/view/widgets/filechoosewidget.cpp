@@ -59,7 +59,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 
     // 拖入提示语
     m_dndTips = new DLabel(this);
-    m_dndTips->setFixedHeight(30);
+    m_dndTips->setMinimumHeight(30);
     m_dndTips->setAlignment(Qt::AlignTop);
     m_dndTips->setText(tr("Drag deb packages here"));
 
@@ -98,7 +98,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
 //    m_chooseFileBtn = new ChooseFileButton(this);
     m_chooseFileBtn = new ChooseFileButton("", this);
-    m_chooseFileBtn->setFixedHeight(28);
+    m_chooseFileBtn->setMinimumHeight(28);
 
     //添加AccessibleName
     m_chooseFileBtn->setObjectName("FileChooseButton");
@@ -166,7 +166,7 @@ void FileChooseWidget::chooseFiles()
     dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);                                        //设置打开的路径为保存的路径
 
-    const int mode = dialog.exec();                                         //打开文件选择窗口
+    auto mode = dialog.exec();                                         //打开文件选择窗口
 
     // save the directory string to config file.
     m_settings.setValue("history_dir", dialog.directoryUrl().toLocalFile());//保存当前文件路径
