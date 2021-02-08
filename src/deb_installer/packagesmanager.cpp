@@ -288,13 +288,24 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
             const QString name = conflict.packageName();
-            Package *p = packageWithArch(name, arch, conflict.multiArchAnnotation());
 
-            if (!p || !p->isInstalled()) continue;
+            //修复依赖中 conflict与provides 存在相同 virtual package
+            //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
+            //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
+            //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
+            Package *p = m_backendFuture.result()->package(name);
+
+            if (!p || !p->isInstalled()) {
+                qDebug() << "PackageManager:" << "isConflictSatisfy"
+                         << "failed to build conflict package or confilict package not installed";
+                continue;
+            }
+
 
             // arch error, conflicts
             if (!isArchMatches(arch, p->architecture(), p->multiArchType())) {
-                qDebug() << "conflicts package installed: " << arch << p->name() << p->architecture()
+                qDebug() << "PackagesManager:" << "conflicts package installed: "
+                         << arch << p->name() << p->architecture()
                          << p->multiArchTypeString();
                 return ConflictResult::err(name);
             }
@@ -314,7 +325,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
             if (dependencyVersionMatch(mirror_result, type)) {
-                qDebug() << "conflicts package installed: " << arch << p->name() << p->architecture()
+                qDebug() << "PackagesManager:" <<  "conflicts package installed: "
+                         << arch << p->name() << p->architecture()
                          << p->multiArchTypeString() << mirror_version << conflict_version;
                 return ConflictResult::err(name);
             }
