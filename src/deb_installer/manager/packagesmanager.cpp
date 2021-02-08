@@ -498,20 +498,26 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             break;
         }
 
-        // TODO: upgrade?
-        //        if (!dep->installedVersion().isEmpty()) return;
-        //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-        // 删除无用冗余的日志
-        if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
-            Backend *b = m_backendFuture.result();
-            Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p) {
-                choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            } else {
-                choosed_set << dep->name() + " not found";
+        //当前依赖未安装，则安装当前依赖。
+        if(dep->installedVersion().isEmpty())
+        {
+            choosed_set << choosed_name;
+        }else {
+            // 当前依赖已安装，判断是否需要升级
+            //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
+            // 删除无用冗余的日志
+            qDebug()<<dep->installedVersion()<<info.packageVersion();
+            if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
+                Backend *b = m_backendFuture.result();
+                Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
+                if (p) {
+                    choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+                } else {
+                    choosed_set << dep->name() + " not found";
+                }
+            } else { //若依赖包符合版本要求,则不进行升级
+                continue;
             }
-        } else { //若依赖包符合版本要求,则不进行升级
-            continue;
         }
 
         if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
@@ -519,7 +525,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             continue;
         }
 
-        // pass if break
         QSet<QString> set = choosed_set;
         set << choosed_name;
         const auto stat = checkDependsPackageStatus(set, dep->architecture(), dep->depends());
