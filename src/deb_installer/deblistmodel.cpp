@@ -731,11 +731,12 @@ bool DebListModel::checkDigitalSignature()
 void DebListModel::installNextDeb()
 {
     // KLU 分支 去除签名，此部分代码废弃
-    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();
-    } else {
-        installDebs();
-    }
+//    if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
+//        showNoDigitalErrWindow();
+//    } else {
+//        installDebs();
+//    }
+    installDebs();
 }
 
 void DebListModel::onTransactionOutput()
