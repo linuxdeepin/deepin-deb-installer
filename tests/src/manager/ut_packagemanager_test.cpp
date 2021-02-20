@@ -492,6 +492,30 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage_openFailed)
     delete p;
 }
 
+TEST(PackageManager_UT, PackageManager_UT_refreshPage)
+{
+    Stub stub;
+    stub.set(ADDR(DebFile, architecture), deb_arch_all);
+    stub.set(ADDR(Backend, architectures), backend_architectures);
+    stub.set(ADDR(Backend, init), backend_init);
+    stub.set(ADDR(DebFile, isValid), deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), deb_installSize);
+    stub.set(ADDR(DebFile, packageName), deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
+    stub.set(ADDR(DebFile, version), deb_version);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+
+    PackagesManager *p = new PackagesManager();
+    usleep(10 * 1000);
+    p->m_preparedPackages.clear();
+    p->m_preparedPackages.append("/1");
+    p->refreshPage(2);
+    delete p;
+}
+
 TEST(PackageManager_UT, PackageManager_UT_isArchError)
 {
     Stub stub;

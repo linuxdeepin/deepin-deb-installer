@@ -98,6 +98,12 @@ bool apt_exits()
 {
     return true;
 }
+
+bool ut_mkTempDir()
+{
+    return false;
+}
+
 TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
 {
     Stub stub;
@@ -116,6 +122,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
     //(int(A::*)(int))ADDR(A,foo)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
+    stub.set(ADDR(AddPackageThread, mkTempDir), ut_mkTempDir);
     ASSERT_STREQ(addPkgThread->SymbolicLink("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
 
@@ -165,7 +172,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_link)
 bool thread_stub_is_open()
 {
     qDebug()<<"stb——is_open";
-    return true;
+    return false;
 }
 
 void thread_stub_open(const std::string& __s,std::ios_base::openmode __mode)
