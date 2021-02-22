@@ -38,11 +38,6 @@ void delegate_checkSystemVersion()
 {
 }
 
-bool delegate_reloadCache()
-{
-    return true;
-}
-
 bool delegate_backendReady()
 {
     return true;
@@ -51,11 +46,6 @@ bool delegate_backendReady()
 QString delegate_deb_arch_i386()
 {
     return "i386";
-}
-
-QStringList delegate_architectures()
-{
-    return {"i386", "amd64"};
 }
 
 bool delegate_deb_isValid()
@@ -83,11 +73,6 @@ QString delegate_deb_longDescription()
     return "longDescription";
 }
 
-QString delegate_deb_shortDescription()
-{
-    return "shortDescription";
-}
-
 QString delegate_deb_version()
 {
     return "version";
@@ -107,26 +92,6 @@ QList<DependencyItem> delegate_deb_conflicts()
 Package *delegate_packageWithArch(QString, QString, QString)
 {
     return nullptr;
-}
-
-PackageList delegate_backend_availablePackages()
-{
-    return {};
-}
-
-QLatin1String delegate_package_name()
-{
-    return QLatin1String("name");
-}
-
-QString delegate_package_version()
-{
-    return "version";
-}
-
-QString delegate_package_architecture()
-{
-    return "i386";
 }
 
 QStringList delegate_backend_architectures()

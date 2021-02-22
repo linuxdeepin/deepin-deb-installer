@@ -37,12 +37,6 @@ void stud_singleaAppProcess(const QCoreApplication &app)
     Q_UNUSED(app);
 }
 
-static QString stud_singleApploadFontFamilyByType(Utils::FontType fontType)
-{
-    Q_UNUSED(fontType);
-    return "test";
-}
-
 class SingleInstallerApplication_UT : public UT_HEAD
 {
 public:

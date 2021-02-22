@@ -27,6 +27,7 @@ PackageInstaller::PackageInstaller(QApt::Backend *b)
 {
     qInfo() << "Package Installer";
     m_backend = b;
+    m_packages = nullptr;
 }
 
 void PackageInstaller::appendPackage(Package *packages)

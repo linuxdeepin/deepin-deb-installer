@@ -332,11 +332,6 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
-    /**
-     * @brief resetInstallStatus 重置所有包的安装状态
-     */
-    void resetInstallStatus();
-
 private:
 
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html

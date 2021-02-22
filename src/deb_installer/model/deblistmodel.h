@@ -201,12 +201,6 @@ public:
      */
     void initPrepareStatus();
 
-    /**
-     * @brief initDependsStatus 获取某一个包的依赖状态
-     * @param index     包的下标
-     */
-    void initDependsStatus(int index = 0);
-
 public:
     /**
      * @brief getInstallFileSize 获取要安装的包的数量
@@ -524,13 +518,6 @@ private:
      * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
      */
     void digitalVerifyFailed(ErrorCode code);
-
-    /**
-     * @brief checkDigitalVerifyFailReason 检查当前验证错误的原因
-     * @return
-     * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
-     */
-    bool checkDigitalVerifyFailReason();
 
     /**
      * @brief showDevelopModeWindow 打开控制中心通用界面

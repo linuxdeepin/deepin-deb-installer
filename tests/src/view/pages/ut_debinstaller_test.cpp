@@ -38,29 +38,12 @@
 
 using namespace QApt;
 
-bool stud_isRunning()
-{
-    return true;
-};
-
 void stud_removePackage(const int idx)
 {
     Q_UNUSED(idx);
 }
 
 void stud_installDebs()
-{
-}
-
-void stud_disableCloseAndExit()
-{
-}
-
-void stud_enableCloseAndExit()
-{
-}
-
-void stud_stopMonitor()
 {
 }
 
@@ -101,13 +84,6 @@ QString stud_longDescription()
 const QList<QString> stud_preparedPackages()
 {
     return QList<QString> {"test.deb"};
-}
-
-const QList<QString> stud1_preparedPackages()
-{
-    return QList<QString> {QStringList() << "test.deb"
-                           << "test1.deb"
-                          };
 }
 
 void stud_afterGetAutherFalse()

@@ -397,20 +397,6 @@ void DebListModel::uninstallPackage(const int idx)
 }
 
 /**
- * @brief DebListModel::initDependsStatus  初始化index包依赖的状态
- * @param index 当前包的index
- * 此处逻辑有问题 稍后修改 0927
- */
-void DebListModel::initDependsStatus(int index)
-{
-    const int packageCount = this->preparedPackages().size();           //获取当前包的数量
-    if (index >= packageCount)                                          //边界检查
-        return;
-    for (int num = index; num < packageCount; num++)                    //初始化所有包的依赖
-        this->index(num).data(DebListModel::PackageDependsStatusRole);
-}
-
-/**
  * @brief DebListModel::removePackage   从prepare列表中删除某一个包
  * @param idx   要删除的包的index
  * 逻辑有问题，稍后修改
@@ -877,22 +863,6 @@ void DebListModel::installDebs()
 
     qInfo() << "[Performance Testing] Pop up authorization box";
     m_currentTransaction->run();
-}
-
-/**
- * @brief DebListModel::checkDigitalVerifyFailReason 检查当前验证错误的原因
- * @return
- * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
- * 暂时未使用，后续如需要逻辑优化再启用
- */
-bool DebListModel::checkDigitalVerifyFailReason()
-{
-    for (auto errorCode : m_packageFailCode) {  //遍历所有的错误代码
-        if (errorCode != NoDigitalSignature) {  //如果错误代码中存在其他错误
-            return false;                       //则不弹出前往控制中心的弹窗
-        }
-    }
-    return true;                                //所有错误代码都是没有数字签名的代码 则返回true
 }
 
 /**

@@ -22,11 +22,6 @@ void model_checkSystemVersion()
 {
 }
 
-bool model_reloadCache()
-{
-    return true;
-}
-
 bool model_BackendReady()
 {
     return true;
@@ -122,19 +117,9 @@ TEST(deblistmodel_Test, deblistmodel_UT_preparedPackages)
     ASSERT_TRUE(model->preparedPackages().isEmpty());
 }
 
-QString model_deb_arch_all()
-{
-    return "all";
-}
-
 QString model_deb_arch_i386()
 {
     return "i386";
-}
-
-QStringList model_architectures()
-{
-    return {"i386", "amd64"};
 }
 
 bool model_deb_isValid()
@@ -189,47 +174,6 @@ Package *model_packageWithArch(QString, QString, QString)
     return nullptr;
 }
 
-PackageList model_backend_availablePackages()
-{
-    return {};
-}
-
-QLatin1String model_package_name()
-{
-    return QLatin1String("name");
-}
-
-QString model_package_version()
-{
-    return "version";
-}
-
-QString model_package_architecture()
-{
-    return "i386";
-}
-
-QList<DependencyItem> model_conflicts()
-{
-    DependencyInfo info("packageName", "0.0", RelationType::Equals, Conflicts);
-    QList<DependencyInfo> dependencyItem;
-    dependencyItem << info;
-    QList<DependencyItem> conflicts;
-    conflicts << dependencyItem;
-
-    return conflicts;
-}
-
-QList<DependencyItem> model_package_conflicts()
-{
-    DependencyInfo info("packageName", "0.0", RelationType::Equals, Conflicts);
-    QList<DependencyInfo> dependencyItem;
-    dependencyItem << info;
-    QList<DependencyItem> conflicts;
-    conflicts << dependencyItem;
-
-    return conflicts;
-}
 QStringList model_backend_architectures()
 {
     return {"i386", "amd64"};
@@ -489,7 +433,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_index)
     list << "/";
     model->appendPackage(list);
 
-    model->initDependsStatus();
     ASSERT_EQ(model->index(0).data(DebListModel::PackageDependsStatusRole).toInt(), DebListModel::DependsOk);
 }
 
@@ -577,11 +520,6 @@ void model_initRowStatus()
 }
 
 void model_installNextDeb()
-{
-    return;
-}
-
-void model_installDebs()
 {
     return;
 }
@@ -1600,48 +1538,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_bumpInstallIndex)
     model->m_packageMd5.append("\n");
     model->m_packageMd5.append("1");
     model->bumpInstallIndex();
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalVerifyFailReason)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    model->m_packageFailCode.insert("", DebListModel::DigitalSignatureError);
-    usleep(100 * 1000);
-    model->checkDigitalVerifyFailReason();
-    model->upWrongStatusRow();
 }
 
 TEST(deblistmodel_Test, deblistmodel_UT_ConfigInstallFinish)

@@ -213,21 +213,6 @@ TEST(Utils_Test, Utils_UT_standardPalette)
     helper->standardPalette(DGuiApplicationHelper::LightType);
 }
 
-const QPalette &util_palette()
-{
-    QPalette pa;
-    pa.setColor(QPalette::Active, QPalette::WindowText, Qt::white);
-    return pa;
-}
-void util_installEventFilter(QObject *)
-{
-    return;
-}
-Dtk::Gui::DGuiApplicationHelper::ColorType util_toColorType_Color(const QColor &)
-{
-    return  DGuiApplicationHelper::LightType;
-}
-
 TEST(Utils_Test, Utils_UT_0016)
 {
 //    Stub stub;

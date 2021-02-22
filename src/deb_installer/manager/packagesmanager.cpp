@@ -630,15 +630,6 @@ void PackagesManager::reset()
     m_backendFuture.result()->reloadCache();
 }
 
-void PackagesManager::resetInstallStatus()
-{
-    m_packageInstallStatus.clear();
-    m_packageMd5DependsStatus.clear();          //修改依赖状态的存储结构，此处清空存储的依赖状态数据
-    m_packageMd5.clear();
-    //reloadCache必须要加
-    m_backendFuture.result()->reloadCache();
-}
-
 void PackagesManager::resetPackageDependsStatus(const int index)
 {
     // 查看此包是否已经存储依赖状态。

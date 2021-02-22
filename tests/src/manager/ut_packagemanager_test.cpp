@@ -137,12 +137,6 @@ QList<DependencyItem> package_conflicts()
     return conflicts;
 }
 
-Backend *ut_init_backend()
-{
-    return nullptr;
-}
-
-
 bool stub_is_open()
 {
     qDebug()<<"stb——is_open";
@@ -216,7 +210,6 @@ TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
 {
     Stub stub;
 
-//    stub.set(init_backend, ut_init_backend);
     stub.set(ADDR(Backend, init), backend_init);
 
     PackagesManager *p = new PackagesManager();
@@ -456,12 +449,6 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage_invalid)
 
     usleep(10 * 1000);
     delete p;
-}
-
-
-bool deb_open_failed()
-{
-    return false;
 }
 
 TEST(PackageManager_UT, PackageManager_UT_appendPackage_openFailed)
@@ -840,11 +827,6 @@ bool ut_isArchError(int index)
     return true;
 }
 
-PackageDependsStatus packageManager_getPackageDependsStatus(const int )
-{
-    return PackageDependsStatus::_break("package");
-}
-
 bool ut_isArchError_false(int index)
 {
     Q_UNUSED(index);
@@ -1123,40 +1105,6 @@ TEST(PackageManager_UT, PackageManager_UT_reset)
     delete p;
 }
 
-TEST(PackageManager_UT, PackageManager_UT_resetInstallStatus)
-{
-    Stub stub;
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), backend_architectures);
-    stub.set(ADDR(Backend, init), backend_init);
-    stub.set(ADDR(Backend, reloadCache), backend_reloadCache);
-    //(int(A::*)(int))ADDR(A,foo)
-    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
-    stub.set(ADDR(DebFile, isValid), deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), deb_installSize);
-    stub.set(ADDR(DebFile, packageName), deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), deb_longDescription);
-    stub.set(ADDR(DebFile, version), deb_version);
-
-    stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
-
-    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, dealPackagePath),stub_dealPackagePath);
-
-    PackagesManager *p = new PackagesManager();
-    usleep(10 * 1000);
-    p->appendPackage({"/"});
-
-    p->resetInstallStatus();
-
-    ASSERT_TRUE(p->m_packageMd5DependsStatus.isEmpty());
-    delete p;
-}
-
 TEST(PackageManager_UT, PackageManager_UT_resetPackageDependsStatus)
 {
     Stub stub;
@@ -1225,11 +1173,6 @@ TEST(PackageManager_UT, PackageManager_UT_removePackage)
     ASSERT_TRUE(p->m_appendedPackagesMd5.isEmpty());
 
     delete p;
-}
-
-bool ut_mktempDir()
-{
-    return false;
 }
 
 TEST(PackageManager_UT, PackageManager_UT_rmTempDir)

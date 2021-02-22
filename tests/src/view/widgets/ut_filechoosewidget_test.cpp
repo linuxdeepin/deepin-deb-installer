@@ -28,11 +28,7 @@ int stub_exec()
 {
     return 0;
 }
-QStringList fileLists()
-{
-    QStringList list;
-    return list;
-}
+
 TEST(FileChooseWidget_TEST, FileChooseWidget_UT_themeChanged)
 {
     FileChooseWidget *fchooseWidget = new FileChooseWidget;

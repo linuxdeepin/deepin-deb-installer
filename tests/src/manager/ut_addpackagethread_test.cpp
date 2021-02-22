@@ -224,12 +224,6 @@ bool thread_stub_checkLocalFile_false(QString fileName)
     return false;
 }
 
-QString thread_stub_dealPackagePath(QString packagePath)
-{
-    Q_UNUSED(packagePath);
-    return "";
-}
-
 TEST(AddPackageThread_Test, UT_AddPackageThread_checkLocalFile_true)
 {
     Stub stub;
