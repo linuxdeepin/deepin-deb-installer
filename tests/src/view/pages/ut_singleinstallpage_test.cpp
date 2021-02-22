@@ -246,7 +246,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
     usleep(100 * 1000);
-    page->setPackageInfo();
+    page->showPackageInfo();
     stub.set(ADDR(QVariant, toInt), stud_successtoInt);
     page->onWorkerFinished();
     page->m_operate = SingleInstallPage::Install;

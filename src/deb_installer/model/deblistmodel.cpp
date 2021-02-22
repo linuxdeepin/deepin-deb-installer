@@ -270,6 +270,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     QString version = deb->version();                               //包的版本
     QString architecture = deb->architecture();                     //包可用的架构
     QString shortDescription = deb->shortDescription();             //包的短描述
+    QString longDescription = deb->longDescription(); //包的长描述
     delete deb;                                                     //删除该指针，以免内存泄露
 
     switch (role) {
@@ -295,6 +296,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageReverseDependsList(packageName, architecture); //获取依赖于当前index包的应用
     case PackageDescriptionRole:
         return Utils::fromSpecialEncoding(shortDescription);        //获取当前index包的短描述
+    case PackageLongDescriptionRole:
+        return Utils::fromSpecialEncoding(longDescription); //获取当前index包的长描述
     case PackageFailReasonRole:
         return packageFailedReason(r);                              //获取当前index包的安装失败的原因
     case PackageOperateStatusRole: {

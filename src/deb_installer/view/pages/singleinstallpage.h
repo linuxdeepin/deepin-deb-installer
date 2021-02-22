@@ -167,9 +167,9 @@ private:
 
 private:
     /**
-     * @brief setPackageInfo 获取deb包的信息
+     * @brief showPackageInfo 获取并显示deb包的信息
      */
-    void setPackageInfo();
+    void showPackageInfo();
 
     /**
      * @brief setAuthConfirm 依赖下载授权确认后的界面处理函数

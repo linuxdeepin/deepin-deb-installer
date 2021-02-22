@@ -86,7 +86,10 @@ void SingleInstallPage::initUI()
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
-    setPackageInfo();
+    const QIcon icon = QIcon::fromTheme("application-x-deb"); //获取icon
+    QPixmap iconPix = icon.pixmap(m_packageIcon->size()); //将Icon 转化为Pixmap
+    m_itemInfoFrame->setVisible(true);
+    m_packageIcon->setPixmap(iconPix);
     m_upDown = true;                            //当前是收缩的
 }
 
@@ -762,98 +765,73 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
 }
 
 /**
- * @brief SingleInstallPage::setPackageInfo 获取包的信息
+ * @brief showPackageInfo 获取并显示deb包的信息
  */
-void SingleInstallPage::setPackageInfo()
+void SingleInstallPage::showPackageInfo()
 {
-    // 如果显示时后端未加载完成，则不断callback访问 直到加载完成
-    // 可以增加一个时间限制并且添加message提示。
-    if (!m_packagesModel->isReady()) {
-        QTimer::singleShot(10, this, &SingleInstallPage::setPackageInfo);
-        return;
-    }
-
-    qApp->processEvents();                                  //界面实时刷新
-    QFontInfo fontinfosize = this->fontInfo();              //获取系统字体
-    int fontlabelsize = fontinfosize.pixelSize();
-    DebFile *package = new DebFile(m_packagesModel->preparedPackages().first());        //获取包的信息
-
-    const QIcon icon = QIcon::fromTheme("application-x-deb");       //获取icon
-
-    QPixmap iconPix = icon.pixmap(m_packageIcon->size());           //将Icon 转化为Pixmap
-
-    //获取包的数据
-    m_itemInfoFrame->setVisible(true);
-    m_packageIcon->setPixmap(iconPix);
-    m_packageName->setText(package->packageName());
-    m_packageVersion->setText(package->version());
-
-    // set package description
-    const QString description = Utils::fromSpecialEncoding(package->longDescription());     //获取描述信息
-    m_description = description;
     const QSize boundingSize = QSize(m_packageDescription->width(), 54);
-    m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), description, boundingSize)); //保证描述信息不会被阶段
-
-    //set package name
-    packagename_description = Utils::fromSpecialEncoding(package->packageName());
-    packageversion_description = Utils::fromSpecialEncoding(package->version());
-    delete package;
-
-    m_packageName->setText(m_packageName->fontMetrics()
-                           .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
-    m_packageVersion->setText(m_packageVersion->fontMetrics()
-                              .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
-
-
-    // package install status
+    QFontInfo fontinfosize = this->fontInfo(); //获取系统字体
+    int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);
-    //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
-    //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
-    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-    qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "depend status:" << dependsStat;
-    // 根据依赖状态调整显示效果
-    if (dependsStat == DebListModel::DependsBreak ||
-            dependsStat == DebListModel::DependsAuthCancel ||
-            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
-        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+    if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
+        m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
+        packagename_description = index.data(DebListModel::PackageNameRole).toString();
+        const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+        const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
+        packageversion_description = index.data(DebListModel::PackageVersionRole).toString();
 
-        m_installButton->setVisible(false);
-        m_reinstallButton->setVisible(false);
-        m_confirmButton->setVisible(true);
-        m_backButton->setVisible(true);
-        return;
-    }
+        m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
+        m_packageName->setText(m_packageName->fontMetrics()
+                                   .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+        m_packageVersion->setText(m_packageVersion->fontMetrics()
+                                      .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+        // package install status
+        //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
+        //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
+        qDebug() << "SingleInstallPage:"
+                 << "get" << m_packageName->text() << "depend status:" << dependsStat;
+        // 根据依赖状态调整显示效果
+        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::ArchBreak) { //添加架构不匹配的处理
+            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
-    //获取版本状态
-    const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-    qDebug() << "SingleInstallPage:" << "get" << m_packageName->text() << "install status:" << installStat;
-    //根据安装状态调整显示效果
-    const bool installed = installStat != DebListModel::NotInstalled;
-    m_installButton->setVisible(!installed);
-    m_uninstallButton->setVisible(installed);
-    m_reinstallButton->setVisible(installed);
-    m_confirmButton->setVisible(false);
-    m_doneButton->setVisible(false);
-
-    // 根据安装状态设置提示文字
-    if (installed) {
-        if (installStat == DebListModel::InstalledSameVersion) {
-            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Same version installed"));
-            m_reinstallButton->setText(tr("Reinstall"));
-        } else if (installStat == DebListModel::InstalledLaterVersion) {
-            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Later version installed: %1")
-                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-            m_reinstallButton->setText(tr("Downgrade"));
-        } else {
-            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-            m_tipsLabel->setText(tr("Earlier version installed: %1")
-                                 .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-            m_reinstallButton->setText(tr("Update"));
+            m_installButton->setVisible(false);
+            m_reinstallButton->setVisible(false);
+            m_confirmButton->setVisible(true);
+            m_backButton->setVisible(true);
+            return;
         }
-        return;
+
+        //获取版本状态
+        qDebug() << "SingleInstallPage:"
+                 << "get" << m_packageName->text() << "install status:" << installStat;
+        //根据安装状态调整显示效果
+        const bool installed = installStat != DebListModel::NotInstalled;
+        m_installButton->setVisible(!installed);
+        m_uninstallButton->setVisible(installed);
+        m_reinstallButton->setVisible(installed);
+        m_confirmButton->setVisible(false);
+        m_doneButton->setVisible(false);
+
+        // 根据安装状态设置提示文字
+        if (installed) {
+            if (installStat == DebListModel::InstalledSameVersion) {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Same version installed"));
+                m_reinstallButton->setText(tr("Reinstall"));
+            } else if (installStat == DebListModel::InstalledLaterVersion) {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Later version installed: %1")
+                                         .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Downgrade"));
+            } else {
+                m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+                m_tipsLabel->setText(tr("Earlier version installed: %1")
+                                         .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                m_reinstallButton->setText(tr("Update"));
+            }
+            return;
+        }
     }
 }
 
@@ -902,12 +880,12 @@ void SingleInstallPage::afterGetAutherFalse()
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
-    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
-    m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
 
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
+
+    showPackageInfo();
 }
 
 /**

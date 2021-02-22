@@ -52,20 +52,21 @@ public:
      * 包的各种数据角色
      */
     enum PackageRole {
-        PackageNameRole = Qt::DisplayRole,      //包名
-        UnusedRole = Qt::UserRole,              //
-        WorkerIsPrepareRole,                    //当前工作是否处于准备状态
-        ItemIsCurrentRole,                      //获取当前下标
-        PackageVersionRole,                     //包的版本
-        PackagePathRole,                        //包的路径
-        PackageInstalledVersionRole,            //包已经安装的版本
-        PackageDescriptionRole,                 //包的描述
-        PackageVersionStatusRole,               //包的安装状态
-        PackageDependsStatusRole,               //包的依赖状态
-        PackageAvailableDependsListRole,        //包可用的依赖
-        PackageFailReasonRole,                  //包安装失败的原因
-        PackageOperateStatusRole,               //包的操作状态
-        PackageReverseDependsListRole,          //依赖于此包的程序
+        PackageNameRole = Qt::DisplayRole, //包名
+        UnusedRole = Qt::UserRole, //
+        WorkerIsPrepareRole, //当前工作是否处于准备状态
+        ItemIsCurrentRole, //获取当前下标
+        PackageVersionRole, //包的版本
+        PackagePathRole, //包的路径
+        PackageInstalledVersionRole, //包已经安装的版本
+        PackageDescriptionRole, //包的短描述
+        PackageLongDescriptionRole, //包的长描述
+        PackageVersionStatusRole, //包的安装状态
+        PackageDependsStatusRole, //包的依赖状态
+        PackageAvailableDependsListRole, //包可用的依赖
+        PackageFailReasonRole, //包安装失败的原因
+        PackageOperateStatusRole, //包的操作状态
+        PackageReverseDependsListRole, //依赖于此包的程序
     };
 
     /**
