@@ -224,6 +224,11 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     page->onWorkerFinished();
 }
 
+QVariant stu_data(int role)
+{
+    return DebListModel::DependsOk;
+}
+
 TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
 {
     Stub stub;
@@ -239,7 +244,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
-
+    stub.set(ADDR(QModelIndex, data), stu_data);
     model = new DebListModel();
     usleep(100 * 1000);
     model->m_packagesManager->m_preparedPackages.append("test");
@@ -247,6 +252,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     page = new SingleInstallPage(model);
     usleep(100 * 1000);
     page->showPackageInfo();
+
     stub.set(ADDR(QVariant, toInt), stud_successtoInt);
     page->onWorkerFinished();
     page->m_operate = SingleInstallPage::Install;

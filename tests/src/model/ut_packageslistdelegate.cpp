@@ -119,6 +119,11 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatus)
     delete listview;
 }
 
+QVariant stud_data(int role)
+{
+    return DebListModel::Waiting;
+}
+
 TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
 {
     PackagesListView *listview = new PackagesListView;
@@ -140,7 +145,7 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
     stub.set(ADDR(DebFile, version), delegate_deb_version);
     stub.set(ADDR(PackagesManager, packageWithArch), delegate_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), delegate_checkSystemVersion);
-
+    stub.set(ADDR(QModelIndex, data), stud_data);
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
     model->appendPackage(QStringList() << "\n");
