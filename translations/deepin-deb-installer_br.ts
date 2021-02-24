@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="br">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="br" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="82"/>
@@ -24,12 +22,12 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="398"/>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
@@ -65,12 +63,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
         <source>No digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="133"/>
@@ -80,17 +78,17 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="631"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="932"/>
@@ -100,7 +98,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="933"/>
         <source>Proceed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="981"/>
@@ -126,7 +124,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="627"/>
@@ -283,7 +281,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -295,7 +293,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="854"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1037"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="931"/>
@@ -305,7 +303,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1077"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="206"/>

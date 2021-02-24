@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -29,7 +27,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
@@ -283,7 +281,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>

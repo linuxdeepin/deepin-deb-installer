@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="82"/>
@@ -29,7 +27,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Možete instalirati samo lokalne deb pakete</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
@@ -90,7 +88,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="932"/>
@@ -152,7 +150,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="48"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="48"/>
@@ -231,7 +229,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -239,7 +237,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="748"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="371"/>
@@ -283,7 +281,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -364,12 +362,12 @@
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>

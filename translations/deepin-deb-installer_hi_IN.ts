@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hi_IN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -29,7 +27,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"></translation>
+        <translation>केवल लोकल पैकेज इंस्टॉल करना संभव है</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
@@ -65,12 +63,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
         <source>No digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>कोई डिजिटल हस्ताक्षर नहीं</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>अमान्य डिजिटल हस्ताक्षर</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="133"/>
@@ -85,12 +83,12 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>इंस्टॉल विफल - कोई डिजिटल हस्ताक्षर नहीं</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>कृपया नियंत्रण केंद्र द्वारा विकासकर्ता मोड सक्रिय कर पुनः प्रयास करें। जारी रखें?</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="932"/>
@@ -100,7 +98,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="933"/>
         <source>Proceed</source>
-        <translation type="unfinished"></translation>
+        <translation>जारी रखें</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="981"/>
@@ -283,7 +281,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>डाउनग्रेड</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -295,7 +293,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="854"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1037"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>अपडेट</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="931"/>
