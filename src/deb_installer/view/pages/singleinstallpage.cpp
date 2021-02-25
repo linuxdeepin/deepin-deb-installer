@@ -791,7 +791,8 @@ void SingleInstallPage::showPackageInfo()
         qDebug() << "SingleInstallPage:"
                  << "get" << m_packageName->text() << "depend status:" << dependsStat;
         // 根据依赖状态调整显示效果
-        if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::ArchBreak) { //添加架构不匹配的处理
+        // 添加依赖授权确认处理
+        if ((dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::ArchBreak) && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -807,7 +808,11 @@ void SingleInstallPage::showPackageInfo()
                  << "get" << m_packageName->text() << "install status:" << installStat;
         //根据安装状态调整显示效果
         const bool installed = installStat != DebListModel::NotInstalled;
-        m_installButton->setVisible(!installed);
+        if (dependAuthStatu == DebListModel::AuthConfirm) {
+            m_installButton->setVisible(installed);
+        } else {
+            m_installButton->setVisible(!installed);
+        }
         m_uninstallButton->setVisible(installed);
         m_reinstallButton->setVisible(installed);
         m_confirmButton->setVisible(false);
@@ -1035,6 +1040,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
 {
     qDebug() << "SingleInstallPage:" << "Deal DependResult" << iAuthRes;
+    dependAuthStatu = iAuthRes;
     switch (iAuthRes) {
     case DebListModel::AuthConfirm:     //授权成功
         setAuthConfirm(dependName);

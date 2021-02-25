@@ -276,6 +276,7 @@ private:
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_pLoadingLabel;                //依赖安装提示信息
+    int dependAuthStatu = -1; //存储依赖授权状态
 };
 
 #endif  // SINGLEINSTALLPAGE_H
