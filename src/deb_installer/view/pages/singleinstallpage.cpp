@@ -441,6 +441,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     progressLayout->setSpacing(0);
     progressLayout->setContentsMargins(0, 8, 0, 0);
     progressLayout->addWidget(m_progress);
+    progressLayout->addSpacing(5);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
