@@ -141,7 +141,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 background = palette.color(cg, DPalette::Highlight);
-                forground.setColor(palette.color(cg, DPalette::HighlightedText));
             }
         }
         painter->setPen(forground);
@@ -194,6 +193,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
 
+        if (option.state & DStyle::State_Enabled) {
+            if (option.state & DStyle::State_Selected) {
+                forground.setColor(palette.color(cg, DPalette::HighlightedText));
+            }
+        }
         painter->setPen(forground);
         painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
