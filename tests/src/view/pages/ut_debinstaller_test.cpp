@@ -222,6 +222,7 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->showHiddenButton();
     deb->packageAppending = true;
     deb->setEnableButton(true);
+    deb->showPkgRemovedMessage("00");
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 }
 

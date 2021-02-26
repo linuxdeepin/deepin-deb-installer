@@ -263,8 +263,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         } else {//当前没有安装过
-            //获取包的描述
-            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
+            //获取包的短描述（model增加长描述接口，批量安装显示的是短描述）
+            info_str = index.data(DebListModel::PackageShortDescriptionRole).toString();
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         }

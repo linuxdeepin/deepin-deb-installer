@@ -135,6 +135,12 @@ signals:
      */
     void appendFinished(QList<QByteArray> packageMd5List);
 
+    /**
+     * @brief packageMd5Changed 添加完成之后更新MD5的列表
+     * @param packageMd5List 当前的MD5列表
+     */
+    void packageMd5Changed(QList<QByteArray> packageMd5List);
+
 //// 界面刷新相关信号
 signals:
     /**
@@ -152,6 +158,10 @@ signals:
      */
     void refreshMultiPage();
 
+    /**
+     * @brief refreshFileChoosePage 刷新首页
+     */
+    void refreshFileChoosePage();
 //// 后端状态相关函数
 public:
 

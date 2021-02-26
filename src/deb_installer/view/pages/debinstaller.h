@@ -84,6 +84,12 @@ private slots:
     void showPkgExistMessage();
 
     /**
+     * @brief showPkgExistMessage 弹出包被移动的消息通知
+     */
+    void showPkgRemovedMessage(QString packageName);
+
+
+    /**
      * @brief onNewAppOpen
      * @param pid 进程号
      * @param arguments 要安装的包的全路径的列表

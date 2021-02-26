@@ -101,6 +101,10 @@ int stud_failedtoInt(bool *ok = nullptr)
     Q_UNUSED(ok);
     return 3;
 }
+bool stud_recheckPackagePath(QString )
+{
+    return true;
+}
 
 PackageDependsStatus stud_getPackageDependsStatus(const int )
 {
@@ -148,6 +152,7 @@ TEST_F(SingleInstallpage_UT, total_UT)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
     model->m_packagesManager->m_preparedPackages.append("test");
@@ -210,6 +215,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
     usleep(100 * 1000);
@@ -245,6 +251,7 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();
     usleep(100 * 1000);
     model->m_packagesManager->m_preparedPackages.append("test");

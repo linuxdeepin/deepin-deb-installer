@@ -138,16 +138,48 @@ DebListModel::DebListModel(QObject *parent)
     , m_workerStatus(WorkerPrepare)
     , m_packagesManager(new PackagesManager(this))
 {
-
-    connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);                //安装成功后，将安装失败的包上滚
-
-
     // 配置包安装的进程
     m_procInstallConfig = new QProcess;
     m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
     m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
 
     configWindow = new AptConfigMessage;
+
+    // 链接信号与槽
+    initConnections();
+    //检查系统版本与是否开启了开发者模式
+    checkSystemVersion();
+}
+
+
+void DebListModel::initAppendConnection()
+{
+    //添加的包是无效的包
+    connect(m_packagesManager, &PackagesManager::invalidPackage, this, &DebListModel::invalidPackage);
+
+    //添加的包不在本地
+    connect(m_packagesManager, &PackagesManager::notLocalPackage, this, &DebListModel::notLocalPackage);
+
+    //要添加的包早就已经被添加到程序中
+    connect(m_packagesManager, &PackagesManager::packageAlreadyExists, this, &DebListModel::packageAlreadyExists);
+
+    //告诉前端当前处在添加过程中
+    connect(m_packagesManager, &PackagesManager::appendStart, this, &DebListModel::appendStart);
+
+    //提示前端当前已经添加完成
+    connect(m_packagesManager, &PackagesManager::appendFinished, this, &DebListModel::getPackageMd5);
+
+    //当前由于文件路径被修改删除md5
+    connect(m_packagesManager, &PackagesManager::packageMd5Changed, this, &DebListModel::getPackageMd5);
+}
+
+/**
+ * @brief DebListModel::initInstallConnecions 链接安装过程的信号与槽
+ */
+void DebListModel::initInstallConnections()
+{
+    //安装成功后，根据安装结果排序
+     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
 
     // 配置安装结束
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
@@ -164,15 +196,13 @@ DebListModel::DebListModel(QObject *parent)
     //安装wine依赖的时候不允许程序退出
     connect(m_packagesManager, &PackagesManager::enableCloseButton, this, &DebListModel::enableCloseButton);
 
-    //添加的包是无效的包
-    connect(m_packagesManager, &PackagesManager::invalidPackage, this, &DebListModel::invalidPackage);
+}
 
-    //添加的包不在本地
-    connect(m_packagesManager, &PackagesManager::notLocalPackage, this, &DebListModel::notLocalPackage);
-
-    //要添加的包早就已经被添加到程序中
-    connect(m_packagesManager, &PackagesManager::packageAlreadyExists, this, &DebListModel::packageAlreadyExists);
-
+/**
+ * @brief DebListModel::initRefreshPageConnecions 链接刷新界面的信号与槽
+ */
+void DebListModel::initRefreshPageConnecions()
+{
     //刷新单包安装界面
     connect(m_packagesManager, &PackagesManager::refreshSinglePage, this, &DebListModel::refreshSinglePage);
 
@@ -182,13 +212,23 @@ DebListModel::DebListModel(QObject *parent)
     //刷新批量安装界面
     connect(m_packagesManager, &PackagesManager::single2MultiPage, this, &DebListModel::single2MultiPage);
 
-    //告诉前端当前处在添加过程中
-    connect(m_packagesManager, &PackagesManager::appendStart, this, &DebListModel::appendStart);
+    //刷新首页
+    connect(m_packagesManager, &PackagesManager::refreshFileChoosePage, this, &DebListModel::refreshFileChoosePage);
+}
 
-    //提示前端当前已经添加完成
-    connect(m_packagesManager, &PackagesManager::appendFinished, this, &DebListModel::getPackageMd5);
-    //检查系统版本与是否开启了开发者模式
-    checkSystemVersion();
+/**
+ * @brief DebListModel::initConnections 链接所有的信号与槽
+ */
+void DebListModel::initConnections()
+{
+    // 链接添加时的信号与槽
+    initAppendConnection();
+
+    // 链接页面刷新的信号与槽
+    initRefreshPageConnecions();
+
+    // 链接安装过程的信号与槽
+    initInstallConnections();
 }
 
 /**
@@ -263,6 +303,21 @@ int DebListModel::rowCount(const QModelIndex &parent) const
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
+
+    // 每次获取数据时,提前获取文件信息,查看文件是否存在
+    // fix bug: https://pms.uniontech.com/zentao/bug-view-63497.html
+        // 判断当前下标是否越界
+    if(r>=m_packagesManager->m_preparedPackages.size() ){
+        return QVariant();
+    }
+    // 检查当前文件是否能够访问到
+    if(!recheckPackagePath(m_packagesManager->package(r))){
+        //当前给出的路径文件已不可访问.直接删除该文件
+        qDebug()<<"因为文件被移动、删除或修改"<<m_packagesManager->package(r)<<"被删除";
+        m_packagesManager->removePackage(r);
+        return QVariant();
+    }
+
     const DebFile *deb = new DebFile(m_packagesManager->package(r));
 
     QString packageName = deb->packageName();                       //包名
@@ -270,7 +325,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     QString version = deb->version();                               //包的版本
     QString architecture = deb->architecture();                     //包可用的架构
     QString shortDescription = deb->shortDescription();             //包的短描述
-    QString longDescription = deb->longDescription(); //包的长描述
+    QString longDescription = deb->longDescription();               //包的长描述
     delete deb;                                                     //删除该指针，以免内存泄露
 
     switch (role) {
@@ -294,10 +349,10 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return m_packagesManager->packageAvailableDepends(r);       //获取当前index包可用的依赖
     case PackageReverseDependsListRole:
         return m_packagesManager->packageReverseDependsList(packageName, architecture); //获取依赖于当前index包的应用
-    case PackageDescriptionRole:
+    case PackageShortDescriptionRole:
         return Utils::fromSpecialEncoding(shortDescription);        //获取当前index包的短描述
     case PackageLongDescriptionRole:
-        return Utils::fromSpecialEncoding(longDescription); //获取当前index包的长描述
+        return Utils::fromSpecialEncoding(longDescription);         //获取当前index包的长描述
     case PackageFailReasonRole:
         return packageFailedReason(r);                              //获取当前index包的安装失败的原因
     case PackageOperateStatusRole: {
@@ -1407,6 +1462,36 @@ void DebListModel::checkInstallStatus(QString str)
         bumpInstallIndex();
         return;
     }
+}
+
+
+/**
+ * @brief DebListModel::recheckPackagePath 安装前重新检查包的路径是否正确
+ * @param packagePath 当前包的路径
+ * @return 如果路径不正确，直接提示安装失败并提示错误
+ *  true  : 文件路径存在
+ *  false : 文件路径不存在
+ */
+bool DebListModel::recheckPackagePath(QString packagePath) const
+{
+    QFile packagePathFile(packagePath);
+    do{
+        if(packagePathFile.readLink().isEmpty()){
+            if(packagePathFile.exists()){
+                return true;
+            }
+        }else {
+            QFile realPath(packagePathFile.readLink());
+            if(realPath.exists() && packagePathFile.exists())
+            {
+                return true;
+            }
+        }
+    }while(false);
+    QFileInfo fileInfo(packagePath);
+    qDebug()<<"check file path"<<packagePath<<"source file and link file not exist ";
+    emit packageCannotFind(fileInfo.fileName());
+    return false;
 }
 
 /**

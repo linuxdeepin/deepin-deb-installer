@@ -46,27 +46,27 @@ class DebListModel : public QAbstractListModel
 public:
     explicit DebListModel(QObject *parent = nullptr);
 
-    ~DebListModel();
+    ~DebListModel() override;
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
      */
     enum PackageRole {
-        PackageNameRole = Qt::DisplayRole, //包名
-        UnusedRole = Qt::UserRole, //
-        WorkerIsPrepareRole, //当前工作是否处于准备状态
-        ItemIsCurrentRole, //获取当前下标
-        PackageVersionRole, //包的版本
-        PackagePathRole, //包的路径
-        PackageInstalledVersionRole, //包已经安装的版本
-        PackageDescriptionRole, //包的短描述
-        PackageLongDescriptionRole, //包的长描述
-        PackageVersionStatusRole, //包的安装状态
-        PackageDependsStatusRole, //包的依赖状态
-        PackageAvailableDependsListRole, //包可用的依赖
-        PackageFailReasonRole, //包安装失败的原因
-        PackageOperateStatusRole, //包的操作状态
-        PackageReverseDependsListRole, //依赖于此包的程序
+        PackageNameRole = Qt::DisplayRole,   //包名
+        UnusedRole = Qt::UserRole,           //
+        WorkerIsPrepareRole,                //当前工作是否处于准备状态
+        ItemIsCurrentRole,                  //获取当前下标
+        PackageVersionRole,                 //包的版本
+        PackagePathRole,                    //包的路径
+        PackageInstalledVersionRole,        //包已经安装的版本
+        PackageShortDescriptionRole,        //包的短描述
+        PackageLongDescriptionRole,         //包的长描述
+        PackageVersionStatusRole,           //包的安装状态
+        PackageDependsStatusRole,           //包的依赖状态
+        PackageAvailableDependsListRole,    //包可用的依赖
+        PackageFailReasonRole,              //包安装失败的原因
+        PackageOperateStatusRole,           //包的操作状态
+        PackageReverseDependsListRole,      //依赖于此包的程序
     };
 
     /**
@@ -298,12 +298,18 @@ signals:
      */
     void notLocalPackage();
 
+    /**
+     * @brief packageCannotFind 包已经被移动的信号 通知前端发送浮动消息
+     * @param packageName 被移动的文件名
+     */
+    void packageCannotFind(QString packageName) const;
+
 
     /**
      * @brief packageAlreadyExists 包已添加的信号
      */
     void packageAlreadyExists();
-
+signals:
     /**
      * @brief refreshSinglePage 刷新单包安装界面的信号
      */
@@ -318,6 +324,11 @@ signals:
      * @brief single2MultiPage 刷新批量安装的信号
      */
     void single2MultiPage();
+
+    /**
+     * @brief refreshFileChoosePage 刷新首页
+     */
+    void refreshFileChoosePage();
 
     /**
      * @brief appendStart 正在添加的信号
@@ -562,6 +573,39 @@ private:
      * @brief getPackageMd5 获取当前操作的包的md5值
      */
     void getPackageMd5(QList<QByteArray> md5);
+
+//// 文件移动、删除、修改检查
+private:
+    /**
+     * @brief recheckPackagePath 重新检查文件路径
+     * @param packagePath 当前需要检查的文件路径
+     * @return 检查的结果
+     *         true : 文件存在
+     *         false: 文件不存在
+     */
+    bool recheckPackagePath(QString packagePath) const;
+
+private:
+    /**
+     * @brief initConnections 初始化信号与槽的链接
+     */
+    void initConnections();
+
+    /**
+     * @brief initInstallConnecions 链接安装过程中的信号与槽
+     */
+    void initInstallConnections();
+
+    /**
+     * @brief initAppendConnection 链接添加过程中的信号与槽
+     */
+    void initAppendConnection();
+
+    /**
+     * @brief initRefreshPageConnecions 链接页面刷新的信号与槽
+     */
+    void initRefreshPageConnecions();
+
 private:
     int m_workerStatus;                                 //当前工作状态
     int m_operatingIndex;                               //当前正在操作的index

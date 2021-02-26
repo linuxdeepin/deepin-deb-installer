@@ -139,6 +139,8 @@ void DebInstaller::initConnections()
     //刷新批量安装界面的信号
     connect(m_fileListModel, &DebListModel::single2MultiPage, this, &DebInstaller::single2Multi);
 
+    connect(m_fileListModel, &DebListModel::refreshFileChoosePage, this, &DebInstaller::reset);
+
     //正在添加的信号
     connect(m_fileListModel, &DebListModel::appendStart, this, &DebInstaller::appendPackageStart);
 
@@ -175,6 +177,8 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
     connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
+
+    connect(m_fileListModel, &DebListModel::packageCannotFind, this, &DebInstaller::showPkgRemovedMessage);
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
@@ -424,6 +428,19 @@ void DebInstaller::showPkgExistMessage()
     DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
 }
 
+/**
+ * @brief DebInstaller::showPkgExistMessage 弹出添加相同包的消息通知
+ */
+void DebInstaller::showPkgRemovedMessage(QString packageName)
+{
+    // PS: DTK问题，在刚好换行时，消息显示字体可能截断。
+    qWarning() << "DebInstaller:" << packageName<<"File is not accessible";
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("%1 does not exist, please reselect").arg(packageName));
+    msg->setIcon(QIcon::fromTheme("di_ok"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
+}
+
 
 /**
  * @brief showUninstallConfirmPage
@@ -505,7 +522,6 @@ void DebInstaller::onAuthing(const bool authing)
 void DebInstaller::reset()
 {
     //reset page status
-    Q_ASSERT(m_centralLayout->count() == 2);
     m_fileListModel->m_workerStatus_temp = 0;                               // 当前工作状态
     m_dragflag = -1;                                                        // 是否被允许拖入或添加
     m_Filterflag = -1;                                                      // 当前显示的页面
@@ -630,8 +646,8 @@ void DebInstaller::refreshSingle()
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
     //安装器中只有一个包，刷新单包安装页面
-    // single package install
-    //    titlebar()->setTitle(QString());
+    //刷新成单包安装界面时，删除标题
+    titlebar()->setTitle(QString());
 
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");

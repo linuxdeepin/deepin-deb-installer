@@ -659,9 +659,9 @@ void PackagesManager::removePackage(const int index)
         qInfo() << "[PackagesManager]" << "[removePackage]" << "Subscript boundary check error";
         return;
     }
-    DebFile *deb = new DebFile(m_preparedPackages[index]);
-    const auto md5 = deb->md5Sum();
-    delete deb;
+
+    // 如果此前的文件已经被修改,则获取到的MD5的值与之前不同,因此从现有的md5中寻找.
+    const auto md5 = m_packageMd5[index];
 
     //提前删除标记list中的md5 否则在删除最后一个的时候会崩溃
     if (m_dependInstallMark.contains(md5))      //如果这个包是wine包，则在wine标记list中删除
@@ -675,6 +675,18 @@ void PackagesManager::removePackage(const int index)
     m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
 
     m_packageInstallStatus.clear();
+
+    // 告诉model md5更新了
+    emit packageMd5Changed(m_packageMd5);
+
+    // 如果后端只剩余一个包,刷新单包安装界面
+    if(m_preparedPackages.size() == 1){
+        emit refreshSinglePage();
+    }else if(m_preparedPackages.size() >=2){
+        emit refreshMultiPage();
+    }else if (m_preparedPackages.size() == 0) {
+        emit refreshFileChoosePage();
+    }
 }
 
 /**
