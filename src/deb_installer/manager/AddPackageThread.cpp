@@ -70,47 +70,36 @@ void AddPackageThread::checkInvalid()
 }
 
 /**
- * @brief PackagesManager::checkLocalFile 检查该文件的权限和其是否在本地
- * @param package
- * @return
+ * @brief AddPackageThread::dealInvalidPackage
+ * @param packagePath 文件路径
+ * @return 文件的有效性
+ *   true   : 文件能打开
+ *   fasle  : 文件不在本地或无权限
  */
-bool AddPackageThread::checkLocalFile(QString package)
+bool AddPackageThread::dealInvalidPackage(QString packagePath)
 {
-    QFileInfo debFileIfo(package);
+    QFileInfo debFileIfo(packagePath);
 
     // 使用fstream 查看包是否能够打开，无法打开说明包不在本地或无权限。
     std::fstream outfile;
-    outfile.open(package.toUtf8());
-    qDebug()<<package<<"open Result: "<<outfile.is_open();
+    outfile.open(packagePath.toUtf8());
+    qDebug()<<packagePath<<"open Result: "<<outfile.is_open();
 
     if(!outfile.is_open()){ // 打不开，文件不在本地或无权限
-
         if(debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)){
             // 文件有权限 打不开，说明不在本地
             outfile.close();
+            emit notLocalPackage();
             return false;
         }
+    }else {     //文件能打开，说明文件在本地且有权限
+        outfile.close();
+        return true;
     }
-    // 能打开 或 因为没有权限打不开
+    //文件在本地但是因为没有权限打不开
     outfile.close();
-    return true;
-}
-
-void AddPackageThread::dealInvalidPackage(QString packagePath)
-{
-    // 检查文件无效的原因
-    // 检查文件权限与是否能够打开
-    if(checkLocalFile(packagePath))
-    {
-        // 文件无权限打不开 或 能打开
-        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is invalid";
-        emit invalidPackage();
-    }
-    else {
-        //文件有权限 但是打不开
-        emit notLocalPackage();
-        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is not loacal";
-    }
+    emit invalidPackage();
+    return false;
 }
 
 /**
@@ -150,6 +139,11 @@ void AddPackageThread::run()
     qDebug() << "[AddPackageThread]" << "[run]" << "start add packages";
     checkInvalid();     //运行之前先计算有效文件的数量
     for (QString debPackage : m_packages) {                 //通过循环添加所有的包
+
+        // 处理包不在本地的情况。
+        if(!dealInvalidPackage(debPackage)){
+            continue;
+        }
 
         debPackage = dealPackagePath(debPackage);
 

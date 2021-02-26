@@ -732,55 +732,36 @@ void PackagesManager::checkInvalid(QStringList packages)
 }
 
 /**
- * @brief PackagesManager::checkLocalFile 检查该文件的权限和其是否在本地
- * @param packagePackage 包的路径
- * @return 包是否是本地安装包
- *         true:  deb包在本地包
- *         false: deb包不在本地
+ * @brief PackagesManager::dealInvalidPackage 处理无效的安装包
+ * @param packagePath 包的路径
+ * @return 包的有效性
+ *   true   : 文件能打开
+ *   fasle  : 文件不在本地或无权限
  */
-bool PackagesManager::checkLocalFile(QString packagePackage)
+bool PackagesManager::dealInvalidPackage(QString packagePath)
 {
-    QFileInfo debFileIfo(packagePackage);
+    QFileInfo debFileIfo(packagePath);
 
     // 使用fstream 查看包是否能够打开，无法打开说明包不在本地或无权限。
     std::fstream outfile;
-    outfile.open(packagePackage.toUtf8());
-    qDebug()<<packagePackage<<"open Result: "<<outfile.is_open();
+    outfile.open(packagePath.toUtf8());
+    qDebug()<<packagePath<<"open Result: "<<outfile.is_open();
 
     if(!outfile.is_open()){ // 打不开，文件不在本地或无权限
-
         if(debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)){
             // 文件有权限 打不开，说明不在本地
             outfile.close();
+            emit notLocalPackage();
             return false;
         }
+    }else {     //文件能打开，说明文件在本地且有权限
+        outfile.close();
+        return true;
     }
-    // 能打开 或 因为没有权限打不开
+    //文件在本地但是因为没有权限打不开
     outfile.close();
-    return true;
-}
-
-/**
- * @brief PackagesManager::dealInvalidPackage 处理无效的安装包
- * @param packagePath 包的路径
- *
- * 根据文件是否打开以及文件打开的权限发送不同的信号
- */
-void PackagesManager::dealInvalidPackage(QString packagePath)
-{
-    // 检查文件无效的原因
-    // 检查文件权限与是否能够打开
-    if(checkLocalFile(packagePath))
-    {
-        // 文件无权限打不开 或 能打开
-        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is invalid";
-        emit invalidPackage();
-    }
-    else {
-        //文件有权限 但是打不开
-        emit notLocalPackage();
-        qDebug() << "[PackagesManager]" << "[appendNoThread]" << "package is not loacal";
-    }
+    emit invalidPackage();
+    return false;
 }
 
 /**
@@ -819,14 +800,18 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 {
     qDebug() << "[PackagesManager]" << "[appendNoThread]" << "start add packages";
     for (QString debPackage : packages) {                 //通过循环添加所有的包
+
+        // 处理包不在本地的情况。
+        if(!dealInvalidPackage(debPackage)){
+            continue;
+        }
+
         //处理package文件路径相关问题
         debPackage = dealPackagePath(debPackage);
 
         QApt::DebFile *pkgFile = new DebFile(debPackage);
         //判断当前文件是否是无效文件
         if (pkgFile && !pkgFile->isValid()) {
-            // 根据文件无效的类型提示不同的文案
-            dealInvalidPackage(debPackage);
             delete pkgFile;
             continue;
         }

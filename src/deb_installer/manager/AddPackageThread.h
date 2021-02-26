@@ -127,21 +127,13 @@ private:
 private:
 
     /**
-     * @brief checkLocalFile 查看文件权限
-     * @param package 包的路径
-     * @return 当前文件是否有权限打开
-     *         true:  权限正常
-     *         false: 没有权限
-     */
-    bool checkLocalFile(QString package);
-
-    /**
-     * @brief dealInvalidPackage 处理包无效的情况
+     * @brief dealInvalidPackage 查看包是否有效
      * @param packagePath 包的路径
-     * 判断包是否在本地，如果是远程包，发送 包不在本地的信号
-     * 如果包在本地，发送包损坏的信号
+     * @return 包的有效性
+     *   true   : 文件能打开
+     *   fasle  : 文件不在本地或无权限
      */
-    void dealInvalidPackage(QString packagePath);
+    bool dealInvalidPackage(QString packagePath);
 
     /**
      * @brief dealPackagePath 处理包的路径

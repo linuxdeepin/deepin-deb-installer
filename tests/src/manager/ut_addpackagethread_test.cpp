@@ -212,58 +212,39 @@ bool thread_stub_permission_false(QFile::Permissions permissions)
     return false;
 }
 
-bool thread_stub_checkLocalFile_true(QString fileName)
+bool add_stub_is_open_true()
 {
-    Q_UNUSED(fileName);
+    qDebug()<<"stb——is_open";
     return true;
 }
 
-bool thread_stub_checkLocalFile_false(QString fileName)
+bool add_stub_is_open_false()
 {
-    Q_UNUSED(fileName);
+    qDebug()<<"stb——is_open";
     return false;
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_checkLocalFile_true)
+void add_stub_open(const std::string& __s,std::ios_base::openmode __mode)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
-    QStringList dependsList;
-    dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
-
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), thread_stub_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), thread_stub_is_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), thread_stub_close);
-
-    stub.set(ADDR(QFileInfo,permission), thread_stub_permission_true);
-
-
-    ASSERT_FALSE( addPkgThread->checkLocalFile("/1"));
+    Q_UNUSED(__s);
+    Q_UNUSED(__mode);
+    qDebug()<<"stb——open";
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_checkLocalFile_false)
+void add_stub_close()
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
 
-    QStringList dependsList;
-    dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+}
+bool add_stub_permission_true(QFile::Permissions permissions)
+{
+    Q_UNUSED(permissions);
+    return true;
+}
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), thread_stub_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), thread_stub_is_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), thread_stub_close);
-
-    stub.set(ADDR(QFileInfo,permission), thread_stub_permission_false);
-
-
-    ASSERT_TRUE( addPkgThread->checkLocalFile("/1"));
+bool add_stub_permission_false(QFile::Permissions permissions)
+{
+    Q_UNUSED(permissions);
+    return false;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage)
@@ -276,8 +257,10 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage)
     QStringList dependsList;
     dependsList << "package1" << "package";
     addPkgThread->setPackages(dependsList);
+    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_true);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
 
-    stub.set(ADDR(AddPackageThread,checkLocalFile), thread_stub_checkLocalFile_true);
     addPkgThread->dealInvalidPackage("");
 }
 
@@ -292,7 +275,30 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_false)
     dependsList << "package1" << "package";
     addPkgThread->setPackages(dependsList);
 
-    stub.set(ADDR(AddPackageThread,checkLocalFile), thread_stub_checkLocalFile_false);
+    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
+    stub.set(ADDR(QFileInfo,permission), add_stub_permission_true);
+
+    addPkgThread->dealInvalidPackage("");
+}
+
+TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_noPermission)
+{
+    Stub stub;
+    QSet<QByteArray> md5;
+    md5 << "24b0ce68d7af97ede709f3b723e686af";
+    AddPackageThread *addPkgThread = new AddPackageThread(md5);
+
+    QStringList dependsList;
+    dependsList << "package1" << "package";
+    addPkgThread->setPackages(dependsList);
+
+    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
+    stub.set(ADDR(QFileInfo,permission), add_stub_permission_false);
+
     addPkgThread->dealInvalidPackage("");
 }
 
