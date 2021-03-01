@@ -20,22 +20,27 @@
         <translation>पैकेज इंस्टॉलर</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="398"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="402"/>
         <source>The deb package may be broken</source>
         <translation>संभवतः DEB पैकेज विकृत है </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="410"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="414"/>
         <source>You can only install local deb packages</source>
         <translation>केवल लोकल पैकेज इंस्टॉल करना संभव है</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="422"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="426"/>
         <source>Already Added</source>
         <translation>पहले से ही शामिल</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="601"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="439"/>
+        <source>%1 does not exist, please reselect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="617"/>
         <source>Bulk Install</source>
         <translation>सामूहिक इंस्टॉल</translation>
     </message>
@@ -76,48 +81,48 @@
         <translation>इंस्टॉल विफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="631"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="675"/>
         <source>Failed to install %1</source>
         <translation>%1 इंस्टॉल विफल</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="956"/>
         <source>Unable to install - no digital signature</source>
         <translation>इंस्टॉल विफल - कोई डिजिटल हस्ताक्षर नहीं</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="957"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>कृपया नियंत्रण केंद्र द्वारा विकासकर्ता मोड सक्रिय कर पुनः प्रयास करें। जारी रखें?</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="932"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="960"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="933"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="961"/>
         <source>Proceed</source>
         <translation>जारी रखें</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="981"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1009"/>
         <source>Unable to install</source>
         <translation>इंस्टॉल करने में अक्षम</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="982"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1010"/>
         <source>This package does not have a valid digital signature</source>
         <translation>इस पैकेज का डिजिटल हस्ताक्षर अमान्य है</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1012"/>
         <source>OK</source>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="636"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="676"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="680"/>
         <source>Broken dependencies: %1</source>
         <translation>खंडित आश्रित पैकेज : %1</translation>
     </message>
@@ -127,7 +132,7 @@
         <translation>प्रमाणीकरण विफल</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="627"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="671"/>
         <source>Unmatched package architecture</source>
         <translation>पैकेज संरचना मेल नहीं खाती</translation>
     </message>
@@ -173,7 +178,7 @@
         <translation>वापस</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="538"/>
+        <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="539"/>
         <source>Installing dependencies: %1</source>
         <translation>आश्रित पैकेज इंस्टॉल हो रहे हैं : %1</translation>
     </message>
@@ -201,17 +206,17 @@
         <translation>प्रतीक्षा में</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="251"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="255"/>
         <source>Same version installed</source>
         <translation>समान संस्करण पहले से इंस्टॉल है</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="254"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="258"/>
         <source>Later version installed: %1</source>
         <translation>नवीन संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="257"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="261"/>
         <source>Earlier version installed: %1</source>
         <translation>पूर्व संस्करण इंस्टॉल है : %1</translation>
     </message>
@@ -235,104 +240,104 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="748"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="752"/>
         <source>Collapse</source>
         <translation>संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="371"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="374"/>
         <source>Install</source>
         <translation>इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="375"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="378"/>
         <source>Remove</source>
         <translation>हटाएँ</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="379"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="844"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1027"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="382"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="822"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1006"/>
         <source>Reinstall</source>
         <translation>पुनः इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="383"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="386"/>
         <source>OK</source>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="387"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="390"/>
         <source>Back</source>
         <translation>वापस</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="391"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="394"/>
         <source>Done</source>
         <translation>पूर्ण हुआ</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1030"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="825"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1009"/>
         <source>Later version installed: %1</source>
         <translation>नवीन संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="849"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1032"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="827"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1011"/>
         <source>Downgrade</source>
         <translation>डाउनग्रेड</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1035"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="830"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1014"/>
         <source>Earlier version installed: %1</source>
         <translation>पूर्व संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="854"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1037"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="832"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1016"/>
         <source>Update</source>
         <translation>अपडेट</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="931"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="910"/>
         <source>Installing dependencies: %1</source>
         <translation>आश्रित पैकेज इंस्टॉल हो रहे हैं : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1077"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1057"/>
         <source>Failed to install %1</source>
         <translation>%1 इंस्टॉल विफल</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="206"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="209"/>
         <source>Version: </source>
         <translation>संस्करण :</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="724"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="728"/>
         <source>Installed successfully</source>
         <translation>इंस्टॉल सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="729"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="733"/>
         <source>Uninstalled successfully</source>
         <translation>इंस्टॉल हटाना सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="739"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="743"/>
         <source>Uninstall Failed</source>
         <translation>इंस्टॉल हटाना विफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="194"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="197"/>
         <source>Name: </source>
         <translation>नाम :</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="843"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1026"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="821"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1005"/>
         <source>Same version installed</source>
         <translation>समान संस्करण पहले से इंस्टॉल है</translation>
     </message>
@@ -341,9 +346,9 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="566"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="594"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="723"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="570"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="598"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="727"/>
         <source>Show details</source>
         <translation>विवरण दिखाएँ</translation>
     </message>
@@ -351,8 +356,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="621"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="728"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="625"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="732"/>
         <source>Show details</source>
         <translation>विवरण दिखाएँ</translation>
     </message>
