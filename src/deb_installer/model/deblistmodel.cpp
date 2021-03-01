@@ -1288,11 +1288,10 @@ void DebListModel::initPrepareStatus()
  */
 void DebListModel::initRowStatus()
 {
-    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_operatingStatusIndex = i;
-        refreshOperatingPackageStatus(Waiting);
+    // 更换状态存储方式后修改更新状态的方式
+    for (auto md5 : m_packageMd5) {
+        m_packageOperateStatus[md5] = Waiting;
     }
-    m_operatingStatusIndex = 0;
 }
 
 /**

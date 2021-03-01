@@ -819,7 +819,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_initRowStatus)
     model->initRowStatus();
 
     usleep(5 * 1000);
-    ASSERT_EQ(model->m_operatingStatusIndex, 0);
+    ASSERT_EQ(model->m_packageOperateStatus.size(), 1);
 }
 
 static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosEnterprise()
