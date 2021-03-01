@@ -236,7 +236,7 @@ void MultipleInstallPage::initUI()
     m_progressAnimation = new QPropertyAnimation(m_installProgress, "value", this);             //进度条动画
     progressFrameLayout->addStretch();
     progressFrameLayout->addWidget(m_installProgress);
-    progressFrameLayout->addSpacing(5);
+    progressFrameLayout->addSpacing(28);
     progressFrameLayout->setAlignment(m_installProgress, Qt::AlignHCenter);                     //进度条居中
 
     m_processFrame->setVisible(false);                                                          //进度条默认隐藏
