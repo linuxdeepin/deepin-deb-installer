@@ -791,7 +791,10 @@ void SingleInstallPage::showPackageInfo()
         //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
-        if ((dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel || dependsStat == DebListModel::ArchBreak) && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
+        if ((dependsStat == DebListModel::DependsBreak
+             || dependsStat == DebListModel::DependsAuthCancel
+             || dependsStat == DebListModel::ArchBreak)
+                && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -804,13 +807,16 @@ void SingleInstallPage::showPackageInfo()
 
         //根据安装状态调整显示效果
         const bool installed = installStat != DebListModel::NotInstalled;
-        if (dependAuthStatu == DebListModel::AuthConfirm) {
-            m_installButton->setVisible(installed);
-        } else {
+        if (dependAuthStatu == DebListModel::AuthConfirm) {     //安装wine依赖时，所有的按钮都不显示
+            m_installButton->setVisible(false);
+            m_uninstallButton->setVisible(false);
+            m_reinstallButton->setVisible(false);
+        } else {    //安装wine前或者安装完成后，根据安装状态显示对应的按钮
             m_installButton->setVisible(!installed);
+            m_uninstallButton->setVisible(installed);
+            m_reinstallButton->setVisible(installed);
         }
-        m_uninstallButton->setVisible(installed);
-        m_reinstallButton->setVisible(installed);
+
         m_confirmButton->setVisible(false);
         m_doneButton->setVisible(false);
 
