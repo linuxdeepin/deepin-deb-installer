@@ -163,6 +163,7 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
+    m_pLoadingLayout->addSpacing(28);
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
     m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);

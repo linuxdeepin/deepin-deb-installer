@@ -269,10 +269,11 @@ void MultipleInstallPage::initUI()
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
 
-    m_contentLayout->addStretch();
+    m_contentLayout->addSpacing(37);
     m_contentLayout->addWidget(m_dSpinner);                                                     //添加依赖安装加载动画
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);                                                    //添加依赖安装提示
+    m_contentLayout->addSpacing(20);
 
     //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);                                //设置提示居中
