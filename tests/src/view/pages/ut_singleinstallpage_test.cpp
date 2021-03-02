@@ -137,6 +137,11 @@ public:
     DebListModel *model;
 };
 
+QVariant stu_data()
+{
+    return DebListModel::DependsOk;
+}
+
 TEST_F(SingleInstallpage_UT, total_UT)
 {
     Stub stub;
@@ -190,6 +195,8 @@ TEST_F(SingleInstallpage_UT, total_UT)
     page->setAuthConfirm("test");
     page->setAuthBefore();
     page->setCancelAuthOrAuthDependsErr();
+    stub.set(ADDR(QModelIndex, data), stu_data);
+    page->setCancelAuthOrAuthDependsErr();
     page->DealDependResult(1, "test");
     page->m_operate = SingleInstallPage::Install;
     page->setEnableButton(true);
@@ -228,11 +235,6 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     page->onWorkerFinished();
     page->m_operate = SingleInstallPage::Install;
     page->onWorkerFinished();
-}
-
-QVariant stu_data(int role)
-{
-    return DebListModel::DependsOk;
 }
 
 TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)

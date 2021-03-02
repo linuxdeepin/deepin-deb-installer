@@ -476,6 +476,10 @@ TEST(PackageManager_UT, PackageManager_UT_refreshPage)
     p->m_preparedPackages.clear();
     p->m_preparedPackages.append("/1");
     p->refreshPage(2);
+    p->m_preparedPackages.append("/2");
+    p->refreshPage(2);
+    p->m_preparedPackages.append("/3");
+    p->refreshPage(2);
     delete p;
 }
 

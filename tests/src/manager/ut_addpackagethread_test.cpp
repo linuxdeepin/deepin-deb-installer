@@ -69,6 +69,11 @@ QString packagename()
     return "name";
 }
 
+bool ut_dealInvalidPackage()
+{
+    return true;
+}
+
 TEST(AddPackageThread_Test, UT_AddPackageThread_run)
 {
     Stub stub;
@@ -83,6 +88,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_run)
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
     stub.set(ADDR(DebFile, packageName), packagename);
+    stub.set(ADDR(AddPackageThread, dealInvalidPackage), ut_dealInvalidPackage);
 
     addPkgThread->run();
 

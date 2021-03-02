@@ -118,3 +118,11 @@ TEST(packagelistview_Test, packagelistview_UT_focusInEvent)
     QCoreApplication::sendEvent(listview, &focus);
     delete listview;
 }
+
+TEST(packagelistview_Test, packagelistview_UT_event)
+{
+    PackagesListView *listview = new PackagesListView;
+    QEvent event(QEvent::FontChange);
+    QCoreApplication::sendEvent(listview, &event);
+    delete listview;
+}

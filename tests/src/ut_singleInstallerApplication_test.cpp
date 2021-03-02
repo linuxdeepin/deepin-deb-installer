@@ -71,6 +71,9 @@ TEST_F(SingleInstallerApplication_UT, test_UT)
     Stub stub;
     stub.set((void (QCommandLineParser::*)(const QCoreApplication &))ADDR(QCommandLineParser, process), stud_singleaAppProcess);
     singleInstaller->parseCmdLine();
-    singleInstaller->InstallerDeb(QStringList() << "test.deb");
+    QStringList debPathList;
+    singleInstaller->InstallerDeb(debPathList);
+    debPathList.append("test.deb");
+    singleInstaller->InstallerDeb(debPathList);
     singleInstaller->activateWindow();
 }
