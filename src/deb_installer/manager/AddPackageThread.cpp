@@ -83,16 +83,15 @@ bool AddPackageThread::dealInvalidPackage(QString packagePath)
     // 使用fstream 查看包是否能够打开，无法打开说明包不在本地或无权限。
     std::fstream outfile;
     outfile.open(packagePath.toUtf8());
-    qDebug()<<packagePath<<"open Result: "<<outfile.is_open();
 
-    if(!outfile.is_open()){ // 打不开，文件不在本地或无权限
-        if(debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)){
+    if (!outfile.is_open()) { // 打不开，文件不在本地或无权限
+        if (debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)) {
             // 文件有权限 打不开，说明不在本地
             outfile.close();
             emit notLocalPackage();
             return false;
         }
-    }else {     //文件能打开，说明文件在本地且有权限
+    } else {     //文件能打开，说明文件在本地且有权限
         outfile.close();
         return true;
     }
@@ -141,7 +140,7 @@ void AddPackageThread::run()
     for (QString debPackage : m_packages) {                 //通过循环添加所有的包
 
         // 处理包不在本地的情况。
-        if(!dealInvalidPackage(debPackage)){
+        if (!dealInvalidPackage(debPackage)) {
             continue;
         }
 
@@ -151,7 +150,7 @@ void AddPackageThread::run()
         //判断当前文件是否是无效文件
         if (pkgFile && !pkgFile->isValid()) {
             // 根据文件无效的类型提示不同的文案
-            dealInvalidPackage(debPackage);
+            emit invalidPackage();
             delete pkgFile;
             continue;
         }

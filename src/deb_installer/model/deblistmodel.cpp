@@ -246,6 +246,8 @@ void DebListModel::DealDependResult(int iAuthRes, int iIndex, QString dependName
     case DebListModel::AuthConfirm:                         //确认授权后，状态的修改由debinstaller进行处理
         break;
     case DebListModel::AuthDependsSuccess:                  //安装成功后，状态的修改由debinstaller进行处理
+        m_packageOperateStatus[m_packagesManager->getPackageMd5(iIndex)] = Prepare;
+        m_workerStatus = Prepare;
         break;
     case DebListModel::AuthDependsErr:                      //安装失败后，状态的修改由debinstaller进行处理
         break;
@@ -832,6 +834,8 @@ void DebListModel::installDebs()
 
     //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
     emit onStartInstall();
+
+
     if (isDpkgRunning()) {
         qDebug() << "DebListModel:" << "dpkg running, waitting...";
         // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。

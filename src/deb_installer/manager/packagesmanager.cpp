@@ -92,7 +92,8 @@ bool dependencyVersionMatch(const int result, const RelationType relation)
         return result == 0;
     case NotEqual:
         return result != 0;
-    default:;
+    default:
+        ;
     }
 
     return true;
@@ -135,7 +136,10 @@ PackagesManager::PackagesManager(QObject *parent)
     connect(m_pAddPackageThread, &AddPackageThread::appendFinished, this, &PackagesManager::appendPackageFinished);
 }
 
-bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
+bool PackagesManager::isBackendReady()
+{
+    return m_backendFuture.isFinished();
+}
 
 bool PackagesManager::isArchError(const int idx)
 {
@@ -499,14 +503,13 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         }
 
         //当前依赖未安装，则安装当前依赖。
-        if(dep->installedVersion().isEmpty())
-        {
+        if (dep->installedVersion().isEmpty()) {
             choosed_set << choosed_name;
-        }else {
+        } else {
             // 当前依赖已安装，判断是否需要升级
             //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
             // 删除无用冗余的日志
-            qDebug()<<dep->installedVersion()<<info.packageVersion();
+            qDebug() << dep->installedVersion() << info.packageVersion();
             if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
                 Backend *b = m_backendFuture.result();
                 Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
@@ -680,11 +683,11 @@ void PackagesManager::removePackage(const int index)
     emit packageMd5Changed(m_packageMd5);
 
     // 如果后端只剩余一个包,刷新单包安装界面
-    if(m_preparedPackages.size() == 1){
+    if (m_preparedPackages.size() == 1) {
         emit refreshSinglePage();
-    }else if(m_preparedPackages.size() >=2){
+    } else if (m_preparedPackages.size() >= 2) {
         emit refreshMultiPage();
-    }else if (m_preparedPackages.size() == 0) {
+    } else if (m_preparedPackages.size() == 0) {
         emit refreshFileChoosePage();
     }
 }
@@ -745,16 +748,16 @@ bool PackagesManager::dealInvalidPackage(QString packagePath)
     // 使用fstream 查看包是否能够打开，无法打开说明包不在本地或无权限。
     std::fstream outfile;
     outfile.open(packagePath.toUtf8());
-    qDebug()<<packagePath<<"open Result: "<<outfile.is_open();
+    qDebug() << packagePath << "open Result: " << outfile.is_open();
 
-    if(!outfile.is_open()){ // 打不开，文件不在本地或无权限
-        if(debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)){
+    if (!outfile.is_open()) { // 打不开，文件不在本地或无权限
+        if (debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)) {
             // 文件有权限 打不开，说明不在本地
             outfile.close();
             emit notLocalPackage();
             return false;
         }
-    }else {     //文件能打开，说明文件在本地且有权限
+    } else {     //文件能打开，说明文件在本地且有权限
         outfile.close();
         return true;
     }
@@ -802,7 +805,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
     for (QString debPackage : packages) {                 //通过循环添加所有的包
 
         // 处理包不在本地的情况。
-        if(!dealInvalidPackage(debPackage)){
+        if (!dealInvalidPackage(debPackage)) {
             continue;
         }
 
@@ -813,6 +816,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         //判断当前文件是否是无效文件
         if (pkgFile && !pkgFile->isValid()) {
             delete pkgFile;
+            emit invalidPackage();
             continue;
         }
 

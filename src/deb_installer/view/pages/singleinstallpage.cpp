@@ -710,6 +710,7 @@ void SingleInstallPage::onWorkerFinished()
 
     //隐藏进度条
     m_progressFrame->setVisible(false);
+    m_progress->setValue(0);
 
     //显示需要显示的按钮
     m_uninstallButton->setVisible(false);
@@ -802,6 +803,7 @@ void SingleInstallPage::showPackageInfo()
             m_reinstallButton->setVisible(false);
             m_confirmButton->setVisible(true);
             m_backButton->setVisible(true);
+            m_infoControlButton->setVisible(false);
             return;
         }
 
@@ -811,6 +813,7 @@ void SingleInstallPage::showPackageInfo()
             m_installButton->setVisible(false);
             m_uninstallButton->setVisible(false);
             m_reinstallButton->setVisible(false);
+            m_infoControlButton->setVisible(false);
         } else {    //安装wine前或者安装完成后，根据安装状态显示对应的按钮
             m_installButton->setVisible(!installed);
             m_uninstallButton->setVisible(installed);
@@ -918,6 +921,7 @@ void SingleInstallPage::setAuthConfirm(QString dependName)
 
     //隐藏包的提示
     m_tipsLabel->setVisible(false);
+    m_infoControlButton->setVisible(false);
 }
 
 /**

@@ -544,13 +544,6 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         break;
     case DebListModel::AuthDependsSuccess:      //依赖安装成功
     case DebListModel::AuthDependsErr:          //依赖安装错误
-        m_appsListView->setEnabled(true);       //listView可以操作
-        m_installButton->setVisible(true);      //显示安装按钮
-        m_installButton->setEnabled(true);      //安装按钮可用
-        m_dSpinner->stop();                     //隐藏并停止安装动画
-        m_dSpinner->hide();
-        m_tipsLabel->setVisible(false);         //隐藏依赖安装提示
-        break;
     case DebListModel::AnalysisErr:             //解析错误
         m_appsListView->setEnabled(true);       //listView可以操作
         m_installButton->setVisible(true);      //显示安装按钮
