@@ -434,7 +434,7 @@ void DebInstaller::showPkgExistMessage()
 void DebInstaller::showPkgRemovedMessage(QString packageName)
 {
     // PS: DTK问题，在刚好换行时，消息显示字体可能截断。
-    qWarning() << "DebInstaller:" << packageName<<"File is not accessible";
+    qWarning() << "DebInstaller:" << packageName << "File is not accessible";
     DFloatingMessage *msg = new DFloatingMessage;
     msg->setMessage(tr("%1 does not exist, please reselect").arg(packageName));
     msg->setIcon(QIcon::fromTheme("di_ok"));

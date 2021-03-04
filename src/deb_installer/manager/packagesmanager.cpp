@@ -254,8 +254,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
             // test package
             const QString mirror_version = p->availableVersion();
-            if (mirror_version == installed_version) continue;
 
+            //删除版本相同比较，如果安装且版本符合则判断冲突，此前逻辑存在问题
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
             if (dependencyVersionMatch(mirror_result, type)) {

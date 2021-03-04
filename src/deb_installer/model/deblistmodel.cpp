@@ -179,7 +179,7 @@ void DebListModel::initAppendConnection()
 void DebListModel::initInstallConnections()
 {
     //安装成功后，根据安装结果排序
-     connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
+    connect(this, &DebListModel::workerFinished, this, &DebListModel::upWrongStatusRow);
 
     // 配置安装结束
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::ConfigInstallFinish);
@@ -308,14 +308,14 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
     // 每次获取数据时,提前获取文件信息,查看文件是否存在
     // fix bug: https://pms.uniontech.com/zentao/bug-view-63497.html
-        // 判断当前下标是否越界
-    if(r>=m_packagesManager->m_preparedPackages.size() ){
+    // 判断当前下标是否越界
+    if (r >= m_packagesManager->m_preparedPackages.size() ) {
         return QVariant();
     }
     // 检查当前文件是否能够访问到
-    if(!recheckPackagePath(m_packagesManager->package(r))){
+    if (!recheckPackagePath(m_packagesManager->package(r))) {
         //当前给出的路径文件已不可访问.直接删除该文件
-        qDebug()<<"因为文件被移动、删除或修改"<<m_packagesManager->package(r)<<"被删除";
+        qDebug() << "因为文件被移动、删除或修改" << m_packagesManager->package(r) << "被删除";
         m_packagesManager->removePackage(r);
         return QVariant();
     }
@@ -1073,6 +1073,7 @@ void DebListModel::checkSystemVersion()
         bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
+        m_isDevelopMode = true;
         delete dbusInterFace;
         break;
     }
@@ -1478,21 +1479,20 @@ void DebListModel::checkInstallStatus(QString str)
 bool DebListModel::recheckPackagePath(QString packagePath) const
 {
     QFile packagePathFile(packagePath);
-    do{
-        if(packagePathFile.readLink().isEmpty()){
-            if(packagePathFile.exists()){
+    do {
+        if (packagePathFile.readLink().isEmpty()) {
+            if (packagePathFile.exists()) {
                 return true;
             }
-        }else {
+        } else {
             QFile realPath(packagePathFile.readLink());
-            if(realPath.exists() && packagePathFile.exists())
-            {
+            if (realPath.exists() && packagePathFile.exists()) {
                 return true;
             }
         }
-    }while(false);
+    } while (false);
     QFileInfo fileInfo(packagePath);
-    qDebug()<<"check file path"<<packagePath<<"source file and link file not exist ";
+    qDebug() << "check file path" << packagePath << "source file and link file not exist ";
     emit packageCannotFind(fileInfo.fileName());
     return false;
 }
