@@ -82,7 +82,8 @@ bool dependencyVersionMatch(const int result, const RelationType relation)
         return result == 0;
     case NotEqual:
         return result != 0;
-    default:;
+    default:
+        ;
     }
 
     return true;
@@ -107,7 +108,10 @@ PackagesManager::PackagesManager(QObject *parent)
     connect(dthread, &DealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
 }
 
-bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
+bool PackagesManager::isBackendReady()
+{
+    return m_backendFuture.isFinished();
+}
 
 bool PackagesManager::isArchError(const int idx)
 {
@@ -219,7 +223,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
             // test package
             const QString mirror_version = p->availableVersion();
-            if (mirror_version == installed_version) continue;
+
+            //删除此前conflict逻辑判断，此前逻辑判断错误
 
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
