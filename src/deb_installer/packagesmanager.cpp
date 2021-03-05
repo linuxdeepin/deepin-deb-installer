@@ -45,7 +45,8 @@ QString relationName(const RelationType type)
         return "=";
     case NotEqual:
         return "!=";
-    default:;
+    default:
+        ;
     }
 
     return QString();
@@ -99,7 +100,8 @@ bool dependencyVersionMatch(const int result, const RelationType relation)
         return result == 0;
     case NotEqual:
         return result != 0;
-    default:;
+    default:
+        ;
     }
 
     return true;
@@ -201,7 +203,10 @@ PackagesManager::PackagesManager(QObject *parent)
     connect(dthread, &dealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
 }
 
-bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
+bool PackagesManager::isBackendReady()
+{
+    return m_backendFuture.isFinished();
+}
 
 bool PackagesManager::isArchError(const int idx)
 {
@@ -320,7 +325,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
             // test package
             const QString mirror_version = p->availableVersion();
-            if (mirror_version == installed_version) continue;
+
+            //修复无法判断Conflict包的问题
 
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
@@ -1007,7 +1013,10 @@ PackagesManager::~PackagesManager()
     delete dthread;
 }
 
-PackageDependsStatus PackageDependsStatus::ok() { return {DebListModel::DependsOk, QString()}; }
+PackageDependsStatus PackageDependsStatus::ok()
+{
+    return {DebListModel::DependsOk, QString()};
+}
 
 PackageDependsStatus PackageDependsStatus::available(const QString &package)
 {
@@ -1063,8 +1072,17 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
     return *this;
 }
 
-bool PackageDependsStatus::isBreak() const { return status == DebListModel::DependsBreak; }
+bool PackageDependsStatus::isBreak() const
+{
+    return status == DebListModel::DependsBreak;
+}
 
-bool PackageDependsStatus::isAuthCancel() const { return status == DebListModel::DependsAuthCancel; }
+bool PackageDependsStatus::isAuthCancel() const
+{
+    return status == DebListModel::DependsAuthCancel;
+}
 
-bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }
+bool PackageDependsStatus::isAvailable() const
+{
+    return status == DebListModel::DependsAvailable;
+}
