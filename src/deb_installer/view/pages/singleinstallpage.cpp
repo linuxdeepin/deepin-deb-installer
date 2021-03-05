@@ -502,9 +502,6 @@ void SingleInstallPage::initConnections()
     //transaction 进度改变 进度条进度改变
     connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
 
-    //依赖下载过程中进程改变，界面根据进程进行调整
-    connect(m_packagesModel, &DebListModel::DependResult, this, &SingleInstallPage::DealDependResult);
-
     //安装结束
     connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
 }
@@ -785,9 +782,9 @@ void SingleInstallPage::showPackageInfo()
 
         m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
         m_packageName->setText(m_packageName->fontMetrics()
-                                   .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                               .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         m_packageVersion->setText(m_packageVersion->fontMetrics()
-                                      .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                                  .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         // package install status
         //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
         //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
@@ -833,12 +830,12 @@ void SingleInstallPage::showPackageInfo()
             } else if (installStat == DebListModel::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Later version installed: %1")
-                                         .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Downgrade"));
             } else {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Earlier version installed: %1")
-                                         .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
+                                     .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Update"));
             }
             return;

@@ -755,6 +755,7 @@ void DebInstaller::closeEvent(QCloseEvent *event)
  */
 void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
 {
+    Q_UNUSED(dependName);
     //Set the display effect according to the status of deepin-wine installation authorization.
     //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
     //依赖下载时、授权时不允许拖入
@@ -768,14 +769,18 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
         m_fileListModel->reset_filestatus();//清除包的状态和包的错误原因
         m_fileListModel->initPrepareStatus();//重置包的prepare状态。
     }
-    //Refresh the display effect of different pages
-    if (m_dragflag == 2) {      //单包安装处理依赖下载授权情况
-        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->DealDependResult(iAuthRes, dependName);
-    } else if (m_dragflag == 1) {//批量安装处理依赖下载授权情况
-        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->DealDependResult(iAuthRes, dependName);
-        multiplePage->refreshModel();// 滚动到最后一行。
+    if (iAuthRes == DebListModel::AuthBefore) {     //授权框弹出时
+        this->setEnabled(false);                    //设置界面不可用
+    } else {                                        //授权成功或失败后
+        this->setEnabled(true);                     //根据授权的结果刷新单包或者批量安装界面
+        if (m_fileListModel->preparedPackages().size() == 1) {          //刷新单包安装界面
+            SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+            singlePage->DealDependResult(iAuthRes, dependName);
+        } else if (m_fileListModel->preparedPackages().size() >= 2) {       //刷新批量安装界面
+            MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+            multiplePage->DealDependResult(iAuthRes, dependName);
+            multiplePage->refreshModel();// 滚动到最后一行。
+        }
     }
 }
 

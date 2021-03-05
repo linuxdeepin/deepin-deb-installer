@@ -177,7 +177,10 @@ void MultipleInstallPage::initUI()
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
+    connect(m_appsListView, &PackagesListView::setItemHeight, [ = ](int height) {
+        delegate->getItemHeight(height);
+    });
+
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
 
@@ -274,6 +277,7 @@ void MultipleInstallPage::initUI()
     m_contentLayout->addWidget(m_dSpinner);                                                     //添加依赖安装加载动画
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);                                                    //添加依赖安装提示
+    m_contentLayout->addSpacing(20);
 
     //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);                                //设置提示居中
@@ -360,9 +364,6 @@ void MultipleInstallPage::initConnections()
 
     //一个包安装结束后 listView滚动到其在listview中的位置
     connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
-
-    //wine依赖安装结果处理
-    connect(m_debListModel, &DebListModel::DependResult, this, &MultipleInstallPage::DealDependResult);
 }
 
 /**
