@@ -37,6 +37,7 @@
 #include <QVBoxLayout>
 #include <DApplicationHelper>
 #include <DStyleHelper>
+#include <QStorageInfo>
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
@@ -166,8 +167,13 @@ void FileChooseWidget::chooseFiles()
     dialog.setDirectory(historyDir);                                        //设置打开的路径为保存的路径
     auto mode = dialog.exec();                                         //打开文件选择窗口
 
+    QString currentPackageDir = dialog.directoryUrl().toLocalFile();    //获取当前打开的文件夹路径
     // save the directory string to config file.
-    m_settings.setValue("history_dir", dialog.directoryUrl().toLocalFile());//保存当前文件路径
+    QStorageInfo info(currentPackageDir);                               //获取路径信息
+
+    if (info.device().startsWith("/dev/")) {                            //判断路径信息是不是本地路径
+        m_settings.setValue("history_dir", currentPackageDir);          //本地路径，保存当前文件路径
+    }
     if (mode != QDialog::Accepted) return;
 
     const QStringList selected_files = dialog.selectedFiles();              //获取选中的文件
