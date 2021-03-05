@@ -272,10 +272,10 @@ bool PackagesListView::event(QEvent *event)
     //字体变化事件
     if (event->type() == QEvent::FontChange) {
         qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
-        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 16) { //当前字体大小是否小于16
-            emit setItemHeight(48);
+        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) { //当前字体大小是否小于13
+            emit setItemHeight(50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font())));
         } else {
-            emit setItemHeight(48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16));
+            emit setItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
         }
     }
     return DListView::event(event);

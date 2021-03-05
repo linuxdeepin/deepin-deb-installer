@@ -178,14 +178,14 @@ void MultipleInstallPage::initUI()
 
     //监听字体大小变化,设置高度
     connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
-
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
-    appsViewLayout->addSpacing(10);
+    appsViewLayout->addSpacing(20);
     appsViewLayout->addWidget(m_appsListView);
+    appsViewLayout->addSpacing(10);
 
     m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
     m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
@@ -265,15 +265,15 @@ void MultipleInstallPage::initUI()
     btnsFrame->setLayout(btnsFrameLayout);
 
     m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);                        //主布局添加listView frame并居中
+    m_contentLayout->addSpacing(10);
     m_contentLayout->addWidget(m_infoControlButton);                                            //主布局添加infoControlButton
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
 
-    m_contentLayout->addSpacing(37);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_dSpinner);                                                     //添加依赖安装加载动画
     m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);                                                    //添加依赖安装提示
-    m_contentLayout->addSpacing(20);
 
     //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);                                //设置提示居中

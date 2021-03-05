@@ -41,7 +41,12 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
     qApp->installEventFilter(this);                     //事件筛选
-    m_itemHeight = 48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16); //根据字体初始化item高度
+    //根据字体初始化item高度
+    if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) { //当前字体大小是否小于13
+        m_itemHeight = 50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font()));
+    } else {
+        m_itemHeight = 52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13);
+    }
 }
 
 /**
@@ -169,14 +174,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package icon
         const int x = 6;
-        int y = bg_rect.y() + yOffset + 1;
+        int y = bg_rect.y() + (m_itemHeight - 32) / 2;
 
         icon.paint(painter, x, y, 32, 32);
 
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y() + yOffset - 5);
+        name_rect.setY(bg_rect.y() + 5);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
         QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -206,7 +211,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const int version_y = version_rect.top();
         version_rect.setLeft(200);
-        version_rect.setTop(version_y - 1);
+        version_rect.setTop(version_y);
         version_rect.setRight(option.rect.right() - 80);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
