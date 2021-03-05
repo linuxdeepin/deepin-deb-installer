@@ -124,7 +124,7 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="676"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="680"/>
         <source>Broken dependencies: %1</source>
-        <translation>بۇزۇلغان بېقىنىشچانلىقى:% 1</translation>
+        <translation>بۇزۇلغان بېقىنىشچانلىقى:%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
@@ -388,14 +388,14 @@
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>% 1 نى ئۆچۈرمەكچىمۇ؟
+        <translation>%1 نى ئۆچۈرمەكچىمۇ؟
 بارلىق بېقىنىشلارمۇ چىقىرىۋېتىلىدۇ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="134"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>% 1 نى ئۆچۈرمەكچىمۇ؟
+        <translation>%1 نى ئۆچۈرمەكچىمۇ؟
 سىستېما ياكى باشقا قوللىنىشچان پروگراممىلار نورمال ئىشلىمەسلىكى مۇمكىن</translation>
     </message>
 </context>
