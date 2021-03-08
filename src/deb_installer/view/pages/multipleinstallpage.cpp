@@ -129,7 +129,7 @@ void MultipleInstallPage::initContentLayout()
     m_centralLayout->setSpacing(0);
 
     //主布局设置边距
-    m_centralLayout->setContentsMargins(0, 0, 0, 0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 20);
     this->setLayout(m_centralLayout);
 
 //#define SHOWBGCOLOR
@@ -186,7 +186,7 @@ void MultipleInstallPage::initUI()
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
-    appsViewLayout->addSpacing(20);
+    appsViewLayout->addSpacing(15);
     appsViewLayout->addWidget(m_appsListView);
     appsViewLayout->addSpacing(10);
 
@@ -259,7 +259,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 20);                                                //底部间距30
+    btnsLayout->setContentsMargins(0, 0, 0, 0);                                                //底部间距30
 
     QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);                                                 //进度布局添加到btn布局中（二者互斥，一定不能同时出现）
@@ -268,16 +268,14 @@ void MultipleInstallPage::initUI()
     btnsFrame->setLayout(btnsFrameLayout);
 
     m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);                        //主布局添加listView frame并居中
-    m_contentLayout->addSpacing(10);
     m_contentLayout->addWidget(m_infoControlButton);                                            //主布局添加infoControlButton
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
 
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_dSpinner);                                                     //添加依赖安装加载动画
-    m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);                                                    //添加依赖安装提示
-    m_contentLayout->addSpacing(20);
+    m_contentLayout->addSpacing(10);
 
     //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);                                //设置提示居中

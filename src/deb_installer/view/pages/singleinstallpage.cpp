@@ -163,7 +163,6 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
-    m_pLoadingLayout->addSpacing(28);
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
     m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -405,8 +404,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_backButton->setMinimumSize(120, 36);
     m_doneButton->setMinimumSize(120, 36);
 
-    m_contentLayout->addWidget(m_infoControlButton);
-
     //启用焦点切换。
     initButtonFocusPolicy();
     // 设置按钮回车触发
@@ -450,8 +447,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     // 把所有的按钮合并成一个widget
     QWidget *btnsFrame = new QWidget(this);
     btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
-    btnsFrameLayout->addWidget(m_progressFrame);
-    btnsFrameLayout->addStretch();
     btnsFrameLayout->addLayout(btnsLayout);
     btnsFrame->setLayout(btnsFrameLayout);
 
@@ -469,10 +464,13 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
     //将进度条布局。提示布局。按钮布局添加到主布局中
+    m_contentLayout->addSpacing(10);
+    m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
-    m_contentLayout->addStretch();
+    m_contentLayout->addSpacing(15);
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addStretch();
+    m_contentLayout->addSpacing(5);
+    m_contentLayout->addWidget(m_progressFrame);
     m_contentLayout->addWidget(btnsFrame);
 
     //添加 wine下载等待提示布局
@@ -791,8 +789,8 @@ void SingleInstallPage::showPackageInfo()
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
         if ((dependsStat == DebListModel::DependsBreak
-             || dependsStat == DebListModel::DependsAuthCancel
-             || dependsStat == DebListModel::ArchBreak)
+                || dependsStat == DebListModel::DependsAuthCancel
+                || dependsStat == DebListModel::ArchBreak)
                 && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
