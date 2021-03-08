@@ -1,3 +1,20 @@
+/*
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <gtest/gtest.h>
 
 #include "../deb_installer/model/deblistmodel.h"
@@ -29,15 +46,15 @@ bool model_BackendReady()
 
 bool stub_model_is_open()
 {
-    qDebug()<<"stb——is_open";
+    qDebug() << "stb——is_open";
     return true;
 }
 
-void stub_model_open(const std::string& __s,std::ios_base::openmode __mode)
+void stub_model_open(const std::string &__s, std::ios_base::openmode __mode)
 {
     Q_UNUSED(__s);
     Q_UNUSED(__mode);
-    qDebug()<<"stb——open";
+    qDebug() << "stb——open";
 }
 
 
@@ -194,7 +211,8 @@ bool model_stud_recheckPackagePath_false(QString )
 {
     return false;
 }
-bool model_stub_dealInvalidPackage(QString ){
+bool model_stub_dealInvalidPackage(QString )
+{
     return true;
 }
 TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
@@ -221,7 +239,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -258,7 +276,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_first)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
 
@@ -298,7 +316,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_rowCount)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -319,7 +337,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_data)
     stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel,recheckPackagePath), model_stud_recheckPackagePath_true);
+    stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_true);
 
     stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
@@ -338,7 +356,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_data)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -363,7 +381,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_data_recheck)
     stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel,recheckPackagePath), model_stud_recheckPackagePath_false);
+    stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_false);
 
     stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
@@ -382,7 +400,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_data_recheck)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -421,7 +439,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_initPrepareStatus)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
@@ -484,7 +502,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_index)
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -520,7 +538,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_getInstallFileSize)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
@@ -559,7 +577,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_setCurrentIndex)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
@@ -619,7 +637,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_installPackages)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
     stub.set(ADDR(Transaction, run), model_transaction_run);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -695,7 +713,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_uninstallPackage)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -755,7 +773,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_packageFailedReason)
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -805,7 +823,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_initRowStatus)
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -887,7 +905,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -939,7 +957,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosProfessional)
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosProfessional);
     stub.set(ADDR(QVariant, toBool), stud_toBool);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -991,7 +1009,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosHome)
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosHome);
     stub.set(ADDR(QVariant, toBool), stud_toBool);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1042,7 +1060,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosCommunity)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosCommunity);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1093,7 +1111,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_default)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_default);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1164,7 +1182,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1227,7 +1245,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_showNoDigitalErrWindow)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1283,7 +1301,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_removePackage)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -1386,7 +1404,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
 
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
-    stub.set((void (std::fstream::*)(const std::string& __s,std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     DebListModel *model = new DebListModel();
@@ -2184,11 +2202,13 @@ TEST(deblistmodel_Test, deblistmodel_UT_initInstallConnections)
     model->initInstallConnections();
 }
 
-QString stub_readLink_empty(){
+QString stub_readLink_empty()
+{
     return "";
 }
 
-QString stub_readLink(){
+QString stub_readLink()
+{
     return "1";
 }
 

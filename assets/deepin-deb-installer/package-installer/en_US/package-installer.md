@@ -1,4 +1,4 @@
-# Package Installer |../common/deepin_deb_installer_96.svg|
+# Package Installer|deepin-deb-installer|
 
 ## Overview
 
@@ -22,13 +22,15 @@ Package Installer is capable to install an individual application or multiple ap
 
 #### Singularly Install
 
-1. On Package Installer interface, click **Select File** to add a .deb package or drag a .deb package directly into the interface.
-2. Click **Install**.
-3. If authentication window pops up, enter your login password required to continue.
-4. Click ![arrow_up](../common/up.svg) or ![arrow_down](../common/down.svg) to display or collapse the installing process during installation.
-5. Click **Back** to keep on adding more packages or click **OK** to exit.
+1. On Package Installer interface, you can:
+   - click **Select File**, select the package you want to install, click **Open**. 
+   - drag a .deb package directly into the interface.
+3. Click **Install**.
+4. If authentication window pops up, enter your login password required to continue.
+5. Click ![arrow_up](../common/down.svg) or ![arrow_down](../common/up.svg) to display or collapse the installing process during installation.
+6. Click **Back** to keep on adding more packages or click **OK** to exit.
 
-![1|singleinstall](fig/singleinstall.png)
+![1|success](fig/success.png)
 
 #### Bulk Install
 
@@ -49,16 +51,19 @@ Please read the prompt carefully, common causes include:
 - Unmatched package architecture.
 - Broken dependencies.
 
-![1|unable](fig/unable.png)
+![1|unable](fig/unable.png) ![1|unable](fig/unable1.png)
 
 ### Uninstall
 
 Package Installer is used to uninstall .deb packages of those the same or different versions have been installed already. 
 
-1. On Package Installer interface, click **Select File** or drag a .deb package into the interface directly..
+1. On Package Installer interface, you can:
+   - click **Select File**, select the package you want to install, click **Open**. 
+   - drag a .deb package directly into the interface.
 2. Click **Remove**.
-3. Then there will be a prompt and click **Confirm** to uninstall.
-4. Click **OK** to exit.
+3. Then there will be a prompt and click **Confirm** to uninstall. If authentication window pops up, enter your login password required to continue.
+4. Click ![arrow_down](../common/down.svg) or ![arrow_up](../common/up.svg) to display or collapse the uninstalling process during uninstallation.
+5. Click **OK** to exit.
 
 ![1|remove](fig/remove.png)
 

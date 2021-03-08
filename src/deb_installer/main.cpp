@@ -1,23 +1,20 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 #include "model/deblistmodel.h"
 #include "utils/accessible.h"
@@ -53,7 +50,7 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    PERF_PRINT_BEGIN("POINT-01", "");		//打开应用，添加记录点
+    PERF_PRINT_BEGIN("POINT-01", "");       //打开应用，添加记录点
     SingleInstallerApplication app(argc, argv);
 
     app.setOrganizationName("deepin");
@@ -85,7 +82,7 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/DebInstaller", &app, QDBusConnection::ExportScriptableSlots);
         app.parseCmdLine();
         app.activateWindow();
-        PERF_PRINT_END("POINT-01");		//打开应用， 添加记录点
+        PERF_PRINT_END("POINT-01");     //打开应用， 添加记录点
         return app.exec();
     } else {
         QCommandLineParser parser;
@@ -94,7 +91,7 @@ int main(int argc, char *argv[])
         debInstallPathList << parser.positionalArguments();
         QDBusInterface notification("com.deepin.DebInstaller", "/com/deepin/DebInstaller", "com.deepin.DebInstaller", QDBusConnection::sessionBus());
         QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
-        PERF_PRINT_END("POINT-01");		//打开应用， 添加记录点
+        PERF_PRINT_END("POINT-01");     //打开应用， 添加记录点
         return 0;
     }
 }
