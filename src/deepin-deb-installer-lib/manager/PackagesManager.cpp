@@ -57,7 +57,36 @@ void PackagesManager::initConnection()
 void PackagesManager::slot_getDependsStatus(int index, DependsStatus dependsStatus)
 {
     Package *pkg = searchByIndex(index);
-    pkg->setPackageDependStatus(dependsStatus);
+    if (pkg) {
+        pkg->setPackageDependStatus(dependsStatus);
+
+        //根据获取的依赖结果，发送信号
+        switch (dependsStatus) {
+        case DependsOk:
+        case DependsAvailable:  //依赖满足，不发送信号
+            qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package depends ok";
+            break;
+        case DependsBreak:          //依赖不满足
+            qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package depends Break" << index << DependsBreak;
+            emit signal_dependStatusError(index, DependsBreak);
+            break;
+        case DependsAuthCancel:     //依赖下载授权被取消
+            qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package depends Auth Cancel" << index << DependsAuthCancel;
+            emit signal_dependStatusError(index, DependsAuthCancel);
+            break;
+        case DependsUnknown:        //依赖未知（下载依赖失败）
+            qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package depends Unknown" << index << DependsUnknown;
+            emit signal_dependStatusError(index, DependsUnknown);
+            break;
+        case ArchBreak:             //依赖架构错误
+            qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package Architecture Error" << index << ArchBreak;
+            emit signal_dependStatusError(index, ArchBreak);
+            break;
+        }
+    } else {
+        //未获取到 当前包的下标
+        qInfo() << "[PackagesManager]<< slot_getDependsStatus" << "Package not found";
+    }
 }
 
 void PackagesManager::slot_getInstallStatus(int index, InstallStatus installStatus)
@@ -104,7 +133,7 @@ int PackagesManager::checkInstallStatus(int index)
         qInfo() << "[packageManager]" << "check install status" << pkg->getInstallStatus();
         return pkg->getInstallStatus();
     } else {
-        qWarning() << "[PackagesManager]<< checkPackageDependsStatus" << "Package not found";
+        qWarning() << "[PackagesManager]<< checkInstallStatus" << "Package not found";
         return InstallStatusUnknown;
     }
 }
@@ -146,7 +175,8 @@ bool PackagesManager::checkPackageDependsStatus(int index)
     Package *package = searchByIndex(index);
     if (package) {
         qInfo() << "[PackagesManager]<< checkPackageDependsStatus" << "Package status" << package->getDependStatus();
-        return package->getDependStatus();
+        return (package->getDependStatus() == DependsOk || package->getDependStatus() == DependsAvailable);
+
     } else {
         qWarning() << "[PackagesManager]<< checkPackageDependsStatus" << "Package not found";
         return false;
@@ -207,7 +237,6 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
         return;
     }
     qInfo() << "[PackagesManager]" << "getPackageInfo" << "package 签名验证" << md5Time.elapsed();
-
 
     qInfo() << "[PackagesManager]<< getPackageInfo" << "append package " << packageFile << "to list";
     m_packagesMd5 << md5;
