@@ -99,7 +99,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->setSpacing(0);
     //fix bug: https://pms.uniontech.com/zentao/bug-view-46864.html
     //卸载页面上边距增加15px  底边距变为20,适应大字体
-    centralLayout->setContentsMargins(20, 15, 20, 20);
+    centralLayout->setContentsMargins(20, 15, 20, 25);
 
 
     //Set font and size

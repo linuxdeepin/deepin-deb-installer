@@ -154,12 +154,13 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);//居中显示
 
 
-    m_pLoadingLayout->addSpacing(4); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
+    m_pLoadingLayout->addSpacing(5); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
     m_pLoadingLabel->setVisible(false);                           //隐藏依赖安装提示信息
     m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
+    m_pLoadingLayout->addSpacing(18);
     m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
@@ -242,10 +243,8 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *itemInfoLayout = new QVBoxLayout();            //包名和包版本的布局
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);                 //设置四周边距
-    itemInfoLayout->addStretch();
     itemInfoLayout->addLayout(pkgNameLayout);                       //添加包名布局
     itemInfoLayout->addLayout(pkgVersionLayout);                    //添加包版本布局
-    itemInfoLayout->addStretch();
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
@@ -265,7 +264,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout();                //整合包信息的布局
-    itemLayout->addSpacing(45);
+    itemLayout->addSpacing(30);
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);                       //添加包的描述
@@ -417,6 +416,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
+    btnsFrameLayout->addSpacing(5);
 
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
     QHBoxLayout *btnsLayout = new QHBoxLayout();
@@ -434,7 +434,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 8, 0, 0);
+    progressLayout->setContentsMargins(0, 20, 0, 20);
+    progressLayout->addStretch();
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);
@@ -460,14 +461,15 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
     //将进度条布局。提示布局。按钮布局添加到主布局中
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
-    m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(m_progressFrame);
-    m_contentLayout->addWidget(btnsFrame);
 
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
+    m_contentLayout->addWidget(m_tipsLabel);
+    m_contentLayout->addWidget(btnsFrame);
 }
 
 /**
