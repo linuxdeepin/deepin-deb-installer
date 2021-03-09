@@ -126,7 +126,7 @@ void SingleInstallPage::initControlAccessibleName()
 void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 10, 20, 16);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 10, 20, 25);         //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -242,8 +242,10 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *itemInfoLayout = new QVBoxLayout();            //包名和包版本的布局
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);                 //设置四周边距
+    itemInfoLayout->addStretch();
     itemInfoLayout->addLayout(pkgNameLayout);                       //添加包名布局
     itemInfoLayout->addLayout(pkgVersionLayout);                    //添加包版本布局
+    itemInfoLayout->addStretch();
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
@@ -267,7 +269,6 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);                       //添加包的描述
-    itemLayout->addStretch();
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
 
@@ -435,7 +436,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     progressLayout->setSpacing(0);
     progressLayout->setContentsMargins(0, 8, 0, 0);
     progressLayout->addWidget(m_progress);
-    progressLayout->addSpacing(28);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -460,12 +460,9 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
     //将进度条布局。提示布局。按钮布局添加到主布局中
-    m_contentLayout->addSpacing(10);
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
-    m_contentLayout->addSpacing(15);
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addSpacing(5);
     m_contentLayout->addWidget(m_progressFrame);
     m_contentLayout->addWidget(btnsFrame);
 
