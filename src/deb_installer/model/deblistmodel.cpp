@@ -1069,7 +1069,6 @@ void DebListModel::checkSystemVersion()
         bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
-        m_isDevelopMode = true;
         delete dbusInterFace;
         break;
     }
