@@ -434,7 +434,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 25, 0, 20);
+    progressLayout->setContentsMargins(0, 45, 0, 0);
     progressLayout->addStretch();
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
