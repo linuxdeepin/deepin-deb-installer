@@ -147,7 +147,7 @@ void SingleInstallPage::initInstallWineLoadingLayout()
 {
     QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();      //依赖安装的布局
 
-    m_pDSpinner->setMinimumSize(24, 24);                        //设置动画的大小
+    m_pDSpinner->setFixedSize(24, 24);                        //设置动画的大小
     m_pDSpinner->setVisible(false);                             //隐藏等待动画
     m_pDSpinner->start();
     m_pLoadingLayout->addWidget(m_pDSpinner);                   //添加到布局中
@@ -160,7 +160,6 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
     m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
     m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
-    m_pLoadingLayout->addSpacing(18);
     m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
@@ -434,7 +433,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 45, 0, 0);
+    progressLayout->setContentsMargins(0, 0, 0, 0);
     progressLayout->addStretch();
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
@@ -464,10 +463,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_progressFrame);
 
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(btnsFrame);
 }
@@ -762,7 +763,7 @@ void SingleInstallPage::onWorkerProgressChanged(const int progress)
  */
 void SingleInstallPage::showPackageInfo()
 {
-    const QSize boundingSize = QSize(m_packageDescription->width(), 54);
+    const QSize boundingSize = QSize(m_packageDescription->width(), 50);
     QFontInfo fontinfosize = this->fontInfo(); //获取系统字体
     int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);

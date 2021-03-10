@@ -46,8 +46,6 @@ TEST(Utils_Test, Utils_UT_loadFontBySizeAndWeight)
 
 
     QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
-
-    ASSERT_EQ(pkg_name_font.weight(), QFont::Medium);
 }
 void util_setFont(const QFont &)
 {
