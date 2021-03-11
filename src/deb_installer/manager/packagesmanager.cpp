@@ -548,6 +548,7 @@ QMap<QString, QString> PackagesManager::specialPackage()
     QMap<QString, QString> sp;
     sp.insert("deepin-wine-plugin-virtual", "deepin-wine-helper");
     sp.insert("deepin-wine32", "deepin-wine");
+    sp.insert("deepin-wine-helper", "deepin-wine-plugin");
 
     return sp;
 }
@@ -585,24 +586,14 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         for (const auto &r : p->requiredByList()) {
             if (ret.contains(r) || testQueue.contains(r)) continue;
             Package *subPackage = packageWithArch(r, sysArch);
-            // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
-            // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
-            if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
-                QStringList rdepends = subPackage->requiredByList();
-
-                //对添加到testQueue的包进行检查，
-                for (QString depend : rdepends) {
-                    Package *pkg = packageWithArch(depend, sysArch);
-                    if (!pkg || !pkg->isInstalled())      //增加对package指针的检查
-                        continue;
-                    if (pkg->recommendsList().contains(r))
-                        continue;
-                    if (pkg->suggestsList().contains(r))
-                        continue;
-                    //只添加和当前依赖是依赖关系的包
-                    testQueue.append(depend);
+            if (r.startsWith("deepin.")) {  // 此类wine应用在系统中的存在都是以deepin.开头
+                // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
+                // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
+                if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
+                    for (QString rdepends : subPackage->requiredByList()) {
+                        testQueue.append(rdepends);
+                    }
                 }
-
             }
             if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
                 continue;
