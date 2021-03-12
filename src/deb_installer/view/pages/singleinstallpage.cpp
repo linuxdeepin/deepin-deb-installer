@@ -53,7 +53,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_packageDescription(new DLabel(this))
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
-    , m_installProcessView(new InstallProcessInfoView(440, 190, this))
+    , m_installProcessView(new InstallProcessInfoView(440, 170, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
     , m_installButton(new DPushButton(this))
     , m_uninstallButton(new DPushButton(this))
@@ -445,6 +445,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
     btnsFrameLayout->addLayout(btnsLayout);
     btnsFrame->setLayout(btnsFrameLayout);
+    btnsFrame->setFixedHeight(45);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);

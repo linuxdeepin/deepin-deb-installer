@@ -264,6 +264,7 @@ void MultipleInstallPage::initUI()
     btnsFrame->setLayout(btnsFrameLayout);
 
     m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);                        //主布局添加listView frame并居中
+    m_contentLayout->addSpacing(10);
     m_contentLayout->addWidget(m_infoControlButton);                                            //主布局添加infoControlButton
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
