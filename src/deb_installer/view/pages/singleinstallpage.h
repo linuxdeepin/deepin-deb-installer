@@ -1,23 +1,19 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef SINGLEINSTALLPAGE_H
 #define SINGLEINSTALLPAGE_H
@@ -167,9 +163,9 @@ private:
 
 private:
     /**
-     * @brief setPackageInfo 获取deb包的信息
+     * @brief showPackageInfo 获取并显示deb包的信息
      */
-    void setPackageInfo();
+    void showPackageInfo();
 
     /**
      * @brief setAuthConfirm 依赖下载授权确认后的界面处理函数
@@ -276,6 +272,7 @@ private:
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
     DCommandLinkButton *m_pLoadingLabel;                //依赖安装提示信息
+    int dependAuthStatu = -1; //存储依赖授权状态
 };
 
 #endif  // SINGLEINSTALLPAGE_H

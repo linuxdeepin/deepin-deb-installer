@@ -1,23 +1,20 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 #include "debinstaller.h"
 #include "model/deblistmodel.h"
@@ -60,7 +57,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget(this))
-    , m_centralLayout(new QStackedLayout(this))
+    , m_centralLayout(new QStackedLayout())
 {
     initUI();
     initConnections();
@@ -124,6 +121,9 @@ void DebInstaller::initConnections()
     //接收到添加无效包的信号则弹出无效包的弹窗
     connect(m_fileListModel, &DebListModel::invalidPackage, this, &DebInstaller::showInvalidePackageMessage);
 
+    //接收到添加无效包的信号则弹出无效包的弹窗
+    connect(m_fileListModel, &DebListModel::notLocalPackage, this, &DebInstaller::showNotLocalPackageMessage);
+
     //接收到包已经添加的信号则弹出已添加的弹窗
     connect(m_fileListModel, &DebListModel::packageAlreadyExists, this, &DebInstaller::showPkgExistMessage);
 
@@ -135,6 +135,8 @@ void DebInstaller::initConnections()
 
     //刷新批量安装界面的信号
     connect(m_fileListModel, &DebListModel::single2MultiPage, this, &DebInstaller::single2Multi);
+
+    connect(m_fileListModel, &DebListModel::refreshFileChoosePage, this, &DebInstaller::reset);
 
     //正在添加的信号
     connect(m_fileListModel, &DebListModel::appendStart, this, &DebInstaller::appendPackageStart);
@@ -172,6 +174,8 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::DependResult, this, &DebInstaller::DealDependResult);
 
     connect(m_fileListModel, &DebListModel::enableCloseButton, this, &DebInstaller::enableCloseButton);
+
+    connect(m_fileListModel, &DebListModel::packageCannotFind, this, &DebInstaller::showPkgRemovedMessage);
 
     //Append packages via double-clicked or right-click
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
@@ -398,6 +402,18 @@ void DebInstaller::showInvalidePackageMessage()
 }
 
 /**
+ * @brief DebInstaller::showNotLocalPackageMessage 弹出不是本地包的消息通知
+ */
+void DebInstaller::showNotLocalPackageMessage()
+{
+    //add Floating Message while package invalid
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("You can only install local deb packages"));
+    msg->setIcon(QIcon::fromTheme("di_warning"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //如果损坏，提示
+}
+
+/**
  * @brief DebInstaller::showPkgExistMessage 弹出添加相同包的消息通知
  */
 void DebInstaller::showPkgExistMessage()
@@ -405,6 +421,19 @@ void DebInstaller::showPkgExistMessage()
     qWarning() << "DebInstaller:" << "package is Exist! ";
     DFloatingMessage *msg = new DFloatingMessage;
     msg->setMessage(tr("Already Added"));
+    msg->setIcon(QIcon::fromTheme("di_ok"));
+    DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
+}
+
+/**
+ * @brief DebInstaller::showPkgExistMessage 弹出添加相同包的消息通知
+ */
+void DebInstaller::showPkgRemovedMessage(QString packageName)
+{
+    // PS: DTK问题，在刚好换行时，消息显示字体可能截断。
+    qWarning() << "DebInstaller:" << packageName << "File is not accessible";
+    DFloatingMessage *msg = new DFloatingMessage;
+    msg->setMessage(tr("%1 does not exist, please reselect").arg(packageName));
     msg->setIcon(QIcon::fromTheme("di_ok"));
     DMessageManager::instance()->sendMessage(this, msg);                        //已经添加的包会提示
 }
@@ -490,7 +519,6 @@ void DebInstaller::onAuthing(const bool authing)
 void DebInstaller::reset()
 {
     //reset page status
-    Q_ASSERT(m_centralLayout->count() == 2);
     m_fileListModel->m_workerStatus_temp = 0;                               // 当前工作状态
     m_dragflag = -1;                                                        // 是否被允许拖入或添加
     m_Filterflag = -1;                                                      // 当前显示的页面
@@ -615,8 +643,8 @@ void DebInstaller::refreshSingle()
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
     //安装器中只有一个包，刷新单包安装页面
-    // single package install
-    //    titlebar()->setTitle(QString());
+    //刷新成单包安装界面时，删除标题
+    titlebar()->setTitle(QString());
 
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");
@@ -724,6 +752,7 @@ void DebInstaller::closeEvent(QCloseEvent *event)
  */
 void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
 {
+    Q_UNUSED(dependName);
     //Set the display effect according to the status of deepin-wine installation authorization.
     //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
     //依赖下载时、授权时不允许拖入
@@ -737,14 +766,18 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
         m_fileListModel->reset_filestatus();//清除包的状态和包的错误原因
         m_fileListModel->initPrepareStatus();//重置包的prepare状态。
     }
-    //Refresh the display effect of different pages
-    if (m_dragflag == 2) {      //单包安装处理依赖下载授权情况
-        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->DealDependResult(iAuthRes, dependName);
-    } else if (m_dragflag == 1) {//批量安装处理依赖下载授权情况
-        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->DealDependResult(iAuthRes, dependName);
-        multiplePage->refreshModel();// 滚动到最后一行。
+    if (iAuthRes == DebListModel::AuthBefore) {     //授权框弹出时
+        this->setEnabled(false);                    //设置界面不可用
+    } else {                                        //授权成功或失败后
+        this->setEnabled(true);                     //根据授权的结果刷新单包或者批量安装界面
+        if (m_fileListModel->preparedPackages().size() == 1) {          //刷新单包安装界面
+            SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+            singlePage->DealDependResult(iAuthRes, dependName);
+        } else if (m_fileListModel->preparedPackages().size() >= 2) {       //刷新批量安装界面
+            MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+            multiplePage->DealDependResult(iAuthRes, dependName);
+            multiplePage->refreshModel();// 滚动到最后一行。
+        }
     }
 }
 

@@ -1,19 +1,20 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     cuizhen <cuizhen@uniontech.com>
-* Maintainer:  cuizhen <cuizhen@uniontech.com>
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "PackageStatus.h"
 
 #include <QtConcurrent>
@@ -84,11 +85,20 @@ PackageStatus PackageStatus::minEq(const PackageStatus &other)
     return *this;
 }
 
-bool PackageStatus::isBreak() const { return status == DependsBreak; }
+bool PackageStatus::isBreak() const
+{
+    return status == DependsBreak;
+}
 
-bool PackageStatus::isAuthCancel() const { return status == DependsAuthCancel; }
+bool PackageStatus::isAuthCancel() const
+{
+    return status == DependsAuthCancel;
+}
 
-bool PackageStatus::isAvailable() const { return status == DependsAvailable; }
+bool PackageStatus::isAvailable() const
+{
+    return status == DependsAvailable;
+}
 
 
 QString PackageStatus::resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType)
@@ -168,7 +178,8 @@ bool PackageStatus::dependencyVersionMatch(const int result, const RelationType 
         return result == 0;
     case NotEqual:
         return result != 0;
-    default:;
+    default:
+        ;
     }
 
     return true;
@@ -217,7 +228,6 @@ const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, const
 
             // test package
             const QString mirror_version = p->availableVersion();
-            if (mirror_version == installed_version) continue;
 
             // mirror version is also break
             const auto mirror_result = QApt::Package::compareVersion(mirror_version, conflict_version);

@@ -1,23 +1,19 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "multipleinstallpage.h"
 #include "model/deblistmodel.h"
@@ -129,7 +125,7 @@ void MultipleInstallPage::initContentLayout()
     m_centralLayout->setSpacing(0);
 
     //主布局设置边距
-    m_centralLayout->setContentsMargins(0, 0, 0, 0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 20);
     this->setLayout(m_centralLayout);
 
 //#define SHOWBGCOLOR
@@ -177,15 +173,18 @@ void MultipleInstallPage::initUI()
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
+    connect(m_appsListView, &PackagesListView::setItemHeight, [ = ](int height) {
+        delegate->getItemHeight(height);
+    });
 
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
-    appsViewLayout->addSpacing(10);
+    appsViewLayout->addSpacing(15);
     appsViewLayout->addWidget(m_appsListView);
+    appsViewLayout->addSpacing(10);
 
     m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
     m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
@@ -236,6 +235,7 @@ void MultipleInstallPage::initUI()
     m_progressAnimation = new QPropertyAnimation(m_installProgress, "value", this);             //进度条动画
     progressFrameLayout->addStretch();
     progressFrameLayout->addWidget(m_installProgress);
+    progressFrameLayout->addSpacing(28);
     progressFrameLayout->setAlignment(m_installProgress, Qt::AlignHCenter);                     //进度条居中
 
     m_processFrame->setVisible(false);                                                          //进度条默认隐藏
@@ -255,7 +255,7 @@ void MultipleInstallPage::initUI()
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 20);                                                //底部间距30
+    btnsLayout->setContentsMargins(0, 0, 0, 0);                                                //底部间距30
 
     QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);                                                 //进度布局添加到btn布局中（二者互斥，一定不能同时出现）
@@ -264,14 +264,15 @@ void MultipleInstallPage::initUI()
     btnsFrame->setLayout(btnsFrameLayout);
 
     m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);                        //主布局添加listView frame并居中
+    m_contentLayout->addSpacing(10);
     m_contentLayout->addWidget(m_infoControlButton);                                            //主布局添加infoControlButton
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
 
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_dSpinner);                                                     //添加依赖安装加载动画
-    m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_tipsLabel);                                                    //添加依赖安装提示
+    m_contentLayout->addSpacing(10);
 
     //fix bug:33999 keep tips in the middle
     m_contentLayout->setAlignment(m_tipsLabel, Qt::AlignCenter);                                //设置提示居中
@@ -358,9 +359,6 @@ void MultipleInstallPage::initConnections()
 
     //一个包安装结束后 listView滚动到其在listview中的位置
     connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
-
-    //wine依赖安装结果处理
-    connect(m_debListModel, &DebListModel::DependResult, this, &MultipleInstallPage::DealDependResult);
 }
 
 /**
@@ -543,13 +541,6 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         break;
     case DebListModel::AuthDependsSuccess:      //依赖安装成功
     case DebListModel::AuthDependsErr:          //依赖安装错误
-        m_appsListView->setEnabled(true);       //listView可以操作
-        m_installButton->setVisible(true);      //显示安装按钮
-        m_installButton->setEnabled(true);      //安装按钮可用
-        m_dSpinner->stop();                     //隐藏并停止安装动画
-        m_dSpinner->hide();
-        m_tipsLabel->setVisible(false);         //隐藏依赖安装提示
-        break;
     case DebListModel::AnalysisErr:             //解析错误
         m_appsListView->setEnabled(true);       //listView可以操作
         m_installButton->setVisible(true);      //显示安装按钮

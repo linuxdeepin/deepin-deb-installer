@@ -1,23 +1,20 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 #include "packageslistdelegate.h"
 #include "model/deblistmodel.h"
@@ -41,7 +38,12 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
 {
     qApp->installEventFilter(this);                     //事件筛选
-    m_itemHeight = 48 + 3 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 16); //根据字体初始化item高度
+    //根据字体初始化item高度
+    if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) { //当前字体大小是否小于13
+        m_itemHeight = 50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font()));
+    } else {
+        m_itemHeight = 52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13);
+    }
 }
 
 /**
@@ -141,7 +143,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (option.state & DStyle::State_Enabled) {
             if (option.state & DStyle::State_Selected) {
                 background = palette.color(cg, DPalette::Highlight);
-                forground.setColor(palette.color(cg, DPalette::HighlightedText));
             }
         }
         painter->setPen(forground);
@@ -170,14 +171,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         // draw package icon
         const int x = 6;
-        int y = bg_rect.y() + yOffset + 1;
+        int y = bg_rect.y() + (m_itemHeight - 32) / 2;
 
         icon.paint(painter, x, y, 32, 32);
 
         // draw package name
         QRect name_rect = bg_rect;
         name_rect.setX(content_x);
-        name_rect.setY(bg_rect.y() + yOffset - 5);
+        name_rect.setY(bg_rect.y() + 5);
 
         const QString pkg_name = index.data(DebListModel::PackageNameRole).toString();
         QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -194,6 +195,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
 
+        if (option.state & DStyle::State_Enabled) {
+            if (option.state & DStyle::State_Selected) {
+                forground.setColor(palette.color(cg, DPalette::HighlightedText));
+            }
+        }
         painter->setPen(forground);
         painter->drawText(name_rect, elided_pkg_name, Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -202,7 +208,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         const int version_y = version_rect.top();
         version_rect.setLeft(200);
-        version_rect.setTop(version_y - 1);
+        version_rect.setTop(version_y);
         version_rect.setRight(option.rect.right() - 80);
         QFontMetrics versionFontMetric(pkg_name_font);
         const QString version = index.data(DebListModel::PackageVersionRole).toString();
@@ -259,8 +265,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         } else {//当前没有安装过
-            //获取包的描述
-            info_str = index.data(DebListModel::PackageDescriptionRole).toString();
+            //获取包的短描述（model增加长描述接口，批量安装显示的是短描述）
+            info_str = index.data(DebListModel::PackageShortDescriptionRole).toString();
             //fix bug: 43139
             forground.setColor(palette.color(cg, DPalette::TextTips));
         }

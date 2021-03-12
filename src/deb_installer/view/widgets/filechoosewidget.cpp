@@ -1,23 +1,19 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "filechoosewidget.h"
 #include "view/widgets/choosefilebutton.h"
@@ -37,6 +33,7 @@
 #include <QVBoxLayout>
 #include <DApplicationHelper>
 #include <DStyleHelper>
+#include <QStorageInfo>
 
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
@@ -158,23 +155,24 @@ void FileChooseWidget::chooseFiles()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
-
     // fix bug: https://pms.uniontech.com/zentao/bug-view-50992.html
     // 为DFileDialog指定父对象
     DFileDialog dialog(this);                                                //获取文件
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setNameFilter("Debian Package Files (*.deb)");
     dialog.setDirectory(historyDir);                                        //设置打开的路径为保存的路径
-
     auto mode = dialog.exec();                                         //打开文件选择窗口
 
+    QString currentPackageDir = dialog.directoryUrl().toLocalFile();    //获取当前打开的文件夹路径
     // save the directory string to config file.
-    m_settings.setValue("history_dir", dialog.directoryUrl().toLocalFile());//保存当前文件路径
+    QStorageInfo info(currentPackageDir);                               //获取路径信息
 
+    if (info.device().startsWith("/dev/")) {                            //判断路径信息是不是本地路径
+        m_settings.setValue("history_dir", currentPackageDir);          //本地路径，保存当前文件路径
+    }
     if (mode != QDialog::Accepted) return;
 
     const QStringList selected_files = dialog.selectedFiles();              //获取选中的文件
-
     emit packagesSelected(selected_files);                                  //发送信号
 }
 

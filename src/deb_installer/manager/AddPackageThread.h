@@ -1,19 +1,20 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     cuizhen <cuizhen@uniontech.com>
-* Maintainer:  cuizhen <cuizhen@uniontech.com>
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 
 #ifndef ADDPACKAGETHREAD_H
 #define ADDPACKAGETHREAD_H
@@ -70,6 +71,13 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+    /**
      * @brief packageAlreadyExists 当前包已经被添加到应用中
      */
     void packageAlreadyExists();
@@ -116,6 +124,27 @@ private:
      * @return 是否创建成功
      */
     bool mkTempDir();
+
+private:
+
+    /**
+     * @brief dealInvalidPackage 查看包是否有效
+     * @param packagePath 包的路径
+     * @return 包的有效性
+     *   true   : 文件能打开
+     *   fasle  : 文件不在本地或无权限
+     */
+    bool dealInvalidPackage(QString packagePath);
+
+    /**
+     * @brief dealPackagePath 处理包的路径
+     * @param packagePath 包的路径
+     * @return 经过处理后的包的路径
+     * 处理两种情况
+     *      1： 相对路径             --------> 转化为绝对路径
+     *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+     */
+    QString dealPackagePath(QString packagePath);
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";             // 软链接的存放路径

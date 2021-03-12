@@ -113,6 +113,13 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+    /**
      * @brief packageAlreadyExists 包重复添加的信号
      */
     void packageAlreadyExists();
@@ -127,6 +134,12 @@ signals:
      * @param packageMd5List 添加后的md5列表
      */
     void appendFinished(QList<QByteArray> packageMd5List);
+
+    /**
+     * @brief packageMd5Changed 添加完成之后更新MD5的列表
+     * @param packageMd5List 当前的MD5列表
+     */
+    void packageMd5Changed(QList<QByteArray> packageMd5List);
 
 //// 界面刷新相关信号
 signals:
@@ -145,6 +158,10 @@ signals:
      */
     void refreshMultiPage();
 
+    /**
+     * @brief refreshFileChoosePage 刷新首页
+     */
+    void refreshFileChoosePage();
 //// 后端状态相关函数
 public:
 
@@ -325,11 +342,6 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
-    /**
-     * @brief resetInstallStatus 重置所有包的安装状态
-     */
-    void resetInstallStatus();
-
 private:
 
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
@@ -391,6 +403,11 @@ private:
      */
     void appendPackageFinished();
 
+    /**
+     * @brief appendNoThread 不通过线程，直接添加包到应用中
+     * @param packages 要添加的包
+     * @param allPackageSize 要添加的包的数量
+     */
     void appendNoThread(QStringList packages, int allPackageSize);
 
     /**
@@ -398,12 +415,30 @@ private:
      */
     void checkInvalid(QStringList packages);
 
+    /**
+     * @brief dealInvalidPackage 处理无效的安装包
+     * @param packagePath 包的路径
+     * @return 包的有效性
+     *   true   : 文件能打开
+     *   fasle  : 文件不在本地或无权限
+     */
+    bool dealInvalidPackage(QString packagePath);
+
+    /**
+     * @brief dealPackagePath 处理包的路径
+     * @param packagePath 包的路径
+     * @return 经过处理后的包的路径
+     * 处理两种情况
+     *      1： 相对路径             --------> 转化为绝对路径
+     *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+     */
+    QString dealPackagePath(QString packagePath);
+
 private:
     QFuture<QApt::Backend *> m_backendFuture;           //安装程序后端指针(异步加载)
 
     QList<QString> m_preparedPackages;          //存放包路径的列表
     QSet<QByteArray> m_appendedPackagesMd5;     //存放包MD5的集合
-
 
     QList<QByteArray> m_packageMd5;
 

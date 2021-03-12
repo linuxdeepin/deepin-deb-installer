@@ -1,23 +1,20 @@
 /*
- * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
- *
- * Author:     sbw <sbw@sbw.so>
- *
- * Maintainer: sbw <sbw@sbw.so>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 
 #ifndef DEBLISTMODEL_H
 #define DEBLISTMODEL_H
@@ -46,26 +43,27 @@ class DebListModel : public QAbstractListModel
 public:
     explicit DebListModel(QObject *parent = nullptr);
 
-    ~DebListModel();
+    ~DebListModel() override;
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
      */
     enum PackageRole {
-        PackageNameRole = Qt::DisplayRole,      //包名
-        UnusedRole = Qt::UserRole,              //
-        WorkerIsPrepareRole,                    //当前工作是否处于准备状态
-        ItemIsCurrentRole,                      //获取当前下标
-        PackageVersionRole,                     //包的版本
-        PackagePathRole,                        //包的路径
-        PackageInstalledVersionRole,            //包已经安装的版本
-        PackageDescriptionRole,                 //包的描述
-        PackageVersionStatusRole,               //包的安装状态
-        PackageDependsStatusRole,               //包的依赖状态
-        PackageAvailableDependsListRole,        //包可用的依赖
-        PackageFailReasonRole,                  //包安装失败的原因
-        PackageOperateStatusRole,               //包的操作状态
-        PackageReverseDependsListRole,          //依赖于此包的程序
+        PackageNameRole = Qt::DisplayRole,   //包名
+        UnusedRole = Qt::UserRole,           //
+        WorkerIsPrepareRole,                //当前工作是否处于准备状态
+        ItemIsCurrentRole,                  //获取当前下标
+        PackageVersionRole,                 //包的版本
+        PackagePathRole,                    //包的路径
+        PackageInstalledVersionRole,        //包已经安装的版本
+        PackageShortDescriptionRole,        //包的短描述
+        PackageLongDescriptionRole,         //包的长描述
+        PackageVersionStatusRole,           //包的安装状态
+        PackageDependsStatusRole,           //包的依赖状态
+        PackageAvailableDependsListRole,    //包可用的依赖
+        PackageFailReasonRole,              //包安装失败的原因
+        PackageOperateStatusRole,           //包的操作状态
+        PackageReverseDependsListRole,      //依赖于此包的程序
     };
 
     /**
@@ -201,12 +199,6 @@ public:
      */
     void initPrepareStatus();
 
-    /**
-     * @brief initDependsStatus 获取某一个包的依赖状态
-     * @param index     包的下标
-     */
-    void initDependsStatus(int index = 0);
-
 public:
     /**
      * @brief getInstallFileSize 获取要安装的包的数量
@@ -297,10 +289,24 @@ signals:
     void invalidPackage();
 
     /**
+     * @brief notLocalPackage 包不在本地的信号
+     *
+     * ps: 包不在本地无法安装
+     */
+    void notLocalPackage();
+
+    /**
+     * @brief packageCannotFind 包已经被移动的信号 通知前端发送浮动消息
+     * @param packageName 被移动的文件名
+     */
+    void packageCannotFind(QString packageName) const;
+
+
+    /**
      * @brief packageAlreadyExists 包已添加的信号
      */
     void packageAlreadyExists();
-
+signals:
     /**
      * @brief refreshSinglePage 刷新单包安装界面的信号
      */
@@ -315,6 +321,11 @@ signals:
      * @brief single2MultiPage 刷新批量安装的信号
      */
     void single2MultiPage();
+
+    /**
+     * @brief refreshFileChoosePage 刷新首页
+     */
+    void refreshFileChoosePage();
 
     /**
      * @brief appendStart 正在添加的信号
@@ -518,13 +529,6 @@ private:
     void digitalVerifyFailed(ErrorCode code);
 
     /**
-     * @brief checkDigitalVerifyFailReason 检查当前验证错误的原因
-     * @return
-     * 如果所有的包安装失败都是由于无数字签名，则弹出前往控制中心的弹窗
-     */
-    bool checkDigitalVerifyFailReason();
-
-    /**
      * @brief showDevelopModeWindow 打开控制中心通用界面
      */
     void showDevelopModeWindow();
@@ -566,6 +570,39 @@ private:
      * @brief getPackageMd5 获取当前操作的包的md5值
      */
     void getPackageMd5(QList<QByteArray> md5);
+
+//// 文件移动、删除、修改检查
+private:
+    /**
+     * @brief recheckPackagePath 重新检查文件路径
+     * @param packagePath 当前需要检查的文件路径
+     * @return 检查的结果
+     *         true : 文件存在
+     *         false: 文件不存在
+     */
+    bool recheckPackagePath(QString packagePath) const;
+
+private:
+    /**
+     * @brief initConnections 初始化信号与槽的链接
+     */
+    void initConnections();
+
+    /**
+     * @brief initInstallConnecions 链接安装过程中的信号与槽
+     */
+    void initInstallConnections();
+
+    /**
+     * @brief initAppendConnection 链接添加过程中的信号与槽
+     */
+    void initAppendConnection();
+
+    /**
+     * @brief initRefreshPageConnecions 链接页面刷新的信号与槽
+     */
+    void initRefreshPageConnecions();
+
 private:
     int m_workerStatus;                                 //当前工作状态
     int m_operatingIndex;                               //当前正在操作的index

@@ -1,19 +1,20 @@
 /*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
-* Author:     cuizhen <cuizhen@uniontech.com>
-* Maintainer:  cuizhen <cuizhen@uniontech.com>
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * any later version.
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
+*
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 
 #include "AddPackageThread.h"
 #include "packagesmanager.h"
@@ -24,6 +25,7 @@
 #include <DRecentManager>
 
 #include <QDir>
+#include <QStorageInfo>
 
 DCORE_USE_NAMESPACE
 
@@ -68,6 +70,51 @@ void AddPackageThread::checkInvalid()
 }
 
 /**
+ * @brief AddPackageThread::dealInvalidPackage
+ * @param packagePath 文件路径
+ * @return 文件是否在本地
+ *   true   : 文件在本地
+ *   fasle  : 文件不在本地
+ */
+bool AddPackageThread::dealInvalidPackage(QString packagePath)
+{
+    QStorageInfo info(packagePath);                               //获取路径信息
+
+    if (!info.device().startsWith("/dev/")) {                            //判断路径信息是不是本地路径
+        emit notLocalPackage();
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @brief PackagesManager::dealPackagePath 处理路径相关的问题
+ * @param packagePath 当前包的文件路径
+ * @return 处理后的文件路径
+ * 处理两种情况
+ *      1： 相对路径             --------> 转化为绝对路径
+ *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
+ */
+QString AddPackageThread::dealPackagePath(QString packagePath)
+{
+    //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
+    if (packagePath[0] != "/") {
+        QFileInfo packageAbsolutePath(packagePath);
+        packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
+        qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
+    }
+
+    // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
+    if (packagePath.contains(" ")) {
+        QApt::DebFile *p = new DebFile(packagePath);
+        packagePath = SymbolicLink(packagePath, p->packageName());
+        qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << packagePath;
+        delete p;
+    }
+    return packagePath;
+}
+
+/**
  * @brief AddPackageThread::run
  */
 void AddPackageThread::run()
@@ -78,44 +125,27 @@ void AddPackageThread::run()
     checkInvalid();     //运行之前先计算有效文件的数量
     for (QString debPackage : m_packages) {                 //通过循环添加所有的包
 
-        //判断此次添加的包是否是绝对路径,如果是相对路径则转换为绝对路径
-        if (debPackage[0] != "/") {
-            QFileInfo packageAbsolutePath(debPackage);
-            debPackage = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
-            qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
+        // 处理包不在本地的情况。
+        if (!dealInvalidPackage(debPackage)) {
+            continue;
         }
 
-        //管理最近文件列表
-        DRecentData data;
-        data.appName = "Deepin Deb Installer";
-        data.appExec = "deepin-deb-installer";
-        DRecentManager::addItem(debPackage, data);
-
-        // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
-        if (debPackage.contains(" ")) {
-            QApt::DebFile *p = new DebFile(debPackage);
-            debPackage = SymbolicLink(debPackage, p->packageName());
-            qDebug() << "PackagesManager:" << "There are spaces in the path, add a soft link" << debPackage;
-            delete p;
-        }
+        debPackage = dealPackagePath(debPackage);
 
         QApt::DebFile *pkgFile = new DebFile(debPackage);
-
         //判断当前文件是否是无效文件
         if (pkgFile && !pkgFile->isValid()) {
-            //处理无效文件
+            // 根据文件无效的类型提示不同的文案
             emit invalidPackage();
             delete pkgFile;
             continue;
         }
-
-        QTime getMD5;
-        getMD5.start();
         // 获取当前文件的md5的值,防止重复添加
+        QTime md5Time;
+        md5Time.start();
         const auto md5 = pkgFile->md5Sum();
-        int md5Time = getMD5.elapsed();
-        qInfo() << "[run]" << "获取" << pkgFile->packageName() << "的MD5 用时" << md5Time << " ms";
-        md5SumTotalTime += md5Time;
+        qInfo() << "[appendNoThread]" << "获取" << pkgFile->packageName() << "的MD5 用时" << md5Time.elapsed() << " ms";
+
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
@@ -123,6 +153,13 @@ void AddPackageThread::run()
             delete pkgFile;
             continue;
         }
+        // 可以添加,发送添加信号
+
+        //管理最近文件列表
+        DRecentData data;
+        data.appName = "Deepin Deb Installer";
+        data.appExec = "deepin-deb-installer";
+        DRecentManager::addItem(debPackage, data);
         // 可以添加,发送添加信号
 
         m_appendedPackagesMd5 << md5;   // 添加到set中，用来判断重复
