@@ -691,6 +691,9 @@ void PackagesManager::removePackage(const int index)
  */
 void PackagesManager::appendPackage(QStringList packages)
 {
+    if (packages.isEmpty()) { //当前放进来的包列表为空（可能拖入的是文件夹）
+        return;
+    }
     checkInvalid(packages);     //运行之前先计算有效文件的数量
     qDebug() << "PackagesManager:" << "append Package" << packages;
     if (packages.size() == 1) {
