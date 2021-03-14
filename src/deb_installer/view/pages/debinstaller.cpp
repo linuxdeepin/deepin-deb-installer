@@ -332,7 +332,10 @@ void DebInstaller::dropEvent(QDropEvent *e)
         }
     }
     this->activateWindow();                                     //激活窗口
-    onPackagesSelected(file_list);                              //放到安装列表中
+    if (!file_list.isEmpty()) {                                 //处理拖入文件夹的情况
+        onPackagesSelected(file_list);                              //放到安装列表中
+    }
+
 }
 
 /**
