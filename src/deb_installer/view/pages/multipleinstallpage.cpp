@@ -49,7 +49,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
 
-    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -178,7 +178,9 @@ void MultipleInstallPage::initUI()
     m_appsListView->setItemDelegate(delegate);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::setItemHeight, [=](int height) { delegate->getItemHeight(height); });
+    connect(m_appsListView, &PackagesListView::setItemHeight, [ = ](int height) {
+        delegate->getItemHeight(height);
+    });
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
@@ -395,6 +397,8 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
  */
 void MultipleInstallPage::onProgressChanged(const int progress)
 {
+    this->showNormal();
+    this->activateWindow();
     m_progressAnimation->setStartValue(m_installProgress->value()); //设置动画开始的进度
     m_progressAnimation->setEndValue(progress);                     //设置进度条动画结束的进度
     m_progressAnimation->start();                                   //开始动画

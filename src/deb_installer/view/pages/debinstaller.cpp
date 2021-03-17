@@ -373,7 +373,7 @@ void DebInstaller::showInvalidePackageMessage_tablet()
     if (m_fileListModel->getInstallFileSize() == 0) {
         this->hide();
         //若应用内无包，点击弹出窗口的确定按钮退出应用
-        connect(btnOK, &DPushButton::clicked, qApp, [=] { qApp->quit(); });
+        connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
     }
 }
 
@@ -651,6 +651,10 @@ void DebInstaller::changeDragFlag()
  */
 void DebInstaller::setEnableButton(bool bEnable)
 {
+    if (bEnable) {
+        this->activateWindow();
+        this->showNormal();
+    }
     //如果正在添加包，则启用按钮
     if (packageAppending)
         return;
@@ -670,6 +674,8 @@ void DebInstaller::setEnableButton(bool bEnable)
  */
 void DebInstaller::showHiddenButton()
 {
+    this->showNormal();
+    this->activateWindow();
     m_fileListModel->reset_filestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (m_dragflag == 2) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);

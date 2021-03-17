@@ -60,7 +60,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_installProcessView(new InstallProcessInfoView(420, 190, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
     , m_installButton(new DPushButton(this))
-    //    , m_uninstallButton(new DPushButton(this))
+      //    , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))
     , m_confirmButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
@@ -755,6 +755,8 @@ void SingleInstallPage::onWorkerFinished()
  */
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
+    this->showNormal();
+    this->activateWindow();
     if (progress < m_progress->value()) {       //进度不后退
         return;
     }
