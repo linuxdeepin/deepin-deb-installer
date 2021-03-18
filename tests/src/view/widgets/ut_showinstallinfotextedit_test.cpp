@@ -77,8 +77,12 @@ TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_tapGestureTriggere
 TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_gestureEvent)
 {
     ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
-    QGestureEvent gestureEvent(QList<QGesture *> {new QGesture(), new QGesture()});
+    QGesture *gesture = new QGesture();
+
+    QGestureEvent gestureEvent(QList<QGesture *> {gesture, gesture});
     edit->gestureEvent(&gestureEvent);
+    delete gesture;
+    delete edit;
 }
 
 TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)

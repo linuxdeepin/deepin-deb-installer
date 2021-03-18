@@ -175,7 +175,6 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
 
     stub.set(ADDR(DebFile, architecture), delegate_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), delegate_backend_architectures);
-    stub.set(ADDR(Backend, init), delegate_backend_init);
     stub.set(ADDR(DebFile, isValid), delegate_deb_isValid);
     stub.set(ADDR(DebFile, md5Sum), delegate_deb_md5Sum);
     stub.set(ADDR(DebFile, installedSize), delegate_deb_installSize);

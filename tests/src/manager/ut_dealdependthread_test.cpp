@@ -33,6 +33,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_setDependsList)
     dThread->setDependsList(dependsList, 0);
 
     ASSERT_EQ(dThread->m_dependsList.size(), 2);
+    delete dThread;
 }
 
 TEST(DealDependThread_Test, DealDependThread_UT_setBrokenDepend)
@@ -43,6 +44,8 @@ TEST(DealDependThread_Test, DealDependThread_UT_setBrokenDepend)
     dThread->setBrokenDepend("package");
 
     ASSERT_STREQ(dThread->m_brokenDepend.toLocal8Bit(), "package");
+
+    delete dThread;
 }
 
 void proc_start(const QString &program, const QStringList &arguments, QIODevice::OpenModeFlag mode)
@@ -65,6 +68,9 @@ TEST(DealDependThread_Test, DealDependThread_UT_start)
 
     dThread->start();
     dThread->terminate();
+    dThread->wait();
+
+    delete dThread;
 }
 
 TEST(DealDependThread_Test, DealDependThread_UT_onFinished)
@@ -75,6 +81,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_onFinished)
     dThread->onFinished(-1);
 
     ASSERT_FALSE(dThread->bDependsStatusErr);
+    delete dThread;
 
 }
 
@@ -85,6 +92,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_finished)
     emit dThread->proc->finished(0);
 
     ASSERT_FALSE(dThread->bDependsStatusErr);
+    delete dThread;
 
 }
 
@@ -99,6 +107,7 @@ TEST(DealDependThread_Test, DealDependThread_UT_on_readoutput)
     Stub stub;
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
     dThread->on_readoutput();
-    //    dThread->start();
-    //    dThread->terminate();
+
+    delete dThread;
+
 }

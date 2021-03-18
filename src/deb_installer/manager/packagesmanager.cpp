@@ -381,7 +381,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         ret.package = deb->packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, ret);//更换依赖的存储方式
         qInfo() << deb->packageName() << "架构错误，获取依赖状态用时" << dependsTime.elapsed() << "ms";
-        return PackageDependsStatus::_break(deb->packageName());
+        QString packageName = deb->packageName();
+        delete deb;
+        return PackageDependsStatus::_break(packageName);
     }
 
     // conflicts

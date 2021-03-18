@@ -242,6 +242,8 @@ TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_SymbolicLink)
 
     usleep(10 * 1000);
     ASSERT_STREQ("", p->dealPackagePath("/ ").toUtf8());
+
+    delete p;
 }
 
 
@@ -272,6 +274,7 @@ TEST(PackageManager_UT, PackageManager_UT_dealPackagePath_AbsolutePath)
     usleep(10 * 1000);
     ASSERT_STREQ("", p->dealPackagePath(" ").toUtf8());
 
+    delete p;
 }
 
 TEST(PackageManager_UT, PackageManager_UT_dealInvalidPackage_true)

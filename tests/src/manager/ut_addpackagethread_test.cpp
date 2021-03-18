@@ -38,6 +38,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_setPackage)
     addPkgThread->setPackages(dependsList);
 
     ASSERT_EQ(addPkgThread->m_packages.size(), 2);
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_setAppendPackagesMd5)
@@ -51,6 +52,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_setAppendPackagesMd5)
     addPkgThread->setAppendPackagesMd5(md5);
 
     ASSERT_TRUE(addPkgThread->m_appendedPackagesMd5.contains("test"));
+    delete addPkgThread;
 }
 
 bool isValid()
@@ -74,6 +76,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_checkInvalid)
     addPkgThread->checkInvalid();
 
     ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
+    delete addPkgThread;
 }
 QByteArray md5sum()
 {
@@ -109,6 +112,8 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_run)
     addPkgThread->run();
 
     ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
+    addPkgThread->terminate();
+    delete addPkgThread;
 }
 bool apt_mkdir(const QString &dirName)
 {
@@ -146,6 +151,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
     stub.set(ADDR(AddPackageThread, mkTempDir), ut_mkTempDir);
     ASSERT_STREQ(addPkgThread->SymbolicLink("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
+    delete addPkgThread;
 }
 
 
@@ -168,6 +174,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_mkTempDir)
     //(int(A::*)(int))ADDR(A,foo)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
     ASSERT_TRUE(addPkgThread->mkTempDir());
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_link)
@@ -189,6 +196,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_link)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
 
     ASSERT_STREQ(addPkgThread->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
+    delete addPkgThread;
 }
 
 bool thread_stub_is_open()
@@ -284,6 +292,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage)
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
 
     addPkgThread->dealInvalidPackage("");
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_false)
@@ -303,6 +312,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_false)
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_true);
 
     addPkgThread->dealInvalidPackage("");
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_noPermission)
@@ -322,6 +332,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_noPermission)
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_false);
 
     addPkgThread->dealInvalidPackage("");
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_absoluteFilePath)
@@ -340,6 +351,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_absoluteFilePath
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
 
     ASSERT_STREQ("", addPkgThread->dealPackagePath("test").toUtf8());
+    delete addPkgThread;
 }
 
 TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink)
@@ -358,4 +370,5 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink)
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
 
     ASSERT_STREQ("", addPkgThread->dealPackagePath(" ").toUtf8());
+    delete addPkgThread;
 }

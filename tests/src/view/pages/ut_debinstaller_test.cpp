@@ -120,15 +120,11 @@ void stud_reset()
 {
 }
 
+
 void stud_appendNoThread(QStringList packages, int allPackageSize)
 {
     Q_UNUSED(packages);
     Q_UNUSED(allPackageSize);
-}
-
-QList<QAction *> stud_actions()
-{
-    return QList<QAction *> {new QAction(), new QAction()};
 }
 
 class Debinstaller_UT : public UT_HEAD
@@ -151,13 +147,20 @@ public:
         deb = new DebInstaller();
         usleep(1000 * 1000);
         qDebug() << "SetUp" << endl;
+
     }
     void TearDown() //TEST跑完之后会执行TearDown
     {
+
         delete deb;
     }
     DebInstaller *deb;
+
 };
+void stub_enableCloseAndExit()
+{
+    return;
+}
 
 TEST_F(Debinstaller_UT, total_UT)
 {
@@ -181,7 +184,9 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, version), stud_version);
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
-    stub.set(ADDR(QMenu, actions), stud_actions);
+    stub.set(ADDR(DebInstaller, enableCloseAndExit), stub_enableCloseAndExit);
+    stub.set(ADDR(DebInstaller, disableCloseAndExit), stub_enableCloseAndExit);
+
 
     deb->enableCloseButton(false);
     deb->enableCloseButton(true);
@@ -224,6 +229,7 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->setEnableButton(true);
     deb->showPkgRemovedMessage("00");
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
+
 }
 
 TEST_F(Debinstaller_UT, checkSuffix_UT)
@@ -242,8 +248,10 @@ TEST_F(Debinstaller_UT, keyPressEvent_UT)
 
 TEST_F(Debinstaller_UT, dragEnterEvent_UT)
 {
-    QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, new QMimeData, Qt::LeftButton, Qt::NoModifier);
+    QMimeData *mimeData = new QMimeData;
+    QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &enterEvent);
+    delete  mimeData;
 }
 
 TEST_F(Debinstaller_UT, dropEvent_UT)
@@ -253,4 +261,5 @@ TEST_F(Debinstaller_UT, dropEvent_UT)
     mimeData->setData("text/csv", csvData);
     QDropEvent dropEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &dropEvent);
+    delete mimeData;
 }

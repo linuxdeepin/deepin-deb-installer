@@ -28,6 +28,7 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_ok)
     PackageDependsStatus *pds = new PackageDependsStatus();
 
     ASSERT_EQ(pds->ok().status, DebListModel::DependsOk);
+    delete pds;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_available)
@@ -35,6 +36,7 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_available)
     PackageDependsStatus *pds = new PackageDependsStatus();
 
     ASSERT_EQ(pds->available("package").status, DebListModel::DependsAvailable);
+    delete pds;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isBreak)
@@ -42,6 +44,7 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isBreak)
     PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
 
     ASSERT_TRUE(pds->isBreak());
+    delete pds;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAvailable)
@@ -49,6 +52,7 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAvailable)
     PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
 
     ASSERT_TRUE(pds->isAvailable());
+    delete pds;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAuthCancel)
@@ -56,6 +60,7 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAuthCancel)
     PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsAuthCancel, "packageName");
 
     ASSERT_TRUE(pds->isAuthCancel());
+    delete pds;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_min)
@@ -65,6 +70,8 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_min)
     PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
 
     ASSERT_TRUE(small->min(*big).isAvailable());
+    delete small;
+    delete big;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_minEq)
@@ -74,6 +81,8 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_minEq)
     PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
 
     ASSERT_TRUE(small->minEq(*big).isAvailable());
+    delete small;
+    delete big;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_max)
@@ -83,6 +92,8 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_max)
     PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
 
     ASSERT_TRUE(small->max(*big).isBreak());
+    delete small;
+    delete big;
 }
 
 TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_maxEq)
@@ -92,4 +103,6 @@ TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_maxEq)
     PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
 
     ASSERT_TRUE(small->maxEq(*big).isBreak());
+    delete small;
+    delete big;
 }
