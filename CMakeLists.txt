@@ -23,6 +23,9 @@ if (NOT DEFINED VERSION)
     set(VERSION 5.3.9)
 endif ()
 
+#安全测试的开关
+set(CMAKE_SAFETYTEST OFF)
+
 project(deepin_deb_installer)
 option(DMAN_RELEAE OFF "Install dman resources to system or not")
 

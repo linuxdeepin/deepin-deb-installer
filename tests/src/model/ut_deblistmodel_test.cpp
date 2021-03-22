@@ -224,7 +224,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
 
     stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(DebFile, isValid), model_deb_isValid);
     stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
     stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
@@ -256,7 +255,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
 TEST(deblistmodel_Test, deblistmodel_UT_first)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -296,7 +294,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_first)
 TEST(deblistmodel_Test, deblistmodel_UT_rowCount)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -334,7 +331,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_rowCount)
 TEST(deblistmodel_Test, deblistmodel_UT_data)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_true);
@@ -378,7 +374,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_data)
 TEST(deblistmodel_Test, deblistmodel_UT_data_recheck)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_false);
@@ -420,7 +415,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_data_recheck)
 TEST(deblistmodel_Test, deblistmodel_UT_initPrepareStatus)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -475,7 +469,6 @@ QList<DependencyItem> model_deb_depends()
 TEST(deblistmodel_Test, deblistmodel_UT_index)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -500,7 +493,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_index)
 
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
 
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
 
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
@@ -519,7 +511,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_index)
 TEST(deblistmodel_Test, deblistmodel_UT_getInstallFileSize)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -558,7 +549,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_getInstallFileSize)
 TEST(deblistmodel_Test, deblistmodel_UT_setCurrentIndex)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -614,7 +604,6 @@ void model_transaction_run()
 TEST(deblistmodel_Test, deblistmodel_UT_installPackages)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
@@ -659,8 +648,8 @@ QString model_packageManager_package(const int index)
 
 const QStringList model_packageManager_packageReverseDependsList(const QString &, const QString &)
 {
-    QStringList list;
-    return list;
+
+    return {};
 }
 
 void model_backend_markPackageForRemoval(const QString &)
@@ -681,7 +670,6 @@ QApt::Transaction *model_backend_commitChanges()
 TEST(deblistmodel_Test, deblistmodel_UT_uninstallPackage)
 {
     Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
     stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
 
@@ -764,7 +752,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_packageFailedReason)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
@@ -815,7 +802,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_initRowStatus)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
@@ -897,7 +883,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -948,7 +933,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosProfessional)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
@@ -1000,7 +984,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosHome)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -1052,7 +1035,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosCommunity)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -1103,7 +1085,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_default)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -1172,7 +1153,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -1198,8 +1178,109 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
     model->m_operatingIndex = 0;
     ASSERT_TRUE(model->checkDigitalSignature());
 
+}
+TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature_01)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    //stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
+
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
+
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->m_isDevelopMode = false;
+
+    model->m_operatingIndex = 0;
+
     stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify1);
     ASSERT_FALSE(model->checkDigitalSignature());
+}
+
+TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature_02)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), model_backend_init);
+    stub.set(ADDR(Backend, architectures), model_backend_architectures);
+    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+
+    stub.set(ADDR(Transaction, run), model_transaction_run);
+
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+
+    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
+    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
+    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
+    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
+    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
+    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
+    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
+    stub.set(ADDR(DebFile, version), model_deb_version);
+    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
+    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
+    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    //stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
+
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
+
+    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
+    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
+
+    DebListModel *model = new DebListModel();
+
+    usleep(5 * 1000);
+
+    QStringList list;
+    list << "/";
+    model->appendPackage(list);
+
+    model->m_isDevelopMode = false;
+
+    model->m_operatingIndex = 0;
     stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
     ASSERT_FALSE(model->checkDigitalSignature());
 }
@@ -1235,7 +1316,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_showNoDigitalErrWindow)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1292,7 +1372,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_removePackage)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
@@ -1394,7 +1473,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1455,7 +1533,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1498,7 +1575,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionStatusChanged)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1541,7 +1617,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_setEndEnable)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1581,7 +1656,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkBoxStatus)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1622,7 +1696,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_bumpInstallIndex)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
@@ -1665,7 +1738,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_ConfigInstallFinish)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1711,12 +1783,10 @@ TEST(deblistmodel_Test, deblistmodel_UT_ConfigReadOutput)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput);
 
@@ -1745,7 +1815,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionFinished)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
@@ -1779,7 +1848,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_refreshOperatingPackageStatus)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
@@ -1809,7 +1877,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_onDependsInstallTransactionFinished)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
@@ -1855,7 +1922,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_showDevelopModeWindow)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1900,7 +1966,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_ConfigInputWrite)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1941,7 +2006,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_onTransactionOutput)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -1982,7 +2046,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_uninstallFinished)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2023,7 +2086,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_checkInstallStatus)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2065,7 +2127,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_initConnections)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2107,7 +2168,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_initAppendConnection)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2149,7 +2209,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_initRefreshPageConnecions)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2191,7 +2250,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_initInstallConnections)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2236,7 +2294,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readRealPathExist)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2267,7 +2324,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readLinkPathExist)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
@@ -2298,7 +2354,6 @@ TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readLinkPathNotExist)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);

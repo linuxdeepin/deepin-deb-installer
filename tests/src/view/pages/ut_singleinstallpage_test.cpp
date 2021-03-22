@@ -155,7 +155,6 @@ TEST_F(SingleInstallpage_UT, total_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_getPackageDependsStatus);
     stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
     stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
