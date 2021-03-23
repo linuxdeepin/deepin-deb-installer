@@ -139,6 +139,11 @@ Backend *ut_init_backend()
 {
     return nullptr;
 }
+
+void stub_start(QThread::Priority)
+{
+    return;
+}
 TEST(PackageManager_UT, PackageManager_UT_isBackendReady)
 {
     Stub stub;
@@ -165,6 +170,7 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
     stub.set(ADDR(DebFile, packageName), deb_packageName);
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(QThread, start), stub_start);
     usleep(300);
     PackagesManager *p = new PackagesManager();
 
@@ -173,7 +179,7 @@ TEST(PackageManager_UT, PackageManager_UT_appendPackage)
 
     ASSERT_FALSE(p->m_packageMd5.isEmpty());
     p->appendPackage(QStringList() << "/1"
-                                   << "/2");
+                     << "/2");
 
     delete p;
 }
