@@ -135,6 +135,11 @@ QList<DependencyItem> package_conflicts()
     return conflicts;
 }
 
+QList<DependencyItem> package_conflicts_null()
+{
+    return {};
+}
+
 Backend *ut_init_backend()
 {
     return nullptr;
@@ -308,7 +313,7 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
     stub.set(ADDR(Package, name), package_name);
     stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, architecture), package_architecture);
-    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, conflicts), package_conflicts_null);
 
 
     ConflictResult cr = p->isConflictSatisfy("i386", package);

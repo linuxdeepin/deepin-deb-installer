@@ -75,9 +75,9 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkGui REQUIRED)
-find_package(DtkCore REQUIRED)
+find_package(DtkWidget5.5 REQUIRED)
+find_package(DtkGui5.5 REQUIRED)
+find_package(DtkCore5.5 REQUIRED)
 find_package(Qt5DBus REQUIRED)
 set(LINK_LIBS
     Qt5::Core
@@ -86,9 +86,9 @@ set(LINK_LIBS
     Qt5::DBus
     QApt
     Qt5::Concurrent
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
+    ${DtkWidget5.5_LIBRARIES}
+    ${DtkCore5.5_LIBRARIES}
+    ${DtkGUI5.5_LIBRARIES}
 )
 
 macro(SUBDIRLIST result curdir)
@@ -135,9 +135,9 @@ target_link_libraries(${APP_BIN_NAME}
     Qt5::DBus
     QApt
     Qt5::Concurrent
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
+    ${DtkWidget5.5_LIBRARIES}
+    ${DtkCore5.5_LIBRARIES}
+    ${DtkGUI5.5_LIBRARIES}
 )
 set(CMAKE_INSTALL_PREFIX /usr)
 

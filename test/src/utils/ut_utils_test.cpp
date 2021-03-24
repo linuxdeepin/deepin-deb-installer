@@ -23,15 +23,6 @@ TEST(Utils_Test, Utils_UT_loadFontFamilyByType)
     Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 }
 
-TEST(Utils_Test, Utils_UT_loadFontBySizeAndWeight)
-{
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
-
-
-    QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
-
-    ASSERT_EQ(pkg_name_font.weight(), QFont::Medium);
-}
 void util_setFont(const QFont &)
 {
     return;
