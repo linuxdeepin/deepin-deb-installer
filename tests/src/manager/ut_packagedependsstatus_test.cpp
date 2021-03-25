@@ -23,86 +23,72 @@
 #include "../deb_installer/model/deblistmodel.h"
 #include <stub.h>
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_ok)
+class ut_packageDependsStatus_Test : public ::testing::Test
 {
-    PackageDependsStatus *pds = new PackageDependsStatus();
+    // Test interface
+protected:
+    void SetUp()
+    {
+        big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
+    }
+    void TearDown()
+    {
+        delete m_pds;
+    }
 
-    ASSERT_EQ(pds->ok().status, DebListModel::DependsOk);
-    delete pds;
+    PackageDependsStatus *m_pds = nullptr;
+    PackageDependsStatus *big = nullptr;
+};
+
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_ok)
+{
+    ASSERT_EQ(m_pds->ok().status, DebListModel::DependsOk);
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_available)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_available)
 {
-    PackageDependsStatus *pds = new PackageDependsStatus();
-
-    ASSERT_EQ(pds->available("package").status, DebListModel::DependsAvailable);
-    delete pds;
+    ASSERT_EQ(m_pds->available("package").status, DebListModel::DependsAvailable);
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isBreak)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_isBreak)
 {
-    PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-
-    ASSERT_TRUE(pds->isBreak());
-    delete pds;
+    m_pds = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
+    ASSERT_TRUE(m_pds->isBreak());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAvailable)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_isAvailable)
 {
-    PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
+    m_pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
 
-    ASSERT_TRUE(pds->isAvailable());
-    delete pds;
+    ASSERT_TRUE(m_pds->isAvailable());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_isAuthCancel)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_isAuthCancel)
 {
-    PackageDependsStatus *pds = new PackageDependsStatus(DebListModel::DependsAuthCancel, "packageName");
-
-    ASSERT_TRUE(pds->isAuthCancel());
-    delete pds;
+    m_pds = new PackageDependsStatus(DebListModel::DependsAuthCancel, "packageName");
+    ASSERT_TRUE(m_pds->isAuthCancel());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_min)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_min)
 {
-    PackageDependsStatus *small = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
-
-    PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-
-    ASSERT_TRUE(small->min(*big).isAvailable());
-    delete small;
-    delete big;
+    m_pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
+    ASSERT_TRUE(m_pds->min(*big).isAvailable());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_minEq)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_minEq)
 {
-    PackageDependsStatus *small = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
-
-    PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-
-    ASSERT_TRUE(small->minEq(*big).isAvailable());
-    delete small;
-    delete big;
+    m_pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
+    ASSERT_TRUE(m_pds->minEq(*big).isAvailable());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_max)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_max)
 {
-    PackageDependsStatus *small = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
-
-    PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-
-    ASSERT_TRUE(small->max(*big).isBreak());
-    delete small;
-    delete big;
+    m_pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
+    ASSERT_TRUE(m_pds->max(*big).isBreak());
 }
 
-TEST(PackageDependsStatus_Test, PackageDependsStatus_UT_maxEq)
+TEST_F(ut_packageDependsStatus_Test, PackageDependsStatus_UT_maxEq)
 {
-    PackageDependsStatus *small = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
-
-    PackageDependsStatus *big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-
-    ASSERT_TRUE(small->maxEq(*big).isBreak());
-    delete small;
-    delete big;
+    m_pds = new PackageDependsStatus(DebListModel::DependsAvailable, "packageName");
+    ASSERT_TRUE(m_pds->maxEq(*big).isBreak());
 }

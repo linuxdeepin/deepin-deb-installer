@@ -27,56 +27,58 @@
 #include <QFileInfo>
 using namespace QApt;
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_setPackage)
+class ut_addPackageThread_Test : public ::testing::Test
 {
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
+    // Test interface
+protected:
+    void SetUp()
+    {
+        md5 << "24b0ce68d7af97ede709f3b723e686af";
+        m_addPkgThread = new AddPackageThread(md5);
+    }
+    void TearDown()
+    {
+        delete m_addPkgThread;
+    }
 
+    AddPackageThread *m_addPkgThread = nullptr;
+    Stub stub;
+    QSet<QByteArray> md5;
+};
+
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_setPackage)
+{
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
-    ASSERT_EQ(addPkgThread->m_packages.size(), 2);
-    delete addPkgThread;
+    ASSERT_EQ(m_addPkgThread->m_packages.size(), 2);
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_setAppendPackagesMd5)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_setAppendPackagesMd5)
 {
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     md5.clear();
     md5 << "test";
-    addPkgThread->setAppendPackagesMd5(md5);
+    m_addPkgThread->setAppendPackagesMd5(md5);
 
-    ASSERT_TRUE(addPkgThread->m_appendedPackagesMd5.contains("test"));
-    delete addPkgThread;
+    ASSERT_TRUE(m_addPkgThread->m_appendedPackagesMd5.contains("test"));
 }
 
 bool isValid()
 {
     return true;
 }
-TEST(AddPackageThread_Test, UT_AddPackageThread_checkInvalid)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_checkInvalid)
 {
-    Stub stub;
-
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(DebFile, isValid), isValid);
 
-    addPkgThread->checkInvalid();
+    m_addPkgThread->checkInvalid();
 
-    ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
-    delete addPkgThread;
+    ASSERT_EQ(m_addPkgThread->m_validPackageCount, 2);
 }
 QByteArray md5sum()
 {
@@ -93,27 +95,21 @@ bool ut_dealInvalidPackage()
     return true;
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_run)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_run)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
     stub.set(ADDR(DebFile, packageName), packagename);
     stub.set(ADDR(AddPackageThread, dealInvalidPackage), ut_dealInvalidPackage);
 
-    addPkgThread->run();
+    m_addPkgThread->run();
 
-    ASSERT_EQ(addPkgThread->m_validPackageCount, 2);
-    addPkgThread->terminate();
-    delete addPkgThread;
+    ASSERT_EQ(m_addPkgThread->m_validPackageCount, 2);
+    m_addPkgThread->terminate();
 }
 bool apt_mkdir(const QString &dirName)
 {
@@ -131,16 +127,11 @@ bool ut_mkTempDir()
     return false;
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_SymbolicLink)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
@@ -150,21 +141,14 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_SymbolicLink)
     //(int(A::*)(int))ADDR(A,foo)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
     stub.set(ADDR(AddPackageThread, mkTempDir), ut_mkTempDir);
-    ASSERT_STREQ(addPkgThread->SymbolicLink("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
-    delete addPkgThread;
+    ASSERT_STREQ(m_addPkgThread->SymbolicLink("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
 
-
-TEST(AddPackageThread_Test, UT_AddPackageThread_mkTempDir)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_mkTempDir)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
@@ -173,20 +157,14 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_mkTempDir)
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
     //(int(A::*)(int))ADDR(A,foo)
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
-    ASSERT_TRUE(addPkgThread->mkTempDir());
-    delete addPkgThread;
+    ASSERT_TRUE(m_addPkgThread->mkTempDir());
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_link)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_link)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
@@ -195,8 +173,7 @@ TEST(AddPackageThread_Test, UT_AddPackageThread_link)
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
 
-    ASSERT_STREQ(addPkgThread->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
-    delete addPkgThread;
+    ASSERT_STREQ(m_addPkgThread->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
 
 bool thread_stub_is_open()
@@ -277,98 +254,68 @@ bool add_stub_permission_false(QFile::Permissions permissions)
     return false;
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealInvalidPackage)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_true);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
 
-    addPkgThread->dealInvalidPackage("");
-    delete addPkgThread;
+    m_addPkgThread->dealInvalidPackage("");
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_false)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_false)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_true);
 
-    addPkgThread->dealInvalidPackage("");
-    delete addPkgThread;
+    m_addPkgThread->dealInvalidPackage("");
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_noPermission)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealInvalidPackage_noPermission)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_false);
 
-    addPkgThread->dealInvalidPackage("");
-    delete addPkgThread;
+    m_addPkgThread->dealInvalidPackage("");
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_absoluteFilePath)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_absoluteFilePath)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
 
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
 
-    ASSERT_STREQ("", addPkgThread->dealPackagePath("test").toUtf8());
-    delete addPkgThread;
+    ASSERT_STREQ("", m_addPkgThread->dealPackagePath("test").toUtf8());
 }
 
-TEST(AddPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink)
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink)
 {
-    Stub stub;
-    QSet<QByteArray> md5;
-    md5 << "24b0ce68d7af97ede709f3b723e686af";
-    AddPackageThread *addPkgThread = new AddPackageThread(md5);
-
     QStringList dependsList;
     dependsList << "package1" << "package";
-    addPkgThread->setPackages(dependsList);
+    m_addPkgThread->setPackages(dependsList);
 
     stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
 
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
 
-    ASSERT_STREQ("", addPkgThread->dealPackagePath(" ").toUtf8());
-    delete addPkgThread;
+    ASSERT_STREQ("", m_addPkgThread->dealPackagePath(" ").toUtf8());
 }

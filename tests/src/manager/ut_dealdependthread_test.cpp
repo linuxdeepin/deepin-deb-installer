@@ -22,30 +22,37 @@
 #include <QProcess>
 #include <QIODevice>
 
-
-
-TEST(DealDependThread_Test, DealDependThread_UT_setDependsList)
+class ut_dealDependThread_Test : public ::testing::Test
 {
-    DealDependThread *dThread = new DealDependThread();
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_dThread = new DealDependThread();
+    }
+    void TearDown()
+    {
+        delete m_dThread;
+    }
 
+    DealDependThread *m_dThread = nullptr;
+    Stub stub;
+};
+
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_setDependsList)
+{
     QStringList dependsList;
     dependsList << "package1" << "package";
-    dThread->setDependsList(dependsList, 0);
+    m_dThread->setDependsList(dependsList, 0);
 
-    ASSERT_EQ(dThread->m_dependsList.size(), 2);
-    delete dThread;
+    ASSERT_EQ(m_dThread->m_dependsList.size(), 2);
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_setBrokenDepend)
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_setBrokenDepend)
 {
-    DealDependThread *dThread = new DealDependThread();
+    m_dThread->setBrokenDepend("package");
 
-
-    dThread->setBrokenDepend("package");
-
-    ASSERT_STREQ(dThread->m_brokenDepend.toLocal8Bit(), "package");
-
-    delete dThread;
+    ASSERT_STREQ(m_dThread->m_brokenDepend.toLocal8Bit(), "package");
 }
 
 void proc_start(const QString &program, const QStringList &arguments, QIODevice::OpenModeFlag mode)
@@ -56,44 +63,29 @@ void proc_start(const QString &program, const QStringList &arguments, QIODevice:
     return;
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_start)
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_start)
 {
-    DealDependThread *dThread = new DealDependThread();
-
-    Stub stub;
-
     //(int(A::*)(int))ADDR(A,foo)
     //stub.set((int(A::*)(double))ADDR(A,foo), foo_stub_double);
     stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), proc_start);
-
-    dThread->start();
-    dThread->terminate();
-    dThread->wait();
-
-    delete dThread;
+    m_dThread->start();
+    m_dThread->terminate();
+    m_dThread->wait();
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_onFinished)
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_onFinished)
 {
-    DealDependThread *dThread = new DealDependThread();
+    m_dThread->bDependsStatusErr = false;
+    m_dThread->onFinished(-1);
 
-    dThread->bDependsStatusErr = false;
-    dThread->onFinished(-1);
-
-    ASSERT_FALSE(dThread->bDependsStatusErr);
-    delete dThread;
-
+    ASSERT_FALSE(m_dThread->bDependsStatusErr);
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_finished)
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_finished)
 {
-    DealDependThread *dThread = new DealDependThread();
+    emit m_dThread->proc->finished(0);
 
-    emit dThread->proc->finished(0);
-
-    ASSERT_FALSE(dThread->bDependsStatusErr);
-    delete dThread;
-
+    ASSERT_FALSE(m_dThread->bDependsStatusErr);
 }
 
 QByteArray readAllStandardOutput_success()
@@ -101,13 +93,8 @@ QByteArray readAllStandardOutput_success()
     return "Not authorized";
 }
 
-TEST(DealDependThread_Test, DealDependThread_UT_on_readoutput)
+TEST_F(ut_dealDependThread_Test, DealDependThread_UT_on_readoutput)
 {
-    DealDependThread *dThread = new DealDependThread();
-    Stub stub;
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
-    dThread->on_readoutput();
-
-    delete dThread;
-
+    m_dThread->on_readoutput();
 }
