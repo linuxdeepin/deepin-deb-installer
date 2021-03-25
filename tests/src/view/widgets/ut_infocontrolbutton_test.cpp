@@ -28,56 +28,51 @@
 class InfoControlButton_Test : public UT_HEAD
 {
 public:
-    virtual void setup()
+    virtual void SetUp()
     {
+        m_infoControlBtn = new InfoControlButton("", "");
     }
     void TearDown()
     {
-        delete btn;
+        delete m_infoControlBtn;
     }
-    InfoControlButton *btn;
+    InfoControlButton *m_infoControlBtn;
 };
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_setExpandTips)
 {
-    btn = new InfoControlButton("", "");
-    btn->setExpandTips("");
+    m_infoControlBtn->setExpandTips("");
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_setShrinkTips)
 {
-    btn = new InfoControlButton("", "");
-    btn->setShrinkTips("");
+    m_infoControlBtn->setShrinkTips("");
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_onMouseRelease)
 {
-    btn = new InfoControlButton("", "");
-    btn->onMouseRelease();
-    btn->m_expand = true;
-    btn->onMouseRelease();
-    EXPECT_FALSE(btn->m_expand);
+    m_infoControlBtn->onMouseRelease();
+    m_infoControlBtn->m_expand = true;
+    m_infoControlBtn->onMouseRelease();
+    EXPECT_FALSE(m_infoControlBtn->m_expand);
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_themeChanged)
 {
-    btn = new InfoControlButton("", "");
-    btn->themeChanged();
-    btn->m_expand = true;
-    btn->themeChanged();
-    EXPECT_TRUE(btn->m_expand);
+    m_infoControlBtn->themeChanged();
+    m_infoControlBtn->m_expand = true;
+    m_infoControlBtn->themeChanged();
+    EXPECT_TRUE(m_infoControlBtn->m_expand);
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_mouseReleaseEvent)
 {
-    btn = new InfoControlButton("", "");
     QMouseEvent mouseReleaseEvent(QEvent::MouseButtonRelease, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    btn->mouseReleaseEvent(&mouseReleaseEvent);
+    m_infoControlBtn->mouseReleaseEvent(&mouseReleaseEvent);
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_keyPressEvent)
 {
-    btn = new InfoControlButton("", "");
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
-    QCoreApplication::sendEvent(btn, &keyPressEvent);
+    QCoreApplication::sendEvent(m_infoControlBtn, &keyPressEvent);
 }

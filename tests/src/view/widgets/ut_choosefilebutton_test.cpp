@@ -22,16 +22,29 @@
 
 #include <gtest/gtest.h>
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+class ut_chooseFileButton_TEST : public ::testing::Test
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
-    btn->setText("");
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_choosFileBtn = new ChooseFileButton("");
+    }
+    void TearDown()
+    {
+        delete m_choosFileBtn;
+    }
+
+    ChooseFileButton *m_choosFileBtn = nullptr;
+};
+
+TEST_F(ut_chooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+{
+    m_choosFileBtn->setText("");
 }
 
-TEST(ChooseFileButton_TEST, ChooseFileButton_UT_keyPressEvent)
+TEST_F(ut_chooseFileButton_TEST, ChooseFileButton_UT_keyPressEvent)
 {
-    ChooseFileButton *btn = new ChooseFileButton("");
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
-    QCoreApplication::sendEvent(btn, &keyPressEvent);
-    delete btn;
+    QCoreApplication::sendEvent(m_choosFileBtn, &keyPressEvent);
 }

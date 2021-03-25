@@ -21,27 +21,34 @@
 
 #include <gtest/gtest.h>
 
-TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_setTextColor)
+class ut_installProcessInfoView_Test : public ::testing::Test
 {
-    InstallProcessInfoView *view = new InstallProcessInfoView(100, 50);
-    view->setTextColor(DPalette::TextTitle);
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_infoView = new InstallProcessInfoView(100, 50);
+    }
+    void TearDown()
+    {
+        delete m_infoView;
+    }
+
+    InstallProcessInfoView *m_infoView = nullptr;
+};
+
+TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_setTextColor)
+{
+    m_infoView->setTextColor(DPalette::TextTitle);
 }
 
-TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_appendText)
+TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_appendText)
 {
-    InstallProcessInfoView *view = new InstallProcessInfoView(100, 50);
-    view->appendText("");
-    view->repaint();
+    m_infoView->appendText("");
+    m_infoView->repaint();
 }
 
-TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_clearText)
+TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_clearText)
 {
-    InstallProcessInfoView *view = new InstallProcessInfoView(100, 50);
-    view->clearText();
-}
-
-TEST(InstallProcessInfoView_Test, InstallProcessInfoView_UT_delete)
-{
-    InstallProcessInfoView *view = new InstallProcessInfoView(100, 50);
-    delete view;
+    m_infoView->clearText();
 }

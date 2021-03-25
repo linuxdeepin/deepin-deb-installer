@@ -100,24 +100,37 @@ QStringList delegate_backend_architectures()
     return {"i386", "amd64"};
 }
 
-TEST(packageslistdelegate_Test, packageslistdelegate_UT_getItemHeight)
+class ut_packageslistdelegate_Test : public ::testing::Test
 {
-    PackagesListView *listview = new PackagesListView;
-    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
-    delegate->getItemHeight(48);
-    delete delegate;
-    delete listview;
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_listview = new PackagesListView;
+        m_delegate = new PackagesListDelegate(nullptr, m_listview);
+    }
+    void TearDown()
+    {
+        delete m_delegate;
+        delete m_listview;
+    }
+
+    PackagesListView *m_listview = nullptr;
+    PackagesListDelegate *m_delegate;
+    Stub stub;
+};
+
+TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_getItemHeight)
+{
+    m_delegate->getItemHeight(48);
 }
 
-TEST(packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatus)
+TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatus)
 {
-    PackagesListView *listview = new PackagesListView;
-    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
-    QPainter painter(listview);
-    delegate->refreshDebItemStatus(1, QRect(0, 0, 10, 10), &painter, true, true);
-    delegate->refreshDebItemStatus(2, QRect(0, 0, 10, 10), &painter, true, true);
-    delete delegate;
-    delete listview;
+    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, m_listview);
+    QPainter painter(m_listview);
+    m_delegate->refreshDebItemStatus(1, QRect(0, 0, 10, 10), &painter, true, true);
+    m_delegate->refreshDebItemStatus(2, QRect(0, 0, 10, 10), &painter, true, true);
 }
 
 QVariant stud_data(int role)
@@ -125,13 +138,11 @@ QVariant stud_data(int role)
     return DebListModel::Waiting;
 }
 
-TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
+TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
 {
-    PackagesListView *listview = new PackagesListView;
-    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
-    QPainter painter(listview);
+    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, m_listview);
+    QPainter painter(m_listview);
     QStyleOptionViewItem option;
-    Stub stub;
     stub.set(ADDR(Backend, init), delegate_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
@@ -151,9 +162,7 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_paint)
     DebListModel *model = new DebListModel;
     model->appendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
-    delegate->paint(&painter, option, index);
-    delete delegate;
-    delete listview;
+    m_delegate->paint(&painter, option, index);
 }
 
 PackageDependsStatus delegate_getPackageDependsStatus(const int index)
@@ -162,13 +171,11 @@ PackageDependsStatus delegate_getPackageDependsStatus(const int index)
     PackageDependsStatus status;
     return status;
 }
-TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
+TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
 {
-    PackagesListView *listview = new PackagesListView;
-    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, listview);
+    PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, m_listview);
     QStyleOptionViewItem option;
 
-    Stub stub;
     stub.set(ADDR(Backend, init), delegate_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
     stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
@@ -190,7 +197,5 @@ TEST(packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
     DebListModel *model = new DebListModel;
     model->appendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
-    delegate->sizeHint(option, index);
-    delete delegate;
-    delete listview;
+    m_delegate->sizeHint(option, index);
 }

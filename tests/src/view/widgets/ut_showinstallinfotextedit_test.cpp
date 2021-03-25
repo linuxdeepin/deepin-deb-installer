@@ -28,19 +28,33 @@ Qt::MouseEventSource stud_source()
     return Qt::MouseEventSynthesizedByQt;
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_slideGesture)
+class ut_showInstallInfoTextEdit_Test : public ::testing::Test
 {
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
-    edit->slideGesture(5);
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_infoTextEdit = new ShowInstallInfoTextEdit;
+    }
+    void TearDown()
+    {
+        delete m_infoTextEdit;
+    }
+
+    ShowInstallInfoTextEdit *m_infoTextEdit = nullptr;
+};
+
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_slideGesture)
+{
+    m_infoTextEdit->slideGesture(5);
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_onSelectionArea)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_onSelectionArea)
 {
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
-    edit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
-    QTextCursor cursor = edit->textCursor();
+    m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
+    QTextCursor cursor = m_infoTextEdit->textCursor();
     cursor.selectedText() = "//";
-    edit->onSelectionArea();
+    m_infoTextEdit->onSelectionArea();
 }
 
 TEST(FlashTween_TEST, FlashTween_UT_start)
@@ -61,51 +75,46 @@ int state()
     return states;
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_tapGestureTriggered)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_tapGestureTriggered)
 {
     Stub stub;
     stub.set(ADDR(QGesture, state), state);
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
+
     while (states <= 4) {
-        edit->tapGestureTriggered(nullptr);
+        m_infoTextEdit->tapGestureTriggered(nullptr);
         if (states != 2 && states != 4)
-            edit->tapAndHoldGestureTriggered(nullptr);
+            m_infoTextEdit->tapAndHoldGestureTriggered(nullptr);
         states++;
     }
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_gestureEvent)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
 {
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
     QGesture *gesture = new QGesture();
 
     QGestureEvent gestureEvent(QList<QGesture *> {gesture, gesture});
-    edit->gestureEvent(&gestureEvent);
+    m_infoTextEdit->gestureEvent(&gestureEvent);
     delete gesture;
-    delete edit;
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
 {
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
     QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    edit->mouseReleaseEvent(&releaseEvent);
-    delete edit;
+    m_infoTextEdit->mouseReleaseEvent(&releaseEvent);
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseMoveEvent)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEvent)
 {
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
     QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    edit->mouseMoveEvent(&moveEvent);
+    m_infoTextEdit->mouseMoveEvent(&moveEvent);
 }
 
-TEST(ShowInstallInfoTextEdit_TEST, ShowInstallInfoTextEdit_UT_mouseMoveEvent_source)
+TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEvent_source)
 {
     Stub stub;
     stub.set(ADDR(QMouseEvent, source), stud_source);
-    ShowInstallInfoTextEdit *edit = new ShowInstallInfoTextEdit;
-    edit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
+
+    m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    edit->mouseMoveEvent(&moveEvent);
+    m_infoTextEdit->mouseMoveEvent(&moveEvent);
 }

@@ -30,44 +30,53 @@ DGuiApplicationHelper::ColorType stub_themeType()
     return DGuiApplicationHelper::DarkType;
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_themeChanged)
+class ut_coloredProgressBar_Test : public ::testing::Test
 {
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    bar->themeChanged();
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_colorProcessBar = new ColoredProgressBar;
+    }
+    void TearDown()
+    {
+        delete m_colorProcessBar;
+    }
+
+    ColoredProgressBar *m_colorProcessBar = nullptr;
+};
+
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged)
+{
+    m_colorProcessBar->themeChanged();
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_addThreshold)
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_addThreshold)
 {
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    bar->addThreshold(0, QBrush(nullptr));
+    m_colorProcessBar->addThreshold(0, QBrush(nullptr));
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_removeThreshold)
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_removeThreshold)
 {
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    bar->removeThreshold(1);
+    m_colorProcessBar->removeThreshold(1);
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_thresholds)
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_thresholds)
 {
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    qDebug() << bar->thresholds();
+    qDebug() << m_colorProcessBar->thresholds();
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_paintEvent_Light)
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_paintEvent_Light)
 {
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    QPaintEvent paint(QRect(bar->rect()));
-    bar->paintEvent(&paint);
-    delete bar;
+    QPaintEvent paint(QRect(m_colorProcessBar->rect()));
+    m_colorProcessBar->paintEvent(&paint);
 }
 
-TEST(ColoredProgressBar_TEST, ColoredProgressBar_UT_paintEvent_Dark)
+TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_paintEvent_Dark)
 {
     Stub stub;
     stub.set(ADDR(DGuiApplicationHelper, themeType), stub_themeType);
-    ColoredProgressBar *bar = new ColoredProgressBar;
-    QPaintEvent paint(QRect(bar->rect()));
-    bar->paintEvent(&paint);
-    delete bar;
+
+    QPaintEvent paint(QRect(m_colorProcessBar->rect()));
+    m_colorProcessBar->paintEvent(&paint);
 }

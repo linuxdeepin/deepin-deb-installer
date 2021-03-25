@@ -25,105 +25,102 @@
 
 #include <stub.h>
 
-TEST(packagelistview_Test, packagelistview_UT_initUI)
+class ut_packagelistview_Test : public ::testing::Test
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->initUI();
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_listview = new PackagesListView;
+    }
+    void TearDown()
+    {
+        delete m_listview;
+    }
+
+    PackagesListView *m_listview = nullptr;
+};
+
+TEST_F(ut_packagelistview_Test, packagelistview_UT_initUI)
+{
+    m_listview->initUI();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_initConnection)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_initConnection)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->initConnections();
+    m_listview->initConnections();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_initShortcus)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_initShortcus)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->initShortcuts();
+    m_listview->initShortcuts();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_initRightContextMenu)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_initRightContextMenu)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->initRightContextMenu();
+    m_listview->initRightContextMenu();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_onShortcutDeleteAction)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_onShortcutDeleteAction)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->onShortcutDeleteAction();
+    m_listview->onShortcutDeleteAction();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_onListViewShowContextMenu)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_onListViewShowContextMenu)
 {
-    PackagesListView *listview = new PackagesListView;
     QModelIndex index;
-    listview->onListViewShowContextMenu(index);
+    m_listview->onListViewShowContextMenu(index);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_onRightMenuDeleteAction)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_onRightMenuDeleteAction)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->onRightMenuDeleteAction();
+    m_listview->onRightMenuDeleteAction();
 }
 
-TEST(packagelistview_Test, packagelistview_UT_getPos)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_getPos)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->m_currentIndex = 1;
-    listview->getPos(QRect(1, 1, 1, 1), 1);
+    m_listview->m_currentIndex = 1;
+    m_listview->getPos(QRect(1, 1, 1, 1), 1);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)
 {
-    PackagesListView *listview = new PackagesListView;
-    listview->setRightMenuShowStatus(true);
+    m_listview->setRightMenuShowStatus(true);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_setSelection)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_setSelection)
 {
-    PackagesListView *listview = new PackagesListView;
     QItemSelectionModel::SelectionFlags command;
-    listview->setSelection(QRect(10, 10, 10, 10), command);
-    ASSERT_FALSE(listview->m_bShortcutDelete);
+    m_listview->setSelection(QRect(10, 10, 10, 10), command);
+    ASSERT_FALSE(m_listview->m_bShortcutDelete);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_mousePressEvent)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_mousePressEvent)
 {
-    PackagesListView *listview = new PackagesListView;
     QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    listview->mousePressEvent(&mousePressEvent);
+    m_listview->mousePressEvent(&mousePressEvent);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_PaintEvent)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_PaintEvent)
 {
-    PackagesListView *listview = new PackagesListView;
-    QPaintEvent paint(QRect(listview->rect()));
-    listview->paintEvent(&paint);
-    delete listview;
+    QPaintEvent paint(QRect(m_listview->rect()));
+    m_listview->paintEvent(&paint);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_keyPressEvent)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_keyPressEvent)
 {
-    PackagesListView *listview = new PackagesListView;
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
-    QCoreApplication::sendEvent(listview, &keyPressEvent);
-    delete listview;
+    QCoreApplication::sendEvent(m_listview, &keyPressEvent);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_focusInEvent)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_focusInEvent)
 {
-    PackagesListView *listview = new PackagesListView;
     QFocusEvent focus(QFocusEvent::FocusIn);
-    QCoreApplication::sendEvent(listview, &focus);
-    delete listview;
+    QCoreApplication::sendEvent(m_listview, &focus);
 }
 
-TEST(packagelistview_Test, packagelistview_UT_event)
+TEST_F(ut_packagelistview_Test, packagelistview_UT_event)
 {
-    PackagesListView *listview = new PackagesListView;
     QEvent event(QEvent::FontChange);
-    QCoreApplication::sendEvent(listview, &event);
-    delete listview;
+    QCoreApplication::sendEvent(m_listview, &event);
 }

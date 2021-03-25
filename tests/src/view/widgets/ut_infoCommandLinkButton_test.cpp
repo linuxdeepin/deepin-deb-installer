@@ -39,4 +39,5 @@ TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_keyPressEvent)
     InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
     QCoreApplication::sendEvent(btn, &keyPressEvent);
+    delete btn;
 }

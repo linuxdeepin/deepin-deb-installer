@@ -33,6 +33,7 @@ TEST(FileChooseWidget_TEST, FileChooseWidget_UT_themeChanged)
 {
     FileChooseWidget *fchooseWidget = new FileChooseWidget;
     fchooseWidget->themeChanged();
+    delete fchooseWidget;
 }
 
 TEST(FileChooseWidget_TEST, FileChooseWidget_UT_chooseFiles)
