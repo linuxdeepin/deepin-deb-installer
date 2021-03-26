@@ -129,9 +129,9 @@ macro(SUBDIRLIST result curdir)
     set(${result} ${dirlist})
 endmacro()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src/deb_installer/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src/deb-installer)
 
-SUBDIRLIST(all_src ${CMAKE_CURRENT_SOURCE_DIR}/../src/deb_installer/)
+SUBDIRLIST(all_src ${CMAKE_CURRENT_SOURCE_DIR}/../src/deb-installer/)
 
 #Include all app own subdirectorys
 foreach(subdir ${all_src})
@@ -139,12 +139,12 @@ foreach(subdir ${all_src})
 endforeach()
 
 file(GLOB_RECURSE APP_SRCS
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/singleInstallerApplication.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/manager/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/model/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/utils/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/view/pages/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/view/widgets/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/singleInstallerApplication.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/manager/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/model/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/utils/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/pages/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/widgets/*.cpp
     )
 FILE(GLOB allTestSource
   src/*.cpp
@@ -155,7 +155,7 @@ FILE(GLOB allTestSource
   src/view/widgets/*.cpp
 )
 include_directories(src)
-include_directories( ${CMAKE_CURRENT_LIST_DIR}/../src/deb_installer/)
+include_directories( ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
 # Tell CMake to create the executable

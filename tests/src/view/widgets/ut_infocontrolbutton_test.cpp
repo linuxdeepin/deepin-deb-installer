@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/infocontrolbutton.h"
+#include "../deb-installer/view/widgets/infocontrolbutton.h"
 
 #include <ut_Head.h>
 

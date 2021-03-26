@@ -24,7 +24,7 @@ if (NOT DEFINED VERSION)
 endif ()
 set(APP_BIN_NAME "libdeepin-deb-installer")
 
-project(deepin-deb-installer-lib)
+project(deepin-deb-installer-dev)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -43,7 +43,7 @@ set(LINK_LIBS
     QApt
     Qt5::Concurrent
 )
-
+include_directories(${CMAKE_CURRENT_LIST_DIR})
 file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/manager/*.cpp

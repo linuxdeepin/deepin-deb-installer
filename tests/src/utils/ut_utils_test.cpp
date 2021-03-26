@@ -18,7 +18,7 @@
 #include <gtest/gtest.h>
 
 
-#include "../deb_installer/utils/utils.h"
+#include "../deb-installer/utils/utils.h"
 
 #include <stub.h>
 #include <DFontSizeManager>

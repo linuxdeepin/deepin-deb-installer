@@ -17,9 +17,9 @@
 
 #include <gtest/gtest.h>
 
-#include "../deb_installer/model/deblistmodel.h"
-#include "../deb_installer/manager/packagesmanager.h"
-#include "../deb_installer/manager/PackageDependsStatus.h"
+#include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/manager/packagesmanager.h"
+#include "../deb-installer/manager/PackageDependsStatus.h"
 #include "utils/utils.h"
 
 #include <stub.h>

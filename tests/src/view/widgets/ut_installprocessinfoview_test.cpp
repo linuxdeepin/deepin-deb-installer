@@ -15,8 +15,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/installprocessinfoview.h"
-#include "../deb_installer/view/widgets/ShowInstallInfoTextEdit.h"
+#include "../deb-installer/view/widgets/installprocessinfoview.h"
+#include "../deb-installer/view/widgets/ShowInstallInfoTextEdit.h"
 #include <stub.h>
 
 #include <gtest/gtest.h>

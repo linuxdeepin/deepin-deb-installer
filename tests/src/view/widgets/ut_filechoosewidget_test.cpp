@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/filechoosewidget.h"
+#include "../deb-installer/view/widgets/filechoosewidget.h"
 #include <stub.h>
 
 #include <DFileDialog>

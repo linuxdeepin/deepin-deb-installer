@@ -19,8 +19,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/uninstallconfirmpage.h"
-#include "../deb_installer/view/pages/debinstaller.h"
+#include "../deb-installer/view/pages/uninstallconfirmpage.h"
+#include "../deb-installer/view/pages/debinstaller.h"
 
 #include <stub.h>
 #include <ut_Head.h>

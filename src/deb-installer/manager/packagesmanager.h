@@ -178,7 +178,10 @@ public:
      * @brief backend 获取后端指针
      * @return  后端的指针
      */
-    QApt::Backend *backend() const { return m_backendFuture.result(); }
+    QApt::Backend *backend() const
+    {
+        return m_backendFuture.result();
+    }
 
 //// 包状态相关函数
 public:
@@ -188,7 +191,10 @@ public:
      * @param index  下标
      * @return  包的路径
      */
-    QString package(const int index) const { return m_preparedPackages[index]; }
+    QString package(const int index) const
+    {
+        return m_preparedPackages[index];
+    }
 
     /**
      * @brief isArchError 判断指定下标的包是否符合架构要求

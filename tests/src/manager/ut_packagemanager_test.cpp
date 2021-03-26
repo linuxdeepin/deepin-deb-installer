@@ -17,8 +17,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../deb_installer/manager/PackageDependsStatus.h"
-#include "../deb_installer/manager/packagesmanager.h"
+#include "../deb-installer/manager/PackageDependsStatus.h"
+#include "../deb-installer/manager/packagesmanager.h"
 
 #include <stub.h>
 #include <QFuture>
@@ -424,8 +424,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
 
-//    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
-
     m_packageManager->appendPackage({"/1"});
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
     ASSERT_TRUE(cr.is_ok());
@@ -437,7 +435,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_01)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
-//    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
     m_packageManager->appendPackage({"/1"});
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
     ASSERT_TRUE(cr.is_ok());
@@ -590,8 +588,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
-//    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
-
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
 
@@ -685,7 +681,6 @@ bool backend_reloadCache()
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_reset)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set(ADDR(Backend, reloadCache), backend_reloadCache);
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
@@ -789,7 +784,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeTwo)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_rmTempDir)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
 
     usleep(10 * 1000);
     m_packageManager->rmTempDir();
@@ -797,7 +791,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_rmTempDir)
 }
 TEST_F(ut_packagesManager_test, PackageManager_UT_020)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
 
     usleep(10 * 1000);
     ASSERT_TRUE(m_packageManager->rmTempDir());
@@ -815,7 +808,6 @@ bool pm_exits()
 }
 TEST_F(ut_packagesManager_test, PackageManager_UT_mkTempDir)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
 
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), pm_mkdir);
     //(int(A::*)(int))ADDR(A,foo)
@@ -827,14 +819,13 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_mkTempDir)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_link)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     usleep(10 * 1000);
     ASSERT_STREQ(m_packageManager->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+//    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -944,7 +935,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_package)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
 {
-    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);

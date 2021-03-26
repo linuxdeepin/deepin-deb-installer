@@ -26,10 +26,10 @@
 #include <QApt/DebFile>
 #include <QWidget>
 
-DWIDGET_USE_NAMESPACE
 class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
+class UninstallConfirmPage;
 
 using QApt::DebFile;
 
@@ -84,16 +84,6 @@ private slots:
      */
     void showPkgRemovedMessage(QString packageName);
 
-
-    /**
-     * @brief onNewAppOpen
-     * @param pid 进程号
-     * @param arguments 要安装的包的全路径的列表
-     * 桌面或文管中双击或右键打开时的槽函数
-     * 会把后缀为.deb的包传递到onPackageSelected中
-     */
-    void onNewAppOpen(qint64 pid, const QStringList &arguments);
-
     /**
      * @brief removePackage
      * @param index 要删除的包的下标
@@ -122,12 +112,6 @@ private slots:
      */
     void onUninstallCancel();
 
-    /**
-     * @brief onStartInstallRequested
-     * 安装开始后，所有的关闭按钮都会被禁止
-     * SP3新增，解决安装开始时焦点闪现的问题。
-     */
-    void onStartInstallRequested();
 
     /**
      * @brief setEnableButton
@@ -246,21 +230,21 @@ private:
     bool checkSuffix(QString filePath);
 
 private:
-    DebListModel *m_fileListModel;                  //model 类
-    FileChooseWidget *m_fileChooseWidget;           //文件选择的widget
-    QStackedLayout *m_centralLayout;                //单包、批量、卸载的widget
-    QPointer<QWidget> m_lastPage;                   //存放上一个页面的指针
+    DebListModel        *m_fileListModel      = nullptr;                  //model 类
+    FileChooseWidget    *m_fileChooseWidget   = nullptr;           //文件选择的widget
+    UninstallConfirmPage *m_uninstallPage     = nullptr;
 
-    int m_dragflag = -1;                            //当前是否允许拖入的标志位
+    QPointer<QWidget>   m_lastPage;                   //存放上一个页面的指针
+    QStackedLayout      *m_centralLayout;                //单包、批量、卸载的widget
+
+    int m_dragflag          = -1;                            //当前是否允许拖入的标志位
 
     int m_iOptionWindowFlag = 0;                    //判断菜单栏是否手动弹出
-    bool bTabFlag = false;                          //Control focus is re-identified from titlebar
-    bool bActiveWindowFlag = true;                  //Window activation id
-    int m_Filterflag = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+    bool bTabFlag           = false;                          //Control focus is re-identified from titlebar
+    bool bActiveWindowFlag  = true;                  //Window activation id
+    int m_Filterflag        = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
-    QPointer<QWidget> m_UninstallPage;              //Store uninstall page
-
-    bool packageAppending = false;
+    bool m_packageAppending = false;
 };
 
 #endif  // DEBINSTALLER_H

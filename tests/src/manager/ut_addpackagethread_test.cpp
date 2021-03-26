@@ -16,8 +16,7 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/manager/AddPackageThread.h"
-
+#include "../deb-installer/manager/AddPackageThread.h"
 
 #include <stub.h>
 #include <QApt/DebFile>

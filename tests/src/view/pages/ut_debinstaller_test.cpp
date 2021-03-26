@@ -15,12 +15,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/debinstaller.h"
-#include "../deb_installer/model/deblistmodel.h"
-#include "../deb_installer/view/pages/multipleinstallpage.h"
-#include "../deb_installer/view/pages/singleinstallpage.h"
-#include "../deb_installer/manager/packagesmanager.h"
-#include "../deb_installer/view/widgets/infocontrolbutton.h"
+#include "../deb-installer/view/pages/debinstaller.h"
+#include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/view/pages/multipleinstallpage.h"
+#include "../deb-installer/view/pages/singleinstallpage.h"
+#include "../deb-installer/manager/packagesmanager.h"
+#include "../deb-installer/view/widgets/infocontrolbutton.h"
 
 #include <stub.h>
 #include <ut_Head.h>
@@ -190,13 +190,10 @@ TEST_F(Debinstaller_UT, total_UT)
 
     deb->enableCloseButton(false);
     deb->enableCloseButton(true);
-    deb->onStartInstallRequested();
 
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerProcessing;
     deb->onPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
-    deb->onNewAppOpen(2222, QStringList() << "deb-installer"
-                      << "test.deb");
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerFinished;
     deb->onPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
@@ -225,7 +222,7 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->setEnableButton(true);
     deb->setEnableButton(false);
     deb->showHiddenButton();
-    deb->packageAppending = true;
+    deb->m_packageAppending = true;
     deb->setEnableButton(true);
     deb->showPkgRemovedMessage("00");
     EXPECT_EQ(deb->backToSinglePage(), nullptr);

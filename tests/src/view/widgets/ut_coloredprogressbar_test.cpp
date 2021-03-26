@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/coloredprogressbar.h"
+#include "../deb-installer/view/widgets/coloredprogressbar.h"
 #include <stub.h>
 #include "utils/utils.h"
 

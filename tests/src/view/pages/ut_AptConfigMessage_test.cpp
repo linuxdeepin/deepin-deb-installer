@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/AptConfigMessage.h"
+#include "../deb-installer/view/pages/AptConfigMessage.h"
 
 #include <stub.h>
 #include <ut_Head.h>

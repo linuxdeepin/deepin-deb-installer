@@ -16,7 +16,7 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/manager/DealDependThread.h"
+#include "../deb-installer/manager/DealDependThread.h"
 
 #include <stub.h>
 #include <QProcess>

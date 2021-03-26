@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include "../deb_installer/manager/PackageDependsStatus.h"
+#include "../deb-installer/manager/PackageDependsStatus.h"
 
 
-#include "../deb_installer/model/deblistmodel.h"
+#include "../deb-installer/model/deblistmodel.h"
 #include <stub.h>
 
 class ut_packageDependsStatus_Test : public ::testing::Test
@@ -34,6 +34,7 @@ protected:
     void TearDown()
     {
         delete m_pds;
+        delete big;
     }
 
     PackageDependsStatus *m_pds = nullptr;

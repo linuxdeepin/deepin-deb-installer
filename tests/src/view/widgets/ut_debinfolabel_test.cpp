@@ -16,7 +16,7 @@
 */
 #include <gtest/gtest.h>
 
-#include "../deb_installer/view/widgets/debinfolabel.h"
+#include "../deb-installer/view/widgets/debinfolabel.h"
 
 #include <QPaintEvent>
 

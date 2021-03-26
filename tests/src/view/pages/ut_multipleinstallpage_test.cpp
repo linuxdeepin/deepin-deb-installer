@@ -15,9 +15,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/multipleinstallpage.h"
-#include "../deb_installer/model/deblistmodel.h"
-#include "../deb_installer/manager/packagesmanager.h"
+#include "../deb-installer/view/pages/multipleinstallpage.h"
+#include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/manager/packagesmanager.h"
 
 #include <stub.h>
 #include <ut_Head.h>

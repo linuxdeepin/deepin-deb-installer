@@ -19,11 +19,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/pages/singleinstallpage.h"
-#include "../deb_installer/model/deblistmodel.h"
-#include "../deb_installer/manager/packagesmanager.h"
-#include "../deb_installer/manager/PackageDependsStatus.h"
-#include "../deb_installer/view/widgets/workerprogress.h"
+#include "../deb-installer/view/pages/singleinstallpage.h"
+#include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/manager/packagesmanager.h"
+#include "../deb-installer/manager/PackageDependsStatus.h"
+#include "../deb-installer/view/widgets/workerprogress.h"
 
 #include <stub.h>
 #include <ut_Head.h>

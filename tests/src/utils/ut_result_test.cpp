@@ -17,7 +17,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../deb_installer/utils/result.h"
+#include "../src/deb-installer/utils/result.h"
 
 #undef private
 #undef protected

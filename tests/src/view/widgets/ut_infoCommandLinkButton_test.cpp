@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/InfoCommandLinkButton.h"
+#include "../deb-installer/view/widgets/InfoCommandLinkButton.h"
 #include "utils/utils.h"
 
 #include <QKeyEvent>

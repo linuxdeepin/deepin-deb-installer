@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/view/widgets/choosefilebutton.h"
+#include "../deb-installer/view/widgets/choosefilebutton.h"
 #include "utils/utils.h"
 
 #include <QKeyEvent>

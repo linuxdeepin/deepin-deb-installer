@@ -77,6 +77,7 @@ else()
   # -ffunction-sections
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
+
 endif()
 
 #Generate the qm file
@@ -130,6 +131,8 @@ foreach(subdir ${all_src})
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}${subdir})
 endforeach()
 
+include_directories(${CMAKE_CURRENT_LIST_DIR}/utils)
+
 file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/manager/*.cpp
@@ -137,6 +140,7 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/utils/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/*.cpp
+
     )
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})

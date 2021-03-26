@@ -17,7 +17,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../deb_installer/utils/DebugTimeManager.h"
+#include "../deb-installer/utils/DebugTimeManager.h"
 
 #undef private
 #undef protected

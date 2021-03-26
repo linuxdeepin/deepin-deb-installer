@@ -19,9 +19,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../deb_installer/singleInstallerApplication.h"
-#include "../deb_installer/utils/utils.h"
-#include "../deb_installer/view/pages/debinstaller.h"
+#include "../deb-installer/singleInstallerApplication.h"
+#include "../deb-installer/utils/utils.h"
+#include "../deb-installer/view/pages/debinstaller.h"
 
 #include <stub.h>
 #include <ut_Head.h>
