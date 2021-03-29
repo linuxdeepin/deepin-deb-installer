@@ -2,16 +2,16 @@
 <name>desktop</name>
 <message>
     <location filename="Desktop Entry]Name" line="0"/>
-    <source>Deepin Package Installer</source><translation>Deepin pakettien asentaja</translation>
+    <source>Deepin Package Installer</source><translation>Deepin ohjelma-asentaja</translation>
 </message>
 <message>
     <location filename="Desktop Entry]GenericName" line="0"/>
-    <source>Package Installer</source><translation>Ohjelmiston asentaja</translation>
+    <source>Package Installer</source><translation>Ohjelma-asentaja</translation>
 </message>
 <message>
     <location filename="Desktop Entry]Comment" line="0"/>
     <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-    <translation>Ohjelmiston asentaja auttaa käyttäjiä asentamaan ja poistamaan ohjelmia.</translation>
+    <translation>Ohjelma-asentaja auttaa käyttäjiä asentamaan ja poistamaan ohjelmia.</translation>
 </message>
 </context>
 </TS>

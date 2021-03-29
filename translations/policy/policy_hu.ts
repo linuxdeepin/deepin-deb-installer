@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!message" line="0"/>
 			<source>Authentication is required to continue the configuration</source>
-			<translation>A konfigurálás folytatásához hitelesítés szükséges</translation>
+			<translation>Hitelesítés szükséges a konfigurálás folytatásához</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!description" line="0"/>
 			<source>authentication</source>
-			<translation>hitelesítés</translation>
+			<translation>Hitelesítés</translation>
 		</message>
 	</context>
 </TS>
