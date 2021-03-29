@@ -63,7 +63,7 @@ TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_removeThreshold)
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_thresholds)
 {
-    qDebug() << m_colorProcessBar->thresholds();
+    m_colorProcessBar->thresholds();
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_paintEvent_Light)
