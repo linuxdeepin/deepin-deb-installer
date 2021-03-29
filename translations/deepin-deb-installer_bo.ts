@@ -37,7 +37,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="439"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1ཡིག་ཆ་མི་འདུག་པས། ཡང་བསྐྱར་འདེམས་རོགས།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="617"/>

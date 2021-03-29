@@ -27,7 +27,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="414"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation>Solo puedes instalar paquetes deb descargados</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="426"/>
@@ -37,7 +37,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="439"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1 aún no existe, vuelva a seleccionar</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="617"/>
@@ -286,7 +286,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="827"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1011"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Degradar</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="830"/>
