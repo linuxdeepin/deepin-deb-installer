@@ -75,8 +75,8 @@ else()
   # -Wl, -O2 Enable linker optimizations
   # -Wl, --gc-sections Remove unused code resulting from -fdsta-sections and
   # -ffunction-sections
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
 
 endif()
 
@@ -166,7 +166,7 @@ set(CMAKE_INSTALL_PREFIX /usr)
 
 # Install files
 install(DIRECTORY ${APP_RES_DIR}/deepin-deb-installer DESTINATION /usr/share/deepin-manual/manual-assets/application/)
-install(TARGETS deepin-deb-installer DESTINATION bin)
+install(TARGETS deepin-deb-installer RUNTIME DESTINATION bin)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
 install(FILES ${APP_DESKTOP} DESTINATION share/applications)
 
