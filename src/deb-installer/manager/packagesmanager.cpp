@@ -696,6 +696,9 @@ void PackagesManager::appendPackage(QStringList packages)
     if (packages.isEmpty()) { //当前放进来的包列表为空（可能拖入的是文件夹）
         return;
     }
+    for (auto pkg : packages) {
+        checkDeb(pkg);
+    }
     checkInvalid(packages);     //运行之前先计算有效文件的数量
     qDebug() << "PackagesManager:" << "append Package" << packages;
     if (packages.size() == 1) {
@@ -1157,6 +1160,7 @@ PackagesManager::~PackagesManager()
         }
         rmTempDirCount++;
     }
+    dthread->deleteLater();
     delete dthread;
 
     //先取消当前异步计算的后端。
@@ -1169,5 +1173,335 @@ PackagesManager::~PackagesManager()
     b->deleteLater();
     delete b;
     PERF_PRINT_END("POINT-02");         //关闭应用
+}
+
+
+
+
+
+bool PackagesManager::checkDeb(QString packagePath)
+{
+
+    DebFile *debfile = new DebFile(packagePath);
+    QApt::Backend *backend = m_backendFuture.result();
+    QStringList arches = backend->architectures();
+    arches.append(QLatin1String("all"));
+    QString debArch = debfile->architecture();
+
+//    qDebug() << "backend.nativeArchitecture" << backend->nativeArchitecture() << backend->architectures();
+    // Check if we support the arch at all
+    if (debArch != backend->nativeArchitecture()) {
+        if (!arches.contains(debArch)) {
+            // Wrong arch
+            qDebug() << "arch error";
+            return false;
+        }
+
+        // We support this foreign arch
+        qDebug() << "m_foreignArch" << debArch;
+        m_foreignArch = debArch;
+    }
+
+    compareDebWithCache(packagePath);
+//    qDebug() << "compareDebWithCache";
+
+    QApt::PackageList conflicts = checkConflicts(packagePath);
+//    qDebug() << "checkConflicts";
+    if (!conflicts.isEmpty()) {
+        return false;
+    }
+
+    QApt::Package *willBreak = checkBreaksSystem(packagePath);
+//    qDebug() << "checkBreaksSystem";
+    if (willBreak) {
+        qDebug() << "will break" << willBreak->name();
+        return false;
+    }
+
+    if (!satisfyDepends(packagePath)) {
+        // create status message
+//        qDebug() << "依赖错误";
+        return false;
+    }
+
+    int toInstall = backend->markedPackages().size();
+
+    if (toInstall) {
+        QStringList packagesName;
+        qDebug() << "需要下载其他的包 数量：" << toInstall;
+
+        for (auto pkg : backend->markedPackages()) {
+            packagesName.append(pkg->name()) ;
+        }
+        qDebug() << "需要下载的包" << packagesName;
+
+
+    } else {
+        qDebug() << "依赖满足";
+    }
+
+    return true;
+}
+
+
+void PackagesManager::compareDebWithCache(QString filePath)
+{
+
+    DebFile *debFile = new DebFile(filePath);
+    QApt::Backend *backend = m_backendFuture.result();
+
+    QString packageName = debFile->packageName() + ":" + m_foreignArch;
+    QApt::Package *pkg = backend->package(packageName);
+
+    if (!pkg) {
+        qDebug() << packageName << " backend 打包失败";
+        return;
+    }
+
+    QString version = debFile->version();
+
+    int res = QApt::Package::compareVersion(debFile->version(), pkg->availableVersion());
+
+    if (res == 0 && !pkg->isInstalled()) {
+        qDebug() << "系统版本与当前安装的版本一致";
+    } else if (res > 0) {
+        qDebug() << "当前正在给该应用降级";
+    } else if (res < 0) {
+        qDebug() << "当前正在更新该应用";
+    }
+}
+
+QString PackagesManager::maybeAppendArchSuffix(const QString &pkgName, bool checkingConflicts)
+{
+    Backend *backend = m_backendFuture.result();
+
+    // Trivial cases where we don't append
+    if (m_foreignArch.isEmpty())
+        return pkgName;
+
+    // Real multiarch checks
+    QString multiArchName = pkgName % ':' % m_foreignArch;
+
+    QApt::Package *multiArchPkg = backend->package(multiArchName);
+
+    // Check for a new dependency, we'll handle that later
+    if (multiArchPkg) {
+//        qDebug() << "多架构打包失败";
+        return multiArchName;
+    }
+
+
+    QApt::Package *pkg = backend->package(pkgName);
+
+//    qDebug() << "pkg" << pkg;
+    if (pkg) {
+//        qDebug() << "原始包 打包失败";
+        return pkgName;
+    }
+    // Check the multi arch state
+//    QApt::MultiArchType type = multiArchPkg->multiArchType();
+
+//    // Add the suffix, unless it's a pkg that can satify foreign deps
+//    if (type == QApt::MultiArchForeign)
+//        return pkgName;
+
+//    // If this is called as part of a conflicts check, any not-multiarch
+//    // enabled package is a conflict implicitly
+//    if (checkingConflicts && type == QApt::MultiArchSame)
+//        return pkgName;
+
+    return pkgName;
+}
+
+QApt::PackageList PackagesManager::checkConflicts(QString packagePath)
+{
+    Backend *backend = m_backendFuture.result();
+    DebFile *debFile = new DebFile(packagePath);
+    QApt::PackageList conflictingPackages;
+    QList<QApt::DependencyItem> conflicts = debFile->conflicts();
+
+    QApt::Package *pkg = nullptr;
+    QString packageName;
+    bool ok = true;
+    foreach (const QApt::DependencyItem &item, conflicts) {
+        foreach (const QApt::DependencyInfo &info, item) {
+            packageName = maybeAppendArchSuffix(info.packageName(), true);
+            pkg = backend->package(packageName);
+
+            if (!pkg) {
+                // FIXME: Virtual package, must check provides
+//                qDebug() << "pkg" << packageName << " 打包失败";
+                continue;
+            }
+
+            string pkgVer = pkg->version().toStdString();
+            string depVer = info.packageVersion().toStdString();
+
+            ok = _system->VS->CheckDep(pkgVer.c_str(),
+                                       info.relationType(),
+                                       depVer.c_str());
+
+            if (ok) {
+                // Group satisfied
+                break;
+            }
+        }
+
+        if (!ok && pkg) {
+            conflictingPackages.append(pkg);
+        }
+    }
+
+    return conflictingPackages;
+}
+
+QApt::Package *PackagesManager::checkBreaksSystem(QString packagePath)
+{
+    DebFile *debFile = new DebFile(packagePath);
+    Backend *backend = m_backendFuture.result();
+    QApt::PackageList systemPackages = backend->availablePackages();
+    string debVer = debFile->version().toStdString();
+
+    foreach (QApt::Package *pkg, systemPackages) {
+        if (!pkg->isInstalled()) {
+            continue;
+        }
+
+        // Check for broken depends
+        foreach (const QApt::DependencyItem &item, pkg->depends()) {
+            foreach (const QApt::DependencyInfo &dep, item) {
+                if (dep.packageName() != debFile->packageName()) {
+                    continue;
+                }
+
+                string depVer = dep.packageVersion().toStdString();
+
+                if (!_system->VS->CheckDep(debVer.c_str(), dep.relationType(),
+                                           depVer.c_str())) {
+                    return pkg;
+                }
+            }
+        }
+
+        // Check for existing conflicts against the .deb
+        // FIXME: Check provided virtual packages too
+        foreach (const QApt::DependencyItem &item, pkg->conflicts()) {
+            foreach (const QApt::DependencyInfo &conflict, item) {
+                if (conflict.packageName() != debFile->packageName()) {
+                    continue;
+                }
+
+                string conflictVer = conflict.packageVersion().toStdString();
+
+                if (_system->VS->CheckDep(debVer.c_str(),
+                                          conflict.relationType(),
+                                          conflictVer.c_str())) {
+                    return pkg;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+bool PackagesManager::satisfyDepends(QString packagePath)
+{
+
+//    qDebug() << "satisfyDepends" << packagePath;
+    QStringList dependsList;
+    DebFile *debFile = new DebFile(packagePath);
+    Backend *backend = m_backendFuture.result();
+    QApt::Package *pkg = nullptr;
+    QString packageName;
+
+//    for (auto item : debFile->depends()) {
+//        for (auto dep : item) {
+//            qDebug() << dep.packageName();
+//            pkg = backend->package(dep.packageName());
+//            if (pkg) {
+//                qDebug() << dep.packageName() << "能够被构建";
+//            } else {
+//                pkg = backend->package(maybeAppendArchSuffix(dep.packageName()));
+//                if (pkg) {
+//                    qDebug() << maybeAppendArchSuffix(dep.packageName()) << "能够被构建";
+//                } else {
+//                    qDebug() << maybeAppendArchSuffix(dep.packageName()) << "构建失败" ;
+//                }
+//            }
+//        }
+//    }
+    foreach (const QApt::DependencyItem &item, debFile->depends()) {
+        bool oneSatisfied = false;
+        foreach (const QApt::DependencyInfo &dep, item) {
+
+            packageName = maybeAppendArchSuffix(dep.packageName());
+            qDebug() << "现在在查找依赖" << packageName;
+            pkg = backend->package(packageName);
+            if (!pkg) {
+                qDebug() << packageName << "构建失败";
+                pkg = backend->package(dep.packageName());
+            }
+
+            if (!pkg) {
+                // FIXME: virtual package handling
+                qDebug() << packageName << " 构建失败";
+                continue;
+            }
+            string debVersion = dep.packageVersion().toStdString();
+
+            // If we're installed, see if we already satisfy the dependency
+            if (pkg->isInstalled()) {
+                qDebug() << packageName << "已经安装";
+                string pkgVersion = pkg->installedVersion().toStdString();
+
+
+                if (_system->VS->CheckDep(pkgVersion.c_str(),
+                                          dep.relationType(),
+                                          debVersion.c_str())) {
+                    oneSatisfied = true;
+                    break;
+                }
+
+                if (Package::compareVersion(pkgVersion.c_str(), debVersion.c_str()) < 0) {
+                    if (pkg) {
+                        pkg->setInstall();
+                        qDebug() << "升级" << pkg->name();
+                    } else {
+                        qDebug() << pkg->name() + "未找到";
+                    }
+                } else { //若依赖包符合版本要求,则不进行升级
+//                    continue;
+                    qDebug() << "不升级";
+                }
+            }
+
+            qDebug() << packageName << "没有安装";
+            // else check if cand ver will satisfy, then mark
+            string candVersion = pkg->availableVersion().toStdString();
+
+            if (!_system->VS->CheckDep(candVersion.c_str(),
+                                       dep.relationType(),
+                                       debVersion.c_str())) {
+                qDebug() << packageName << "依赖检查失败";
+                continue;
+            }
+
+            pkg->setInstall();
+
+
+            dependsList.append(pkg->name());
+            if (!pkg->wouldBreak()) {
+                oneSatisfied = true;
+                break;
+            }
+        }
+
+        if (!oneSatisfied) {
+            qDebug() << dependsList;
+            return false;
+        }
+    }
+
+    return true;
 }
 

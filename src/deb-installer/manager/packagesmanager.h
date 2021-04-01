@@ -29,6 +29,13 @@
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
+
+#include <apt-pkg/debversion.h>
+#include <apt-pkg/pkgsystem.h>
+#include <apt-pkg/version.h>
+#include <apt-pkg/cacheset.h>
+#include <apt-pkg/cachefile.h>
+
 #include <QThread>
 #include <QProcess>
 
@@ -493,6 +500,18 @@ private:
     int m_validPackageCount = 0;
 
     qint64 dependsStatusTotalTime = 0;
+
+private:
+    bool checkDeb(QString packagePath);
+    void compareDebWithCache(QString filePath);
+    QString maybeAppendArchSuffix(const QString &pkgName, bool checkingConflicts = false);
+    QApt::PackageList checkConflicts(QString packagePath);
+    QApt::Package *checkBreaksSystem(QString packagePath);
+    bool satisfyDepends(QString packagePath);
+
+    QString m_foreignArch;
+
+
 
 };
 

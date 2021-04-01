@@ -99,12 +99,16 @@ find_package(DtkWidget REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(Qt5DBus REQUIRED)
+
+find_package(AptPkg REQUIRED)
+
 set(LINK_LIBS
     Qt5::Core
     Qt5::Widgets
     Qt5::Gui
     Qt5::DBus
     QApt
+    apt-pkg
     Qt5::Concurrent
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
@@ -130,6 +134,7 @@ SUBDIRLIST(all_src ${CMAKE_CURRENT_SOURCE_DIR})
 foreach(subdir ${all_src})
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}${subdir})
 endforeach()
+include_directories(${APTPKG_INCLUDE_DIR})
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utils)
 
@@ -157,6 +162,7 @@ target_link_libraries(${APP_BIN_NAME}
     Qt5::Gui
     Qt5::DBus
     QApt
+    apt-pkg
     Qt5::Concurrent
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}

@@ -746,11 +746,13 @@ void DebListModel::onTransactionFinished()
 void DebListModel::onDependsInstallTransactionFinished()//依赖安装关系满足
 {
     if (m_workerStatus == WorkerProcessing) {
-        qInfo() << "installer status error";
+        qInfo() << "onDependsInstallTransactionFinished installer status error";
     }
     Transaction *trans = static_cast<Transaction *>(sender());                                  //获取transaction指针
 
     const auto ret = trans->exitStatus();
+    qDebug() << "reset Package Depends status";
+    m_packagesManager->resetPackageDependsStatus(m_operatingIndex);
 
     if (ret) qWarning() << trans->error() << trans->errorDetails() << trans->errorString();     //transaction发生错误
 
@@ -865,29 +867,39 @@ void DebListModel::installDebs()
         Q_ASSERT_X(m_packageOperateStatus[m_operatingPackageMd5], Q_FUNC_INFO,
                    "package operate status error when start install availble dependencies");
 
-        // 获取到所有的依赖包 准备安装
-        const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
-        //        for (auto const &p : availableDepends) backend->markPackageForInstall(p);
-        //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
-        for (auto const &p : availableDepends) {
-            if (p.contains(" not found")) {                             //依赖安装失败
-                refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
-                // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
-                m_packageFailReason.insert(m_operatingPackageMd5, p);
-                emit appendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
-                bumpInstallIndex();                                     //开始安装下一个包或结束安装
-                return;
-            }
-            backend->markPackageForInstall(p);                          //开始安装依赖包
-        }
+//        // 获取到所有的依赖包 准备安装
+//        const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
+//        //        for (auto const &p : availableDepends) backend->markPackageForInstall(p);
+//        //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
+//        for (auto const &p : availableDepends) {
+//            if (p.contains(" not found")) {                             //依赖安装失败
+//                refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
+//                // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+//                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
+//                m_packageFailReason.insert(m_operatingPackageMd5, p);
+//                emit appendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
+//                bumpInstallIndex();                                     //开始安装下一个包或结束安装
+//                return;
+//            }
+//            backend->markPackageForInstall(p);                          //开始安装依赖包
+//        }
 
         //安装
-        qDebug() << "DebListModel:" << "install" << deb.packageName() << "dependencies: " << availableDepends;
+//        qDebug() << "DebListModel:" << "install" << deb.packageName() << "dependencies: " << availableDepends;
 
-        trans = backend->commitChanges();
-        //依赖安装结果处理
-        connect(trans, &Transaction::finished, this, &DebListModel::onDependsInstallTransactionFinished);
+        if (backend->markedPackages().size() == 0) {
+
+            trans = backend->installFile(deb);//触发Qapt授权框和安装线程
+
+            // 进度变化和结束过程处理
+            connect(trans, &Transaction::progressChanged, this, &DebListModel::transactionProgressChanged);
+            connect(trans, &Transaction::finished, this, &DebListModel::onTransactionFinished);
+        } else {
+            trans = backend->commitChanges();
+            //依赖安装结果处理
+            connect(trans, &Transaction::finished, this, &DebListModel::onDependsInstallTransactionFinished);
+        }
+
     } else {
         //开始安装当前包
         qDebug() << "DebListModel:" << "starting to install package: " << deb.packageName();
