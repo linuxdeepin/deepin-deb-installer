@@ -57,6 +57,13 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
   # 添加宏定义只在debug模式下输出性能打点日志
   add_definitions("-DDEBUG")
 
+else()
+  # -Wl, -O2 Enable linker optimizations
+  # -Wl, --gc-sections Remove unused code resulting from -fdsta-sections and
+  # -ffunction-sections
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
+
   if(CMAKE_SAFETYTEST)
   #安全测试选项
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
@@ -70,14 +77,6 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
     set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -g -fsanitize=address -O2")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}  -g -fsanitize=address -O2")
    endif()
-
-else()
-  # -Wl, -O2 Enable linker optimizations
-  # -Wl, --gc-sections Remove unused code resulting from -fdsta-sections and
-  # -ffunction-sections
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
-
 endif()
 
 #Generate the qm file

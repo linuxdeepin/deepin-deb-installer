@@ -427,9 +427,6 @@ void DebInstaller::reset()
     if (!m_lastPage.isNull()) {
         m_lastPage->deleteLater();
     }
-    if (m_uninstallPage)
-        m_uninstallPage->deleteLater();
-
     m_centralLayout->setCurrentIndex(0);
 
     this->setAcceptDrops(true);

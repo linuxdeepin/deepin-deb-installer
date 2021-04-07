@@ -575,12 +575,8 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
         if (p->recommendsList().contains(packageName)) continue;
         if (p->suggestsList().contains(packageName)) continue;
-        // fix bug: https://pms.uniontech.com/zentao/bug-view-37220.html dde相关组件特殊处理.
-        //修复dde会被动卸载但是不会提示的问题
-        //if (item.contains("dde")) continue;
         ret << item;
 
-        // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
         if (specialPackage().contains(item)) {
             testQueue.append(specialPackage()[item]);
         }
@@ -589,7 +585,6 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
             if (ret.contains(r) || testQueue.contains(r)) continue;
             Package *subPackage = packageWithArch(r, sysArch);
             if (r.startsWith("deepin.")) {  // 此类wine应用在系统中的存在都是以deepin.开头
-                // fix bug: https://pms.uniontech.com/zentao/bug-view-54930.html
                 // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
                 if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
                     for (QString rdepends : subPackage->requiredByList()) {
@@ -1187,6 +1182,7 @@ bool PackagesManager::checkDeb(QString packagePath)
     QStringList arches = backend->architectures();
     arches.append(QLatin1String("all"));
     QString debArch = debfile->architecture();
+    delete debfile;
 
 //    qDebug() << "backend.nativeArchitecture" << backend->nativeArchitecture() << backend->architectures();
     // Check if we support the arch at all
@@ -1255,6 +1251,7 @@ void PackagesManager::compareDebWithCache(QString filePath)
 
     if (!pkg) {
         qDebug() << packageName << " backend 打包失败";
+        delete debFile;
         return;
     }
 
@@ -1269,6 +1266,8 @@ void PackagesManager::compareDebWithCache(QString filePath)
     } else if (res < 0) {
         qDebug() << "当前正在更新该应用";
     }
+    delete debFile;
+    delete pkg;
 }
 
 QString PackagesManager::maybeAppendArchSuffix(const QString &pkgName, bool checkingConflicts)
@@ -1319,6 +1318,7 @@ QApt::PackageList PackagesManager::checkConflicts(QString packagePath)
     DebFile *debFile = new DebFile(packagePath);
     QApt::PackageList conflictingPackages;
     QList<QApt::DependencyItem> conflicts = debFile->conflicts();
+    delete debFile;
 
     QApt::Package *pkg = nullptr;
     QString packageName;
@@ -1378,6 +1378,7 @@ QApt::Package *PackagesManager::checkBreaksSystem(QString packagePath)
 
                 if (!_system->VS->CheckDep(debVer.c_str(), dep.relationType(),
                                            depVer.c_str())) {
+                    delete debFile;
                     return pkg;
                 }
             }
@@ -1396,11 +1397,13 @@ QApt::Package *PackagesManager::checkBreaksSystem(QString packagePath)
                 if (_system->VS->CheckDep(debVer.c_str(),
                                           conflict.relationType(),
                                           conflictVer.c_str())) {
+                    delete debFile;
                     return pkg;
                 }
             }
         }
     }
+    delete debFile;
 
     return nullptr;
 }
@@ -1494,14 +1497,17 @@ bool PackagesManager::satisfyDepends(QString packagePath)
                 oneSatisfied = true;
                 break;
             }
+            delete pkg;
         }
 
         if (!oneSatisfied) {
             qDebug() << dependsList;
+            delete debFile;
             return false;
         }
     }
 
+    delete debFile;
     return true;
 }
 
