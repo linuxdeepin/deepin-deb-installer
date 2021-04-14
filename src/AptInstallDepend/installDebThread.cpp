@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2019 ~ 2020 Deepin Technology Co., Ltd.
+* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
 *
 * Author:     liupeng <liupeng@uniontech.com>
 * Maintainer: liupeng <liupeng@uniontech.com>
@@ -34,9 +34,9 @@ void InstallDebThread::setParam(QStringList tParam)
     m_listParam = tParam;
 }
 
-void InstallDebThread::getDescription()
+void InstallDebThread::getDescription(QString debPath)
 {
-    QString str = "dpkg -e " + m_listParam[1] + " " + TEMPLATE_DIR;
+    QString str = "dpkg -e " + debPath + " " + TEMPLATE_DIR;
     system(str.toUtf8());
 
     QFile file;
@@ -111,15 +111,23 @@ void InstallDebThread::run()
                 return;
             const QFileInfo info(m_listParam[1]);
             const QFile debFile(m_listParam[1]);
-            qDebug() << m_listParam[1];
+            QString debPath = m_listParam[1];
+
+            if (debPath.contains(" ")
+                    || debPath.contains("&")
+                    || debPath.contains(";")
+                    || debPath.contains("|")) {
+                debPath = SymbolicLink(debPath, "installPackage");
+            }
+
 
             if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
                 qDebug() << "StartInstallAptConfig";
 
-                getDescription();
+                getDescription(debPath);
 
                 //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << m_listParam[1]);
+                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
                 m_proc->waitForFinished(-1);
 
                 QDir filePath(TEMPLATE_DIR);
@@ -131,5 +139,84 @@ void InstallDebThread::run()
             }
 
         }
+    }
+}
+
+
+/**
+ * @brief PackagesManager::SymbolicLink 创建软连接
+ * @param previousName 原始路径
+ * @param packageName 软件包的包名
+ * @return 软链接的路径
+ */
+QString InstallDebThread::SymbolicLink(QString previousName, QString packageName)
+{
+    if (!mkTempDir()) {
+        qWarning() << "PackagesManager:" << "Failed to create temporary folder";
+        return previousName;
+    }
+    return link(previousName, packageName);
+}
+
+/**
+ * @brief PackagesManager::mkTempDir 创建软链接存放的临时目录
+ * @return 创建目录的结果
+ */
+bool InstallDebThread::mkTempDir()
+{
+    QDir tempPath(m_tempLinkDir);
+    if (!tempPath.exists()) {
+        return tempPath.mkdir(m_tempLinkDir);
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief PackagesManager::rmTempDir 删除存放软链接的临时目录
+ * @return 删除临时目录的结果
+ */
+bool InstallDebThread::rmTempDir()
+{
+    QDir tempPath(m_tempLinkDir);
+    if (tempPath.exists()) {
+        return tempPath.removeRecursively();
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief PackagesManager::link 创建软链接
+ * @param linkPath              原文件的路径
+ * @param packageName           包的packageName
+ * @return                      软链接之后的路径
+ */
+QString InstallDebThread::link(QString linkPath, QString packageName)
+{
+    qDebug() << "PackagesManager: Create soft link for" << packageName;
+    QFile linkDeb(linkPath);
+
+    //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
+    //删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
+    int count = 1;
+    QString tempName = packageName;
+    while (true) {
+        QFile tempLinkPath(m_tempLinkDir + tempName);
+        if (tempLinkPath.exists()) {
+            tempName = packageName + "_" + QString::number(count);
+            qWarning() << "PackagesManager:" << "A file with the same name exists in the current temporary directory,"
+                       "and the current file name is changed to"
+                       << tempName;
+            count++;
+        } else {
+            break;
+        }
+    }
+    if (linkDeb.link(linkPath, m_tempLinkDir + tempName))
+        return m_tempLinkDir + tempName;
+    else {
+        qWarning() << "PackagesManager:" << "Failed to create Symbolick link error.";
+        return linkPath;
     }
 }
