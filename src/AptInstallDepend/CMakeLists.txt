@@ -15,6 +15,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+
+if(CMAKE_SAFETYTEST)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+ endif()
+
 file(GLOB_RECURSE AUTH_CPP_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
 add_executable (${EXE_NAME}
     ${AUTH_CPP_FILES}

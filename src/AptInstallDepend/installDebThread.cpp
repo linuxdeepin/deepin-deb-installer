@@ -23,13 +23,10 @@ InstallDebThread::InstallDebThread()
     connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
 }
-
 InstallDebThread::~InstallDebThread()
 {
-    if (m_proc != nullptr) {
+    if (m_proc)
         delete m_proc;
-        m_proc = nullptr;
-    }
 }
 
 void InstallDebThread::setParam(QStringList tParam)
@@ -39,7 +36,7 @@ void InstallDebThread::setParam(QStringList tParam)
 
 void InstallDebThread::getDescription()
 {
-    QString str = "sudo dpkg -e " + m_listParam[1] + " " + TEMPLATE_DIR;
+    QString str = "dpkg -e " + m_listParam[1] + " " + TEMPLATE_DIR;
     system(str.toUtf8());
 
     QFile file;
@@ -112,21 +109,27 @@ void InstallDebThread::run()
         } else if (m_listParam[0] == "InstallConfig") {
             if (m_listParam.size() <= 1)
                 return;
+            const QFileInfo info(m_listParam[1]);
+            const QFile debFile(m_listParam[1]);
+            qDebug() << m_listParam[1];
 
-            qDebug() << "StartInstallAptConfig";
+            if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
+                qDebug() << "StartInstallAptConfig";
 
-            getDescription();
+                getDescription();
 
-            //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-            m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << m_listParam[1]);
-            m_proc->waitForFinished(-1);
+                //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
+                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << m_listParam[1]);
+                m_proc->waitForFinished(-1);
 
-            QDir filePath(TEMPLATE_DIR);
-            if (filePath.exists()) {
-                filePath.removeRecursively();
+                QDir filePath(TEMPLATE_DIR);
+                if (filePath.exists()) {
+                    filePath.removeRecursively();
+                }
+
+                m_proc->close();
             }
 
-            m_proc->close();
         }
     }
 }

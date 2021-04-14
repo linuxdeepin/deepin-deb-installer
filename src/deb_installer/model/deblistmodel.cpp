@@ -1044,6 +1044,7 @@ void DebListModel::getDebian(QString debPath)
     if (!getDebianProcessErrInfo.isEmpty()) {
         qDebug() << "DebListModel:" << "Failed to decompress the main control file" << getDebianProcessErrInfo;
     }
+    delete m_pDpkg;
 }
 
 /**

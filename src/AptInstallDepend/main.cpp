@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
     parser.process(app);
     const QStringList tParamList = parser.positionalArguments();
 
-    InstallDebThread *mThread = new InstallDebThread;
-    mThread->setParam(tParamList);
-    mThread->run();
-    mThread->wait();
-    return mThread->m_resultFlag;
+    InstallDebThread mThread;
+    mThread.setParam(tParamList);
+    mThread.run();
+    mThread.wait();
+    return mThread.m_resultFlag;
 }

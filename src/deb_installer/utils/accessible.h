@@ -93,7 +93,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), FileChooseWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InfoCommandLinkButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InfoControlButton);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InstallProcessInfoView);
+//    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), InstallProcessInfoView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), MultipleInstallPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), PackagesListView);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SingleInstallPage);
@@ -102,9 +102,9 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
 
 
     //  Qt 控件
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QWidget);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QPushButton);
+//    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);
+//    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QWidget);
+//    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QPushButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QSlider);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QMenu);
     //    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QLabel);
