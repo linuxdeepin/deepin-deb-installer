@@ -17,7 +17,10 @@
 #include "PackageDependsStatus.h"
 #include "model/deblistmodel.h"
 
-PackageDependsStatus PackageDependsStatus::ok() { return {DebListModel::DependsOk, QString()}; }
+PackageDependsStatus PackageDependsStatus::ok()
+{
+    return {DebListModel::DependsOk, QString()};
+}
 
 PackageDependsStatus PackageDependsStatus::available(const QString &package)
 {
@@ -28,6 +31,11 @@ PackageDependsStatus PackageDependsStatus::available(const QString &package)
 PackageDependsStatus PackageDependsStatus::_break(const QString &package)
 {
     return {DebListModel::DependsBreak, package};
+}
+
+PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
+{
+    return {DebListModel::Prohibit, package};
 }
 
 PackageDependsStatus::PackageDependsStatus()
@@ -73,8 +81,21 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
     return *this;
 }
 
-bool PackageDependsStatus::isBreak() const { return status == DebListModel::DependsBreak; }
+bool PackageDependsStatus::isBreak() const
+{
+    return status == DebListModel::DependsBreak;
+}
 
-bool PackageDependsStatus::isAuthCancel() const { return status == DebListModel::DependsAuthCancel; }
+bool PackageDependsStatus::isAuthCancel() const
+{
+    return status == DebListModel::DependsAuthCancel;
+}
 
-bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }
+bool PackageDependsStatus::isAvailable() const
+{
+    return status == DebListModel::DependsAvailable;
+}
+bool PackageDependsStatus::isProhibit() const
+{
+    return status == DebListModel::Prohibit;
+}

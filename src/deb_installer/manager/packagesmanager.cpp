@@ -106,6 +106,9 @@ PackagesManager::PackagesManager(QObject *parent)
     dthread = new DealDependThread();
     connect(dthread, &DealDependThread::DependResult, this, &PackagesManager::DealDependResult);
     connect(dthread, &DealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
+
+    // 获取应用黑名单列表
+    getBlackApplications();
 }
 
 bool PackagesManager::isBackendReady()
@@ -312,6 +315,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const QString architecture = deb->architecture();
     PackageDependsStatus ret = PackageDependsStatus::ok();
+
+    if (isBlackApplication(deb->packageName())) {
+        ret.status  = DebListModel::Prohibit;
+        ret.package = deb->packageName();
+        m_packageDependsStatus.insert(index, ret);
+        qWarning() << deb->packageName() << "In the blacklist";
+        delete deb;
+        return ret;
+    }
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
@@ -906,6 +918,32 @@ QString PackagesManager::link(QString linkPath, QString packageName)
         return linkPath;
     }
 }
+
+void PackagesManager::getBlackApplications()
+{
+    QFile blackListFile(BLACKFILE);
+    if (blackListFile.exists()) {
+        blackListFile.open(QFile::ReadOnly);
+        QString blackApplications = blackListFile.readAll();
+        blackApplications.replace(" ", "");
+        blackApplications = blackApplications.replace("\n", "");
+        m_blackApplicationList =  blackApplications.split(",");
+        blackListFile.close();
+        return;
+    }
+
+
+    qWarning() << "Black File not Found";
+}
+
+bool PackagesManager::isBlackApplication(QString applicationName)
+{
+    if (m_blackApplicationList.contains(applicationName)) {
+        return true;
+    }
+    return false;
+}
+
 
 PackagesManager::~PackagesManager()
 {

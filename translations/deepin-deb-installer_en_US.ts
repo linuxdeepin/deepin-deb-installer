@@ -17,22 +17,22 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="120"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="117"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="439"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="376"/>
         <source>The deb package may be broken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="453"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="390"/>
         <source>Already Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="658"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="610"/>
         <source>Bulk Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -40,61 +40,80 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="93"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="129"/>
         <source>Authentication failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="99"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="116"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="95"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="112"/>
         <source>Installation failed, please check your network connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="101"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="97"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="100"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="104"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="108"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="120"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="116"/>
         <source>Installation failed, insufficient disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="124"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="121"/>
+        <source>No digital signature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="125"/>
+        <source>Invalid digital signature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="134"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1404"/>
+        <source>The administrator has set policies to prevent installation of this package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="137"/>
         <source>Installation Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="621"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="626"/>
         <source>Unmatched package architecture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="625"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="633"/>
         <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="626"/>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="630"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="634"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="638"/>
         <source>Broken dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="872"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="882"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1403"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="873"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="883"/>
         <source>This package does not have a valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="875"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="885"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="1406"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -102,12 +121,12 @@
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="63"/>
+        <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="64"/>
         <source>Drag deb packages here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="105"/>
+        <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="106"/>
         <source>Select File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,37 +167,37 @@
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="86"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="81"/>
         <source>Installing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="90"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="85"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="94"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="89"/>
         <source>Waiting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="98"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="93"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="259"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="251"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="262"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="254"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="265"/>
+        <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="257"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,7 +213,7 @@
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="60"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,87 +221,90 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="198"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="199"/>
         <source>Name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="205"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="211"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="385"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="376"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="389"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="380"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="393"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="384"/>
         <source>Reinstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="397"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="388"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="392"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="396"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="729"/>
         <source>Installed successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="756"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="734"/>
         <source>Uninstalled successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="767"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="744"/>
         <source>Uninstall Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="777"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="753"/>
         <source>Collapse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="876"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="839"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1014"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="879"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="842"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1017"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="883"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1021"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="961"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="924"/>
         <source>Installing dependencies: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1084"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1062"/>
         <source>Failed to install %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -290,10 +312,10 @@
 <context>
     <name>SingleInstallPage_Install</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="60"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="593"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="621"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="750"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="61"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="571"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="599"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="728"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -301,8 +323,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="648"/>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="755"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="626"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="733"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -345,13 +367,13 @@ The system or other applications may not work properly</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/deb_installer/main.cpp" line="65"/>
         <location filename="../src/deb_installer/main.cpp" line="66"/>
+        <location filename="../src/deb_installer/main.cpp" line="67"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/main.cpp" line="67"/>
+        <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
         <translation type="unfinished"></translation>
     </message>

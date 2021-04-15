@@ -41,6 +41,16 @@ public:
      */
     static PackageDependsStatus _break(const QString &package);
 
+
+    /**
+     * @brief 当前包目前在黑名单中，所以被禁止安装
+     *
+     * @param package 包名
+     * @return PackageDependsStatus 当前包的依赖状态为prohibit
+     */
+    static PackageDependsStatus _prohibit(const QString &package);
+
+
     PackageDependsStatus();
     PackageDependsStatus(const int status, const QString &package);
 
@@ -61,9 +71,37 @@ public:
     PackageDependsStatus min(const PackageDependsStatus &other);
     PackageDependsStatus minEq(const PackageDependsStatus &other);
 
+    /**
+     * @brief 判断当前包是否依赖break
+     *
+     * @return true 当前包依赖错误
+     * @return false 当前包的依赖状态不是break
+     */
     bool isBreak() const;
+
+    /**
+     * @brief 当前包的依赖状态是否是下载wine没有得到授权
+     *
+     * @return true 当前包下载wine依赖时没有得到授权
+     * @return false 当前包下载依赖状态不是授权取消
+     */
     bool isAuthCancel() const;
+
+    /**
+     * @brief 当前包的依赖状态是否是available
+     *
+     * @return true 当前包的依赖状态是available
+     * @return false 当前包的依赖状态不是available
+     */
     bool isAvailable() const;
+
+    /**
+     * @brief 当前包的是否在黑名单内
+     *
+     * @return true 当前包在黑名单内
+     * @return false 当前包不在黑名单内
+     */
+    bool isProhibit() const;
 
 public:
     int status;

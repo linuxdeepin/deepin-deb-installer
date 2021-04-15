@@ -32,6 +32,8 @@
 #include <QThread>
 #include <QProcess>
 
+#define BLACKFILE "/usr/share/udcp/appblacklist.txt"
+
 typedef Result<QString> ConflictResult;
 
 class PackageDependsStatus;
@@ -69,8 +71,14 @@ public:
     PackageDependsStatus getPackageDependsStatus(const int index);
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
-    QString package(const int index) const { return m_preparedPackages[index]; }
-    QApt::Backend *backend() const { return m_backendFuture.result(); }
+    QString package(const int index) const
+    {
+        return m_preparedPackages[index];
+    }
+    QApt::Backend *backend() const
+    {
+        return m_backendFuture.result();
+    }
 
     bool appendPackage(QString debPackage);
 
@@ -134,6 +142,26 @@ private:
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
+
+private:
+
+    /**
+     * @brief 判断当前应用是否为黑名单应用
+     *
+     * @return true 是黑名单应用
+     * @return false 不是黑名单应用
+     */
+    bool isBlackApplication(QString applicationName);
+
+    /**
+     * @brief 获取当前黑名单应用列表
+     *
+     */
+    void getBlackApplications();
+
+    QStringList m_blackApplicationList;
+
+
 };
 
 #endif  // PACKAGESMANAGER_H

@@ -35,7 +35,6 @@
 #include <DPushButton>
 #include <DSysInfo>
 #include <QProcess>
-#define ConfigAuthCancel 127
 
 class PackagesManager;
 class DebListModel : public QAbstractListModel
@@ -97,6 +96,7 @@ public:
         DependsBreak,           //依赖不满足
         DependsVerifyFailed,    //签名验证失败
         DependsAuthCancel,      //依赖授权失败（wine依赖）
+        Prohibit,               //当前包在黑名单中，禁止安装
     };
 
     /**
@@ -124,6 +124,13 @@ public:
         AuthDependsSuccess, //安装成功
         AuthDependsErr,     //安装失败
         AnalysisErr,        //解析错误
+    };
+
+    enum ErrorCode {
+        NoDigitalSignature      = 101, //无有效的数字签名
+        DigitalSignatureError,         //数字签名校验失败
+        ConfigAuthCancel        = 127, //配置安装授权被取消
+        ApplocationProhibit     = 404, //当前包在黑名单中禁止安装
     };
 
     /**
@@ -496,6 +503,27 @@ private:
      * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
      */
     void checkInstallStatus(QString str);
+
+
+private:
+
+    /**
+     * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
+     */
+    void showProhibitWindow();
+
+    /**
+     * @brief 检查当前将要安装的包是否在黑名单中。
+     *
+     * @return true 当前要安装的包在黑名单中
+     * @return false 当前要安装的包不在黑名单中
+     */
+    bool checkBlackListApplication();
+
+    /**
+     * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
+     */
+    void digitalVerifyFailed(ErrorCode code);
 
 private:
     int m_workerStatus;                                 //当前工作状态
