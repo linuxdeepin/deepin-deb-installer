@@ -49,32 +49,41 @@ public:
 signals:
 
     /**
-     * @brief DependResult 依赖下载的过程处理信号
+     * @brief signalDependResult 依赖下载的过程处理信号
      */
-    void DependResult(int, int, QString);
+    void signalDependResult(int, int, QString);
 
     /**
      * @brief enableCloseButton 依赖下载时设置关闭按钮是否可用的信号
      */
-    void enableCloseButton(bool);
+    void signalEnableCloseButton(bool);
 
 public slots:
 
     /**
      * @brief onFinished 依赖下载完成的处理槽函数
      */
-    void onFinished(int);
+    void slotInstallFinished(int);
 
     /**
      * @brief on_readoutput 依赖下载过程中的输出函数
      */
-    void on_readoutput();
+    void slotReadOutput();
 private:
-    QProcess *proc;                     //执行下载的进程指针
-    int m_index = -1;                   //出现问题依赖的下标
-    QStringList m_dependsList;          //需要安装的依赖列表
-    bool bDependsStatusErr = false;     //依赖安装状态是否错误的标识
-    QString m_brokenDepend;             //下载失败的依赖的名称
+    //执行下载的进程指针
+    QProcess *proc              = nullptr;
+
+    //出现问题依赖的下标
+    int m_index                 = -1;
+
+    //需要安装的依赖列表
+    QStringList m_dependsList   = {nullptr};
+
+    //依赖安装状态是否错误的标识
+    bool bDependsStatusErr      = false;
+
+    //下载失败的依赖的名称
+    QString m_brokenDepend      ="";
 };
 
 #endif // DEALDEPENDTHREAD_H

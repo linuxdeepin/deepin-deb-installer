@@ -97,7 +97,6 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addWidget(m_dependsInfomation);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
-    //fix bug: https://pms.uniontech.com/zentao/bug-view-46864.html
     //卸载页面上边距增加15px  底边距变为20,适应大字体
     centralLayout->setContentsMargins(20, 15, 20, 25);
 
@@ -115,16 +114,15 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     setLayout(centralLayout);
 
-    connect(m_cancelBtn, &DPushButton::clicked, this, &UninstallConfirmPage::canceled);
-    connect(m_confirmBtn, &DPushButton::clicked, this, &UninstallConfirmPage::accepted);
-    connect(m_infoControl, &InfoControlButton::expand, this, &UninstallConfirmPage::showDetail);
-    connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::hideDetail);
+    connect(m_cancelBtn, &DPushButton::clicked, this, &UninstallConfirmPage::signalUninstallCanceled);
+    connect(m_confirmBtn, &DPushButton::clicked, this, &UninstallConfirmPage::signalUninstallAccepted);
+    connect(m_infoControl, &InfoControlButton::expand, this, &UninstallConfirmPage::slotShowDetail);
+    connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::slotHideDetail);
 }
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
     //add tips
-    qDebug() << "name" << name;
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
@@ -147,70 +145,16 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     m_dependsInfomation->appendText(requiredList.join(", "));
 }
 
-void UninstallConfirmPage::showDetail()
+void UninstallConfirmPage::slotShowDetail()
 {
     // Show dependency information
     m_infoWrapperWidget->setVisible(false);
     m_dependsInfomation->setVisible(true);
 }
 
-void UninstallConfirmPage::hideDetail()
+void UninstallConfirmPage::slotHideDetail()
 {
     //Hide dependency information
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
-}
-
-
-bool UninstallConfirmPage::eventFilter(QObject *watched, QEvent *event)
-{
-    if (QEvent::MouseButtonRelease == event->type()) {
-        m_MouseBtnRelease++;
-        QList<DPushButton *> btnList = this->findChildren<DPushButton *>();
-        if (btnList.size() > 0) {
-            for (int num = 0; num < btnList.size(); num++) {
-                if (watched == btnList.at(num)) {
-                    this->releaseKeyboard();
-                    btnList.at(num)->click();
-                    m_MouseBtnRelease = 0;
-                    return QObject::eventFilter(watched, event);
-                }
-            }
-        }
-        if (m_MouseBtnRelease >= btnList.size()) {
-            if (this->focusWidget() != nullptr) {
-                this->focusWidget()->clearFocus();
-            }
-            m_MouseBtnRelease = 0;
-            emit OutOfFocus(false);
-        }
-    }
-
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *key_event = static_cast < QKeyEvent *>(event); //将事件转化为键盘事件
-        if (key_event->key() == Qt::Key_Tab) {
-            if (m_confirmBtn->hasFocus()) {
-                emit OutOfFocus(true);
-                this->releaseKeyboard();
-            }
-            if (m_cancelBtn->hasFocus()) {
-                m_confirmBtn->setFocus();
-            }
-            return true;
-        } else if (key_event->key() == Qt::Key_Return) {
-            this->releaseKeyboard();
-            if (m_confirmBtn->hasFocus()) {
-                emit OutOfFocus(false);
-                m_confirmBtn->click();
-            }
-            if (m_cancelBtn->hasFocus()) {
-                emit OutOfFocus(false);
-                m_cancelBtn->click();
-            }
-            return true;
-        } else
-            return true;
-    }
-
-    return QObject::eventFilter(watched, event);
 }

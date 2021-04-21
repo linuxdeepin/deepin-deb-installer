@@ -30,6 +30,20 @@
 
 using namespace QApt;
 
+
+
+class ut_DebListModel_test : public ::testing::Test
+{
+    // Test interface
+protected:
+    void SetUp() override;
+    void TearDown() override;
+    void stubFunction();
+
+    DebListModel *m_debListModel = nullptr;
+    Stub stub;
+};
+
 bool model_backend_init()
 {
     return true;
@@ -57,82 +71,6 @@ void stub_model_open(const std::string &__s, std::ios_base::openmode __mode)
     qDebug() << "stb——open";
 }
 
-
-TEST(deblistmodel_Test, deblistmodel_UT_reset)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, reloadCache), model_backend_init);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    DebListModel *model = new DebListModel();
-    usleep(5 * 1000);
-    model->reset();
-    ASSERT_EQ(model->m_workerStatus, DebListModel::WorkerPrepare);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_reset_filestatus)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, reloadCache), model_backend_init);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-    model->m_packageOperateStatus[0] = 1;
-    model->reset_filestatus();
-    ASSERT_TRUE(model->m_packageOperateStatus.isEmpty());
-}
-
-
-TEST(deblistmodel_Test, deblistmodel_UT_isReady)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-    ASSERT_TRUE(model->isReady());
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_isWorkerPrepare)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-
-    DebListModel *model = new DebListModel();
-    usleep(5 * 1000);
-
-    ASSERT_TRUE(model->isWorkerPrepare());
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_preparedPackages)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-    ASSERT_TRUE(model->preparedPackages().isEmpty());
-}
 
 QString model_deb_arch_i386()
 {
@@ -215,240 +153,7 @@ bool model_stub_dealInvalidPackage(QString )
 {
     return true;
 }
-TEST(deblistmodel_Test, deblistmodel_UT_appendPackage)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
 
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    ASSERT_EQ(model->preparedPackages().size(), 1);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_first)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-
-
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    ASSERT_EQ(model->first().row(), 0);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_rowCount)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    QModelIndex index;
-    ASSERT_EQ(model->rowCount(index), 1);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_data)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_true);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    QModelIndex index = model->index(0);
-    ASSERT_TRUE(model->data(index, DebListModel::WorkerIsPrepareRole).toBool());
-    int i = 1;
-    while (i <= 13) {
-        model->data(index, i);
-        i++;
-    }
-}
-TEST(deblistmodel_Test, deblistmodel_UT_data_recheck)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, recheckPackagePath), model_stud_recheckPackagePath_false);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    QModelIndex index = model->index(0);
-
-    model->data(index, 0);
-
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_initPrepareStatus)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->initPrepareStatus();
-    ASSERT_EQ(model->m_packageOperateStatus[0], DebListModel::Prepare);
-}
 
 Package *model_package_package(const QString &name)
 {
@@ -466,125 +171,6 @@ QList<DependencyItem> model_deb_depends()
     return conflicts;
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_index)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), model_package_package);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-
-    stub.set(ADDR(DebFile, depends), model_deb_depends);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    ASSERT_EQ(model->index(0).data(DebListModel::PackageDependsStatusRole).toInt(), DebListModel::DependsOk);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_getInstallFileSize)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-
-    ASSERT_EQ(model->getInstallFileSize(), 1);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_setCurrentIndex)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-
-    QModelIndex index = model->index(0);
-    model->setCurrentIndex(index);
-    ASSERT_EQ(model->m_currentIdx, model->index(0));
-}
 
 void model_initRowStatus()
 {
@@ -599,46 +185,6 @@ void model_installNextDeb()
 void model_transaction_run()
 {
     return;
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_installPackages)
-{
-    Stub stub;
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(DebListModel, initRowStatus), model_initRowStatus);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->installPackages();
-    ASSERT_EQ(model->m_workerStatus, DebListModel::WorkerProcessing);
 }
 
 QString model_packageManager_package(const int index)
@@ -667,54 +213,6 @@ QApt::Transaction *model_backend_commitChanges()
     return nullptr;
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_uninstallPackage)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, initRowStatus), model_initRowStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->uninstallPackage(0);
-    ASSERT_EQ(model->m_workerStatus, DebListModel::WorkerProcessing);
-}
 
 QByteArray model_package_getPackageMd5(const int)
 {
@@ -725,106 +223,28 @@ bool model_package_isArchError(const int)
 {
     return true;
 }
-TEST(deblistmodel_Test, deblistmodel_UT_packageFailedReason)
+
+
+QString stub_readLink_empty()
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, initRowStatus), model_initRowStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-
-    ASSERT_STREQ(model->packageFailedReason(0).toLocal8Bit(), "Unmatched package architecture");
+    return "";
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_initRowStatus)
+QString stub_readLink()
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->initRowStatus();
-
-    usleep(5 * 1000);
-    ASSERT_EQ(model->m_packageOperateStatus.size(), 1);
+    return "1";
 }
+
+bool stub_exists_true()
+{
+    return true;
+}
+
+bool stub_exists_false()
+{
+    return false;
+}
+
 
 static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosEnterprise()
 {
@@ -855,551 +275,29 @@ bool stud_toBool()
 {
     return true;
 }
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->checkSystemVersion();
-
-    ASSERT_TRUE(model->m_isDevelopMode);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosProfessional)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosProfessional);
-    stub.set(ADDR(QVariant, toBool), stud_toBool);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->checkSystemVersion();
-
-    ASSERT_TRUE(model->m_isDevelopMode);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosHome)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosHome);
-    stub.set(ADDR(QVariant, toBool), stud_toBool);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->checkSystemVersion();
-
-    ASSERT_TRUE(model->m_isDevelopMode);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_UosCommunity)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosCommunity);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->checkSystemVersion();
-
-    ASSERT_TRUE(model->m_isDevelopMode);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkSystemVersion_default)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_default);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->checkSystemVersion();
-
-    ASSERT_TRUE(model->m_isDevelopMode);
-}
-
-Utils::VerifyResultCode model_Digital_Verify(QString filepath_name)
+Utils::VerifyResultCode model_Digital_Verify(QString )
 {
     qDebug() << "model_Digital_Verify";
     return Utils::VerifySuccess;
 }
 
-Utils::VerifyResultCode model_Digital_Verify1(QString filepath_name)
+Utils::VerifyResultCode model_Digital_Verify1(QString )
 {
     qDebug() << "model_Digital_Verify";
     return Utils::DebfileInexistence;
 }
 
-Utils::VerifyResultCode model_Digital_Verify2(QString filepath_name)
+Utils::VerifyResultCode model_Digital_Verify2(QString )
 {
     qDebug() << "model_Digital_Verify";
     return Utils::ExtractDebFail;
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->m_isDevelopMode = false;
-
-    model->m_operatingIndex = 0;
-    ASSERT_TRUE(model->checkDigitalSignature());
-
-}
-TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature_01)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    //stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->m_isDevelopMode = false;
-
-    model->m_operatingIndex = 0;
-
-    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify1);
-    ASSERT_FALSE(model->checkDigitalSignature());
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_checkDigitalSignature_02)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    //stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->m_isDevelopMode = false;
-
-    model->m_operatingIndex = 0;
-    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
-    ASSERT_FALSE(model->checkDigitalSignature());
-}
 
 void model_bumpInstallIndex()
 {
     return;
 }
-TEST(deblistmodel_Test, deblistmodel_UT_showNoDigitalErrWindow)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-    stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->m_operatingIndex = 0;
-
-    model->m_packagesManager->m_preparedPackages.append("1");
-
-    model->showNoDigitalErrWindow();
-
-    ASSERT_EQ(model-> m_packageFailCode.size(), 1);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_removePackage)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
-
-    stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
-
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-    QStringList list;
-    list << "/";
-    model->appendPackage(list);
-
-    model->m_operatingIndex = 0;
-
-    model->m_packagesManager->m_preparedPackages.append("1");
-
-    model->removePackage(0);
-
-    ASSERT_EQ(model->m_packagesManager->m_preparedPackages.size(), 1);
-}
-
 QApt::ErrorCode model_transaction_error()
 {
     return QApt::AuthError;
@@ -1440,75 +338,28 @@ bool model_transaction_setProperty(const char *, const QVariant &)
 {
     return true;
 }
-TEST(deblistmodel_Test, deblistmodel_UT_onTransactionErrorOccurred)
+
+bool ut_process_startDetached(qint64 *)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+    return false;
+}
+qint64 ut_process_write(const QByteArray &)
+{
+    return 0;
+}
 
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
+void ut_DebListModel_test::stubFunction()
+{
 
-    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-    stub.set(ADDR(PackagesManager, removePackage), model_checkSystemVersion);
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
-    stub.set(ADDR(Utils, Digital_Verify), model_Digital_Verify);
-
-    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
 
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
-    DebListModel *model = new DebListModel();
-
-    usleep(5 * 1000);
-
-//    QStringList list;
-//    list << "/";
-//    model->appendPackage(list);
-
-    model->checkSystemVersion();
-    model->m_workerStatus = DebListModel::WorkerProcessing;
-    model->m_packageMd5.insert(0, "00000");
-    model->m_operatingIndex = 0;
-    model->onTransactionErrorOccurred();
-
-
-    ASSERT_EQ(model->m_packageFailCode.size(), 1);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
-{
-    Stub stub;
     stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
     stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+    stub.set(ADDR(Backend, reloadCache), model_backend_init);
+
     stub.set(ADDR(Transaction, run), model_transaction_run);
     stub.set(ADDR(Transaction, error), model_transaction_error);
     stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
@@ -1516,6 +367,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
     stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
     stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
     stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
+    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
 
     stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
     stub.set(ADDR(DebFile, isValid), model_deb_isValid);
@@ -1526,6 +378,7 @@ TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
     stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
     stub.set(ADDR(DebFile, version), model_deb_version);
     stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+    stub.set(ADDR(DebFile, depends), model_deb_depends);
 
     stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
     stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
@@ -1533,219 +386,371 @@ TEST(deblistmodel_Test, deblistmodel_UT_DealDependResult)
     stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->DealDependResult(4, 0, "");
-    model->DealDependResult(5, 0, "");
-    model->DealDependResult(2, 0, "");
-    model->DealDependResult(3, 0, "");
+    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), model_package_package);
+
+//    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+//    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
+//    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
+//    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
+
+}
+void ut_DebListModel_test::SetUp()
+{
+
+
+    stubFunction();
+
+    m_debListModel = new DebListModel();
+    usleep(10 * 1000);
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_onTransactionStatusChanged)
+void ut_DebListModel_test::TearDown()
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+    delete m_debListModel;
+}
+
+
+
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_reset)
+{
+    ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerPrepare);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
+{
+
+    m_debListModel->m_packageOperateStatus[0] = 1;
+    m_debListModel->reset_filestatus();
+    ASSERT_TRUE(m_debListModel->m_packageOperateStatus.isEmpty());
+}
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_isReady)
+{
+    ASSERT_TRUE(m_debListModel->isReady());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkerPrepare)
+{
+    ASSERT_TRUE(m_debListModel->isWorkerPrepare());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_preparedPackages)
+{
+
+    ASSERT_TRUE(m_debListModel->preparedPackages().isEmpty());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotAppendPackage)
+{
+    QStringList list;
+    list << "/";
+
+
+    m_debListModel->slotAppendPackage(list);
+
+    ASSERT_EQ(m_debListModel->preparedPackages().size(), 1);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_first)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    ASSERT_EQ(m_debListModel->first().row(), 0);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_rowCount)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    QModelIndex index;
+    ASSERT_EQ(m_debListModel->rowCount(index), 1);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
+{
+
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    QModelIndex index = m_debListModel->index(0);
+    int i = 1;
+    while (i <= 13) {
+        m_debListModel->data(index, i);
+        i++;
+    }
+}
+TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    QModelIndex index = m_debListModel->index(0);
+
+    m_debListModel->data(index, 0);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initPrepareStatus)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->initPrepareStatus();
+    ASSERT_EQ(m_debListModel->m_packageOperateStatus[0], DebListModel::Prepare);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_index)
+{
+
+
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    ASSERT_EQ(m_debListModel->index(0).data(DebListModel::PackageDependsStatusRole).toInt(), DebListModel::DependsOk);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_getInstallFileSize)
+{
+
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+
+    ASSERT_EQ(m_debListModel->getInstallFileSize(), 1);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_setCurrentIndex)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    QModelIndex index = m_debListModel->index(0);
+    m_debListModel->slotSetCurrentIndex(index);
+    ASSERT_EQ(m_debListModel->m_currentIdx, m_debListModel->index(0));
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_installPackages)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->slotInstallPackages();
+    ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerProcessing);
+}
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage)
+{
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
     stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
 
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
 
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
+    m_debListModel->slotUninstallPackage(0);
+    ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerProcessing);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    ASSERT_STREQ(m_debListModel->packageFailedReason(0).toLocal8Bit(), "Unmatched package architecture");
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->initRowStatus();
+
+    ASSERT_EQ(m_debListModel->m_packageOperateStatus.size(), 1);
+}
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
+{
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
+    m_debListModel->checkSystemVersion();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosProfessional)
+{
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosProfessional);
+    m_debListModel->checkSystemVersion();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosHome)
+{
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosHome);
+    m_debListModel->checkSystemVersion();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosCommunity)
+{
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosCommunity);
+    m_debListModel->checkSystemVersion();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_default)
+{
+    m_debListModel->checkSystemVersion();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify);
+
+    m_debListModel->m_isDevelopMode = false;
+
+    m_debListModel->m_operatingIndex = 0;
+    ASSERT_TRUE(m_debListModel->checkDigitalSignature());
+
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_01)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify1);
+
+    m_debListModel->m_isDevelopMode = false;
+
+    m_debListModel->m_operatingIndex = 0;
+    ASSERT_FALSE(m_debListModel->checkDigitalSignature());
+
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_02)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
+
+    m_debListModel->m_isDevelopMode = false;
+
+    m_debListModel->m_operatingIndex = 0;
+    ASSERT_FALSE(m_debListModel->checkDigitalSignature());
+
+}
+void model_digitalVerifyFailed()
+{
+    return;
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_showNoDigitalErrWindow)
+{
+
+    stub.set(ADDR(DebListModel, digitalVerifyFailed), model_digitalVerifyFailed);
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->m_operatingIndex = 0;
+
+    m_debListModel->m_packagesManager->m_preparedPackages.append("1");
+
+    m_debListModel->showNoDigitalErrWindow();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_removePackage)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->m_operatingIndex = 0;
+
+    m_debListModel->m_packagesManager->m_preparedPackages.append("1");
+
+    m_debListModel->slotRemovePackage(0);
+
+    ASSERT_EQ(m_debListModel->m_packagesManager->m_preparedPackages.size(), 1);
+}
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
+{
+    m_debListModel->checkSystemVersion();
+    m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
+    m_debListModel->m_packageMd5.insert(0, "00000");
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->slotTransactionErrorOccurred();
+
+    ASSERT_EQ(m_debListModel->m_packageFailCode.size(), 1);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult)
+{
 
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
+
+    m_debListModel->slotDealDependResult(1, 0, "");
+    m_debListModel->slotDealDependResult(2, 0, "");
+    m_debListModel->slotDealDependResult(3, 0, "");
+    m_debListModel->slotDealDependResult(4, 0, "");
+    m_debListModel->slotDealDependResult(5, 0, "");
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionStatusChanged)
+{
     TransactionStatus stat = TransactionStatus::AuthenticationStatus;
-    model->onTransactionStatusChanged(stat);
+    m_debListModel->slotTransactionStatusChanged(stat);
     stat = TransactionStatus::WaitingStatus;
-    model->onTransactionStatusChanged(stat);
+    m_debListModel->slotTransactionStatusChanged(stat);
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_setEndEnable)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_setEndEnable)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->setEndEnable();
+    m_debListModel->setEndEnable();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_checkBoxStatus)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkBoxStatus)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->checkBoxStatus();
+    m_debListModel->checkBoxStatus();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_bumpInstallIndex)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->m_operatingIndex = 0;
-    model->m_packageMd5.append("\n");
-    model->m_packageMd5.append("1");
-    model->bumpInstallIndex();
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->m_packageMd5.append("\n");
+    m_debListModel->m_packageMd5.append("1");
+    m_debListModel->bumpInstallIndex();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_ConfigInstallFinish)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInstallFinish)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->ConfigInstallFinish(1);
+    m_debListModel->slotConfigInstallFinish(1);
 }
 
 QByteArray model_readAllStandardOutput()
@@ -1753,619 +758,139 @@ QByteArray model_readAllStandardOutput()
     return "StartInstallAptConfig";
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_ConfigReadOutput)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
     stub.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput);
 
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->ConfigReadOutput();
+    m_debListModel->slotConfigReadOutput();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_onTransactionFinished)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
 {
-    Stub stub;
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->m_operatingIndex = 0;
-    model->m_packageMd5.append("test");
-    model->m_packageMd5.append("test1");
-    model->onTransactionFinished();
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_refreshOperatingPackageStatus)
-{
-    Stub stub;
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->refreshOperatingPackageStatus(DebListModel::PackageOperationStatus::Failed);
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_onDependsInstallTransactionFinished)
-{
-    Stub stub;
-
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->onDependsInstallTransactionFinished();
-}
-
-bool ut_process_startDetached(qint64 *command)
-{
-    return false;
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_showDevelopModeWindow)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
+
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->m_packageMd5.append("test");
+    m_debListModel->m_packageMd5.append("test1");
+    m_debListModel->slotTransactionFinished();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_refreshOperatingPackageStatus)
+{
+    m_debListModel->refreshOperatingPackageStatus(DebListModel::PackageOperationStatus::Failed);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinished)
+{
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
+
+    m_debListModel->slotDependsInstallTransactionFinished();
+}
+
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_showDevelopModeWindow)
+{
+
     stub.set((bool (QProcess::*)(qint64 *))ADDR(QProcess, startDetached), ut_process_startDetached);
-    DebListModel *model = new DebListModel;
-    model->showDevelopModeWindow();
+    m_debListModel->showDevelopModeWindow();
 }
 
-qint64 ut_process_write(const QByteArray &data)
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInputWrite)
 {
-    return 0;
-}
-
-TEST(deblistmodel_Test, deblistmodel_UT_ConfigInputWrite)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set((qint64(QProcess::*)(const QByteArray &))ADDR(QProcess, write), ut_process_write);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->ConfigInputWrite("\n");
+
+    m_debListModel->slotConfigInputWrite("\n");
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_onTransactionOutput)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->onTransactionOutput();
+    m_debListModel->slotTransactionOutput();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_uninstallFinished)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallFinished)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    model->uninstallFinished();
+    m_debListModel->slotUninstallFinished();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_checkInstallStatus)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkInstallStatus)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
+
     QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
-    model->checkInstallStatus(str);
+    m_debListModel->slotCheckInstallStatus(str);
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_initConnections)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initConnections)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
-    model->initConnections();
+    m_debListModel->initConnections();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_initAppendConnection)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initAppendConnection)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
-    model->initAppendConnection();
+    m_debListModel->initAppendConnection();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_initRefreshPageConnecions)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initRefreshPageConnecions)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
-    model->initRefreshPageConnecions();
+    m_debListModel->initRefreshPageConnecions();
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_initInstallConnections)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_initInstallConnections)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
-    stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
-    stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
-    stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
-    stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
-    stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
-    stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
-
-    stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
-    stub.set(ADDR(DebFile, isValid), model_deb_isValid);
-    stub.set(ADDR(DebFile, md5Sum), model_deb_md5Sum);
-    stub.set(ADDR(DebFile, installedSize), model_deb_installSize);
-    stub.set(ADDR(DebFile, packageName), model_deb_packageName);
-    stub.set(ADDR(DebFile, longDescription), model_deb_longDescription);
-    stub.set(ADDR(DebFile, shortDescription), model_deb_shortDescription);
-    stub.set(ADDR(DebFile, version), model_deb_version);
-    stub.set(ADDR(DebFile, conflicts), model_deb_conflicts);
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-    QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
-    model->initInstallConnections();
+    m_debListModel->initInstallConnections();
 }
 
-QString stub_readLink_empty()
+TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readRealPathExist)
 {
-    return "";
-}
-
-QString stub_readLink()
-{
-    return "1";
-}
-
-bool stub_exists_true()
-{
-    return true;
-}
-
-bool stub_exists_false()
-{
-    return false;
-}
-TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readRealPathExist)
-{
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
 
     stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink_empty);
     stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_true);
 
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-
-
-    ASSERT_TRUE(model->recheckPackagePath("/0"));
+    ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readLinkPathExist)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathExist)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
     stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink);
     stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_true);
 
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-
-
-    ASSERT_TRUE(model->recheckPackagePath("/0"));
+    ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
 }
 
-TEST(deblistmodel_Test, deblistmodel_UT_recheckPackagePath_readLinkPathNotExist)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathNotExist)
 {
-    Stub stub;
-    stub.set(ADDR(Backend, init), model_backend_init);
-    stub.set(ADDR(Backend, architectures), model_backend_architectures);
-    stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
-
-
-
-    stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
-    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
-    stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
-    stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
-    stub.set(ADDR(PackagesManager, package), model_packageManager_package);
-
-    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-
     stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink);
     stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_false);
 
-    DebListModel *model = new DebListModel;
-    usleep(100 * 1000);
-
-
-    ASSERT_FALSE(model->recheckPackagePath("/0"));
+    ASSERT_FALSE(m_debListModel->recheckPackagePath("/0"));
 }
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_netErrors)
+{
+    netErrors();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_workerErrorString)
+{
+    workerErrorString(1,"");
+    workerErrorString(2,"No space left on device");
+    workerErrorString(2,"");
+    workerErrorString(3,"");
+    workerErrorString(4,"");
+    workerErrorString(5,"");
+    workerErrorString(5,"Network is unreachable;http");
+    workerErrorString(5,"No space left on device");
+    workerErrorString(9,"");
+    workerErrorString(10,"");
+    workerErrorString(101,"");
+    workerErrorString(102,"");
+    workerErrorString(127,"");
+
+}
+
 

@@ -144,10 +144,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
                      this, &FileChooseWidget::themeChanged);
 }
-/**
- * @brief FileChooseWidget::chooseFiles
- * 选择文件
- */
+
 void FileChooseWidget::chooseFiles()
 {
     QString historyDir = m_settings.value("history_dir").toString();        //获取保存的文件路径
@@ -155,7 +152,6 @@ void FileChooseWidget::chooseFiles()
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
     }
-    // fix bug: https://pms.uniontech.com/zentao/bug-view-50992.html
     // 为DFileDialog指定父对象
     DFileDialog dialog(this);                                                //获取文件
     dialog.setFileMode(QFileDialog::ExistingFiles);
@@ -176,9 +172,6 @@ void FileChooseWidget::chooseFiles()
     emit packagesSelected(selected_files);                                  //发送信号
 }
 
-/**
- * @brief FileChooseWidget::themeChanged 根据主题更新图标
- */
 void FileChooseWidget::themeChanged()
 {
     //更新icon
@@ -190,10 +183,6 @@ void FileChooseWidget::themeChanged()
     split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
 }
 
-/**
- * @brief FileChooseWidget::clearChooseFileBtnFocus 在返回文件选择界面的时候清除文件选择按钮的焦点
- * fix bug: https://pms.uniontech.com/zentao/bug-view-46525.html
- */
 void FileChooseWidget::clearChooseFileBtnFocus()
 {
     m_chooseFileBtn->clearFocus();                              //清除文件选择按钮的焦点

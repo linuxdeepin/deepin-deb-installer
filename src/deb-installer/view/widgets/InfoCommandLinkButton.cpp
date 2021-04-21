@@ -30,10 +30,6 @@ InfoCommandLinkButton::InfoCommandLinkButton(QString text, QWidget *parent)
 
 }
 
-/**
- * @brief ChooseFileButton::keyPressEvent 添加键盘响应。
- * @param event
- */
 void InfoCommandLinkButton::keyPressEvent(QKeyEvent *event)
 {
     //添加回车，换行，空格键盘事件的响应

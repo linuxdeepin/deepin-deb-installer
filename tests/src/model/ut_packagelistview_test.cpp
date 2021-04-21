@@ -63,24 +63,24 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_initRightContextMenu)
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onShortcutDeleteAction)
 {
-    m_listview->onShortcutDeleteAction();
+    m_listview->slotShortcutDeleteAction();
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onListViewShowContextMenu)
 {
     QModelIndex index;
-    m_listview->onListViewShowContextMenu(index);
+    m_listview->slotListViewShowContextMenu(index);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onRightMenuDeleteAction)
 {
-    m_listview->onRightMenuDeleteAction();
+    m_listview->slotRightMenuDeleteAction();
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_getPos)
 {
     m_listview->m_currentIndex = 1;
-    m_listview->getPos(QRect(1, 1, 1, 1), 1);
+    m_listview->slotGetPos(QRect(1, 1, 1, 1), 1);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)

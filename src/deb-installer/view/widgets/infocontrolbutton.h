@@ -91,15 +91,15 @@ private slots:
     void themeChanged();
 
 private:
-    bool m_expand;                      // 当前是需要扩展还是收缩的标志位
-    QString m_expandTips;               // 展开的提示语
-    QString m_shrinkTips;               // 收缩的提示语
+    bool        m_expand        = false;                      // 当前是需要扩展还是收缩的标志位
+    QString     m_expandTips    = "";               // 展开的提示语
+    QString     m_shrinkTips    = "";               // 收缩的提示语
 
-    DLabel *m_arrowIcon;                // 展开或收缩的图标
-    QVBoxLayout *centralLayout;         // 布局
+    DLabel      *m_arrowIcon    = nullptr;                // 展开或收缩的图标
+    QVBoxLayout *centralLayout  = nullptr;         // 布局
 
-    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
-    InfoCommandLinkButton *m_tipsText;  //
+    //DCommandLinkButton for Activity color
+    InfoCommandLinkButton *m_tipsText   = nullptr;  //
 };
 
 #endif // INFOCONTROLBUTTON_H

@@ -22,8 +22,8 @@ DealDependThread::DealDependThread(QObject *parent)
 {
     Q_UNUSED(parent);
     proc = new QProcess(this);
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DealDependThread::onFinished);
-    connect(proc, &QProcess::readyReadStandardOutput, this, &DealDependThread::on_readoutput);
+    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DealDependThread::slotInstallFinished);
+    connect(proc, &QProcess::readyReadStandardOutput, this, &DealDependThread::slotReadOutput);
 }
 
 DealDependThread::~DealDependThread()
@@ -54,27 +54,24 @@ void DealDependThread::setBrokenDepend(QString dependName)
 /**
  * @brief DealDependThread::on_readoutput
  */
-void DealDependThread::on_readoutput()
+void DealDependThread::slotReadOutput()
 {
     QString tmp = proc->readAllStandardOutput().data();
-    qDebug() << "安装依赖输出数据:" << tmp;
 
     if (tmp.contains("StartInstallDeepinwine")) {
-        emit DependResult(DebListModel::AuthConfirm, m_index, m_brokenDepend);
+        emit signalDependResult(DebListModel::AuthConfirm, m_index, m_brokenDepend);
         return;
     }
 
     if (tmp.contains("Not authorized")) {
         bDependsStatusErr = true;
-        emit DependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
+        qWarning()<<"install Wine dependency Not authorized";
+        emit signalDependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
     }
 }
 
-/**
- * @brief DealDependThread::onFinished
- * @param num
- */
-void DealDependThread::onFinished(int num = -1)
+
+void DealDependThread::slotInstallFinished(int num = -1)
 {
     if (bDependsStatusErr) {
         bDependsStatusErr = false;
@@ -83,22 +80,21 @@ void DealDependThread::onFinished(int num = -1)
 
     if (num == 0) {
         if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
+            emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
             bDependsStatusErr = false;
             return;
         }
-        qDebug() << m_dependsList << "安装成功";
-        emit DependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
+        emit signalDependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
     } else {
         if (bDependsStatusErr) {
-            emit DependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
+            emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
             bDependsStatusErr = false;
             return;
         }
-        qDebug() << m_dependsList << "install error" << num;
-        emit DependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
+        qWarning() << m_dependsList << "install error" << num;
+        emit signalDependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
     }
-    emit enableCloseButton(true);
+    emit signalEnableCloseButton(true);
 }
 
 /**
@@ -109,8 +105,8 @@ void DealDependThread::run()
     proc->setProcessChannelMode(QProcess::MergedChannels);
     msleep(100);
 
-    emit DependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
+    emit signalDependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
     qDebug() << "run m_dependList" << m_dependsList;
     proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall"  << "InstallDeepinWine" << m_dependsList);
-    emit enableCloseButton(false);
+    emit signalEnableCloseButton(false);
 }

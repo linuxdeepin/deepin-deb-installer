@@ -57,108 +57,107 @@ protected:
 
 private slots:
     /**
-     * @brief onPackagesSelected
+     * @brief slotPackagesSelected
      * @param packages 安装的包的全路径的列表
      * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
      */
-    void onPackagesSelected(const QStringList &packages);
+    void slotPackagesSelected(const QStringList &packages);
 
     /**
-     * @brief showInvalidePackageMessage 弹出无效包的消息通知
+     * @brief slotShowInvalidePackageMessage 弹出无效包的消息通知
      */
-    void showInvalidePackageMessage();
+    void slotShowInvalidePackageMessage();
 
     /**
-     * @brief showInvalidePackageMessage 弹出不是本地包的消息通知
+     * @brief slotShowNotLocalPackageMessage 弹出不是本地包的消息通知
      */
-    void showNotLocalPackageMessage();
-
+    void slotShowNotLocalPackageMessage();
 
     /**
-     * @brief showPkgExistMessage 弹出包已存在的消息通知
+     * @brief slotShowPkgExistMessage 弹出包已存在的消息通知
      */
-    void showPkgExistMessage();
+    void slotShowPkgExistMessage();
 
     /**
-     * @brief showPkgExistMessage 弹出包被移动的消息通知
+     * @brief slotShowPkgRemovedMessage 弹出包被移动的消息通知
      */
-    void showPkgRemovedMessage(QString packageName);
+    void slotShowPkgRemovedMessage(QString packageName);
 
     /**
-     * @brief removePackage
+     * @brief slotRemovePackage
      * @param index 要删除的包的下标
      * 根据传入的下表删除某个包。
      */
-    void removePackage(const int index);
+    void slotRemovePackage(const int index);
 
     /**
-     * @brief showUninstallConfirmPage
+     * @brief slotShowUninstallConfirmPage
      * 卸载按钮的槽函数
      * 显示卸载界面
      */
-    void showUninstallConfirmPage();
+    void slotShowUninstallConfirmPage();
 
     /**
-     * @brief onUninstallAccepted
+     * @brief slotUninstallAccepted
      * 卸载界面确认卸载按钮的槽函数
      * 卸载开始时，返回singleInstallPage 并显示卸载进程。
      */
-    void onUninstallAccepted();
+    void slotUninstallAccepted();
 
     /**
-     * @brief onUninstallCancel
+     * @brief slotUninstallCancel
      * 卸载界面取消卸载按钮的槽函数
      * 取消卸载后返回 singleInstallPage
      */
-    void onUninstallCancel();
+    void slotUninstallCancel();
 
 
     /**
-     * @brief setEnableButton
+     * @brief slotSetEnableButton
      * @param bEnable 按钮是否可用标志
      * 根据当前的安装/卸载进程来控制singleInstallPage/multiInstallPage按钮的可用性
      */
-    void setEnableButton(bool bEnable);
+    void slotSetEnableButton(bool bEnable);
 
     /**
-     * @brief showHiddenButton
+     * @brief slotShowHiddenButton
      * 授权取消后显示被隐藏的按钮
      */
-    void showHiddenButton();
+    void slotShowHiddenButton();
 
     /**
-     * @brief onAuthing
+     * @brief slotSetAuthingStatus
      * @param authing 按钮是否可用的标志
      * 授权框弹出后，设置当前界面为不可用状态
      */
-    void onAuthing(const bool authing);
+    void slotSetAuthingStatus(const bool authing);
 
     /**
-     * @brief DealDependResult
+     * @brief slotDealDependResult
      * @param iAuthRes
      * 根据deepin-wine依赖安装的结果处理界面显示效果
      */
-    void DealDependResult(int iAuthRes, QString dependName);
+    void slotDealDependResult(int iAuthRes, QString dependName);
 
     /**
-     * @brief changeDragFlag
+     * @brief slotChangeDragFlag
      * 安装卸载结束后，允许包被拖入程序，并设置关闭按钮可用
      */
-    void changeDragFlag();
+    void slotChangeDragFlag();
 
     /**
-     * @brief reset
+     * @brief slotReset
      * 重置当前工作状态、拖入状态、标题栏、页面暂存区，删除卸载页面
      *
      */
-    void reset();
+    void slotReset();
 
     /**
-     * @brief enableCloseButton
+     * @brief slotEnableCloseButton
      * @param enable 是否禁用关闭按钮
      * 下载依赖时，关闭按钮不可用，下载依赖成功后，依赖按钮可用
      */
-    void enableCloseButton(bool enable);
+    void slotEnableCloseButton(bool enable);
 
 private:
     /**
@@ -235,7 +234,7 @@ private:
     UninstallConfirmPage *m_uninstallPage     = nullptr;
 
     QPointer<QWidget>   m_lastPage;                   //存放上一个页面的指针
-    QStackedLayout      *m_centralLayout;                //单包、批量、卸载的widget
+    QStackedLayout      *m_centralLayout      = nullptr;                //单包、批量、卸载的widget
 
     int m_dragflag          = -1;                            //当前是否允许拖入的标志位
 

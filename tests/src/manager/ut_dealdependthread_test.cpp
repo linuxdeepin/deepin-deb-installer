@@ -76,7 +76,7 @@ TEST_F(ut_dealDependThread_Test, DealDependThread_UT_start)
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_onFinished)
 {
     m_dThread->bDependsStatusErr = false;
-    m_dThread->onFinished(-1);
+    m_dThread->slotInstallFinished(-1);
 
     ASSERT_FALSE(m_dThread->bDependsStatusErr);
 }
@@ -96,5 +96,5 @@ QByteArray readAllStandardOutput_success()
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_on_readoutput)
 {
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
-    m_dThread->on_readoutput();
+    m_dThread->slotReadOutput();
 }

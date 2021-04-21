@@ -32,12 +32,6 @@ DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags f)
     this->setObjectName("DebInfoLabel");
 }
 
-/**
- * @brief DebInfoLabel::setCustomQPalette
- * @param colorRole 字体调色板的颜色
- * 设置自定的Qt风格 字体颜色，根据传入的颜色角色来对DLabel进行设置
- * 目前使用到此类型的有 singleInstallPage的packgeName packageVersion 以及他们提示的label
- */
 void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
 {
     m_colorRole = colorRole;                                                //获取当前使用QPalette的字体颜色角色
@@ -56,12 +50,6 @@ void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
     }
 }
 
-/**
- * @brief DebInfoLabel::setCustomDPalette
- * @param colorType 字体调色板的颜色
- * 设置自定的Deepin字体风格，根据传入的颜色角色来对DLabel进行设置
- * 目前使用到此类型的有 singleInstallPage的m_tipsLabel(单包安装时状态[依赖状态][安装状态][卸载状态][版本状态]提示)
- */
 void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
 {
     m_colorType = colorType;                                                //获取当前使用DPalette的字体颜色类型
@@ -74,11 +62,6 @@ void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
     this->setPalette(palette);
 }
 
-/**
- * @brief DebInfoLabel::setCustomDPalette
- * 设置当前DLabel 为默认的风格
- * 目前没有控件在使用
- */
 void DebInfoLabel::setCustomDPalette()
 {
     m_bMultiIns = true;                                                     //当前使用的是默认的颜色
@@ -90,11 +73,6 @@ void DebInfoLabel::setCustomDPalette()
     this->setPalette(palette);
 }
 
-/**
- * @brief DebInfoLabel::paintEvent
- * @param event
- * 根据调色板设置进行重绘
- */
 void DebInfoLabel::paintEvent(QPaintEvent *event)
 {
     QWidget tmpWidget;

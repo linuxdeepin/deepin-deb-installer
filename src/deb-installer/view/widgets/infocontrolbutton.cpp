@@ -88,39 +88,21 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
     // add clicked connection fot expand or shrink
     connect(m_tipsText, &DCommandLinkButton::clicked, this, &InfoControlButton::onMouseRelease);
-
-
-//#define SHOWBGCOLOR
-#ifdef SHOWBGCOLOR
-    m_tipsText->setStyleSheet("QLabel{background: cyan;}");
-    m_arrowIcon->setStyleSheet("QLabel{background: red;}");
-#endif
 }
 
-/**
- * @brief InfoControlButton::controlButton
- * @return 当前使用的CommandLinkButton
- */
 QAbstractButton *InfoControlButton::controlButton()
 {
     return m_tipsText;
 }
 
-/**
- * @brief InfoControlButton::mouseReleaseEvent 添加鼠标点击事件
- * @param e
- */
-void InfoControlButton::mouseReleaseEvent(QMouseEvent *e)
+
+void InfoControlButton::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
-    QWidget::mouseReleaseEvent(e);
+    QWidget::mouseReleaseEvent(mouseEvent);
 
     onMouseRelease();           //鼠标事件的响应
 }
 
-/**
- * @brief InfoControlButton::keyPressEvent 添加键盘事件响应
- * @param event
- */
 void InfoControlButton::keyPressEvent(QKeyEvent *event)
 {
     //添加回车键，空格键，换行键来触发展开或收缩
@@ -130,10 +112,7 @@ void InfoControlButton::keyPressEvent(QKeyEvent *event)
         }
     }
 }
-/**
- * @brief InfoControlButton::onMouseRelease
- * 鼠标点击事件
- */
+
 void InfoControlButton::onMouseRelease()
 {
     if (m_expand) {                             //当前已经展开
@@ -166,29 +145,18 @@ void InfoControlButton::onMouseRelease()
     }
 }
 
-/**
- * @brief InfoControlButton::setExpandTips 接收外部展开的提示语
- * @param text  要修改的提示语
- */
 void InfoControlButton::setExpandTips(const QString text)
 {
     m_expandTips = text;                //保存提示语
     m_tipsText->setText(m_expandTips);  //设置提示语
 }
 
-/**
- * @brief InfoControlButton::setShrinkTips 接收外部收缩的提示语
- * @param text 要修改的提示语
- */
 void InfoControlButton::setShrinkTips(const QString text)
 {
     m_shrinkTips = text;                //保存提示语
     m_tipsText->setText(m_shrinkTips);  //设置提示语
 }
 
-/**
- * @brief InfoControlButton::themeChanged 主题变化的调整
- */
 void InfoControlButton::themeChanged()
 {
     if (m_expand) {                                                 //当前是展开状态

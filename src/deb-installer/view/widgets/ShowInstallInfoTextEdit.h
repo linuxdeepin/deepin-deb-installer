@@ -49,16 +49,16 @@ private slots:
     void __run();
 
 private:
-    QTimer *m_timer = nullptr;
-    FunSlideInertial m_fSlideGesture = nullptr;
+    QTimer              *m_timer        = nullptr;
+    FunSlideInertial    m_fSlideGesture = nullptr;
 
     //纵向单指惯性滑动
-    qreal m_currentTime = 0;
-    qreal m_beginValue = 0;
-    qreal m_changeValue = 0;
-    qreal m_durationTime = 0;
-    qreal m_direction = 1;
-    qreal m_lastValue = 0;
+    qreal               m_currentTime   = 0;
+    qreal               m_beginValue    = 0;
+    qreal               m_changeValue   = 0;
+    qreal               m_durationTime  = 0;
+    qreal               m_direction     = 1;
+    qreal               m_lastValue     = 0;
 
 
 private:
@@ -197,30 +197,30 @@ private:
         GA_hold,        //长按
     };
 
-    GestureAction m_gestureAction = GA_null;    //手势动作 默认误动作
+    GestureAction   m_gestureAction = GA_null;    //手势动作 默认误动作
 
-    qint64 m_tapBeginTime = 0;                  //开始点击的时间
+    qint64          m_tapBeginTime  = 0;          //开始点击的时间
 
-    bool m_slideContinue {false};               //是否持续滑动
+    bool            m_slideContinue = false;      //是否持续滑动
 
     //add for single refers to the sliding
-    FlashTween tween;                           //滑动惯性
+    FlashTween      tween;                        //滑动惯性
 
-    qreal change = {0.0};                       //滑动变化量
-    qreal duration = {0.0};                     //滑动方向
+    qreal           change          = {0.0};      //滑动变化量
+    qreal           duration        = {0.0};      //滑动方向
 
     //鼠标事件的位置
-    int m_start = 0;                            //开始时鼠标的位置
-    int m_end = 0;                              //结束时鼠标的位置
-    qreal m_stepSpeed = 0;                      //移动的速度
+    int             m_start         = 0;          //开始时鼠标的位置
+    int             m_end           = 0;          //结束时鼠标的位置
+    qreal           m_stepSpeed     = 0;          //移动的速度
 
-    int m_lastMousepos;                         //上次移动后鼠标的位置
+    int             m_lastMousepos  = 0;         //上次移动后鼠标的位置
 
-    ulong m_lastMouseTime;                      //上次移动鼠标的时间
+    ulong           m_lastMouseTime = 0;          //上次移动鼠标的时间
 
-    int m_nSelectEndLine;                       //< 选择结束时后鼠标所在行
-    int m_nSelectStart;                         //< 选择开始时的鼠标位置
-    int m_nSelectEnd;                           //< 选择结束时的鼠标位置
+    int             m_nSelectEndLine= 0;          //< 选择结束时后鼠标所在行
+    int             m_nSelectStart  = 0;          //< 选择开始时的鼠标位置
+    int             m_nSelectEnd    = 0;          //< 选择结束时的鼠标位置
 
 };
 

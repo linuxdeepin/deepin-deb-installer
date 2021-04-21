@@ -54,53 +54,56 @@ public:
 signals:
 
     /**
-     * @brief addedPackage 当前包可以被添加到应用中
+     * @brief sigAddPackageToInstaller 把包添加到安装器中
      */
-    void addedPackage(int, QString, QByteArray);
+    void signalAddPackageToInstaller(int, QString, QByteArray);
 
     /**
      * @brief appendFinished 批量添加结束
      * @param 是否需要下载wine依赖的标识
      */
-    void appendFinished();
+    void signalAppendFinished();
 
 signals:
     /**
      * @brief invalidPackage 当前包是无效的包
      */
-    void invalidPackage();
+    void signalInvalidPackage();
 
     /**
      * @brief notLocalPackage 包不在本地的信号
      *
      * ps: 包不在本地无法安装
      */
-    void notLocalPackage();
+    void signalNotLocalPackage();
 
     /**
      * @brief packageAlreadyExists 当前包已经被添加到应用中
      */
-    void packageAlreadyExists();
+    void signalPackageAlreadyExists();
 
 signals:
     /**
      * @brief refreshSinglePage 刷新单包界面
      */
-    void refreshSinglePage();
+    void signalRefreshSinglePage();
 
     /**
      * @brief refreshMultiPage 刷新批量安装界面
      */
-    void refreshMultiPage();
+    void signalRefreshMultiPage();
 
     /**
      * @brief single2MultiPage 从单包安装界面刷新为批量安装界面
      */
-    void single2MultiPage();
+    void signalSingleToMultiPage();
 
 private:
-    QStringList m_packages;                     //要添加的软件包列表
-    QSet<QByteArray> m_appendedPackagesMd5;     //已经添加的deb包的MD5值的集合
+    //要添加的软件包列表
+    QStringList m_packages                  = {};
+
+    //已经添加的deb包的MD5值的集合
+    QSet<QByteArray> m_appendedPackagesMd5  = {};
 
 private:
     /**
@@ -147,7 +150,8 @@ private:
     QString dealPackagePath(QString packagePath);
 
 private:
-    const QString m_tempLinkDir = "/tmp/LinkTemp/";             // 软链接的存放路径
+    // 软链接的存放路径
+    const QString m_tempLinkDir = "/tmp/LinkTemp/";
 
 private:
 
@@ -156,9 +160,8 @@ private:
      */
     void checkInvalid();
 
-    int m_validPackageCount;        //有效文件的数量
-
-    qint64 md5SumTotalTime = 0;         //性能测试临时变量，获取md5Sum总耗时
+    //有效文件的数量
+    int m_validPackageCount = 0;
 };
 
 #endif // ADDPACKAGETHREAD_H

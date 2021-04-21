@@ -35,10 +35,6 @@ ChooseFileButton::ChooseFileButton(QString text, QWidget *parent)
     this->setAccessibleName("ChooseFileButton");
 }
 
-/**
- * @brief ChooseFileButton::keyPressEvent 添加键盘响应。
- * @param event
- */
 void ChooseFileButton::keyPressEvent(QKeyEvent *event)
 {
     // 当按下回车、换行、或空格时，如果当前按钮存在焦点则触发click事件

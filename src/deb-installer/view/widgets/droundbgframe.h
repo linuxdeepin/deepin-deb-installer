@@ -30,12 +30,12 @@ public:
     void paintEvent(QPaintEvent *) override;
 
 public slots:
-    void onShowHideTopBg(bool bShow);
-    void onShowHideBottomBg(bool bShow);
+    void slotShowHideTopBg(bool bShow);
+    void slotShowHideBottomBg(bool bShow);
 
 private:
-    int m_bgOffsetTop = 0;
-    int m_bgOffsetBottom = 0;
+    int m_bgOffsetTop       = 0;
+    int m_bgOffsetBottom    = 0;
 };
 
 #endif // DROUNDBGFRAME_H

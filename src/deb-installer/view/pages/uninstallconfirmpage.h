@@ -32,32 +32,53 @@ class UninstallConfirmPage : public QWidget
 public:
     explicit UninstallConfirmPage(QWidget *parent = nullptr);
 
-    void setPackage(const QString &name);
+    /**
+     * @brief setPackage 设置要卸载的包的名称
+     * @param packageName 包的名称
+     */
+    void setPackage(const QString &packageName);
+
+    /**
+     * @brief setRequiredList 设置依赖当前包的依赖列表
+     * @param requiredList 依赖列表
+     */
     void setRequiredList(const QStringList &requiredList);
 
-protected:
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
 signals:
-    void accepted() const;
-    void canceled() const;
-    void OutOfFocus(bool) const;
+
+    /**
+     * @brief signalUninstallAccepted 卸载确认
+     */
+    void signalUninstallAccepted() const;
+
+    /**
+     * @brief signalUninstallCanceled 卸载取消
+     */
+    void signalUninstallCanceled() const;
+
 
 private slots:
-    void showDetail();
-    void hideDetail();
+
+    /**
+     * @brief slotShowDetail 显示卸载信息
+     */
+    void slotShowDetail();
+
+    /**
+     * @brief slotHideDetail 隐藏卸载信息
+     */
+    void slotHideDetail();
 
 private:
-    DLabel *m_icon;
-    DLabel *m_tips;
-    QWidget *m_infoWrapperWidget;
-    InfoControlButton *m_infoControl;
-    InstallProcessInfoView *m_dependsInfomation;
-    DPushButton *m_cancelBtn;
-    DPushButton *m_confirmBtn;
+    DLabel                  *m_icon                = nullptr;
+    DLabel                  *m_tips                = nullptr;
+    QWidget                 *m_infoWrapperWidget   = nullptr;
+    InfoControlButton       *m_infoControl         = nullptr;
+    InstallProcessInfoView  *m_dependsInfomation   = nullptr;
+    DPushButton             *m_cancelBtn           = nullptr;
+    DPushButton             *m_confirmBtn          = nullptr;
 
-    QStringList m_requiredList;
-    QString m_description;
-    int m_MouseBtnRelease = 0;
+    QStringList             m_requiredList         = {};
+    QString                 m_description          = "";
 };
 #endif  // UNINSTALLCONFIRMPAGE_H

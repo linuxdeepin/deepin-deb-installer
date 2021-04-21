@@ -42,8 +42,11 @@ class AptConfigMessage : public DMainWindow
 public:
     explicit AptConfigMessage(QWidget *parent = nullptr);
     ~AptConfigMessage() override;
-    InstallProcessInfoView *m_textEdit;
 
+public:
+    InstallProcessInfoView *m_textEdit = nullptr;
+
+public:
     static AptConfigMessage *getInstance()
     {
         if (aptConfig == nullptr) {
@@ -56,7 +59,7 @@ public:
      * @brief appendTextEdit 获取安装进程返回的信息
      * @param str 安装进程的详细信息
      */
-    void appendTextEdit(QString str);
+    void appendTextEdit(QString processInfo);
 
     /**
      * @brief clearTexts 清除输入框和信息框中的内容
@@ -80,9 +83,9 @@ protected:
 
 private:
 
-    DLineEdit *m_inputEdit;                 //输入框
-    DSuggestButton *m_pushbutton;           //确定输入按钮
-    DLabel *m_pQuestionLabel;               //提示信息
+    DLineEdit *m_inputEdit              = nullptr;              //输入框
+    DSuggestButton *m_pushbutton        = nullptr;              //确定输入按钮
+    DLabel *m_pQuestionLabel            = nullptr;              //提示信息
     static AptConfigMessage *aptConfig;
 
 private:

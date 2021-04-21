@@ -60,8 +60,8 @@ private:
     QPalette::ColorRole m_colorRole;    //当前label的字体颜色角色（QPalette）
     DPalette::ColorType m_colorType;    //当前Label的字体颜色类型（DPalette）
 
-    bool m_bUserColorType;              //是否是使用的DPalette
-    bool m_bMultiIns = false;           //是否是使用的自定义DPalette风格
+    bool                m_bUserColorType           = false;              //是否是使用的DPalette
+    bool                m_bMultiIns                = false;           //是否是使用的自定义DPalette风格
 };
 
 #endif // DEBINFOLABEL_H

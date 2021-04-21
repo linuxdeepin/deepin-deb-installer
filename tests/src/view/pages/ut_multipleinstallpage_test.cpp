@@ -73,19 +73,19 @@ TEST_F(MultipleInstallPage_UT, total_UT)
 {
     Stub stub;
     stub.set(ADDR(DebListModel, getInstallFileSize), stud_getInstallFileSize);
-    multiplepage->onWorkerFinshed();
-    multiplepage->onOutputAvailable("test");
-    multiplepage->onProgressChanged(100);
-    multiplepage->onAutoScrollInstallList(-1);
-    multiplepage->onAutoScrollInstallList(2);
-    multiplepage->onRequestRemoveItemClicked(debListModel->index(0));
+    multiplepage->slotWorkerFinshed();
+    multiplepage->slotOutputAvailable("test");
+    multiplepage->slotProgressChanged(100);
+    multiplepage->slotAutoScrollInstallList(-1);
+    multiplepage->slotAutoScrollInstallList(2);
+    multiplepage->slotRequestRemoveItemClicked(debListModel->index(0));
     EXPECT_EQ(debListModel->isWorkerPrepare(), true);
-    multiplepage->showInfo();
+    multiplepage->slotShowInfo();
     EXPECT_EQ(multiplepage->m_upDown, false);
-    multiplepage->hiddenCancelButton();
+    multiplepage->slotHiddenCancelButton();
     multiplepage->setEnableButton(true);
     multiplepage->refreshModel();
-    multiplepage->hideInfo();
+    multiplepage->slotHideInfo();
     multiplepage->afterGetAutherFalse();
 
     multiplepage->DealDependResult(2, "test");

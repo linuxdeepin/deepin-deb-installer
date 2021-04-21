@@ -32,27 +32,15 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
 {
     initUI(w, h);
 
-    //fix bug: 44726 https://pms.uniontech.com/zentao/bug-view-44726.html
-    //使用自写控件实现滑动，废弃
-//    QScroller::grabGesture(m_editor, QScroller::TouchGesture);
-
     //数据更新后，直接跳转到最后一行
     connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
         m_editor->moveCursor(QTextCursor::End);
     });
     //设置TextEdit和InfoView为无焦点
-    //fix bug:https://pms.uniontech.com/zentao/bug-view-48235.html
     this->setFocusPolicy(Qt::NoFocus);
     m_editor->setFocusPolicy(Qt::NoFocus);
 }
 
-/**
- * @brief InstallProcessInfoView::initUI 初始化ProcessInfo的大小
- * @param w 控件的宽度
- * @param h 控件的高度
- * 此处在SP3之后修改，增加宽度高度参数
- * 为适应配置框的大小与安装器installProcessInfo的大小
- */
 void InstallProcessInfoView::initUI(int w, int h)
 {
     //设置控件背景色
@@ -93,21 +81,12 @@ void InstallProcessInfoView::initUI(int w, int h)
     m_editor->setTextCursor(textCursor);
 }
 
-/**
- * @brief InstallProcessInfoView::setTextFontSize 设置字体大小
- * @param fontSize      字体大小        PS:此参数无实际意义
- * @param fontWeight    字体大小
- */
 void InstallProcessInfoView::setTextFontSize(int fontSize, int fontWeight)
 {
     QString textFont = Utils::loadFontFamilyByType(Utils::DefautFont);
     Utils::bindFontBySizeAndWeight(m_editor, textFont, fontSize, fontWeight);
 }
 
-/**
- * @brief InstallProcessInfoView::setTextColor 设置字体颜色
- * @param ct    字体颜色
- */
 void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
 {
     m_colorType = ct;                                                   //保存传入的颜色类型
@@ -116,10 +95,6 @@ void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
     m_editor->setPalette(pa);
 }
 
-/**
- * @brief InstallProcessInfoView::appendText 向editor添加要显示的数据
- * @param text  要显示的数据
- */
 void InstallProcessInfoView::appendText(QString text)
 {
     m_editor->append(text);
@@ -150,6 +125,10 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     }
 }
 
+/**
+ * @brief 清除当前展示框中的内容
+ * 
+ */
 void InstallProcessInfoView::clearText()
 {
     m_editor->clear();

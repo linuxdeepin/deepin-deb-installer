@@ -27,7 +27,7 @@ class InfoCommandLinkButton : public DCommandLinkButton
 {
 public:
     explicit InfoCommandLinkButton(QString text, QWidget *parent = nullptr);
-    // QWidget interface
+    
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 };

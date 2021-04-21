@@ -33,6 +33,28 @@
 #include <DSysInfo>
 #include <QProcess>
 
+
+/**
+ * @brief isDpkgRunning 判断当前dpkg 是否在运行
+ * @return
+ */
+bool isDpkgRunning();
+/**
+ * @brief netErrors
+ * @return the List of The Error infomations.
+ * 无网络安装依赖时，库返回错误为FetechError 偶尔为CommitError
+ * 此函数处理库返回CommitError时，网络错误的各种情况，如果错误信息中包含此列表中的信息，则判断为网络原因。
+ */
+const QStringList netErrors();
+
+/**
+ * @brief workerErrorString 根据安装失败的代码显示安装失败的原因。
+ * @param errorCode 库或自定义的安装失败代码
+ * @param errorInfo 库返回的或自定义的安装错误的原因
+ * @return 要显示的安装失败的原因
+ */
+const QString workerErrorString(const int errorCode, const QString errorInfo);
+
 class PackagesManager;
 class AptConfigMessage;
 
@@ -208,218 +230,248 @@ public:
 
 signals:
     /**
-     * @brief lockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
+     * @brief signalLockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
      * @param lock 启用/禁用按钮
      */
-    void lockForAuth(const bool lock) const;
+    void signalLockForAuth(const bool lock) const;
 
     /**
-     * @brief AuthCancel    授权取消
+     * @brief signalAuthCancel    授权取消
      */
-    void AuthCancel();
+    void signalAuthCancel();
 
     /**
-     * @brief onStartInstall  开始安装
+     * @brief signalStartInstall  开始安装
      */
-    void onStartInstall();
+    void signalStartInstall();
 
     /**
-     * @brief workerFinished  安装结束
+     * @brief signalWorkerFinished  安装结束
      */
-    void workerFinished() const;
+    void signalWorkerFinished() const;
 
     /**
-     * @brief transactionProgressChanged
+     * @brief signalTransactionProgressChanged
      * 某一个包的安装进度改变
      * @param progress
      */
-    void transactionProgressChanged(const int progress) const;
+    void signalTransactionProgressChanged(const int progress) const;
 
     /**
-     * @brief workerProgressChanged 整体的安装进度改变
+     * @brief signalWorkerProgressChanged 整体的安装进度改变
      * @param progress
      */
-    void workerProgressChanged(const int progress) const;
+    void signalWorkerProgressChanged(const int progress) const;
 
     /**
-     * @brief packageOperationChanged 包操作状态改变
+     * @brief signalPackageOperationChanged 包操作状态改变
      * @param index 包的index
      * @param status    修改的状态
      */
-    void packageOperationChanged(const QModelIndex &index, int status) const;
+    void signalPackageOperationChanged(const QModelIndex &index, int status) const;
 
     /**
-     * @brief packageDependsChanged     包的依赖状态改变
+     * @brief signalPackageDependsChanged     包的依赖状态改变
      * @param index     包的index
      * @param status    修改后的状态
      */
-    void packageDependsChanged(const QModelIndex &index, int status) const;
+    void signalPackageDependsChanged(const QModelIndex &index, int status) const;
 
     /**
-     * @brief appendOutputInfo      安装输出信息
+     * @brief signalAppendOutputInfo      安装输出信息
      * @param info      要显示的信息
      */
-    void appendOutputInfo(const QString &info) const;
+    void signalAppendOutputInfo(const QString &info) const;
 
     /**
-     * @brief onChangeOperateIndex  index 被修改
+     * @brief signalChangeOperateIndex  index 被修改
      * @param opIndex       修改后的index
      */
-    void onChangeOperateIndex(int opIndex);
+    void signalChangeOperateIndex(int opIndex);
 
     /**
-     * @brief EnableReCancelBtn         授权框弹出后禁用按钮，授权框取消后启用按钮
+     * @brief signalEnableReCancelBtn         授权框弹出后禁用按钮，授权框取消后启用按钮
      * @param bEnable       启用/禁用按钮的标识
      */
-    void EnableReCancelBtn(bool bEnable);
+    void signalEnableReCancelBtn(bool bEnable);
 
     /**
-     * @brief DependResult  依赖下载的状态
+     * @brief signalDependResult  依赖下载的状态
      */
-    void DependResult(int, QString);
+    void signalDependResult(int, QString);
 
     /**
-     * @brief enableCloseButton        设置关闭按钮是否可用
+     * @brief signalEnableCloseButton        设置关闭按钮是否可用
      */
-    void enableCloseButton(bool);
+    void signalEnableCloseButton(bool);
 
     /**
-     * @brief invalidPackage 无效包的信号
+     * @brief signalInvalidPackage 无效包的信号
      */
-    void invalidPackage();
+    void signalInvalidPackage();
 
     /**
-     * @brief notLocalPackage 包不在本地的信号
+     * @brief signalNotLocalPackage 包不在本地的信号
      *
      * ps: 包不在本地无法安装
      */
-    void notLocalPackage();
+    void signalNotLocalPackage();
 
     /**
-     * @brief packageCannotFind 包已经被移动的信号 通知前端发送浮动消息
+     * @brief signalPackageCannotFind 包已经被移动的信号 通知前端发送浮动消息
      * @param packageName 被移动的文件名
      */
-    void packageCannotFind(QString packageName) const;
+    void signalPackageCannotFind(QString packageName) const;
 
 
     /**
-     * @brief packageAlreadyExists 包已添加的信号
+     * @brief signalPackageAlreadyExists 包已添加的信号
      */
-    void packageAlreadyExists();
+    void signalPackageAlreadyExists();
 signals:
     /**
-     * @brief refreshSinglePage 刷新单包安装界面的信号
+     * @brief signalRefreshSinglePage 刷新单包安装界面的信号
      */
-    void refreshSinglePage();
+    void signalRefreshSinglePage();
 
     /**
-     * @brief refreshMultiPage 刷新批量安装model的信号
+     * @brief signalRefreshMultiPage 刷新批量安装model的信号
      */
-    void refreshMultiPage();
+    void signalRefreshMultiPage();
 
     /**
-     * @brief single2MultiPage 刷新批量安装的信号
+     * @brief signalSingle2MultiPage 刷新批量安装的信号
      */
-    void single2MultiPage();
+    void signalSingle2MultiPage();
 
     /**
-     * @brief refreshFileChoosePage 刷新首页
+     * @brief signalRefreshFileChoosePage 刷新首页
      */
-    void refreshFileChoosePage();
+    void signalRefreshFileChoosePage();
 
     /**
-     * @brief appendStart 正在添加的信号
+     * @brief signalAppendStart 正在添加的信号
      */
-    void appendStart();
+    void signalAppendStart();
 
     /**
-     * @brief appendFinished 添加结束的信号
+     * @brief signalAppendFinished 添加结束的信号
      */
-    void appendFinished();
+    void signalAppendFinished();
 
 public slots:
 
     /**
-     * @brief setCurrentIndex   设置当前操作的index
+     * @brief slotSetCurrentIndex   设置当前操作的index
      * @param idx       修改后的index
      */
-    void setCurrentIndex(const QModelIndex &idx);
+    void slotSetCurrentIndex(const QModelIndex &idx);
 
     /**
-     * @brief installPackages 开始安装所有的包
+     * @brief slotInstallPackages 开始安装所有的包
      */
-    void installPackages();
+    void slotInstallPackages();
 
     /**
-     * @brief uninstallPackage     卸载某一个包
-     * @param idx   包的index
+     * @brief slotUninstallPackage     卸载某一个包
+     * @param index   包的index
      */
-    void uninstallPackage(const int idx);
+    void slotUninstallPackage(const int index);
 
     /**
-     * @brief removePackage 删除某一个包
+     * @brief slotRemovePackage 删除某一个包
      * @param idx 要删除的包的index
      */
-    void removePackage(const int idx);
+    void slotRemovePackage(const int idx);
 
     /**
-     * @brief appendPackage 添加包
+     * @brief slotAppendPackage 添加包
      * @param package 添加的包的路径
      * @return 是否添加成功（主要是判断是否重复添加）
      */
-    void appendPackage(QStringList packages);
+    void slotAppendPackage(QStringList packages);
 
     /**
-     * @brief onTransactionErrorOccurred 安装过程中出现错误
+     * @brief slotTransactionErrorOccurred 安装过程中出现错误
      */
-    void onTransactionErrorOccurred();
+    void slotTransactionErrorOccurred();
 
     /**
-     * @brief onTransactionStatusChanged 安装状态出现改变
-     * @param stat
+     * @brief slotTransactionStatusChanged 安装状态出现改变
+     * @param TransactionStatus
      */
-    void onTransactionStatusChanged(QApt::TransactionStatus stat);
+    void slotTransactionStatusChanged(QApt::TransactionStatus TransactionStatus);
 
     /**
-     * @brief DealDependResult 处理依赖安装的过程
-     * @param iAuthRes      过程标识
-     * @param iIndex        包的index（因为这个包的依赖不被满足）
+     * @brief slotDealDependResult 处理依赖安装的过程
+     * @param authType      授权类型
+     * @param dependIndex   依赖包的index（因为这个包的依赖不被满足）
      * @param dependName    发生依赖安装失败的依赖名称
      */
-    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
+    void slotDealDependResult(int authType, int dependIndex, QString dependName);
 
 public slots:
     /**
-     * @brief ConfigReadOutput 处理配置包的输出并显示
+     * @brief slotConfigReadOutput 处理配置包的输出并显示
      */
-    void ConfigReadOutput();
+    void slotConfigReadOutput();
 
     /**
-     * @brief ConfigInstallFinish 配置结束
+     * @brief slotConfigInstallFinish 配置结束
      * @param flag 配置安装的结果
      */
-    void ConfigInstallFinish(int flag);
+    void slotConfigInstallFinish(int flag);
 
     /**
-     * @brief ConfigInputWrite 配置的输入数据处理
+     * @brief slotConfigInputWrite 配置的输入数据处理
      * @param str 输入的数据（一般是输入的选项）
      */
-    void ConfigInputWrite(QString str);
+    void slotConfigInputWrite(QString str);
 
     /**
-     * @brief checkInstallStatus 根据命令返回的消息判断安装状态
+     * @brief slotCheckInstallStatus 根据命令返回的消息判断安装状态
      * @param str  命令返回的安装信息
      * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
      * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
      */
-    void checkInstallStatus(QString str);
+    void slotCheckInstallStatus(QString str);
 
 private slots:
 
     /**
-     * @brief upWrongStatusRow 安装完成后对安装失败的包上滚 其中包括各种状态的变更
+     * @brief slotUpWrongStatusRow 安装完成后对安装失败的包上滚 其中包括各种状态的变更
      */
-    void upWrongStatusRow();
+    void slotUpWrongStatusRow();
+
+    /**
+     * @brief slotTransactionOutput
+     * 修改当前包的工作状态
+     */
+    void slotTransactionOutput();
+
+    /**
+     * @brief slotTransactionFinished
+     * 当前包安装结束
+     */
+    void slotTransactionFinished();
+
+    /**
+     * @brief  slotDependsInstallTransactionFinished();
+
+     * 当前包依赖安装结束
+     * 依赖安装成功，安装当前包
+     * 依赖安装失败，记录失败原因，安装下一个包
+     */
+    void slotDependsInstallTransactionFinished();
+
+    /**
+     * @brief slotUninstallFinished
+     * 卸载结束槽函数
+     * 切换工作状态
+     * 切换操作状态
+     * 发送卸载结束信号
+     */
+    void slotUninstallFinished();
 
 private:
 
@@ -454,39 +506,10 @@ private:
     void installDebs();
 
     /**
-     * @brief onTransactionOutput
-     * 修改当前包的工作状态
-     */
-    void onTransactionOutput();
-
-    /**
-     * @brief onTransactionFinished
-     * 当前包安装结束
-     */
-    void onTransactionFinished();
-
-    /**
-     * @brief onDependsInstallTransactionFinished
-     * 当前包依赖安装结束
-     * 依赖安装成功，安装当前包
-     * 依赖安装失败，记录失败原因，安装下一个包
-     */
-    void onDependsInstallTransactionFinished();
-
-    /**
-     * @brief uninstallFinished
-     * 卸载结束槽函数
-     * 切换工作状态
-     * 切换操作状态
-     * 发送卸载结束信号
-     */
-    void uninstallFinished();
-
-    /**
      * @brief refreshOperatingPackageStatus 刷新当前操作的包的操作状态
-     * @param stat  要修改的操作状态
+     * @param oprationStatus  要修改的操作状态
      */
-    void refreshOperatingPackageStatus(const PackageOperationStatus stat);
+    void refreshOperatingPackageStatus(const PackageOperationStatus oprationStatus);
 
     /**
      * @brief packageFailedReason  获取包安装失败的原因
@@ -523,10 +546,13 @@ private:
      */
     void showDigitalErrWindow();
 
+
     /**
-     * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
+     * @brief 数字签名校验失败 弹窗处理的槽函数
+     * 
+     * @param errorCode 错误原因代码
      */
-    void digitalVerifyFailed(ErrorCode code);
+    void digitalVerifyFailed(ErrorCode errorCode);
 
     /**
      * @brief showDevelopModeWindow 打开控制中心通用界面
@@ -566,10 +592,13 @@ private:
      */
     void enableTitleBarFocus();
 
+
     /**
-     * @brief getPackageMd5 获取当前操作的包的md5值
+     * @brief Get the Package Md5 object
+     * 
+     * @param packagesMD5 所有包的md5的列表
      */
-    void getPackageMd5(QList<QByteArray> md5);
+    void getPackageMd5(QList<QByteArray> packagesMD5);
 
 //// 文件移动、删除、修改检查
 private:
@@ -604,31 +633,50 @@ private:
     void initRefreshPageConnecions();
 
 private:
-    int m_workerStatus;                                 //当前工作状态
-    int m_operatingIndex;                               //当前正在操作的index
-    QByteArray m_operatingPackageMd5;                   //当前正在处理的包的md5
-    int m_operatingStatusIndex;                         //当前正在操作的状态的index
+    //当前工作状态
+    int m_workerStatus                  = 0;
 
-    QModelIndex m_currentIdx;                           //当前的index
-    PackagesManager *m_packagesManager;                 //后端类
+    //当前正在操作的index
+    int m_operatingIndex                = 0;
 
-    QPointer<QApt::Transaction> m_currentTransaction;   //当前正在运行的Trans
+    //当前正在操作的状态的index
+    int m_operatingStatusIndex          = 0;
 
-    // 修改 operateStatus的存放结构，现在与Md5绑定。
-    QMap<QByteArray, int> m_packageOperateStatus;              //所有包的操作状态Map
+    //当前正在处理的包的md5
+    QByteArray m_operatingPackageMd5    = nullptr;
 
-    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-    QMap<QByteArray, int> m_packageFailCode;                   //FailCode 错误代码 ，trans返回的错误代码
-    QMap<QByteArray, QString> m_packageFailReason;             //FailReason , trans返回的详细错误信息
 
-    QProcess *m_procInstallConfig;                      // 配置安装进程
-    const QString tempPath = "/tmp/DEBIAN";             // 配置的临时目录
+    //当前的index
+    QModelIndex m_currentIdx;
 
-    bool m_isDevelopMode = true;                      // 开发者模式的标志变量 ps：部分系统版本无需签名验证，默认开发者模式
+    //后端类
+    PackagesManager *m_packagesManager  = nullptr;
 
-    QList<QByteArray> m_packageMd5;
+    //当前正在运行的Trans
+    QPointer<QApt::Transaction> m_currentTransaction;
 
-    AptConfigMessage *configWindow = nullptr;
+    //所有包的操作状态Map
+    QMap<QByteArray, int> m_packageOperateStatus = {};
+
+    //FailCode 错误代码 ，trans返回的错误代码
+    QMap<QByteArray, int> m_packageFailCode      = {};
+
+    //FailReason , trans返回的详细错误信息
+    QMap<QByteArray, QString> m_packageFailReason= {};
+
+    // 配置安装进程
+    QProcess *m_procInstallConfig                = {};
+
+    // 配置的临时目录
+    const QString tempPath                       = "/tmp/DEBIAN";
+
+    // 开发者模式的标志变量
+    //部分系统版本无需签名验证，默认开发者模式
+    bool m_isDevelopMode                         = true;
+
+    QList<QByteArray> m_packageMd5               = {};
+
+    AptConfigMessage *configWindow               = nullptr;
 };
 
 #endif  // DEBLISTMODEL_H

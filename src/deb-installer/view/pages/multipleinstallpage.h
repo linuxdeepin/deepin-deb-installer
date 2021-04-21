@@ -67,59 +67,59 @@ signals:
     /**
      * @brief back 返回到fileChooseWidget界面的信号
      */
-    void back() const;
+    void signalBackToFileChooseWidget() const;
 
     /**
      * @brief requestRemovePackage  删除包的信号
      * @param index 要删除的包的下标
      */
-    void requestRemovePackage(const int index) const;
+    void signalRequestRemovePackage(const int index) const;
 
 private slots:
 
     /**
      * @brief onWorkerFinshed   批量安装结束，调整页面展示效果
      */
-    void onWorkerFinshed();
+    void slotWorkerFinshed();
 
     /**
      * @brief onOutputAvailable 批量安装过程中添加安装信息
      * @param output    安装过程信息
      */
-    void onOutputAvailable(const QString &output);
+    void slotOutputAvailable(const QString &output);
 
     /**
      * @brief onProgressChanged 批量安装进度变化
      * @param progress 已经增加的进度
      */
-    void onProgressChanged(const int progress);
+    void slotProgressChanged(const int progress);
 
     /**
      * @brief onRequestRemoveItemClicked 在批量安装的包的时候删除某个包
      * @param index 要删除的包的下标
      */
-    void onRequestRemoveItemClicked(const QModelIndex &index);
+    void slotRequestRemoveItemClicked(const QModelIndex &index);
 
     /**
      * @brief showInfo  处理展示详细信息的界面展示
      */
-    void showInfo();
+    void slotShowInfo();
 
     /**
      * @brief hideInfo  处理隐藏详细信息的界面展示
      */
-    void hideInfo();
+    void slotHideInfo();
 
     /**
      * @brief onAutoScrollInstallList  自动滚动到当前正在安装的包
      * @param opIndex  当前正在安装的包的位置
      */
-    void onAutoScrollInstallList(int opIndex);
+    void slotAutoScrollInstallList(int opIndex);
 
     /**
      * @brief hiddenCancelButton    安装开始后处理界面展示情况
      */
-    void hiddenCancelButton();
+    void slotHiddenCancelButton();
 
 private:
 
@@ -145,7 +145,6 @@ private:
 
     /**
      * @brief setButtonFocusPolicy 设置按钮的焦点策略
-     * @param focusPolicy 是否启用焦点
      */
     void setButtonFocusPolicy();
 
@@ -161,36 +160,33 @@ private:
 
 
 private:
-    DebListModel *m_debListModel;                       //listModel类
 
-    DRoundBgFrame *m_appsListViewBgFrame;               //listView的背景frame 修改listView的背景样式
-    QWidget *m_contentFrame;                            //applistview  infoControlButton的frame
-    QWidget *m_processFrame;                            //process 的frame
-    QVBoxLayout *m_contentLayout;                       //applistview  infoControlButton的布局
-    QVBoxLayout *m_centralLayout;                       //主布局
+    DRoundBgFrame           *m_appsListViewBgFrame      = nullptr;  //listView的背景frame 修改listView的背景样式
+    DebListModel            *m_debListModel             = nullptr;  //listModel类
+    QWidget                 *m_contentFrame             = nullptr;  //applistview  infoControlButton的frame
+    QWidget                 *m_processFrame             = nullptr;  //process 的frame
+    QVBoxLayout             *m_contentLayout            = nullptr;  //applistview  infoControlButton的布局
+    QVBoxLayout             *m_centralLayout            = nullptr;  //主布局
 
-    PackagesListView *m_appsListView;                   //listView
+    PackagesListView        *m_appsListView             = nullptr;  //listView
 
-    InstallProcessInfoView *m_installProcessInfoView;   //安装进程信息显示窗口
+    InstallProcessInfoView  *m_installProcessInfoView   = nullptr;  //安装进程信息显示窗口
 
-    WorkerProgress *m_installProgress;                  //进度显示
-    QPropertyAnimation *m_progressAnimation;            //进度动画
+    WorkerProgress          *m_installProgress          = nullptr;  //进度显示
+    QPropertyAnimation      *m_progressAnimation        = nullptr;  //进度动画
 
-    InfoControlButton *m_infoControlButton;             //展开收缩控制按钮
-    DPushButton *m_installButton;                       //安装按钮
-    DPushButton *m_backButton;                          //返回文件选择窗口的按钮
-    DPushButton *m_acceptButton;                        //确认按钮
+    InfoControlButton       *m_infoControlButton        = nullptr;  //展开收缩控制按钮
+    DPushButton             *m_installButton            = nullptr;  //安装按钮
+    DPushButton             *m_backButton               = nullptr;  //返回文件选择窗口的按钮
+    DPushButton             *m_acceptButton             = nullptr;  //确认按钮
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
-    DCommandLinkButton *m_tipsLabel;                    //依赖安装提示按钮
-    DSpinner *m_dSpinner;                               //依赖安装动画
+    DCommandLinkButton      *m_tipsLabel                = nullptr;  //依赖安装提示按钮
+    DSpinner                *m_dSpinner                 = nullptr;  //依赖安装动画
 
-    int m_index = -1;                                   //当前添加的index
 
-    bool m_upDown = true;                               //展开收缩的标识
-    //install:1    finish:2
-    int m_currentFlag = 1;                              //此变量被废弃
-    int m_MouseBtnRelease = 0;                          //此变量被废弃
+    int m_index             = -1;                                   //当前添加的index
+    bool m_upDown           = true;                                 //展开收缩的标识
 };
 
 #endif // MULTIPLEINSTALLPAGE_H

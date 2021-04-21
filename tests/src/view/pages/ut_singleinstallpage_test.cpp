@@ -155,15 +155,15 @@ TEST_F(SingleInstallpage_UT, total_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
     model->m_packagesManager->m_preparedPackages.append("test");
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
-    page->reinstall();
+    page->slotReinstall();
 
     EXPECT_EQ(page->initLabelWidth(11), 260);
     EXPECT_EQ(page->initLabelWidth(12), 255);
@@ -175,18 +175,18 @@ TEST_F(SingleInstallpage_UT, total_UT)
     EXPECT_EQ(page->initLabelWidth(20), 220);
     EXPECT_EQ(page->initLabelWidth(22), 220);
 
-    page->install();
-    page->uninstallCurrentPackage();
-    page->showInfomation();
-    page->hideInfomation();
-    page->showInfo();
-    page->onOutputAvailable("test");
+    page->slotInstall();
+    page->slotUninstallCurrentPackage();
+    page->slotShowInfomation();
+    page->slotHideInfomation();
+    page->slotShowInfo();
+    page->slotOutputAvailable("test");
     page->m_upDown = false;
-    page->onWorkerFinished();
+    page->slotWorkerFinished();
 
-    page->onWorkerProgressChanged(100);
+    page->slotWorkerProgressChanged(100);
     page->m_progress->setValue(60);
-    page->onWorkerProgressChanged(50);
+    page->slotWorkerProgressChanged(50);
 
     page->setEnableButton(false);
     page->setEnableButton(true);
@@ -219,8 +219,8 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
@@ -231,9 +231,9 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     usleep(100 * 1000);
     stub.set(ADDR(QVariant, toInt), stud_failedtoInt);
     page->m_operate = SingleInstallPage::Uninstall;
-    page->onWorkerFinished();
+    page->slotWorkerFinished();
     page->m_operate = SingleInstallPage::Install;
-    page->onWorkerFinished();
+    page->slotWorkerFinished();
 }
 
 TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
@@ -248,8 +248,8 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, installPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, uninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();
@@ -261,9 +261,9 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     page->showPackageInfo();
 
     stub.set(ADDR(QVariant, toInt), stud_successtoInt);
-    page->onWorkerFinished();
+    page->slotWorkerFinished();
     page->m_operate = SingleInstallPage::Install;
-    page->onWorkerFinished();
+    page->slotWorkerFinished();
     page->m_operate = SingleInstallPage::Uninstall;
     page->setAuthBefore();
     page->DealDependResult(3, "test");

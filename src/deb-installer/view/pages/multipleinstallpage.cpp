@@ -31,8 +31,8 @@
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
-    , m_debListModel(model)
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
+    , m_debListModel(model)
     , m_contentFrame(new QWidget(this))
     , m_processFrame(new QWidget(this))
     , m_contentLayout(new QVBoxLayout())
@@ -59,9 +59,6 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     m_appsListView->setRightMenuShowStatus(true);//设置批量安装右键删除菜单可用
 }
 
-/**
- * @brief MultipleInstallPage::initControlAccessibleName 添加控件的AccessibleName
- */
 void MultipleInstallPage::initControlAccessibleName()
 {
     //添加contentFrame AccessibleName
@@ -105,9 +102,6 @@ void MultipleInstallPage::initControlAccessibleName()
     m_tipsLabel->setAccessibleName("TipsCommandLinkButton");
 }
 
-/**
- * @brief MultipleInstallPage::initContentLayout 初始化主布局
- */
 void MultipleInstallPage::initContentLayout()
 {
     //子布局添加10px 的空格
@@ -134,21 +128,6 @@ void MultipleInstallPage::initContentLayout()
 #endif
 }
 
-/**
- * @brief MultipleInstallPage::initUI 初始化各个UI控件
- * 对PackageListView 进程重绘
- * 设置appListView的背景样式
- * 设置appListView的展示效果
- *
- * 初始化安装按钮、确认按钮、返回按钮
- * 设置各个按钮的显示效果
- * 设置各个按钮的字体的展示效果
- * 处理各个控件的焦点
- * 初始化安装进度控件
- * 初始化依赖安装动画控件
- *
- * 各个小布局的规制
- */
 void MultipleInstallPage::initUI()
 {
     this->setFocusPolicy(Qt::NoFocus);
@@ -156,7 +135,7 @@ void MultipleInstallPage::initUI()
     PackagesListDelegate *delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
 
     //获取currentIndex的坐标位置，用于键盘触发右键菜单
-    connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::getPos);
+    connect(delegate, &PackagesListDelegate::sigIndexAndRect, m_appsListView, &PackagesListView::slotGetPos);
     //fix bug:33730
     m_appsListViewBgFrame->setFixedSize(460, 186/* + 10*/ + 5);
 
@@ -173,7 +152,7 @@ void MultipleInstallPage::initUI()
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::setItemHeight, [ = ](int height) {
+    connect(m_appsListView, &PackagesListView::signalChangeItemHeight, [ = ](int height) {
         delegate->getItemHeight(height);
     });
 
@@ -280,9 +259,7 @@ void MultipleInstallPage::initUI()
 
     m_contentLayout->addWidget(btnsFrame);
 }
-/**
- * @brief MultipleInstallPage::initTabOrder 初始化tab焦点切换顺序。
- */
+
 void MultipleInstallPage::initTabOrder()
 {
     // 修改焦点切换的顺序
@@ -294,10 +271,6 @@ void MultipleInstallPage::initTabOrder()
     QWidget::setTabOrder(m_backButton, m_acceptButton);
 }
 
-/**
- * @brief MultipleInstallPage::setButtonFocusPolicy 设置按钮的焦点策略
- * @param focusPolicy 是否启用焦点
- */
 void MultipleInstallPage::setButtonFocusPolicy()
 {
     // 修改焦点控制 启用焦点设置为TabFouce
@@ -312,9 +285,6 @@ void MultipleInstallPage::setButtonFocusPolicy()
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
 }
 
-/**
- * @brief MultipleInstallPage::setButtonAutoDefault  设置按钮可以被enter和Return键触发
- */
 void MultipleInstallPage::setButtonAutoDefault()
 {
     //增加键盘enter控制按钮
@@ -326,48 +296,43 @@ void MultipleInstallPage::setButtonAutoDefault()
 void MultipleInstallPage::initConnections()
 {
     // 详细信息展开
-    connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::showInfo);
+    connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::slotShowInfo);
 
     //详细信息收缩
-    connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::hideInfo);
+    connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::slotHideInfo);
 
     //开始安装
-    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::installPackages);
+    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::slotInstallPackages);
 
     //开始安装后隐藏安装按钮等
-    connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::hiddenCancelButton);
+    connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::slotHiddenCancelButton);
 
     //返回到文件选择窗口
-    connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::back);
+    connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::signalBackToFileChooseWidget);
 
     //退出应用程序
     connect(m_acceptButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     //在listView中删除了某一个包，需要在PackageManager中同步删除
-    connect(m_appsListView, &PackagesListView::onRemoveItemClicked, this, &MultipleInstallPage::onRequestRemoveItemClicked);
+    connect(m_appsListView, &PackagesListView::signalRemoveItemClicked, this, &MultipleInstallPage::slotRequestRemoveItemClicked);
 
     //安装过程中进度发生变化
-    connect(m_debListModel, &DebListModel::workerProgressChanged, this, &MultipleInstallPage::onProgressChanged);
+    connect(m_debListModel, &DebListModel::signalWorkerProgressChanged, this, &MultipleInstallPage::slotProgressChanged);
 
     //安装过程中安装信息变化
-    connect(m_debListModel, &DebListModel::appendOutputInfo, this, &MultipleInstallPage::onOutputAvailable);
+    connect(m_debListModel, &DebListModel::signalAppendOutputInfo, this, &MultipleInstallPage::slotOutputAvailable);
 
     //开始安装时，显示安装进度条
-    connect(m_debListModel, &DebListModel::onStartInstall, this, [ = ] {
+    connect(m_debListModel, &DebListModel::signalStartInstall, this, [ = ] {
         m_processFrame->setVisible(true);
     });
 
     //一个包安装结束后 listView滚动到其在listview中的位置
-    connect(m_debListModel, &DebListModel::onChangeOperateIndex, this, &MultipleInstallPage::onAutoScrollInstallList);
+    connect(m_debListModel, &DebListModel::signalChangeOperateIndex, this, &MultipleInstallPage::slotAutoScrollInstallList);
 }
 
-/**
- * @brief MultipleInstallPage::onWorkerFinshed 安装结束的界面展示效果处理
- */
-void MultipleInstallPage::onWorkerFinshed()
+void MultipleInstallPage::slotWorkerFinshed()
 {
-    m_currentFlag = 2;   //install finish
-
     //安装结束显示返回和确认按钮
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
@@ -376,11 +341,7 @@ void MultipleInstallPage::onWorkerFinshed()
     m_appsListView->setRightMenuShowStatus(false);      //安装结束不允许删除包
 }
 
-/**
- * @brief MultipleInstallPage::onOutputAvailable 向安装详细信息展示窗口添加安装进度信息
- * @param output 要添加的信息
- */
-void MultipleInstallPage::onOutputAvailable(const QString &output)
+void MultipleInstallPage::slotOutputAvailable(const QString &output)
 {
     m_installProcessInfoView->appendText(output.trimmed());     //添加信息到窗口
 
@@ -390,11 +351,7 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
     }
 }
 
-/**
- * @brief MultipleInstallPage::onProgressChanged 安装进度变化显示处理函数
- * @param progress 安装的进度
- */
-void MultipleInstallPage::onProgressChanged(const int progress)
+void MultipleInstallPage::slotProgressChanged(const int progress)
 {
     m_progressAnimation->setStartValue(m_installProgress->value()); //设置动画开始的进度
     m_progressAnimation->setEndValue(progress);                     //设置进度条动画结束的进度
@@ -402,16 +359,12 @@ void MultipleInstallPage::onProgressChanged(const int progress)
 
     // finished
     if (progress == 100) {
-        onOutputAvailable(QString());
-        QTimer::singleShot(m_progressAnimation->duration(), this, &MultipleInstallPage::onWorkerFinshed);       //当前安装完成
+        slotOutputAvailable(QString());
+        QTimer::singleShot(m_progressAnimation->duration(), this, &MultipleInstallPage::slotWorkerFinshed);       //当前安装完成
     }
 }
 
-/**
- * @brief MultipleInstallPage::onAutoScrollInstallList 安装某一个包结束后，跳动到安装完成的包的位置
- * @param opIndex 安装完成的包的位置下标
- */
-void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
+void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 {
     //当前安装包的下标是合法的
     if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
@@ -423,23 +376,16 @@ void MultipleInstallPage::onAutoScrollInstallList(int opIndex)
     }
 }
 
-/**
- * @brief MultipleInstallPage::onRequestRemoveItemClicked 接受到applistView删除包后告知PackageManager删除包
- * @param index
- */
-void MultipleInstallPage::onRequestRemoveItemClicked(const QModelIndex &index)
+void MultipleInstallPage::slotRequestRemoveItemClicked(const QModelIndex &index)
 {
     if (!m_debListModel->isWorkerPrepare()) return;     //当前未处于准备阶段，不允许删除
 
-    const int r = index.row();                          //要删除的包的下标转换
+    const int row = index.row();                          //要删除的包的下标转换
 
-    emit requestRemovePackage(r);                       //发送删除信号
+    emit signalRequestRemovePackage(row);                       //发送删除信号
 }
 
-/**
- * @brief MultipleInstallPage::showInfo 显示安装信息的界面展示
- */
-void MultipleInstallPage::showInfo()
+void MultipleInstallPage::slotShowInfo()
 {
     m_appsListView->setFocusPolicy(Qt::NoFocus);            //详细信息出现后 设置appListView不接受焦点
     m_upDown = false;                                       //未使用
@@ -449,10 +395,7 @@ void MultipleInstallPage::showInfo()
     m_installProcessInfoView->setVisible(true);             //显示相关安装进度信息
 }
 
-/**
- * @brief MultipleInstallPage::hideInfo  隐藏详细信息
- */
-void MultipleInstallPage::hideInfo()
+void MultipleInstallPage::slotHideInfo()
 {
     m_appsListView->setFocusPolicy(Qt::TabFocus);           //隐藏详细信息后，设置appListView的焦点策略
     m_upDown = true;
@@ -462,10 +405,7 @@ void MultipleInstallPage::hideInfo()
     m_installProcessInfoView->setVisible(false);            //隐藏安装过程信息
 }
 
-/**
- * @brief MultipleInstallPage::hiddenCancelButton 授权成功后隐藏按钮
- */
-void MultipleInstallPage::hiddenCancelButton()
+void MultipleInstallPage::slotHiddenCancelButton()
 {
     //安装开始后不允许调出右键菜单。
     //安装按钮点击后清除其焦点。解决授权框消失后标题栏菜单键被focus的问题
@@ -475,10 +415,6 @@ void MultipleInstallPage::hiddenCancelButton()
     m_installButton->setVisible(false);                 //隐藏安装按钮
 }
 
-/**
- * @brief MultipleInstallPage::setEnableButton 授权框取消/显示后，设置安装按钮可用/禁用
- * @param bEnable   按钮可用/禁用的标识
- */
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
     m_installButton->setEnabled(bEnable);//设置按钮是否可用
@@ -487,9 +423,6 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
     }
 }
 
-/**
- * @brief MultipleInstallPage::afterGetAutherFalse 授权失败或取消后的界面处理函数
- */
 void MultipleInstallPage::afterGetAutherFalse()
 {
     m_processFrame->setVisible(false);          //隐藏进度条
@@ -501,23 +434,14 @@ void MultipleInstallPage::afterGetAutherFalse()
     m_appsListView->setRightMenuShowStatus(true);
 }
 
-/**
- * @brief MultipleInstallPage::refreshModel 刷新model
- */
 void MultipleInstallPage::refreshModel()
 {
     m_appsListView->reset();
 }
 
-/**
- * @brief MultipleInstallPage::DealDependResult 批量处理授权结果
- * @param iAuthRes      授权的类型
- * @param dependName    需要安装的依赖的名字
- */
-void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
+void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
 {
-    qDebug() << "批量处理鉴权结果：" << iAuthRes;
-    switch (iAuthRes) {
+    switch (authStatus) {
     case DebListModel::AuthBefore:              //授权之前
         m_appsListView->setEnabled(false);      //listView不可用
         m_installButton->setVisible(true);      //显示安装按钮但是不可用

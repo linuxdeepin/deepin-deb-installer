@@ -166,9 +166,9 @@ TEST_F(Debinstaller_UT, total_UT)
 {
     Stub stub;
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
-    stub.set(ADDR(DebListModel, appendPackage), stud_appendPackage);
+    stub.set(ADDR(DebListModel, slotAppendPackage), stud_appendPackage);
     stub.set(ADDR(DebListModel, preparedPackages), stud_preparedPackages);
-    stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
+    stub.set(ADDR(DebListModel, slotRemovePackage), stud_removePackage);
     stub.set(ADDR(DebListModel, reset), stud_reset);
     stub.set(ADDR(DebListModel, initPrepareStatus), stud_reset);
     stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
@@ -176,7 +176,7 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(MultipleInstallPage, setEnableButton), stud_setEnableButton);
     stub.set(ADDR(MultipleInstallPage, DealDependResult), stud_DealDependResult);
     stub.set(ADDR(MultipleInstallPage, afterGetAutherFalse), stud_afterGetAutherFalse);
-    stub.set(ADDR(SingleInstallPage, uninstallCurrentPackage), stud_uninstallCurrentPackage);
+    stub.set(ADDR(SingleInstallPage, slotUninstallCurrentPackage), stud_uninstallCurrentPackage);
     stub.set(ADDR(SingleInstallPage, afterGetAutherFalse), stud_afterGetAutherFalse);
     stub.set(ADDR(SingleInstallPage, setEnableButton), stud_setEnableButton);
     stub.set(ADDR(SingleInstallPage, DealDependResult), stud_DealDependResult);
@@ -188,43 +188,43 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebInstaller, disableCloseAndExit), stub_enableCloseAndExit);
 
 
-    deb->enableCloseButton(false);
-    deb->enableCloseButton(true);
+    deb->slotEnableCloseButton(false);
+    deb->slotEnableCloseButton(true);
 
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerProcessing;
-    deb->onPackagesSelected(QStringList() << "test.deb"
+    deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
     deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerFinished;
-    deb->onPackagesSelected(QStringList() << "test.deb"
+    deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
 
     deb->refreshMulti();
-    deb->showInvalidePackageMessage();
-    deb->showPkgExistMessage();
-    deb->showUninstallConfirmPage();
-    deb->onUninstallAccepted();
-    deb->onUninstallCancel();
-    deb->onAuthing(false);
-    deb->reset();
+    deb->slotShowInvalidePackageMessage();
+    deb->slotShowPkgExistMessage();
+    deb->slotShowUninstallConfirmPage();
+    deb->slotUninstallAccepted();
+    deb->slotUninstallCancel();
+    deb->slotSetAuthingStatus(false);
+    deb->slotReset();
 
-    deb->removePackage(1);
+    deb->slotRemovePackage(1);
     deb->appendPackageStart();
     deb->appendFinished();
     deb->single2Multi();
-    deb->changeDragFlag();
+    deb->slotChangeDragFlag();
     deb->m_dragflag = 2;
-    deb->DealDependResult(DebListModel::AuthDependsSuccess, "test");
-    deb->setEnableButton(true);
-    deb->setEnableButton(false);
-    deb->showHiddenButton();
+    deb->slotDealDependResult(DebListModel::AuthDependsSuccess, "test");
+    deb->slotSetEnableButton(true);
+    deb->slotSetEnableButton(false);
+    deb->slotShowHiddenButton();
     deb->m_dragflag = 1;
-    deb->DealDependResult(DebListModel::AuthBefore, "test");
-    deb->setEnableButton(true);
-    deb->setEnableButton(false);
-    deb->showHiddenButton();
+    deb->slotDealDependResult(DebListModel::AuthBefore, "test");
+    deb->slotSetEnableButton(true);
+    deb->slotSetEnableButton(false);
+    deb->slotShowHiddenButton();
     deb->m_packageAppending = true;
-    deb->setEnableButton(true);
-    deb->showPkgRemovedMessage("00");
+    deb->slotSetEnableButton(true);
+    deb->slotShowPkgRemovedMessage("00");
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 
 }

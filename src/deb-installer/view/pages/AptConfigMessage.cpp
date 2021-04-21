@@ -61,11 +61,14 @@ void AptConfigMessage::initTabOrder()
 void AptConfigMessage::initTitlebar()
 {
     DTitlebar *tb = titlebar();
-    tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));      //设置图标
-    tb->setTitle("");
-    tb->setVisible(false);
-    tb->setMenuVisible(false);                                  //设置标题栏菜单按钮不可见
-    tb->setAutoFillBackground(false);                           //填充标题栏背景
+    if(tb)
+    {
+        tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));      //设置图标
+        tb->setTitle("");
+        tb->setVisible(false);
+        tb->setMenuVisible(false);                                  //设置标题栏菜单按钮不可见
+        tb->setAutoFillBackground(false);                           //填充标题栏背景
+    }
 }
 
 /**
@@ -113,7 +116,6 @@ void AptConfigMessage::initControl()
  */
 void AptConfigMessage::initUI()
 {
-
     setFixedSize(380, 332);                             //固定配置框的大小
     setTitlebarShadowEnabled(false);                    //设置标题栏无阴影
 
@@ -147,50 +149,51 @@ void AptConfigMessage::initUI()
 
 /**
  * @brief AptConfigMessage::appendTextEdit  向配置信息展示窗口添加配置信息的数据
- * @param str                               配置信息数据
+ * @param processInfo           配置信息数据
  */
-void AptConfigMessage::appendTextEdit(QString str)
+void AptConfigMessage::appendTextEdit(QString processInfo)
 {
-    m_inputEdit->lineEdit()->setFocus();                    //保证焦点在输入框上
-    qDebug() << "str" << str << "str.size" << str.size();
-    if (str.isEmpty() || str == "\\n")                      //如果添加的数据是空的或者只有换行，则不添加
+    //保证焦点在输入框上
+    m_inputEdit->lineEdit()->setFocus();   
+    //如果添加的数据是空的或者只有换行，则不添加                
+    if (processInfo.isEmpty() || processInfo == "\\n")      
         return;
 
-    QString text;                                           //存放配置信息去除空格后的结果
-    QString question("");                                   //截取当前配置时的问题    PS:已经被废弃
-    text = str.replace("  ", "     ");
+    QString configMessage;                                                                    
+    configMessage = processInfo.replace("  ", "     ");
 
-    text.remove(QChar('\"'), Qt::CaseInsensitive);          //移除多余的“"”
-    int num = text.indexOf("\\n");                          //获取配置的第一行的最后一个字符的下标，用于判断当前是否还有信息需要展示
+    //移除多余的“"”
+    configMessage.remove(QChar('\"'), Qt::CaseInsensitive); 
+
+    //获取配置的第一行的最后一个字符的下标，用于判断当前是否还有信息需要展示         
+    int num = configMessage.indexOf("\\n");                          
     //下标为-1 表明此时只有一行数据需要展示，则直接添加
     if (num == -1) {
-        m_textEdit->appendText(str);                        //添加信息
+        m_textEdit->appendText(processInfo);                        
         m_textEdit->appendText("\n");
         return;
     }
-    int size = text.size();                                 //获取当前信息的字符数
+    int messageSize = configMessage.size();                                 
     while (num != -1) {
-        num = text.indexOf("\\n");                          //获取第一行的下标
+        num = configMessage.indexOf("\\n");                 //获取第一行的下标
 
         QString strFilter;                                  //存放第一行的数据
-        strFilter = text.mid(0, num);                       //截取第一行
+        strFilter = configMessage.mid(0, num);              //截取第一行
 
         // 从原始数据中删除第一行
         // num +2 是为了去掉换行，size-num-3是保证 数据的长度不超过原本text的长度
         // size-1 是本身的长度 num+2 是第一行的长度  size-1-(num +2) = size-num-3
-        text = text.mid(num + 2, size - num - 3);
+        configMessage = configMessage.mid(num + 2, messageSize - num - 3);
 
         if (strFilter[0] == '\t') strFilter.remove(0, 1);        //如果第一行的第一个数据是tab，去掉
         m_textEdit->appendText(strFilter);                       //添加数据
         qDebug() << "strFilter" << strFilter;
 
-        if (!strFilter.isEmpty())                                //此时是为了保存每一行的数据，直到最后保存的是此次配置的问题  PS:已经被废弃
-            question = strFilter;
-        if (num == -1 && text.size() > 0 && !text.contains("\n")) {     //如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
+            //如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
+        if (num == -1 && configMessage.size() > 0 && !configMessage.contains("\n")) {     
             break;
         }
     }
-    qDebug() << "end after while";
 }
 
 /**
@@ -199,7 +202,6 @@ void AptConfigMessage::appendTextEdit(QString str)
  */
 void AptConfigMessage::dealInput()
 {
-    qDebug() << "m_inputEdit" << m_inputEdit->text();
     //如果当前输入框中的信息是空的 或者输入了00 则不提交，并清除信息
     //PS:dpkg 规定如果输入00 配置会结束
     if (m_inputEdit->text().isEmpty() || m_inputEdit->text() == "" || m_inputEdit->text() == "00") {

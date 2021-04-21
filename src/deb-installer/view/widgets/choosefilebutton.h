@@ -32,7 +32,6 @@ class ChooseFileButton : public DCommandLinkButton
 {
     Q_OBJECT
 public:
-    //fix bug:33999 change DButton to DCommandLinkButton for Activity color
     explicit ChooseFileButton(QString text, QWidget *parent = nullptr);
 
     // QWidget interface

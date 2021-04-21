@@ -57,12 +57,13 @@ private slots:
      */
     void themeChanged();
 private:
-    ChooseFileButton *m_chooseFileBtn {nullptr};            //文件选择按钮
-    QSettings m_settings;                                   //保存上次打开的文件路径
-    DLabel *split_line {nullptr};                           //分割线
-    DLabel *m_dndTips {nullptr};                            //拖入提示语
-    DLabel *m_iconImage {nullptr};                          //图标
-    int m_MouseBtnRelease = 0;                              //此变量已废弃
+    ChooseFileButton    *m_chooseFileBtn    = nullptr;            //文件选择按钮
+    
+    DLabel              *split_line         = nullptr;                           //分割线
+    DLabel              *m_dndTips          = nullptr;                            //拖入提示语
+    DLabel              *m_iconImage        = nullptr;                          //图标
+    
+    QSettings           m_settings;                                   //保存上次打开的文件路径
 };
 
 #endif  // FILECHOOSEWIDGET_H

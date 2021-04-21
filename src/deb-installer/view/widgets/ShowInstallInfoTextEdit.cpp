@@ -35,9 +35,6 @@ ShowInstallInfoTextEdit::ShowInstallInfoTextEdit(QWidget *parent):
     connect(this, &ShowInstallInfoTextEdit::selectionChanged, this, &ShowInstallInfoTextEdit::onSelectionArea);
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::onSelectionArea 选中文字
- */
 void ShowInstallInfoTextEdit::onSelectionArea()
 {
     if (m_gestureAction != GA_null) {
@@ -49,11 +46,6 @@ void ShowInstallInfoTextEdit::onSelectionArea()
     }
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::event 事件处理
- * @param event
- * @return
- */
 bool ShowInstallInfoTextEdit::event(QEvent *event)
 {
     if (event->type() == QEvent::Gesture)
@@ -61,11 +53,6 @@ bool ShowInstallInfoTextEdit::event(QEvent *event)
     return QTextEdit::event(event);
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::gestureEvent 手势事件的处理
- * @param event
- * @return
- */
 bool ShowInstallInfoTextEdit::gestureEvent(QGestureEvent *event)
 {
     if (QGesture *tap = event->gesture(Qt::TapGesture))
@@ -75,10 +62,6 @@ bool ShowInstallInfoTextEdit::gestureEvent(QGestureEvent *event)
     return true;
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::tapGestureTriggered 单指点击事件的处理
- * @param tap
- */
 void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
 {
     this->clearFocus();
@@ -115,10 +98,6 @@ void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
     }
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::tapAndHoldGestureTriggered 单指长按事件
- * @param tapAndHold
- */
 void ShowInstallInfoTextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
 {
     //单指长按
@@ -141,10 +120,6 @@ void ShowInstallInfoTextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tap
     }
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::slideGesture 滑动事件的处理
- * @param diff
- */
 void ShowInstallInfoTextEdit::slideGesture(qreal diff)
 {
     static qreal delta = 0.0;
@@ -153,10 +128,6 @@ void ShowInstallInfoTextEdit::slideGesture(qreal diff)
     verticalScrollBar()->setValue(verticalScrollBar()->value() + step);         //移动滚动条
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::mouseReleaseEvent 鼠标释放事件
- * @param e
- */
 void ShowInstallInfoTextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
     change = 0.0;
@@ -180,10 +151,6 @@ void ShowInstallInfoTextEdit::mouseReleaseEvent(QMouseEvent *e)
     return QTextEdit::mouseReleaseEvent(e);
 }
 
-/**
- * @brief ShowInstallInfoTextEdit::mouseMoveEvent 鼠标移动事件
- * @param e
- */
 void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
 {
     if (Qt::MouseEventSynthesizedByQt == e->source()) {
@@ -212,7 +179,6 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
             m_stepSpeed /= sqrt(font.pointSize() * 4.0);
             change = m_stepSpeed * sqrt(abs(m_stepSpeed)) * 100;
 
-            // fix bug: https://pms.uniontech.com/zentao/bug-view-55665.html
             // 如果放到外面会屏蔽掉选中
             return;    //此时屏蔽其他触控效果
         }
@@ -220,23 +186,12 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
     QTextEdit::mouseMoveEvent(e);
 }
 
-/**
- * @brief FlashTween::FlashTween 惯性滑动
- */
 FlashTween::FlashTween()
 {
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &FlashTween::__run);
 }
 
-/**
- * @brief FlashTween::start 开始滑动
- * @param t
- * @param b
- * @param c
- * @param d
- * @param f
- */
 void FlashTween::start(qreal t, qreal b, qreal c, qreal d, FunSlideInertial f)
 {
     if (c == 0.0 || d == 0.0) return;
@@ -253,9 +208,6 @@ void FlashTween::start(qreal t, qreal b, qreal c, qreal d, FunSlideInertial f)
     m_timer->start(CELL_TIME);
 }
 
-/**
- * @brief FlashTween::__run 触发滑动
- */
 void FlashTween::__run()
 {
     qreal tempValue = m_lastValue;

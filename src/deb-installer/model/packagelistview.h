@@ -40,55 +40,33 @@ public:
     void setRightMenuShowStatus(bool isShow);
 
 signals:
-    /**
-     * @brief onShowHideTopBg   信号已经被废弃
-     * @param bShow
-     */
-    void onShowHideTopBg(bool bShow);
 
     /**
-     * @brief setItemHeight    设置item高度
+     * @brief signalChangeItemHeight    设置item高度
      * @param height item高度
      */
-    void setItemHeight(int height);
+    void signalChangeItemHeight(int height);
 
     /**
-     * @brief onShowHideBottomBg    信号已经被废弃
-     * @param bShow
-     */
-    void onShowHideBottomBg(bool bShow);
-
-    /**
-     * @brief onClickItemAtIndex    信号已经被废弃
-     * @param index
-     */
-    void onClickItemAtIndex(QModelIndex index);
-
-    /**
-     * @brief onShowContextMenu 显示右键菜单
+     * @brief signalShowContextMenu 显示右键菜单
      * @param index             显示右键菜单的index
      */
-    void onShowContextMenu(QModelIndex index);
+    void signalShowContextMenu(QModelIndex index);
 
     /**
-     * @brief onRemoveItemClicked      删除该item
+     * @brief signalRemoveItemClicked      删除该item
      * @param index   要删除的item的index
      */
-    void onRemoveItemClicked(QModelIndex index);
-
-    /**
-     * @brief OutOfFocus  此信号已经被废弃
-     */
-    void OutOfFocus(bool);
+    void signalRemoveItemClicked(QModelIndex index);
 
 public slots:
 
     /**
-     * @brief getPos 获取到的当前Item的位置和row
+     * @brief slotGetPos 获取到的当前Item的位置和row
      * @param rect   当前item的rect
      * @param index  当前item的下标
      */
-    void getPos(QRect rect, int index); //获取到的当前Item的位置和row
+    void slotGetPos(QRect rect, int index); //获取到的当前Item的位置和row
 protected:
 
     /**
@@ -164,36 +142,37 @@ private:
 private slots:
 
     /**
-     * @brief onListViewShowContextMenu 弹出右键菜单
+     * @brief slotListViewShowContextMenu 弹出右键菜单
      * @param index 点击右键菜单的index的位置
      */
-    void onListViewShowContextMenu(QModelIndex index);
+    void slotListViewShowContextMenu(QModelIndex index);
 
     /**
-     * @brief onRightMenuDeleteAction   删除某一个包
+     * @brief slotRightMenuDeleteAction   删除某一个包
      */
-    void onRightMenuDeleteAction();
+    void slotRightMenuDeleteAction();
 
     /**
-     * @brief onShortcutDeleteAction  使用快捷键删除
+     * @brief slotShortcutDeleteAction  使用快捷键删除
      */
-    void onShortcutDeleteAction();
+    void slotShortcutDeleteAction();
 
 private:
-    bool m_bLeftMouse;              //左键按下，取消右键菜单标识
-    bool m_bShortcutDelete;         //快捷删除标识
+    bool m_bLeftMouse           = false;              //左键按下，取消右键菜单标识
+    bool m_bShortcutDelete      = false;         //快捷删除标识
+    DMenu *m_rightMenu          = nullptr;   //右键菜单
+
     QModelIndex m_currModelIndex;   //当前选中的index
-    DMenu *m_rightMenu {nullptr};   //右键菜单
     QModelIndex m_highlightIndex;   //当前选中的index
 
     QPoint m_rightMenuPos;          //确定的右键菜单出现的位置
-    int m_currentIndex;             //当前选中的index.row
+
+    int m_currentIndex          = -1;             //当前选中的index.row
 
     /**
      * @brief m_bIsRightMenuShow 当前是否能够调出右键菜单标识，由MultiPage工作状态决定，并传入
      */
-    bool m_bIsRightMenuShow = false;//当前是否允许右键菜单显示
-
+    bool m_bIsRightMenuShow     = false;//当前是否允许右键菜单显示
 };
 
 #endif  // PACKAGESLISTVIEW_H

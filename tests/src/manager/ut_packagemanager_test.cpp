@@ -245,7 +245,7 @@ int package_compareVersion()
 }
 
 
-Package *backend_package(const QString &name)
+Package *backend_package(const QString &)
 {
     return nullptr;
 }
@@ -493,9 +493,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
 
     m_packageManager->m_dependInstallMark.append("test success");
-    m_packageManager->DealDependResult(4, 0, "");
-    m_packageManager->DealDependResult(2, 0, "");
-    m_packageManager->DealDependResult(5, 0, "");
+    m_packageManager->slotDealDependResult(4, 0, "");
+    m_packageManager->slotDealDependResult(2, 0, "");
+    m_packageManager->slotDealDependResult(5, 0, "");
 }
 //TEST_F(ut_packagesManager_test,)
 //{
@@ -852,7 +852,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackageFinished)
 {
     usleep(10 * 1000);
-    m_packageManager->appendPackageFinished();
+    m_packageManager->slotAppendPackageFinished();
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_01)

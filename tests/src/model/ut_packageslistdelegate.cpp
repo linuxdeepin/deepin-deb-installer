@@ -160,7 +160,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
     stub.set(ADDR(QModelIndex, data), stud_data);
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
-    model->appendPackage(QStringList() << "\n");
+    model->slotAppendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
     m_delegate->paint(&painter, option, index);
 }
@@ -195,7 +195,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
 
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
-    model->appendPackage(QStringList() << "\n");
+    model->slotAppendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
     m_delegate->sizeHint(option, index);
 }

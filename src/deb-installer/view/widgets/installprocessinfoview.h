@@ -72,8 +72,8 @@ private:
      */
     void initUI(int w, int h);
 
-    ShowInstallInfoTextEdit *m_editor;                               //展示框 修改为自写控件
-    DPalette::ColorType m_colorType;                   //显示的字体的颜色类型
+    ShowInstallInfoTextEdit *m_editor   = nullptr;         //展示框 修改为自写控件
+    DPalette::ColorType     m_colorType;                   //显示的字体的颜色类型
 };
 
 #endif // INSTALLPROCESSINFOVIEW_H

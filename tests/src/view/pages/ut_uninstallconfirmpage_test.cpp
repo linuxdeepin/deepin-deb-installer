@@ -66,6 +66,6 @@ TEST_F(UnInstallConfirmPage_UT, total_UT)
     Stub stub;
     stub.set(ADDR(QEvent, type), stud_uninstalltype);
     uninstallPage->installEventFilter(uninstallPage);
-    uninstallPage->showDetail();
-    uninstallPage->hideDetail();
+    uninstallPage->slotShowDetail();
+    uninstallPage->slotHideDetail();
 }

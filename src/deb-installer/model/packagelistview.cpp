@@ -40,7 +40,6 @@ PackagesListView::PackagesListView(QWidget *parent)
  */
 void PackagesListView::initUI()
 {
-    //fix bug: 44726 https://pms.uniontech.com/zentao/bug-view-44726.html
     QScroller::grabGesture(this, QScroller::TouchGesture);              //添加触控屏触控
 
     setVerticalScrollMode(ScrollPerPixel);                              //设置垂直滚动的模式
@@ -57,9 +56,9 @@ void PackagesListView::initConnections()
 {
     // 鼠标右键点击，根据条件判断是否需要弹出右键菜单
     connect(this,
-            &PackagesListView::onShowContextMenu,
+            &PackagesListView::signalShowContextMenu,
             this,
-            &PackagesListView::onListViewShowContextMenu,
+            &PackagesListView::slotListViewShowContextMenu,
             Qt::ConnectionType::QueuedConnection);
 }
 
@@ -120,7 +119,7 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
     m_currModelIndex = m_highlightIndex;
     if (!m_bLeftMouse) {
         m_bShortcutDelete = false;                      //不允许删除
-        emit onShowContextMenu(modelIndex);             //显示右键菜单
+        emit signalShowContextMenu(modelIndex);             //显示右键菜单
     } else {
         m_bShortcutDelete = true;
     }
@@ -167,7 +166,7 @@ void PackagesListView::initRightContextMenu()
  * @brief PackagesListView::onListViewShowContextMenu  显示右键菜单
  * @param index
  */
-void PackagesListView::onListViewShowContextMenu(QModelIndex index)
+void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
 
@@ -184,7 +183,7 @@ void PackagesListView::onListViewShowContextMenu(QModelIndex index)
 /**
  * @brief PackagesListView::onShortcutDeleteAction 快捷键删除
  */
-void PackagesListView::onShortcutDeleteAction()
+void PackagesListView::slotShortcutDeleteAction()
 {
     //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
     if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible() || this->count() == 1) {
@@ -195,19 +194,19 @@ void PackagesListView::onShortcutDeleteAction()
     //fix bug: 44901 https://pms.uniontech.com/zentao/bug-view-44901.htm
     // 只删除当前选中的项
     if (m_currModelIndex.row() < this->count() && this->selectionModel()->selectedIndexes().contains(m_currModelIndex))
-        emit onRemoveItemClicked(m_currModelIndex);
+        emit signalRemoveItemClicked(m_currModelIndex);
 }
 
 /**
  * @brief PackagesListView::onRightMenuDeleteAction 右键菜单删除选中的项
  */
-void PackagesListView::onRightMenuDeleteAction()
+void PackagesListView::slotRightMenuDeleteAction()
 {
     if (-1 == m_currModelIndex.row()) {
         return;
     }
 
-    emit onRemoveItemClicked(m_currModelIndex);
+    emit signalRemoveItemClicked(m_currModelIndex);
 }
 
 /**
@@ -229,7 +228,7 @@ void PackagesListView::paintEvent(QPaintEvent *event)
  *
  * 获取某一个Item的rect,与index。用于保存位置参数触发右键菜单
  */
-void PackagesListView::getPos(QRect rect, int index)
+void PackagesListView::slotGetPos(QRect rect, int index)
 {
     if (index == m_currentIndex) {                              //获取当前项右键菜单出现的位置
         m_rightMenuPos.setX(rect.x() + rect.width() - 162);
@@ -270,9 +269,9 @@ bool PackagesListView::event(QEvent *event)
     if (event->type() == QEvent::FontChange) {
         qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
         if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) { //当前字体大小是否小于13
-            emit setItemHeight(50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font())));
+            emit signalChangeItemHeight(50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font())));
         } else {
-            emit setItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
+            emit signalChangeItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
         }
     }
     return DListView::event(event);

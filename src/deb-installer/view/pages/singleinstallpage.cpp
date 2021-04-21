@@ -70,9 +70,6 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     initControlAccessibleName();// 自动化测试
 }
 
-/**
- * @brief SingleInstallPage::initUI 初始化界面
- */
 void SingleInstallPage::initUI()
 {
     QFontInfo fontinfo = this->fontInfo();      //获取字体信息
@@ -89,10 +86,6 @@ void SingleInstallPage::initUI()
     m_upDown = true;                            //当前是收缩的
 }
 
-/**
- * @brief SingleInstallPage::initControlAccessibleName 初始化控件的AccessibleName
- * 兼容自动化测试
- */
 void SingleInstallPage::initControlAccessibleName()
 {
     //获取的包名
@@ -120,9 +113,6 @@ void SingleInstallPage::initControlAccessibleName()
     m_pLoadingLabel->setAccessibleName("SinglePagePackageLoadingTips");
 }
 
-/**
- * @brief SingleInstallPage::initContentLayout 初始化主布局
- */
 void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->setSpacing(0);                             //设置控件边距
@@ -140,9 +130,6 @@ void SingleInstallPage::initContentLayout()
 #endif
 }
 
-/**
- * @brief SingleInstallPage::initInstallWineLoadingLayout 初始化依赖安装加载布局
- */
 void SingleInstallPage::initInstallWineLoadingLayout()
 {
     QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();      //依赖安装的布局
@@ -167,10 +154,6 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_contentLayout->addLayout(m_pLoadingLayout);               //添加到主布局中
 }
 
-/**
- * @brief SingleInstallPage::initPkgInfoView 初始化包的信息布局
- * @param fontinfosize 字体的大小
- */
 void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     //根据系统字体的大小设置显示字体的大小
@@ -285,27 +268,29 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_contentLayout->addWidget(m_itemInfoFrame);                                                //添加到主窗口中
 }
 
-/**
- * @brief SingleInstallPage::initTabOrder 设置tab切换焦点的顺序。
- */
 void SingleInstallPage::initTabOrder()
 {
     // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
-    // fix bug: https://pms.uniontech.com/zentao/bug-view-46968.html
-    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
-    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
-    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
+    if(m_installButton->isVisible()){
+        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
+    }
 
-    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
+    if(m_backButton->isVisible()){
+        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
+        if(m_doneButton->isVisible()){
+            QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
+        }
+        if(m_confirmButton->isVisible()){
+            QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
+        }
+    }
 
-    QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
-    QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
-
+    if(m_uninstallButton->isVisible()){
+        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
+        QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
+    }
 }
 
-/**
- * @brief SingleInstallPage::initButtonFocusPolicy 添加各个控件的焦点获取策略
- */
 void SingleInstallPage::initButtonFocusPolicy()
 {
     this->setFocusPolicy(Qt::NoFocus);                              //主界面不接受焦点
@@ -319,10 +304,6 @@ void SingleInstallPage::initButtonFocusPolicy()
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
 }
 
-/**
- * @brief SingleInstallPage::initButtonAutoDefault 给各个按钮添加回车触发。
- * 没有infoControlButton ,因为属于自定义控件，已经在控件内部实现。
- */
 void SingleInstallPage::initButtonAutoDefault()
 {
     m_installButton->setAutoDefault(true);
@@ -333,10 +314,6 @@ void SingleInstallPage::initButtonAutoDefault()
     m_doneButton->setAutoDefault(true);
 }
 
-/**
- * @brief SingleInstallPage::initPkgInstallProcessView 初始化安装进程控制按钮的view
- * @param fontinfosize
- */
 void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
     int fontinfosizetemp = 0;                                           //根据当前字体的大小设置按钮的字体大小
@@ -474,38 +451,30 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(btnsFrame);
 }
 
-/**
- * @brief SingleInstallPage::initConnections 初始化链接信号与槽
- */
 void SingleInstallPage::initConnections()
 {
     // infoControlButton的展开与收缩
-    connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::showInfomation);
-    connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::hideInfomation);
+    connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowInfomation);
+    connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideInfomation);
 
     //各个按钮的触发事件
-    connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::install);
-    connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::reinstall);
-    connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::requestUninstallConfirm);
-    connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::back);
+    connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::slotInstall);
+    connect(m_reinstallButton, &DPushButton::clicked, this, &SingleInstallPage::slotReinstall);
+    connect(m_uninstallButton, &DPushButton::clicked, this, &SingleInstallPage::signalRequestUninstallConfirm);
+    connect(m_backButton, &DPushButton::clicked, this, &SingleInstallPage::signalBacktoFileChooseWidget);
     connect(m_confirmButton, &DPushButton::clicked, qApp, &QApplication::quit);
     connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     // model 安装进程信息的展示
-    connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::onOutputAvailable);
+    connect(m_packagesModel, &DebListModel::signalAppendOutputInfo, this, &SingleInstallPage::slotOutputAvailable);
 
     //transaction 进度改变 进度条进度改变
-    connect(m_packagesModel, &DebListModel::transactionProgressChanged, this, &SingleInstallPage::onWorkerProgressChanged);
+    connect(m_packagesModel, &DebListModel::signalTransactionProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
 
     //安装结束
-    connect(m_packagesModel, &DebListModel::workerFinished, this, &SingleInstallPage::onWorkerFinished);
+    connect(m_packagesModel, &DebListModel::signalWorkerFinished, this, &SingleInstallPage::slotWorkerFinished);
 }
 
-/**
- * @brief SingleInstallPage::initLabelWidth 根据系统字体大小 调整label的长度
- * @param fontinfo
- * @return label的长度
- */
 int SingleInstallPage::initLabelWidth(int fontinfo)
 {
     int fontlabelwidth = 0;
@@ -541,13 +510,9 @@ int SingleInstallPage::initLabelWidth(int fontinfo)
     return fontlabelwidth;
 }
 
-/**
- * @brief SingleInstallPage::reinstall 重新安装场景
- */
-void SingleInstallPage::reinstall()
+void SingleInstallPage::slotReinstall()
 {
     // 重装按钮点击后清除焦点
-    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
     m_reinstallButton->clearFocus();
 
     //隐藏不需要的按钮
@@ -568,16 +533,13 @@ void SingleInstallPage::reinstall()
     m_operate = Reinstall;
 
     //开始安装
-    m_packagesModel->installPackages();
+    m_packagesModel->slotInstallPackages();
 }
 
-/**
- * @brief SingleInstallPage::install 安装场景
- */
-void SingleInstallPage::install()
+
+void SingleInstallPage::slotInstall()
 {
     // 安装按钮点击后清除焦点
-    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
     m_installButton->clearFocus();
 
     //隐藏按钮
@@ -596,16 +558,13 @@ void SingleInstallPage::install()
     m_operate = Install;
 
     // 开始安装
-    m_packagesModel->installPackages();
+    m_packagesModel->slotInstallPackages();
 }
 
-/**
- * @brief SingleInstallPage::uninstallCurrentPackage 卸载场景
- */
-void SingleInstallPage::uninstallCurrentPackage()
+
+void SingleInstallPage::slotUninstallCurrentPackage()
 {
     // 卸载按钮点击后清除焦点
-    // fix bug: https://pms.uniontech.com/zentao/bug-view-46813.html
     m_uninstallButton->clearFocus();
 
     //隐藏不需要的按钮
@@ -623,33 +582,25 @@ void SingleInstallPage::uninstallCurrentPackage()
     m_operate = Uninstall;
 
     //开始卸载
-    m_packagesModel->uninstallPackage(0);
+    m_packagesModel->slotUninstallPackage(0);
 }
 
-/**
- * @brief SingleInstallPage::showInfomation 显示安装信息
- */
-void SingleInstallPage::showInfomation()
+void SingleInstallPage::slotShowInfomation()
 {
     m_upDown = false;
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
 }
 
-/**
- * @brief SingleInstallPage::hideInfomation 隐藏安装信息
- */
-void SingleInstallPage::hideInfomation()
+
+void SingleInstallPage::slotHideInfomation()
 {
     m_upDown = true;
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
 }
 
-/**
- * @brief SingleInstallPage::showInfo 显示进度信息
- */
-void SingleInstallPage::showInfo()
+void SingleInstallPage::slotShowInfo()
 {
     //显示进度信息
     m_infoControlButton->setVisible(true);
@@ -668,11 +619,8 @@ void SingleInstallPage::showInfo()
     m_backButton->setVisible(false);
 }
 
-/**
- * @brief SingleInstallPage::onOutputAvailable 展示安装进程信息
- * @param output
- */
-void SingleInstallPage::onOutputAvailable(const QString &output)
+
+void SingleInstallPage::slotOutputAvailable(const QString &output)
 {
     // 信息展示窗口添加进程数据
     m_installProcessView->appendText(output.trimmed());
@@ -686,14 +634,11 @@ void SingleInstallPage::onOutputAvailable(const QString &output)
     //切换状态为已经开始安装
     if (!m_workerStarted) {
         m_workerStarted = true;
-        showInfo();
+        slotShowInfo();
     }
 }
 
-/**
- * @brief SingleInstallPage::onWorkerFinished 安装/卸载完成后的界面调整
- */
-void SingleInstallPage::onWorkerFinished()
+void SingleInstallPage::slotWorkerFinished()
 {
     // 显示infoControlButton
     m_infoControlButton->setVisible(true);
@@ -746,11 +691,7 @@ void SingleInstallPage::onWorkerFinished()
         m_infoControlButton->setShrinkTips(tr("Collapse"));
 }
 
-/**
- * @brief SingleInstallPage::onWorkerProgressChanged 安装进度变化
- * @param progress
- */
-void SingleInstallPage::onWorkerProgressChanged(const int progress)
+void SingleInstallPage::slotWorkerProgressChanged(const int progress)
 {
     if (progress < m_progress->value()) {       //进度不后退
         return;
@@ -770,18 +711,17 @@ void SingleInstallPage::showPackageInfo()
     const QModelIndex index = m_packagesModel->index(0);
     if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
         m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
-        packagename_description = index.data(DebListModel::PackageNameRole).toString();
+        m_pkgNameDescription = index.data(DebListModel::PackageNameRole).toString();
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
         const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-        packageversion_description = index.data(DebListModel::PackageVersionRole).toString();
+        m_versionDescription = index.data(DebListModel::PackageVersionRole).toString();
 
         m_packageDescription->setText(Utils::holdTextInRect(m_packageDescription->font(), m_description, boundingSize));
         m_packageName->setText(m_packageName->fontMetrics()
-                               .elidedText(packagename_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                               .elidedText(m_pkgNameDescription, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         m_packageVersion->setText(m_packageVersion->fontMetrics()
-                                  .elidedText(packageversion_description, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                                  .elidedText(m_pkgNameDescription, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         // package install status
-        //fix bug:42285 调整状态优先级， 依赖状态 > 安装状态
         //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
@@ -838,13 +778,9 @@ void SingleInstallPage::showPackageInfo()
     }
 }
 
-/**
- * @brief SingleInstallPage::setEnableButton 授权框弹出/取消后 ，设置按钮禁用/可用
- * @param bEnable 按钮禁用/可用的标识
- */
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
-    // fix bug: 36120 After the uninstall authorization is canceled, hide the uninstall details and display the version status
+    //After the uninstall authorization is canceled, hide the uninstall details and display the version status
     m_tipsLabel->setVisible(true);
     m_tipsLabel->setVisible(true);
 
@@ -854,9 +790,6 @@ void SingleInstallPage::setEnableButton(bool bEnable)
     m_uninstallButton->setEnabled(bEnable);
 }
 
-/**
- * @brief SingleInstallPage::afterGetAutherFalse 调整授权取消后的界面展示效果
- */
 void SingleInstallPage::afterGetAutherFalse()
 {
     //等待dpkg启动但是授权取消后，如果详细信息是expend状态，则shrink
@@ -876,10 +809,6 @@ void SingleInstallPage::afterGetAutherFalse()
     }
 }
 
-/**
- * @brief SingleInstallPage::paintEvent
- * @param event
- */
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
@@ -891,10 +820,6 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
     showPackageInfo();
 }
 
-/**
- * @brief SingleInstallPage::setAuthConfirm 调整授权确认后的界面显示效果
- * @param dependName
- */
 void SingleInstallPage::setAuthConfirm(QString dependName)
 {
     //调整按钮的显示效果
@@ -917,9 +842,6 @@ void SingleInstallPage::setAuthConfirm(QString dependName)
     m_infoControlButton->setVisible(false);
 }
 
-/**
- * @brief SingleInstallPage::setAuthBefore  wine下载前的界面展示效果
- */
 void SingleInstallPage::setAuthBefore()
 {
     // 显示包信息提示
@@ -961,26 +883,22 @@ void SingleInstallPage::setAuthBefore()
     m_pDSpinner->setVisible(false);
 }
 
-/**
- * @brief SingleInstallPage::setCancelAuthOrAuthDependsErr 授权取消或安装失败的界面显示
- */
 void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
-    qDebug() << "SingleInstallPage:" << "set Cancel Auth or Auth Depends Error";
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
 
     //获取依赖状态
     QModelIndex index = m_packagesModel->first();
-    const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+    const int dependsStatus = index.data(DebListModel::PackageDependsStatusRole).toInt();
     //根据依赖状态 调整界面显示
-    if (dependsStat == DebListModel::DependsBreak ||
-            dependsStat == DebListModel::DependsAuthCancel ||
-            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
+    if (dependsStatus == DebListModel::DependsBreak ||
+            dependsStatus == DebListModel::DependsAuthCancel ||
+            dependsStatus == DebListModel::ArchBreak) {   //添加架构不匹配的处理
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-        qDebug() << "SingleInstallPage:" <<  "depends Break or Revoke installation authorization";
+        qWarning() << "SingleInstallPage:" <<  "depends Break or Revoke installation authorization";
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
         m_confirmButton->setEnabled(true);
@@ -993,16 +911,13 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_tipsLabel->clear();                   //依赖安装成功后，去除依赖错误的提示信息。
         m_confirmButton->setVisible(false);
         m_backButton->setVisible(false);
-        //fix bug 42285: 在升级安装wine应用（wine->wine5）,依赖安装后，界面显示错乱。
         const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
         if (installStat == DebListModel::NotInstalled) {  //没有安装过其他版本
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
         } else {// 已经安装过其他版本
-            // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
             //增加提示 依赖安装完成后的提示
-            // fix bug: https://pms.uniontech.com/zentao/bug-view-56754.html
             if (installStat == DebListModel::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Same version installed"));
@@ -1031,16 +946,10 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     m_pDSpinner->setVisible(false);
 }
 
-/**
- * @brief SingleInstallPage::DealDependResult 处理依赖下载进程的界面展示
- * @param iAuthRes wine依赖下载的进程标识
- * @param dependName 需要下载的依赖名称
- */
-void SingleInstallPage::DealDependResult(int iAuthRes, QString dependName)
+void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
 {
-    qDebug() << "SingleInstallPage:" << "Deal DependResult" << iAuthRes;
-    dependAuthStatu = iAuthRes;
-    switch (iAuthRes) {
+    dependAuthStatu = authStatus;
+    switch (authStatus) {
     case DebListModel::AuthConfirm:     //授权成功
         setAuthConfirm(dependName);
         break;

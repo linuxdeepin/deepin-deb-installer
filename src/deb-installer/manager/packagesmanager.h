@@ -26,7 +26,6 @@
 
 #include <QFuture>
 #include <QObject>
-
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QThread>
@@ -51,26 +50,26 @@ class AddPackageThread;
 bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType);
 
 /**
- * @brief resolvMultiArchAnnotation
- * @param annotation
- * @param debArch
- * @param multiArchType
+ * @brief resolvMultiArchAnnotation 处理多架构问题
+ * @param annotation  当前control文件中的附加信息
+ * @param debArch   deb包的架构
+ * @param multiArchType 多架构的类型
  * @return
  */
 QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
                                   const int multiArchType = InvalidMultiArchType);
 
 /**
- * @brief dependencyVersionMatch
- * @param result
- * @param relation
+ * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
+ * @param result 当前依赖版本
+ * @param relation 依赖版本关系的类型
  * @return
  */
 bool dependencyVersionMatch(const int result, const RelationType relation);
 
 /**
- * @brief init_backend
- * @return
+ * @brief init_backend 初始化后端
+ * @return 初始化完成的后端指针
  */
 Backend *init_backend();
 
@@ -91,77 +90,77 @@ public slots:
      * @param iIndex    wine应用的下标
      * @param dependName    wine依赖错误的依赖名称
      */
-    void DealDependResult(int iAuthRes, int iIndex, QString dependName);
+    void slotDealDependResult(int iAuthRes, int iIndex, QString dependName);
 
 //// 依赖下载相关信号
 signals:
     /**
      * @brief DependResult 处理wine依赖下载结果
      */
-    void DependResult(int, int, QString);
+    void signalDependResult(int, int, QString);
 
     /**
      * @brief enableCloseButton 设置关闭按钮是否可用的信号
      */
-    void enableCloseButton(bool);
+    void signalEnableCloseButton(bool);
 
 ////添加包相关信号
 signals:
     /**
      * @brief invalidPackage 无效包的信号
      */
-    void invalidPackage();
+    void signalInvalidPackage();
 
     /**
      * @brief notLocalPackage 包不在本地的信号
      *
-     * ps: 包不在本地无法安装
+     * 包不在本地无法安装
      */
-    void notLocalPackage();
+    void signalNotLocalPackage();
 
     /**
      * @brief packageAlreadyExists 包重复添加的信号
      */
-    void packageAlreadyExists();
+    void signalPackageAlreadyExists();
 
     /**
      * @brief appendStart 批量安装开始添加包的信号
      */
-    void appendStart();
+    void signalAppendStart();
 
     /**
      * @brief appendFinished 批量安装添加包结束的信号
      * @param packageMd5List 添加后的md5列表
      */
-    void appendFinished(QList<QByteArray> packageMd5List);
+    void signalAppendFinished(QList<QByteArray> packageMd5List);
 
     /**
      * @brief packageMd5Changed 添加完成之后更新MD5的列表
      * @param packageMd5List 当前的MD5列表
      */
-    void packageMd5Changed(QList<QByteArray> packageMd5List);
+    void signalPackageMd5Changed(QList<QByteArray> packageMd5List);
 
 //// 界面刷新相关信号
 signals:
     /**
      * @brief single2MultiPage 单包安装刷新为批量安装的信号
      */
-    void single2MultiPage();
+    void signalSingle2MultiPage();
 
     /**
      * @brief refreshSinglePage 刷新单包安装界面的信号
      */
-    void refreshSinglePage();
+    void signalRefreshSinglePage();
 
     /**
      * @brief refreshMultiPage 刷新批量安装界面的信号
      */
-    void refreshMultiPage();
+    void signalRefreshMultiPage();
 
     /**
      * @brief refreshFileChoosePage 刷新首页
      */
-    void refreshFileChoosePage();
+    void signalRefreshFileChoosePage();
 //// 后端状态相关函数
 public:
 
@@ -350,13 +349,10 @@ private:
 
 private:
 
-    // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
     QMap<QString, QString> specialPackage();
 
-
 private:
-
     /**
      * @brief SymbolicLink 为路径中存在空格的包创建临时文件夹以及软链接
      * @param previousName 存在空格的路径ruanji
@@ -396,18 +392,11 @@ private:
      */
     void addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum);
 
-
     /**
      * @brief refreshPage 刷新当前的页面
      * @param pkgCount  需要添加的包的数量
      */
     void refreshPage(int pkgCount);
-
-    /**
-     * @brief appendFinished 添加包结束后，如果此时需要下载wine依赖，则直接开始下载
-     * @param 是否需要下载wine依赖的标识
-     */
-    void appendPackageFinished();
 
     /**
      * @brief appendNoThread 不通过线程，直接添加包到应用中
@@ -440,13 +429,24 @@ private:
      */
     QString dealPackagePath(QString packagePath);
 
+private slots:
+    /**
+     * @brief slotAppendPackageFinished 添加包结束后，如果此时需要下载wine依赖，则直接开始下载
+     */
+    void slotAppendPackageFinished();
 private:
-    QFuture<QApt::Backend *> m_backendFuture;           //安装程序后端指针(异步加载)
 
-    QList<QString> m_preparedPackages;          //存放包路径的列表
-    QSet<QByteArray> m_appendedPackagesMd5;     //存放包MD5的集合
+    //安装程序后端指针(异步加载)
+    QFuture<QApt::Backend *> m_backendFuture;           
 
-    QList<QByteArray> m_packageMd5;
+    //存放包路径的列表
+    QList<QString> m_preparedPackages       = {};   
+
+    //存放包MD5的集合       
+    QSet<QByteArray> m_appendedPackagesMd5  = {};     
+
+    //包MD5与下标绑定的list
+    QList<QByteArray> m_packageMd5          = {};
 
     /**
      * @brief m_packageMd5DependsStatus 包的依赖状态的Map
@@ -471,16 +471,19 @@ private:
      * 1.修改添加方式从添加到插入到最前方
      * 2.使用之前的方式会导致所有包的安装状态都是第一个包的安装状态
      */
-    QMap<QByteArray, int> m_packageInstallStatus;
+    QMap<QByteArray, int> m_packageInstallStatus = {};
 
-    int m_DealDependIndex = -1;             // wine应用处理的下标
-    DealDependThread *dthread = nullptr;    //下载依赖的线程
+    // wine应用处理的下标
+    int m_DealDependIndex                        = -1; 
+    
+    //下载依赖的线程            
+    DealDependThread *m_installWineThread        = nullptr;    
 
     /**
-     * @brief m_dependInstallMark
+     * @brief m_dependInstallMark wine依赖下标的标记
      * 将依赖下载的标记修改为md5sum  与包绑定 而非下标
      */
-    QList<QByteArray> m_dependInstallMark;         //wine依赖下标的标记
+    QList<QByteArray> m_dependInstallMark        = {};         
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";     //软链接临时路径
@@ -488,12 +491,11 @@ private:
 private:
     AddPackageThread *m_pAddPackageThread = nullptr;    //添加包的线程
 
-    bool installWineDepends = false;
+    bool installWineDepends               = false;
 
-    int m_validPackageCount = 0;
+    int m_validPackageCount               = 0;
 
-    qint64 dependsStatusTotalTime = 0;
-
+    qint64 dependsStatusTotalTime         = 0;
 };
 
 #endif  // PACKAGESMANAGER_H

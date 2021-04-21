@@ -53,17 +53,55 @@ public:
     PackageDependsStatus &operator=(const PackageDependsStatus &other);
 
     /**
-     * @brief max   状态的比较
-     * @param other
-     * @return
+     * @brief max   比较当前状态并返回状态值更大的那一个
+     * @param other 与当前状态比较的另一个依赖状态
+     * @return 两个状态中更大的一个
      */
     PackageDependsStatus max(const PackageDependsStatus &other);
+
+    /**
+     * @brief maxEq   比较当前状态并返回状态值更大的那一个
+     * @param other 与当前状态比较的另一个依赖状态
+     * @return 两个状态中更大的一个
+     */
     PackageDependsStatus maxEq(const PackageDependsStatus &other);
+
+        /**
+     * @brief min   比较当前状态并返回状态值更小的那一个
+     * @param other 与当前状态比较的另一个依赖状态
+     * @return 两个状态中更小的一个
+     */
     PackageDependsStatus min(const PackageDependsStatus &other);
+
+        /**
+     * @brief minEq   比较当前状态并返回状态值更小的那一个
+     * @param other 与当前状态比较的另一个依赖状态
+     * @return 两个状态中更小的一个
+     */
     PackageDependsStatus minEq(const PackageDependsStatus &other);
 
+    /**
+     * @brief 当前依赖状态是否为break
+     * 
+     * @return true 当前依赖状态为break
+     * @return false 当前依赖状态不是break
+     */
     bool isBreak() const;
+
+    /**
+     * @brief 当前依赖状态是否为AuthCancel
+     * 
+     * @return true 当前依赖状态是AuthCancle
+     * @return false 当前依赖状态不是AuthCancle
+     */
     bool isAuthCancel() const;
+
+    /**
+     * @brief 当前依赖状态是否为Available
+     * 
+     * @return true 当前依赖状态是Available
+     * @return false 当前依赖状态不是Available
+     */
     bool isAvailable() const;
 
 public:
