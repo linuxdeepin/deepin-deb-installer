@@ -526,17 +526,24 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         }
 
         // TODO: upgrade?
-//        if (!dep->installedVersion().isEmpty()) return;
         //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-        qDebug() << dep->installedVersion();
-        qDebug() << Package::compareVersion(dep->installedVersion(), info.packageVersion());
-        if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
-            Backend *b = m_backendFuture.result();
-            Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p)
-                choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            else
-                choosed_set << dep->name() + " not found";
+        //当前依赖未安装，则安装当前依赖。
+        if (dep->installedVersion().isEmpty()) {
+            choosed_set << choosed_name;
+        } else {
+            // 当前依赖已安装，判断是否需要升级
+            //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
+            if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
+                Backend *backend = m_backendFuture.result();
+                Package *updatePackage = backend->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
+                if (updatePackage)
+                    choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+                else
+                    choosed_set << updatePackage->name() + " not found";
+
+            } else { //若依赖包符合版本要求,则不进行升级
+                continue;
+            }
         }
 
 
