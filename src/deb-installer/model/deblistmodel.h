@@ -173,19 +173,16 @@ public:
     void reset_filestatus();
 
     /**
+     * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
+     * @return 当前是否就绪
+     */
+    bool isWorkerPrepare() const;
+
+    /**
      * @brief isReady 查看后端初始化的状态
      * @return 后端是否准备就绪
      */
     bool isReady() const;
-
-    /**
-     * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
-     * @return 当前是否就绪
-     */
-    bool isWorkerPrepare() const
-    {
-        return m_workerStatus == WorkerPrepare;
-    }
 
     /**
      * @brief preparedPackages 获取当前已经添加的包的列表
@@ -473,6 +470,21 @@ private slots:
      */
     void slotUninstallFinished();
 
+    /**
+     * @brief slotNoDigitalSignature 无数字签名
+     */
+    void slotNoDigitalSignature();
+
+    /**
+     * @brief slotDigitalSignatureError 数字签名校验失败
+     */
+    void slotDigitalSignatureError();
+
+    /**
+     * @brief showDevelopModeWindow 打开控制中心通用界面
+     */
+    void slotShowDevelopModeWindow() /*__attribute__((noreturn))*/;
+
 private:
 
     /**
@@ -546,18 +558,12 @@ private:
      */
     void showDigitalErrWindow();
 
-
     /**
      * @brief 数字签名校验失败 弹窗处理的槽函数
      * 
      * @param errorCode 错误原因代码
      */
     void digitalVerifyFailed(ErrorCode errorCode);
-
-    /**
-     * @brief showDevelopModeWindow 打开控制中心通用界面
-     */
-    void showDevelopModeWindow();
 
 private:
 

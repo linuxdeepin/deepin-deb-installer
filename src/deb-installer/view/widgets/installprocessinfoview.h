@@ -62,6 +62,12 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+private slots:
+    /**
+     * @brief slotMoveCursorToEnd 移动当前光标到最后一行
+     */
+    void slotMoveCursorToEnd();
+
 private:
     /**
      * @brief initUI 初始化ProcessInfo的大小

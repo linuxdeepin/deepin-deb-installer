@@ -25,7 +25,6 @@
 #include "AddPackageThread.h"
 #include "utils/utils.h"
 #include "model/deblistmodel.h"
-#include "utils/DebugTimeManager.h"
 
 #include <DRecentManager>
 
@@ -795,10 +794,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
             emit signalInvalidPackage();
             continue;
         }
-
-        PERF_PRINT_BEGIN("POINT-03", "pkgsize=" + QString::number(pkgFile->installedSize()) + "b");
         // 获取当前文件的md5的值,防止重复添加
-       
         const auto md5 = pkgFile->md5Sum();
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
@@ -1133,6 +1129,11 @@ bool PackagesManager::rmTempDir()
     } else {
         return true;                    //临时目录不存在，返回删除成功
     }
+}
+
+QString PackagesManager::package(const int index) const
+{
+    return m_preparedPackages[index];
 }
 
 PackagesManager::~PackagesManager()

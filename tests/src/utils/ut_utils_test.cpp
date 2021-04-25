@@ -218,7 +218,6 @@ TEST(Utils_Test, Utils_UT_0013)
 TEST(Utils_Test, Utils_UT_DebApplicationHelper)
 {
     DebApplicationHelper *helper = DebApplicationHelper::instance();
-
     Q_UNUSED(helper);
 }
 
@@ -226,30 +225,6 @@ TEST(Utils_Test, Utils_UT_standardPalette)
 {
     DebApplicationHelper *helper = DebApplicationHelper::instance();
     helper->standardPalette(DGuiApplicationHelper::LightType);
-}
-
-TEST(Utils_Test, Utils_UT_0016)
-{
-//    Stub stub;
-//    stub.set(ADDR(QWidget, palette), util_palette);
-//    stub.set(ADDR(QWidget, installEventFilter), util_installEventFilter);
-
-////    stub.set((DGuiApplicationHelper::ColorType(DGuiApplicationHelper::*)
-////              (const QPalette &))ADDR(DGuiApplicationHelper, toColorType), util_toColorType);
-
-//    //       (int
-//    //        (A::*)
-//    //        (int))
-//            //ADDR(A,foo)
-//    typedef DGuiApplicationHelper::ColorType (*fptr)(DGuiApplicationHelper*,const QColor &);
-//    fptr helper_toColor = (fptr)(&DGuiApplicationHelper::toColorType);
-
-//    stub.set(ADDR(DGuiApplicationHelper, toColorType),util_toColorType_Color);
-//    DebApplicationHelper *helper = DebApplicationHelper::instance();
-
-//    QWidget * w = nullptr;
-//    QPalette pa;
-//    helper->palette(w, pa);
 }
 
 void util_setPalette(const QPalette &)

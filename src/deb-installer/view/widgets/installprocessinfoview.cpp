@@ -33,14 +33,16 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     initUI(w, h);
 
     //数据更新后，直接跳转到最后一行
-    connect(m_editor, &QTextEdit::textChanged, this, [ = ] {
-        m_editor->moveCursor(QTextCursor::End);
-    });
+    connect(m_editor, &QTextEdit::textChanged, this, &InstallProcessInfoView::slotMoveCursorToEnd);
     //设置TextEdit和InfoView为无焦点
     this->setFocusPolicy(Qt::NoFocus);
     m_editor->setFocusPolicy(Qt::NoFocus);
 }
 
+void InstallProcessInfoView::slotMoveCursorToEnd()
+{
+    m_editor->moveCursor(QTextCursor::End);
+}
 void InstallProcessInfoView::initUI(int w, int h)
 {
     //设置控件背景色

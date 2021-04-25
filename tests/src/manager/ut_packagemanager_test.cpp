@@ -870,6 +870,16 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation)
     ASSERT_STREQ(resolvMultiArchAnnotation("all", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
+TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_any)
+{
+    ASSERT_STREQ(resolvMultiArchAnnotation("any", "", InvalidMultiArchType).toLocal8Bit(), "");
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_MultiArchForeign)
+{
+    ASSERT_STREQ(resolvMultiArchAnnotation("any", "", MultiArchForeign).toLocal8Bit(), "");
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_01)
 {
     ASSERT_STREQ(resolvMultiArchAnnotation("testAnnotation", "", InvalidMultiArchType).toLocal8Bit(), ":testAnnotation");
@@ -943,3 +953,4 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
     QSet<QString> set;
     m_packageManager->checkDependsPackageStatus(set, "", conflicts());
 }
+

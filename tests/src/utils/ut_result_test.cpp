@@ -18,9 +18,6 @@
 #include <gtest/gtest.h>
 
 #include "../src/deb-installer/utils/result.h"
-
-#undef private
-#undef protected
 #include <QString>
 typedef Result<QString> TestResult;
 
@@ -34,4 +31,9 @@ TEST(Result_Test, Result_UT_002)
     TestResult t = TestResult::err("test");
     t.err("test");
     t.unwrap();
+}
+TEST(Result_Test, Result_UT_003)
+{
+    Result<QString> t(true,"QString");
+    t.is_ok();
 }

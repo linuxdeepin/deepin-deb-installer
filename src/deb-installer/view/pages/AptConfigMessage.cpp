@@ -105,9 +105,7 @@ void AptConfigMessage::initControl()
     m_pushbutton->setMinimumSize(130, 36);
 
     //焦点在信息输入框时，按回车触发提交信息。
-    connect(m_inputEdit, &DLineEdit::returnPressed, this, [ = ] {
-        m_pushbutton->clicked();
-    });
+    connect(m_inputEdit, &DLineEdit::returnPressed, m_pushbutton, &DPushButton::click);
 }
 
 /**

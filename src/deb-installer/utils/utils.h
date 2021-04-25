@@ -47,9 +47,6 @@ public:
     void resetPalette(QWidget *widget);
 
 private:
-    DebApplicationHelper();
-    ~DebApplicationHelper() override;
-
     bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
@@ -59,7 +56,6 @@ class Utils : public QObject
 
 public:
     Utils(QObject *parent = nullptr);
-    ~Utils();
 
     enum FontType {
         SourceHanSansMedium,

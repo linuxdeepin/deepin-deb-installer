@@ -49,7 +49,6 @@ public:
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
 protected:
-    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;           //按键事件
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;    //拖入事件
     void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;              //拖入放下事件
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;      //拖进事件

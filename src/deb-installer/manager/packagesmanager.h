@@ -190,10 +190,7 @@ public:
      * @param index  下标
      * @return  包的路径
      */
-    QString package(const int index) const
-    {
-        return m_preparedPackages[index];
-    }
+    QString package(const int index) const;
 
     /**
      * @brief isArchError 判断指定下标的包是否符合架构要求

@@ -361,7 +361,6 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(Backend, reloadCache), model_backend_init);
 
     stub.set(ADDR(Transaction, run), model_transaction_run);
-    stub.set(ADDR(Transaction, error), model_transaction_error);
     stub.set(ADDR(Transaction, errorString), model_transaction_errorString);
     stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
     stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
@@ -389,12 +388,6 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
     stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), model_package_package);
-
-//    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
-//    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-//    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
-//    stub.set(ADDR(DebListModel, checkSystemVersion), model_checkSystemVersion);
-
 }
 void ut_DebListModel_test::SetUp()
 {
@@ -417,6 +410,7 @@ void ut_DebListModel_test::TearDown()
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_reset)
 {
+    m_debListModel->reset();
     ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerPrepare);
 }
 
@@ -441,7 +435,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkerPrepare)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_preparedPackages)
 {
-
     ASSERT_TRUE(m_debListModel->preparedPackages().isEmpty());
 }
 
@@ -475,6 +468,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_rowCount)
     ASSERT_EQ(m_debListModel->rowCount(index), 1);
 }
 
+bool stub_recheckPackagePath(QString )
+{
+    return false;
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
 {
 
@@ -488,6 +486,20 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
         m_debListModel->data(index, i);
         i++;
     }
+
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    for (int i = 257;i <=269; i++) {
+        m_debListModel->data(index, i);
+    }
+
+
+    stub.set(ADDR(DebListModel,recheckPackagePath), stub_recheckPackagePath);
+    m_debListModel->data(index, 1);
+
+    m_debListModel->m_packageOperateStatus[""] = 1;
+    m_debListModel->data(index,268);
+
+
 }
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
 {
@@ -558,7 +570,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage)
 {
     stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-    stub.set(ADDR(Transaction, run), model_transaction_run);
 
     QStringList list;
     list << "/";
@@ -692,16 +703,42 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_removePackage)
     m_debListModel->slotRemovePackage(0);
 
     ASSERT_EQ(m_debListModel->m_packagesManager->m_preparedPackages.size(), 1);
+
+    m_debListModel->slotAppendPackage(list);
+    m_debListModel->m_packageOperateStatus[""] = 1;
+    m_debListModel->slotRemovePackage(0);
+
 }
 
+QApt::ErrorCode model_transaction_commitError()
+{
+    return QApt::CommitError;
+}
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
 {
+    stub.set(ADDR(Transaction, error), model_transaction_error);
     m_debListModel->checkSystemVersion();
     m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
     m_debListModel->m_packageMd5.insert(0, "00000");
     m_debListModel->m_operatingIndex = 0;
     m_debListModel->slotTransactionErrorOccurred();
+
+    ASSERT_EQ(m_debListModel->m_packageFailCode.size(), 1);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionCommitErrorOccurred)
+{
+
+    stub.set(ADDR(Transaction, error), model_transaction_commitError);
+    m_debListModel->checkSystemVersion();
+    m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
+    m_debListModel->m_packageMd5.insert(0, "00000");
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->slotTransactionErrorOccurred();
+
+    m_debListModel->slotTransactionErrorOccurred();
+
 
     ASSERT_EQ(m_debListModel->m_packageFailCode.size(), 1);
 }
@@ -768,7 +805,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
 {
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-
+    stub.set(ADDR(Transaction,error),model_transaction_error);
     m_debListModel->m_operatingIndex = 0;
     m_debListModel->m_packageMd5.append("test");
     m_debListModel->m_packageMd5.append("test1");
@@ -786,6 +823,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinish
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
+    stub.set(ADDR(Transaction, error), model_transaction_error);
 
     m_debListModel->slotDependsInstallTransactionFinished();
 }
@@ -795,7 +833,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_showDevelopModeWindow)
 {
 
     stub.set((bool (QProcess::*)(qint64 *))ADDR(QProcess, startDetached), ut_process_startDetached);
-    m_debListModel->showDevelopModeWindow();
+    m_debListModel->slotShowDevelopModeWindow();
 }
 
 
@@ -813,6 +851,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallFinished)
 {
+    stub.set(ADDR(Transaction,error), model_transaction_run);
     m_debListModel->slotUninstallFinished();
 }
 
@@ -893,4 +932,23 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_workerErrorString)
 
 }
 
+TEST_F(ut_DebListModel_test, deblistmodel_UT_digitalVerifyFailed)
+{
+    m_debListModel->digitalVerifyFailed(DebListModel::ErrorCode::DigitalSignatureError);
+}
 
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDigitalSignatureError)
+{
+    m_debListModel->slotDigitalSignatureError();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotNoDigitalSignature)
+{
+    m_debListModel->slotNoDigitalSignature();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkPrepare)
+{
+    m_debListModel->m_workerStatus = DebListModel::WorkerPrepare;
+    ASSERT_TRUE(m_debListModel->isWorkerPrepare());
+}

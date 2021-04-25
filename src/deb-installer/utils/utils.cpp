@@ -41,10 +41,6 @@ Utils::Utils(QObject *parent)
 {
 }
 
-Utils::~Utils()
-{
-}
-
 QString Utils::loadFontFamilyByType(FontType fontType)
 {
     Q_UNUSED(fontType);
@@ -448,10 +444,6 @@ void DebApplicationHelper::resetPalette(QWidget *widget)
     widget->setProperty("_d_set_palette", QVariant());
     widget->setAttribute(Qt::WA_SetPalette, false);
 }
-
-DebApplicationHelper::DebApplicationHelper() {}
-
-DebApplicationHelper::~DebApplicationHelper() {}
 
 bool DebApplicationHelper::eventFilter(QObject *watched, QEvent *event)
 {

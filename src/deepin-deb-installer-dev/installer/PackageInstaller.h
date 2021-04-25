@@ -40,7 +40,6 @@ public:
 
     void uninstallPackage();
 
-
 signals:
     void signal_startInstall();
 

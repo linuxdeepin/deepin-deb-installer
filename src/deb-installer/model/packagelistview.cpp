@@ -69,7 +69,7 @@ void PackagesListView::initShortcuts()
 {
     QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);              //初始化快捷键
     deleteShortcut->setContext(Qt::ApplicationShortcut);                                //设置快捷键的显示提示
-    connect(deleteShortcut, SIGNAL(activated()), this, SLOT(onShortcutDeleteAction())); //链接快捷键
+    connect(deleteShortcut, &QShortcut::activated, this, &PackagesListView::slotShortcutDeleteAction); //链接快捷键
 }
 
 /**
@@ -158,7 +158,7 @@ void PackagesListView::initRightContextMenu()
         QAction *deleteAction = new QAction(tr("Delete"), this);
 
         m_rightMenu->addAction(deleteAction);                   //右键菜单添加action
-        connect(deleteAction, SIGNAL(triggered()), this, SLOT(onRightMenuDeleteAction()));      //action 添加链接事件
+        connect(deleteAction, &QAction::triggered, this, &PackagesListView::slotRightMenuDeleteAction);      //action 添加链接事件
     }
 }
 

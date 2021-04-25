@@ -184,10 +184,8 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, version), stud_version);
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
-    stub.set(ADDR(DebInstaller, enableCloseAndExit), stub_enableCloseAndExit);
-    stub.set(ADDR(DebInstaller, disableCloseAndExit), stub_enableCloseAndExit);
 
-
+    deb->disableCloseAndExit();
     deb->slotEnableCloseButton(false);
     deb->slotEnableCloseButton(true);
 
@@ -202,6 +200,7 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->slotShowInvalidePackageMessage();
     deb->slotShowPkgExistMessage();
     deb->slotShowUninstallConfirmPage();
+    deb->slotShowNotLocalPackageMessage();
     deb->slotUninstallAccepted();
     deb->slotUninstallCancel();
     deb->slotSetAuthingStatus(false);
@@ -250,6 +249,13 @@ TEST_F(Debinstaller_UT, dragEnterEvent_UT)
     QCoreApplication::sendEvent(deb, &enterEvent);
     delete  mimeData;
 }
+TEST_F(Debinstaller_UT, dragMoveEvent_UT)
+{
+    QMimeData *mimeData = new QMimeData;
+    QDragMoveEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QCoreApplication::sendEvent(deb, &enterEvent);
+    delete  mimeData;
+}
 
 TEST_F(Debinstaller_UT, dropEvent_UT)
 {
@@ -260,3 +266,15 @@ TEST_F(Debinstaller_UT, dropEvent_UT)
     QCoreApplication::sendEvent(deb, &dropEvent);
     delete mimeData;
 }
+
+
+TEST_F(Debinstaller_UT, closeEvent_UT)
+{
+    QByteArray csvData = "test";
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("text/csv", csvData);
+    QCloseEvent closeEvent;
+    QCoreApplication::sendEvent(deb, &closeEvent);
+    delete mimeData;
+}
+

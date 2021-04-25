@@ -24,7 +24,6 @@
 #include "view/pages/uninstallconfirmpage.h"
 #include "view/pages/AptConfigMessage.h"
 #include "utils/utils.h"
-#include "utils/DebugTimeManager.h"
 
 #include <DInputDialog>
 #include <DRecentManager>
@@ -146,29 +145,13 @@ void DebInstaller::initConnections()
     //Determine the status of the current application based on the status of the authorization box.
     connect(m_fileListModel, &DebListModel::signalLockForAuth, this, &DebInstaller::slotSetAuthingStatus);
 
-    //show dpkg details
-    connect(m_fileListModel, &DebListModel::signalAppendOutputInfo, this, [ = ](const QString & output) {
-        this->titlebar()->update();
-        qDebug() << "Process:" << output.trimmed();
-    });
-
     //During installing/uninstalling, drag is not allowed
     connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotChangeDragFlag);
-
-    //When the authorization is revoked, show install/uninstall/reinstall button which hidden during authorizing
     connect(m_fileListModel, &DebListModel::signalAuthCancel, this, &DebInstaller::slotShowHiddenButton);
-
-    //When starting the installation, the install button is not available
     connect(m_fileListModel, &DebListModel::signalStartInstall, this, &DebInstaller::disableCloseAndExit);
-
-    //When the authorization box pops up, the install button is not available.
     connect(m_fileListModel, &DebListModel::signalEnableReCancelBtn, this, &DebInstaller::slotSetEnableButton);
-
-    //When installing deepin-wine for the first time, set the button display according to the progress of the installation
     connect(m_fileListModel, &DebListModel::signalDependResult, this, &DebInstaller::slotDealDependResult);
-
     connect(m_fileListModel, &DebListModel::signalEnableCloseButton, this, &DebInstaller::slotEnableCloseButton);
-
     connect(m_fileListModel, &DebListModel::signalPackageCannotFind, this, &DebInstaller::slotShowPkgRemovedMessage);
 }
 
@@ -183,55 +166,29 @@ void DebInstaller::slotEnableCloseButton(bool enable)
 
 void DebInstaller::disableCloseAndExit()
 {
-    DTitlebar *tb = this->titlebar();
-    if (tb) {
-        tb->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
-        QMenu *titleMenu = tb->menu();
-        if (titleMenu) {
-            QList<QAction *> actions = titleMenu->actions();
-            if (!actions.isEmpty()) {
-                QAction *action = actions.last();
-                if (action)
-                    action->setDisabled(true);
-            }
+    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
+    QMenu *titleMenu = titlebar()->menu();
+    if (titleMenu) {
+        QList<QAction *> actions = titleMenu->actions();
+        if (!actions.isEmpty()) {
+            QAction *action = actions.last();
+            if (action)
+                action->setDisabled(true);
         }
     }
 }
 
 void DebInstaller::enableCloseAndExit()
 {
-
-    DTitlebar *tb = this->titlebar();
-    if (tb) {
-        //设置标题栏的最小化和关闭按钮可用
-        tb->setDisableFlags(tb->windowFlags() &
-                            ~Qt::WindowMinimizeButtonHint &
-                            ~Qt::WindowCloseButtonHint);
-        //设置actions中的关闭按钮可用
-        QMenu *titleMenu = tb->menu();
-        if (titleMenu) {
-            QList<QAction *> actions = titleMenu->actions();
-            if (!actions.isEmpty()) {
-                QAction *action = actions.last();
-                if (action)
-                    action->setDisabled(false);
-            }
+    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
+    QMenu *titleMenu = titlebar()->menu();
+    if (titleMenu) {
+        QList<QAction *> actions = titleMenu->actions();
+        if (!actions.isEmpty()) {
+            QAction *action = actions.last();
+            if (action)
+                action->setDisabled(false);
         }
-    }
-}
-
-
-void DebInstaller::keyPressEvent(QKeyEvent *keyEvent)
-{
-    // debug 模式下，按下Esc 会退出安装程序
-    switch (keyEvent->key()) {
-#ifdef QT_DEBUG
-    case Qt::Key_Escape:
-        qApp->quit();
-        break;
-#endif
-    default:
-        ;
     }
 }
 
@@ -296,11 +253,9 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *dragMoveEvent)
 
 void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
 {
-
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
-    // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
-    // 如果此时处于正在安装或者卸载状态，则不添加
+    // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
     if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
             m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
@@ -319,7 +274,6 @@ void DebInstaller::refreshMulti()
 
 void DebInstaller::slotShowInvalidePackageMessage()
 {
-    //add Floating Message while package invalid
     DFloatingMessage *floatingMsg = new DFloatingMessage;
     floatingMsg->setMessage(tr("The deb package may be broken"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
@@ -328,7 +282,6 @@ void DebInstaller::slotShowInvalidePackageMessage()
 
 void DebInstaller::slotShowNotLocalPackageMessage()
 {
-    //add Floating Message while package invalid
     DFloatingMessage *floatingMsg = new DFloatingMessage;
     floatingMsg->setMessage(tr("You can only install local deb packages"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
@@ -361,12 +314,10 @@ void DebInstaller::slotShowUninstallConfirmPage()
 
     const QModelIndex index = m_fileListModel->first();                                         //只有单包才有卸载界面
 
-    //  Set the display information of the uninstall page
     m_uninstallPage = new UninstallConfirmPage(this);                                   //初始化卸载页面
     m_uninstallPage->setRequiredList(index.data(DebListModel::PackageReverseDependsListRole).toStringList()); //查看是否有包依赖于当前要卸载的包，病获取列表
     m_uninstallPage->setPackage(index.data().toString());                                                     //添加卸载提示语
 
-    //Uninstall the page
     m_Filterflag = 3;
     m_centralLayout->addWidget(m_uninstallPage);                                                              //添加卸载页面到主界面中
     m_centralLayout->setCurrentIndex(2);                                                        //显示卸载页面
@@ -484,14 +435,11 @@ void DebInstaller::single2Multi()
     m_dragflag = 1;
     m_Filterflag = 1;
 
-    // switch to new page.
     m_centralLayout->setCurrentIndex(1);
-
 }
 
 void DebInstaller::refreshSingle()
 {
-    //刷新页面之前先清除掉文件选择按钮的焦点，防止在文件选择按钮有焦点的时候添加包，焦点转移到其他控件
     m_fileChooseWidget->clearChooseFileBtnFocus();
 
     // 刷新文件的状态，初始化包的状态为准备状态

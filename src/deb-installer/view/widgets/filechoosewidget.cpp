@@ -18,7 +18,6 @@
 #include "filechoosewidget.h"
 #include "view/widgets/choosefilebutton.h"
 #include "utils/utils.h"
-#include "utils/DebugTimeManager.h"
 
 #include <QDebug>
 #include <QDir>

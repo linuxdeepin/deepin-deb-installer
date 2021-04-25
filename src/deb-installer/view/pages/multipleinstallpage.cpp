@@ -152,9 +152,7 @@ void MultipleInstallPage::initUI()
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::signalChangeItemHeight, [ = ](int height) {
-        delegate->getItemHeight(height);
-    });
+    connect(m_appsListView, &PackagesListView::signalChangeItemHeight,delegate, &PackagesListDelegate::getItemHeight);
 
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);

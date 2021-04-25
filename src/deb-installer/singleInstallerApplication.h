@@ -23,8 +23,6 @@
 #include <DMainWindow>
 #include <QCommandLineParser>
 
-#include <QDebug>
-
 DWIDGET_USE_NAMESPACE
 
 class SingleInstallerApplication : public DApplication
@@ -33,9 +31,6 @@ class SingleInstallerApplication : public DApplication
     Q_CLASSINFO("D-Bus Interface", "com.deepin.DebInstaller")
 public:
     explicit SingleInstallerApplication(int &argc, char **argv);
-
-    virtual ~SingleInstallerApplication();
-
     /**
      * @brief 激活软件包安装器窗口
      * 
