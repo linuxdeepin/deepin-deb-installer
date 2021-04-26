@@ -41,14 +41,14 @@ void SingleInstallerApplication::activateWindow()
         m_qspMainWnd->showNormal();     //非特效模式下激活窗口
     }
     if (m_selectedFiles.size() > 0) {
-        QMetaObject::invokeMethod(m_qspMainWnd.get(), "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_selectedFiles));
+        QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_selectedFiles));
     }
 }
 
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
     if (debPathList.size() > 0) {
-        QMetaObject::invokeMethod(m_qspMainWnd.get(), "onPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
+        QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     } else {
         if (m_qspMainWnd.get()) {                   //先判断当前是否已经存在一个进程。
             m_qspMainWnd.get()->activateWindow();   //特效模式下激活窗口

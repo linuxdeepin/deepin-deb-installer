@@ -27,6 +27,7 @@ DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 class ColoredProgressBarPrivate;
+
 /*!
  * \class ColoredProgressBar
  * \brief ColoredProgressBar is the same as QProgressBar, except it can change its appearance depending on the value displayed.

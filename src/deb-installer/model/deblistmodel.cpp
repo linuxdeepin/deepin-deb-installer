@@ -111,6 +111,8 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
     case DebListModel::ConfigAuthCancel:
         return QApplication::translate("DebListModel",
                                        "Authentication failed");
+    case DebListModel::ErrorCode::ApplocationProhibit:
+        return QApplication::translate("DebListModel", "The administrator has set policies to prevent installation of this package");
     }
     //其余错误，暂不提示具体的错误原因
     return QApplication::translate("DebListModel", "Installation Failed");
@@ -538,6 +540,8 @@ QString DebListModel::packageFailedReason(const int idx) const
     const auto dependStatus = m_packagesManager->getPackageDependsStatus(idx);                         //获取包的依赖状态
     const auto md5 = m_packagesManager->getPackageMd5(idx);                                 //获取包的md5值
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
+    if(dependStatus.isProhibit())
+        return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
         if (!dependStatus.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
@@ -920,7 +924,9 @@ bool DebListModel::checkDigitalSignature()
 
 void DebListModel::installNextDeb()
 {
-    if (!checkDigitalSignature()) {                             //非开发者模式且数字签名验证失败
+    //检查当前应用是否在黑名单中
+    //非开发者模式且数字签名验证失败
+    if (!checkDigitalSignature() || checkBlackListApplication()) {
         return;
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
@@ -1214,6 +1220,56 @@ void DebListModel::getPackageMd5(QList<QByteArray> packagesMD5)
     emit signalAppendFinished();
 }
 
+void DebListModel::slotShowProhibitWindow()
+{
+    digitalVerifyFailed(ApplocationProhibit);
+}
+void DebListModel::showProhibitWindow()
+{
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+        digitalVerifyFailed(ApplocationProhibit);     //刷新安装错误，并记录错误原因
+        return;
+    }
+    DDialog *Ddialog = new DDialog();
+    //设置窗口焦点
+    Ddialog->setFocusPolicy(Qt::TabFocus);
+
+    //设置弹出窗口为模态窗口
+    Ddialog->setModal(true);
+
+    //设置窗口始终置顶
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    // 设置弹出窗口显示的信息
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setMessage(QString(tr("The administrator has set policies to prevent installation of this package")));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+    Ddialog->show();
+    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+
+
+    btnOK->setFocusPolicy(Qt::TabFocus);
+    btnOK->setFocus();
+    // 点击弹出窗口的关闭图标按钮
+    connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotShowProhibitWindow);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
+
+    //点击弹出窗口的确定按钮
+    connect(btnOK, &DPushButton::clicked, this, &DebListModel::slotShowProhibitWindow);
+    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+}
+
+bool DebListModel::checkBlackListApplication()
+{
+    PackageDependsStatus dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingIndex);
+    if (dependsStat.isProhibit()) {
+        showProhibitWindow();
+        return true;
+    }
+    return false;
+}
 
 DebListModel::~DebListModel()
 {

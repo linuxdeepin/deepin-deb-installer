@@ -34,6 +34,11 @@ PackageDependsStatus PackageDependsStatus::_break(const QString &package)
     return {DebListModel::DependsBreak, package};
 }
 
+PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
+{
+    return {DebListModel::DependsBreak, package};
+}
+
 PackageDependsStatus::PackageDependsStatus()
     : PackageDependsStatus(DebListModel::DependsOk, QString()) {}
 
@@ -91,3 +96,9 @@ bool PackageDependsStatus::isAvailable() const
 {
     return status == DebListModel::DependsAvailable;
 }
+
+bool PackageDependsStatus::isProhibit() const
+{
+    return status == DebListModel::Prohibit;
+}
+

@@ -726,7 +726,8 @@ void SingleInstallPage::showPackageInfo()
         // 添加依赖授权确认处理
         if ((dependsStat == DebListModel::DependsBreak
                 || dependsStat == DebListModel::DependsAuthCancel
-                || dependsStat == DebListModel::ArchBreak)
+                || dependsStat == DebListModel::ArchBreak
+                || dependsStat == DebListModel::Prohibit)
                 && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -854,9 +855,11 @@ void SingleInstallPage::setAuthBefore()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
     //依赖不满足或依赖授权被取消
-    if (dependsStat == DebListModel::DependsBreak ||
-            dependsStat == DebListModel::DependsAuthCancel ||
-            dependsStat == DebListModel::ArchBreak) {   //添加架构不匹配的处理
+    if (dependsStat == DebListModel::DependsBreak
+            || dependsStat == DebListModel::DependsAuthCancel
+            || dependsStat == DebListModel::ArchBreak   //添加架构不匹配的处理
+            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
+        ) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
@@ -891,9 +894,11 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     QModelIndex index = m_packagesModel->first();
     const int dependsStatus = index.data(DebListModel::PackageDependsStatusRole).toInt();
     //根据依赖状态 调整界面显示
-    if (dependsStatus == DebListModel::DependsBreak ||
-            dependsStatus == DebListModel::DependsAuthCancel ||
-            dependsStatus == DebListModel::ArchBreak) {   //添加架构不匹配的处理
+    if (dependsStatus == DebListModel::DependsBreak
+            || dependsStatus == DebListModel::DependsAuthCancel
+            || dependsStatus == DebListModel::ArchBreak         //添加架构不匹配的处理
+            || dependsStatus == DebListModel::Prohibit          //增加域管黑名单处理
+        ) {
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);

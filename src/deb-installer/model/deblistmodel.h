@@ -121,6 +121,7 @@ public:
         DependsVerifyFailed,    //签名验证失败
         DependsAuthCancel,      //依赖授权失败（wine依赖）
         ArchBreak,              //架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
+        Prohibit,               //应用被域管限制，无法安装
     };
 
     /**
@@ -151,9 +152,10 @@ public:
     };
 
     enum ErrorCode {
-        NoDigitalSignature = 101,               //无有效的数字签名
-        DigitalSignatureError,                  //数字签名校验失败
-        ConfigAuthCancel   = 127,               //配置安装授权被取消
+        NoDigitalSignature      = 101, //无有效的数字签名
+        DigitalSignatureError,         //数字签名校验失败
+        ConfigAuthCancel        = 127, //配置安装授权被取消
+        ApplocationProhibit     = 404, //当前包在黑名单中禁止安装
     };
 
     /**
@@ -485,6 +487,11 @@ private slots:
      */
     void slotShowDevelopModeWindow() /*__attribute__((noreturn))*/;
 
+    /**
+     * @brief slotShowProhibitWindow 应用在域管黑名单中，无法安装
+     */
+    void slotShowProhibitWindow();
+
 private:
 
     /**
@@ -557,6 +564,19 @@ private:
      * @brief showNoDigitalErrWindow 弹出数字签名校验错误的错误弹窗
      */
     void showDigitalErrWindow();
+
+    /**
+     * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
+     */
+    void showProhibitWindow();
+
+    /**
+     * @brief 检查当前将要安装的包是否在黑名单中。
+     *
+     * @return true 当前要安装的包在黑名单中
+     * @return false 当前要安装的包不在黑名单中
+     */
+    bool checkBlackListApplication();
 
     /**
      * @brief 数字签名校验失败 弹窗处理的槽函数

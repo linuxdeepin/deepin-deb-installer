@@ -21,8 +21,8 @@
 #include <QPainter>
 #include <QDebug>
 
-DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags f)
-    : DLabel(parent, f)
+DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags windowFlags)
+    : DLabel(parent, windowFlags)
     , m_colorRole(QPalette::NoRole)
     , m_colorType(DPalette::NoType)
     , m_bUserColorType(false)

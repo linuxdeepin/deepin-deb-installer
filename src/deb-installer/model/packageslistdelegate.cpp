@@ -270,7 +270,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (dependsStat == DebListModel::DependsBreak
                 || dependsStat == DebListModel::DependsAuthCancel
                 || dependsStat == DebListModel::DependsVerifyFailed
-                || dependsStat == DebListModel::ArchBreak) {// 添加对架构不匹配的处理
+                || dependsStat == DebListModel::ArchBreak   // 添加对架构不匹配的处理
+                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
+            ){
 
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             forground.setColor(palette.color(colorGroup, DPalette::TextWarning));       //安装失败或依赖错误

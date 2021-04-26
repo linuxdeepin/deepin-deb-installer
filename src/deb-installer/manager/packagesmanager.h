@@ -33,6 +33,8 @@
 
 using namespace QApt;
 
+#define BLACKFILE "/usr/share/udcp/appblacklist.txt"
+
 typedef Result<QString> ConflictResult;
 
 class PackageDependsStatus;
@@ -431,6 +433,23 @@ private slots:
      * @brief slotAppendPackageFinished 添加包结束后，如果此时需要下载wine依赖，则直接开始下载
      */
     void slotAppendPackageFinished();
+
+private:
+
+    /**
+     * @brief 判断当前应用是否为黑名单应用
+     *
+     * @return true 是黑名单应用
+     * @return false 不是黑名单应用
+     */
+    bool isBlackApplication(QString applicationName);
+
+    /**
+     * @brief 获取当前黑名单应用列表
+     *
+     */
+    void getBlackApplications();
+
 private:
 
     //安装程序后端指针(异步加载)
@@ -493,6 +512,9 @@ private:
     int m_validPackageCount               = 0;
 
     qint64 dependsStatusTotalTime         = 0;
+
+
+    QStringList m_blackApplicationList    = {};         //域管黑名单
 };
 
 #endif  // PACKAGESMANAGER_H

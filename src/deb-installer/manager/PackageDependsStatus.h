@@ -42,6 +42,13 @@ public:
      */
     static PackageDependsStatus _break(const QString &package);
 
+    /**
+     * @brief _prohibit 将传入的报名的依赖状态设置为_prohibit
+     * @param package 包的名字
+     * @return 包依赖状态为_prohibit
+     */
+    static PackageDependsStatus _prohibit(const QString &package);
+
     PackageDependsStatus();
     PackageDependsStatus(const int status, const QString &package);
 
@@ -103,6 +110,14 @@ public:
      * @return false 当前依赖状态不是Available
      */
     bool isAvailable() const;
+
+    /**
+     * @brief isProhibit 当前依赖状态是否为prohibit
+     * @return true 当前依赖状态是prohibit
+     * @return fasle 当前依赖状态不是prohibit
+     */
+    bool isProhibit() const;
+
 
 public:
     int status;
