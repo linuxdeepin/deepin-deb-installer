@@ -926,7 +926,7 @@ void DebListModel::installNextDeb()
 {
     //检查当前应用是否在黑名单中
     //非开发者模式且数字签名验证失败
-    if (!checkDigitalSignature() || checkBlackListApplication()) {
+    if (checkBlackListApplication() || !checkDigitalSignature() ) {
         return;
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
