@@ -180,7 +180,10 @@ void DebInstaller::disableCloseAndExit()
 
 void DebInstaller::enableCloseAndExit()
 {
-    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
+    titlebar()->setDisableFlags(titlebar()->windowFlags() &
+                                ~Qt::WindowMinimizeButtonHint &
+                                ~Qt::WindowCloseButtonHint);
+
     QMenu *titleMenu = titlebar()->menu();
     if (titleMenu) {
         QList<QAction *> actions = titleMenu->actions();
