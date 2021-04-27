@@ -719,7 +719,7 @@ void SingleInstallPage::showPackageInfo()
         m_packageName->setText(m_packageName->fontMetrics()
                                .elidedText(m_pkgNameDescription, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         m_packageVersion->setText(m_packageVersion->fontMetrics()
-                                  .elidedText(m_pkgNameDescription, Qt::ElideRight, initLabelWidth(fontlabelsize)));
+                                  .elidedText(m_versionDescription, Qt::ElideRight, initLabelWidth(fontlabelsize)));
         // package install status
         //否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
         // 根据依赖状态调整显示效果
