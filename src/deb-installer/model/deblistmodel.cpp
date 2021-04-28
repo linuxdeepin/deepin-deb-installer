@@ -41,7 +41,27 @@ using namespace QApt;
  * @brief isDpkgRunning 判断当前dpkg 是否在运行
  * @return
  */
-bool isDpkgRunning()
+
+
+DebListModel::DebListModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , m_workerStatus(WorkerPrepare)
+    , m_packagesManager(new PackagesManager(this))
+{
+    // 配置包安装的进程
+    m_procInstallConfig = new QProcess;
+    m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
+    m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
+
+    configWindow = new AptConfigMessage;
+
+    // 链接信号与槽
+    initConnections();
+    //检查系统版本与是否开启了开发者模式
+    checkSystemVersion();
+}
+
+bool DebListModel::isDpkgRunning()
 {
     QProcess proc;
 
@@ -60,7 +80,7 @@ bool isDpkgRunning()
     return false;
 }
 
-const QStringList netErrors()
+const QStringList DebListModel::netErrors()
 {
     QStringList errorDetails;
     errorDetails << "Address family for hostname not supported";
@@ -70,7 +90,7 @@ const QStringList netErrors()
     return errorDetails;
 }
 
-const QString workerErrorString(const int errorCode, const QString errorInfo)
+const QString DebListModel::workerErrorString(const int errorCode, const QString errorInfo)
 {
     switch (errorCode) {
     case FetchError:
@@ -113,30 +133,12 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
                                        "Authentication failed");
     case DebListModel::ErrorCode::ApplocationProhibit:
         return QApplication::translate("DebListModel", "The administrator has set policies to prevent installation of this package");
+    default:
+        break;
     }
     //其余错误，暂不提示具体的错误原因
     return QApplication::translate("DebListModel", "Installation Failed");
 }
-
-DebListModel::DebListModel(QObject *parent)
-    : QAbstractListModel(parent)
-    , m_workerStatus(WorkerPrepare)
-    , m_packagesManager(new PackagesManager(this))
-{
-    // 配置包安装的进程
-    m_procInstallConfig = new QProcess;
-    m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
-    m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
-
-    configWindow = new AptConfigMessage;
-
-    // 链接信号与槽
-    initConnections();
-    //检查系统版本与是否开启了开发者模式
-    checkSystemVersion();
-}
-
-
 void DebListModel::initAppendConnection()
 {
     //添加的包是无效的包
@@ -332,12 +334,9 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 void DebListModel::slotInstallPackages()
 {
-    qInfo() << "[Performance Testing] Click the install button";
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "installer status error");
     if (m_workerStatus != WorkerPrepare) return;
 
     m_workerStatus = WorkerProcessing;                                  //刷新包安装器的工作状态
-    m_workerStatus_temp = m_workerStatus;
     m_operatingIndex = 0;                                               //初始化当前操作的index
     m_operatingStatusIndex = 0;
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
@@ -350,11 +349,8 @@ void DebListModel::slotInstallPackages()
 
 void DebListModel::slotUninstallPackage(const int index)
 {
-    Q_ASSERT(index == 0);
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
 
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
-    m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = index;                             //获取卸载的包的indx
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     // fix bug : 卸载失败时不提示卸载失败。
@@ -438,7 +434,6 @@ void DebListModel::slotTransactionStatusChanged(TransactionStatus transactionSta
 void DebListModel::reset()
 {
     m_workerStatus          = WorkerPrepare;                     //工作状态重置为准备态
-    m_workerStatus_temp     = m_workerStatus;
     m_operatingIndex        = 0;                               //当前操作的index置为0
     m_operatingPackageMd5   = nullptr;
     m_operatingStatusIndex  = 0;                         //当前操作状态的index置为0
@@ -454,7 +449,7 @@ int DebListModel::getInstallFileSize()
     return m_packagesManager->m_preparedPackages.size();
 }
 
-void DebListModel::reset_filestatus()
+void DebListModel::resetFilestatus()
 {
     m_packageOperateStatus.clear();                     //重置包的操作状态
     m_packageFailReason.clear();                        //重置包的错误状态
@@ -468,7 +463,6 @@ void DebListModel::bumpInstallIndex()
     }
     if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
         m_workerStatus = WorkerFinished;                                        //设置包安装器的工作状态为Finish
-        m_workerStatus_temp = m_workerStatus;
         emit signalWorkerFinished();                                                  //发送安装完成信号
         emit signalWorkerProgressChanged(100);                                        //修改安装进度
         emit signalTransactionProgressChanged(100);
@@ -518,7 +512,6 @@ void DebListModel::slotTransactionErrorOccurred()
         emit signalLockForAuth(false);                                                    //取消授权锁定，设置按钮可用
         emit signalEnableCloseButton(true);
         m_workerStatus = WorkerPrepare;                                             // 重置工作状态为准备态
-        m_workerStatus_temp = m_workerStatus;
         return;
     }
 
@@ -602,8 +595,9 @@ void DebListModel::slotTransactionFinished()
         }
     }
     //    delete trans;
-    transaction->deleteLater();
+    m_currentTransaction->deleteLater();
     m_currentTransaction = nullptr;
+    transaction = nullptr;
     bumpInstallIndex();                 //进入安装进度控制
 }
 
@@ -630,8 +624,9 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
     }
 
     //    delete trans;
-    transaction->deleteLater();
+    m_currentTransaction->deleteLater();
     m_currentTransaction = nullptr;
+    transaction = nullptr;
 
     // check current operate exit status to install or install next
     if (transExitStatus)
@@ -797,14 +792,17 @@ void DebListModel::showNoDigitalErrWindow()
     //取消按钮
     QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     connect(btnCancel, &DPushButton::clicked, this, &DebListModel::slotNoDigitalSignature);
+    connect(btnCancel, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 
     //前往按钮1
     QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
     connect(btnProceedControlCenter, &DPushButton::clicked, this, &DebListModel::slotShowDevelopModeWindow);
     connect(btnProceedControlCenter, &DPushButton::clicked, this, &QApplication::exit);
+    connect(btnProceedControlCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 
     //关闭图标
     connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotNoDigitalSignature);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 }
 
 
@@ -836,9 +834,11 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocus();
     // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotDigitalSignatureError);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 
     //点击弹出窗口的确定按钮
     connect(btnOK, &DPushButton::clicked, this, &DebListModel::slotDigitalSignatureError);
+    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
 void DebListModel::slotDigitalSignatureError()
@@ -1013,13 +1013,11 @@ void DebListModel::slotUninstallFinished()
     
     if (trans->exitStatus()) {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
-        m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
         m_packageOperateStatus[m_operatingPackageMd5] = Failed;
         qWarning() << "DebListModel:" << "uninstall finished with finished code:" << trans->error() << "finished details:" << trans->errorString();
     } else {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
-        m_workerStatus_temp = m_workerStatus;
         refreshOperatingPackageStatus(Success);                     //刷新当前包的卸载状态
         m_packageOperateStatus[m_operatingPackageMd5] = Success;
     }
@@ -1180,7 +1178,7 @@ void DebListModel::slotCheckInstallStatus(QString installInfo)
     if (installInfo.contains("Cannot run program deepin-deb-installer-dependsInstall: No such file or directory")) {
         emit signalAppendOutputInfo(installInfo);                                 //输出安装错误的原因
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
-        m_workerStatus_temp = m_workerStatus;
+
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
@@ -1269,6 +1267,16 @@ bool DebListModel::checkBlackListApplication()
         return true;
     }
     return false;
+}
+
+int DebListModel::getWorkerStatus()
+{
+    return m_workerStatus;
+}
+
+void DebListModel::setWorkerStatus(int workerStatus)
+{
+    m_workerStatus = workerStatus;
 }
 
 DebListModel::~DebListModel()

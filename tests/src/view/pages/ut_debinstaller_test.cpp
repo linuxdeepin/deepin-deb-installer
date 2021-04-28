@@ -189,10 +189,10 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->slotEnableCloseButton(false);
     deb->slotEnableCloseButton(true);
 
-    deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerProcessing;
+    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerProcessing);
     deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
-    deb->m_fileListModel->m_workerStatus_temp = DebListModel::WorkerFinished;
+    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerFinished);
     deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
 

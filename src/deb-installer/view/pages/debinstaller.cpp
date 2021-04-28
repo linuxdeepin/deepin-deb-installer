@@ -198,7 +198,7 @@ void DebInstaller::enableCloseAndExit()
 void DebInstaller::dragEnterEvent(QDragEnterEvent *dragEnterEvent)
 {
     this->activateWindow();                                                         //拖入时，激活窗口
-    if (m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing) {   //如果当前正在安装，不允许拖入包
+    if (m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing) {   //如果当前正在安装，不允许拖入包
         this->setAcceptDrops(false);                                                //不允许拖入
     } else {
         m_fileChooseWidget->setAcceptDrops(true);                                   //允许包被拖入
@@ -259,9 +259,9 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
-    if ((!m_lastPage.isNull() && m_fileListModel->m_workerStatus_temp != DebListModel::WorkerPrepare) ||
-            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerProcessing ||
-            m_fileListModel->m_workerStatus_temp == DebListModel::WorkerUnInstall) {
+    if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare) ||
+            m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing ||
+            m_fileListModel->getWorkerStatus() == DebListModel::WorkerUnInstall) {
     } else {
         //开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(packagesPathList);
@@ -311,7 +311,7 @@ void DebInstaller::slotShowPkgRemovedMessage(QString packageName)
 
 void DebInstaller::slotShowUninstallConfirmPage()
 {
-    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerUnInstall;                       //刷新当前安装器的工作状态
+    m_fileListModel->setWorkerStatus( DebListModel::WorkerUnInstall);                       //刷新当前安装器的工作状态
 
     this->setAcceptDrops(false);                                                                //卸载页面不允许添加/拖入包
 
@@ -346,7 +346,7 @@ void DebInstaller::slotUninstallCancel()
 {
     // Cancel uninstall
     this->setAcceptDrops(true);                                                                 //取消卸载，允许包被拖入
-    m_fileListModel->m_workerStatus_temp = DebListModel::WorkerPrepare;                         //重置工作状态为准备状态
+    m_fileListModel->setWorkerStatus(DebListModel::WorkerPrepare);                        //重置工作状态为准备状态
     backToSinglePage();                                                                         //返回单包安装页面
 
     m_Filterflag = m_dragflag;
@@ -361,7 +361,6 @@ void DebInstaller::slotSetAuthingStatus(const bool authing)
 void DebInstaller::slotReset()
 {
     //reset page status
-    m_fileListModel->m_workerStatus_temp = 0;                               // 当前工作状态
     m_dragflag = -1;                                                        // 是否被允许拖入或添加
     m_Filterflag = -1;                                                      // 当前显示的页面
     titlebar()->setTitle(QString());                                        // 重置标题栏
@@ -420,7 +419,7 @@ void DebInstaller::MulRefreshPage()
 void DebInstaller::single2Multi()
 {
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->reset_filestatus();
+    m_fileListModel->resetFilestatus();
     m_fileListModel->initPrepareStatus();
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
 
@@ -446,7 +445,7 @@ void DebInstaller::refreshSingle()
     m_fileChooseWidget->clearChooseFileBtnFocus();
 
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->reset_filestatus();
+    m_fileListModel->resetFilestatus();
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
@@ -516,7 +515,7 @@ void DebInstaller::slotSetEnableButton(bool bButtonEnabled)
 void DebInstaller::slotShowHiddenButton()
 {
     enableCloseAndExit();
-    m_fileListModel->reset_filestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
+    m_fileListModel->resetFilestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (2 == m_dragflag) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         if (singlePage)
@@ -546,7 +545,7 @@ void DebInstaller::slotDealDependResult(int authDependsStatus, QString dependNam
     }
 
     if (authDependsStatus == DebListModel::AuthDependsSuccess) { //依赖下载成功
-        m_fileListModel->reset_filestatus();//清除包的状态和包的错误原因
+        m_fileListModel->resetFilestatus();//清除包的状态和包的错误原因
         m_fileListModel->initPrepareStatus();//重置包的prepare状态。
     }
     if (authDependsStatus == DebListModel::AuthBefore) {     //授权框弹出时

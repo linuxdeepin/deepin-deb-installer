@@ -19,41 +19,19 @@
 #ifndef DEBLISTMODEL_H
 #define DEBLISTMODEL_H
 
-#include <QAbstractListModel>
-#include <QFuture>
-#include <QPointer>
-
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusReply>
-#include <DPushButton>
 #include <DSysInfo>
+
+#include <QAbstractListModel>
+#include <QFuture>
+#include <QPointer>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <DPushButton>
 #include <QProcess>
-
-
-/**
- * @brief isDpkgRunning 判断当前dpkg 是否在运行
- * @return
- */
-bool isDpkgRunning();
-/**
- * @brief netErrors
- * @return the List of The Error infomations.
- * 无网络安装依赖时，库返回错误为FetechError 偶尔为CommitError
- * 此函数处理库返回CommitError时，网络错误的各种情况，如果错误信息中包含此列表中的信息，则判断为网络原因。
- */
-const QStringList netErrors();
-
-/**
- * @brief workerErrorString 根据安装失败的代码显示安装失败的原因。
- * @param errorCode 库或自定义的安装失败代码
- * @param errorInfo 库返回的或自定义的安装错误的原因
- * @return 要显示的安装失败的原因
- */
-const QString workerErrorString(const int errorCode, const QString errorInfo);
 
 class PackagesManager;
 class AptConfigMessage;
@@ -66,6 +44,27 @@ public:
     explicit DebListModel(QObject *parent = nullptr);
 
     ~DebListModel() override;
+
+    /**
+     * @brief isDpkgRunning 判断当前dpkg 是否在运行
+     * @return
+     */
+    static bool isDpkgRunning();
+    /**
+     * @brief netErrors
+     * @return the List of The Error infomations.
+     * 无网络安装依赖时，库返回错误为FetechError 偶尔为CommitError
+     * 此函数处理库返回CommitError时，网络错误的各种情况，如果错误信息中包含此列表中的信息，则判断为网络原因。
+     */
+    static const QStringList netErrors();
+
+    /**
+     * @brief workerErrorString 根据安装失败的代码显示安装失败的原因。
+     * @param errorCode 库或自定义的安装失败代码
+     * @param errorInfo 库返回的或自定义的安装错误的原因
+     * @return 要显示的安装失败的原因
+     */
+    static const QString workerErrorString(const int errorCode, const QString errorInfo);
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
@@ -168,11 +167,11 @@ public:
     void reset();
 
     /**
-     * @brief reset_filestatus
+     * @brief resetFilestatus
      * 重置包的操作状态
      * 清空安装错误原因的缓存
      */
-    void reset_filestatus();
+    void resetFilestatus();
 
     /**
      * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
@@ -212,7 +211,7 @@ public:
      * @return
      */
     QVariant data(const QModelIndex &index, int role) const override;
-    int m_workerStatus_temp = 0;
+
 
 public:
     /**
@@ -226,6 +225,19 @@ public:
      * @return 包的数量
      */
     int getInstallFileSize();
+
+public:
+    /**
+     * @brief getWorkerStatus 获取当前安装器的安装状态
+     * @return 当前安装器的安装状态
+     */
+    int getWorkerStatus();
+
+    /**
+     * @brief setWorkerStatus 设置当前安装器的安装状态
+     * @param workerStatus 当前需要设置的安装状态
+     */
+    void setWorkerStatus(int workerStatus);
 
 signals:
     /**
@@ -386,7 +398,6 @@ public slots:
     /**
      * @brief slotAppendPackage 添加包
      * @param package 添加的包的路径
-     * @return 是否添加成功（主要是判断是否重复添加）
      */
     void slotAppendPackage(QStringList packages);
 
@@ -485,7 +496,7 @@ private slots:
     /**
      * @brief showDevelopModeWindow 打开控制中心通用界面
      */
-    void slotShowDevelopModeWindow() /*__attribute__((noreturn))*/;
+    void slotShowDevelopModeWindow();
 
     /**
      * @brief slotShowProhibitWindow 应用在域管黑名单中，无法安装

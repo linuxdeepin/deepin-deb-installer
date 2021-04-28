@@ -418,7 +418,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
 {
 
     m_debListModel->m_packageOperateStatus[0] = 1;
-    m_debListModel->reset_filestatus();
+    m_debListModel->resetFilestatus();
     ASSERT_TRUE(m_debListModel->m_packageOperateStatus.isEmpty());
 }
 
@@ -911,24 +911,24 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathNotE
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_netErrors)
 {
-    netErrors();
+    m_debListModel->netErrors();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_workerErrorString)
 {
-    workerErrorString(1,"");
-    workerErrorString(2,"No space left on device");
-    workerErrorString(2,"");
-    workerErrorString(3,"");
-    workerErrorString(4,"");
-    workerErrorString(5,"");
-    workerErrorString(5,"Network is unreachable;http");
-    workerErrorString(5,"No space left on device");
-    workerErrorString(9,"");
-    workerErrorString(10,"");
-    workerErrorString(101,"");
-    workerErrorString(102,"");
-    workerErrorString(127,"");
+    m_debListModel->workerErrorString(1,"");
+    m_debListModel->workerErrorString(2,"No space left on device");
+    m_debListModel->workerErrorString(2,"");
+    m_debListModel->workerErrorString(3,"");
+    m_debListModel->workerErrorString(4,"");
+    m_debListModel->workerErrorString(5,"");
+    m_debListModel->workerErrorString(5,"Network is unreachable;http");
+    m_debListModel->workerErrorString(5,"No space left on device");
+    m_debListModel->workerErrorString(9,"");
+    m_debListModel->workerErrorString(10,"");
+    m_debListModel->workerErrorString(101,"");
+    m_debListModel->workerErrorString(102,"");
+    m_debListModel->workerErrorString(127,"");
 
 }
 
