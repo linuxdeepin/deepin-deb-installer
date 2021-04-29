@@ -45,9 +45,6 @@ public:
     DPalette palette(const QWidget *widget, const QPalette &base = QPalette()) const;
     void setPalette(QWidget *widget, const DPalette &palette);
     void resetPalette(QWidget *widget);
-
-private:
-    bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
 class Utils : public QObject

@@ -121,6 +121,7 @@ bool apt_exits()
     return true;
 }
 
+
 bool ut_mkTempDir()
 {
     return false;
@@ -317,4 +318,43 @@ TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLin
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
 
     ASSERT_STREQ("", m_addPkgThread->dealPackagePath(" ").toUtf8());
+}
+
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink_1)
+{
+    QStringList dependsList;
+    dependsList << "package1" << "package";
+    m_addPkgThread->setPackages(dependsList);
+
+    stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
+
+    stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
+    stub.set(ADDR(DebFile, packageName), packagename);
+
+    ASSERT_STREQ("", m_addPkgThread->dealPackagePath("/ 1").toUtf8());
+}
+
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_SymbolicLink_2)
+{
+    stub.set(ADDR(AddPackageThread, mkTempDir), add_stub_is_open_true);
+    m_addPkgThread->SymbolicLink("0","1");
+}
+
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_mkTempDir)
+{
+    stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), ut_mkTempDir);
+    //(int(A::*)(int))ADDR(A,foo)
+    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), ut_mkTempDir);
+
+    m_addPkgThread->mkTempDir();
+}
+
+TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_dealPackagePath_link)
+{
+    stub.set((bool(QFile::*)(const QString &))ADDR(QFile, link), apt_exits);
+    //(int(A::*)(int))ADDR(A,foo)
+    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), ut_mkTempDir);
+
+    QFile file;
+    m_addPkgThread->link("","");
 }

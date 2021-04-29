@@ -445,7 +445,3 @@ void DebApplicationHelper::resetPalette(QWidget *widget)
     widget->setAttribute(Qt::WA_SetPalette, false);
 }
 
-bool DebApplicationHelper::eventFilter(QObject *watched, QEvent *event)
-{
-    return DGuiApplicationHelper::eventFilter(watched, event);
-}

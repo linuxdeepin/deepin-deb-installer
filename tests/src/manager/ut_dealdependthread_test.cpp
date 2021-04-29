@@ -65,12 +65,7 @@ void proc_start(const QString &program, const QStringList &arguments, QIODevice:
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_start)
 {
-    //(int(A::*)(int))ADDR(A,foo)
-    //stub.set((int(A::*)(double))ADDR(A,foo), foo_stub_double);
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), proc_start);
-    m_dThread->start();
-    m_dThread->terminate();
-    m_dThread->wait();
+    m_dThread->run();
 }
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_onFinished)
