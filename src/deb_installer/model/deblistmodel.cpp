@@ -932,9 +932,9 @@ bool DebListModel::checkSystemVersion()
     }
     case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
-        return false;
-    default:
         return true;
+    default:
+        return false;
     }
 }
 
