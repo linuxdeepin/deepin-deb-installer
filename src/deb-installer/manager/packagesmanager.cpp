@@ -557,54 +557,28 @@ QMap<QString, QString> PackagesManager::specialPackage()
 
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
+    QStringList reverseDepends;
+    Backend *backend = m_backendFuture.result();
+    QApt::PackageList systemPackages = backend->availablePackages();
+
     Package *package = packageWithArch(packageName, sysArch);
-
-    QSet<QString> ret{packageName};
-    QQueue<QString> testQueue;
-
-    for (const auto &item : package->requiredByList().toSet())
-        testQueue.append(item);
-    while (!testQueue.isEmpty()) {
-        const auto item = testQueue.first();
-        testQueue.pop_front();
-
-        if (ret.contains(item)) continue;
-
-        Package *p = packageWithArch(item, sysArch);
-        if (!p || !p->isInstalled()) continue;
-
-        if (p->recommendsList().contains(packageName)) continue;
-        if (p->suggestsList().contains(packageName)) continue;
-        ret << item;
-
-        if (specialPackage().contains(item)) {
-            testQueue.append(specialPackage()[item]);
+    if(package){
+        package->setPurge();
+    }
+    for(Package* pkg: systemPackages)
+    {
+        if(!pkg){
+            continue;
         }
-        // append new reqiure list
-        for (const auto &r : p->requiredByList()) {
-            if (ret.contains(r) || testQueue.contains(r)) continue;
-            Package *subPackage = packageWithArch(r, sysArch);
-            if (r.startsWith("deepin.")) {  // 此类wine应用在系统中的存在都是以deepin.开头
-                // 部分wine应用在系统中有一个替换的名字，使用requiredByList 可以获取到这些名字
-                if (subPackage && !subPackage->requiredByList().isEmpty()) {    //增加对package指针的检查
-                    for (QString rdepends : subPackage->requiredByList()) {
-                        testQueue.append(rdepends);
-                    }
-                }
-            }
-            if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
-                continue;
-            if (subPackage->recommendsList().contains(item))
-                continue;
-            if (subPackage->suggestsList().contains(item))
-                continue;
-            testQueue.append(r);
+        if(!pkg->isInstalled()){
+            continue;
+        }
+        if((pkg->state() & pkg->ToPurge) || (pkg->state() & pkg->ToRemove))
+        {
+            reverseDepends.append(pkg->name());
         }
     }
-    // remove self
-    ret.remove(packageName);
-
-    return ret.toList();
+    return reverseDepends;
 }
 
 void PackagesManager::reset()
@@ -1272,6 +1246,7 @@ void PackagesManager::compareDebWithCache(QString filePath)
 
 QString PackagesManager::maybeAppendArchSuffix(const QString &pkgName, bool checkingConflicts)
 {
+    Q_UNUSED(checkingConflicts)
     Backend *backend = m_backendFuture.result();
 
     // Trivial cases where we don't append
@@ -1363,9 +1338,10 @@ QApt::Package *PackagesManager::checkBreaksSystem(QString packagePath)
     string debVer = debFile->version().toStdString();
 
     foreach (QApt::Package *pkg, systemPackages) {
-        if (!pkg->isInstalled()) {
+        if (!pkg)
             continue;
-        }
+        if(!pkg->isInstalled())
+            continue;
 
         // Check for broken depends
         foreach (const QApt::DependencyItem &item, pkg->depends()) {

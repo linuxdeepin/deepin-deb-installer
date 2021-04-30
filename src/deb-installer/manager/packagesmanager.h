@@ -448,7 +448,7 @@ private:
     QString dealPackagePath(QString packagePath);
 
 private:
-    QFuture<QApt::Backend *> m_backendFuture;           //安装程序后端指针(异步加载)
+    QFuture<Backend *> m_backendFuture;           //安装程序后端指针(异步加载)
 
     QList<QString> m_preparedPackages;          //存放包路径的列表
     QSet<QByteArray> m_appendedPackagesMd5;     //存放包MD5的集合
