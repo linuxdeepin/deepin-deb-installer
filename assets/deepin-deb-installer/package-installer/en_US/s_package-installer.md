@@ -51,19 +51,9 @@ Please read the prompt carefully, common causes include:
 - Unmatched package architecture.
 - Broken dependencies.
 
-   ![unable](fig/unable.png) 
+   ![1|unable](fig/unable.png) 
 
-   ![unable](fig/unable1.png)
-
-- No digital signature. 
-   
-   Please enable developer mode in **Control Center > General Settings** according to the hints in the dialogue box.
-
-- Lack of valid digital signature.
-
-   ![cant](fig/cant3.png) 
-   
-   ![cant4](fig/cant4.png)
+   ![1|unable](fig/unable1.png)
 
 ### Uninstall
 

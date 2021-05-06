@@ -56,21 +56,10 @@
 - 软件包架构不匹配。
 - 依赖关系不满足。
 
-   ![0|cant](fig/cant1.png) 
-   
-   ![0|cant](fig/cant2.png)
-  
 
-- 安装包无数字签名。
-  
-   请根据对话框提示前往 **控制中心 > 通用** 中开启开发者模式后，再进行安装。
+![0|cant](fig/cant1.png)
 
-- 安装包没有有效的数字签名。
-   
-   ![0|cant](fig/cant3.png)
-   
-   ![0|cant](fig/cant4.png)
-   
+![0|cant](fig/cant2.png)
 
 
 ### 卸载
