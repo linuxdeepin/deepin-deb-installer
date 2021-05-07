@@ -185,7 +185,6 @@ bool PackagesManager::checkPackageDependsStatus(int index)
 
 bool PackagesManager::checkPackageSuffix(QString packagePath)
 {
-    qInfo() << "[PackagesManager]" << "checkPackageSuffix" << packagePath;
     const QFileInfo info(packagePath);
 
     if (info.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
