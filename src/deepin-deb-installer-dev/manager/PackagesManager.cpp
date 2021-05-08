@@ -113,15 +113,12 @@ void PackagesManager::appendPackages(QStringList packages)
 
 void PackagesManager::removePackage(int index)
 {
-    qInfo() << "[PackagesManager]" << "removePackage" << m_packages.size();
     Package *pkg = searchByIndex(index);
     if (pkg) {
-        qInfo() << "[PackagesManager]" << "removePackage" << pkg->getPath();
         m_packages.removeOne(pkg);
         m_packagesMd5.remove(pkg->getMd5());
         emit signal_removePackageSuccess(index);
     }
-    qInfo() << "[PackagesManager]" << "removePackage" << "Currently remaining" << m_packages.size();
     delete pkg;
 }
 
@@ -210,34 +207,27 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
     m_pGetStatusThread->setPackage(index, packagePath);
     m_pGetStatusThread->start();
 
-    qInfo() << "[PackagesManager]" << "getPackageInfo" << "check package suffix 用时" << md5Time.elapsed();
 
     Package *packageFile = new Package(index, packagePath);
 
-    qInfo() << "[PackagesManager]" << "getPackageInfo" << "package 构造用时" << md5Time.elapsed();
-    if (!packageFile->getValid()) {
+     if (!packageFile->getValid()) {
         qWarning() << "[PackagesManager]" << "getPackageInfo" << "packageFile->getValid()" << packageFile->getValid();
         emit signal_packageInvalid(index);
         return;
     }
 
-    qInfo() << "[PackagesManager]" << "getPackageInfo" << "get valid 构造用时" << md5Time.elapsed();
-    auto md5 = packageFile->getMd5();
+      auto md5 = packageFile->getMd5();
     if (m_packagesMd5.contains(md5)) {
         qWarning() << "[PackagesManager]" << "getPackageInfo" <<  "md5 already exists";
         emit signal_packageAlreadyExits(index);
         return;
     }
 
-    qInfo() << "[PackagesManager]" << "getPackageInfo" << "get md5 构造用时" << md5Time.elapsed();
-    if (packageFile->getSigntureStatus() != SigntureVerifySuccess) {
-        qInfo() << "[PackagesManager]" << "getPackageInfo" <<  "get package signature Status" << packageFile->getSigntureStatus();
-        emit signal_signatureError(index, packageFile->getSigntureStatus());
+     if (packageFile->getSigntureStatus() != SigntureVerifySuccess) {
+             emit signal_signatureError(index, packageFile->getSigntureStatus());
         return;
     }
-    qInfo() << "[PackagesManager]" << "getPackageInfo" << "package 签名验证" << md5Time.elapsed();
 
-    qInfo() << "[PackagesManager]<< getPackageInfo" << "append package " << packageFile << "to list";
     m_packagesMd5 << md5;
     m_packages.append(packageFile);
 
@@ -254,7 +244,6 @@ void PackagesManager::install()
     qInfo() << "PackagesManager" << "install";
     if (m_packages.size() > 0) {
 
-        qInfo() << "PackageManager" << "install" << m_packages[0]->getPath();
         m_pPackageInstaller->appendPackage(m_packages[0]);
         m_pPackageInstaller->installPackage();
     } else {

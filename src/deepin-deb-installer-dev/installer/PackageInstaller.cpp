@@ -197,7 +197,7 @@ void PackageInstaller::dealInstallablePackage()
 {
     QApt::DebFile deb(m_packages->getPath());
 
-    qInfo() << "[PackageInstaller]" << "dealInstallablePackage" << "install file" << m_packages->getPath();
+    qInfo() << "[PackageInstaller]" << "dealInstallablePackage" << "install file" << m_packages->getName();
 
     m_pTrans = m_backend->installFile(deb);//触发Qapt授权框和安装线程
 
