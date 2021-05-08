@@ -1,3 +1,12 @@
+deepin-deb-installer (0.0.1) unstable; urgency=medium
+
+  * 适配龙芯3A5000
+  * 打开缺wine依赖的deb包，无安装授权框弹出
+  * 将依赖不满足的deb包添加到批量列表界面，失败原因消失
+  * 修复命令注入漏洞
+
+ -- cuizhen <cuizhen@uniontech.com> Sat, 08 May 2021 17:01:33 +0800
+
 deepin-deb-installer (5.3.9) unstable; urgency=medium
 
   * Initial Release.

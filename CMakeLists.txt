@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 if (NOT DEFINED VERSION)
-    set(VERSION 5.3.9)
+    set(VERSION 0.0.1)
 endif ()
 
 set(CMAKE_SAFETYTEST OFF)
