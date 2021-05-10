@@ -68,9 +68,9 @@ private:
 
 
 private:
-    Package *m_packages;
+    Package *m_packages         = nullptr;
 
-    QApt::Backend *m_backend;
+    QApt::Backend *m_backend    = nullptr;
     QApt::Transaction *m_pTrans = nullptr;
 };
 

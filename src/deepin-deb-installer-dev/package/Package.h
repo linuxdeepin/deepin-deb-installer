@@ -142,28 +142,26 @@ public:
     QStringList     getPackageReverseDependList();
 
 private:
-    int             m_index;
-    bool            m_valid;
-    QString         m_name;
-    QString         m_version;
-    QString         m_architecture;
-    QByteArray      m_md5;
-    DependsStatus   m_dependsStatus;
-    SigntureStatus  m_signtureStatus;
-    InstallStatus   m_installStatus;
+    int             m_index                     = -1;
+    bool            m_valid                     = false;
+    QString         m_name                      = "";
+    QString         m_version                   = "";
+    QString         m_architecture              = "";
+    QByteArray      m_md5                       = "";
+    DependsStatus   m_dependsStatus             = DependsUnknown;
+    SigntureStatus  m_signtureStatus            = SigntureUnknown;
+    InstallStatus   m_installStatus             = InstallStatusUnknown;
 
-    QString         m_packagePath;
-
-    QStringList     m_packageAvailableDependList;
-
-    QStringList     m_packageReverseDepends;
+    QString         m_packagePath                = "";
+    QStringList     m_packageAvailableDependList = {};
+    QStringList     m_packageReverseDepends      = {};
 
 private:
 
     /**
      * @brief m_pSigntureStatus 签名状态类
      */
-    PackageSigntureStatus *m_pSigntureStatus;
+    PackageSigntureStatus *m_pSigntureStatus    = nullptr;
 
 };
 

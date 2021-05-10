@@ -101,21 +101,21 @@ private slots:
 
     void slot_getInstallStatus(int, InstallStatus);
 private:
-    QList<Package *> m_packages;
+    QList<Package *> m_packages             = {};
 
-    Package *searchByIndex(int index = 0);
+    QSet<QByteArray> m_packagesMd5          = {};
 
-    QSet<QByteArray> m_packagesMd5;
+    PackageStatus      *m_pPackageStatus    = nullptr;
 
-    PackageStatus      *m_pPackageStatus;
+    PackageInstaller   *m_pPackageInstaller = nullptr;
 
-    PackageInstaller   *m_pPackageInstaller;
+    GetStatusThread    *m_pGetStatusThread  = nullptr;
 
-    GetStatusThread    *m_pGetStatusThread;
-
-    bool                m_appendFinished = false;
+    bool                m_appendFinished    = false;
 
 private:
+
+    Package *searchByIndex(int index = 0);
     void getPackageInfo(QString pkg, int index = 0);
 
     bool checkPackageSuffix(QString packagePath);

@@ -26,7 +26,6 @@
 #include <QApt/DebFile>
 PackageInstaller::PackageInstaller(QApt::Backend *b)
 {
-    qInfo() << "Package Installer";
     m_backend = b;
     m_packages = nullptr;
 }
@@ -71,7 +70,7 @@ void PackageInstaller::uninstallPackage()
         if (m_backend->package(r))
             m_backend->markPackageForRemoval(r);
         else
-            qInfo() << "PackageInstaller" << "reverse depend" << r << "error ,please check it!";
+            qWarning() << "PackageInstaller" << "reverse depend" << r << "error ,please check it!";
     }
     m_backend->markPackageForRemoval(m_packages->getName() + ':' + m_packages->getArchitecture());       //卸载当前包
 
@@ -100,7 +99,6 @@ void PackageInstaller::uninstallPackage()
 void PackageInstaller::installPackage()
 {
     emit signal_startInstall();
-    qInfo() << "[PackageInstaller]" << "installPackage";
     if (isDpkgRunning()) {
         qInfo() << "[PackageInstaller]" << "dpkg running, waitting...";
         // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
@@ -114,15 +112,12 @@ void PackageInstaller::installPackage()
     case DependsBreak:
     case DependsAuthCancel:
     case ArchBreak:
-        qInfo() << "[PackageInstaller]" << "installPackage" << "deal break package";
         dealBreakPackage();
         break;
     case DependsAvailable:
-        qInfo() << "[PackageInstaller]" << "installPackage" << "deal available package";
         dealAvailablePackage();
         break;
     case DependsOk:
-        qInfo() << "[PackageInstaller]" << "installPackage" << "deal installable package";
         dealInstallablePackage();
         break;
     }
@@ -147,15 +142,12 @@ void PackageInstaller::dealBreakPackage()
     switch (packageDependsStatus) {
     case DependsBreak:
     case DependsAuthCancel:
-        qInfo() << "[PackageInstaller]" << "dealBreakPackage" << "Broken dependencies";
         emit signal_installError(packageDependsStatus, "Broken dependencies");
         return;
     case ArchBreak:
-        qInfo() << "[PackageInstaller]" << "dealBreakPackage" << "Unmatched package architecture";
         emit signal_installError(packageDependsStatus, "Unmatched package architecture");
         return;
     default:
-        qInfo() << "[PackageInstaller]" << "dealBreakPackage" << "unknown error";
         emit signal_installError(packageDependsStatus, "unknown error");
         return;
     }
@@ -164,18 +156,15 @@ void PackageInstaller::dealBreakPackage()
 void PackageInstaller::dealAvailablePackage()
 {
     const QStringList availableDepends = m_packages->getPackageAvailableDepends();
-    qInfo() << "[PackageInstaller]" << "dealAvailablePackage" << "get available Depends" << availableDepends;
     //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
     for (auto const &p : availableDepends) {
         if (p.contains(" not found")) {                             //依赖安装失败
             emit signal_installError(DependsAvailable, p);
-            qInfo() << "[PackageInstaller]" << "dealAvailablePackage" << p;
 
             return;
         }
         m_backend->markPackageForInstall(p);
     }
-    qInfo() << "[PackageInstaller]" << "dealAvailablePackage" << "commit changes";
     m_pTrans = m_backend->commitChanges();
     connect(m_pTrans, &QApt::Transaction::finished, this, &PackageInstaller::installAvailableDepends);
 }
@@ -196,8 +185,6 @@ void PackageInstaller::installAvailableDepends()
 void PackageInstaller::dealInstallablePackage()
 {
     QApt::DebFile deb(m_packages->getPath());
-
-    qInfo() << "[PackageInstaller]" << "dealInstallablePackage" << "install file" << m_packages->getPath();
 
     m_pTrans = m_backend->installFile(deb);//触发Qapt授权框和安装线程
 

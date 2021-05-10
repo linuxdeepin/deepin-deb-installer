@@ -41,9 +41,9 @@ signals:
     void signal_dependsStatus(int, DependsStatus);
     void signal_installStatus(int, InstallStatus);
 private:
-    int m_index = -1;
-    PackageStatus *m_pPackageStatus;
-    QString m_packagePath;
+    int             m_index             = -1;
+    PackageStatus   *m_pPackageStatus   = nullptr;
+    QString         m_packagePath       = "";
 };
 
 #endif // GETSTATUSTHREAD_H

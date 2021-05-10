@@ -62,7 +62,7 @@ private:
     bool checkDeviceLock();
 
 private:
-    QProcess *m_pCheckSignProc;
+    QProcess *m_pCheckSignProc = nullptr;
 };
 
 #endif // PackageSigntureStatus_H

@@ -196,8 +196,8 @@ private:
     QMap<QString, QString> specialPackage();
 
 public:
-    DependsStatus status;
-    QString package;
+    DependsStatus   status  = DependsUnknown;
+    QString         package = "";
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
