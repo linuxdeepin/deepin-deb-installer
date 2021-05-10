@@ -68,12 +68,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="104"/>
         <source>No digital signature</source>
-        <translation>無數字簽名</translation>
+        <translation>無數位簽章</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="108"/>
         <source>Invalid digital signature</source>
-        <translation>數字簽名無效</translation>
+        <translation>數位簽章無效</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="115"/>
@@ -95,7 +95,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="789"/>
         <source>Unable to install - no digital signature</source>
-        <translation>無法安裝，安裝包無數字簽名</translation>
+        <translation>無法安裝，安裝包無數位簽章</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="790"/>

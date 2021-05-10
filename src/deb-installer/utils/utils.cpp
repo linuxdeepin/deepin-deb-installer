@@ -164,7 +164,6 @@ Utils::VerifyResultCode Utils::Digital_Verify(QString filepath_name)
         filepath_name = "\"" + filepath_name + "\"";
         program = program + filepath_name;
         proc.start(program);
-        qInfo() << "签名校验command:" << program;
         proc.waitForFinished();
         const QString output = proc.readAllStandardOutput();
         const QString output1 = proc.readAllStandardError();

@@ -27,7 +27,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="286"/>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation>Siz yalnız yerli deb paketləri quraşdıra bilərsiniz</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="295"/>
@@ -37,7 +37,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="304"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1 mövcud deyil, lütfən, yenidən seçin</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="425"/>
@@ -80,7 +80,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="544"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1246"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"/>
+        <translation>İnzibatçı, bu paketin quraşdırılmasının qarşçısını almaq üçün qaydalar təyin edib</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>

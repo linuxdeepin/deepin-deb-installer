@@ -37,7 +37,6 @@ Package::Package():
 Package::Package(QString packagePath):
     m_pSigntureStatus(new PackageSigntureStatus)
 {
-    qInfo() << "[Package]" << "Constructor function" << "packagePath=" << packagePath;
     m_packagePath           = packagePath;
     QApt::DebFile *pDebInfo = new QApt::DebFile(packagePath);
     if (!pDebInfo || !pDebInfo->isValid()) {

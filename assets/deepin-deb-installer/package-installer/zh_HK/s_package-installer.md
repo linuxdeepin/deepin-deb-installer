@@ -54,19 +54,11 @@
 - 軟件包架構不匹配。
 - 依賴關係不滿足。
 
-   ![0|cant](fig/cant1.png)
 
-   ![0|cant](fig/cant2.png)
+![0|cant](fig/cant1.png)
 
-- 安裝包無數字簽名。
+![0|cant](fig/cant2.png)
 
-   請根據對話框提示前往 **控制中心 > 通用** 中開啟開發者模式後，再進行安裝。
-   
-- 安裝包沒有有效的數字簽名。
-  
-   ![0|cant](fig/cant3.png)
-
-   ![0|cant](fig/cant4.png)
 
 ### 卸載
 
