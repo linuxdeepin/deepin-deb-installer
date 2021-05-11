@@ -51,12 +51,12 @@ Please read the prompt carefully, common causes include:
 - Unmatched package architecture.
 - Broken dependencies.
 
-   ![unable](fig/unable.png) 
+   ![unable](fig/unable1.png) 
 
-   ![unable](fig/unable1.png)
+   ![unable](fig/unable.png)
 
 - No digital signature. 
-   
+  
    Please enable developer mode in **Control Center > General Settings** according to the hints in the dialogue box.
 
 - Lack of valid digital signature.
