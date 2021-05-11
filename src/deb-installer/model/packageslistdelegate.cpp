@@ -271,7 +271,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
                 || dependsStat == DebListModel::DependsAuthCancel
                 || dependsStat == DebListModel::DependsVerifyFailed
                 || dependsStat == DebListModel::ArchBreak   // 添加对架构不匹配的处理
-                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
+//                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
             ){
 
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();

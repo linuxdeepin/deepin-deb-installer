@@ -727,7 +727,8 @@ void SingleInstallPage::showPackageInfo()
         if ((dependsStat == DebListModel::DependsBreak
                 || dependsStat == DebListModel::DependsAuthCancel
                 || dependsStat == DebListModel::ArchBreak
-                || dependsStat == DebListModel::Prohibit)
+//                || dependsStat == DebListModel::Prohibit
+             )
                 && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -858,7 +859,7 @@ void SingleInstallPage::setAuthBefore()
     if (dependsStat == DebListModel::DependsBreak
             || dependsStat == DebListModel::DependsAuthCancel
             || dependsStat == DebListModel::ArchBreak   //添加架构不匹配的处理
-            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
+//            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
         ) {
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
