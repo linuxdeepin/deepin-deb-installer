@@ -78,6 +78,8 @@ void DebInstaller::initUI()
     //Hide the shadow under the title bar
     setTitlebarShadowEnabled(false);
 
+    // 取消显示最大化窗口按钮
+    setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setObjectName("DebInstaller");
     this->setAccessibleName("DebInstaller");
 
