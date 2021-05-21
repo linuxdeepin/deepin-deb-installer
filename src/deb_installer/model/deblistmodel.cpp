@@ -347,12 +347,24 @@ void DebListModel::uninstallPackage(const int idx)
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(deb->packageName(), deb->architecture());     //检查是否有应用依赖到该包
     Backend *b = m_packagesManager->m_backendFuture.result();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (b->package(r))
-            b->markPackageForRemoval(r);
+        if (b->package(r)){
+            //更换卸载包的方式
+            b->package(r)->setPurge();
+        }
         else
             qDebug() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
-    b->markPackageForRemoval(deb->packageName() + ':' + deb->architecture());       //卸载当前包
+    //卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+    QApt::Package* uninstalledPackage = b->package(deb->packageName() + ':' + deb->architecture());
+
+    //未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
+    if(!uninstalledPackage){
+        refreshOperatingPackageStatus(Failed);
+        delete deb;
+        return;
+    }
+    uninstalledPackage->setPurge();
+
 
     // uninstall
     qDebug() << "DebListModel:" << "starting to remove package: " << deb->packageName() << rdepends;
