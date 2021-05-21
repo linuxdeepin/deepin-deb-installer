@@ -67,12 +67,22 @@ void PackageInstaller::uninstallPackage()
     const QStringList rdepends = m_packages->getPackageReverseDependList();     //检查是否有应用依赖到该包
 
     for (const auto &r : rdepends) {                                          // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (m_backend->package(r))
-            m_backend->markPackageForRemoval(r);
+        if (m_backend->package(r)){
+            // 更换卸载包的方式
+            m_backend->package(r)->setPurge();
+        }
         else
             qWarning() << "PackageInstaller" << "reverse depend" << r << "error ,please check it!";
     }
-    m_backend->markPackageForRemoval(m_packages->getName() + ':' + m_packages->getArchitecture());       //卸载当前包
+    //卸载当前包 更换卸载包的方式，此前的方式为markPackageForRemoval 会遗留配置文件对下次再次安装影响依赖解析
+    QApt::Package* uninstalledPackage = m_backend->package(m_packages->getName() + ':' + m_packages->getArchitecture());
+
+    //如果未能成功根据包名以及架构名称获取到Package*对象，直接设置为卸载失败。并退出
+    if(!uninstalledPackage){
+        emit signal_installError(QApt::CommitError, m_pTrans->errorDetails());
+        return;
+    }
+    uninstalledPackage->setPurge();
 
     m_pTrans = m_backend->commitChanges();
 

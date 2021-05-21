@@ -360,12 +360,23 @@ void DebListModel::slotUninstallPackage(const int index)
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile->packageName(), debFile->architecture());     //检查是否有应用依赖到该包
     Backend *backend = m_packagesManager->m_backendFuture.result();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (backend->package(r))
-            backend->markPackageForRemoval(r);
+        if (backend->package(r)){
+            // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+            backend->package(r)->setPurge();
+        }
         else
             qWarning() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
-    backend->markPackageForRemoval(debFile->packageName() + ':' + debFile->architecture());       //卸载当前包
+    //卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+    QApt::Package* uninstalledPackage = backend->package(debFile->packageName() + ':' + debFile->architecture());
+
+    //未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
+    if(!uninstalledPackage){
+        refreshOperatingPackageStatus(Failed);
+        delete debFile;
+        return;
+    }
+    uninstalledPackage->setPurge();
 
     refreshOperatingPackageStatus(Operating);                                       //刷新当前index的操作状态
     Transaction *transsaction = backend->commitChanges();

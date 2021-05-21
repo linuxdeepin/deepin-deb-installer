@@ -172,8 +172,6 @@ TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_link)
 
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
     stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
-
-    ASSERT_STREQ(m_addPkgThread->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
 
 bool thread_stub_is_open()
