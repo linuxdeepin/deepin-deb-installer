@@ -520,11 +520,12 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             // 删除无用冗余的日志
             if (Package::compareVersion(package->installedVersion(), info.packageVersion()) < 0) {
                 Backend *backend = m_backendFuture.result();
-                Package *updatePackage = backend->package(package->name() + resolvMultiArchAnnotation(QString(), package->architecture()));
-                if (updatePackage) 
+                Package *updatePackage = backend->package(package->name()
+                                                          + resolvMultiArchAnnotation(QString(), package->architecture()));
+                if (updatePackage)
                     choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-                else 
-                    choosed_set << updatePackage->name() + " not found";
+                else
+                    choosed_set << info.packageName() + " not found";
                 
             } else { //若依赖包符合版本要求,则不进行升级
                 continue;

@@ -51,6 +51,7 @@ PackageStatus &PackageStatus::operator=(const PackageStatus &other)
 {
     status = other.status;
     package = other.package;
+    m_backendFuture = other.m_backendFuture;
 
     return *this;
 }

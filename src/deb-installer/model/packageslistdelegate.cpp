@@ -142,7 +142,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
         //设置包名和版本号的字体颜色 fix bug: 59390
         forground.setColor(palette.color(colorGroup, DPalette::ToolTipText));
-        int yOffset = 6;
 
         //绘制分割线
         QRect lineRect;
@@ -216,7 +215,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         if (operate_stat != DebListModel::Prepare) {
             QRect install_status_rect = option.rect;
             install_status_rect.setRight(option.rect.right() - 20);
-            install_status_rect.setTop(version_y + yOffset - 10);
+            install_status_rect.setTop(version_y - 4);
 
             QFont stat_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium);
             stat_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
