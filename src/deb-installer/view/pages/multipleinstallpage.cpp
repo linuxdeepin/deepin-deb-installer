@@ -41,7 +41,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
-    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse"), this))
+    , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse", "button"), this))
     , m_installButton(new DPushButton(this))
     , m_backButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
@@ -167,10 +167,10 @@ void MultipleInstallPage::initUI()
     m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
     m_backButton->setMinimumSize(120, 36);        //设置返回按钮的大小
 
-    m_installButton->setText(tr("Install"));    //设置安装按钮的提示语
-    m_acceptButton->setText(tr("Done"));        //设置完成按钮的提示
+    m_installButton->setText(tr("Install", "button"));    //设置安装按钮的提示语
+    m_acceptButton->setText(tr("Done", "button"));        //设置完成按钮的提示
     m_acceptButton->setVisible(false);          //默认隐藏完成按钮
-    m_backButton->setText(tr("Back"));          //设置返回按钮的提示
+    m_backButton->setText(tr("Back", "button"));          //设置返回按钮的提示
     m_backButton->setVisible(false);            //隐藏返回按钮
 
 

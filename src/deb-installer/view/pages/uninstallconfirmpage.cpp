@@ -26,7 +26,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_icon(new DLabel(this))
     , m_tips(new DLabel(this))
     , m_infoWrapperWidget(new QWidget(this))
-    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse"), this))
+    , m_infoControl(new InfoControlButton(tr("Show related packages"), tr("Collapse", "button"), this))
     , m_dependsInfomation(new InstallProcessInfoView(440, 190, this))
     , m_cancelBtn(new DPushButton(this))
     , m_confirmBtn(new DPushButton(this))
@@ -47,7 +47,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_tips->setAlignment(Qt::AlignCenter);
 
     // cancel button settings
-    m_cancelBtn->setText(tr("Cancel"));
+    m_cancelBtn->setText(tr("Cancel", "button"));
     m_cancelBtn->setMinimumSize(120, 36);
     m_confirmBtn->setText(tr("Confirm"));
     m_confirmBtn->setMinimumSize(120, 36);

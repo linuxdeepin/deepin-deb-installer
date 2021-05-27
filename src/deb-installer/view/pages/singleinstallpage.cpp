@@ -53,7 +53,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
     , m_installProcessView(new InstallProcessInfoView(440, 170, this))
-    , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse")))
+    , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse", "button")))
     , m_installButton(new DPushButton(this))
     , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))
@@ -342,11 +342,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_installProcessView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     // 安装按钮
-    m_installButton->setText(tr("Install"));
+    m_installButton->setText(tr("Install", "button"));
     m_installButton->setVisible(false);
 
     //卸载按钮
-    m_uninstallButton->setText(tr("Remove"));
+    m_uninstallButton->setText(tr("Remove", "button"));
     m_uninstallButton->setVisible(false);
 
     //重新安装按钮
@@ -354,15 +354,15 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_reinstallButton->setVisible(false);
 
     //确定按钮
-    m_confirmButton->setText(tr("OK"));
+    m_confirmButton->setText(tr("OK", "button"));
     m_confirmButton->setVisible(false);
 
     //返回按钮
-    m_backButton->setText(tr("Back"));
+    m_backButton->setText(tr("Back", "button"));
     m_backButton->setVisible(false);
 
     //完成按钮
-    m_doneButton->setText(tr("Done"));
+    m_doneButton->setText(tr("Done", "button"));
     m_doneButton->setVisible(false);
 
     m_packageDescription->setWordWrap(true);        //允许内容自动换行
@@ -772,7 +772,7 @@ void SingleInstallPage::showPackageInfo()
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Earlier version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-                m_reinstallButton->setText(tr("Update"));
+                m_reinstallButton->setText(tr("Update", "button"));
             }
             return;
         }
@@ -936,7 +936,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Earlier version installed: %1")
                                      .arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
-                m_reinstallButton->setText(tr("Update"));
+                m_reinstallButton->setText(tr("Update", "button"));
             }
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);

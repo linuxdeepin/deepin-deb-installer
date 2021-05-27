@@ -9,7 +9,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="103"/>
         <source>OK</source>
+        <comment>button</comment>
         <translation>Гаразд</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="vanished">Гаразд</translation>
     </message>
 </context>
 <context>
@@ -20,27 +25,27 @@
         <translation>Встановлювач пакунків</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="278"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="281"/>
         <source>The deb package may be broken</source>
         <translation>Ймовірно, пакунок deb пошкоджено</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="286"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="289"/>
         <source>You can only install local deb packages</source>
         <translation>Ви можете встановлювати лише локальні пакунки deb</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="295"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="298"/>
         <source>Already Added</source>
         <translation>Вже додано</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="304"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="307"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 не існує. Будь ласка, виберіть щось інше</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="425"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="427"/>
         <source>Bulk Install</source>
         <translation>Масова інсталяція</translation>
     </message>
@@ -48,100 +53,115 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="78"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="95"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="98"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="115"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Не вдалося встановити, перевірте підключення до мережі</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="80"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="100"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation>Не вдалося встановити, перевірте оновлення в Центрі керування</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="83"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="87"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="99"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="103"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="107"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="119"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Помилка встановлення, недостатньо місця на диску</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="104"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
         <source>No digital signature</source>
         <translation>Немає цифрового підпису</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="108"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="128"/>
         <source>Invalid digital signature</source>
         <translation>Некоректний цифровий підпис</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="115"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="544"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1246"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="135"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="548"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1255"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Адміністратором встановлено правила, які забороняють встановлення цього пакунка</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="140"/>
         <source>Installation Failed</source>
         <translation>Не вдалося встановити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="548"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="552"/>
         <source>Failed to install %1</source>
         <translation>Не вдалося встановити %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="789"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="795"/>
         <source>Unable to install - no digital signature</source>
         <translation>Не вдалося встановити — немає цифрового підпису</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="790"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="796"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Будь ласка, перейдіть до «Центру керування», щоб увімкнути режим розробника і повторіть спробу. Продовжити обробку?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="793"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="799"/>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="794"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="800"/>
         <source>Proceed</source>
+        <comment>button</comment>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="829"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1245"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1257"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>Гаразд</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="vanished">Скасувати</translation>
+    </message>
+    <message>
+        <source>Proceed</source>
+        <translation type="vanished">Продовжити</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="838"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1254"/>
         <source>Unable to install</source>
         <translation>Неможливо встановити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="830"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="839"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Цей пакунок не має коректного цифрового підпису</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="832"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1248"/>
         <source>OK</source>
-        <translation>Гаразд</translation>
+        <translation type="vanished">Гаразд</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="549"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="553"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="557"/>
         <source>Broken dependencies: %1</source>
         <translation>Помилкові залежності: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="112"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="132"/>
         <source>Authentication failed</source>
         <translation>Не вдалося пройти розпізнавання</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="542"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="546"/>
         <source>Unmatched package architecture</source>
         <translation>Неперевершена архітектура пакету</translation>
     </message>
@@ -162,9 +182,8 @@
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="44"/>
         <source>Collapse</source>
-        <translation>Згорнути</translation>
+        <translation type="vanished">Згорнути</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="44"/>
@@ -172,19 +191,40 @@
         <translation>Показати подробиці</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="44"/>
+        <source>Collapse</source>
+        <comment>button</comment>
+        <translation>Згорнути</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="170"/>
         <source>Install</source>
+        <comment>button</comment>
         <translation>Встановити</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="171"/>
         <source>Done</source>
+        <comment>button</comment>
         <translation>Завершити</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="173"/>
         <source>Back</source>
+        <comment>button</comment>
         <translation>Назад</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="vanished">Встановити</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="vanished">Завершити</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="vanished">Назад</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="458"/>
@@ -215,17 +255,17 @@
         <translation>Очікування</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="249"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Same version installed</source>
         <translation>Одна і та сама версія встановлена</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="252"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="251"/>
         <source>Later version installed: %1</source>
         <translation>Встановлено пізнішу версію: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="255"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="254"/>
         <source>Earlier version installed: %1</source>
         <translation>Встановлено старішу версію: %1</translation>
     </message>
@@ -241,8 +281,13 @@
 <context>
     <name>QApplication</name>
     <message>
+        <source>Collapse</source>
+        <translation type="vanished">Згорнути</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="56"/>
         <source>Collapse</source>
+        <comment>button</comment>
         <translation>Згорнути</translation>
     </message>
 </context>
@@ -254,68 +299,61 @@
         <translation>Згорнути</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="345"/>
         <source>Install</source>
-        <translation>Встановити</translation>
+        <translation type="vanished">Встановити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="349"/>
         <source>Remove</source>
-        <translation>Видалити</translation>
+        <translation type="vanished">Видалити</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="353"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="765"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Reinstall</source>
         <translation>Перевстановити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="357"/>
         <source>OK</source>
-        <translation>Гаразд</translation>
+        <translation type="vanished">Гаразд</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="361"/>
         <source>Back</source>
-        <translation>Назад</translation>
+        <translation type="vanished">Назад</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="365"/>
         <source>Done</source>
-        <translation>Завершити</translation>
+        <translation type="vanished">Завершити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="767"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="931"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="768"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>Later version installed: %1</source>
         <translation>Встановлено пізнішу версію: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="769"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="934"/>
         <source>Downgrade</source>
         <translation>Знизити версію</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="772"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="773"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="937"/>
         <source>Earlier version installed: %1</source>
         <translation>Встановлено старішу версію: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Update</source>
-        <translation>Оновити</translation>
+        <translation type="vanished">Оновити</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="837"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="838"/>
         <source>Installing dependencies: %1</source>
         <translation>Встановлення залежностей: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="973"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="974"/>
         <source>Failed to install %1</source>
         <translation>Не вдалося встановити %1</translation>
     </message>
@@ -323,6 +361,36 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="187"/>
         <source>Version: </source>
         <translation>Версія: </translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="345"/>
+        <source>Install</source>
+        <comment>button</comment>
+        <translation>Встановити</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="349"/>
+        <source>Remove</source>
+        <comment>button</comment>
+        <translation>Видалити</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="357"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation>Гаразд</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="361"/>
+        <source>Back</source>
+        <comment>button</comment>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="365"/>
+        <source>Done</source>
+        <comment>button</comment>
+        <translation>Завершити</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="666"/>
@@ -340,13 +408,20 @@
         <translation>Не вдалося видалити </translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="939"/>
+        <source>Update</source>
+        <comment>button</comment>
+        <translation>Оновити</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Name: </source>
         <translation>Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="763"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="927"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>Same version installed</source>
         <translation>Одна і та сама версія встановлена</translation>
     </message>
@@ -374,9 +449,8 @@
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="29"/>
         <source>Collapse</source>
-        <translation>Згорнути</translation>
+        <translation type="vanished">Згорнути</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="29"/>
@@ -384,8 +458,19 @@
         <translation>Показати пов&apos;язані пакунки</translation>
     </message>
     <message>
+        <source>Cancel</source>
+        <translation type="vanished">Скасувати</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="29"/>
+        <source>Collapse</source>
+        <comment>button</comment>
+        <translation>Згорнути</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="50"/>
         <source>Cancel</source>
+        <comment>button</comment>
         <translation>Скасувати</translation>
     </message>
     <message>

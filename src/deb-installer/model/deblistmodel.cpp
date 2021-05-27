@@ -796,8 +796,8 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->setMessage(QString(tr("Please go to Control Center to enable developer mode and try again. Proceed?")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
-    Ddialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);     //添加取消按钮
-    Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
+    Ddialog->addButton(QString(tr("Cancel", "button")), true, DDialog::ButtonNormal);     //添加取消按钮
+    Ddialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);  //添加前往按钮
     Ddialog->show();    //显示弹窗
 
     //取消按钮
@@ -838,7 +838,7 @@ void DebListModel::showDigitalErrWindow()
     Ddialog->setTitle(tr("Unable to install"));
     Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
-    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+    Ddialog->addButton(QString(tr("OK", "button")), true, DDialog::ButtonNormal);
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     btnOK->setFocusPolicy(Qt::TabFocus);
@@ -1254,7 +1254,7 @@ void DebListModel::showProhibitWindow()
     Ddialog->setTitle(tr("Unable to install"));
     Ddialog->setMessage(QString(tr("The administrator has set policies to prevent installation of this package")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
-    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+    Ddialog->addButton(QString(tr("OK", "button")), true, DDialog::ButtonNormal);
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
 

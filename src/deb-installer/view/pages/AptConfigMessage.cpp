@@ -100,7 +100,7 @@ void AptConfigMessage::initControl()
     m_pQuestionLabel->setFocusPolicy(Qt::NoFocus);
 
     //初始化提交信息按钮
-    m_pushbutton = new DSuggestButton(tr("OK"));
+    m_pushbutton = new DSuggestButton(tr("OK", "button"));
     m_pushbutton->setDefault(true);
     m_pushbutton->setMinimumSize(130, 36);
 
