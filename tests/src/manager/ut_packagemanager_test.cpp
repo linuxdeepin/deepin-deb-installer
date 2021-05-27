@@ -501,7 +501,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0001)
 
 
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", package);
-    ASSERT_TRUE(cr.is_ok());
+    ASSERT_FALSE(cr.is_ok());
     delete package;
 }
 const ConflictResult stub_isInstalledConflict(const QString &, const QString &,
@@ -1018,72 +1018,72 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackageFinished)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_01)
 {
-    ASSERT_TRUE(isArchMatches("all", "", 0));
+    ASSERT_TRUE(m_packageManager->isArchMatches("all", "", 0));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_02)
 {
-    ASSERT_FALSE(isArchMatches("amd64", "", 0));
+    ASSERT_FALSE(m_packageManager->isArchMatches("amd64", "", 0));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation)
 {
-    ASSERT_STREQ(resolvMultiArchAnnotation("all", "", InvalidMultiArchType).toLocal8Bit(), "");
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("all", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_any)
 {
-    ASSERT_STREQ(resolvMultiArchAnnotation("any", "", InvalidMultiArchType).toLocal8Bit(), "");
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("any", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_MultiArchForeign)
 {
-    ASSERT_STREQ(resolvMultiArchAnnotation("any", "", MultiArchForeign).toLocal8Bit(), "");
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("any", "", MultiArchForeign).toLocal8Bit(), "");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_01)
 {
-    ASSERT_STREQ(resolvMultiArchAnnotation("testAnnotation", "", InvalidMultiArchType).toLocal8Bit(), ":testAnnotation");
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("testAnnotation", "", InvalidMultiArchType).toLocal8Bit(), ":testAnnotation");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_02)
 {
-    ASSERT_STREQ(resolvMultiArchAnnotation(":i386", "", InvalidMultiArchType).toLocal8Bit(), ":i386");
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation(":i386", "", InvalidMultiArchType).toLocal8Bit(), ":i386");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch)
 {
-    ASSERT_TRUE(dependencyVersionMatch(0, Equals));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(0, Equals));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_01)
 {
-    ASSERT_TRUE(dependencyVersionMatch(0, LessOrEqual));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(0, LessOrEqual));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_02)
 {
-    ASSERT_TRUE(dependencyVersionMatch(-1, LessThan));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(-1, LessThan));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_03)
 {
-    ASSERT_TRUE(dependencyVersionMatch(1, GreaterThan));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, GreaterThan));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_04)
 {
-    ASSERT_TRUE(dependencyVersionMatch(1, NotEqual));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, NotEqual));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_05)
 {
-    ASSERT_TRUE(dependencyVersionMatch(1, GreaterOrEqual));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, GreaterOrEqual));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_06)
 {
-    ASSERT_TRUE(dependencyVersionMatch(1, NoOperand));
+    ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, NoOperand));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_backend)

@@ -24,12 +24,13 @@
 
 #include "utils/result.h"
 
-#include <QFuture>
-#include <QObject>
 #include <QApt/Backend>
 #include <QApt/DebFile>
+
 #include <QThread>
 #include <QProcess>
+#include <QFuture>
+#include <QObject>
 
 using namespace QApt;
 
@@ -41,33 +42,6 @@ class PackageDependsStatus;
 class DebListModel;
 class DealDependThread;
 class AddPackageThread;
-
-/**
- * @brief isArchMatches 判断包的架构是否符合系统要求
- * @param sysArch       系统架构
- * @param packageArch   包的架构
- * @param multiArchType 系统多架构类型
- * @return 是否符合多架构要求
- */
-bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType);
-
-/**
- * @brief resolvMultiArchAnnotation 处理多架构问题
- * @param annotation  当前control文件中的附加信息
- * @param debArch   deb包的架构
- * @param multiArchType 多架构的类型
- * @return
- */
-QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                  const int multiArchType = InvalidMultiArchType);
-
-/**
- * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
- * @param result 当前依赖版本
- * @param relation 依赖版本关系的类型
- * @return
- */
-bool dependencyVersionMatch(const int result, const RelationType relation);
 
 /**
  * @brief init_backend 初始化后端
@@ -84,6 +58,33 @@ class PackagesManager : public QObject
 public:
     explicit PackagesManager(QObject *parent = nullptr);
     ~PackagesManager();
+
+    /**
+     * @brief isArchMatches 判断包的架构是否符合系统要求
+     * @param sysArch       系统架构
+     * @param packageArch   包的架构
+     * @param multiArchType 系统多架构类型
+     * @return 是否符合多架构要求
+     */
+    static bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType);
+
+    /**
+     * @brief resolvMultiArchAnnotation 处理多架构问题
+     * @param annotation  当前control文件中的附加信息
+     * @param debArch   deb包的架构
+     * @param multiArchType 多架构的类型
+     * @return
+     */
+    static QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
+                                      const int multiArchType = InvalidMultiArchType);
+
+    /**
+     * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
+     * @param result 当前依赖版本
+     * @param relation 依赖版本关系的类型
+     * @return
+     */
+    static bool dependencyVersionMatch(const int result, const RelationType relation);
 
 public slots:
     /**
