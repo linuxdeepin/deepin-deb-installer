@@ -19,6 +19,7 @@
 
 #include "../deb-installer/manager/PackageDependsStatus.h"
 #include "../deb-installer/manager/packagesmanager.h"
+#include "../deb-installer/manager/DealDependThread.h"
 
 #include <stub.h>
 #include <QFuture>
@@ -100,9 +101,17 @@ QList<DependencyItem> deb_conflicts_null()
 
 }
 
-Package *packageWithArch(QString, QString, QString)
+Package *stub_packageWithArch(QString, QString, QString)
 {
     return nullptr;
+}
+
+Package *stub_avaialbe_packageWithArch(QString, QString, QString)
+{
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    Package *package = new Package(bac,packageIter);
+    return package;
 }
 
 PackageList backend_availablePackages()
@@ -112,8 +121,18 @@ PackageList backend_availablePackages()
 
 QLatin1String package_name()
 {
-    return QLatin1String("name");
+    return QLatin1String("");
 }
+
+QString deb_package_name()
+{
+    return QString("deepin-elf-verify");
+}
+QString deb_package_name1()
+{
+    return QString("deepin-wine");
+}
+
 
 QString package_version()
 {
@@ -244,6 +263,15 @@ int package_compareVersion()
     return 0;
 }
 
+int package_compareVersion1()
+{
+    return -1;
+}
+
+int package_compareVersion2()
+{
+    return 1;
+}
 
 Package *backend_package(const QString &)
 {
@@ -272,9 +300,7 @@ void ut_packagesManager_test::SetUp()
     stub.set(ADDR(DebFile, packageName), deb_packageName);
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
-//    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
-    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), package_package);
     m_packageManager = new PackagesManager();
     usleep(10 * 1000);
 }
@@ -285,6 +311,15 @@ void ut_packagesManager_test::TearDown()
     delete m_packageManager;
 }
 
+Package *packagesManager_package(const QString &)
+{
+    qDebug()<<"not null";
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    Package *package = new Package(bac,packageIter);
+    return package;
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_isBackendReady)
 {
     ASSERT_TRUE(m_packageManager->isBackendReady());
@@ -292,13 +327,13 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isBackendReady)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_SymbolicLink)
 {
-    ASSERT_STREQ("/tmp/LinkTemp/1", m_packageManager->SymbolicLink("0","1").toUtf8());
+    m_packageManager->SymbolicLink("0","1");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_SymbolicLink_01)
 {
     stub.set(ADDR(PackagesManager, mkTempDir), stub_is_open_false);
-//    ASSERT_STREQ("0", m_packageManager->SymbolicLink("0","1").toUtf8());
+    m_packageManager->SymbolicLink("0","1");
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_AbsolutePath)
@@ -435,7 +470,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isArchError_1)
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat)
 {
 
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts_null);
@@ -448,9 +483,26 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat)
     ASSERT_TRUE(cr.is_ok());
 }
 
+TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat_invalid)
+{
+
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts_null);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    m_packageManager->appendPackage({"/1"});
+
+    ConflictResult cr = m_packageManager->packageConflictStat(-1);
+    ASSERT_FALSE(cr.is_ok());
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -462,7 +514,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_01)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
@@ -470,6 +524,73 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_01)
     m_packageManager->appendPackage({"/1"});
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
     ASSERT_TRUE(cr.is_ok());
+}
+
+
+MultiArchType ut_packagesManager_multiArchType()
+{
+    return MultiArchSame;
+}
+
+int ut_packagesManager_compareVersion(const QString &, const QString &){
+    return 0;
+}
+
+bool ut_packagesManager_dependencyVersionMatch(const int, const RelationType)
+{
+    return false;
+}
+
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_02)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(PackagesManager, dependencyVersionMatch), stub_dealInvalidPackage);
+
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), packagesManager_package);
+    stub.set(ADDR(Package, isInstalled), package_isInstalled);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, version), package_version);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, multiArchType), ut_packagesManager_multiArchType);
+    stub.set(ADDR(Package, multiArchTypeString), package_version);
+    stub.set(ADDR(Package, installedVersion), package_version);
+    stub.set(ADDR(Package, compareVersion), ut_packagesManager_compareVersion);
+    stub.set(ADDR(Package, availableVersion), package_version);
+
+    m_packageManager->appendPackage({"/1"});
+    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
+    ASSERT_FALSE(cr.is_ok());
+}
+
+bool stub_isArchMatches(QString , const QString &, const int ){
+    return false;
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_03)
+{
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), packagesManager_package);
+    stub.set(ADDR(Package, isInstalled), package_isInstalled);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, version), package_version);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, multiArchType), ut_packagesManager_multiArchType);
+    stub.set(ADDR(Package, multiArchTypeString), package_version);
+    stub.set(ADDR(Package, installedVersion), package_version);
+    stub.set(ADDR(Package, compareVersion), ut_packagesManager_compareVersion);
+    stub.set(ADDR(Package, availableVersion), package_version);
+    stub.set(ADDR(PackagesManager, isArchMatches), stub_isArchMatches);
+
+
+//    m_packageManager->appendPackage({"/1"});
+    usleep(50 *1000);
+    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
+    ASSERT_FALSE(cr.is_ok());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
@@ -485,9 +606,75 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
     ASSERT_TRUE(cr.is_ok());
 }
 
+PackageList stub_availablePackages()
+{
+    PackageList paclist;
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    Package *package =  new Package(bac,packageIter);
+    paclist.append(package);
+    return paclist;
+}
+
+QString deb_isInstalledConflict_packageName()
+{
+    return "";
+}
+
+QString deb_package_version()
+{
+    return "1";
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_001)
+{
+    qDebug()<<"PackageManager_UT_isInstalledConflict_001";
+    usleep(10 *1000);
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(Backend, availablePackages),stub_availablePackages);
+
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(Package, isInstalled), package_isInstalled);
+    stub.set(ADDR(Package, conflicts), deb_conflicts);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(DependencyInfo, packageName), deb_isInstalledConflict_packageName);
+    stub.set(ADDR(DependencyInfo, packageVersion), deb_package_version);
+    stub.set(ADDR(DependencyInfo, multiArchAnnotation), deb_package_version);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+
+    qDebug()<<"PackageManager_UT_isInstalledConflict_001 打桩完成";
+
+    ConflictResult cr = m_packageManager->isInstalledConflict("package name", "packageversion", "i386");
+    ASSERT_TRUE(cr.is_ok());
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_002)
+{
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(Backend, availablePackages),stub_availablePackages);
+
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(Package, isInstalled), package_isInstalled);
+    stub.set(ADDR(Package, conflicts), deb_conflicts);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(DependencyInfo, packageName), deb_isInstalledConflict_packageName);
+    stub.set(ADDR(DependencyInfo, packageVersion), deb_package_version);
+    stub.set(ADDR(DependencyInfo, multiArchAnnotation), package_installedVersion);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+
+    ConflictResult cr = m_packageManager->isInstalledConflict("package name", "packageversion", "i386");
+    ASSERT_TRUE(cr.is_ok());
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0001)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -499,25 +686,53 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0001)
     stub.set(ADDR(Package, architecture), package_architecture);
     stub.set(ADDR(Package, conflicts), package_conflicts);
 
-
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", package);
     ASSERT_FALSE(cr.is_ok());
     delete package;
 }
-const ConflictResult stub_isInstalledConflict(const QString &, const QString &,
-                                         const QString &)
-{
-    return ConflictResult::err("");
-}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0002)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
 
-    Package *package = nullptr;
+    Package *pkg = nullptr;
+
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, version), package_version);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+
+    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", pkg);
+    ASSERT_FALSE(cr.is_ok());
+}
+const ConflictResult stub_isInstalledConflict(const QString &, const QString &,
+                                         const QString &)
+{
+    return ConflictResult::err("1");
+}
+
+const ConflictResult stub_isInstalledConflict_ok(const QString &, const QString &,
+                                         const QString &)
+{
+    return ConflictResult::ok("1");
+}
+
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0003)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    Package package(bac,packageIter);
     stub.set(ADDR(Package, name), package_name);
     stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, architecture), package_architecture);
@@ -525,13 +740,46 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0002)
 
     stub.set(ADDR(PackagesManager,isInstalledConflict),stub_isInstalledConflict);
 
-    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", package);
-    delete package;
+    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", &package);
+    ASSERT_FALSE(cr.is_ok());
+}
+
+const ConflictResult stub_isConflictSatisfy(const QString &, const QList<QApt::DependencyItem> &)
+{
+    return ConflictResult::ok("1");
+}
+
+const ConflictResult stub_isConflictSatisfy_error(const QString &, const QList<QApt::DependencyItem> &)
+{
+    return ConflictResult::err("1");
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0004)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    Package package(bac,packageIter);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, version), package_version);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+
+    stub.set(ADDR(PackagesManager,isInstalledConflict),stub_isInstalledConflict_ok);
+    stub.set((const ConflictResult (PackagesManager::*)(const QString &, const QList<QApt::DependencyItem> &))ADDR(PackagesManager, isConflictSatisfy), stub_isConflictSatisfy);
+
+    ConflictResult cr = m_packageManager->isConflictSatisfy("i386", &package);
+    ASSERT_TRUE(cr.is_ok());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
@@ -541,9 +789,65 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus)
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
 }
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_01)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+
+    m_packageManager->appendPackage({"/1"});
+    ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_02)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(Package, installedVersion), deb_package_version);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion1);
+
+    m_packageManager->appendPackage({"/1"});
+    ASSERT_EQ(m_packageManager->packageInstallStatus(0), 3);
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_03)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(Package, installedVersion), deb_package_version);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion2);
+
+    m_packageManager->appendPackage({"/1"});
+    ASSERT_EQ(m_packageManager->packageInstallStatus(0), 2);
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_04)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(Package, installedVersion), deb_package_version);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion2);
+
+    m_packageManager->m_preparedPackages.append("0");
+    m_packageManager->m_packageMd5.insert(0,"0");
+    m_packageManager->m_packageInstallStatus.insert("0",1);
+
+    ASSERT_EQ(m_packageManager->packageInstallStatus(0), 1);
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
 
     m_packageManager->m_dependInstallMark.append("test success");
@@ -551,19 +855,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
     m_packageManager->slotDealDependResult(2, 0, "");
     m_packageManager->slotDealDependResult(5, 0, "");
 }
-//TEST_F(ut_packagesManager_test,)
-//{
-
-//}
-//TEST_F(ut_packagesManager_test,)
-//{
-
-//}
-//TEST_F(ut_packagesManager_test,)
-//{
-
-//}
-
 
 QList<DependencyItem> deb_depends()
 {
@@ -595,8 +886,9 @@ bool ut_isArchError_false(int index)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
 {
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
@@ -617,8 +909,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_01)
 {
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
@@ -647,8 +940,9 @@ bool stub_isBlackApplication_true(QString)
 }
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_02)
 {
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
@@ -669,8 +963,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_02)
 }
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_03)
 {
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
@@ -690,15 +985,181 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_03)
     ASSERT_EQ(pd.status, 6);
 }
 
-const ConflictResult stub_isConflictSatisfy(const QString &, const QList<QApt::DependencyItem> &)
+TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_04)
 {
-    return ConflictResult::err("");
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), isInstalled);
+    PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(-1);
+
+    ASSERT_EQ(pd.status, 2);
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_05)
+{
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(DebFile, depends), deb_depends);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(PackagesManager, isBlackApplication), stub_isBlackApplication_false);
+
+    usleep(10 * 1000);
+    m_packageManager->appendPackage({"/"});
+    m_packageManager->m_packageMd5DependsStatus.clear();
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), isInstalled);
+
+
+    stub.set((const ConflictResult (PackagesManager::*)(const QString &, const QList<QApt::DependencyItem> &))
+             ADDR(PackagesManager, isConflictSatisfy), stub_isConflictSatisfy_error);
+
+    PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
+
+    ASSERT_EQ(pd.status, 2);
+}
+
+const PackageDependsStatus stub_checkDependsPackageStatus(QSet<QString> &, const QString &,
+                                                     const QList<QApt::DependencyItem> &)
+{
+    return PackageDependsStatus::_break("1");
+}
+
+const PackageDependsStatus stub_checkDependsPackageStatus_DI(QSet<QString> &,
+                                                                      const QString &,
+                                                                      const DependencyInfo &)
+{
+    return PackageDependsStatus::_break("1");
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_06)
+{
+    stub.set(ADDR(DependencyInfo, packageName), deb_package_name);
+    stub.set(ADDR(DependencyInfo, packageVersion), deb_package_name);
+
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    stub.set(ADDR(DebFile, depends), deb_depends);
+
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), isInstalled);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, version), package_architecture);
+    stub.set(ADDR(Package, multiArchType), ut_packagesManager_multiArchType);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, depends), deb_conflicts_null);
+
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+
+
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(PackagesManager, isBlackApplication), stub_isBlackApplication_false);
+
+    stub.set((const ConflictResult (PackagesManager::*)(const QString &, const QList<QApt::DependencyItem> &))
+             ADDR(PackagesManager, isConflictSatisfy), stub_isConflictSatisfy);
+
+    stub.set((const PackageDependsStatus (PackagesManager::*)(QSet<QString> &, const QString &,
+                                                              const QList<QApt::DependencyItem> &))
+             ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus);
+
+    stub.set((const PackageDependsStatus (PackagesManager::*)(QSet<QString> &,
+                                                              const QString &,
+                                                              const DependencyInfo &))
+             ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_DI);
+
+
+    m_packageManager->appendPackage({"/"});
+    m_packageManager->m_packageMd5DependsStatus.clear();
+
+    PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
+
+    ASSERT_EQ(pd.status, 2);
+}
+
+void stub_run()
+{
+
+}
+bool stub_isRunning()
+{
+    return false;
+}
+
+void stub_setDependsList(QStringList , int )
+{
+
+}
+
+void stub_setBrokenDepend(QString)
+{
+
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_07)
+{
+    stub.set(ADDR(DependencyInfo, packageName), deb_package_name1);
+    stub.set(ADDR(DependencyInfo, packageVersion), deb_package_name);
+
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    stub.set(ADDR(DebFile, depends), deb_depends);
+
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), isInstalled);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(Package, multiArchType), ut_packagesManager_multiArchType);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(PackagesManager, isBlackApplication), stub_isBlackApplication_false);
+
+    stub.set((const ConflictResult (PackagesManager::*)(const QString &, const QList<QApt::DependencyItem> &))
+             ADDR(PackagesManager, isConflictSatisfy), stub_isConflictSatisfy);
+
+    stub.set((const PackageDependsStatus (PackagesManager::*)(QSet<QString> &,
+                                                              const QString &,
+                                                              const DependencyInfo &))
+    ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_DI);
+
+    stub.set(ADDR(QThread, isRunning), stub_isRunning);
+
+//    typedef void (*fptr)(DealDependThread*);
+//    fptr run    = (fptr)((void(DealDependThread::*)(   ))&DealDependThread::run);
+
+    stub.set(ADDR(DealDependThread, setDependsList), stub_setDependsList);
+    stub.set(ADDR(DealDependThread, setBrokenDepend), stub_setBrokenDepend);
+
+    m_packageManager->m_preparedPackages.insert(0,"0");
+    m_packageManager->m_packageMd5.insert(0,"0");
+    m_packageManager->m_dependInstallMark.insert(0,"0");
+    m_packageManager->m_packageMd5DependsStatus.clear();
+
+    PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
+
+    ASSERT_EQ(pd.status, 2);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
 {
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -710,6 +1171,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
 
+
     m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5[0]] = 0;
     QString version = m_packageManager->packageInstalledVersion(0);
 
@@ -719,7 +1181,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageAvailableDepends)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -740,7 +1202,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageAvailableDepends)
 TEST_F(ut_packagesManager_test, PackageManager_UT_specialPackage)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -765,7 +1227,7 @@ QStringList package_requiredByList()
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -796,7 +1258,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_reset)
 {
     stub.set(ADDR(Backend, reloadCache), backend_reloadCache);
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -815,7 +1277,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_reset)
 TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -838,7 +1300,7 @@ bool stub_reloadCache()
 TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus_01)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -861,7 +1323,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus_01)
 TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -902,7 +1364,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_02)
 TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeMulti)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -925,7 +1387,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeMulti)
 TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeTwo)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -987,6 +1449,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_link)
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
 {
 //    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
+    stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
 
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1025,6 +1488,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_02)
 {
     ASSERT_FALSE(m_packageManager->isArchMatches("amd64", "", 0));
 }
+TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_03)
+{
+    ASSERT_FALSE(m_packageManager->isArchMatches(":amd64", "", 0));
+}
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation)
 {
@@ -1050,6 +1517,12 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_02)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation(":i386", "", InvalidMultiArchType).toLocal8Bit(), ":i386");
 }
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_03)
+{
+    ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation(":i386", "", MultiArchForeign).toLocal8Bit(), "");
+}
+
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch)
 {
@@ -1106,7 +1579,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_package)
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), packageWithArch);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
 
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
