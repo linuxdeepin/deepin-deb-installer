@@ -199,7 +199,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 const ConflictResult PackagesManager::isInstalledConflict(const QString &packageName, const QString &packageVersion,
                                                           const QString &packageArch)
 {
-    static QList<QPair<QString, DependencyInfo>> sysConflicts;
+    static QList<QPair<QLatin1String, DependencyInfo>> sysConflicts;
 
     if (sysConflicts.isEmpty()) {
         Backend *backend = m_backendFuture.result();
@@ -213,8 +213,9 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
                 continue;
 
             for (const auto &conflict_list : conflicts)
-                for (const auto &conflict : conflict_list)
-                    sysConflicts << QPair<QString, DependencyInfo>(pkg->name(), conflict);
+                for (const auto &conflict : conflict_list){
+                    sysConflicts << QPair<QLatin1String, DependencyInfo>(pkg->name(), conflict);
+                }
         }
     }
 
@@ -239,7 +240,6 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
         if (dependencyVersionMatch(relation, conflict.relationType())) 
             return ConflictResult::err(info.first);
     }
-
     return ConflictResult::ok(QString());
 }
 
@@ -399,7 +399,7 @@ QByteArray PackagesManager::getPackageMd5(const int index)
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
     //提前获取需要的md5
-    if(index < -1 || index > m_preparedPackages.size()){
+    if(index < 0 || index > m_preparedPackages.size()){
         qWarning()<<"invalid param index";
         return PackageDependsStatus::_break("");
     }
