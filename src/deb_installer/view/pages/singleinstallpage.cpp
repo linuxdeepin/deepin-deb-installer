@@ -186,7 +186,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     }
 
     m_packageIcon->setText("icon");         //图标
-    m_packageIcon->setMinimumSize(64, 64);    //设置图标的大小
+    m_packageIcon->setFixedSize(64, 64);    //设置图标的大小
 
     DebInfoLabel *packageName = new DebInfoLabel(this);             //包名的描述性文字
     packageName->setCustomQPalette(QPalette::WindowText);           //设置包名的字体颜色
