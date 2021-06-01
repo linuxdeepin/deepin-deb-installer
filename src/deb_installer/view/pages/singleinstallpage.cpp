@@ -1027,6 +1027,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
+            m_backButton->setVisible(true);
         } else {// 已经安装过其他版本
             // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
             //增加提示 依赖安装完成后的提示
