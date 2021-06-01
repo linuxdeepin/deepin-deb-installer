@@ -306,8 +306,6 @@ TEST(PackageManager_UT, PackageManager_UT_isConflictSatisfy_0001)
     PackagesManager *p = new PackagesManager();
     usleep(10 * 1000);
     p->appendPackage({"/1"});
-    qInfo() << package_conflicts().size();
-
 
     Package *package = nullptr;
     stub.set(ADDR(Package, name), package_name);

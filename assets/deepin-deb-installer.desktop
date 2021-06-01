@@ -11,6 +11,7 @@ StartupNotify=false
 Terminal=false
 Type=Application
 X-Deepin-Vendor=deepin
+NoDisplay=true
 
 # Translations:
 # Do not manually modify!
