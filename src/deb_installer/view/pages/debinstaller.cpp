@@ -561,6 +561,7 @@ void DebInstaller::single2Multi()
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
 
     // multiple packages install
+    setWindowTitle(tr("Bulk Install"));
 
     MultipleInstallPage *multiplePage = new MultipleInstallPage(m_fileListModel);
     multiplePage->setObjectName("MultipleInstallPage");
