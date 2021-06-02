@@ -364,6 +364,9 @@ void DebInstaller::showInvalidePackageMessage_tablet()
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
     Ddialog->addButton(QString(tr("Ok")), true, DDialog::ButtonNormal);
+
+    Ddialog->move(this->x()+(this->width()-Ddialog->width())/2,
+                  this->y()+(this->height()-Ddialog->height())/2);
     Ddialog->show(); //显示弹窗
 
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
@@ -374,6 +377,7 @@ void DebInstaller::showInvalidePackageMessage_tablet()
         this->hide();
         //若应用内无包，点击弹出窗口的确定按钮退出应用
         connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
+        connect(Ddialog, &DDialog::aboutToClose, qApp,  [ = ] { qApp->quit(); });
     }
     this->showNormal();
     this->activateWindow();

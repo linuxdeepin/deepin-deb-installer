@@ -33,6 +33,7 @@
 #include <QFutureWatcher>
 #include <QSize>
 #include <QtConcurrent>
+#include <QDesktopWidget>
 
 #include <DDialog>
 #include <DSysInfo>
@@ -926,6 +927,12 @@ void DebListModel::showNoDigitalErrWindow()
 
     Ddialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);     //添加取消按钮
     Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
+
+    QDesktopWidget *desk=QApplication::desktop();
+    int wd=desk->width();
+    int ht=desk->height();
+    Ddialog->move((wd-Ddialog->width())/2,(ht-Ddialog->height())/2);
+
     Ddialog->show();    //显示弹窗
 
     //取消按钮
@@ -977,6 +984,12 @@ void DebListModel::showDigitalErrWindow()
     Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
     Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+
+    QDesktopWidget *desk=QApplication::desktop();
+    int wd=desk->width();
+    int ht=desk->height();
+    Ddialog->move((wd-Ddialog->width())/2,(ht-Ddialog->height())/2);
+
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
 
