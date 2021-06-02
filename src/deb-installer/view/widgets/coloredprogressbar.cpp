@@ -27,7 +27,7 @@
 
 class ColoredProgressBarPrivate : DTK_CORE_NAMESPACE::DObjectPrivate
 {
-    D_DECLARE_PUBLIC(ColoredProgressBar)
+    Q_DECLARE_PUBLIC(ColoredProgressBar)
     ColoredProgressBarPrivate(ColoredProgressBar *q);
 private:
     QMap<int, QBrush> threshmap;
