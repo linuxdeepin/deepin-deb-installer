@@ -311,7 +311,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="765"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Reinstall</source>
-        <translation>重裝</translation>
+        <translation>重 裝</translation>
     </message>
     <message>
         <source>OK</source>
@@ -476,7 +476,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="52"/>
         <source>Confirm</source>
-        <translation>確定</translation>
+        <translation>確 定</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="126"/>
