@@ -476,7 +476,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="52"/>
         <source>Confirm</source>
-        <translation>確定卸載</translation>
+        <translation>確 定</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="126"/>
