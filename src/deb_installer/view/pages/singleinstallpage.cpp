@@ -891,6 +891,7 @@ void SingleInstallPage::afterGetAutherFalse()
     //根据安装场景显示按钮
     if (m_operate == Install) {
         m_installButton->setVisible(true);
+        m_backButton->setVisible(true);
     } else if (m_operate == Uninstall) {
         m_reinstallButton->setVisible(true);
         //        m_uninstallButton->setVisible(true);
@@ -980,6 +981,7 @@ void SingleInstallPage::setAuthBefore()
         }
         m_installButton->setEnabled(false);
         m_reinstallButton->setEnabled(false);
+        m_backButton->setEnabled(false);
         //        m_uninstallButton->setEnabled(false);
     }
 
@@ -1028,6 +1030,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
             m_backButton->setVisible(true);
+            m_backButton->setEnabled(true);
         } else {// 已经安装过其他版本
             // fix bug：https://pms.uniontech.com/zentao/bug-view-51088.html
             //增加提示 依赖安装完成后的提示
@@ -1049,8 +1052,9 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             }
             m_reinstallButton->setVisible(true);
             //            m_uninstallButton->setVisible(true);
-            m_backButton->setVisible(true);
             m_reinstallButton->setEnabled(true);
+            m_backButton->setVisible(true);
+            m_backButton->setEnabled(true);
             //            m_uninstallButton->setEnabled(true);
         }
     }

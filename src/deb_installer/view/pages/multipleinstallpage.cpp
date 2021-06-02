@@ -498,6 +498,7 @@ void MultipleInstallPage::afterGetAutherFalse()
     m_processFrame->setVisible(false);          //隐藏进度条
     m_infoControlButton->setVisible(false);     //隐藏infoControlButton
     m_installButton->setVisible(true);          //显示安装按钮
+    m_backButton->setVisible(true);          //显示安装按钮
     m_infoControlButton->shrink();              //收缩安装信息，下次出现时是收缩的
 
     //授权取消或授权失败后，允许右键菜单弹出
@@ -525,6 +526,8 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         m_appsListView->setEnabled(false);      //listView不可用
         m_installButton->setVisible(true);      //显示安装按钮但是不可用
         m_installButton->setEnabled(false);
+        m_backButton->setVisible(true);      //安装按钮可见并可用
+        m_backButton->setEnabled(true);
         m_dSpinner->stop();                     //安装动画不可见
         m_dSpinner->hide();
         m_tipsLabel->setVisible(false);         //隐藏提示
@@ -533,6 +536,8 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         m_appsListView->setEnabled(true);       //appListView可用
         m_installButton->setVisible(true);      //安装按钮可见并可用
         m_installButton->setEnabled(true);
+        m_backButton->setVisible(true);      //安装按钮可见并可用
+        m_backButton->setEnabled(true);
         break;
     case DebListModel::AuthConfirm:             //确认授权
         m_appsListView->setEnabled(false);      //listView不可用
@@ -547,6 +552,8 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         m_appsListView->setEnabled(true);       //listView可以操作
         m_installButton->setVisible(true);      //显示安装按钮
         m_installButton->setEnabled(true);      //安装按钮可用
+        m_backButton->setVisible(true);      //显示安装按钮
+        m_backButton->setEnabled(true);      //安装按钮可用
         m_dSpinner->stop();                     //隐藏并停止安装动画
         m_dSpinner->hide();
         m_tipsLabel->setVisible(false);         //隐藏依赖安装提示
@@ -555,6 +562,8 @@ void MultipleInstallPage::DealDependResult(int iAuthRes, QString dependName)
         m_appsListView->setEnabled(true);       //listView可以操作
         m_installButton->setVisible(true);      //显示安装按钮
         m_installButton->setEnabled(true);      //安装按钮可用
+        m_backButton->setVisible(true);      //显示安装按钮
+        m_backButton->setEnabled(true);      //安装按钮可用
         m_dSpinner->stop();                     //隐藏并停止安装动画
         m_dSpinner->hide();
         m_tipsLabel->setVisible(false);         //隐藏依赖安装提示
