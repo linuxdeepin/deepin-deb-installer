@@ -8,7 +8,7 @@ project(deepin_deb_installer)
 option(DMAN_RELEAE OFF "Install dman resources to system or not")
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb_installer)
-add_subdirectory(test)
+#add_subdirectory(test)
 add_subdirectory(src/deepin-deb-installer-lib)
 #add_subdirectory(test/FuzzyTest)
 

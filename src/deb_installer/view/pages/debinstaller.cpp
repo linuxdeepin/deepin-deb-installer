@@ -375,6 +375,8 @@ void DebInstaller::showInvalidePackageMessage_tablet()
         //若应用内无包，点击弹出窗口的确定按钮退出应用
         connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
     }
+    this->showNormal();
+    this->activateWindow();
 }
 
 /**
