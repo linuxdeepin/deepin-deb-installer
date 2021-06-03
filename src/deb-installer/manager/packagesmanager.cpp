@@ -261,14 +261,18 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             if(!package)
                 continue;
 
-            if (!package->isInstalled())
+            if (!package->isInstalled()){
+                delete package;
+                package = nullptr;
                 continue;
-            
+            }
             // arch error, conflicts
             if (!isArchMatches(arch, package->architecture(), package->multiArchType())) {
                 qWarning() << "PackagesManager:" << "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString();
+                delete package;
+                package = nullptr;
                 return ConflictResult::err(name);
             }
 
@@ -278,9 +282,11 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             const auto result = Package::compareVersion(installed_version, conflict_version);
 
             // not match, ok
-            if (!dependencyVersionMatch(result, type)) 
+            if (!dependencyVersionMatch(result, type)) {
+                delete package;
+                package = nullptr;
                 continue;
-
+            }
             // test package
             const QString mirror_version = package->availableVersion();
 
@@ -291,6 +297,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qWarning() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString() << mirror_version << conflict_version;
+                delete package;
+                package = nullptr;
                 return ConflictResult::err(name);
             }
 
@@ -329,6 +337,8 @@ int PackagesManager::packageInstallStatus(const int index)
         return ret;
 
     const QString installedVersion = package->installedVersion();
+    delete package;
+    package = nullptr;
     if (installedVersion.isEmpty())
         return ret;
 
@@ -457,6 +467,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         else
                             dependList << depend->name() + ":" + depend->architecture();
 
+                        delete depend;
+                        depend = nullptr;
+
                         if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
                             isWineApplication = true;
 
@@ -503,8 +516,11 @@ const QString PackagesManager::packageInstalledVersion(const int index)
     Package *package = backend->package(packageName + ":" + packageArch);
 
     //修复可能某些包无法package的错误，如果遇到此类包，返回安装版本为空
-    if (package)
+    if (package){
+        delete package;
+        package = nullptr;
         return package->installedVersion();   //能正常打包，返回包的安装版本
+    }
     else
         return "";                      //此包无法正常package，返回空
 }
