@@ -232,7 +232,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qDebug() << "PackagesManager:" << "conflicts package installed: "
                          << arch << p->name() << p->architecture()
                          << p->multiArchTypeString();
-                delete p;
                 return ConflictResult::err(name);
             }
 
@@ -254,11 +253,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qDebug() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << p->name() << p->architecture()
                          << p->multiArchTypeString() << mirror_version << conflict_version;
-                delete p;
                 return ConflictResult::err(name);
             }
-
-            delete p;
         }
     }
     return ConflictResult::ok(QString());
@@ -492,21 +488,28 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (!dep) continue;
 
         const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-        if (choosed_set.contains(choosed_name)) {
+        if (choosed_set.contains(choosed_name))
             break;
-        }
 
-        // TODO: upgrade?
-        //        if (!dep->installedVersion().isEmpty()) return;
-        //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-        // 删除无用冗余的日志
-        if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
-            Backend *b = m_backendFuture.result();
-            Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p) {
-                choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            } else {
-                choosed_set << dep->name() + " not found";
+
+        //当前依赖未安装，则安装当前依赖。
+        if(dep->installedVersion().isEmpty())
+            choosed_set << choosed_name;
+        else {
+            // 当前依赖已安装，判断是否需要升级
+            //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
+            // 删除无用冗余的日志
+            qDebug()<<dep->installedVersion()<<info.packageVersion();
+            if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
+                Backend *b = m_backendFuture.result();
+                Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
+                if (p) {
+                    choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+                } else {
+                    choosed_set << dep->name() + " not found";
+                }
+            } else { //若依赖包符合版本要求,则不进行升级
+                continue;
             }
         }
 
@@ -528,7 +531,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         packageCandidateChoose(choosed_set, debArch, dep->depends());
         break;
     }
-
 }
 
 QMap<QString, QString> PackagesManager::specialPackage()
@@ -685,6 +687,9 @@ void PackagesManager::removePackage(const int index)
  */
 void PackagesManager::appendPackage(QStringList packages)
 {
+    if (packages.isEmpty()) { //当前放进来的包列表为空（可能拖入的是文件夹）
+        return;
+    }
     checkInvalid(packages);     //运行之前先计算有效文件的数量
     qDebug() << "PackagesManager:" << "append Package" << packages;
     if (packages.size() == 1) {
@@ -832,6 +837,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_preparedPackages.insert(0, packagePath);      //每次添加的包都放到最前面
     m_packageMd5.insert(0, packageMd5Sum);          //添加MD5Sum
     m_appendedPackagesMd5 << packageMd5Sum;         //将MD5添加到集合中，这里是为了判断包不再重复
+    getPackageDependsStatus(0);                     //刷新当前添加包的依赖
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
 }
 

@@ -65,6 +65,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 {
     initUI();
     initConnections();
+    this->setModal(true);
 }
 
 DebInstaller::~DebInstaller() {}
@@ -280,7 +281,9 @@ void DebInstaller::dropEvent(QDropEvent *e)
         }
     }
     this->activateWindow();                                     //激活窗口
-    onPackagesSelected(file_list);                              //放到安装列表中
+    if (!file_list.isEmpty()) {                                 //处理拖入文件夹的情况
+        onPackagesSelected(file_list);                              //放到安装列表中
+    }
 }
 
 /**
@@ -715,14 +718,21 @@ void DebInstaller::DealDependResult(int iAuthRes, QString dependName)
         m_fileListModel->initPrepareStatus();//重置包的prepare状态。
     }
     //Refresh the display effect of different pages
-    if (m_dragflag == 2) {      //单包安装处理依赖下载授权情况
-        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        singlePage->DealDependResult(iAuthRes, dependName);
-    } else if (m_dragflag == 1) {//批量安装处理依赖下载授权情况
-        MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        multiplePage->DealDependResult(iAuthRes, dependName);
-        multiplePage->refreshModel();// 滚动到最后一行。
+
+    if (iAuthRes == DebListModel::AuthBefore) {     //授权框弹出时
+        this->setEnabled(false);                    //设置界面不可用
+    } else {                                        //授权成功或失败后
+        this->setEnabled(true);                     //根据授权的结果刷新单包或者批量安装界面
+        if (m_fileListModel->preparedPackages().size() == 1) {          //刷新单包安装界面
+            SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+            singlePage->DealDependResult(iAuthRes, dependName);
+        } else if (m_fileListModel->preparedPackages().size() >= 2) {       //刷新批量安装界面
+            MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+            multiplePage->DealDependResult(iAuthRes, dependName);
+            multiplePage->refreshModel();// 滚动到最后一行。
+        }
     }
+
 }
 
 /**

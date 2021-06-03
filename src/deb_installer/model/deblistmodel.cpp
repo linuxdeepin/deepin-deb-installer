@@ -1049,6 +1049,7 @@ void DebListModel::checkSystemVersion()
         bool deviceMode = Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
+
         break;
     }
     case Dtk::Core::DSysInfo::UosCommunity: //社区版 不验证签名
@@ -1075,6 +1076,7 @@ bool DebListModel::checkDigitalSignature()
     //        return true;
     //    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //平板模式，判断是否有数字签名
+//    digitalSigntual = Utils::VerifySuccess;
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
         qInfo() << "Digital signature verification succeed";
@@ -1271,11 +1273,8 @@ void DebListModel::initPrepareStatus()
  */
 void DebListModel::initRowStatus()
 {
-    for (int i = 0; i < m_packagesManager->m_preparedPackages.size(); i++) {
-        m_operatingStatusIndex = i;
-        refreshOperatingPackageStatus(Waiting);
-    }
-    m_operatingStatusIndex = 0;
+    for (auto md5 : m_packageMd5)
+        m_packageOperateStatus[md5] = Waiting;
 }
 
 /**
