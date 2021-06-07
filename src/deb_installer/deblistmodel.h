@@ -64,6 +64,12 @@ public:
         WorkerUnInstall
     };
 
+    enum ErrorCode {
+        NoDigitalSignature      = 101, //无有效的数字签名
+        DigitalSignatureError,         //数字签名校验失败
+        ApplocationProhibit     = 404, //当前包在黑名单中禁止安装
+    };
+
     enum PackageInstallStatus {
         NotInstalled,
         InstalledSameVersion,
@@ -77,6 +83,7 @@ public:
         DependsBreak,  //依赖不满足
         DependsVerifyFailed,
         DependsAuthCancel,
+        ApplicationProhibit,
     };
 
     enum PackageOperationStatus {
@@ -186,6 +193,27 @@ private:
     bool checkDigitalSignature();
 
     void showNoDigitalErrWindow();
+
+
+private:
+
+    /**
+     * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
+     */
+    void showProhibitWindow();
+
+    /**
+     * @brief 检查当前将要安装的包是否在黑名单中。
+     *
+     * @return true 当前要安装的包在黑名单中
+     * @return false 当前要安装的包不在黑名单中
+     */
+    bool checkBlackListApplication();
+
+    /**
+     * @brief DigitalVerifyFailed 数字签名校验失败 弹窗处理的槽函数
+     */
+    void digitalVerifyFailed(ErrorCode code);
 
 private:
     int m_workerStatus;

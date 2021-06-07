@@ -90,6 +90,18 @@ const QString workerErrorString(const int errorCode, const QString errorInfo)
         if (errorInfo.contains("No space left on device")) {
             return QApplication::translate("DebListModel", "Installation failed, insufficient disk space");
         }
+        break;
+    // 无数字签名的错误
+    case DebListModel::NoDigitalSignature:
+        return QApplication::translate("DebListModel", "No digital signature");
+
+    //无有效的数字签名
+    case DebListModel::DigitalSignatureError:
+        return QApplication::translate("DebListModel", "Invalid digital signature");
+
+    // 当前软件在黑名单中，禁止安装
+    case DebListModel::ErrorCode::ApplocationProhibit:
+        return QApplication::translate("DebListModel", "The administrator has set policies to prevent installation of this package");
     }
     return QApplication::translate("DebListModel", "Installation Failed");
 }
@@ -461,6 +473,9 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto stat = m_packagesManager->packageDependsStatus(idx);
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");
+    if (stat.isProhibit()) {
+        return tr("The administrator has set policies to prevent installation of this package");
+    }
     if (stat.isBreak() || stat.isAuthCancel()) {
         if (!stat.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(idx))
@@ -728,8 +743,83 @@ bool DebListModel::checkDigitalSignature()
         return true;
     return Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
 }
+
+
+void DebListModel::showProhibitWindow()
+{
+    //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
+    if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
+        digitalVerifyFailed(ApplocationProhibit);     //刷新安装错误，并记录错误原因
+        return;
+    }
+    DDialog *Ddialog = new DDialog();
+    //设置窗口焦点
+    Ddialog->setFocusPolicy(Qt::TabFocus);
+
+    //设置弹出窗口为模态窗口
+    Ddialog->setModal(true);
+
+    //设置窗口始终置顶
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    // 设置弹出窗口显示的信息
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setMessage(QString(tr("The administrator has set policies to prevent installation of this package")));
+    Ddialog->setIcon(QIcon(Utils::renderSVG(":/images/warning.svg", QSize(32, 32))));
+    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
+    Ddialog->show();
+    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+
+
+    btnOK->setFocusPolicy(Qt::TabFocus);
+    btnOK->setFocus();
+    // 点击弹出窗口的关闭图标按钮
+    connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
+        //刷新当前包的操作状态，失败原因为禁止安装
+        digitalVerifyFailed(ApplocationProhibit);
+    });
+
+    //点击弹出窗口的确定按钮
+    connect(btnOK, &DPushButton::clicked, this, [ = ] {
+        //刷新当前包的操作状态，失败原因为禁止安装
+        digitalVerifyFailed(ApplocationProhibit);
+    });
+}
+
+
+/**
+ * @brief DebListModel::digitalVerifyFailed 数字签名校验失败的处理槽函数
+ */
+void DebListModel::digitalVerifyFailed(ErrorCode code)
+{
+    if (preparedPackages().size() > 1) {                        //批量安装
+        refreshOperatingPackageStatus(Failed);                  //刷新操作状态
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode.insert(m_operatingIndex, code); //记录错误代码与错误原因
+        m_packageFailReason.insert(m_operatingIndex, "");
+        bumpInstallIndex();                                     //跳过当前包
+    } else if (preparedPackages().size() == 1) {
+        exit(0);                                                //单包安装 直接退出
+    }
+}
+
+bool DebListModel::checkBlackListApplication()
+{
+
+    auto dependsStat = m_packagesManager->packageDependsStatus(m_operatingIndex);
+    if (dependsStat.isProhibit()) {
+        showProhibitWindow();
+        return true;
+    }
+    return false;
+}
+
 void DebListModel::installNextDeb()
 {
+    //检查当前应用是否在黑名单中
+    if (checkBlackListApplication()) {
+        return ;
+    }
     // KLU 分支 去除签名，此部分代码废弃
     if (checkSystemVersion() && !checkDigitalSignature()) { //非开发者模式且数字签名验证失败
         showNoDigitalErrWindow();

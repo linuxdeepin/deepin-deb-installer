@@ -231,8 +231,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
         forground.setColor(palette.color(cg, DPalette::ToolTipText));
-        if (operate_stat == DebListModel::Failed || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
-                || (dependsStat == DebListModel::DependsAuthCancel)) {
+        if (operate_stat == DebListModel::Failed
+                || (dependsStat == DebListModel::DependsBreak && install_stat == DebListModel::NotInstalled)
+                || (dependsStat == DebListModel::DependsAuthCancel)
+                || (dependsStat == DebListModel::ApplicationProhibit)) {
             info_str = index.data(DebListModel::PackageFailReasonRole).toString();
             forground.setColor(palette.color(cg, DPalette::TextWarning));
 

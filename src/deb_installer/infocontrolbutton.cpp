@@ -39,6 +39,9 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_shrinkTips(shrinkTips)
     , m_arrowIcon(new DLabel(this))
 {
+    //在新dtk中增加了DCommandLinkButton的焦点，KLU使用的版本为102X无焦点控制功能，需要手动去除
+    m_tipsText->setFocusPolicy(Qt::NoFocus);
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();

@@ -199,6 +199,9 @@ PackagesManager::PackagesManager(QObject *parent)
     dthread = new dealDependThread();
     connect(dthread, &dealDependThread::DependResult, this, &PackagesManager::DealDependResult);
     connect(dthread, &dealDependThread::enableCloseButton, this, &PackagesManager::enableCloseButton);
+
+    //初始化时获取应用黑名单列表
+    getBlackApplications();
 }
 
 bool PackagesManager::isBackendReady() { return m_backendFuture.isFinished(); }
@@ -392,6 +395,31 @@ void PackagesManager::DealDependResult(int iAuthRes, int iIndex, QString dependN
     emit DependResult(iAuthRes, iIndex, dependName);
 }
 
+void PackagesManager::getBlackApplications()
+{
+    QFile blackListFile(BLACKFILE);
+    if (blackListFile.exists()) {
+        blackListFile.open(QFile::ReadOnly);
+        QString blackApplications = blackListFile.readAll();
+        blackApplications.replace(" ", "");
+        blackApplications = blackApplications.replace("\n", "");
+        m_blackApplicationList =  blackApplications.split(",");
+        blackListFile.close();
+        return;
+    }
+
+
+    qWarning() << "Black File not Found";
+}
+
+bool PackagesManager::isBlackApplication(QString applicationName)
+{
+    if (m_blackApplicationList.contains(applicationName)) {
+        return true;
+    }
+    return false;
+}
+
 PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
 {
     if (m_packageDependsStatus.contains(index)) {
@@ -406,6 +434,15 @@ PackageDependsStatus PackagesManager::packageDependsStatus(const int index)
     DebFile *deb = new DebFile(m_preparedPackages[index]);
     const QString architecture = deb->architecture();
     PackageDependsStatus ret = PackageDependsStatus::ok();
+
+    if (isBlackApplication(deb->packageName())) {
+        ret.status  = DebListModel::ApplicationProhibit;
+        ret.package = deb->packageName();
+        m_packageDependsStatus.insert(index, ret);
+        qWarning() << deb->packageName() << "In the blacklist";
+        delete deb;
+        return ret;
+    }
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
@@ -1009,6 +1046,11 @@ PackageDependsStatus PackageDependsStatus::_break(const QString &package)
     return {DebListModel::DependsBreak, package};
 }
 
+PackageDependsStatus PackageDependsStatus::_prohibit(const QString &packageName)
+{
+    return {DebListModel::ApplicationProhibit, packageName};
+}
+
 PackageDependsStatus::PackageDependsStatus()
     : PackageDependsStatus(DebListModel::DependsOk, QString()) {}
 
@@ -1057,3 +1099,7 @@ bool PackageDependsStatus::isBreak() const { return status == DebListModel::Depe
 bool PackageDependsStatus::isAuthCancel() const { return status == DebListModel::DependsAuthCancel; }
 
 bool PackageDependsStatus::isAvailable() const { return status == DebListModel::DependsAvailable; }
+
+bool PackageDependsStatus::isProhibit() const{
+    return status == DebListModel::ApplicationProhibit;
+}
