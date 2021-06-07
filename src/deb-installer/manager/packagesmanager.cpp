@@ -206,16 +206,21 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
         for (Package *pkg : backend->availablePackages()) {
             if(!pkg)
                 continue;
-            if (!pkg->isInstalled())
+            if (!pkg->isInstalled()){
+                pkg = nullptr;
                 continue;
+            }
             const auto &conflicts = pkg->conflicts();
-            if (conflicts.isEmpty()) 
+            if (conflicts.isEmpty()){
+                pkg = nullptr;
                 continue;
+            }
 
             for (const auto &conflict_list : conflicts)
                 for (const auto &conflict : conflict_list){
                     sysConflicts << QPair<QLatin1String, DependencyInfo>(pkg->name(), conflict);
                 }
+            pkg = nullptr;
         }
     }
 
@@ -553,9 +558,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             continue;
 
         const auto choosed_name = package->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-        if (choosed_set.contains(choosed_name))
+        if (choosed_set.contains(choosed_name)){
+            delete package;
+            package = nullptr;
             break;
-        
+        }
         //当前依赖未安装，则安装当前依赖。
         if (package->installedVersion().isEmpty()) {
             choosed_set << choosed_name;
@@ -567,31 +574,47 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 Backend *backend = m_backendFuture.result();
                 if(!backend){
                     qWarning()<<"libqapt backend loading error";
+                    delete package;
+                    package = nullptr;
                     return;
                 }
                 Package *updatePackage = backend->package(package->name()
                                                           + resolvMultiArchAnnotation(QString(), package->architecture()));
-                if (updatePackage)
+                if (updatePackage){
                     choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-                else
+                    delete updatePackage;
+                    updatePackage = nullptr;
+                }
+                else{
                     choosed_set << info.packageName() + " not found";
-                
+                }
             } else { //若依赖包符合版本要求,则不进行升级
+                delete package;
+                package = nullptr;
                 continue;
             }
         }
 
-        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok())
+        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok()){
+            delete package;
+            package = nullptr;
             continue;
+        }
 
         QSet<QString> upgradeDependsSet = choosed_set;
         upgradeDependsSet << choosed_name;
         const auto stat = checkDependsPackageStatus(upgradeDependsSet, package->architecture(), package->depends());
-        if (stat.isBreak())
+        if (stat.isBreak()){
+            delete package;
+            package = nullptr;
             continue;
+        }
 
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, package->depends());
+
+        delete package;
+        package = nullptr;
         break;
     }
 
@@ -614,6 +637,10 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         qWarning()<<"Failed to package from"<<packageName<<"with"<< sysArch;
         return {};
     }
+    QStringList requiredList = package->requiredByList();
+
+    delete package;
+    package = nullptr;
 
     //确定和当前包存在直接或间接反向依赖的包的集合
     QSet<QString> reverseDependSet{packageName};
@@ -621,7 +648,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     // 存放当前需要验证反向依赖的包
     QQueue<QString> reverseQueue;
 
-    for (const auto &requiredPackage : package->requiredByList().toSet())
+    for (const auto &requiredPackage : requiredList.toSet())
         reverseQueue.append(requiredPackage);
     while (!reverseQueue.isEmpty()) {
         const auto item = reverseQueue.first();
@@ -631,13 +658,21 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
             continue;
 
         Package *currentPackage = packageWithArch(item, sysArch);
-        if (!currentPackage || !currentPackage->isInstalled()) 
+        if (!currentPackage || !currentPackage->isInstalled()){
+            delete currentPackage;
+            currentPackage = nullptr;
             continue;
-        if (currentPackage->recommendsList().contains(packageName)) 
+        }
+        if (currentPackage->recommendsList().contains(packageName)){
+            delete currentPackage;
+            currentPackage = nullptr;
             continue;
-        if (currentPackage->suggestsList().contains(packageName)) 
+        }
+        if (currentPackage->suggestsList().contains(packageName)) {
+            delete currentPackage;
+            currentPackage = nullptr;
             continue;
-
+        }
 
         reverseDependSet << item;
 
@@ -656,14 +691,26 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
                     }
                 }
             }
-            if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
+            if (!subPackage || !subPackage->isInstalled()){      //增加对package指针的检查
+                delete subPackage;
+                subPackage = nullptr;
                 continue;
-            if (subPackage->recommendsList().contains(item))
+            }
+            if (subPackage->recommendsList().contains(item)){
+                delete subPackage;
+                subPackage = nullptr;
                 continue;
-            if (subPackage->suggestsList().contains(item))
+            }
+            if (subPackage->suggestsList().contains(item)) {
+                delete subPackage;
+                subPackage = nullptr;
                 continue;
+            }
             reverseQueue.append(dependRequiredPackage);
         }
+
+        delete currentPackage;
+        currentPackage = nullptr;
     }
     // remove self
     reverseDependSet.remove(packageName);
@@ -1028,12 +1075,15 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
             Backend *backend = m_backendFuture.result();
             for (auto *availablePackage : backend->availablePackages()) {
-                if (!availablePackage->providesList().contains(package->name()))
+                if (!availablePackage->providesList().contains(package->name())){
+                    availablePackage = nullptr;
                     continue;
+                }
 
                 // is that already provide by another package?
                 if (availablePackage->isInstalled()) {
                     qInfo() << "PackagesManager:" << "find a exist provider: " << availablePackage->name();
+                    availablePackage = nullptr;
                     return PackageDependsStatus::ok();
                 }
 
@@ -1041,8 +1091,10 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 if (isConflictSatisfy(architecture, availablePackage).is_ok()) {
                     qInfo() << "PackagesManager:" << "switch to depends a new provider: " << availablePackage->name();
                     choosed_set << availablePackage->name();
+                    availablePackage = nullptr;
                     return PackageDependsStatus::ok();
                 }
+                availablePackage = nullptr;
             }
 
             qWarning() << "PackagesManager:" << "providers not found, still break: " << package->name();
@@ -1227,6 +1279,11 @@ PackagesManager::~PackagesManager()
     delete m_pAddPackageThread;
 
     Backend *backend = m_backendFuture.result();
+
+    for (auto pkg : backend->availablePackages()) {
+        delete pkg;
+        pkg = nullptr;
+    }
 
     delete backend;
     backend = nullptr;
