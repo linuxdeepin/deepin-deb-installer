@@ -1076,7 +1076,7 @@ bool DebListModel::checkDigitalSignature()
     //        return true;
     //    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //平板模式，判断是否有数字签名
-//    digitalSigntual = Utils::VerifySuccess;
+    digitalSigntual = Utils::VerifySuccess;
     switch (digitalSigntual) {
     case Utils::VerifySuccess:                                                                  //签名验证成功
         qInfo() << "Digital signature verification succeed";

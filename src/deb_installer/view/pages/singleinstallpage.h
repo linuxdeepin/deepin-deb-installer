@@ -111,6 +111,24 @@ private:
     void initUI();
 
     /**
+     * @brief initPkgInfoView 初始化 包信息视图布局
+     * @param fontinfosize  字体大小
+     */
+    void initPkgInfoFrame(int fontinfosize);
+
+    void initInfoControlButtonFrame();
+    /**
+     * @brief initPkgInstallProcessView 初始化安装进程信息布局
+     */
+    void initPkgInstallProcessFrame();
+
+    void initButtonsFrame();
+
+    void initProgressFrame();
+
+    void initTipsFrame();
+
+    /**
      * @brief initContentLayout 初始化主布局
      */
     void initContentLayout();
@@ -120,17 +138,7 @@ private:
      */
     void initInstallWineLoadingLayout();
 
-    /**
-     * @brief initPkgInfoView 初始化 包信息视图布局
-     * @param fontinfosize  字体大小
-     */
-    void initPkgInfoView(int fontinfosize);
 
-    /**
-     * @brief initPkgInstallProcessView 初始化安装进程信息布局
-     * @param fontinfosize  字体大小
-     */
-    void initPkgInstallProcessView(int fontinfosize);
 
     /**
      * @brief initConnections 初始化链接信号与槽
@@ -245,7 +253,11 @@ private:
 
     QWidget *m_contentFrame;                            //主布局
     QWidget *m_itemInfoFrame;                           //包信息框架
+    QWidget *m_infoControlFrame;
     QWidget *m_progressFrame;                           //安装进度框架
+    QWidget *m_installInfoFrame;                        //安装详细信息
+    QWidget *m_tipsFrame;                               //提示信息
+    QWidget *m_buttonsFrame;                            //按钮
 
     DLabel *m_packageIcon;                              //包的图标
     DebInfoLabel *m_packageName;                        //包名

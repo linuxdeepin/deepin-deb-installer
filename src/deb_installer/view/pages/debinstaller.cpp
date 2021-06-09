@@ -56,13 +56,14 @@ using QApt::DebFile;
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-DebInstaller::DebInstaller(QWidget *parent)
-    : DDialog(parent)
+DebInstaller::DebInstaller()
+    : DDialog()
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout())
     , m_dragflag(-1)
 {
+    this->setWindowFlag(Qt::Widget);
     initUI();
     initConnections();
     this->setModal(true);
@@ -309,8 +310,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     if (packages.size() > 1) {             //单包安装记录当前包的大小
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
     }
-    this->showNormal();                                                 //非特效模式下激活窗口
-    this->activateWindow();                                             //特效模式下激活窗口
+/*    this->showNormal();                                                 //非特效模式下激活窗口
+    this->activateWindow();  */                                           //特效模式下激活窗口
+    this->exec();
     qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
@@ -338,8 +340,9 @@ void DebInstaller::refreshMulti()
     qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
     m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
     MulRefreshPage();
-    this->showNormal();
-    this->activateWindow();
+//    this->showNormal();
+//    this->activateWindow();
+    this->exec();
 }
 
 /**
@@ -366,7 +369,7 @@ void DebInstaller::showInvalidePackageMessage_tablet()
     Ddialog->setMessage(QString(tr("The deb package may be broken")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
-    Ddialog->addButton(QString(tr("Ok")), true, DDialog::ButtonNormal);
+    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
 
     Ddialog->move(this->x()+(this->width()-Ddialog->width())/2,
                   this->y()+(this->height()-Ddialog->height())/2);
@@ -382,8 +385,9 @@ void DebInstaller::showInvalidePackageMessage_tablet()
         connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
         connect(Ddialog, &DDialog::aboutToClose, qApp,  [ = ] { qApp->quit(); });
     }
-    this->showNormal();
-    this->activateWindow();
+//    this->showNormal();
+//    this->activateWindow();
+    this->exec();
 }
 
 /**
@@ -614,8 +618,9 @@ void DebInstaller::refreshSingle()
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 
-    this->showNormal();
-    this->activateWindow(); //单包安装刷新显示
+//    this->showNormal();
+//    this->activateWindow(); //单包安装刷新显示
+    this->exec();
 }
 
 /**
@@ -662,8 +667,9 @@ void DebInstaller::changeDragFlag()
 void DebInstaller::setEnableButton(bool bEnable)
 {
     if (bEnable) {
-        this->activateWindow();
-        this->showNormal();
+//        this->activateWindow();
+//        this->showNormal();
+        this->exec();
     }
     //如果正在添加包，则启用按钮
     if (packageAppending)

@@ -133,6 +133,18 @@ private:
      */
     void initUI();
 
+    void initDebListViewFrame();
+
+    void initInfoControlButtonFrame();
+
+    void initInstallInfoFrame();
+
+    void initInstallProcessFrame();
+
+    void initTipsFrame();
+
+    void initButtonsFrame();
+
     /**
      * @brief initConnections 初始化链接
      */
@@ -169,9 +181,13 @@ private:
     DebListModel *m_debListModel;                       //listModel类
 
     DRoundBgFrame *m_appsListViewBgFrame;               //listView的背景frame 修改listView的背景样式
-    QWidget *m_contentFrame;                            //applistview  infoControlButton的frame
+    QWidget *m_infoControlButtonFrame;
+    QWidget *m_installInfoFrame;
     QWidget *m_processFrame;                            //process 的frame
-    QVBoxLayout *m_contentLayout;                       //applistview  infoControlButton的布局
+    QWidget *m_tipsFrame;
+    QWidget *m_buttonsFrame;
+
+
     QVBoxLayout *m_centralLayout;                       //主布局
 
     PackagesListView *m_appsListView;                   //listView
@@ -187,8 +203,9 @@ private:
     DPushButton *m_acceptButton;                        //确认按钮
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
+        DSpinner *m_dSpinner;                               //依赖安装动画
     DCommandLinkButton *m_tipsLabel;                    //依赖安装提示按钮
-    DSpinner *m_dSpinner;                               //依赖安装动画
+
 
     PackagesListDelegate *delegate;
 

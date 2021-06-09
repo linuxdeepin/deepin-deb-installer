@@ -57,7 +57,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
 
     //设置图标的高度
-    m_arrowIcon->setFixedHeight(13);
+    m_arrowIcon->setFixedHeight(8);
 
     //默认设置展开。所以设置展开的提示语
     m_tipsText->setText(expandTips);
@@ -65,7 +65,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
     //设置提示语的高度
 
-    m_tipsText->setMinimumHeight(28);
+    m_tipsText->setFixedHeight(20);
 
     //设置提示的字体颜色与字体大小
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);

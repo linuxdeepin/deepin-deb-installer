@@ -51,7 +51,7 @@ class DebInstaller : public Dtk::Widget::DDialog
     Q_OBJECT
 
 public:
-    DebInstaller(QWidget *parent = nullptr);
+    DebInstaller();
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
 
 protected:

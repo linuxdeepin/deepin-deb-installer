@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
@@ -50,7 +50,11 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_packagesModel(model)
     , m_contentFrame(new QWidget(this))
     , m_itemInfoFrame(new QWidget(this))
+    , m_infoControlFrame(new QWidget(this))
     , m_progressFrame(new QWidget(this))
+    , m_installInfoFrame(new QWidget(this))
+    , m_tipsFrame(new QWidget(this))
+    , m_buttonsFrame(new QWidget(this))
     , m_packageIcon(new DLabel(this))
     , m_packageName(new DebInfoLabel(this))
     , m_packageVersion(new DebInfoLabel(this))
@@ -72,28 +76,21 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 {
     initUI();                   //初始化界面
     initControlAccessibleName();// 自动化测试
-}
-
-/**
- * @brief SingleInstallPage::initUI 初始化界面
- */
-void SingleInstallPage::initUI()
-{
-    QFontInfo fontinfo = this->fontInfo();      //获取字体信息
-    int fontsize = fontinfo.pixelSize();        //获得字体大小
-    initContentLayout();                        //初始化主布局
-    initPkgInfoView(fontsize);                  //初始化包信息布局
-    initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
-    initConnections();                          //链接信号和槽
-
     setPackageInfo();
-    m_upDown = true;                            //当前是收缩的
 }
 
-/**
- * @brief SingleInstallPage::initControlAccessibleName 初始化控件的AccessibleName
- * 兼容自动化测试
- */
+void SingleInstallPage::initContentLayout()
+{
+    m_contentLayout->setSpacing(0);                             //设置控件边距
+    m_contentLayout->setContentsMargins(20, 0, 20, 20);         //设置四周边距
+    m_contentFrame->setLayout(m_contentLayout);                 //设置布局
+    m_centralLayout->addWidget(m_contentFrame);
+
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);             //设置中心布局
+    this->setLayout(m_centralLayout);
+}
+
 void SingleInstallPage::initControlAccessibleName()
 {
     //获取的包名
@@ -119,60 +116,32 @@ void SingleInstallPage::initControlAccessibleName()
     //依赖安装的提示信息
     m_pLoadingLabel->setObjectName("SinglePagePackageLoadingTips");
     m_pLoadingLabel->setAccessibleName("SinglePagePackageLoadingTips");
+
 }
 
-/**
- * @brief SingleInstallPage::initContentLayout 初始化主布局
- */
-void SingleInstallPage::initContentLayout()
+void SingleInstallPage::initUI()
 {
-    m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 10, 0, 16); //设置四周边距
-    m_contentFrame->setLayout(m_contentLayout);                 //设置布局
-    m_centralLayout->addWidget(m_contentFrame);
+    QFontInfo fontinfo = this->fontInfo();      //获取字体信息
+    int fontsize = fontinfo.pixelSize();        //获得字体大小
+    initContentLayout();                        //初始化主布局
+    initPkgInfoFrame(fontsize);                  //初始化包信息布局
+    initInfoControlButtonFrame();
+    initPkgInstallProcessFrame();        //初始化包安装过程进度显示布局
+    initTipsFrame();
+    initProgressFrame();
+    initButtonsFrame();
 
-    m_centralLayout->setSpacing(0);
-    m_centralLayout->setContentsMargins(0, 0, 0, 0);             //设置中心布局
-    this->setLayout(m_centralLayout);
 
-//#define SHOWBGCOLOR
-#ifdef SHOWBGCOLOR
-    m_contentFrame->setStyleSheet("QFrame{background: cyan}");
-#endif
+    initConnections();                          //链接信号和槽
+
+    const QIcon icon = QIcon::fromTheme("application-x-deb"); //获取icon
+    QPixmap iconPix = icon.pixmap(m_packageIcon->size()); //将Icon 转化为Pixmap
+    m_itemInfoFrame->setVisible(true);
+    m_packageIcon->setPixmap(iconPix);
+    m_upDown = true;                            //当前是收缩的
 }
 
-/**
- * @brief SingleInstallPage::initInstallWineLoadingLayout 初始化依赖安装加载布局
- */
-void SingleInstallPage::initInstallWineLoadingLayout()
-{
-    QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();      //依赖安装的布局
-
-    m_pDSpinner->setMinimumSize(24, 24);                        //设置动画的大小
-    m_pDSpinner->setVisible(false);                             //隐藏等待动画
-    m_pDSpinner->start();
-    m_pLoadingLayout->addWidget(m_pDSpinner);                   //添加到布局中
-    m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);//居中显示
-
-
-    m_pLoadingLayout->addSpacing(4); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
-    m_pLoadingLabel->setVisible(false);                           //隐藏依赖安装提示信息
-    m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
-    m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
-    m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
-    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
-    m_pLoadingLabel->setMinimumHeight(24);                        //设置高度
-    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
-
-    m_contentLayout->addLayout(m_pLoadingLayout);               //添加到主布局中
-}
-
-/**
- * @brief SingleInstallPage::initPkgInfoView 初始化包的信息布局
- * @param fontinfosize 字体的大小
- */
-void SingleInstallPage::initPkgInfoView(int fontinfosize)
+void SingleInstallPage::initPkgInfoFrame(int fontinfosize)
 {
     //根据系统字体的大小设置显示字体的大小
     int fontinfosizetemp = 0;
@@ -186,7 +155,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     }
 
     m_packageIcon->setText("icon");         //图标
-    m_packageIcon->setFixedSize(64, 64);    //设置图标的大小
+    m_packageIcon->setMinimumSize(64, 64);    //设置图标的大小
 
     DebInfoLabel *packageName = new DebInfoLabel(this);             //包名的描述性文字
     packageName->setCustomQPalette(QPalette::WindowText);           //设置包名的字体颜色
@@ -211,45 +180,45 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_packageVersion->setMinimumHeight(fontinfosizetemp_version);     //根据字体大小设置高度
     m_packageVersion->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);//垂直居中，水平靠左
 
-    //此处可优化
-    QVBoxLayout *packageNameVLayout = new QVBoxLayout();        //包名提示的布局
-    packageNameVLayout->setSpacing(0);                              //设置控件间距
-    packageNameVLayout->setContentsMargins(0, 0, 0, 0);             //设置四周边距
-    packageNameVLayout->addSpacing(4);
-    packageNameVLayout->addWidget(packageName);                     //添加控件
+    //设置描述信息的size 与位置
+    m_packageDescription->setFixedHeight(65);
+    m_packageDescription->setFixedWidth(270);
+    m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    DPalette pa = DApplicationHelper::instance()->palette(this);
+    pa.setBrush(DPalette::WindowText, pa.color(DPalette::TextTips));
+    DApplicationHelper::instance()->setPalette(m_packageDescription, pa);
 
-    QVBoxLayout *pkgNameValueLayout = new QVBoxLayout();        //实际获取到包名
-    pkgNameValueLayout->setSpacing(0);                              //设置控件间距
-    pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
-    pkgNameValueLayout->addSpacing(4 + 4);                          //增加空间
-    pkgNameValueLayout->addWidget(m_packageName);                   //添加控件
 
     QHBoxLayout *pkgNameLayout = new QHBoxLayout();             //包名的控件布局
+    pkgNameLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     pkgNameLayout->setSpacing(0);
     pkgNameLayout->setContentsMargins(0, 0, 0, 0);                  //设置边距
-    pkgNameLayout->addSpacing(2);
-    pkgNameLayout->addLayout(packageNameVLayout);                   //添加包名提示的label
-    pkgNameLayout->addLayout(pkgNameValueLayout);                   //添加实际获取到的包名的label
+    pkgNameLayout->addSpacing(0);
+    pkgNameLayout->addWidget(packageName);                   //添加包名提示的label
+    pkgNameLayout->addWidget(m_packageName);                   //添加实际获取到的包名的label
     pkgNameLayout->addStretch();                                    //添加弹簧
 
     QHBoxLayout *pkgVersionLayout = new QHBoxLayout();          //包版本的控件布局
+    pkgVersionLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     pkgVersionLayout->setSpacing(0);
     pkgVersionLayout->setContentsMargins(0, 0, 0, 0);               //设置四周边距
-    pkgVersionLayout->addSpacing(2);
+    pkgVersionLayout->addSpacing(0);
     pkgVersionLayout->addWidget(packageVersion);                    //添加包版本提示的label
     pkgVersionLayout->addWidget(m_packageVersion);                  //添加包实际版本的label
     pkgVersionLayout->addStretch();
 
     QVBoxLayout *itemInfoLayout = new QVBoxLayout();            //包名和包版本的布局
+    itemInfoLayout->addStretch();
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);                 //设置四周边距
     itemInfoLayout->addLayout(pkgNameLayout);                       //添加包名布局
     itemInfoLayout->addLayout(pkgVersionLayout);                    //添加包版本布局
+    itemInfoLayout->addStretch();
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
-    itemBlockLayout->addSpacing(112 - 20 - 10);                     //与标题栏保持一定的间距
+    itemBlockLayout->addSpacing(112 - 20 - 10);                     //左右距离
     itemBlockLayout->addWidget(m_packageIcon);                      //添加图标
     itemBlockLayout->addLayout(itemInfoLayout);                     //添加包名和版本
 
@@ -257,20 +226,20 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     itemInfoWidget->setLayout(itemBlockLayout);                     //保存成一个widget
 
     QHBoxLayout *packageDescLayout = new QHBoxLayout();         //包描述的 布局
-    packageDescLayout->addStretch();
+//    packageDescLayout->addStretch();
     packageDescLayout->addWidget(m_packageDescription);             //添加包描述的Label
-    packageDescLayout->addStretch();
+//    packageDescLayout->addStretch();
     packageDescLayout->setSpacing(0);
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout();                //整合包信息的布局
-    itemLayout->addSpacing(45);
+    itemLayout->addSpacing(30);
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);                       //添加包的描述
-    itemLayout->addStretch();
     itemLayout->setMargin(0);
     itemLayout->setSpacing(0);
+    itemLayout->addStretch();
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -282,14 +251,66 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 
     m_itemInfoFrame->setLayout(itemLayout);
     m_itemInfoFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_itemInfoFrame->setVisible(false);
 
     m_contentLayout->addWidget(m_itemInfoFrame);                                                //添加到主窗口中
 }
 
-/**
- * @brief SingleInstallPage::initTabOrder 设置tab切换焦点的顺序。
- */
+void SingleInstallPage::initProgressFrame()
+{
+    m_progressFrame->setVisible(false);
+    //进度条 布局
+    QVBoxLayout *progressLayout = new QVBoxLayout();
+    progressLayout->setSpacing(0);
+    progressLayout->setContentsMargins(0, 15, 0, 0);
+    progressLayout->addWidget(m_progress);
+    progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
+    m_progressFrame->setLayout(progressLayout);
+    m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    m_contentLayout->addWidget(m_progressFrame);
+    m_progressFrame->setVisible(false);
+}
+
+void SingleInstallPage::initTipsFrame()
+{
+    m_tipsLabel->setMinimumHeight(21);                      //设置提示label的高度
+    m_tipsLabel->setAlignment(Qt::AlignCenter);                         //提示居中显示
+    QVBoxLayout *tipsLayout = new QVBoxLayout();
+    tipsLayout->setSpacing(0);
+    tipsLayout->setContentsMargins(0, 0, 0, 5);
+    tipsLayout->addWidget(m_tipsLabel);
+    tipsLayout->setAlignment(m_tipsLabel, Qt::AlignHCenter);
+    m_tipsFrame->setLayout(tipsLayout);
+    m_contentLayout->addWidget(m_tipsFrame);
+}
+
+void SingleInstallPage::initInstallWineLoadingLayout()
+{
+    QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();      //依赖安装的布局
+    m_pDSpinner->setFixedSize(24, 24);                        //设置动画的大小
+    m_pDSpinner->setVisible(false);                             //隐藏等待动画
+    m_pDSpinner->start();
+
+    m_pLoadingLayout->addWidget(m_pDSpinner);                   //添加到布局中
+    m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);//居中显示
+    m_pLoadingLayout->addSpacing(5); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
+
+    m_pLoadingLabel->setVisible(false);                           //隐藏依赖安装提示信息
+    m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
+
+    m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
+    m_pLoadingLayout->addWidget(m_pLoadingLabel);               //添加提示信息到布局中
+    m_pLoadingLayout->setAlignment(m_pLoadingLabel, Qt::AlignHCenter);//fix bug:33999 keep the label in the middle
+
+    m_pLoadingLabel->setFixedHeight(24);                        //设置高度
+
+    QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
+    Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
+
+    m_contentLayout->addLayout(m_pLoadingLayout);               //添加到主布局中
+}
+
+
 void SingleInstallPage::initTabOrder()
 {
     // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
@@ -305,9 +326,6 @@ void SingleInstallPage::initTabOrder()
 
 }
 
-/**
- * @brief SingleInstallPage::initButtonFocusPolicy 添加各个控件的焦点获取策略
- */
 void SingleInstallPage::initButtonFocusPolicy()
 {
     this->setFocusPolicy(Qt::NoFocus);                              //主界面不接受焦点
@@ -321,10 +339,6 @@ void SingleInstallPage::initButtonFocusPolicy()
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
 }
 
-/**
- * @brief SingleInstallPage::initButtonAutoDefault 给各个按钮添加回车触发。
- * 没有infoControlButton ,因为属于自定义控件，已经在控件内部实现。
- */
 void SingleInstallPage::initButtonAutoDefault()
 {
     m_installButton->setAutoDefault(true);
@@ -335,45 +349,57 @@ void SingleInstallPage::initButtonAutoDefault()
     m_doneButton->setAutoDefault(true);
 }
 
-/**
- * @brief SingleInstallPage::initPkgInstallProcessView 初始化安装进程控制按钮的view
- * @param fontinfosize
- */
-void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
-{
-    int fontinfosizetemp = 0;                                           //根据当前字体的大小设置按钮的字体大小
-    if (fontinfosize > 16) {
-        fontinfosizetemp = 21;
-    } else {
-        fontinfosizetemp = 18;
-    }
 
+void SingleInstallPage::initInfoControlButtonFrame()
+{
     // 添加Accessible Name
     m_infoControlButton->setObjectName("InfoControlButton");
     m_infoControlButton->setAccessibleName("InfoControlButton");
-    m_installProcessView->setObjectName("WorkerInformation");
-    m_installProcessView->setAccessibleName("WorkerInformation");
-    m_packageDescription->setObjectName("PackageDescription");
-    m_packageDescription->setAccessibleName("PackageDescription");
 
-    m_tipsLabel->setMinimumHeight(fontinfosizetemp);                      //设置提示label的高度
-    m_tipsLabel->setAlignment(Qt::AlignCenter);                         //提示居中显示
+    QVBoxLayout *infoControlButtonLayout = new QVBoxLayout();
+    infoControlButtonLayout->setContentsMargins(0, 5, 0, 5);
+    infoControlButtonLayout->addWidget(m_infoControlButton);
+    m_infoControlFrame->setLayout(infoControlButtonLayout);
+    m_contentLayout->addWidget(m_infoControlFrame, Qt::AlignCenter);
+    m_infoControlFrame->setVisible(false);
+}
 
-    m_progressFrame->setVisible(false);                                 //默认隐藏进度条view
-    m_infoControlButton->setVisible(false);                             //infoControlButton 默认隐藏
+void SingleInstallPage::initPkgInstallProcessFrame()
+{
+     m_packageDescription->setObjectName("PackageDescription");
+     m_packageDescription->setAccessibleName("PackageDescription");
 
-    m_installProcessView->setVisible(false);                            //默认隐藏安装进程信息
-    m_installProcessView->setAcceptDrops(false);                        //不接受拖入的数据
-    m_installProcessView->setMinimumHeight(200);                          //设置高度
-    m_installProcessView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+     m_installProcessView->setObjectName("WorkerInformation");
+     m_installProcessView->setAccessibleName("WorkerInformation");
 
+     m_installProcessView->setFixedHeight(200);                          //设置高度
+     m_installProcessView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+
+     QVBoxLayout *processViewLayout = new  QVBoxLayout();
+     processViewLayout->setContentsMargins(0, 0, 0, 0);
+     processViewLayout->addWidget(m_installProcessView);
+
+     m_installInfoFrame->setLayout(processViewLayout);
+
+     m_contentLayout->addWidget(m_installInfoFrame);
+
+     m_installInfoFrame->setVisible(false);
+
+     //添加 wine下载等待提示布局
+     initInstallWineLoadingLayout();
+}
+
+
+void SingleInstallPage::initButtonsFrame()
+{
     // 安装按钮
     m_installButton->setText(tr("Install"));
     m_installButton->setVisible(false);
 
-    //卸载按钮
-    //    m_uninstallButton->setText(tr("Remove"));
-    //    m_uninstallButton->setVisible(false);
+    //返回按钮
+    m_backButton->setText(tr("Cancel"));
+    m_backButton->setVisible(false);
 
     //重新安装按钮
     m_reinstallButton->setText(tr("Reinstall"));
@@ -383,10 +409,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_confirmButton->setText(tr("OK"));
     m_confirmButton->setVisible(false);
 
-    //返回按钮
-    m_backButton->setText(tr("Cancel"));
-    m_backButton->setVisible(false);
-
     //完成按钮
     m_doneButton->setText(tr("Done"));
     m_doneButton->setVisible(false);
@@ -395,13 +417,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     // 设置各个按钮的大小
     m_installButton->setMinimumSize(120, 36);
-    //    m_uninstallButton->setMinimumSize(120, 36);
+//     m_uninstallButton->setMinimumSize(120, 36);
     m_reinstallButton->setMinimumSize(120, 36);
     m_confirmButton->setMinimumSize(120, 36);
     m_backButton->setMinimumSize(120, 36);
     m_doneButton->setMinimumSize(120, 36);
-
-    m_contentLayout->addWidget(m_infoControlButton);
 
     //启用焦点切换。
     initButtonFocusPolicy();
@@ -410,45 +430,32 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     // 初始化按钮焦点切换策略。
     initTabOrder();
 
-    //设置描述信息的size 与位置
-    m_packageDescription->setMinimumHeight(65);
-    m_packageDescription->setMinimumWidth(270);
-    m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
     //各个按钮的布局
     QVBoxLayout *btnsFrameLayout = new QVBoxLayout();
     btnsFrameLayout->setSpacing(0);
     btnsFrameLayout->setContentsMargins(0, 0, 0, 0);
+//     btnsFrameLayout->addSpacing(5);
 
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_backButton);
     btnsLayout->addWidget(m_installButton);
-    //    btnsLayout->addWidget(m_uninstallButton);
+//     btnsLayout->addWidget(m_uninstallButton);
     btnsLayout->addWidget(m_reinstallButton);
+
     btnsLayout->addWidget(m_confirmButton);
     btnsLayout->addWidget(m_doneButton);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
 
-    //进度条 布局
-    QVBoxLayout *progressLayout = new QVBoxLayout();
-    progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 23, 0, 18);
-    progressLayout->addWidget(m_progress);
-    progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
-    m_progressFrame->setLayout(progressLayout);
-    m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_buttonsFrame->setMinimumHeight(m_installButton->maximumHeight());
+    btnsFrameLayout->addLayout(btnsLayout);
+    m_buttonsFrame->setLayout(btnsFrameLayout);
+    m_buttonsFrame->setFixedHeight(45);
 
     // 把所有的按钮合并成一个widget
-    QWidget *btnsFrame = new QWidget(this);
-    btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
-    btnsFrameLayout->addWidget(m_progressFrame);
-    btnsFrameLayout->addStretch();
-    btnsFrameLayout->addLayout(btnsLayout);
-    btnsFrame->setLayout(btnsFrameLayout);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -456,24 +463,15 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //设置各个按钮的字体大小与样式
     Utils::bindFontBySizeAndWeight(m_tipsLabel, normalFontFamily, 12, QFont::Normal);
     Utils::bindFontBySizeAndWeight(m_installButton, mediumFontFamily, 14, QFont::Medium);
-    //    Utils::bindFontBySizeAndWeight(m_uninstallButton, mediumFontFamily, 14, QFont::Medium);
+//     Utils::bindFontBySizeAndWeight(m_uninstallButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_reinstallButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_confirmButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_backButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_doneButton, mediumFontFamily, 14, QFont::Medium);
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
-    //将进度条布局。提示布局。按钮布局添加到主布局中
-    m_contentLayout->addWidget(m_installProcessView);
-    m_contentLayout->addStretch();
-    m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addStretch();
-    m_contentLayout->addWidget(btnsFrame);
-
-    //添加 wine下载等待提示布局
-    initInstallWineLoadingLayout();
+    m_contentLayout->addWidget(m_buttonsFrame);
 }
-
 /**
  * @brief SingleInstallPage::initConnections 初始化链接信号与槽
  */
@@ -564,7 +562,7 @@ void SingleInstallPage::reinstall()
 
     //安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
-    m_infoControlButton->setVisible(true);
+    m_infoControlFrame->setVisible(true);
     m_progressFrame->setVisible(true);
 
     //重置包的工作状态
@@ -635,7 +633,7 @@ void SingleInstallPage::uninstallCurrentPackage()
 void SingleInstallPage::showInfomation()
 {
     m_upDown = false;
-    m_installProcessView->setVisible(true);
+    m_installInfoFrame->setVisible(true);
     m_itemInfoFrame->setVisible(false);
 }
 
@@ -645,7 +643,7 @@ void SingleInstallPage::showInfomation()
 void SingleInstallPage::hideInfomation()
 {
     m_upDown = true;
-    m_installProcessView->setVisible(false);
+    m_installInfoFrame->setVisible(false);
     m_itemInfoFrame->setVisible(true);
 }
 
@@ -655,7 +653,7 @@ void SingleInstallPage::hideInfomation()
 void SingleInstallPage::showInfo()
 {
     //显示进度信息
-    m_infoControlButton->setVisible(true);
+    m_infoControlFrame->setVisible(true);
     m_progressFrame->setVisible(true);
     m_progress->setValue(0);
 
@@ -837,7 +835,7 @@ void SingleInstallPage::setPackageInfo()
     m_installButton->setVisible(!installed);
     //    m_uninstallButton->setVisible(installed);
     m_reinstallButton->setVisible(installed);
-    m_backButton->setVisible(installed);
+    m_backButton->setVisible(true);
     m_confirmButton->setVisible(false);
     m_doneButton->setVisible(false);
 
@@ -894,6 +892,7 @@ void SingleInstallPage::afterGetAutherFalse()
         m_backButton->setVisible(true);
     } else if (m_operate == Uninstall) {
         m_reinstallButton->setVisible(true);
+        m_backButton->setVisible(true);
         //        m_uninstallButton->setVisible(true);
         m_backButton->setVisible(true);
     } else if (m_operate == Reinstall) {
@@ -972,7 +971,6 @@ void SingleInstallPage::setAuthBefore()
             m_backButton->setVisible(true);
         } else if (m_operate == Uninstall) {
             m_reinstallButton->setVisible(true);
-            //            m_uninstallButton->setVisible(true);
             m_backButton->setVisible(true);
         } else if (m_operate == Reinstall) {
             m_reinstallButton->setVisible(true);

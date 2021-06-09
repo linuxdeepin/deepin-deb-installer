@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="az" version="2.1">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="72"/>
         <source>Enter the number to configure: </source>
-        <translation>Nhập số để cấu hình:</translation>
+        <translation>Konfiqurasiya nömrəsini daxil edin:</translation>
     </message>
     <message>
         <source>OK</source>
@@ -14,20 +14,20 @@
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>g</translation>
     </message>
 </context>
 <context>
     <name>DebInstaller</name>
     <message>
         <source>Package Installer</source>
-        <translation type="vanished">Trình cài đặt gói</translation>
+        <translation type="vanished">Paket quraşdırıcısı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="352"/>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="366"/>
         <source>The deb package may be broken</source>
-        <translation>Gói deb có thể bị lỗi</translation>
+        <translation>DEB paket pozula bilər</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="369"/>
@@ -36,21 +36,21 @@
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Siz yalnız yerli deb paketləri quraşdıra bilərsiniz</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="396"/>
         <source>Already Added</source>
-        <translation>Đã thêm</translation>
+        <translation>Artıq əlavə olunub</translation>
     </message>
     <message>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">%1 mövcud deyil, lütfən, yenidən seçin</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
         <source>Bulk Install</source>
-        <translation>Cài đặt hàng loạt</translation>
+        <translation>Toplu quraşdırma</translation>
     </message>
 </context>
 <context>
@@ -59,63 +59,63 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="96"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="113"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Cài đặt thất bại, vui lòng kiểm tra lại mạng internet</translation>
+        <translation>Quraşdırılma alınmadı, lütfən internet bağlantısını yoxlayın</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="98"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Cài đặt thất bại, vui lòng cập nhật Quản lý trung tâm</translation>
+        <translation>Quraşdırılma alınmadı, İdarəetmə Mərkəzində yenilənmələri yoxlayın</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="101"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="105"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="117"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Cài đặt thất bại, không đủ dung lượng ổ dĩa</translation>
+        <translation>Quraşdırma alınmadı, qeyri-kafi disk sahəsi</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="122"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Rəqəmsal imza yoxdur</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="126"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Rəqəmsal imza səhvdir</translation>
     </message>
     <message>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">İnzibatçı, bu paketin quraşdırılmasının qarşçısını almaq üçün qaydalar təyin edib</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="134"/>
         <source>Installation Failed</source>
-        <translation>Cài đặt thất bại</translation>
+        <translation>Quraşdırma baş tutmadı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="627"/>
         <source>Failed to install %1</source>
-        <translation>Cài đặt thất bại %1</translation>
+        <translation>%1 quraşdırılması baş tutmadı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="924"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Quraşdırılma mümkün deyil - rəqəmsal imza yoxdur</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation>Lütfən, İdarəetmə Mərkəzinə keçin və tərtibatçı rejimini açın və yenidən cəhd edin. İcra olunsun?</translation>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="vanished">Hủy</translation>
+        <translation type="vanished">İmtina</translation>
     </message>
     <message>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation type="vanished">Davam edin</translation>
     </message>
     <message>
         <source>OK</source>
@@ -125,43 +125,43 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
         <source>Cancel</source>
-        <translation>Hủy</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
         <source>Proceed</source>
-        <translation type="unfinished"/>
+        <translation>Davam edin</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="983"/>
         <source>Unable to install</source>
-        <translation>Không thể cài đặt</translation>
+        <translation>Quraşdırıla bilmədi</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>Gói này có thể sai chữ ký điện tử</translation>
+        <translation>Bu paketdə etibarlı rəqəmsal imza yoxdur</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>g</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
         <source>Broken dependencies: %1</source>
-        <translation>Các phần phụ thuộc bị hỏng: %1</translation>
+        <translation>Pozulmuş asılılıqlar: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="130"/>
         <source>Authentication failed</source>
-        <translation>Xác thực thất bại</translation>
+        <translation>Doğrulama alınmadı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
-        <translation>Không trùng kiến trúc gói</translation>
+        <translation>Uyğunsuz paket arxitekturaları</translation>
     </message>
 </context>
 <context>
@@ -169,12 +169,12 @@
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="64"/>
         <source>Drag deb packages here</source>
-        <translation>Kéo gói deb vào đây</translation>
+        <translation>Deb paketləri buraya atın</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/widgets/filechoosewidget.cpp" line="106"/>
         <source>Select File</source>
-        <translation>Chọn tệp</translation>
+        <translation>Faylı seçin</translation>
     </message>
 </context>
 <context>
@@ -182,56 +182,56 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="49"/>
         <source>Collapse</source>
-        <translation>Đóng lại</translation>
+        <translation>Yığmaq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="49"/>
         <source>Show details</source>
-        <translation>Hiện chi tiết</translation>
+        <translation>Təfərrüatları göstərmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="268"/>
         <source>Cancel</source>
-        <translation>Hủy</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation type="vanished">Đóng lại</translation>
+        <translation type="vanished">Yığmaq</translation>
     </message>
     <message>
         <source>Install</source>
         <comment>button</comment>
-        <translation type="vanished">Cài dặt</translation>
+        <translation type="vanished">Quraşdırmaq</translation>
     </message>
     <message>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="vanished">Hoàn thành</translation>
+        <translation type="vanished">İcra olundu</translation>
     </message>
     <message>
         <source>Back</source>
         <comment>button</comment>
-        <translation type="vanished">Trở lại</translation>
+        <translation type="vanished">Geriyə</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="265"/>
         <source>Install</source>
-        <translation>Cài dặt</translation>
+        <translation>Quraşdırmaq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="266"/>
         <source>Done</source>
-        <translation>Hoàn thành</translation>
+        <translation>İcra olundu</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="vanished">Trở lại</translation>
+        <translation type="vanished">Geriyə</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
         <source>Installing dependencies: %1</source>
-        <translation>Đang cài đặt các thư viện liên quan: %1</translation>
+        <translation>Asılılıqlar quraşdırılır: %1</translation>
     </message>
 </context>
 <context>
@@ -239,37 +239,37 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="86"/>
         <source>Installing</source>
-        <translation>Đang cài đặt</translation>
+        <translation>Quraşdırılır</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="90"/>
         <source>Installed</source>
-        <translation>Đã cài đặt</translation>
+        <translation>Quraşdırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="98"/>
         <source>Failed</source>
-        <translation>Thất bại</translation>
+        <translation>Alınmadı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="94"/>
         <source>Waiting</source>
-        <translation>Đang đợi</translation>
+        <translation>Xəbərdarlıq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="260"/>
         <source>Same version installed</source>
-        <translation>Có một phiên bản tương tự đã được cài đặt</translation>
+        <translation>Eyni versiya quraşdırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="263"/>
         <source>Later version installed: %1</source>
-        <translation>Phiên bản đã cài lần cuối: %1</translation>
+        <translation>Sonrakı versiya quraşdırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="266"/>
         <source>Earlier version installed: %1</source>
-        <translation>Phiên bản đã cài đặt trước đó: %1</translation>
+        <translation>Əvvəlki versiya quraşdırıldı: %1</translation>
     </message>
 </context>
 <context>
@@ -277,7 +277,7 @@
     <message>
         <location filename="../src/deb_installer/model/packagelistview.cpp" line="166"/>
         <source>Delete</source>
-        <translation>Xóa</translation>
+        <translation>Silmək</translation>
     </message>
 </context>
 <context>
@@ -285,12 +285,12 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="65"/>
         <source>Collapse</source>
-        <translation>Đóng lại</translation>
+        <translation>Yığmaq</translation>
     </message>
     <message>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation type="vanished">Đóng lại</translation>
+        <translation type="vanished">Yığmaq</translation>
     </message>
 </context>
 <context>
@@ -298,86 +298,86 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="747"/>
         <source>Collapse</source>
-        <translation>Đóng lại</translation>
+        <translation>Yığmaq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="397"/>
         <source>Install</source>
-        <translation>Cài dặt</translation>
+        <translation>Quraşdırmaq</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="vanished">Xóa</translation>
+        <translation type="vanished">Silmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1039"/>
         <source>Reinstall</source>
-        <translation>Cài lại</translation>
+        <translation>Yenidən quraşdırmaq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>g</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="vanished">Trở lại</translation>
+        <translation type="vanished">Geriyə</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
         <source>Done</source>
-        <translation>Hoàn thành</translation>
+        <translation>İcra olundu</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="850"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Later version installed: %1</source>
-        <translation>Phiên bản đã cài lần cuối: %1</translation>
+        <translation>Sonrakı versiya quraşdırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1044"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Bir versiya geriyə</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="855"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1047"/>
         <source>Earlier version installed: %1</source>
-        <translation>Phiên bản đã cài đặt trước đó: %1</translation>
+        <translation>Əvvəlki versiya quraşdırıldı: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="857"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1049"/>
         <source>Update</source>
-        <translation type="unfinished"/>
+        <translation>Yeniləmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
         <source>Installing dependencies: %1</source>
-        <translation>Đang cài đặt các thư viện liên quan: %1</translation>
+        <translation>Asılılıqlar quraşdırılır: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Failed to install %1</source>
-        <translation>Cài đặt thất bại %1</translation>
+        <translation>%1 quraşdırılması baş tutmadı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
-        <translation>Phiên bản:</translation>
+        <translation>Versiya:</translation>
     </message>
     <message>
         <source>Install</source>
         <comment>button</comment>
-        <translation type="vanished">Cài dặt</translation>
+        <translation type="vanished">Quraşdırmaq</translation>
     </message>
     <message>
         <source>Remove</source>
         <comment>button</comment>
-        <translation type="vanished">Xóa</translation>
+        <translation type="vanished">Silmək</translation>
     </message>
     <message>
         <source>OK</source>
@@ -387,48 +387,48 @@
     <message>
         <source>Back</source>
         <comment>button</comment>
-        <translation type="vanished">Trở lại</translation>
+        <translation type="vanished">Geriyə</translation>
     </message>
     <message>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="vanished">Hoàn thành</translation>
+        <translation type="vanished">İcra olundu</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="722"/>
         <source>Installed successfully</source>
-        <translation>Đã cài đặt thành công</translation>
+        <translation>Uğurla quraşdırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="728"/>
         <source>Uninstalled successfully</source>
-        <translation>Gỡ cài đặt thành công</translation>
+        <translation>Uğurla silindi</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="738"/>
         <source>Uninstall Failed</source>
-        <translation>Gỡ cài đặt thất bại</translation>
+        <translation>Silinə bilədi</translation>
     </message>
     <message>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation type="vanished">Yeniləmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
-        <translation>Tên:</translation>
+        <translation>Adı:</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Cancel</source>
-        <translation>Hủy</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Same version installed</source>
-        <translation>Có một phiên bản tương tự đã được cài đặt</translation>
+        <translation>Eyni versiya quraşdırıldı</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="592"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="721"/>
         <source>Show details</source>
-        <translation>Hiện chi tiết</translation>
+        <translation>Təfərrüatları göstərmək</translation>
     </message>
 </context>
 <context>
@@ -448,7 +448,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="619"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="727"/>
         <source>Show details</source>
-        <translation>Hiện chi tiết</translation>
+        <translation>Təfərrüatları göstərmək</translation>
     </message>
 </context>
 <context>
@@ -456,46 +456,46 @@
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Collapse</source>
-        <translation>Đóng lại</translation>
+        <translation>Yığmaq</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="33"/>
         <source>Show related packages</source>
-        <translation>Hiện các gói liên quan</translation>
+        <translation>Əlaqəli paketləri göstərmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>
         <source>Cancel</source>
-        <translation>Hủy</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation type="vanished">Đóng lại</translation>
+        <translation type="vanished">Yığmaq</translation>
     </message>
     <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="vanished">Hủy</translation>
+        <translation type="vanished">İmtina</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>
         <source>Confirm</source>
-        <translation>Xác nhận</translation>
+        <translation>Təsdiqləmək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Bạn có chắc muốn gỡ %1?
-Tất cả các thư viện liên quan cũng sẽ bị gỡ</translation>
+        <translation>%1 silmək istədiyinizə əminsiniz?
+Həmçinin bütün asılılıqlar da silinəcək</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="134"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>Bạn có chắc muốn gỡ %1?
-Hệ thống hoặc phần mềm khác có thể không hoạt động</translation>
+        <translation>%1 silmək istəfiyinizə əminsiniz?
+Sistem və başqa tətbiqlər düzgün işləməyə bilər</translation>
     </message>
 </context>
 <context>
@@ -504,12 +504,12 @@ Hệ thống hoặc phần mềm khác có thể không hoạt động</translat
         <location filename="../src/deb_installer/main.cpp" line="66"/>
         <location filename="../src/deb_installer/main.cpp" line="67"/>
         <source>Package Installer</source>
-        <translation>Trình cài đặt gói</translation>
+        <translation>Paket quraşdırıcısı</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Trình cài đặt gói hỗ trợ người dùng cài đặt và xóa hàng loạt các gói phần mềm</translation>
+        <translation>Paket quraşdırıcısı, istifadəçilərə paketləri quraşdırmağa və silməyə imkan verir, həmçinin toplu quraşdırmanı dəstəkləyir.</translation>
     </message>
 </context>
 </TS>

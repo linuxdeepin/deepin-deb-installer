@@ -55,7 +55,8 @@ void SingleInstallerApplication::activateWindow()
 
     if (nullptr == m_qspMainWnd.get()) {
         m_qspMainWnd.reset(new DebInstaller());
-        Dtk::Widget::moveToCenter(m_qspMainWnd.get());
+//        Dtk::Widget::moveToCenter(m_qspMainWnd.get());
+        m_qspMainWnd.get()->moveToCenter();
 
         //        m_qspMainWnd->show();
     } else {
