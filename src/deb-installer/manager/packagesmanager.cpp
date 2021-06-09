@@ -267,7 +267,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 continue;
 
             if (!package->isInstalled()){
-                delete package;
                 package = nullptr;
                 continue;
             }
@@ -276,7 +275,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qWarning() << "PackagesManager:" << "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString();
-                delete package;
                 package = nullptr;
                 return ConflictResult::err(name);
             }
@@ -288,7 +286,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
             // not match, ok
             if (!dependencyVersionMatch(result, type)) {
-                delete package;
                 package = nullptr;
                 continue;
             }
@@ -302,7 +299,6 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qWarning() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString() << mirror_version << conflict_version;
-                delete package;
                 package = nullptr;
                 return ConflictResult::err(name);
             }
@@ -342,7 +338,6 @@ int PackagesManager::packageInstallStatus(const int index)
         return ret;
 
     const QString installedVersion = package->installedVersion();
-    delete package;
     package = nullptr;
     if (installedVersion.isEmpty())
         return ret;
@@ -472,7 +467,6 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         else
                             dependList << depend->name() + ":" + depend->architecture();
 
-                        delete depend;
                         depend = nullptr;
 
                         if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
@@ -522,7 +516,6 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 
     //修复可能某些包无法package的错误，如果遇到此类包，返回安装版本为空
     if (package){
-        delete package;
         package = nullptr;
         return package->installedVersion();   //能正常打包，返回包的安装版本
     }
@@ -559,7 +552,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 
         const auto choosed_name = package->name() + resolvMultiArchAnnotation(QString(), package->architecture());
         if (choosed_set.contains(choosed_name)){
-            delete package;
             package = nullptr;
             break;
         }
@@ -574,7 +566,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 Backend *backend = m_backendFuture.result();
                 if(!backend){
                     qWarning()<<"libqapt backend loading error";
-                    delete package;
                     package = nullptr;
                     return;
                 }
@@ -582,21 +573,18 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                                                           + resolvMultiArchAnnotation(QString(), package->architecture()));
                 if (updatePackage){
                     choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-                    delete updatePackage;
                     updatePackage = nullptr;
                 }
                 else{
                     choosed_set << info.packageName() + " not found";
                 }
             } else { //若依赖包符合版本要求,则不进行升级
-                delete package;
                 package = nullptr;
                 continue;
             }
         }
 
         if (!isConflictSatisfy(debArch, package->conflicts()).is_ok()){
-            delete package;
             package = nullptr;
             continue;
         }
@@ -605,7 +593,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         upgradeDependsSet << choosed_name;
         const auto stat = checkDependsPackageStatus(upgradeDependsSet, package->architecture(), package->depends());
         if (stat.isBreak()){
-            delete package;
             package = nullptr;
             continue;
         }
@@ -613,7 +600,6 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, package->depends());
 
-        delete package;
         package = nullptr;
         break;
     }
@@ -639,7 +625,6 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     }
     QStringList requiredList = package->requiredByList();
 
-    delete package;
     package = nullptr;
 
     //确定和当前包存在直接或间接反向依赖的包的集合
@@ -659,17 +644,14 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
 
         Package *currentPackage = packageWithArch(item, sysArch);
         if (!currentPackage || !currentPackage->isInstalled()){
-            delete currentPackage;
             currentPackage = nullptr;
             continue;
         }
         if (currentPackage->recommendsList().contains(packageName)){
-            delete currentPackage;
             currentPackage = nullptr;
             continue;
         }
         if (currentPackage->suggestsList().contains(packageName)) {
-            delete currentPackage;
             currentPackage = nullptr;
             continue;
         }
@@ -692,24 +674,20 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
                 }
             }
             if (!subPackage || !subPackage->isInstalled()){      //增加对package指针的检查
-                delete subPackage;
                 subPackage = nullptr;
                 continue;
             }
             if (subPackage->recommendsList().contains(item)){
-                delete subPackage;
                 subPackage = nullptr;
                 continue;
             }
             if (subPackage->suggestsList().contains(item)) {
-                delete subPackage;
                 subPackage = nullptr;
                 continue;
             }
             reverseQueue.append(dependRequiredPackage);
         }
 
-        delete currentPackage;
         currentPackage = nullptr;
     }
     // remove self
