@@ -1258,11 +1258,6 @@ PackagesManager::~PackagesManager()
 
     Backend *backend = m_backendFuture.result();
 
-    for (auto pkg : backend->availablePackages()) {
-        delete pkg;
-        pkg = nullptr;
-    }
-
     delete backend;
     backend = nullptr;
 }
