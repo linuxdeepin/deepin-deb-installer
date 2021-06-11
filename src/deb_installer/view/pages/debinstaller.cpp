@@ -182,8 +182,6 @@ void DebInstaller::initConnections()
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::newProcessInstance, this, &DebInstaller::onNewAppOpen);
 }
 
-
-
 /**
  * @brief onNewAppOpen
  * @param pid 进程号
