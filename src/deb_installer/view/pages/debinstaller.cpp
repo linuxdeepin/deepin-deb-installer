@@ -308,9 +308,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     if (packages.size() > 1) {             //单包安装记录当前包的大小
         PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
     }
-/*    this->showNormal();                                                 //非特效模式下激活窗口
-    this->activateWindow();  */                                           //特效模式下激活窗口
-    this->exec();
+    this->showNormal();                                                 //非特效模式下激活窗口
+    this->activateWindow();                                             //特效模式下激活窗口
     qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
@@ -338,9 +337,8 @@ void DebInstaller::refreshMulti()
     qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
     m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
     MulRefreshPage();
-//    this->showNormal();
-//    this->activateWindow();
-    this->exec();
+    this->showNormal();
+    this->activateWindow();
 }
 
 /**
@@ -383,9 +381,8 @@ void DebInstaller::showInvalidePackageMessage_tablet()
         connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
         connect(Ddialog, &DDialog::aboutToClose, qApp,  [ = ] { qApp->quit(); });
     }
-//    this->showNormal();
-//    this->activateWindow();
-    this->exec();
+    this->showNormal();
+    this->activateWindow();
 }
 
 /**
@@ -616,9 +613,8 @@ void DebInstaller::refreshSingle()
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 
-//    this->showNormal();
-//    this->activateWindow(); //单包安装刷新显示
-    this->exec();
+    this->showNormal();
+    this->activateWindow(); //单包安装刷新显示
 }
 
 /**
@@ -665,9 +661,8 @@ void DebInstaller::changeDragFlag()
 void DebInstaller::setEnableButton(bool bEnable)
 {
     if (bEnable) {
-//        this->activateWindow();
-//        this->showNormal();
-        this->exec();
+        this->activateWindow();
+        this->showNormal();
     }
     //如果正在添加包，则启用按钮
     if (packageAppending)
