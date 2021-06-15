@@ -82,7 +82,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
 void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 0, 20, 20);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 0, 20, 10);         //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -155,7 +155,7 @@ void SingleInstallPage::initPkgInfoFrame(int fontinfosize)
     }
 
     m_packageIcon->setText("icon");         //图标
-    m_packageIcon->setMinimumSize(64, 64);    //设置图标的大小
+    m_packageIcon->setFixedSize(64, 64);    //设置图标的大小
 
     DebInfoLabel *packageName = new DebInfoLabel(this);             //包名的描述性文字
     packageName->setCustomQPalette(QPalette::WindowText);           //设置包名的字体颜色
@@ -218,7 +218,7 @@ void SingleInstallPage::initPkgInfoFrame(int fontinfosize)
     QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
     itemBlockLayout->setContentsMargins(0, 0, 0, 0);
-    itemBlockLayout->addSpacing(112 - 20 - 10);                     //左右距离
+    itemBlockLayout->addSpacing(82);                                //左右距离
     itemBlockLayout->addWidget(m_packageIcon);                      //添加图标
     itemBlockLayout->addLayout(itemInfoLayout);                     //添加包名和版本
 
@@ -233,7 +233,7 @@ void SingleInstallPage::initPkgInfoFrame(int fontinfosize)
     packageDescLayout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *itemLayout = new QVBoxLayout();                //整合包信息的布局
-    itemLayout->addSpacing(30);
+    itemLayout->addSpacing(40);
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);                       //添加包的描述
