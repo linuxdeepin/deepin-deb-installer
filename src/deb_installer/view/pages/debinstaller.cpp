@@ -183,10 +183,10 @@ void DebInstaller::enableCloseButton(bool enable)
 void DebInstaller::disableCloseAndExit()
 {
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
-    QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();                                   //获取标题栏菜单的关闭按钮
-    action->setDisabled(true);                                          //设置标题栏菜单中的关闭按钮不可用
+    DTitlebar *tbar = this->titlebar();
+    if(tbar){
+        tbar->setQuitMenuDisabled(true);
+    }
 }
 
 /**
@@ -197,12 +197,13 @@ void DebInstaller::disableCloseAndExit()
 void DebInstaller::enableCloseAndExit()
 {
     titlebar()->setDisableFlags(titlebar()->windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowCloseButtonHint);    //设置标题栏的关闭按钮可用
-
-    QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();                                       //获取标题栏菜单中的关闭按钮
-    action->setDisabled(false);                                             //设置标题栏菜单中的关闭按钮不可用
+    //设置标题栏菜单中的关闭按钮不可用
+    DTitlebar *tbar = this->titlebar();
+    if(tbar){
+        tbar->setQuitMenuDisabled(false);
+    }
 }
+
 
 /**
  * @brief onStartInstallRequested
