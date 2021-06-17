@@ -621,16 +621,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
     ASSERT_TRUE(cr.is_ok());
 }
 
-PackageList stub_availablePackages()
-{
-    PackageList paclist;
-//    Backend *bac = nullptr;
-//    pkgCache::PkgIterator packageIter;
-//    Package *package =  new Package(bac,packageIter);
-//    paclist.append(package);
-    return paclist;
-}
-
 PackageList stub_availablePackages_nullptr()
 {
     PackageList paclist;
