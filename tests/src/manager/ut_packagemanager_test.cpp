@@ -259,6 +259,11 @@ QString package_installedVersion()
     return "";
 }
 
+QString package_installedVersion1()
+{
+    return "deb";
+}
+
 int package_compareVersion()
 {
     return 0;
@@ -554,6 +559,11 @@ int ut_packagesManager_compareVersion(const QString &, const QString &){
 bool ut_packagesManager_dependencyVersionMatch(const int, const RelationType)
 {
     return false;
+}
+
+bool ut_packagesManager_dependencyVersionMatch1(const int, const RelationType)
+{
+    return true;
 }
 
 
@@ -916,6 +926,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
     stub.set(ADDR(Package, isInstalled), stub_isInstalled);
+
+    m_packageManager->m_dependInstallMark.append("deb");
+    m_packageManager->m_packageMd5.append("deb");
     PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
 
     ASSERT_TRUE(pd.isBreak());
@@ -938,6 +951,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_01)
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
     stub.set(ADDR(Package, isInstalled), stub_isInstalled);
+
+    m_packageManager->m_dependInstallMark.append("deb");
+    m_packageManager->m_packageMd5.append("deb1");
+
     PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
 
     ASSERT_EQ(pd.status, 5);
@@ -1758,12 +1775,30 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_package)
 TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
-
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
     usleep(10 * 1000);
     QSet<QString> set;
     m_packageManager->checkDependsPackageStatus(set, "", conflicts());
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
+{
+    usleep(10 * 1000);
+    QSet<QString> set;
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion1);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, depends), deb_conflicts_null);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+
+    m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    stub.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageMd5)
