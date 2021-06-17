@@ -64,7 +64,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="98"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>A instalação falhou; verifique se há atualizações disponíveis na Central de Controle</translation>
+        <translation>A instalação falhou; verifique se há atualizações disponíveis</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="101"/>
@@ -105,7 +105,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Acesse a Central de Controle para ativar o modo de desenvolvedor. Continuar?</translation>
+        <translation>Acesse a Central de Controle para ativar o modo desenvolvedor. Continuar?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -161,7 +161,7 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
-        <translation>A arquitetura do pacote é incompatível</translation>
+        <translation>Arquitetura do pacote incompatível</translation>
     </message>
 </context>
 <context>
@@ -322,8 +322,9 @@
         <translation>Ok</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Voltar</translation>
+        <translation>Voltar</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -362,7 +363,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Failed to install %1</source>
-        <translation>Falha na instalação %1</translation>
+        <translation>Falha ao instalar %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Nome:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -495,7 +491,7 @@ Todas as dependências serão removidas</translation>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Desinstalar %1?
-O sistema e/ou os outros aplicativos podem não funcionar corretamente</translation>
+O sistema e/ou outros aplicativos podem não funcionar corretamente</translation>
     </message>
 </context>
 <context>
@@ -509,7 +505,7 @@ O sistema e/ou os outros aplicativos podem não funcionar corretamente</translat
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>O Instalador de Pacotes ajuda os usuários a instalar e remover os pacotes; além de, permitir a instalação em massa.</translation>
+        <translation>O Instalador de Pacotes auxilia os usuários a instalar e remover pacotes, e permite a instalação em massa.</translation>
     </message>
 </context>
 </TS>

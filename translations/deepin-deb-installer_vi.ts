@@ -322,8 +322,9 @@
         <translation>OK</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Trở lại</translation>
+        <translation>Trở lại</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -334,7 +335,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="850"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Later version installed: %1</source>
-        <translation>Phiên bản đã cài lần cuối: %1</translation>
+        <translation>Phiên bản mới nhất đã cài: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Tên:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>Hủy</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>

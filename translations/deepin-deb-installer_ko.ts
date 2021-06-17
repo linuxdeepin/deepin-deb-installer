@@ -322,8 +322,9 @@
         <translation>확인</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">뒤로</translation>
+        <translation>뒤로</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>이름:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>취소</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>

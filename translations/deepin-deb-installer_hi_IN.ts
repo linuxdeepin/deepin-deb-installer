@@ -322,8 +322,9 @@
         <translation>ठीक है</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">वापस</translation>
+        <translation>वापस</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>नाम :</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>

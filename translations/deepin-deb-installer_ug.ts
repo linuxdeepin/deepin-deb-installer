@@ -151,7 +151,7 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
         <source>Broken dependencies: %1</source>
-        <translation>بۇزۇلغان بېقىنىشچانلىقى:% 1</translation>
+        <translation>بۇزۇلغان بېقىنىشچانلىقى:%1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="130"/>
@@ -322,8 +322,9 @@
         <translation>تامام</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">قايتىش</translation>
+        <translation>قايتىش</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -420,11 +421,6 @@
         <translation>ئىسمى:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>ئەمەلدىن قالدۇرۇش</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Same version installed</source>
@@ -487,14 +483,14 @@
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="132"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>% 1 نى ئۆچۈرمەكچىمۇ؟
+        <translation>%1 نى ئۆچۈرمەكچىمۇ؟
 بارلىق بېقىنىشلارمۇ چىقىرىۋېتىلىدۇ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="134"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>% 1 نى ئۆچۈرمەكچىمۇ؟
+        <translation>%1 نى ئۆچۈرمەكچىمۇ؟
 سىستېما ياكى باشقا قوللىنىشچان پروگراممىلار نورمال ئىشلىمەسلىكى مۇمكىن</translation>
     </message>
 </context>

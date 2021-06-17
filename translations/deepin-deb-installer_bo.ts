@@ -187,7 +187,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="49"/>
         <source>Show details</source>
-        <translation>བཤིག་འདོན་བྱེད་རིམ་འཆར་བ།</translation>
+        <translation>ཞིབ་ཕྲའི་ཆ་འཕྲིན་འཆར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="268"/>
@@ -322,8 +322,9 @@
         <translation>ཆོག</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">ཕྱིར་ལོག</translation>
+        <translation>ཕྱིར་ལོག</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>མིང་།</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>འདོར་བ།</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>

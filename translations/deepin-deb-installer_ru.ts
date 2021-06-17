@@ -322,8 +322,9 @@
         <translation>OK</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Назад</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -420,11 +421,6 @@
         <translation>Наименование:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>Отмена</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Same version installed</source>
@@ -509,7 +505,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Установщик Пакетов используется  для установки и удаления программного обеспечения и поддерживает массовую установку приложений.</translation>
+        <translation>Установщик Пакетов используется для  установки и удаления программного обеспечения и поддерживает массовую установку приложений.</translation>
     </message>
 </context>
 </TS>

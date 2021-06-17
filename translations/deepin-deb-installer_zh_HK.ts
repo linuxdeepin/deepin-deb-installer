@@ -187,12 +187,12 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="49"/>
         <source>Show details</source>
-        <translation>顯示卸載進程</translation>
+        <translation>顯示詳細訊息</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="268"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>取 消</translation>
     </message>
     <message>
         <source>Collapse</source>
@@ -322,8 +322,9 @@
         <translation>確定</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">返回</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -420,11 +421,6 @@
         <translation>名稱：</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>取 消</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Same version installed</source>
@@ -481,7 +477,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>
         <source>Confirm</source>
-        <translation>確定卸載</translation>
+        <translation>確 定</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="132"/>

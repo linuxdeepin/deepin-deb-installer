@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
-        <translation>g</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -50,7 +50,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
         <source>Bulk Install</source>
-        <translation>Toplu quraşdırma</translation>
+        <translation>Toplu quraşdırmaq</translation>
     </message>
 </context>
 <context>
@@ -145,13 +145,13 @@
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
         <source>OK</source>
-        <translation>g</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
         <source>Broken dependencies: %1</source>
-        <translation>Pozulmuş asılılıqlar: %1</translation>
+        <translation>Korlanmış asılılıqlar: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="130"/>
@@ -254,7 +254,7 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="94"/>
         <source>Waiting</source>
-        <translation>Xəbərdarlıq</translation>
+        <translation>Gözləyir</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="260"/>
@@ -264,7 +264,7 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="263"/>
         <source>Later version installed: %1</source>
-        <translation>Sonrakı versiya quraşdırıldı</translation>
+        <translation>Sonrakı versiya quraşdırıldı: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="266"/>
@@ -319,11 +319,12 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
-        <translation>g</translation>
+        <translation>OK</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Geriyə</translation>
+        <translation>Geriyə</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -334,7 +335,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="850"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Later version installed: %1</source>
-        <translation>Sonrakı versiya quraşdırıldı</translation>
+        <translation>Sonrakı versiya quraşdırıldı: %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -367,7 +368,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
-        <translation>Versiya:</translation>
+        <translation>Versiya: </translation>
     </message>
     <message>
         <source>Install</source>
@@ -407,7 +408,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="738"/>
         <source>Uninstall Failed</source>
-        <translation>Silinə bilədi</translation>
+        <translation>Silinə bilmədi</translation>
     </message>
     <message>
         <source>Update</source>
@@ -418,11 +419,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Adı:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>İmtina</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>

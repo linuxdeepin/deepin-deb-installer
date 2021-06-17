@@ -322,8 +322,9 @@
         <translation>OK</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Takaisin</translation>
+        <translation>Takaisin</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -420,11 +421,6 @@
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>Peru</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Same version installed</source>
@@ -504,7 +500,7 @@ Järjestelmä tai muut sovellukset eivät välttämättä toimi oikein</translat
         <location filename="../src/deb_installer/main.cpp" line="66"/>
         <location filename="../src/deb_installer/main.cpp" line="67"/>
         <source>Package Installer</source>
-        <translation>Ohjelma-asentaja</translation>
+        <translation>Asentaja</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>

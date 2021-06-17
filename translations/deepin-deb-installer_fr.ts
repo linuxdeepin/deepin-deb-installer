@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="72"/>
         <source>Enter the number to configure: </source>
-        <translation>Entrer le numéro à configurer:</translation>
+        <translation>Entrer le numéro à configurer :</translation>
     </message>
     <message>
         <source>OK</source>
@@ -151,7 +151,7 @@
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="628"/>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="632"/>
         <source>Broken dependencies: %1</source>
-        <translation>Dépendances cassée: %1</translation>
+        <translation>Dépendances cassée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="130"/>
@@ -231,7 +231,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installation des dépendances: %1</translation>
+        <translation>Installation des dépendances : %1</translation>
     </message>
 </context>
 <context>
@@ -264,12 +264,12 @@
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="263"/>
         <source>Later version installed: %1</source>
-        <translation>Version ultérieure installée: %1</translation>
+        <translation>Version ultérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/model/packageslistdelegate.cpp" line="266"/>
         <source>Earlier version installed: %1</source>
-        <translation>Version antérieure installée: %1</translation>
+        <translation>Version antérieure installée : %1</translation>
     </message>
 </context>
 <context>
@@ -322,8 +322,9 @@
         <translation>OK</translation>
     </message>
     <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
         <source>Back</source>
-        <translation type="vanished">Précédent</translation>
+        <translation>Précédent</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -334,7 +335,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="850"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Later version installed: %1</source>
-        <translation>Version ultérieure installée: %1</translation>
+        <translation>Version ultérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="852"/>
@@ -346,7 +347,7 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="855"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1047"/>
         <source>Earlier version installed: %1</source>
-        <translation>Version antérieure installée: %1</translation>
+        <translation>Version antérieure installée : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="857"/>
@@ -357,7 +358,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installation des dépendances: %1</translation>
+        <translation>Installation des dépendances : %1</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1091"/>
@@ -367,7 +368,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
-        <translation>Version:</translation>
+        <translation>Version :</translation>
     </message>
     <message>
         <source>Install</source>
@@ -417,12 +418,7 @@
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
-        <translation>Nom:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -509,7 +505,7 @@ Le système ou d&apos;autres applications peuvent ne pas fonctionner correctemen
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Installateur de paquets aide les utilisateurs à installer et supprimer des paquets locaux et prend en charge l&apos;installation en bloc.</translation>
+        <translation>L&apos;installateur de paquets aide les utilisateurs à installer et à supprimer des paquets locaux, prend aussi en charge l&apos;installation multiple.</translation>
     </message>
 </context>
 </TS>

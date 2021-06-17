@@ -981,7 +981,7 @@ void DebListModel::showDigitalErrWindow()
 
     // 设置弹出窗口显示的信息
     Ddialog->setTitle(tr("Unable to install"));
-    Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
+    Ddialog->setMessage(QString(tr("No valid digital signature with this package")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
     Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
 
@@ -1083,7 +1083,7 @@ bool DebListModel::checkDigitalSignature()
         return true;
     case Utils::DebfileInexistence:                                                             //无签名文件
         qInfo() << "No signature file was found in the application";
-        showDigitalErrWindow(); //平板模式无需进入开发者模式，使用数字签名
+        showNoDigitalErrWindow(); //平板模式无需进入开发者模式，使用数字签名
         return false;
     case Utils::ExtractDebFail:
         showDigitalErrWindow();
