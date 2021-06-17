@@ -7,11 +7,6 @@
         <translation>Anna määritettävä numero:</translation>
     </message>
     <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -20,35 +15,23 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Package Installer</source>
-        <translation type="vanished">Ohjelma-asentaja</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="352"/>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="366"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="351"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="365"/>
         <source>The deb package may be broken</source>
         <translation>Paketti .deb voi olla rikki</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="369"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="368"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <source>You can only install local deb packages</source>
-        <translation type="vanished">Voit asentaa vain paikallisia deb-paketteja</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="394"/>
         <source>Already Added</source>
         <translation>Jo lisätty</translation>
     </message>
     <message>
-        <source>%1 does not exist, please reselect</source>
-        <translation type="vanished">%1 ei ole, valitse uudelleen</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="569"/>
         <source>Bulk Install</source>
         <translation>Suora-asennus</translation>
     </message>
@@ -84,8 +67,9 @@
         <translation>Virheellinen digitaalinen allekirjoitus</translation>
     </message>
     <message>
-        <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="vanished">Järjestelmänvalvoja on määrittänyt käytännöt estämään tämän paketin asentamisen</translation>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="973"/>
+        <source>No valid digital signature with this package</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="134"/>
@@ -103,47 +87,13 @@
         <translation>Asennusta ei voi tehdä - digitaalinen allekirjoitus puuttuu</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Ota kehittäjätila käyttöön Ohjauspaneelissa ja yritä uudelleen. Hyväksy?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Peru</translation>
-    </message>
-    <message>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="vanished">Hyväksy</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
-        <source>Cancel</source>
-        <translation>Peru</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
-        <source>Proceed</source>
-        <translation>Hyväksy</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="983"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="972"/>
         <source>Unable to install</source>
         <translation>Ei voi asentaa</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="927"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="975"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -195,26 +145,6 @@
         <translation>Peru</translation>
     </message>
     <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Pudotus</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Asenna</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Valmis</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Takaisin</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="265"/>
         <source>Install</source>
         <translation>Asenna</translation>
@@ -223,10 +153,6 @@
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="266"/>
         <source>Done</source>
         <translation>Valmis</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Takaisin</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
@@ -287,11 +213,6 @@
         <source>Collapse</source>
         <translation>Pudotus</translation>
     </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Pudotus</translation>
-    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -306,10 +227,6 @@
         <translation>Asenna</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation type="vanished">Poista</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1039"/>
@@ -320,11 +237,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Back</source>
-        <translation>Takaisin</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -356,7 +268,7 @@
         <translation>Päivitys</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Installing dependencies: %1</source>
         <translation>Riippuvuuksien asentaminen: %1</translation>
     </message>
@@ -369,31 +281,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
         <translation>Versio:</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Asenna</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <comment>button</comment>
-        <translation type="vanished">Poista</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Takaisin</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Valmis</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="722"/>
@@ -411,14 +298,14 @@
         <translation>Poisto epäonnistui</translation>
     </message>
     <message>
-        <source>Update</source>
-        <comment>button</comment>
-        <translation type="vanished">Päivitys</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Nimi:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
+        <source>Cancel</source>
+        <translation>Peru</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -465,16 +352,6 @@
         <translation>Peru</translation>
     </message>
     <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Pudotus</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Peru</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>
         <source>Confirm</source>
         <translation>Vahvista</translation>
@@ -500,7 +377,7 @@ Järjestelmä tai muut sovellukset eivät välttämättä toimi oikein</translat
         <location filename="../src/deb_installer/main.cpp" line="66"/>
         <location filename="../src/deb_installer/main.cpp" line="67"/>
         <source>Package Installer</source>
-        <translation>Asentaja</translation>
+        <translation>Ohjelma-asentaja</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/main.cpp" line="68"/>

@@ -7,11 +7,6 @@
         <translation>Zadejte číslo pro nastavení:</translation>
     </message>
     <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -20,35 +15,23 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Package Installer</source>
-        <translation type="vanished">Instalátor balíčků</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="352"/>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="366"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="351"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="365"/>
         <source>The deb package may be broken</source>
         <translation>Tento deb balíček může být poškozený</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="369"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="368"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="394"/>
         <source>Already Added</source>
         <translation>Už přidáno</translation>
     </message>
     <message>
-        <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="569"/>
         <source>Bulk Install</source>
         <translation>Hromadná instalace</translation>
     </message>
@@ -84,7 +67,8 @@
         <translation>Neplatný digitální podpis</translation>
     </message>
     <message>
-        <source>The administrator has set policies to prevent installation of this package</source>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="973"/>
+        <source>No valid digital signature with this package</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -103,47 +87,13 @@
         <translation>Nedaří se nainstalovat – chybí digitální podpis</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Přejděte do Ovládacích panelů, zde zapněte režim pro pro vývojáře a zkuste to znovu. Pokračovat?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Zrušit</translation>
-    </message>
-    <message>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="vanished">Pokračovat</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
-        <source>Cancel</source>
-        <translation>Zrušit</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
-        <source>Proceed</source>
-        <translation>Pokračovat</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="983"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="972"/>
         <source>Unable to install</source>
         <translation>Nelze nainstalovat</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation>Tento balíček nemá platný digitální podpis</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="927"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="975"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -195,26 +145,6 @@
         <translation>Zrušit</translation>
     </message>
     <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Sbalit</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Nainstalovat</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Hotovo</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Zpět</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="265"/>
         <source>Install</source>
         <translation>Nainstalovat</translation>
@@ -223,10 +153,6 @@
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="266"/>
         <source>Done</source>
         <translation>Hotovo</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Zpět</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
@@ -287,11 +213,6 @@
         <source>Collapse</source>
         <translation>Sbalit</translation>
     </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Sbalit</translation>
-    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -306,10 +227,6 @@
         <translation>Nainstalovat</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation type="vanished">Odebrat</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1039"/>
@@ -320,11 +237,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Back</source>
-        <translation>Zpět</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -356,7 +268,7 @@
         <translation>Aktualizovat</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Installing dependencies: %1</source>
         <translation>Instalují se součásti, na kterých závisí: %1</translation>
     </message>
@@ -369,31 +281,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
         <translation>Verze:</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Nainstalovat</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <comment>button</comment>
-        <translation type="vanished">Odebrat</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Zpět</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Hotovo</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="722"/>
@@ -411,14 +298,14 @@
         <translation>Odinstalace se nezdařila</translation>
     </message>
     <message>
-        <source>Update</source>
-        <comment>button</comment>
-        <translation type="vanished">Aktualizovat</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Název: </translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -463,16 +350,6 @@
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
-    </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Sbalit</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Zrušit</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>

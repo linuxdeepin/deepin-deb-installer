@@ -7,11 +7,6 @@
         <translation>विन्यास हेतु अंक दर्ज करें :</translation>
     </message>
     <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">ठीक है</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
         <translation>ठीक है</translation>
@@ -20,35 +15,23 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Package Installer</source>
-        <translation type="vanished">पैकेज इंस्टॉलर</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="352"/>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="366"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="351"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="365"/>
         <source>The deb package may be broken</source>
         <translation>संभवतः DEB पैकेज विकृत है </translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="369"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="368"/>
         <source>OK</source>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <source>You can only install local deb packages</source>
-        <translation type="vanished">केवल लोकल पैकेज इंस्टॉल करना संभव है</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="394"/>
         <source>Already Added</source>
         <translation>पहले से ही शामिल</translation>
     </message>
     <message>
-        <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="569"/>
         <source>Bulk Install</source>
         <translation>सामूहिक इंस्टॉल</translation>
     </message>
@@ -84,7 +67,8 @@
         <translation>अमान्य डिजिटल हस्ताक्षर</translation>
     </message>
     <message>
-        <source>The administrator has set policies to prevent installation of this package</source>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="973"/>
+        <source>No valid digital signature with this package</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -103,47 +87,13 @@
         <translation>इंस्टॉल विफल - कोई डिजिटल हस्ताक्षर नहीं</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>कृपया नियंत्रण केंद्र द्वारा विकासकर्ता मोड सक्रिय कर पुनः प्रयास करें। जारी रखें?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">रद्द करें</translation>
-    </message>
-    <message>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="vanished">जारी रखें</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">ठीक है</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
-        <source>Cancel</source>
-        <translation>रद्द करें</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
-        <source>Proceed</source>
-        <translation>जारी रखें</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="983"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="972"/>
         <source>Unable to install</source>
         <translation>इंस्टॉल करने में अक्षम</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation>इस पैकेज का डिजिटल हस्ताक्षर अमान्य है</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="927"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="975"/>
         <source>OK</source>
         <translation>ठीक है</translation>
     </message>
@@ -195,26 +145,6 @@
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">संक्षिप्त करें</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">इंस्टॉल करें</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">पूर्ण हुआ</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">वापस</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="265"/>
         <source>Install</source>
         <translation>इंस्टॉल करें</translation>
@@ -223,10 +153,6 @@
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="266"/>
         <source>Done</source>
         <translation>पूर्ण हुआ</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">वापस</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
@@ -287,11 +213,6 @@
         <source>Collapse</source>
         <translation>संक्षिप्त करें</translation>
     </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">संक्षिप्त करें</translation>
-    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -306,10 +227,6 @@
         <translation>इंस्टॉल करें</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation type="vanished">हटाएँ</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1039"/>
@@ -320,11 +237,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
         <translation>ठीक है</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Back</source>
-        <translation>वापस</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -356,7 +268,7 @@
         <translation>अपडेट</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Installing dependencies: %1</source>
         <translation>आश्रित पैकेज इंस्टॉल हो रहे हैं : %1</translation>
     </message>
@@ -369,31 +281,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
         <translation>संस्करण :</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">इंस्टॉल करें</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <comment>button</comment>
-        <translation type="vanished">हटाएँ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">ठीक है</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">वापस</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">पूर्ण हुआ</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="722"/>
@@ -411,14 +298,14 @@
         <translation>इंस्टॉल हटाना विफल रहा</translation>
     </message>
     <message>
-        <source>Update</source>
-        <comment>button</comment>
-        <translation type="vanished">अपडेट</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>नाम :</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
+        <source>Cancel</source>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -463,16 +350,6 @@
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
-    </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">संक्षिप्त करें</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">रद्द करें</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>

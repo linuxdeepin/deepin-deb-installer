@@ -7,11 +7,6 @@
         <translation>Inserisci il numero da configurare:</translation>
     </message>
     <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/AptConfigMessage.cpp" line="77"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -20,35 +15,23 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <source>Package Installer</source>
-        <translation type="vanished">Gestore pacchetti</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="352"/>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="366"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="351"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="365"/>
         <source>The deb package may be broken</source>
         <translation>Il pacchetto Deb potrebbe essere corrotto</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="369"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="368"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <source>You can only install local deb packages</source>
-        <translation type="vanished">Puoi installare solo pacchetti Deb locali</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="396"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="394"/>
         <source>Already Added</source>
         <translation>Già aggiunto</translation>
     </message>
     <message>
-        <source>%1 does not exist, please reselect</source>
-        <translation type="vanished">%1 non esiste, per cortesia riprova</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="571"/>
+        <location filename="../src/deb_installer/view/pages/debinstaller.cpp" line="569"/>
         <source>Bulk Install</source>
         <translation>Installazione di massa</translation>
     </message>
@@ -84,8 +67,9 @@
         <translation>Firma digitale non valida</translation>
     </message>
     <message>
-        <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="vanished">L&apos;Admin ha impostato una policy che nega la possibilità di installare il pacchetto in questione</translation>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="973"/>
+        <source>No valid digital signature with this package</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb_installer/model/deblistmodel.cpp" line="134"/>
@@ -103,47 +87,13 @@
         <translation>Installazione non riuscita - Nessuna firma digitale</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="925"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Per cortesia vai nel Centro di Controllo per abilitare le opzioni da sviluppatore e riprova. Procedere?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Annulla</translation>
-    </message>
-    <message>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="vanished">Procedi</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="928"/>
-        <source>Cancel</source>
-        <translation>Annulla</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="929"/>
-        <source>Proceed</source>
-        <translation>Procedi</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="983"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="972"/>
         <source>Unable to install</source>
         <translation>Impossibile installare</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="984"/>
-        <source>This package does not have a valid digital signature</source>
-        <translation>Questo pacchetto non ha una firma digitale valida</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="986"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="927"/>
+        <location filename="../src/deb_installer/model/deblistmodel.cpp" line="975"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -195,26 +145,6 @@
         <translation>Annulla</translation>
     </message>
     <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Collassa</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Installa</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Fatto</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Indietro</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="265"/>
         <source>Install</source>
         <translation>Installa</translation>
@@ -223,10 +153,6 @@
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="266"/>
         <source>Done</source>
         <translation>Fatto</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Indietro</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/multipleinstallpage.cpp" line="561"/>
@@ -287,11 +213,6 @@
         <source>Collapse</source>
         <translation>Collassa</translation>
     </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Collassa</translation>
-    </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
@@ -306,10 +227,6 @@
         <translation>Installa</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation type="vanished">Rimuovi</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="405"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="847"/>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="1039"/>
@@ -320,11 +237,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="409"/>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
-        <source>Back</source>
-        <translation>Indietro</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="413"/>
@@ -356,7 +268,7 @@
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="937"/>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Installing dependencies: %1</source>
         <translation>Installazione dipendenze: %1</translation>
     </message>
@@ -369,31 +281,6 @@
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Version: </source>
         <translation>Versione:</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <comment>button</comment>
-        <translation type="vanished">Installa</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <comment>button</comment>
-        <translation type="vanished">Rimuovi</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <comment>button</comment>
-        <translation type="vanished">Indietro</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <comment>button</comment>
-        <translation type="vanished">Fatto</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="722"/>
@@ -411,14 +298,14 @@
         <translation>Disinstallazione fallita</translation>
     </message>
     <message>
-        <source>Update</source>
-        <comment>button</comment>
-        <translation type="vanished">Aggiorna</translation>
-    </message>
-    <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="163"/>
         <source>Name: </source>
         <translation>Nome:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="401"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/singleinstallpage.cpp" line="846"/>
@@ -463,16 +350,6 @@
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="54"/>
         <source>Cancel</source>
         <translation>Annulla</translation>
-    </message>
-    <message>
-        <source>Collapse</source>
-        <comment>button</comment>
-        <translation type="vanished">Collassa</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <comment>button</comment>
-        <translation type="vanished">Annulla</translation>
     </message>
     <message>
         <location filename="../src/deb_installer/view/pages/uninstallconfirmpage.cpp" line="56"/>

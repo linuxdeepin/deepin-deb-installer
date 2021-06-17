@@ -921,12 +921,11 @@ void DebListModel::showNoDigitalErrWindow()
     DDialog *Ddialog = new DDialog();                   //弹出窗口
     Ddialog->setModal(true);
     Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);   //窗口一直置顶
-    Ddialog->setTitle(tr("Unable to install - no digital signature"));
-    Ddialog->setMessage(QString(tr("Please go to Control Center to enable developer mode and try again. Proceed?")));
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setMessage(QString(tr("Unable to install - no digital signature")));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
-    Ddialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);     //添加取消按钮
-    Ddialog->addButton(QString(tr("Proceed")), true, DDialog::ButtonRecommend);  //添加前往按钮
+    Ddialog->addButton(QString(tr("OK")), true, DDialog::ButtonNormal);
 
     QDesktopWidget *desk=QApplication::desktop();
     int wd=desk->width();
@@ -935,18 +934,9 @@ void DebListModel::showNoDigitalErrWindow()
 
     Ddialog->show();    //显示弹窗
 
-    //取消按钮
-    QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
-    connect(btnCancel, &DPushButton::clicked, this, [ = ] {
-        //跳过当前包，当前包的安装状态为失败，失败原因是无数字签名
-        digitalVerifyFailed(NoDigitalSignature);
-    });
-
-    //前往按钮
-    QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
+    //确定按钮
+    QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     connect(btnProceedControlCenter, &DPushButton::clicked, this, [ = ] {
-        //前往控制中心
-        showDevelopModeWindow();
         exit(0);
     });
 
