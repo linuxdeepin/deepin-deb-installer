@@ -884,6 +884,9 @@ void DebListModel::checkSystemVersion()
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
+#if(DTK_VERSION > DTK_VERSION_CHECK(5,4,10,0))
+    case Dtk::Core::DSysInfo::UosEducation:                     //教育版
+#endif
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
         QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
