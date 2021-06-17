@@ -224,6 +224,10 @@ bool model_package_isArchError(const int)
     return true;
 }
 
+bool model_package_isArchError1(const int)
+{
+    return false;
+}
 
 QString stub_readLink_empty()
 {
@@ -293,6 +297,16 @@ Utils::VerifyResultCode model_Digital_Verify2(QString )
     return Utils::ExtractDebFail;
 }
 
+Utils::VerifyResultCode model_Digital_Verify3(QString )
+{
+    return Utils::DebVerifyFail;
+}
+
+Utils::VerifyResultCode model_Digital_Verify4(QString )
+{
+    return Utils::OtherError;
+}
+
 
 void model_bumpInstallIndex()
 {
@@ -306,6 +320,11 @@ QApt::ErrorCode model_transaction_error()
 QApt::ExitStatus model_transaction_exitStatus()
 {
     return QApt::ExitFailed;
+}
+
+QApt::ExitStatus model_transaction_exitStatus1()
+{
+    return QApt::ExitSuccess;
 }
 
 QString model_transaction_errorString()
@@ -498,8 +517,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
 
     m_debListModel->m_packageOperateStatus[""] = 1;
     m_debListModel->data(index,268);
-
-
 }
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
 {
@@ -565,18 +582,50 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_installPackages)
     ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerProcessing);
 }
 
+Package *stub_model_packageWithArch(QString)
+{
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    QScopedPointer<Package> package(new Package(bac, packageIter));
+    return package.get();
+}
+
+void stub_setPurge()
+{
+    return;
+}
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage)
 {
     stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-
     QStringList list;
     list << "/";
+    m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
     m_debListModel->slotAppendPackage(list);
 
     m_debListModel->slotUninstallPackage(0);
     ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerProcessing);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage1)
+{
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
+//    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), stub_model_packageWithArch);
+    stub.set(ADDR(Package,setPurge),stub_setPurge);
+    QStringList list;
+    list << "/";
+    m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
+    m_debListModel->slotAppendPackage(list);
+
+    m_debListModel->slotUninstallPackage(0);
+    ASSERT_EQ(m_debListModel->m_workerStatus, DebListModel::WorkerProcessing);
+}
+
+bool ut_model_isBreak()
+{
+    return true;
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
@@ -586,6 +635,10 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
     m_debListModel->slotAppendPackage(list);
 
     ASSERT_STREQ(m_debListModel->packageFailedReason(0).toLocal8Bit(), "Unmatched package architecture");
+    Stub stub;
+    stub.set(ADDR(PackagesManager,isArchError),model_package_isArchError1);
+    stub.set(ADDR(PackageDependsStatus,isBreak),ut_model_isBreak);
+    m_debListModel->packageFailedReason(0);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
@@ -668,6 +721,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_02)
 
     m_debListModel->m_operatingIndex = 0;
     ASSERT_FALSE(m_debListModel->checkDigitalSignature());
+
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify3);
+    m_debListModel->checkDigitalSignature();
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify4);
+    m_debListModel->checkDigitalSignature();
 
 }
 void model_digitalVerifyFailed()
@@ -810,6 +868,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
     m_debListModel->m_packageMd5.append("test");
     m_debListModel->m_packageMd5.append("test1");
     m_debListModel->slotTransactionFinished();
+//    stub.set(ADDR(Transaction,exitStatus),model_transaction_exitStatus1);
+    m_debListModel->slotTransactionFinished();
+
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_refreshOperatingPackageStatus)
@@ -932,8 +993,16 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_workerErrorString)
 
 }
 
+const QList<QString> ut_preparedPackages()
+{
+    QList<QString> list;
+    list << "deb" << "rpm";
+    return list;
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_digitalVerifyFailed)
 {
+//    stub.set(ADDR(DebListModel,preparedPackages),ut_preparedPackages);
     m_debListModel->digitalVerifyFailed(DebListModel::ErrorCode::DigitalSignatureError);
 }
 
