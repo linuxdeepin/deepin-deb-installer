@@ -589,6 +589,7 @@ void DebInstaller::single2Multi()
  */
 void DebInstaller::refreshSingle()
 {
+    setWindowTitle(QString(""));
     //刷新页面之前先清除掉文件选择按钮的焦点，防止在文件选择按钮有焦点的时候添加包，焦点转移到其他控件
     m_fileChooseWidget->clearChooseFileBtnFocus();
 
