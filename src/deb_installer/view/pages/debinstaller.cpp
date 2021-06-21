@@ -56,17 +56,15 @@ using QApt::DebFile;
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-DebInstaller::DebInstaller()
-    : DDialog()
+DebInstaller::DebInstaller(QWidget *parent)
+    : DDialog(parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget)
     , m_centralLayout(new QStackedLayout())
     , m_dragflag(-1)
 {
-    this->setWindowFlag(Qt::Widget);
     initUI();
     initConnections();
-    this->setModal(true);
 }
 
 DebInstaller::~DebInstaller() {}

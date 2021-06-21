@@ -1,5 +1,6 @@
 #include "singleInstallerApplication.h"
 #include "view/pages/debinstaller.h"
+#include "view/pages/MainWindow.h"
 #include "utils/DebugTimeManager.h"
 
 #include <DWidgetUtil>
@@ -54,9 +55,9 @@ void SingleInstallerApplication::activateWindow()
     qDebug() << "Active quick install window to install file:" << m_selectedFiles << m_selectedFiles.size();
 
     if (nullptr == m_qspMainWnd.get()) {
-        m_qspMainWnd.reset(new DebInstaller());
+        m_qspMainWnd.reset(new MainWindow());
 //        Dtk::Widget::moveToCenter(m_qspMainWnd.get());
-        m_qspMainWnd.get()->moveToCenter();
+//        m_qspMainWnd.get()->moveToCenter();
 
         m_qspMainWnd->show();
     } else {

@@ -51,8 +51,15 @@ class DebInstaller : public Dtk::Widget::DDialog
     Q_OBJECT
 
 public:
-    DebInstaller();
+    DebInstaller(QWidget *parent = nullptr);
     virtual ~DebInstaller() Q_DECL_OVERRIDE;
+public slots:
+    /**
+     * @brief onPackagesSelected
+     * @param packages 安装的包的全路径的列表
+     * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
+     */
+    void onPackagesSelected(const QStringList &packages);
 
 protected:
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;           //按键事件
@@ -61,12 +68,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;      //拖进事件
 
 private slots:
-    /**
-     * @brief onPackagesSelected
-     * @param packages 安装的包的全路径的列表
-     * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
-     */
-    void onPackagesSelected(const QStringList &packages);
+
 
     /**
      * @brief showInvalidePackageMessage 弹出无效包的消息通知

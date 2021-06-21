@@ -28,7 +28,7 @@ public slots:
 private:
     QStringList m_selectedFiles;
 
-    QScopedPointer<DDialog> m_qspMainWnd;  // MainWindow ptr
+    QScopedPointer<QWidget> m_qspMainWnd;  // MainWindow ptr
 };
 
 #endif // SINGLEFONTAPPLICATION_H
