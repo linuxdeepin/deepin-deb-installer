@@ -373,11 +373,15 @@ void DebInstaller::showInvalidePackageMessage_tablet()
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
     //判断当前应用内包的数量，如果为0则隐藏且点击OK后退出，如果不为0则点击ok后关闭弹窗
-    if (m_fileListModel->getInstallFileSize() == 0) {
         //若应用内无包，点击弹出窗口的确定按钮退出应用
-        connect(btnOK, &DPushButton::clicked, qApp, [ = ] { qApp->quit(); });
-        connect(Ddialog, &DDialog::aboutToClose, qApp,  [ = ] { qApp->quit(); });
-    }
+    connect(btnOK, &DPushButton::clicked, qApp, [ = ] {
+         if (m_fileListModel->preparedPackages().size() == 0)
+             qApp->quit();
+    });
+    connect(Ddialog, &DDialog::aboutToClose, qApp,  [ = ] {
+         if(m_fileListModel->preparedPackages().size() == 0)
+             qApp->quit();
+    });
     this->showNormal();
     this->activateWindow();
 }
