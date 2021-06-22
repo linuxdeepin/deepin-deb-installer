@@ -936,9 +936,10 @@ void DebListModel::showNoDigitalErrWindow()
 
     //确定按钮
     QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(0));
-    connect(btnProceedControlCenter, &DPushButton::clicked, this, [ = ] {
-        exit(0);
-    });
+        connect(btnProceedControlCenter, &DPushButton::clicked, this, [ = ] {
+            digitalVerifyFailed(NoDigitalSignature);
+        });
+
 
     //关闭图标
     connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
