@@ -29,5 +29,11 @@ TEST(DebInfoLabel_TEST, DebInfoLabel_UT_setCustomQPalette)
     label->setCustomDPalette(DPalette::TextLively);
     QPaintEvent paint(QRect(label->rect()));
     label->paintEvent(&paint);
+    label->m_bMultiIns = true;
+    QPaintEvent paint1(QRect(label->rect()));
+    label->paintEvent(&paint1);
+    label->m_bUserColorType = false;
+    QPaintEvent paint2(QRect(label->rect()));
+    label->paintEvent(&paint2);
     delete label;
 }

@@ -273,3 +273,58 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     page->DealDependResult(6, "test");
     page->DealDependResult(0, "test");
 }
+
+TEST_F(SingleInstallpage_UT, initTabOrder_UT)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), stud_singleinit);
+    stub.set(ADDR(DebFile, packageName), stud_singlepackageName);
+    stub.set(ADDR(DebFile, version), stud_singleversion);
+    stub.set(ADDR(DebFile, longDescription), stud_singlelongDescription);
+    stub.set(ADDR(DebFile, filePath), stud_singlefilePath);
+    stub.set(ADDR(DebFile, architecture), stud_singlearchitecture);
+    stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(QModelIndex, data), stu_data);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
+    model = new DebListModel();
+    usleep(100 * 1000);
+    model->m_packagesManager->m_preparedPackages.append("test");
+    model->m_packagesManager->m_preparedPackages.append("test1");
+    page = new SingleInstallPage(model);
+    usleep(100 * 1000);
+
+    page->m_installButton->setVisible(true);
+    page->m_backButton->setVisible(true);
+    page->m_uninstallButton->setVisible(true);
+    page->initTabOrder();
+}
+
+TEST_F(SingleInstallpage_UT, paintEvent_UT)
+{
+    Stub stub;
+    stub.set(ADDR(Backend, init), stud_singleinit);
+    stub.set(ADDR(DebFile, packageName), stud_singlepackageName);
+    stub.set(ADDR(DebFile, version), stud_singleversion);
+    stub.set(ADDR(DebFile, longDescription), stud_singlelongDescription);
+    stub.set(ADDR(DebFile, filePath), stud_singlefilePath);
+    stub.set(ADDR(DebFile, architecture), stud_singlearchitecture);
+    stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
+    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set(ADDR(QModelIndex, data), stu_data);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
+    model = new DebListModel();
+    usleep(100 * 1000);
+    model->m_packagesManager->m_preparedPackages.append("test");
+    model->m_packagesManager->m_preparedPackages.append("test1");
+    page = new SingleInstallPage(model);
+    usleep(100 * 1000);
+    QPaintEvent paint(QRect(page->rect()));
+    page->paintEvent(&paint);
+}

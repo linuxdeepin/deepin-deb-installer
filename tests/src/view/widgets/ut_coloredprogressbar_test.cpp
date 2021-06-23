@@ -46,8 +46,17 @@ protected:
     ColoredProgressBar *m_colorProcessBar = nullptr;
 };
 
+DApplicationHelper::ColorType ut_themeType()
+{
+    return DApplicationHelper::DarkType;
+}
+
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged)
 {
+    m_colorProcessBar->themeChanged();
+
+    Stub stub;
+    stub.set(ADDR(DApplicationHelper,themeType),ut_themeType);
     m_colorProcessBar->themeChanged();
 }
 
