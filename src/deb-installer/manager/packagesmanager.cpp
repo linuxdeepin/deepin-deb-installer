@@ -516,7 +516,6 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 
     //修复可能某些包无法package的错误，如果遇到此类包，返回安装版本为空
     if (package){
-        package = nullptr;
         return package->installedVersion();   //能正常打包，返回包的安装版本
     }
     else
