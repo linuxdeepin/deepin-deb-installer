@@ -88,6 +88,7 @@ TEST_F(MultipleInstallPage_UT, total_UT)
     multiplepage->slotHideInfo();
     multiplepage->afterGetAutherFalse();
 
+    multiplepage->DealDependResult(0, "test");
     multiplepage->DealDependResult(2, "test");
     multiplepage->DealDependResult(3, "test");
     multiplepage->DealDependResult(4, "test");

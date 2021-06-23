@@ -242,9 +242,16 @@ TEST_F(Debinstaller_UT, keyPressEvent_UT)
     QCoreApplication::sendEvent(deb, &keyPressEvent);
 }
 
+bool ut_hasUrls()
+{
+    return true;
+}
+
 TEST_F(Debinstaller_UT, dragEnterEvent_UT)
 {
     QMimeData *mimeData = new QMimeData;
+    Stub stub;
+    stub.set(ADDR(QMimeData,hasUrls),ut_hasUrls);
     QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &enterEvent);
     delete  mimeData;
