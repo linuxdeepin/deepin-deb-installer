@@ -52,3 +52,9 @@ TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_clearText)
 {
     m_infoView->clearText();
 }
+
+TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent)
+{
+    QPaintEvent paint(QRect(m_infoView->rect()));
+    m_infoView->paintEvent(&paint);
+}
