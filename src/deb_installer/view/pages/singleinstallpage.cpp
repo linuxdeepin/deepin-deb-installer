@@ -226,7 +226,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *pkgNameValueLayout = new QVBoxLayout();        //实际获取到包名
     pkgNameValueLayout->setSpacing(0);                              //设置控件间距
     pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
-    pkgNameValueLayout->addSpacing(4 + 4);                          //增加空间
+    pkgNameValueLayout->addSpacing(4);                          //增加空间
     pkgNameValueLayout->addWidget(m_packageName);                   //添加控件
 
     QHBoxLayout *pkgNameLayout = new QHBoxLayout();             //包名的控件布局
