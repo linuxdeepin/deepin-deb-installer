@@ -308,10 +308,8 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     }
     //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget){
-        widget->showNormal();
+    if(widget)
         widget->activateWindow();
-    }
     qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
@@ -342,10 +340,8 @@ void DebInstaller::refreshMulti()
 
     //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget){
-        widget->showNormal();
+    if(widget)
         widget->activateWindow();
-    }
 }
 
 /**
@@ -393,10 +389,8 @@ void DebInstaller::showInvalidePackageMessage_tablet()
     });
     //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget){
-        widget->showNormal();
+    if(widget)
         widget->activateWindow();
-    }
 }
 
 /**
@@ -628,12 +622,10 @@ void DebInstaller::refreshSingle()
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
 
-    //单包安装刷新显示 修改父窗口为激活窗口
+    //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget){
-        widget->showNormal();
+    if(widget)
         widget->activateWindow();
-    }
 }
 
 /**
@@ -681,10 +673,8 @@ void DebInstaller::setEnableButton(bool bEnable)
 {
     if (bEnable) {
         QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-        if(widget){
-            widget->showNormal();
+        if(widget)
             widget->activateWindow();
-        }
     }
     //如果正在添加包，则启用按钮
     if (packageAppending)
@@ -706,10 +696,8 @@ void DebInstaller::setEnableButton(bool bEnable)
 void DebInstaller::showHiddenButton()
 {
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget){
-        widget->showNormal();
+    if(widget)
         widget->activateWindow();
-    }
     m_fileListModel->reset_filestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (m_dragflag == 2) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);

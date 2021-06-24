@@ -21,7 +21,7 @@
 #include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
-  ,m_mainWindow(new DebInstaller(this))
+  ,m_mainWindow(new DebInstaller())
 {
     initUI();
 }
@@ -35,7 +35,6 @@ void MainWindow::initUI()
 {
      setWindowFlags(Qt::FramelessWindowHint);
      setAttribute(Qt::WA_TranslucentBackground);
-     setAutoFillBackground(true);
      QGridLayout *mainLayout = new QGridLayout;
      mainLayout->addWidget(m_mainWindow);
      this->setLayout(mainLayout);
