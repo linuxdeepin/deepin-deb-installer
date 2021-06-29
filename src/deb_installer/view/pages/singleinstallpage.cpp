@@ -753,8 +753,6 @@ void SingleInstallPage::onWorkerFinished()
  */
 void SingleInstallPage::onWorkerProgressChanged(const int progress)
 {
-    this->showNormal();
-    this->activateWindow();
     if (progress < m_progress->value()) {       //进度不后退
         return;
     }

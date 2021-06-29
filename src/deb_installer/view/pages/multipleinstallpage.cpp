@@ -416,8 +416,6 @@ void MultipleInstallPage::onOutputAvailable(const QString &output)
  */
 void MultipleInstallPage::onProgressChanged(const int progress)
 {
-    this->showNormal();
-    this->activateWindow();
     m_progressAnimation->setStartValue(m_installProgress->value()); //设置动画开始的进度
     m_progressAnimation->setEndValue(progress);                     //设置进度条动画结束的进度
     m_progressAnimation->start();                                   //开始动画
