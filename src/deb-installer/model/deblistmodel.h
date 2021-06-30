@@ -24,13 +24,13 @@
 #include <QApt/Transaction>
 
 #include <DSysInfo>
+#include <DPushButton>
 
 #include <QAbstractListModel>
 #include <QFuture>
 #include <QPointer>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include <DPushButton>
 #include <QProcess>
 
 class PackagesManager;
@@ -171,7 +171,7 @@ public:
      * 重置包的操作状态
      * 清空安装错误原因的缓存
      */
-    void resetFilestatus();
+    void resetFileStatus();
 
     /**
      * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
@@ -539,7 +539,7 @@ private:
      * @brief refreshOperatingPackageStatus 刷新当前操作的包的操作状态
      * @param oprationStatus  要修改的操作状态
      */
-    void refreshOperatingPackageStatus(const PackageOperationStatus oprationStatus);
+    void refreshOperatingPackageStatus(PackageOperationStatus oprationStatus);
 
     /**
      * @brief packageFailedReason  获取包安装失败的原因
@@ -635,7 +635,7 @@ private:
      * 
      * @param packagesMD5 所有包的md5的列表
      */
-    void getPackageMd5(QList<QByteArray> packagesMD5);
+    void getPackageMd5(const QList<QByteArray> &packagesMD5);
 
 //// 文件移动、删除、修改检查
 private:

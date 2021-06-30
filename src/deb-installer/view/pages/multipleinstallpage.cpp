@@ -22,12 +22,12 @@
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
 
+#include <DLabel>
+
 #include <QApplication>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QVBoxLayout>
-
-#include <DLabel>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
@@ -376,7 +376,8 @@ void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 
 void MultipleInstallPage::slotRequestRemoveItemClicked(const QModelIndex &index)
 {
-    if (!m_debListModel->isWorkerPrepare()) return;     //当前未处于准备阶段，不允许删除
+    if (!m_debListModel->isWorkerPrepare())
+        return;     //当前未处于准备阶段，不允许删除
 
     const int row = index.row();                          //要删除的包的下标转换
 
