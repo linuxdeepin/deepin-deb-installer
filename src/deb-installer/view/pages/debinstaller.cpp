@@ -410,7 +410,7 @@ void DebInstaller::MulRefreshPage()
 void DebInstaller::single2Multi()
 {
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->resetFilestatus();
+    m_fileListModel->resetFileStatus();
     m_fileListModel->initPrepareStatus();
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
 
@@ -436,7 +436,7 @@ void DebInstaller::refreshSingle()
     m_fileChooseWidget->clearChooseFileBtnFocus();
 
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->resetFilestatus();
+    m_fileListModel->resetFileStatus();
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
@@ -506,7 +506,7 @@ void DebInstaller::slotSetEnableButton(bool bButtonEnabled)
 void DebInstaller::slotShowHiddenButton()
 {
     enableCloseAndExit();
-    m_fileListModel->resetFilestatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
+    m_fileListModel->resetFileStatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
     if (2 == m_dragflag) {// 单包安装显示按钮
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         if (singlePage)
@@ -536,7 +536,7 @@ void DebInstaller::slotDealDependResult(int authDependsStatus, QString dependNam
     }
 
     if (authDependsStatus == DebListModel::AuthDependsSuccess) { //依赖下载成功
-        m_fileListModel->resetFilestatus();//清除包的状态和包的错误原因
+        m_fileListModel->resetFileStatus();//清除包的状态和包的错误原因
         m_fileListModel->initPrepareStatus();//重置包的prepare状态。
     }
     if (authDependsStatus == DebListModel::AuthBefore) {     //授权框弹出时
