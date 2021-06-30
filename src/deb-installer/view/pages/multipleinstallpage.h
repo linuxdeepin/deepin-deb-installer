@@ -22,13 +22,13 @@
 #include "view/widgets/droundbgframe.h"
 #include "view/widgets/installprocessinfoview.h"
 
-#include <QPropertyAnimation>
-#include <QWidget>
-
 #include <DPushButton>
 #include <DProgressBar>
 #include <DSpinner>
 #include <DCommandLinkButton>
+
+#include <QPropertyAnimation>
+#include <QWidget>
 
 class PackagesListView;
 class DebListModel;

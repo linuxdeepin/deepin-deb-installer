@@ -437,7 +437,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
 {
 
     m_debListModel->m_packageOperateStatus[0] = 1;
-    m_debListModel->resetFilestatus();
+    m_debListModel->resetFileStatus();
     ASSERT_TRUE(m_debListModel->m_packageOperateStatus.isEmpty());
 }
 

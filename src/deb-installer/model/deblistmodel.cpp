@@ -21,6 +21,10 @@
 #include "view/pages/AptConfigMessage.h"
 #include "utils/utils.h"
 
+
+#include <DDialog>
+#include <DSysInfo>
+
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -28,9 +32,6 @@
 #include <QFutureWatcher>
 #include <QSize>
 #include <QtConcurrent>
-
-#include <DDialog>
-#include <DSysInfo>
 
 #include <QApt/Backend>
 #include <QApt/Package>
@@ -75,7 +76,8 @@ bool DebListModel::isDpkgRunning()
     const QString processOutput = proc.readAllStandardOutput();
 
     // 查看进程信息中是否存在dpkg 存在说明已经正在安装其他包
-    if (processOutput.contains("dpkg")) return true;   //更换判断的方式
+    if (processOutput.contains("dpkg"))
+        return true;   //更换判断的方式
 
     return false;
 }
@@ -325,7 +327,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return QSize(0, 48);
 
     default:
-        ;
+        break;
     }
 
     return QVariant();
@@ -334,7 +336,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 
 void DebListModel::slotInstallPackages()
 {
-    if (m_workerStatus != WorkerPrepare) return;
+    if (m_workerStatus != WorkerPrepare)
+        return;
 
     m_workerStatus = WorkerProcessing;                                  //刷新包安装器的工作状态
     m_operatingIndex = 0;                                               //初始化当前操作的index
@@ -438,7 +441,7 @@ void DebListModel::slotTransactionStatusChanged(TransactionStatus transactionSta
         emit signalLockForAuth(false);                            //设置底层窗口按钮可用
         break;
     default:
-        ;
+        break;
     }
 }
 
@@ -460,7 +463,7 @@ int DebListModel::getInstallFileSize()
     return m_packagesManager->m_preparedPackages.size();
 }
 
-void DebListModel::resetFilestatus()
+void DebListModel::resetFileStatus()
 {
     m_packageOperateStatus.clear();                     //重置包的操作状态
     m_packageFailReason.clear();                        //重置包的错误状态
@@ -530,7 +533,7 @@ void DebListModel::slotTransactionErrorOccurred()
     transaction->setProperty("exitStatus", QApt::ExitFailed);                             //设置trans的退出状态为 失败
 }
 
-void DebListModel::refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus operationStatus)
+void DebListModel::refreshOperatingPackageStatus(PackageOperationStatus operationStatus)
 {
     m_packageOperateStatus[m_operatingPackageMd5] = operationStatus;  //将失败包的索引和状态修改保存,用于更新
 
@@ -1225,7 +1228,7 @@ bool DebListModel::recheckPackagePath(QString packagePath) const
     return false;
 }
 
-void DebListModel::getPackageMd5(QList<QByteArray> packagesMD5)
+void DebListModel::getPackageMd5(const QList<QByteArray> &packagesMD5)
 {
     m_packageMd5.clear();
     m_packageMd5 = packagesMD5;
