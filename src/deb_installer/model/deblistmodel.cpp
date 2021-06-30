@@ -967,6 +967,9 @@ bool DebListModel::checkSystemVersion()
  */
 bool DebListModel::checkDigitalSignature()
 {
+    const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex);              //获取包的依赖状态
+    if (stat.isBreak() || stat.isAuthCancel())
+        return true;
     if (m_isVerifyDigital)
         return true;
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
@@ -995,7 +998,7 @@ void DebListModel::installNextDeb()
         return ;
     }
     if (!checkDigitalSignature()) {     //非开发者模式且数字签名验证失败
-        showNoDigitalErrWindow();                               //演出错误窗口
+        showNoDigitalErrWindow();                               //提示错误窗口
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         QStringList strFilePath;
