@@ -65,6 +65,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 {
     initUI();
     initConnections();
+    setModal(true);
 }
 
 DebInstaller::~DebInstaller() {}
@@ -192,7 +193,6 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
 {
     Q_UNUSED(pid)
     qDebug() << "onNewAppOpen: pid:" << pid << ", arguments:" << arguments;
-
     QStringList debFileList;                                    //保存deb包的路径
     for (int i = 0; i < arguments.size(); i++) {
         QString strArg = arguments.at(i);                       //某个deb包
@@ -206,9 +206,10 @@ void DebInstaller::onNewAppOpen(qint64 pid, const QStringList &arguments)
     if (debFileList.size() > 0) {
         onPackagesSelected(debFileList);                        //添加到安装器中
     }
-
-    this->setWindowState(Qt::WindowActive);                     //激活窗口
-    this->activateWindow();
+    //修改父窗口为激活窗口
+    QWidget *widget = dynamic_cast<QWidget *>(this->parent());
+    if(widget)
+        widget->activateWindow();
 }
 
 /**
@@ -302,14 +303,15 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *e)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    //根据不同的包的数量开启不同的记录点
-    if (packages.size() > 1) {             //单包安装记录当前包的大小
-        PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
-    }
     //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
     if(widget)
         widget->activateWindow();
+
+    //根据不同的包的数量开启不同的记录点
+    if (packages.size() > 1) {             //单包安装记录当前包的大小
+        PERF_PRINT_BEGIN("POINT-06", QString::number(packages.size()));
+    }
     qDebug() << "DebInstaller:" << packages.size() << "packages have been selected";
 
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成，则不添加
@@ -334,14 +336,13 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
  */
 void DebInstaller::refreshMulti()
 {
-    qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
-    m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
-    MulRefreshPage();
-
     //修改父窗口为激活窗口
     QWidget *widget = dynamic_cast<QWidget *>(this->parent());
     if(widget)
         widget->activateWindow();
+    qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
+    m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
+    MulRefreshPage();
 }
 
 /**
@@ -598,6 +599,10 @@ void DebInstaller::single2Multi()
  */
 void DebInstaller::refreshSingle()
 {
+    //修改父窗口为激活窗口
+    QWidget *widget = dynamic_cast<QWidget *>(this->parent());
+    if(widget)
+        widget->activateWindow();
     setWindowTitle(QString(""));
     //刷新页面之前先清除掉文件选择按钮的焦点，防止在文件选择按钮有焦点的时候添加包，焦点转移到其他控件
     m_fileChooseWidget->clearChooseFileBtnFocus();
@@ -621,11 +626,6 @@ void DebInstaller::refreshSingle()
     m_Filterflag = 2;
     // switch to new page.
     m_centralLayout->setCurrentIndex(1);
-
-    //修改父窗口为激活窗口
-    QWidget *widget = dynamic_cast<QWidget *>(this->parent());
-    if(widget)
-        widget->activateWindow();
 }
 
 /**

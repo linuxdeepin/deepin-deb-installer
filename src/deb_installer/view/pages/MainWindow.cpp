@@ -21,7 +21,7 @@
 #include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
-  ,m_mainWindow(new DebInstaller())
+  ,m_mainWindow(new DebInstaller(this))
 {
     initUI();
 }
