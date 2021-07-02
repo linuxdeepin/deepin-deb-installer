@@ -17,6 +17,9 @@
 
 #include "../deb-installer/view/widgets/installprocessinfoview.h"
 #include "../deb-installer/view/widgets/ShowInstallInfoTextEdit.h"
+
+#include <DGuiApplicationHelper>
+
 #include <stub.h>
 
 #include <gtest/gtest.h>
@@ -53,8 +56,26 @@ TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_clearText)
     m_infoView->clearText();
 }
 
+DGuiApplicationHelper::ColorType ut_view_themeType()
+{
+    return DGuiApplicationHelper::DarkType;
+}
+
+DGuiApplicationHelper::ColorType ut_view_themeType1()
+{
+    return DGuiApplicationHelper::UnknownType;
+}
+
 TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent)
 {
     QPaintEvent paint(QRect(m_infoView->rect()));
     m_infoView->paintEvent(&paint);
+    Stub stub;
+    stub.set(ADDR(DGuiApplicationHelper,themeType),ut_view_themeType);
+    QPaintEvent paint1(QRect(m_infoView->rect()));
+    m_infoView->paintEvent(&paint1);
+    Stub stub1;
+    stub1.set(ADDR(DGuiApplicationHelper,themeType),ut_view_themeType1);
+    QPaintEvent paint2(QRect(m_infoView->rect()));
+    m_infoView->paintEvent(&paint2);
 }
