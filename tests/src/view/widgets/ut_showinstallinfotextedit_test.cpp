@@ -49,11 +49,18 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_slideGesture)
     m_infoTextEdit->slideGesture(5);
 }
 
+QString ut_selectedText()
+{
+    return "//";
+}
+
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_onSelectionArea)
 {
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
-    QTextCursor cursor = m_infoTextEdit->textCursor();
-    cursor.selectedText() = "//";
+//    QTextCursor cursor = m_infoTextEdit->textCursor();
+//    cursor.selectedText() = "//";
+    Stub stub;
+    stub.set(ADDR(QTextCursor,selectedText),ut_selectedText);
     m_infoTextEdit->onSelectionArea();
 }
 
@@ -99,7 +106,8 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
 {
-    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0),QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,Qt::MouseEventSynthesizedByQt);
+    m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     m_infoTextEdit->mouseReleaseEvent(&releaseEvent);
 }
 
