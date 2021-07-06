@@ -34,6 +34,7 @@
 #include <DMessageManager>
 #include <DTitlebar>
 #include <DGuiApplicationHelper>
+#include <DBlurEffectWidget>
 
 #include <QAction>
 #include <QDebug>
@@ -84,9 +85,10 @@ void DebInstaller::initUI()
 
     setFixedSize(480, 380);
 
-    DWidget *mainWidget = new DWidget(this);
-    mainWidget->setGeometry(0, 0, this->width(), this->height());
-    mainWidget->setAutoFillBackground(true);
+    DBlurEffectWidget *widget = findChild<DBlurEffectWidget *>();
+    widget->lower();
+    widget->setBlurEnabled(false);
+    setAttribute(Qt::WA_NoSystemBackground, false);
 
     //file choose widget settings
     m_fileChooseWidget->setObjectName("FileChooseWidget");
