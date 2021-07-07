@@ -60,6 +60,8 @@ QFont Utils::loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontW
 
 void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight)
 {
+    if (nullptr == widget)
+        return;
     QFont font = loadFontBySizeAndWeight(fontFamily, fontSize, fontWeight);
     widget->setFont(font);
 
@@ -305,7 +307,9 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const int &wid
 
 DebApplicationHelper *DebApplicationHelper::instance()
 {
-    return qobject_cast<DebApplicationHelper *>(DGuiApplicationHelper::instance());
+    static DebApplicationHelper *phelper = new DebApplicationHelper;
+
+    return phelper;
 }
 
 #define CAST_INT static_cast<int>
@@ -434,12 +438,16 @@ DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &ba
 void DebApplicationHelper::setPalette(QWidget *widget, const DPalette &palette)
 {
     // 记录此控件被设置过palette
+    if (nullptr == widget)
+        return;
     widget->setProperty("_d_set_palette", true);
     widget->setPalette(palette);
 }
 
 void DebApplicationHelper::resetPalette(QWidget *widget)
 {
+    if (nullptr == widget)
+        return;
     widget->setProperty("_d_set_palette", QVariant());
     widget->setAttribute(Qt::WA_SetPalette, false);
 }

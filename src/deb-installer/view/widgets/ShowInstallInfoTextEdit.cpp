@@ -64,6 +64,8 @@ bool ShowInstallInfoTextEdit::gestureEvent(QGestureEvent *event)
 
 void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
 {
+    if (nullptr == tap)
+        return;
     this->clearFocus();
     //单指点击函数
     switch (tap->state()) {             //根据点击的状态进行不同的操作
@@ -100,6 +102,8 @@ void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
 
 void ShowInstallInfoTextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
 {
+    if (nullptr == tapAndHold)
+        return;
     //单指长按
     switch (tapAndHold->state()) {
     case Qt::GestureStarted:
