@@ -324,6 +324,8 @@ void DebInstaller::slotUninstallAccepted()
 {
     // uninstall begin
     SingleInstallPage *singlePage = backToSinglePage();                                                  // 获取单包安装界面(卸载页面其实也是单包安装页面的一种)
+    if (nullptr == singlePage)
+        return;
     m_fileChooseWidget->setAcceptDrops(true);                                                   // 设置文件选择界面可以拖入包
     singlePage->slotUninstallCurrentPackage();                                                               // 显示正在卸载页面
 
@@ -463,6 +465,8 @@ SingleInstallPage *DebInstaller::backToSinglePage()
 {
     // 获取当前的页面并删除
     QWidget *confirmPage = m_centralLayout->widget(2);
+    if (nullptr == confirmPage)
+        return nullptr;
     m_centralLayout->removeWidget(confirmPage);
     confirmPage->deleteLater();
 

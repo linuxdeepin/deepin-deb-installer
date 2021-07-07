@@ -37,7 +37,7 @@ PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemV
     , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
     , m_parentView(parent)
 {
-    qApp->installEventFilter(this);                     //事件筛选
+    qGuiApp->installEventFilter(this); //事件筛选
 
     m_itemHeight = 50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font()));
     if (DFontSizeManager::fontPixelSize(qGuiApp->font()) > 13) { //当前字体大小是否小于13

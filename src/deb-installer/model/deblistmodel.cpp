@@ -496,8 +496,9 @@ void DebListModel::slotTransactionErrorOccurred()
     if(WorkerProcessing != m_workerStatus){
         qWarning()<<"installer status error";
     }
-    Transaction *transaction = static_cast<Transaction *>(sender());
-
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if(!transaction)
+        return;
     //失败时刷新操作状态为failed,并记录失败原因
     refreshOperatingPackageStatus(Failed);
     m_packageOperateStatus[m_operatingPackageMd5] = Failed;
@@ -575,8 +576,10 @@ void DebListModel::slotTransactionFinished()
     if (m_workerStatus == WorkerProcessing) {
         qWarning() << "installer status error";
     }
-    Transaction *transaction = static_cast<Transaction *>(sender());                              // 获取trans指针
-
+    // 获取trans指针
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if(!transaction)
+       return;
     // prevent next signal
     disconnect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);  //不再接收trans结束的信号
 
@@ -621,7 +624,9 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
     if (m_workerStatus == WorkerProcessing) {
         qWarning() << "installer status error";
     }
-    Transaction *transaction = static_cast<Transaction *>(sender());                                  //获取transaction指针
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if(!transaction)
+       return;
 
     const auto transExitStatus = transaction->exitStatus();
 
@@ -1010,7 +1015,9 @@ void DebListModel::slotTransactionOutput()
     if (m_workerStatus == WorkerProcessing) {
         qInfo() << "installer status error";
     }
-    Transaction *trans = static_cast<Transaction *>(sender());
+    Transaction *trans = qobject_cast<Transaction *>(sender());
+    if (!trans)
+        return;
 
     refreshOperatingPackageStatus(Operating);                       //刷新当前包的操作状态
 
@@ -1026,8 +1033,10 @@ void DebListModel::slotUninstallFinished()
 
     //增加卸载失败的情况
     //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
-    Transaction *trans = static_cast<Transaction *>(sender());
-    
+    Transaction *trans = qobject_cast<Transaction *>(sender());
+    if (!trans)
+        return;
+
     if (trans->exitStatus()) {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
@@ -1120,6 +1129,8 @@ void DebListModel::slotUpWrongStatusRow()
 
 void DebListModel::slotConfigInstallFinish(int installResult)
 {
+    if (m_packagesManager->m_preparedPackages.size() == 0)
+        return;
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size()); //批量安装时对进度进行处理
     emit signalWorkerProgressChanged(progressValue);
     if (0 == installResult) {        //安装成功

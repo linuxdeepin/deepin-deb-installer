@@ -62,7 +62,12 @@ void InstallProcessInfoView::initUI(int w, int h)
     Utils::bindFontBySizeAndWeight(m_editor, textFont, 11, QFont::Light);
 
     // 设置字体颜色
-    DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
+    DebApplicationHelper *pdebhelp = DebApplicationHelper::instance();
+    if (nullptr == pdebhelp) {
+        return;
+    }
+
+    DPalette pa = pdebhelp->palette(m_editor);
     m_colorType = DPalette::TextTips;
     pa.setColor(DPalette::Text, pa.color(m_colorType));
     m_editor->setPalette(pa);
