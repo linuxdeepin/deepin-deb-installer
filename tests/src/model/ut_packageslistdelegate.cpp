@@ -131,6 +131,8 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatu
     QPainter painter(m_listview);
     m_delegate->refreshDebItemStatus(1, QRect(0, 0, 10, 10), &painter, true, true);
     m_delegate->refreshDebItemStatus(2, QRect(0, 0, 10, 10), &painter, true, true);
+    m_delegate->refreshDebItemStatus(4, QRect(0, 0, 10, 10), &painter, true, true);
+    m_delegate->refreshDebItemStatus(0, QRect(0, 0, 10, 10), &painter, true, true);
 }
 
 QVariant stud_data(int role)
@@ -161,7 +163,8 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
     model->slotAppendPackage(QStringList() << "\n");
-    QModelIndex index = model->index(0);
+    m_listview->setModel(model);
+    QModelIndex index = m_listview->model()->index(0, 0);
     m_delegate->paint(&painter, option, index);
 }
 

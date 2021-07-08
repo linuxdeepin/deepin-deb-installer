@@ -595,6 +595,15 @@ void stub_setPurge()
     return;
 }
 
+Package *ut_package(QString, QString, QString)
+{
+    Backend *bac = nullptr;
+    pkgCache::PkgIterator packageIter;
+    //    Package *package = new Package(bac,packageIter);
+    QScopedPointer<Package> package(new Package(bac, packageIter));
+    return package.get();
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage)
 {
     stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
@@ -773,6 +782,12 @@ QApt::ErrorCode model_transaction_commitError()
     return QApt::CommitError;
 }
 
+QObject *ut_sender()
+{
+    Transaction *transaction = new Transaction("1");
+    return qobject_cast<QObject *>(transaction);
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
 {
     stub.set(ADDR(Transaction, error), model_transaction_error);
@@ -780,9 +795,14 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
     m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
     m_debListModel->m_packageMd5.insert(0, "00000");
     m_debListModel->m_operatingIndex = 0;
-    m_debListModel->slotTransactionErrorOccurred();
 
-//    ASSERT_EQ(m_debListModel->m_packageFailCode.size(), 1);
+    Stub stub1;
+    stub1.set(ADDR(QObject, sender), ut_sender);
+
+    m_debListModel->slotTransactionErrorOccurred();
+    delete ut_sender();
+
+    //    ASSERT_EQ(m_debListModel->m_packageFailCode.size(), 1);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionCommitErrorOccurred)
@@ -845,6 +865,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex)
 TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInstallFinish)
 {
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
+    m_debListModel->m_packagesManager->m_preparedPackages.append("/");
     m_debListModel->slotConfigInstallFinish(1);
 }
 
@@ -853,10 +874,18 @@ QByteArray model_readAllStandardOutput()
     return "StartInstallAptConfig";
 }
 
+QByteArray model_readAllStandardOutput1()
+{
+    return "StartInstall";
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
 {
     stub.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput);
+    m_debListModel->slotConfigReadOutput();
 
+    Stub stub1;
+    stub1.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput1);
     m_debListModel->slotConfigReadOutput();
 }
 
@@ -867,9 +896,12 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
     m_debListModel->m_operatingIndex = 0;
     m_debListModel->m_packageMd5.append("test");
     m_debListModel->m_packageMd5.append("test1");
+    Stub stub1;
+    stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotTransactionFinished();
-//    stub.set(ADDR(Transaction,exitStatus),model_transaction_exitStatus1);
-//    m_debListModel->slotTransactionFinished();
+    delete ut_sender();
+    //    stub.set(ADDR(Transaction,exitStatus),model_transaction_exitStatus1);
+    //    m_debListModel->slotTransactionFinished();
 
 }
 
@@ -886,7 +918,10 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinish
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     stub.set(ADDR(Transaction, error), model_transaction_error);
 
+    Stub stub1;
+    stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotDependsInstallTransactionFinished();
+    delete ut_sender();
 }
 
 
@@ -897,6 +932,17 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_showDevelopModeWindow)
     m_debListModel->slotShowDevelopModeWindow();
 }
 
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotUpWrongStatusRow)
+{
+    stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
+    stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
+    stub.set(ADDR(Transaction, error), model_transaction_error);
+    m_debListModel->m_packageOperateStatus.insert("key", DebListModel::Failed);
+    m_debListModel->m_packageOperateStatus.insert("key1", DebListModel::Success);
+    m_debListModel->slotUpWrongStatusRow();
+}
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInputWrite)
 {
@@ -907,13 +953,19 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInputWrite)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)
 {
+    Stub stub1;
+    stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotTransactionOutput();
+    delete ut_sender();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallFinished)
 {
     stub.set(ADDR(Transaction,error), model_transaction_run);
+    Stub stub1;
+    stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotUninstallFinished();
+    delete ut_sender();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkInstallStatus)
@@ -928,6 +980,12 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkInstallStatus)
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initConnections)
 {
     m_debListModel->initConnections();
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotShowProhibitWindow)
+{
+    m_debListModel->slotShowProhibitWindow();
+    m_debListModel->showProhibitWindow();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initAppendConnection)
