@@ -702,7 +702,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature)
 
     m_debListModel->m_operatingIndex = 0;
     ASSERT_TRUE(m_debListModel->checkDigitalSignature());
-
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_01)
@@ -731,9 +730,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_02)
     m_debListModel->m_operatingIndex = 0;
     ASSERT_FALSE(m_debListModel->checkDigitalSignature());
 
-    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify3);
+    Stub stub1;
+    stub1.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify3);
     m_debListModel->checkDigitalSignature();
-    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify4);
+    Stub stub2;
+    stub2.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify4);
     m_debListModel->checkDigitalSignature();
 
 }
