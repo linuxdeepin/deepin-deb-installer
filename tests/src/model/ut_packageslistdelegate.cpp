@@ -163,6 +163,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;
     model->slotAppendPackage(QStringList() << "\n");
+    model->m_packagesManager->m_preparedPackages.append("deb");
     m_listview->setModel(model);
     QModelIndex index = m_listview->model()->index(0, 0);
     m_delegate->paint(&painter, option, index);
