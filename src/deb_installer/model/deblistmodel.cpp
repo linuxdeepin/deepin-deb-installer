@@ -1062,10 +1062,10 @@ void DebListModel::checkSystemVersion()
 bool DebListModel::checkDigitalSignature()
 {
     //平板模式无需验证开发者模式，判断数字签名即可
-    //    if (m_isDevelopMode) {
-    //        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
-    //        return true;
-    //    }
+    if (m_isDevelopMode) {
+        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
+        return true;
+    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //平板模式，判断是否有数字签名
 //    digitalSigntual = Utils::VerifySuccess;   //添加数字签名
     switch (digitalSigntual) {
