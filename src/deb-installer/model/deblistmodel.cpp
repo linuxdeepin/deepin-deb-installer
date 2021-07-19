@@ -384,6 +384,10 @@ void DebListModel::slotUninstallPackage(const int index)
     refreshOperatingPackageStatus(Operating);                                       //刷新当前index的操作状态
     Transaction *transsaction = backend->commitChanges();
 
+    QVariantMap map;
+    map.insert("LOGNAME", getenv("LOGNAME"));
+    transsaction->setEnvVariable(map);
+
     // trans 进度change 链接
     connect(transsaction, &Transaction::progressChanged, this, &DebListModel::signalTransactionProgressChanged);
 
@@ -759,6 +763,10 @@ void DebListModel::installDebs()
 
     // NOTE: DO NOT remove this.
     transaction->setLocale(".UTF-8");
+
+    QVariantMap map;
+    map.insert("LOGNAME", getenv("LOGNAME"));
+    transaction->setEnvVariable(map);
 
     //记录日志
     connect(transaction, &Transaction::statusDetailsChanged, this, &DebListModel::signalAppendOutputInfo);
