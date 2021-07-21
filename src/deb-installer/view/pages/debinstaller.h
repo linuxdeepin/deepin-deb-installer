@@ -30,6 +30,7 @@ class FileChooseWidget;
 class DebListModel;
 class SingleInstallPage;
 class UninstallConfirmPage;
+class SettingDialog;
 
 using QApt::DebFile;
 
@@ -158,12 +159,24 @@ private slots:
      */
     void slotEnableCloseButton(bool enable);
 
+    /**
+     * @brief slotSettingDialogVisiable
+     * 显示设置框
+     */
+    void slotSettingDialogVisiable();
+
 private:
     /**
      * @brief initUI
      * 初始化界面
      */
     void initUI();
+
+    /**
+     * @brief initTitleBar
+     * 初始化标题栏
+     */
+    void initTitleBar();
 
     /**
      * @brief initConnections
@@ -234,6 +247,7 @@ private:
 
     QPointer<QWidget>   m_lastPage;                   //存放上一个页面的指针
     QStackedLayout      *m_centralLayout      = nullptr;                //单包、批量、卸载的widget
+    SettingDialog *m_settingDialog = nullptr;
 
     int m_dragflag          = -1;                            //当前是否允许拖入的标志位
 
