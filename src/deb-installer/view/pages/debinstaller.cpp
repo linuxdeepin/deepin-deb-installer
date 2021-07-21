@@ -23,6 +23,7 @@
 #include "view/pages/singleinstallpage.h"
 #include "view/pages/uninstallconfirmpage.h"
 #include "view/pages/AptConfigMessage.h"
+#include "settingdialog.h"
 #include "utils/utils.h"
 
 #include <DInputDialog>
@@ -57,6 +58,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     , m_fileListModel(new DebListModel(this))
     , m_fileChooseWidget(new FileChooseWidget(this))
     , m_centralLayout(new QStackedLayout())
+    , m_settingDialog(new SettingDialog(this))
 {
     initUI();
     initConnections();
@@ -91,22 +93,30 @@ void DebInstaller::initUI()
     wrapWidget->setStyleSheet("QWidget{border:1px solid black;}");
 #endif
 
+    initTitleBar();
+    setCentralWidget(wrapWidget); //将给定的小部件设置为主窗口的中心小部件。
+    setAcceptDrops(true); //启用了drop事件
+    setFixedSize(480, 380);
+    setWindowTitle(tr("Package Installer"));
+    setWindowIcon(QIcon::fromTheme("deepin-deb-installer")); //仅仅适用于windows系统
+    move(qApp->primaryScreen()->geometry().center() - geometry().center());
+}
+
+void DebInstaller::initTitleBar()
+{
     //title bar settings
     DTitlebar *tb = titlebar();
+    QAction *settingAction(new QAction(tr("Settings"), this));
+    DMenu *menu = new DMenu;
+    menu->addAction(settingAction);
+    tb->setMenu(menu);
     if (tb) {
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
         tb->setAutoFillBackground(true);
         tb->setDisableFlags(Qt::CustomizeWindowHint);
     }
-
-
-    setCentralWidget(wrapWidget);  //将给定的小部件设置为主窗口的中心小部件。
-    setAcceptDrops(true);          //启用了drop事件
-    setFixedSize(480, 380);
-    setWindowTitle(tr("Package Installer"));
-    setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));  //仅仅适用于windows系统
-    move(qApp->primaryScreen()->geometry().center() - geometry().center());
+    connect(settingAction, &QAction::triggered, this, &DebInstaller::slotSettingDialogVisiable);
 }
 
 void DebInstaller::initConnections()
@@ -162,6 +172,12 @@ void DebInstaller::slotEnableCloseButton(bool enable)
     } else {
         disableCloseAndExit();                          //禁用关闭按钮
     }
+}
+
+void DebInstaller::slotSettingDialogVisiable()
+{
+    m_settingDialog->setCheckboxEnable(m_fileListModel->isDevelopMode());
+    m_settingDialog->exec();
 }
 
 void DebInstaller::disableCloseAndExit()

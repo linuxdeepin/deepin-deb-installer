@@ -212,6 +212,11 @@ public:
      */
     QVariant data(const QModelIndex &index, int role) const override;
 
+    /**
+     * @brief isDevelopMode 是否是开发者模式
+     * @return
+     */
+    bool isDevelopMode();
 
 public:
     /**
@@ -577,6 +582,11 @@ private:
     void showDigitalErrWindow();
 
     /**
+     * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
+     */
+    void showDevelopDigitalErrWindow();
+
+    /**
      * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
      */
     void showProhibitWindow();
@@ -710,6 +720,7 @@ private:
     // 开发者模式的标志变量
     //部分系统版本无需签名验证，默认开发者模式
     bool m_isDevelopMode                         = true;
+    bool m_isDigitalVerify = false;
 
     QList<QByteArray> m_packageMd5               = {};
 
