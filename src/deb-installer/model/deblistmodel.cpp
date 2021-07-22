@@ -812,7 +812,15 @@ void DebListModel::digitalVerifyFailed(ErrorCode errorCode)
         m_packageFailReason.insert(m_operatingPackageMd5, "");
         bumpInstallIndex();                                     //跳过当前包
     } else if (preparedPackages().size() == 1) {
-        exit(0);                                                //单包安装 直接退出
+        if (!m_isDevelopMode) {
+            exit(0);
+        } else { //开发者模式下，点击取消按钮，返回错误界面
+            refreshOperatingPackageStatus(Failed);                  //刷新操作状态
+            // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+            m_packageFailCode.insert(m_operatingPackageMd5, errorCode); //记录错误代码与错误原因
+            m_packageFailReason.insert(m_operatingPackageMd5, "");
+            emit signalWorkerFinished();
+        }
     }
 }
 
