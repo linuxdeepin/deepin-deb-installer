@@ -987,39 +987,41 @@ bool DebListModel::checkDigitalSignature()
     SettingDialog dialog;
     m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
+    qInfo() << "m_isDevelopMode:" << m_isDevelopMode << " /m_isDigitalVerify:" << m_isDigitalVerify << " /digitalSigntual:" << digitalSigntual;
     if (m_isDevelopMode && !m_isDigitalVerify) { //开发者模式且未设置验签功能
-        qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
         return true;
     } else if (m_isDevelopMode && m_isDigitalVerify) { //开发者模式且设置验签功能
         if (digitalSigntual == Utils::VerifySuccess) {
             return true;
         } else {
             showDevelopDigitalErrWindow(); //弹出提示框
-            qInfo() << "DevelopMode Signature file verification failed";
             return false;
         }
     } else { //非开发者模式
+        bool verifiedResult = false;
         switch (digitalSigntual) {
         case Utils::VerifySuccess: //签名验证成功
-            qInfo() << "Digital signature verification succeed";
-            return true;
+            verifiedResult = true;
+            break;
         case Utils::DebfileInexistence: //无签名文件
-            qInfo() << "No signature file was found in the application";
             showNoDigitalErrWindow();
-            return false;
-        case Utils::ExtractDebFail:
+            verifiedResult = false;
+            break;
+        case Utils::ExtractDebFail: //无有效的数字签名
             showDigitalErrWindow();
-            qInfo() << "An error occurred while verifying the signature"; //无有效的数字签名
-            return false;
+            verifiedResult = false;
+            break;
         case Utils::DebVerifyFail:
-        case Utils::OtherError:
+        case Utils::OtherError: //其他原因造成的签名校验失败
             showDigitalErrWindow();
-            qInfo() << "Signature file verification failed"; //其他原因造成的签名校验失败
-            return false;
+            verifiedResult = false;
+            break;
         default: //其他未知错误
             qInfo() << "unknown mistake";
-            return false;
+            verifiedResult = false;
+            break;
         }
+        return verifiedResult;
     }
 }
 
