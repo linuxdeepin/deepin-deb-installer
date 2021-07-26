@@ -32,6 +32,7 @@ SettingDialog::SettingDialog(QWidget *parent)
 
 SettingDialog::~SettingDialog()
 {
+    delete m_setting;
 }
 
 void SettingDialog::init()

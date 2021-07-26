@@ -922,18 +922,18 @@ void DebListModel::showDevelopDigitalErrWindow()
     connect(Ddialog, &DDialog::aboutToClose, this, [=] {
         //刷新当前包的操作状态，失败原因为数字签名校验失败
         digitalVerifyFailed(DigitalSignatureError);
-        return;
     });
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 
     //点击弹出窗口的确定按钮
     connect(cancelBtn, &DPushButton::clicked, this, [=] {
         digitalVerifyFailed(DigitalSignatureError);
-        return;
     });
+    connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 
     QPushButton *continueBtn = qobject_cast<QPushButton *>(Ddialog->getButton(1));
-    connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
     connect(continueBtn, &DPushButton::clicked, this, [=] { installNextDeb(); }); //点击继续，进入安装流程
+    connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
 void DebListModel::slotDigitalSignatureError()
