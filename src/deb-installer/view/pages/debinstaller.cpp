@@ -176,7 +176,7 @@ void DebInstaller::slotEnableCloseButton(bool enable)
 
 void DebInstaller::slotSettingDialogVisiable()
 {
-    m_settingDialog->setCheckboxEnable(m_fileListModel->isDevelopMode());
+    //    m_settingDialog->setCheckboxEnable(m_fileListModel->isDevelopMode());//非开发者模式下无需置灰
     m_settingDialog->exec();
 }
 
