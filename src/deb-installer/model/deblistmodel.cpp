@@ -717,12 +717,12 @@ void DebListModel::installDebs()
     //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
     emit signalStartInstall();
 
-
     if (isDpkgRunning()) {
-        qInfo() << "DebListModel:" << "dpkg running, waitting...";
+        qInfo() << "DebListModel:"
+                << "dpkg running, waitting...";
         // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
         QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-        emit signalAppendOutputInfo("dpkg running, waitting...");                 //发送提示，告知用户dpkg正在运行
+        emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
         return;
     }
 
@@ -894,7 +894,7 @@ void DebListModel::showDigitalErrWindow()
     connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
-void DebListModel::showDevelopDigitalErrWindow()
+void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
 {
     DDialog *Ddialog = new DDialog();
     //设置窗口焦点
@@ -918,16 +918,17 @@ void DebListModel::showDevelopDigitalErrWindow()
 
     cancelBtn->setFocusPolicy(Qt::TabFocus);
     cancelBtn->setFocus();
+
     // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, [=] {
         //刷新当前包的操作状态，失败原因为数字签名校验失败
-        digitalVerifyFailed(DigitalSignatureError);
+        digitalVerifyFailed(code);
     });
     connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 
     //点击弹出窗口的确定按钮
     connect(cancelBtn, &DPushButton::clicked, this, [=] {
-        digitalVerifyFailed(DigitalSignatureError);
+        digitalVerifyFailed(code);
     });
     connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 
@@ -1002,7 +1003,12 @@ bool DebListModel::checkDigitalSignature()
         if (digitalSigntual == Utils::VerifySuccess) {
             return true;
         } else {
-            showDevelopDigitalErrWindow(); //弹出提示框
+            ErrorCode code;
+            if (digitalSigntual == Utils::DebfileInexistence)
+                code = NoDigitalSignature;
+            else
+                code = DigitalSignatureError;
+            showDevelopDigitalErrWindow(code); //弹出提示框
             return false;
         }
     } else { //非开发者模式

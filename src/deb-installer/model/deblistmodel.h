@@ -584,7 +584,7 @@ private:
     /**
      * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
      */
-    void showDevelopDigitalErrWindow();
+    void showDevelopDigitalErrWindow(ErrorCode code);
 
     /**
      * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
