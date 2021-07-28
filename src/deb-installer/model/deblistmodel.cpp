@@ -717,15 +717,6 @@ void DebListModel::installDebs()
     //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
     emit signalStartInstall();
 
-    if (isDpkgRunning()) {
-        qInfo() << "DebListModel:"
-                << "dpkg running, waitting...";
-        // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
-        QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-        emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
-        return;
-    }
-
     // fetch next deb
     auto *const backend = m_packagesManager->m_backendFuture.result();
 
@@ -747,6 +738,14 @@ void DebListModel::installDebs()
         bumpInstallIndex();                                             //开始下一步的安装流程
         return;
     } else if (dependsStat.isAvailable()) {
+        if (isDpkgRunning()) {
+            qInfo() << "DebListModel:"
+                    << "dpkg running, waitting...";
+            // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
+            QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
+            emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
+            return;
+        }
         // 依赖可用 但是需要下载
         Q_ASSERT_X(m_packageOperateStatus[m_operatingPackageMd5], Q_FUNC_INFO,
                    "package operate status error when start install availble dependencies");
@@ -771,7 +770,14 @@ void DebListModel::installDebs()
         //依赖安装结果处理
         connect(transaction, &Transaction::finished, this, &DebListModel::slotDependsInstallTransactionFinished);
     } else {
-
+        if (isDpkgRunning()) {
+            qInfo() << "DebListModel:"
+                    << "dpkg running, waitting...";
+            // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
+            QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
+            emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
+            return;
+        }
         transaction = backend->installFile(deb);//触发Qapt授权框和安装线程
 
         // 进度变化和结束过程处理
@@ -993,6 +999,9 @@ void DebListModel::checkSystemVersion()
 
 bool DebListModel::checkDigitalSignature()
 {
+    const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex); //获取包的依赖状态
+    if (stat.isBreak() || stat.isAuthCancel())
+        return true;
     SettingDialog dialog;
     m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
