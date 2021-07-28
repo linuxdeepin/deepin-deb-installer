@@ -140,3 +140,10 @@ void InstallProcessInfoView::clearText()
 {
     m_editor->clear();
 }
+
+void InstallProcessInfoView::setTextCursor(QTextCursor::MoveOperation operation)
+{
+    QTextCursor textCursor = m_editor->textCursor();
+    textCursor.movePosition(operation, QTextCursor::MoveAnchor);
+    m_editor->setTextCursor(textCursor);
+}
