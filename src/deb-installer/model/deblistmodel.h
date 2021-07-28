@@ -19,6 +19,8 @@
 #ifndef DEBLISTMODEL_H
 #define DEBLISTMODEL_H
 
+#include "manager/packagesmanager.h"
+
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -33,7 +35,6 @@
 #include <QDBusReply>
 #include <QProcess>
 
-class PackagesManager;
 class AptConfigMessage;
 
 class DebListModel : public QAbstractListModel
@@ -344,6 +345,12 @@ signals:
      * @brief signalPackageAlreadyExists 包已添加的信号
      */
     void signalPackageAlreadyExists();
+
+    /**
+     * @brief signalBreakDependsPackages 依赖关系显示信号
+     * @param breakPackages
+     */
+    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> breakPackages);
 signals:
     /**
      * @brief signalRefreshSinglePage 刷新单包安装界面的信号

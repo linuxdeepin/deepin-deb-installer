@@ -414,6 +414,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         return PackageDependsStatus::_break("");
     }
     auto currentPackageMd5 = m_packageMd5[index];
+    m_currentPkgMd5 = currentPackageMd5;
 
     if (m_packageMd5DependsStatus.contains(currentPackageMd5))
         return m_packageMd5DependsStatus[currentPackageMd5];
@@ -493,7 +494,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             }
         }
     }
-    if (dependsStatus.isBreak()) 
+    if (dependsStatus.isBreak())
         Q_ASSERT(!dependsStatus.package.isEmpty());
 
     m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
@@ -707,6 +708,7 @@ void PackagesManager::reset()
 
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
+    m_dependsPackages.clear();
 }
 
 void PackagesManager::resetPackageDependsStatus(const int index)
@@ -949,6 +951,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_appendedPackagesMd5 << packageMd5Sum;         //将MD5添加到集合中，这里是为了判断包不再重复
     getPackageDependsStatus(0);                     //刷新当前添加包的依赖
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
+    emit signalDependPackages(m_dependsPackages);
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
@@ -956,14 +959,22 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                                                                       const QList<DependencyItem> &depends)
 {
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
-
+    QList<DependInfo> break_list;
+    QList<DependInfo> available_list;
     for (const auto &candicate_list : depends) {
         const auto r = checkDependsPackageStatus(choosed_set, architecture, candicate_list);
         dependsStatus.maxEq(r);
-
-        if (dependsStatus.isBreak()) break;
+        if (r.isBreak()) {
+            break_list.append(m_dinfo);
+        } else if (r.isAvailable()) {
+            available_list.append(m_dinfo);
+        }
     }
 
+    QPair<QList<DependInfo>, QList<DependInfo>> pair;
+    pair.first.append(available_list);
+    pair.second.append(break_list);
+    m_dependsPackages.insert(m_currentPkgMd5, pair);
     return dependsStatus;
 }
 
@@ -976,11 +987,9 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     for (const auto &info : candicate) {
         const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
         dependsStatus.minEq(r);
-
         if (!dependsStatus.isBreak()) 
             break;
     }
-
     return dependsStatus;
 }
 
@@ -988,12 +997,16 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                                                                       const QString &architecture,
                                                                       const DependencyInfo &dependencyInfo)
 {
+    m_dinfo.packageName.clear();
+    m_dinfo.version.clear();
     const QString package_name = dependencyInfo.packageName();
 
     Package *package = packageWithArch(package_name, architecture, dependencyInfo.multiArchAnnotation());
 
     if (!package) {
         qWarning() << "PackagesManager:" << "depends break because package" << package_name << "not available";
+        m_dinfo.packageName = package_name;
+        m_dinfo.version = dependencyInfo.packageVersion();
         return PackageDependsStatus::_break(package_name);
     }
 
@@ -1012,12 +1025,16 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                     qInfo() << "PackagesManager:" << "availble by upgrade package" << package->name() + ":" + package->architecture() << "from"
                              << installedVersion << "to" << mirror_version;
                     // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
+                    m_dinfo.packageName = package_name;
+                    m_dinfo.version = package->availableVersion();
                     return PackageDependsStatus::available(package->name());
                 }
             }
 
             qWarning() << "PackagesManager:" << "depends break by" << package->name() << package->architecture() << dependencyInfo.packageVersion();
             qWarning() << "PackagesManager:" << "installed version not match" << installedVersion;
+            m_dinfo.packageName = package_name;
+            m_dinfo.version = dependencyInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
     } else {
@@ -1025,6 +1042,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         if (!dependencyVersionMatch(result, relation)) {
             qWarning() << "PackagesManager:" << "depends break by" << package->name() << package->architecture() << dependencyInfo.packageVersion();
             qWarning() << "PackagesManager:" << "available version not match" << package->version();
+            m_dinfo.packageName = package_name;
+            m_dinfo.version = dependencyInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
 
@@ -1043,6 +1062,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 if (otherArchPackage && otherArchPackage->isInstalled()) {
                     qWarning() << "PackagesManager:" << "multiple architecture installed: " << package->name() << package->version() << package->architecture() << "but now need"
                              << otherArchPackage->name() << otherArchPackage->version() << otherArchPackage->architecture();
+                    m_dinfo.packageName = package_name;
+                    m_dinfo.version = dependencyInfo.packageVersion();
                     return PackageDependsStatus::_break(package->name() + ":" + package->architecture());
                 }
             }
@@ -1075,6 +1096,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             }
 
             qWarning() << "PackagesManager:" << "providers not found, still break: " << package->name();
+            m_dinfo.packageName = package_name;
+            m_dinfo.version = dependencyInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
 
@@ -1087,11 +1110,15 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         if (dependsStatus.isBreak()) {
             choosed_set.remove(package->name());
             qWarning() << "PackagesManager:" << "depends break by direct depends" << package->name() << package->architecture() << dependsStatus.package;
+            m_dinfo.packageName = package_name;
+            m_dinfo.version = dependencyInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
 
         qInfo() << "PackagesManager:" << "Check finshed for package" << package->name();
         // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
+        m_dinfo.packageName = package_name;
+        m_dinfo.version = package->availableVersion();
         return PackageDependsStatus::available(package->name());
     }
 }

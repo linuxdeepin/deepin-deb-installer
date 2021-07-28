@@ -49,6 +49,11 @@ class AddPackageThread;
  */
 Backend *init_backend();
 
+struct DependInfo {
+    QString packageName; //依赖的包名称
+    QString version; //依赖的包的版本
+};
+
 class PackagesManager : public QObject
 {
     Q_OBJECT
@@ -164,7 +169,13 @@ signals:
      * @brief refreshFileChoosePage 刷新首页
      */
     void signalRefreshFileChoosePage();
-//// 后端状态相关函数
+
+    /**
+     * @brief signalDependPackages
+     * @param breakPackages
+     */
+    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages);
+    //// 后端状态相关函数
 public:
 
     /**
@@ -489,6 +500,16 @@ private:
      * 2.使用之前的方式会导致所有包的安装状态都是第一个包的安装状态
      */
     QMap<QByteArray, int> m_packageInstallStatus = {};
+
+    QByteArray m_currentPkgMd5; //当前包的md5
+
+    /**
+     * @brief m_dependsPackages  包依赖关系的map
+     * QPair<QList<dependInfo>, QList<dependInfo>> 仓库可获取依赖与仓库不可获取依赖
+     * 与md5进行绑定
+     */
+    QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> m_dependsPackages;
+    DependInfo m_dinfo; //依赖包的包名及版本
 
     // wine应用处理的下标
     int m_DealDependIndex                        = -1; 

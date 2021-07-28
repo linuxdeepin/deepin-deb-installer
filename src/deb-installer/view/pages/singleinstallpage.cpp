@@ -53,7 +53,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
     , m_installProcessView(new InstallProcessInfoView(440, 170, this))
+    , m_showDependsView(new InstallProcessInfoView(440, 170, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse", "button")))
+    , m_showDependsButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show dependencies"), tr("Collapse", "button")))
     , m_installButton(new DPushButton(this))
     , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))
@@ -75,6 +77,7 @@ void SingleInstallPage::initUI()
     int fontsize = fontinfo.pixelSize();        //获得字体大小
     initContentLayout();                        //初始化主布局
     initPkgInfoView(fontsize);                  //初始化包信息布局
+    initPkgDependsInfoView(); //初始化依赖显示布局
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
@@ -450,11 +453,27 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(btnsFrame);
 }
 
+void SingleInstallPage::initPkgDependsInfoView()
+{
+    m_showDependsView->setVisible(false);
+    m_showDependsButton->setVisible(false);
+    m_showDependsView->setAcceptDrops(false); //不接受拖入的数据
+    m_showDependsView->setMinimumHeight(200); //设置高度
+    m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_contentLayout->addWidget(m_showDependsButton);
+    m_contentLayout->addSpacing(2);
+    m_contentLayout->addWidget(m_showDependsView);
+}
+
 void SingleInstallPage::initConnections()
 {
     // infoControlButton的展开与收缩
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideInfomation);
+
+    // showDependsButton的展开与收缩
+    connect(m_showDependsButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowDependsInfo);
+    connect(m_showDependsButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideDependsInfo);
 
     //各个按钮的触发事件
     connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::slotInstall);
@@ -469,6 +488,8 @@ void SingleInstallPage::initConnections()
 
     //transaction 进度改变 进度条进度改变
     connect(m_packagesModel, &DebListModel::signalTransactionProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
+
+    connect(m_packagesModel, &DebListModel::signalDependPackages, this, &SingleInstallPage::slotDependPackages);
 
     //安装结束
     connect(m_packagesModel, &DebListModel::signalWorkerFinished, this, &SingleInstallPage::slotWorkerFinished);
@@ -551,6 +572,7 @@ void SingleInstallPage::slotInstall()
     //安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
 
     //重置工作状态
@@ -576,6 +598,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_infoControlButton->setVisible(true);
     m_progressFrame->setVisible(true);
+    m_showDependsButton->setVisible(false);
 
     //重置工作状态
     m_operate = Uninstall;
@@ -599,10 +622,23 @@ void SingleInstallPage::slotHideInfomation()
     m_itemInfoFrame->setVisible(true);
 }
 
+void SingleInstallPage::slotShowDependsInfo()
+{
+    m_showDependsView->setVisible(true);
+    m_itemInfoFrame->setVisible(false);
+}
+
+void SingleInstallPage::slotHideDependsInfo()
+{
+    m_showDependsView->setVisible(false);
+    m_itemInfoFrame->setVisible(true);
+}
+
 void SingleInstallPage::slotShowInfo()
 {
     //显示进度信息
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
     m_progress->setValue(0);
 
@@ -697,6 +733,25 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     }
 
     m_progress->setValue(progress);             //进度增加
+}
+
+void SingleInstallPage::slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages)
+{
+    QPair<QList<DependInfo>, QList<DependInfo>> depends = dependPackages.last();
+    if (depends.second.size() > 0)
+        m_showDependsButton->setVisible(true);
+    if (depends.first.size() > 0) {
+        m_showDependsView->appendText(tr("Dependencies in the repository"));
+        for (int i = 0; i < depends.first.size(); i++)
+            m_showDependsView->appendText(depends.first.at(i).packageName + "   " + depends.first.at(i).version);
+        m_showDependsView->appendText(tr(""));
+    }
+    if (depends.second.size() > 0) {
+        m_showDependsView->appendText(tr("Missing dependencies"));
+        for (int i = 0; i < depends.second.size(); i++)
+            m_showDependsView->appendText(depends.second.at(i).packageName + "   " + depends.second.at(i).version);
+    }
+    m_showDependsView->setTextCursor(QTextCursor::Start);
 }
 
 /**
