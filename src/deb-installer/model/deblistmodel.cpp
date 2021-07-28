@@ -204,6 +204,9 @@ void DebListModel::initRefreshPageConnecions()
 
     //刷新首页
     connect(m_packagesManager, &PackagesManager::signalRefreshFileChoosePage, this, &DebListModel::signalRefreshFileChoosePage);
+
+    //显示依赖关系
+    connect(m_packagesManager, &PackagesManager::signalDependPackages, this, &DebListModel::signalDependPackages);
 }
 
 /**

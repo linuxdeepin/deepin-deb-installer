@@ -59,6 +59,12 @@ public:
      */
     void clearText();
 
+    /**
+     * @brief setTextCursor 设置文本光标位置
+     * @param operation
+     */
+    void setTextCursor(QTextCursor::MoveOperation operation);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
