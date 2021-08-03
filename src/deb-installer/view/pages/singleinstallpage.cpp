@@ -737,6 +737,8 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
 
 void SingleInstallPage::slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages)
 {
+    if (dependPackages.isEmpty())
+        return;
     QPair<QList<DependInfo>, QList<DependInfo>> depends = dependPackages.last();
     if (depends.second.size() > 0)
         m_showDependsButton->setVisible(true);
