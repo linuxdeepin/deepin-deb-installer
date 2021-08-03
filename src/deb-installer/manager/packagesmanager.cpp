@@ -951,7 +951,8 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_appendedPackagesMd5 << packageMd5Sum;         //将MD5添加到集合中，这里是为了判断包不再重复
     getPackageDependsStatus(0);                     //刷新当前添加包的依赖
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
-    emit signalDependPackages(m_dependsPackages);
+    if (!m_dependsPackages.isEmpty()) //过滤掉依赖冲突的包不显示依赖关系的情况
+        emit signalDependPackages(m_dependsPackages);
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
