@@ -766,6 +766,8 @@ void DebListModel::installDebs()
         }
 
         transaction = backend->commitChanges();
+        if (!transaction)
+            return;
         //依赖安装结果处理
         connect(transaction, &Transaction::finished, this, &DebListModel::slotDependsInstallTransactionFinished);
     } else {
@@ -778,7 +780,8 @@ void DebListModel::installDebs()
             return;
         }
         transaction = backend->installFile(deb);//触发Qapt授权框和安装线程
-
+        if (!transaction)
+            return;
         // 进度变化和结束过程处理
         connect(transaction, &Transaction::progressChanged, this, &DebListModel::signalTransactionProgressChanged);
         connect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);

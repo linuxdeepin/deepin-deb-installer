@@ -156,6 +156,9 @@ bool PackagesManager::isArchError(const int idx)
     }
     DebFile deb(m_preparedPackages[idx]);
 
+    if (!deb.isValid())
+        return false;
+
     const QString arch = deb.architecture();
 
     if ("all" == arch ||"any" == arch ) 
@@ -421,6 +424,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 
 
     DebFile debFile(m_preparedPackages[index]);
+    if (!debFile.isValid())
+        return PackageDependsStatus::_break("");
+
     const QString architecture = debFile.architecture();
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
 
@@ -505,7 +511,8 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 {
     //更换安装状态的存储结构
     DebFile debFile (m_preparedPackages[index]);
-
+    if (!debFile.isValid())
+        return "";
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
     Backend *backend = m_backendFuture.result();
@@ -526,6 +533,8 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
     DebFile debFile(m_preparedPackages[index]);
+    if (!debFile.isValid())
+        return QStringList();
     QSet<QString> choose_set;
     const QString debArch = debFile.architecture();
     const auto &depends = debFile.depends();
