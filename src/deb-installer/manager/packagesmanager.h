@@ -174,7 +174,7 @@ signals:
      * @brief signalDependPackages
      * @param breakPackages
      */
-    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages);
+    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages, bool installWineDepends);
     //// 后端状态相关函数
 public:
 
@@ -512,16 +512,18 @@ private:
     DependInfo m_dinfo; //依赖包的包名及版本
 
     // wine应用处理的下标
-    int m_DealDependIndex                        = -1; 
-    
-    //下载依赖的线程            
+    int m_DealDependIndex = -1;
+
+    //下载依赖的线程
     DealDependThread *m_installWineThread        = nullptr;    
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记
      * 将依赖下载的标记修改为md5sum  与包绑定 而非下标
      */
-    QList<QByteArray> m_dependInstallMark        = {};         
+    QList<QByteArray> m_dependInstallMark = {};
+
+    QPair<QList<DependInfo>, QList<DependInfo>> m_pair; //存储available及broken依赖
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";     //软链接临时路径
@@ -529,14 +531,17 @@ private:
 private:
     AddPackageThread *m_pAddPackageThread = nullptr;    //添加包的线程
 
-    bool installWineDepends               = false;
+    bool installWineDepends = false;
 
-    int m_validPackageCount               = 0;
+    bool isDependsExists = false;
 
-    qint64 dependsStatusTotalTime         = 0;
+    int m_validPackageCount = 0;
 
+    qint64 dependsStatusTotalTime = 0;
 
-    QStringList m_blackApplicationList    = {};         //域管黑名单
+    QString m_brokenDepend = "";
+
+    QStringList m_blackApplicationList = {}; //域管黑名单
 };
 
 #endif  // PACKAGESMANAGER_H
