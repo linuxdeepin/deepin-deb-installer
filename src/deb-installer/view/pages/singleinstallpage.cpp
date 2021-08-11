@@ -735,17 +735,22 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     m_progress->setValue(progress);             //进度增加
 }
 
-void SingleInstallPage::slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages)
+void SingleInstallPage::slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages, bool installWineDepends)
 {
     if (dependPackages.isEmpty())
         return;
+
     QPair<QList<DependInfo>, QList<DependInfo>> depends = dependPackages.last();
-    if (depends.second.size() > 0)
-        m_showDependsButton->setVisible(true);
+    // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
+    if (!(depends.second.size() > 0 && !installWineDepends))
+        return;
+    m_showDependsButton->setVisible(true);
     if (depends.first.size() > 0) {
         m_showDependsView->appendText(tr("Dependencies in the repository"));
-        for (int i = 0; i < depends.first.size(); i++)
+        for (int i = 0; i < depends.first.size(); i++) {
             m_showDependsView->appendText(depends.first.at(i).packageName + "   " + depends.first.at(i).version);
+            qInfo() << "****************" << depends.first.at(i).packageName;
+        }
         m_showDependsView->appendText(tr(""));
     }
     if (depends.second.size() > 0) {

@@ -226,6 +226,7 @@ void DebListModel::initConnections()
 
 void DebListModel::slotDealDependResult(int authType, int dependIndex, QString dependName)
 {
+    m_brokenDepend = dependName;
     switch (authType) {
     case DebListModel::CancelAuth:
         m_packageOperateStatus[m_packagesManager->getPackageMd5(dependIndex)] = Prepare;           //取消授权后，缺失wine依赖的包的操作状态修改为prepare
@@ -569,7 +570,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
         if (!dependStatus.package.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
-                return tr("Failed to install %1").arg(dependStatus.package);                        //wine依赖安装失败
+                return tr("Failed to install %1").arg(m_brokenDepend); //wine依赖安装失败
             return tr("Broken dependencies: %1").arg(dependStatus.package);                         //依赖不满足
         }
 

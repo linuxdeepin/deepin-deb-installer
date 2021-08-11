@@ -384,6 +384,12 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, QString dep
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.push_back(m_dependInstallMark[num]);
         }
+        if (installWineDepends) { //下载wine依赖失败时，考虑出现依赖缺失的情况
+            qInfo() << "check wine depends again !" << iIndex;
+            getPackageDependsStatus(iIndex);
+            if (!m_dependsPackages.isEmpty())
+                emit signalDependPackages(m_dependsPackages, false);
+        }
         emit signalEnableCloseButton(true);
     }
     emit signalDependResult(iAuthRes, iIndex, dependName);
@@ -482,6 +488,12 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                 }
             }
+            installWineDepends = false; //标记wine依赖下载线程开启
+            isDependsExists = false; //标记多架构依赖冲突
+            m_pair.first.clear(); //清空available依赖
+            m_pair.second.clear(); //清空broken依赖
+            if (m_dependsPackages.contains(m_currentPkgMd5))
+                m_dependsPackages.remove(m_currentPkgMd5);
             dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
             // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
@@ -489,10 +501,11 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                 
                 if (!m_dependInstallMark.contains(currentPackageMd5)) {           //更换判断依赖错误的标记
                     if (!m_installWineThread->isRunning()) {
+                        installWineDepends = true;
                         m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
                         qInfo() << "PackagesManager:" << "command install depends:" << dependList;
                         m_installWineThread->setDependsList(dependList, index);
-                        m_installWineThread->setBrokenDepend(dependsStatus.package);
+                        m_installWineThread->setBrokenDepend(m_brokenDepend);
                         m_installWineThread->run();
                     }
                 }
@@ -961,7 +974,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     getPackageDependsStatus(0);                     //刷新当前添加包的依赖
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
     if (!m_dependsPackages.isEmpty()) //过滤掉依赖冲突的包不显示依赖关系的情况
-        emit signalDependPackages(m_dependsPackages);
+        emit signalDependPackages(m_dependsPackages, installWineDepends);
 }
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
@@ -974,17 +987,18 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     for (const auto &candicate_list : depends) {
         const auto r = checkDependsPackageStatus(choosed_set, architecture, candicate_list);
         dependsStatus.maxEq(r);
-        if (r.isBreak()) {
-            break_list.append(m_dinfo);
-        } else if (r.isAvailable()) {
-            available_list.append(m_dinfo);
+        if (!m_dinfo.packageName.isEmpty()) {
+            if (r.isBreak()) {
+                break_list.append(m_dinfo);
+            } else if (r.isAvailable()) {
+                available_list.append(m_dinfo);
+            }
         }
     }
 
-    QPair<QList<DependInfo>, QList<DependInfo>> pair;
-    pair.first.append(available_list);
-    pair.second.append(break_list);
-    m_dependsPackages.insert(m_currentPkgMd5, pair);
+    m_pair.first.append(available_list);
+    m_pair.second.append(break_list);
+    m_dependsPackages.insert(m_currentPkgMd5, m_pair);
     return dependsStatus;
 }
 
@@ -1070,10 +1084,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
                 Package *otherArchPackage = backend->package(package->name() + ":" + arch);
                 if (otherArchPackage && otherArchPackage->isInstalled()) {
-                    qWarning() << "PackagesManager:" << "multiple architecture installed: " << package->name() << package->version() << package->architecture() << "but now need"
-                             << otherArchPackage->name() << otherArchPackage->version() << otherArchPackage->architecture();
-                    m_dinfo.packageName = package_name;
-                    m_dinfo.version = dependencyInfo.packageVersion();
+                    isDependsExists = true; //依赖冲突不属于依赖缺失
+                    qWarning() << "PackagesManager:"
+                               << "multiple architecture installed: " << package->name() << package->version() << package->architecture() << "but now need"
+                               << otherArchPackage->name() << otherArchPackage->version() << otherArchPackage->architecture() << isDependsExists;
+                    m_brokenDepend = package->name() + ":" + package->architecture();
                     return PackageDependsStatus::_break(package->name() + ":" + package->architecture());
                 }
             }
@@ -1119,9 +1134,12 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         const auto dependsStatus = checkDependsPackageStatus(choosed_set, package->architecture(), package->depends());
         if (dependsStatus.isBreak()) {
             choosed_set.remove(package->name());
-            qWarning() << "PackagesManager:" << "depends break by direct depends" << package->name() << package->architecture() << dependsStatus.package;
-            m_dinfo.packageName = package_name;
-            m_dinfo.version = dependencyInfo.packageVersion();
+            qWarning() << "PackagesManager:"
+                       << "depends break by direct depends" << package->name() << package->architecture() << dependsStatus.package << isDependsExists;
+            if (!isDependsExists) {
+                m_dinfo.packageName = package_name;
+                m_dinfo.version = dependencyInfo.packageVersion();
+            }
             return PackageDependsStatus::_break(package->name());
         }
 

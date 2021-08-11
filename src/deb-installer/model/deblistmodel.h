@@ -350,7 +350,7 @@ signals:
      * @brief signalBreakDependsPackages 依赖关系显示信号
      * @param breakPackages
      */
-    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> breakPackages);
+    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> breakPackages, bool intallWineDepends);
 signals:
     /**
      * @brief signalRefreshSinglePage 刷新单包安装界面的信号
@@ -704,7 +704,7 @@ private:
     QModelIndex m_currentIdx;
 
     //后端类
-    PackagesManager *m_packagesManager  = nullptr;
+    PackagesManager *m_packagesManager = nullptr;
 
     //当前正在运行的Trans
     QPointer<QApt::Transaction> m_currentTransaction;
@@ -713,25 +713,27 @@ private:
     QMap<QByteArray, int> m_packageOperateStatus = {};
 
     //FailCode 错误代码 ，trans返回的错误代码
-    QMap<QByteArray, int> m_packageFailCode      = {};
+    QMap<QByteArray, int> m_packageFailCode = {};
 
     //FailReason , trans返回的详细错误信息
     QMap<QByteArray, QString> m_packageFailReason= {};
 
     // 配置安装进程
-    QProcess *m_procInstallConfig                = {};
+    QProcess *m_procInstallConfig = {};
 
     // 配置的临时目录
-    const QString tempPath                       = "/tmp/DEBIAN";
+    const QString tempPath = "/tmp/DEBIAN";
+
+    QString m_brokenDepend = "";
 
     // 开发者模式的标志变量
     //部分系统版本无需签名验证，默认开发者模式
-    bool m_isDevelopMode                         = true;
+    bool m_isDevelopMode = true;
     bool m_isDigitalVerify = false;
 
-    QList<QByteArray> m_packageMd5               = {};
+    QList<QByteArray> m_packageMd5 = {};
 
-    AptConfigMessage *configWindow               = nullptr;
+    AptConfigMessage *configWindow = nullptr;
 };
 
 #endif  // DEBLISTMODEL_H
