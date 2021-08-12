@@ -27,6 +27,7 @@
 
 #include <DSysInfo>
 #include <DPushButton>
+#include <DDialog>
 
 #include <QAbstractListModel>
 #include <QFuture>
@@ -34,8 +35,21 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QProcess>
+#include <QKeyEvent>
+
+DWIDGET_USE_NAMESPACE
 
 class AptConfigMessage;
+
+class Dialog : public DDialog
+{
+    Q_OBJECT
+public:
+    explicit Dialog();
+    void keyPressEvent(QKeyEvent *event);
+signals:
+    void signalClosed();
+};
 
 class DebListModel : public QAbstractListModel
 {

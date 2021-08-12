@@ -901,7 +901,7 @@ void DebListModel::showDigitalErrWindow()
 
 void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
 {
-    DDialog *Ddialog = new DDialog();
+    Dialog *Ddialog = new Dialog();
     //设置窗口焦点
     //fix bug:https://pms.uniontech.com/zentao/bug-view-44837.html
     Ddialog->setFocusPolicy(Qt::TabFocus);
@@ -924,6 +924,8 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
     cancelBtn->setFocusPolicy(Qt::TabFocus);
     cancelBtn->setFocus();
 
+    bool continueBtnClicked = false;
+
     // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, [=] {
         //刷新当前包的操作状态，失败原因为数字签名校验失败
@@ -938,8 +940,13 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
     connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 
     QPushButton *continueBtn = qobject_cast<QPushButton *>(Ddialog->getButton(1));
-    connect(continueBtn, &DPushButton::clicked, this, [=] { installNextDeb(); }); //点击继续，进入安装流程
+    connect(continueBtn, &DPushButton::clicked, this, [&] {
+        continueBtnClicked = true;
+        installNextDeb();
+    }); //点击继续，进入安装流程
     connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    connect(Ddialog, &Dialog::signalClosed, this, [=] { digitalVerifyFailed(code); });
+    connect(Ddialog, &Dialog::signalClosed, Ddialog, &DDialog::deleteLater);
 }
 
 void DebListModel::slotDigitalSignatureError()
@@ -1409,4 +1416,14 @@ DebListModel::~DebListModel()
     delete m_packagesManager;
     delete configWindow;
     delete m_procInstallConfig;
+}
+
+Dialog::Dialog()
+{
+}
+
+void Dialog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape)
+        emit signalClosed();
 }
