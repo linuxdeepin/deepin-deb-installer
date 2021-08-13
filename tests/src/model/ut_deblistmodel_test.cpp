@@ -736,8 +736,22 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_02)
     Stub stub2;
     stub2.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify4);
     m_debListModel->checkDigitalSignature();
-
 }
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_03)
+{
+    QStringList list;
+    list << "/";
+    m_debListModel->slotAppendPackage(list);
+    m_debListModel->m_operatingIndex = 0;
+    Stub stub;
+    m_debListModel->m_isDevelopMode = true;
+    m_debListModel->m_isDigitalVerify = true;
+    stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
+    m_debListModel->checkDigitalSignature();
+    m_debListModel->showDevelopDigitalErrWindow(DebListModel::NoDigitalSignature);
+}
+
 void model_digitalVerifyFailed()
 {
     return;
@@ -960,11 +974,18 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)
     delete ut_sender();
 }
 
+ExitStatus ut_exitStatus()
+{
+    return ExitStatus::ExitSuccess;
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallFinished)
 {
     stub.set(ADDR(Transaction,error), model_transaction_run);
     Stub stub1;
     stub1.set(ADDR(QObject, sender), ut_sender);
+    m_debListModel->slotUninstallFinished();
+    stub1.set(ADDR(Transaction, exitStatus), ut_exitStatus);
     m_debListModel->slotUninstallFinished();
     delete ut_sender();
 }

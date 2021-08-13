@@ -869,15 +869,15 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_04)
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 1);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
+bool ut_isArchError_false(int index)
 {
-    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
-    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    Q_UNUSED(index);
+    return false;
+}
 
-    m_packageManager->m_dependInstallMark.append("test success");
-    m_packageManager->slotDealDependResult(4, 0, "");
-    m_packageManager->slotDealDependResult(2, 0, "");
-    m_packageManager->slotDealDependResult(5, 0, "");
+bool stub_isInstalled()
+{
+    return true;
 }
 
 QList<DependencyItem> deb_depends()
@@ -891,21 +891,40 @@ QList<DependencyItem> deb_depends()
     return conflicts;
 }
 
-bool stub_isInstalled()
+TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
 {
-    return true;
+    Stub stub;
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
+    stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
+    stub.set((QApt::Package * (QApt::Backend::*)(const QString &name) const) ADDR(Backend, package), package_package);
+    stub.set(ADDR(DebFile, depends), deb_depends);
+    stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    usleep(10 * 1000);
+    m_packageManager->appendPackage({"/"});
+    qInfo() << package_conflicts().size();
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, isInstalled), stub_isInstalled);
+
+    m_packageManager->m_dependInstallMark.append("deb");
+    m_packageManager->m_packageMd5.append("deb");
+
+    m_packageManager->m_dependInstallMark.append("test success");
+    m_packageManager->slotDealDependResult(4, 0, "");
+    m_packageManager->slotDealDependResult(2, 0, "");
+    m_packageManager->slotDealDependResult(5, 0, "");
+    m_packageManager->installWineDepends = true;
+    m_packageManager->slotDealDependResult(5, 0, "");
 }
 
 bool ut_isArchError(int index)
 {
     Q_UNUSED(index);
     return true;
-}
-
-bool ut_isArchError_false(int index)
-{
-    Q_UNUSED(index);
-    return false;
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
@@ -1782,6 +1801,16 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
     m_packageManager->checkDependsPackageStatus(set, "", conflicts());
 }
 
+QString ut_availableversion()
+{
+    return "1.0";
+}
+
+QString ut_version()
+{
+    return "1.1";
+}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
 {
     usleep(10 * 1000);
@@ -1793,12 +1822,38 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
     stub.set(ADDR(Package, name), package_name);
     stub.set(ADDR(Package, architecture), package_architecture);
     stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, availableVersion), ut_availableversion);
     stub.set(ADDR(Package, depends), deb_conflicts_null);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
-
     m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
     stub.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch);
+    m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+}
+
+TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus02)
+{
+    usleep(10 * 1000);
+    QSet<QString> set;
+    Stub stub;
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+
+    stub.set(ADDR(Package, installedVersion), package_installedVersion);
+    stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(Package, version), ut_version);
+    stub.set(ADDR(Package, architecture), package_architecture);
+    stub.set(ADDR(Package, conflicts), package_conflicts);
+    stub.set(ADDR(Package, availableVersion), ut_availableversion);
+    stub.set(ADDR(Package, depends), deb_conflicts_null);
+    stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+
+    stub.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch);
+    m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    Stub stub1;
+    set.insert("");
+    stub1.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch1);
+    m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageMd5)
