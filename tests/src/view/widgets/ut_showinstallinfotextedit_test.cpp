@@ -87,12 +87,17 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_tapGestureTri
     Stub stub;
     stub.set(ADDR(QGesture, state), state);
 
+    QTapGesture *tap = new QTapGesture;
+    tap->setPosition(QPointF(0, 0));
+    QTapAndHoldGesture *tapAndHold = new QTapAndHoldGesture;
     while (states <= 4) {
-        m_infoTextEdit->tapGestureTriggered(nullptr);
+        m_infoTextEdit->tapGestureTriggered(tap);
         if (states != 2 && states != 4)
-            m_infoTextEdit->tapAndHoldGestureTriggered(nullptr);
+            m_infoTextEdit->tapAndHoldGestureTriggered(tapAndHold);
         states++;
     }
+    delete tap;
+    delete tapAndHold;
 }
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
