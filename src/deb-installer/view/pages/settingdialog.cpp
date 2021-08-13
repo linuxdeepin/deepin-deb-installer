@@ -57,14 +57,3 @@ bool SettingDialog::isDigitalVerified()
 {
     return m_setting->value("basic.develop_digital_verify.").toBool();
 }
-
-void SettingDialog::setCheckboxEnable(bool isDevelopMode)
-{
-    DCheckBox *box = this->findChild<DCheckBox *>();
-    if (box) {
-        if (isDevelopMode)
-            box->setEnabled(true);
-        else
-            box->setEnabled(false);
-    }
-}

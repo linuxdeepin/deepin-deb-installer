@@ -33,8 +33,6 @@ public:
     ~SettingDialog();
     void init();
     bool isDigitalVerified();
-    void setCheckboxEnable(bool isDevelopMode);
-    //    DWidget *widget();
 
 signals:
 
