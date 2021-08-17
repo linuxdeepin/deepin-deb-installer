@@ -59,6 +59,12 @@ signals:
      */
     void signalRemoveItemClicked(QModelIndex index);
 
+    /**
+     * @brief signalCurrentIndexRow 当前选中行
+     * @param row 行号
+     */
+    void signalCurrentIndexRow(int row);
+
 public slots:
 
     /**

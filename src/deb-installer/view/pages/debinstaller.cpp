@@ -387,17 +387,6 @@ void DebInstaller::slotReset()
     m_fileChooseWidget->clearChooseFileBtnFocus();
 }
 
-void DebInstaller::slotRemovePackage(const int index)
-{
-    m_fileListModel->slotRemovePackage(index);                                          // 后端删除某个下表的包
-    const int packageCount = m_fileListModel->preparedPackages().size();            // 获取删除后的包的数量
-    if (packageCount == 1) {                                                        // 删除后包的数量只有一个，从批量安装页面刷新成单包安装页面
-        refreshSingle();
-    }
-    if (packageCount > 1)                                                           // 删除后仍然有多个包，直接刷新批量安装界面
-        MulRefreshPage();
-}
-
 void DebInstaller::appendPackageStart()
 {
     m_packageAppending = true;
@@ -439,7 +428,7 @@ void DebInstaller::single2Multi()
     multiplePage->setObjectName("MultipleInstallPage");
 
     connect(multiplePage, &MultipleInstallPage::signalBackToFileChooseWidget, this, &DebInstaller::slotReset);
-    connect(multiplePage, &MultipleInstallPage::signalRequestRemovePackage, this, &DebInstaller::slotRemovePackage);
+
     multiplePage->refreshModel();
     m_lastPage = multiplePage;
     m_centralLayout->addWidget(multiplePage);

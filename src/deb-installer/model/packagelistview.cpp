@@ -99,7 +99,7 @@ void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
     if (!debListModel->isWorkerPrepare()) {                                     //当前model未就绪
         return;
     }
-
+    emit signalCurrentIndexRow(m_currentIndex);
     DListView::mouseReleaseEvent(event);
 }
 
@@ -169,7 +169,7 @@ void PackagesListView::initRightContextMenu()
 void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
-
+    emit signalCurrentIndexRow(index.row());
     m_bShortcutDelete = false;                          //右键菜单显示时不允许使用快捷键删除
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
