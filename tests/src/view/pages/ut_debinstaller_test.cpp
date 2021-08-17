@@ -168,7 +168,7 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
     stub.set(ADDR(DebListModel, slotAppendPackage), stud_appendPackage);
     stub.set(ADDR(DebListModel, preparedPackages), stud_preparedPackages);
-    stub.set(ADDR(DebListModel, slotRemovePackage), stud_removePackage);
+    stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
     stub.set(ADDR(DebListModel, reset), stud_reset);
     stub.set(ADDR(DebListModel, initPrepareStatus), stud_reset);
     stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
@@ -206,7 +206,6 @@ TEST_F(Debinstaller_UT, total_UT)
     deb->slotSetAuthingStatus(false);
     deb->slotReset();
 
-    deb->slotRemovePackage(1);
     deb->appendPackageStart();
     deb->appendFinished();
     deb->single2Multi();

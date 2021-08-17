@@ -205,8 +205,11 @@ void DebListModel::initRefreshPageConnecions()
     //刷新首页
     connect(m_packagesManager, &PackagesManager::signalRefreshFileChoosePage, this, &DebListModel::signalRefreshFileChoosePage);
 
-    //显示依赖关系
-    connect(m_packagesManager, &PackagesManager::signalDependPackages, this, &DebListModel::signalDependPackages);
+    //显示单包依赖关系
+    connect(m_packagesManager, &PackagesManager::signalSingleDependPackages, this, &DebListModel::signalSingleDependPackages);
+
+    //显示批量包依赖关系
+    connect(m_packagesManager, &PackagesManager::signalMultDependPackages, this, &DebListModel::signalMultDependPackages);
 }
 
 /**
@@ -343,6 +346,11 @@ bool DebListModel::isDevelopMode()
     return m_isDevelopMode;
 }
 
+void DebListModel::selectedIndexRow(int row)
+{
+    m_packagesManager->selectedIndexRow(row);
+}
+
 void DebListModel::slotInstallPackages()
 {
     if (m_workerStatus != WorkerPrepare)
@@ -421,7 +429,7 @@ void DebListModel::slotUninstallPackage(const int index)
     delete debFile;
 }
 
-void DebListModel::slotRemovePackage(const int idx)
+void DebListModel::removePackage(const int idx)
 {
     if(WorkerPrepare != m_workerStatus){
         qWarning()<<"installer status error";
@@ -575,7 +583,9 @@ QString DebListModel::packageFailedReason(const int idx) const
         }
 
         const auto conflictStatus = m_packagesManager->packageConflictStat(idx);                  //获取冲突情况
-        if (!conflictStatus.is_ok()) return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
+        if (!conflictStatus.is_ok())
+            return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
+        qInfo() << "================" << dependStatus.package;
     }
 
     if(m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)

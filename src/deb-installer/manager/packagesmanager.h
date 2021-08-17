@@ -91,6 +91,12 @@ public:
      */
     static bool dependencyVersionMatch(const int result, const RelationType relation);
 
+    /**
+     * @brief selectedIndexRow 当前选择安装包列表的行
+     * @param row 行号
+     */
+    void selectedIndexRow(int row);
+
 public slots:
     /**
      * @brief DealDependResult 处理wine依赖下载结果的槽函数
@@ -171,10 +177,16 @@ signals:
     void signalRefreshFileChoosePage();
 
     /**
-     * @brief signalDependPackages
+     * @brief signalSingleDependPackages
      * @param breakPackages
      */
-    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages, bool installWineDepends);
+    void signalSingleDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
+
+    /**
+     * @brief signalMultDependPackages
+     * @param breakPackages
+     */
+    void signalMultDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
     //// 后端状态相关函数
 public:
 

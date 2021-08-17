@@ -249,7 +249,12 @@ private slots:
      */
     void slotWorkerProgressChanged(const int progress);
 
-    void slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages, bool installWineDepends);
+    /**
+     * @brief slotDependPackages  缺失依赖显示
+     * @param dependPackages  依赖包存储
+     * @param installWineDepends 是否进入wine依赖配置
+     */
+    void slotDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
 
 private:
     Operate m_operate = Unknown; //当前的操作

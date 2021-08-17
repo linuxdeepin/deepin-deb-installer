@@ -782,14 +782,13 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_removePackage)
 
     m_debListModel->m_packagesManager->m_preparedPackages.append("1");
 
-    m_debListModel->slotRemovePackage(0);
+    m_debListModel->removePackage(0);
 
     ASSERT_EQ(m_debListModel->m_packagesManager->m_preparedPackages.size(), 1);
 
     m_debListModel->slotAppendPackage(list);
     m_debListModel->m_packageOperateStatus[""] = 1;
-    m_debListModel->slotRemovePackage(0);
-
+    m_debListModel->removePackage(0);
 }
 
 QApt::ErrorCode model_transaction_commitError()
