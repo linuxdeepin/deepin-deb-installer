@@ -84,13 +84,6 @@ private slots:
     void slotShowPkgRemovedMessage(QString packageName);
 
     /**
-     * @brief slotRemovePackage
-     * @param index 要删除的包的下标
-     * 根据传入的下表删除某个包。
-     */
-    void slotRemovePackage(const int index);
-
-    /**
      * @brief slotShowUninstallConfirmPage
      * 卸载按钮的槽函数
      * 显示卸载界面

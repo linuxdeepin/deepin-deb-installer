@@ -353,7 +353,7 @@ TEST_F(SingleInstallpage_UT, slotDependPackages_UT)
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
     usleep(100 * 1000);
-    QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages;
+    //    QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages;
     DependInfo info;
     info.packageName = "libopencl1";
     info.version = "1.0";
@@ -362,6 +362,6 @@ TEST_F(SingleInstallpage_UT, slotDependPackages_UT)
     QPair<QList<DependInfo>, QList<DependInfo>> pair;
     pair.first.append(list);
     pair.second.append(list);
-    dependPackages.insert("deb", pair);
-    page->slotDependPackages(dependPackages, false);
+    //    dependPackages.insert("deb", pair);
+    page->slotDependPackages(pair, false);
 }

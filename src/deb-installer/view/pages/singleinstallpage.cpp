@@ -489,7 +489,7 @@ void SingleInstallPage::initConnections()
     //transaction 进度改变 进度条进度改变
     connect(m_packagesModel, &DebListModel::signalTransactionProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
 
-    connect(m_packagesModel, &DebListModel::signalDependPackages, this, &SingleInstallPage::slotDependPackages);
+    connect(m_packagesModel, &DebListModel::signalSingleDependPackages, this, &SingleInstallPage::slotDependPackages);
 
     //安装结束
     connect(m_packagesModel, &DebListModel::signalWorkerFinished, this, &SingleInstallPage::slotWorkerFinished);
@@ -735,28 +735,23 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     m_progress->setValue(progress);             //进度增加
 }
 
-void SingleInstallPage::slotDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> dependPackages, bool installWineDepends)
+void SingleInstallPage::slotDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends)
 {
-    if (dependPackages.isEmpty())
-        return;
-
-    QPair<QList<DependInfo>, QList<DependInfo>> depends = dependPackages.last();
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
-    if (!(depends.second.size() > 0 && !installWineDepends))
+    m_showDependsView->clearText();
+    if (!(dependPackages.second.size() > 0 && !installWineDepends))
         return;
     m_showDependsButton->setVisible(true);
-    if (depends.first.size() > 0) {
+    if (dependPackages.first.size() > 0) {
         m_showDependsView->appendText(tr("Dependencies in the repository"));
-        for (int i = 0; i < depends.first.size(); i++) {
-            m_showDependsView->appendText(depends.first.at(i).packageName + "   " + depends.first.at(i).version);
-            qInfo() << "****************" << depends.first.at(i).packageName;
-        }
+        for (int i = 0; i < dependPackages.first.size(); i++)
+            m_showDependsView->appendText(dependPackages.first.at(i).packageName + "   " + dependPackages.first.at(i).version);
         m_showDependsView->appendText(tr(""));
     }
-    if (depends.second.size() > 0) {
+    if (dependPackages.second.size() > 0) {
         m_showDependsView->appendText(tr("Missing dependencies"));
-        for (int i = 0; i < depends.second.size(); i++)
-            m_showDependsView->appendText(depends.second.at(i).packageName + "   " + depends.second.at(i).version);
+        for (int i = 0; i < dependPackages.second.size(); i++)
+            m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
     }
     m_showDependsView->setTextCursor(QTextCursor::Start);
 }

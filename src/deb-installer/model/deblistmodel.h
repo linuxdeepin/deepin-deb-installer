@@ -233,6 +233,12 @@ public:
      */
     bool isDevelopMode();
 
+    /**
+     * @brief selectedIndexRow 当前选择安装包列表的行
+     * @param row 行号
+     */
+    void selectedIndexRow(int row);
+
 public:
     /**
      * @brief initPrepareStatus  初始化所有包的状态为Prepare
@@ -258,6 +264,12 @@ public:
      * @param workerStatus 当前需要设置的安装状态
      */
     void setWorkerStatus(int workerStatus);
+
+    /**
+     * @brief removePackage 删除某一个包
+     * @param idx 要删除的包的index
+     */
+    void removePackage(const int idx);
 
 signals:
     /**
@@ -361,10 +373,16 @@ signals:
     void signalPackageAlreadyExists();
 
     /**
-     * @brief signalBreakDependsPackages 依赖关系显示信号
+     * @brief signalSingleDependPackages 单包依赖关系显示信号
      * @param breakPackages
      */
-    void signalDependPackages(QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> breakPackages, bool intallWineDepends);
+    void signalSingleDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> breakPackages, bool intallWineDepends);
+
+    /**
+     * @brief signalMultDependPackages 批量包依赖关系显示信号
+     * @param breakPackages
+     */
+    void signalMultDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> breakPackages, bool intallWineDepends);
 signals:
     /**
      * @brief signalRefreshSinglePage 刷新单包安装界面的信号
@@ -414,12 +432,6 @@ public slots:
      * @param index   包的index
      */
     void slotUninstallPackage(const int index);
-
-    /**
-     * @brief slotRemovePackage 删除某一个包
-     * @param idx 要删除的包的index
-     */
-    void slotRemovePackage(const int idx);
 
     /**
      * @brief slotAppendPackage 添加包
