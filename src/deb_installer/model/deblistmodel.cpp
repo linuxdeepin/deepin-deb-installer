@@ -953,7 +953,7 @@ bool DebListModel::checkSystemVersion()
     }
     case Dtk::Core::DSysInfo::UosCommunity:                  //社区版 不验证签名
     case Dtk::Core::DSysInfo::UosEnterprise:                 //服务器版
-        return false;
+        return true;
     default:
         return true;
     }
@@ -970,7 +970,7 @@ bool DebListModel::checkDigitalSignature()
     const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex);              //获取包的依赖状态
     if (stat.isBreak() || stat.isAuthCancel())
         return true;
-    if (!m_isVerifyDigital)
+    if (m_isVerifyDigital)
         return true;
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //非开模式，判断是否有数字签名
     switch (digitalSigntual) {
