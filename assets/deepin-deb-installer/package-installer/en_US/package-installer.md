@@ -49,19 +49,18 @@ Package Installer is able to identify the packages could not be installed automa
 Please read the prompt carefully, common causes include: 
 
 - Unmatched package architecture.
-- Broken dependencies.
-
+   
    ![unable](fig/unable1.png) 
-
+   
+- Broken dependencies.
+   
    ![unable](fig/unable.png)
 
-- No digital signature. 
-  
-   Please enable developer mode in **Control Center > General Settings** according to the hints in the dialogue box.
-
-- Lack of valid digital signature.
-
+- No digital signature. Please enable developer mode in **Control Center > General Settings** according to the hints in the dialogue box.
+   
    ![cant](fig/cant3.png) 
+   
+- Lack of valid digital signature.
    
    ![cant4](fig/cant4.png)
 
