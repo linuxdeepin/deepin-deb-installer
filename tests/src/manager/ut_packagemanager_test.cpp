@@ -110,8 +110,8 @@ Package *stub_avaialbe_packageWithArch(QString, QString, QString)
 {
     Backend *bac = nullptr;
     pkgCache::PkgIterator packageIter;
-    Package *package = new Package(bac,packageIter);
-    return package;
+    static Package package(bac, packageIter);
+    return &package;
 }
 
 PackageList backend_availablePackages()
@@ -316,8 +316,8 @@ Package *packagesManager_package(const QString &)
     qDebug()<<"not null";
     Backend *bac = nullptr;
     pkgCache::PkgIterator packageIter;
-    Package *package = new Package(bac,packageIter);
-    return package;
+    static Package package(bac, packageIter);
+    return &package;
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isBackendReady)
@@ -609,9 +609,8 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
 PackageList stub_availablePackages()
 {
     PackageList paclist;
-    Backend *bac = nullptr;
-    pkgCache::PkgIterator packageIter;
-    Package *package =  new Package(bac,packageIter);
+
+    Package *package = nullptr;
     paclist.append(package);
     return paclist;
 }
