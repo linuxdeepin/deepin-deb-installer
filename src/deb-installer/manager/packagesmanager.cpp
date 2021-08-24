@@ -393,8 +393,12 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, QString dep
         if (installWineDepends) { //下载wine依赖失败时，考虑出现依赖缺失的情况
             qInfo() << "check wine depends again !" << iIndex;
             getPackageDependsStatus(iIndex);
-            if (!m_dependsPackages.isEmpty() && 1 == m_preparedPackages.size())
-                emit signalSingleDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
+            if (!m_dependsPackages.isEmpty()) {
+                if (1 == m_preparedPackages.size())
+                    emit signalSingleDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
+                else if (m_preparedPackages.size() > 1)
+                    installWineDepends = false;
+            }
         }
         emit signalEnableCloseButton(true);
     }
