@@ -1186,9 +1186,8 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     if (package)
         return package;
     for (QString arch : backend->architectures()) {
-        if (!package)
-            package = backend->package(packageName + ":" + arch);
-        else
+        package = backend->package(packageName + ":" + arch);
+        if (package)
             return package;
     }
 
