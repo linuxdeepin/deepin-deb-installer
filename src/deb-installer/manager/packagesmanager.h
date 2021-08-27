@@ -416,6 +416,35 @@ private:
     void addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum);
 
     /**
+     * @brief swapPackages   对列表中第一个包位置交换
+     * @param packagePath    包的路径
+     */
+    void swapPackages(const QString &packagePath);
+
+    /**
+     * @brief swappedPackageIndex 获取当前包要插入的位置
+     * @param packagePath     包的路径
+     * @return
+     */
+    int swappedPackageIndex(const QString &packagePath);
+
+    /**
+     * @brief getAllDepends 获取安装包所有依赖
+     * @param depends       依赖列表
+     * @param architecture  安装包架构
+     * @return
+     */
+    QList<QString> getAllDepends(const QList<DependencyItem> &depends,QString architecture);
+
+    /**
+     * @brief getAllDepends 获取依赖包所有依赖
+     * @param packageName   依赖包包名
+     * @param architecture  架构
+     * @return
+     */
+    QList<QString> getAllDepends(const QString &packageName,QString architecture);
+
+    /**
      * @brief refreshPage 刷新当前的页面
      * @param pkgCount  需要添加的包的数量
      */
@@ -536,6 +565,8 @@ private:
     QList<QByteArray> m_dependInstallMark = {};
 
     QPair<QList<DependInfo>, QList<DependInfo>> m_pair; //存储available及broken依赖
+
+    QList<QString> m_allDependsList; //存储当前添加的包的所有依赖
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";     //软链接临时路径
