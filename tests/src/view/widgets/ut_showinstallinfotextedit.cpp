@@ -20,6 +20,7 @@
 
 #include <QGestureEvent>
 #include <QMouseEvent>
+#include <QScrollBar>
 
 #include <gtest/gtest.h>
 
@@ -46,7 +47,9 @@ protected:
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_slideGesture)
 {
+    int value = m_infoTextEdit->verticalScrollBar()->value();
     m_infoTextEdit->slideGesture(5);
+    EXPECT_EQ(0 + value, m_infoTextEdit->verticalScrollBar()->value());
 }
 
 QString ut_selectedText()
@@ -57,11 +60,11 @@ QString ut_selectedText()
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_onSelectionArea)
 {
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
-//    QTextCursor cursor = m_infoTextEdit->textCursor();
-//    cursor.selectedText() = "//";
     Stub stub;
     stub.set(ADDR(QTextCursor,selectedText),ut_selectedText);
     m_infoTextEdit->onSelectionArea();
+    EXPECT_EQ(ShowInstallInfoTextEdit::GA_tap, m_infoTextEdit->m_gestureAction);
+    EXPECT_EQ("//", m_infoTextEdit->textCursor().selectedText());
 }
 
 TEST(FlashTween_TEST, FlashTween_UT_start)
@@ -96,6 +99,8 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_tapGestureTri
             m_infoTextEdit->tapAndHoldGestureTriggered(tapAndHold);
         states++;
     }
+    EXPECT_FALSE(m_infoTextEdit->m_slideContinue);
+    EXPECT_EQ(ShowInstallInfoTextEdit::GA_slide, m_infoTextEdit->m_gestureAction);
     delete tap;
     delete tapAndHold;
 }
@@ -105,7 +110,7 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
     QGesture *gesture = new QGesture();
 
     QGestureEvent gestureEvent(QList<QGesture *> {gesture, gesture});
-    m_infoTextEdit->gestureEvent(&gestureEvent);
+    EXPECT_TRUE(m_infoTextEdit->gestureEvent(&gestureEvent));
     delete gesture;
 }
 
@@ -114,12 +119,14 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseE
     QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0),QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,Qt::MouseEventSynthesizedByQt);
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     m_infoTextEdit->mouseReleaseEvent(&releaseEvent);
+    EXPECT_EQ(ShowInstallInfoTextEdit::GA_null, m_infoTextEdit->m_gestureAction);
 }
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEvent)
 {
     QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_infoTextEdit->mouseMoveEvent(&moveEvent);
+    ASSERT_EQ(0.0, m_infoTextEdit->m_lastMousepos);
 }
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEvent_source)
@@ -130,4 +137,5 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEven
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_infoTextEdit->mouseMoveEvent(&moveEvent);
+    ASSERT_EQ(0.0, m_infoTextEdit->m_lastMousepos);
 }

@@ -185,18 +185,22 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
 
-    deb->disableCloseAndExit();
     deb->slotEnableCloseButton(false);
+    EXPECT_TRUE(deb->titlebar()->quitMenuIsDisabled());
     deb->slotEnableCloseButton(true);
+    EXPECT_FALSE(deb->titlebar()->quitMenuIsDisabled());
 
     deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerProcessing);
     deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
+    EXPECT_EQ(DebListModel::WorkerProcessing, deb->m_fileListModel->getWorkerStatus());
     deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerFinished);
     deb->slotPackagesSelected(QStringList() << "test.deb"
                             << "test1.deb");
+    EXPECT_EQ(DebListModel::WorkerFinished, deb->m_fileListModel->getWorkerStatus());
 
     deb->refreshMulti();
+    EXPECT_EQ(1, deb->m_dragflag);
     deb->slotShowInvalidePackageMessage();
     deb->slotShowPkgExistMessage();
     deb->slotShowUninstallConfirmPage();
