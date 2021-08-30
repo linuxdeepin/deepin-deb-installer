@@ -102,7 +102,7 @@ bool PackagesManager::dependencyVersionMatch(const int result, const RelationTyp
 
 void PackagesManager::selectedIndexRow(int row)
 {
-    if (row <= m_packageMd5.size() - 1)
+    if (row < m_packageMd5.size())
         emit signalMultDependPackages(m_dependsPackages.value(m_packageMd5[row]), installWineDepends);
 }
 
