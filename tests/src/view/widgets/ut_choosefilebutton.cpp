@@ -14,26 +14,38 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include "../deb-installer/view/widgets/choosefilebutton.h"
+#include "utils/utils.h"
+
+#include <QKeyEvent>
+
 #include <gtest/gtest.h>
 
-#include "../deb-installer/view/widgets/debinfolabel.h"
-
-#include <QPaintEvent>
-
-TEST(DebInfoLabel_TEST, DebInfoLabel_UT_setCustomQPalette)
+class ut_chooseFileButton_TEST : public ::testing::Test
 {
-    DebInfoLabel *label = new DebInfoLabel;
-    label->setCustomQPalette(QPalette::WindowText);
-    label->setCustomQPalette(QPalette::BrightText);
-    label->setCustomDPalette();
-    label->setCustomDPalette(DPalette::TextLively);
-    QPaintEvent paint(QRect(label->rect()));
-    label->paintEvent(&paint);
-    label->m_bMultiIns = true;
-    QPaintEvent paint1(QRect(label->rect()));
-    label->paintEvent(&paint1);
-    label->m_bUserColorType = false;
-    QPaintEvent paint2(QRect(label->rect()));
-    label->paintEvent(&paint2);
-    delete label;
+    // Test interface
+protected:
+    void SetUp()
+    {
+        m_choosFileBtn = new ChooseFileButton("");
+    }
+    void TearDown()
+    {
+        delete m_choosFileBtn;
+    }
+
+    ChooseFileButton *m_choosFileBtn = nullptr;
+};
+
+TEST_F(ut_chooseFileButton_TEST, ChooseFileButton_UT_setFamily)
+{
+    m_choosFileBtn->setText("1");
+    ASSERT_EQ("1", m_choosFileBtn->text());
+}
+
+TEST_F(ut_chooseFileButton_TEST, ChooseFileButton_UT_keyPressEvent)
+{
+    QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
+    QCoreApplication::sendEvent(m_choosFileBtn, &keyPressEvent);
 }

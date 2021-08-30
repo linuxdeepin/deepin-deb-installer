@@ -66,16 +66,40 @@ public:
     SingleInstallerApplication *singleInstaller;
 };
 
-TEST_F(SingleInstallerApplication_UT, test_UT)
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_parseCmdLine)
 {
     Stub stub;
     stub.set((void (QCommandLineParser::*)(const QCoreApplication &))ADDR(QCommandLineParser, process), stud_singleaAppProcess);
     singleInstaller->m_selectedFiles.append(" ");
     singleInstaller->parseCmdLine();
-    QStringList debPathList;
-    singleInstaller->InstallerDeb(debPathList);
-    debPathList.append("test.deb");
-    singleInstaller->InstallerDeb(debPathList);
+    EXPECT_TRUE(singleInstaller->m_selectedFiles.isEmpty());
+}
+
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_activateWindow)
+{
     singleInstaller->m_selectedFiles.append(" ");
     singleInstaller->activateWindow();
+
+    EXPECT_TRUE(singleInstaller->m_qspMainWnd.get()->isVisible());
+}
+
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb)
+{
+    QStringList debPathList;
+    singleInstaller->m_selectedFiles.append(" ");
+    singleInstaller->activateWindow();
+    singleInstaller->InstallerDeb(debPathList);
+    EXPECT_EQ(0, debPathList.size());
+    EXPECT_FALSE(singleInstaller->m_qspMainWnd.get()->isActiveWindow());
+}
+
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb_01)
+{
+    QStringList debPathList;
+    debPathList.append("test.deb");
+    singleInstaller->m_selectedFiles.append(" ");
+    singleInstaller->activateWindow();
+    singleInstaller->InstallerDeb(debPathList);
+    EXPECT_EQ(1, debPathList.size());
+    EXPECT_FALSE(singleInstaller->m_qspMainWnd.get()->isActiveWindow());
 }
