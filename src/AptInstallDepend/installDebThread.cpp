@@ -96,7 +96,7 @@ void InstallDebThread::run()
             for (int i = 1; i < m_listParam.size(); i++) {
                 depends << m_listParam[i];
             }
-
+            system("echo \"libpam-runtime libpam-runtime/override boolean false\" | debconf-set-selections");
             system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
             m_proc->start("sudo", QStringList() << "apt-get"
                           << "install"

@@ -63,7 +63,9 @@ TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_removeThreshold)
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_thresholds)
 {
-    qDebug() << m_colorProcessBar->thresholds();
+    m_colorProcessBar->threshmap.insert(1,QBrush(nullptr));
+    m_colorProcessBar->thresholds();
+    EXPECT_EQ(1,m_colorProcessBar->thresholds().first());
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_paintEvent_Light)
