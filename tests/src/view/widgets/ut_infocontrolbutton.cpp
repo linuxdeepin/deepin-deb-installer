@@ -16,7 +16,7 @@
 */
 
 #include "../deb-installer/view/widgets/infocontrolbutton.h"
-
+#include "../deb-installer/view/widgets/InfoCommandLinkButton.h"
 #include <ut_Head.h>
 
 #include <QMouseEvent>
@@ -41,28 +41,43 @@ public:
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_setExpandTips)
 {
-    m_infoControlBtn->setExpandTips("");
+    m_infoControlBtn->setExpandTips("/");
+    ASSERT_EQ("/", m_infoControlBtn->m_expandTips);
+    ASSERT_EQ("/", m_infoControlBtn->m_tipsText->text());
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_setShrinkTips)
 {
-    m_infoControlBtn->setShrinkTips("");
+    m_infoControlBtn->setShrinkTips("/");
+    ASSERT_EQ("/", m_infoControlBtn->m_shrinkTips);
+    ASSERT_EQ("/", m_infoControlBtn->m_tipsText->text());
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_onMouseRelease)
 {
+    m_infoControlBtn->m_expand = false;
+    m_infoControlBtn->m_shrinkTips = "shrink";
     m_infoControlBtn->onMouseRelease();
+    EXPECT_TRUE(m_infoControlBtn->m_expand);
+    ASSERT_EQ("shrink", m_infoControlBtn->m_tipsText->text());
+}
+
+TEST_F(InfoControlButton_Test, InfoControlButton_UT_onMouseRelease_01)
+{
     m_infoControlBtn->m_expand = true;
+    m_infoControlBtn->m_expandTips = "expand";
     m_infoControlBtn->onMouseRelease();
     EXPECT_FALSE(m_infoControlBtn->m_expand);
+    ASSERT_EQ("expand", m_infoControlBtn->m_tipsText->text());
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_themeChanged)
 {
     m_infoControlBtn->themeChanged();
+    EXPECT_FALSE(m_infoControlBtn->m_expand) << "false";
     m_infoControlBtn->m_expand = true;
     m_infoControlBtn->themeChanged();
-    EXPECT_TRUE(m_infoControlBtn->m_expand);
+    EXPECT_TRUE(m_infoControlBtn->m_expand) << "true";
 }
 
 TEST_F(InfoControlButton_Test, InfoControlButton_UT_mouseReleaseEvent)

@@ -33,15 +33,25 @@ TEST(FileChooseWidget_TEST, FileChooseWidget_UT_themeChanged)
 {
     FileChooseWidget *fchooseWidget = new FileChooseWidget;
     fchooseWidget->themeChanged();
+    ASSERT_EQ(QSize(160, 160), fchooseWidget->m_iconImage->size());
     delete fchooseWidget;
 }
 
 TEST(FileChooseWidget_TEST, FileChooseWidget_UT_chooseFiles)
 {
     FileChooseWidget *fchooseWidget = new FileChooseWidget;
+    fchooseWidget->m_settings.setValue("history_dir", "/");
     Stub stub;
     stub.set(DDialog_exec, stub_exec);
     fchooseWidget->chooseFiles();
+    ASSERT_EQ("/", fchooseWidget->m_settings.value("history_dir"));
+    delete fchooseWidget;
+}
+
+TEST(FileChooseWidget_TEST, FileChooseWidget_UT_clearChooseFileBtnFocus)
+{
+    FileChooseWidget *fchooseWidget = new FileChooseWidget;
     fchooseWidget->clearChooseFileBtnFocus();
+    ASSERT_FALSE(fchooseWidget->hasFocus());
     delete fchooseWidget;
 }

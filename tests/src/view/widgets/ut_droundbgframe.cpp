@@ -50,10 +50,12 @@ public:
     DRoundBgFrame *frame;
 };
 
-TEST_F(DRoundBgFrame_UT, total_UT)
+TEST_F(DRoundBgFrame_UT, paintEvent_UT)
 {
-    frame = new DRoundBgFrame();
+    frame = new DRoundBgFrame(nullptr, 10, 10);
     QPaintEvent paint(QRect(frame->rect()));
     frame->paintEvent(&paint);
+    ASSERT_EQ(10, frame->m_bgOffsetTop);
+    ASSERT_EQ(10, frame->m_bgOffsetBottom);
     delete frame;
 }

@@ -16,7 +16,7 @@
 */
 
 #include "../deb-installer/view/pages/AptConfigMessage.h"
-
+#include "../deb-installer/view/widgets/ShowInstallInfoTextEdit.h"
 #include <stub.h>
 #include <ut_Head.h>
 
@@ -49,15 +49,26 @@ public:
     AptConfigMessage *aptConfig;
 };
 
-TEST_F(AptConfigMessage_UT, total_UT)
+TEST_F(AptConfigMessage_UT, UT_AptConfigMessage_clearTexts)
+{
+    aptConfig->clearTexts();
+    EXPECT_TRUE(aptConfig->m_inputEdit->text().isEmpty());
+    EXPECT_TRUE(aptConfig->m_textEdit->m_editor->toPlainText().isEmpty());
+}
+
+TEST_F(AptConfigMessage_UT, UT_AptConfigMessage_appendTextEdit)
 {
     aptConfig->appendTextEdit("test");
     aptConfig->appendTextEdit("test\\n");
+    EXPECT_NE(4, aptConfig->m_textEdit->m_editor->toPlainText().size());
+}
 
+TEST_F(AptConfigMessage_UT, UT_AptConfigMessage_dealInput)
+{
     aptConfig->dealInput();
     aptConfig->m_inputEdit->setText("test");
     aptConfig->dealInput();
-    aptConfig->clearTexts();
+    EXPECT_TRUE(aptConfig->m_inputEdit->text().isEmpty());
 }
 
 TEST_F(AptConfigMessage_UT, paintEvent_UT)
