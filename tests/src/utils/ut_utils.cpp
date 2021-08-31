@@ -38,14 +38,16 @@ TEST(Utils_Test, Utils_UT_loadFontFamilyByType)
     Stub stub;
     stub.set(ADDR(QFont, family), stud_family);
     Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
+    EXPECT_EQ("test", Utils::loadFontFamilyByType(Utils::SourceHanSansMedium));
 }
 
 TEST(Utils_Test, Utils_UT_loadFontBySizeAndWeight)
 {
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
-
-    QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 14, QFont::Medium);
+    int fontsize = 14;
+    QFont pkg_name_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, fontsize, QFont::Medium);
+    EXPECT_EQ(14, fontsize);
 }
 void util_setFont(const QFont &)
 {
@@ -67,6 +69,7 @@ TEST(Utils_Test, Utils_UT_bindFontBySizeAndWeight)
     stub.set((void (DFontSizeManager::*)(QWidget *, DFontSizeManager::SizeType, int))ADDR(DFontSizeManager, bind), util_bind);
 
     Utils::bindFontBySizeAndWeight(widget, fontFamily, 14, QFont::Medium);
+    EXPECT_EQ(nullptr, widget);
 }
 
 TEST(Utils_Test, Utils_UT_fromSpecialEncoding)
