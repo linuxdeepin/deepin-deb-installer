@@ -68,4 +68,6 @@ TEST_F(UnInstallConfirmPage_UT, total_UT)
     uninstallPage->installEventFilter(uninstallPage);
     uninstallPage->slotShowDetail();
     uninstallPage->slotHideDetail();
+    EXPECT_FALSE(uninstallPage->m_infoWrapperWidget->isVisible());
+    EXPECT_FALSE(uninstallPage->m_dependsInfomation->isVisible());
 }
