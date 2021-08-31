@@ -19,6 +19,8 @@
 #include "../deb-installer/model/deblistmodel.h"
 #include "../deb-installer/view/pages/multipleinstallpage.h"
 #include "../deb-installer/view/pages/singleinstallpage.h"
+#include "../deb-installer/view/widgets/filechoosewidget.h"
+#include "../deb-installer/view/widgets/choosefilebutton.h"
 #include "../deb-installer/manager/packagesmanager.h"
 #include "../deb-installer/view/widgets/infocontrolbutton.h"
 
@@ -127,7 +129,7 @@ void stud_appendNoThread(QStringList packages, int allPackageSize)
     Q_UNUSED(allPackageSize);
 }
 
-class Debinstaller_UT : public UT_HEAD
+class UT_Debinstaller : public UT_HEAD
 {
 public:
     //添加日志
@@ -162,7 +164,120 @@ void stub_enableCloseAndExit()
     return;
 }
 
-TEST_F(Debinstaller_UT, total_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_total)
+{
+    deb->slotShowInvalidePackageMessage();
+    deb->slotShowPkgExistMessage();
+    deb->slotShowNotLocalPackageMessage();
+    deb->slotShowPkgRemovedMessage("00");
+    EXPECT_EQ(deb->backToSinglePage(), nullptr);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotEnableCloseButton)
+{
+    deb->slotEnableCloseButton(false);
+    EXPECT_TRUE(deb->titlebar()->quitMenuIsDisabled());
+    deb->slotEnableCloseButton(true);
+    EXPECT_FALSE(deb->titlebar()->quitMenuIsDisabled());
+    deb->refreshMulti();
+    EXPECT_EQ(1, deb->m_dragflag);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotSetAuthingStatus)
+{
+    bool auth = false;
+    deb->slotSetAuthingStatus(auth);
+    EXPECT_FALSE(auth);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_single2Multi)
+{
+    deb->single2Multi();
+    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_EQ(1, deb->m_Filterflag);
+    EXPECT_EQ(1, deb->m_dragflag);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotChangeDragFlag)
+{
+    deb->slotChangeDragFlag();
+    EXPECT_EQ(0, deb->m_dragflag);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotDealDependResult)
+{
+    deb->slotDealDependResult(DebListModel::AuthDependsSuccess, "test");
+    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    deb->slotDealDependResult(DebListModel::AuthBefore, "test");
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotSetEnableButton)
+{
+    deb->m_dragflag = 2;
+    deb->slotSetEnableButton(true);
+    deb->slotSetEnableButton(false);
+    deb->slotShowHiddenButton();
+    EXPECT_FALSE(deb->m_packageAppending);
+    EXPECT_EQ(2, deb->m_dragflag);
+    deb->m_dragflag = 1;
+    deb->slotSetEnableButton(true);
+    deb->slotSetEnableButton(false);
+    deb->slotShowHiddenButton();
+    EXPECT_FALSE(deb->m_packageAppending);
+    EXPECT_EQ(1, deb->m_dragflag);
+    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    deb->m_packageAppending = true;
+    deb->slotSetEnableButton(true);
+    EXPECT_TRUE(deb->m_packageAppending);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_appendPackageStart)
+{
+    deb->appendPackageStart();
+    EXPECT_TRUE(deb->m_packageAppending);
+    deb->appendFinished();
+    EXPECT_FALSE(deb->m_packageAppending);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotPackagesSelected)
+{
+    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerProcessing);
+    deb->slotPackagesSelected(QStringList() << "test.deb"
+                                            << "test1.deb");
+    EXPECT_EQ(DebListModel::WorkerProcessing, deb->m_fileListModel->getWorkerStatus());
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotPackagesSelected_01)
+{
+    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerFinished);
+    deb->slotPackagesSelected(QStringList() << "test.deb");
+    EXPECT_EQ(DebListModel::WorkerFinished, deb->m_fileListModel->getWorkerStatus());
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotShowUninstallConfirmPage)
+{
+    deb->slotShowUninstallConfirmPage();
+    EXPECT_EQ(DebListModel::WorkerUnInstall, deb->m_fileListModel->getWorkerStatus());
+    EXPECT_EQ(3, deb->m_Filterflag);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotUninstallAccepted)
+{
+    deb->m_dragflag = 1;
+    deb->slotUninstallAccepted();
+    EXPECT_TRUE(deb->m_fileChooseWidget->acceptDrops());
+    EXPECT_EQ(-1, deb->m_Filterflag) << deb->m_Filterflag;
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotUninstallCancel)
+{
+    deb->m_dragflag = 1;
+    deb->slotUninstallCancel();
+    EXPECT_EQ(DebListModel::WorkerPrepare, deb->m_fileListModel->getWorkerStatus());
+    EXPECT_EQ(1, deb->m_Filterflag);
+}
+
+TEST_F(UT_Debinstaller, UT_Debinstaller_slotReset)
 {
     Stub stub;
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
@@ -184,54 +299,15 @@ TEST_F(Debinstaller_UT, total_UT)
     stub.set(ADDR(DebFile, version), stud_version);
     stub.set(ADDR(DebFile, longDescription), stud_longDescription);
     stub.set(ADDR(Backend, reloadCache), stud_reloadCache);
-
-    deb->slotEnableCloseButton(false);
-    EXPECT_TRUE(deb->titlebar()->quitMenuIsDisabled());
-    deb->slotEnableCloseButton(true);
-    EXPECT_FALSE(deb->titlebar()->quitMenuIsDisabled());
-
-    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerProcessing);
-    deb->slotPackagesSelected(QStringList() << "test.deb"
-                            << "test1.deb");
-    EXPECT_EQ(DebListModel::WorkerProcessing, deb->m_fileListModel->getWorkerStatus());
-    deb->m_fileListModel->setWorkerStatus(DebListModel::WorkerFinished);
-    deb->slotPackagesSelected(QStringList() << "test.deb"
-                            << "test1.deb");
-    EXPECT_EQ(DebListModel::WorkerFinished, deb->m_fileListModel->getWorkerStatus());
-
-    deb->refreshMulti();
-    EXPECT_EQ(1, deb->m_dragflag);
-    deb->slotShowInvalidePackageMessage();
-    deb->slotShowPkgExistMessage();
-    deb->slotShowUninstallConfirmPage();
-    deb->slotShowNotLocalPackageMessage();
-    deb->slotUninstallAccepted();
-    deb->slotUninstallCancel();
-    deb->slotSetAuthingStatus(false);
     deb->slotReset();
-
-    deb->appendPackageStart();
-    deb->appendFinished();
-    deb->single2Multi();
-    deb->slotChangeDragFlag();
-    deb->m_dragflag = 2;
-    deb->slotDealDependResult(DebListModel::AuthDependsSuccess, "test");
-    deb->slotSetEnableButton(true);
-    deb->slotSetEnableButton(false);
-    deb->slotShowHiddenButton();
-    deb->m_dragflag = 1;
-    deb->slotDealDependResult(DebListModel::AuthBefore, "test");
-    deb->slotSetEnableButton(true);
-    deb->slotSetEnableButton(false);
-    deb->slotShowHiddenButton();
-    deb->m_packageAppending = true;
-    deb->slotSetEnableButton(true);
-    deb->slotShowPkgRemovedMessage("00");
-    EXPECT_EQ(deb->backToSinglePage(), nullptr);
-
+    EXPECT_EQ(-1, deb->m_dragflag);
+    EXPECT_EQ(-1, deb->m_Filterflag);
+    EXPECT_EQ(DebListModel::WorkerPrepare, deb->m_fileListModel->m_workerStatus);
+    EXPECT_TRUE(deb->m_fileChooseWidget->acceptDrops());
+    EXPECT_FALSE(deb->m_fileChooseWidget->m_chooseFileBtn->hasFocus());
 }
 
-TEST_F(Debinstaller_UT, checkSuffix_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_checkSuffix)
 {
     Stub stub;
     stub.set(ADDR(QFileInfo, isFile), stud_isFile);
@@ -239,7 +315,7 @@ TEST_F(Debinstaller_UT, checkSuffix_UT)
     EXPECT_EQ(deb->checkSuffix("test"), false);
 }
 
-TEST_F(Debinstaller_UT, keyPressEvent_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_keyPressEvent)
 {
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Escape, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &keyPressEvent);
@@ -250,7 +326,7 @@ bool ut_hasUrls()
     return true;
 }
 
-TEST_F(Debinstaller_UT, dragEnterEvent_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_dragEnterEvent)
 {
     QMimeData *mimeData = new QMimeData;
     Stub stub;
@@ -259,7 +335,7 @@ TEST_F(Debinstaller_UT, dragEnterEvent_UT)
     QCoreApplication::sendEvent(deb, &enterEvent);
     delete  mimeData;
 }
-TEST_F(Debinstaller_UT, dragMoveEvent_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_dragMoveEvent)
 {
     QMimeData *mimeData = new QMimeData;
     QDragMoveEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
@@ -267,7 +343,7 @@ TEST_F(Debinstaller_UT, dragMoveEvent_UT)
     delete  mimeData;
 }
 
-TEST_F(Debinstaller_UT, dropEvent_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_dropEvent)
 {
     QByteArray csvData = "test";
     QMimeData *mimeData = new QMimeData;
@@ -277,8 +353,7 @@ TEST_F(Debinstaller_UT, dropEvent_UT)
     delete mimeData;
 }
 
-
-TEST_F(Debinstaller_UT, closeEvent_UT)
+TEST_F(UT_Debinstaller, UT_Debinstaller_closeEvent)
 {
     QByteArray csvData = "test";
     QMimeData *mimeData = new QMimeData;

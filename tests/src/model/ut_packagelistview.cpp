@@ -44,6 +44,7 @@ protected:
 TEST_F(ut_packagelistview_Test, packagelistview_UT_initUI)
 {
     m_listview->initUI();
+    EXPECT_TRUE(m_listview->hasAutoScroll());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_initConnection)

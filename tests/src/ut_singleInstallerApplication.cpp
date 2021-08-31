@@ -86,20 +86,14 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_activateWind
 TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb)
 {
     QStringList debPathList;
-    singleInstaller->m_selectedFiles.append(" ");
-    singleInstaller->activateWindow();
     singleInstaller->InstallerDeb(debPathList);
     EXPECT_EQ(0, debPathList.size());
-    EXPECT_FALSE(singleInstaller->m_qspMainWnd.get()->isActiveWindow());
 }
 
 TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb_01)
 {
     QStringList debPathList;
     debPathList.append("test.deb");
-    singleInstaller->m_selectedFiles.append(" ");
-    singleInstaller->activateWindow();
     singleInstaller->InstallerDeb(debPathList);
     EXPECT_EQ(1, debPathList.size());
-    EXPECT_FALSE(singleInstaller->m_qspMainWnd.get()->isActiveWindow());
 }

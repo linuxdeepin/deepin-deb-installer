@@ -24,6 +24,7 @@
 #include "../deb-installer/manager/packagesmanager.h"
 #include "../deb-installer/manager/PackageDependsStatus.h"
 #include "../deb-installer/view/widgets/workerprogress.h"
+#include "../deb-installer/view/widgets/ShowInstallInfoTextEdit.h"
 
 #include <stub.h>
 #include <ut_Head.h>
@@ -112,8 +113,7 @@ PackageDependsStatus stud_getPackageDependsStatus(const int )
     return PackageDependsStatus::_break("package");
 }
 
-
-class SingleInstallpage_UT : public UT_HEAD
+class UT_SingleInstallpage : public UT_HEAD
 {
 public:
     //添加日志
@@ -143,7 +143,12 @@ QVariant stu_data()
     return DebListModel::DependsOk;
 }
 
-TEST_F(SingleInstallpage_UT, total_UT)
+QVariant stu_data1()
+{
+    return DebListModel::Success;
+}
+
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_total)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -164,6 +169,16 @@ TEST_F(SingleInstallpage_UT, total_UT)
     model->m_packagesManager->m_preparedPackages.append("test1");
     page = new SingleInstallPage(model);
     page->slotReinstall();
+    EXPECT_FALSE(page->m_reinstallButton->hasFocus());
+    EXPECT_EQ("Show details", page->m_infoControlButton->m_expandTips);
+    EXPECT_FALSE(page->m_installButton->isVisible());
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_EQ("Show details", page->m_infoControlButton->m_expandTips);
+    EXPECT_EQ(SingleInstallPage::Reinstall, page->m_operate);
+    EXPECT_EQ(DebListModel::WorkerPrepare, page->m_packagesModel->m_workerStatus);
 
     EXPECT_EQ(page->initLabelWidth(11), 260);
     EXPECT_EQ(page->initLabelWidth(12), 255);
@@ -176,28 +191,103 @@ TEST_F(SingleInstallpage_UT, total_UT)
     EXPECT_EQ(page->initLabelWidth(22), 220);
 
     page->slotInstall();
+    EXPECT_FALSE(page->m_installButton->hasFocus());
+    EXPECT_EQ("Show details", page->m_infoControlButton->m_expandTips);
+    EXPECT_FALSE(page->m_installButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+
     page->slotUninstallCurrentPackage();
+    EXPECT_FALSE(page->m_tipsLabel->isVisible());
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_EQ("Show details", page->m_infoControlButton->m_expandTips);
+    EXPECT_EQ(SingleInstallPage::Uninstall, page->m_operate);
+    EXPECT_EQ(DebListModel::WorkerPrepare, page->m_packagesModel->m_workerStatus);
+
     page->slotShowInfomation();
+    EXPECT_FALSE(page->m_upDown);
+    EXPECT_FALSE(page->m_installProcessView->isVisible());
+    EXPECT_FALSE(page->m_itemInfoFrame->isVisible());
+
     page->slotHideInfomation();
+    EXPECT_TRUE(page->m_upDown);
+    EXPECT_FALSE(page->m_installProcessView->isVisible());
+    EXPECT_FALSE(page->m_itemInfoFrame->isVisible());
+
     page->slotShowInfo();
-    page->slotOutputAvailable("test");
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_installButton->isVisible());
+    EXPECT_FALSE(page->m_doneButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_FALSE(page->m_showDependsButton->isVisible());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+    EXPECT_FALSE(page->m_confirmButton->isVisible());
+    EXPECT_EQ("", page->m_tipsLabel->text());
+
+    page->slotOutputAvailable("");
+    EXPECT_TRUE(page->m_installProcessView->m_editor->toPlainText().isEmpty());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+    page->m_progress->setValue(0);
+    EXPECT_EQ(0, page->m_progress->value());
+    EXPECT_TRUE(page->m_workerStarted);
+
     page->m_upDown = false;
+    page->slotWorkerFinished();
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_EQ(0, page->m_progress->value());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+    EXPECT_FALSE(page->m_upDown);
+    Stub stub1;
+    stub1.set(ADDR(QModelIndex, data), stu_data1);
+    page->m_operate = SingleInstallPage::Unknown;
     page->slotWorkerFinished();
 
     page->slotWorkerProgressChanged(100);
+    EXPECT_EQ(100, page->m_progress->value());
+
     page->m_progress->setValue(60);
     page->slotWorkerProgressChanged(50);
 
     page->setEnableButton(false);
     page->setEnableButton(true);
+    EXPECT_TRUE(page->m_uninstallButton->isEnabled());
+    EXPECT_TRUE(page->m_reinstallButton->isEnabled());
+    EXPECT_TRUE(page->m_installButton->isEnabled());
 
     page->afterGetAutherFalse();
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+
     page->setAuthConfirm("test");
+    EXPECT_FALSE(page->m_pLoadingLabel->isVisible());
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_installButton->isVisible());
+    EXPECT_FALSE(page->m_confirmButton->isVisible());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+
     page->setAuthBefore();
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+
     page->setCancelAuthOrAuthDependsErr();
     stub.set(ADDR(QModelIndex, data), stu_data);
     page->setCancelAuthOrAuthDependsErr();
+    EXPECT_FALSE(page->m_pLoadingLabel->isVisible());
+    EXPECT_FALSE(page->m_pDSpinner->isVisible());
+
     page->DealDependResult(1, "test");
+    EXPECT_EQ(1, page->dependAuthStatu);
+
     page->m_operate = SingleInstallPage::Install;
     page->setEnableButton(true);
     page->setAuthBefore();
@@ -205,9 +295,12 @@ TEST_F(SingleInstallpage_UT, total_UT)
     page->m_operate = SingleInstallPage::Reinstall;
     page->setAuthBefore();
     page->afterGetAutherFalse();
+    EXPECT_FALSE(page->m_uninstallButton->isEnabled());
+    EXPECT_FALSE(page->m_reinstallButton->isEnabled());
+    EXPECT_FALSE(page->m_installButton->isEnabled());
 }
 
-TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_onWorkFinishedFailed)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -234,9 +327,16 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedFailed_UT)
     page->slotWorkerFinished();
     page->m_operate = SingleInstallPage::Install;
     page->slotWorkerFinished();
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_EQ(0, page->m_progress->value());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+    EXPECT_TRUE(page->m_upDown);
 }
 
-TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_onWorkFinishedSuccees)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -266,15 +366,28 @@ TEST_F(SingleInstallpage_UT, onWorkFinishedSuccees_UT)
     page->slotWorkerFinished();
     page->m_operate = SingleInstallPage::Uninstall;
     page->setAuthBefore();
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_backButton->isVisible());
+    EXPECT_FALSE(page->m_reinstallButton->isVisible());
+    EXPECT_FALSE(page->m_progressFrame->isVisible());
+    EXPECT_EQ(0, page->m_progress->value());
+    EXPECT_FALSE(page->m_infoControlButton->isVisible());
+    EXPECT_TRUE(page->m_upDown);
     page->DealDependResult(3, "test");
+    EXPECT_EQ(3, page->dependAuthStatu);
     page->DealDependResult(2, "test");
+    EXPECT_EQ(2, page->dependAuthStatu);
     page->DealDependResult(5, "test");
+    EXPECT_EQ(5, page->dependAuthStatu);
     page->DealDependResult(4, "test");
+    EXPECT_EQ(4, page->dependAuthStatu);
     page->DealDependResult(6, "test");
+    EXPECT_EQ(6, page->dependAuthStatu);
     page->DealDependResult(0, "test");
+    EXPECT_EQ(0, page->dependAuthStatu);
 }
 
-TEST_F(SingleInstallpage_UT, initTabOrder_UT)
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_initTabOrder)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -301,11 +414,19 @@ TEST_F(SingleInstallpage_UT, initTabOrder_UT)
     page->m_backButton->setVisible(true);
     page->m_uninstallButton->setVisible(true);
     page->initTabOrder();
+    EXPECT_FALSE(page->m_doneButton->isVisible());
+    EXPECT_FALSE(page->m_uninstallButton->isVisible());
+    EXPECT_FALSE(page->m_confirmButton->isVisible());
+    EXPECT_FALSE(page->m_installButton->isVisible());
     page->slotHideDependsInfo();
+    EXPECT_TRUE(page->m_upDown);
     page->slotShowDependsInfo();
+    EXPECT_TRUE(page->m_upDown);
+    EXPECT_FALSE(page->m_installProcessView->isVisible());
+    EXPECT_FALSE(page->m_itemInfoFrame->isVisible());
 }
 
-TEST_F(SingleInstallpage_UT, paintEvent_UT)
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_paintEvent)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -331,7 +452,7 @@ TEST_F(SingleInstallpage_UT, paintEvent_UT)
     page->paintEvent(&paint);
 }
 
-TEST_F(SingleInstallpage_UT, slotDependPackages_UT)
+TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_slotDependPackages)
 {
     Stub stub;
     stub.set(ADDR(Backend, init), stud_singleinit);
@@ -364,4 +485,6 @@ TEST_F(SingleInstallpage_UT, slotDependPackages_UT)
     pair.second.append(list);
     //    dependPackages.insert("deb", pair);
     page->slotDependPackages(pair, false);
+    EXPECT_EQ(1, pair.first.size());
+    EXPECT_FALSE(page->m_showDependsButton->isVisible());
 }
