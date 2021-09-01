@@ -49,20 +49,16 @@ using namespace QApt;
 bool isDpkgRunning()
 {
     QProcess proc;
-
-    // 获取当前的进程信息
-    proc.start("ps", QStringList() << "-e"
-               << "-o"
-               << "comm");
+    proc.setProgram("bash");
+    proc.setArguments(QStringList() << "-c"
+                                    << "ps -e -o comm | grep dpkg");
+    proc.start();
     proc.waitForFinished();
-
-    // 获取进程信息的数据
-    const QString processOutput = proc.readAllStandardOutput();
-
-    // 查看进程信息中是否存在dpkg 存在说明已经正在安装其他包
-    if (processOutput.contains("dpkg")) return true;   //更换判断的方式
-
-    return false;
+    QString info = proc.readAllStandardOutput();
+    info = info.trimmed();
+    if (info.isEmpty() || info == "dpkg-query")
+        return false;
+    return true;
 }
 
 /**
