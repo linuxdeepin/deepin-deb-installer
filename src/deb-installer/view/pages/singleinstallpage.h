@@ -254,7 +254,7 @@ private slots:
      * @param dependPackages  依赖包存储
      * @param installWineDepends 是否进入wine依赖配置
      */
-    void slotDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
+    void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
 
 private:
     Operate m_operate = Unknown; //当前的操作

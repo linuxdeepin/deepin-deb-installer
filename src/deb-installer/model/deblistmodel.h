@@ -376,13 +376,13 @@ signals:
      * @brief signalSingleDependPackages 单包依赖关系显示信号
      * @param breakPackages
      */
-    void signalSingleDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> breakPackages, bool intallWineDepends);
+    void signalSingleDependPackages(DependsPair breakPackages, bool intallWineDepends);
 
     /**
      * @brief signalMultDependPackages 批量包依赖关系显示信号
      * @param breakPackages
      */
-    void signalMultDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> breakPackages, bool intallWineDepends);
+    void signalMultDependPackages(DependsPair breakPackages, bool intallWineDepends);
 signals:
     /**
      * @brief signalRefreshSinglePage 刷新单包安装界面的信号
