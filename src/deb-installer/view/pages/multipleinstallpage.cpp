@@ -464,7 +464,7 @@ void MultipleInstallPage::slotHideDependsInfo()
     m_appsListView->setVisible(true);
 }
 
-void MultipleInstallPage::slotDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends)
+void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
 {
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();

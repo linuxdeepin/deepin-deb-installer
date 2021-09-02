@@ -735,7 +735,7 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     m_progress->setValue(progress);             //进度增加
 }
 
-void SingleInstallPage::slotDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends)
+void SingleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
 {
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();

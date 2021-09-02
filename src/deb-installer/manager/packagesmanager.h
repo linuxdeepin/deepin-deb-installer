@@ -54,6 +54,8 @@ struct DependInfo {
     QString version; //依赖的包的版本
 };
 
+typedef QPair<QList<DependInfo>, QList<DependInfo>> DependsPair;
+
 class PackagesManager : public QObject
 {
     Q_OBJECT
@@ -180,13 +182,13 @@ signals:
      * @brief signalSingleDependPackages
      * @param breakPackages
      */
-    void signalSingleDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
+    void signalSingleDependPackages(DependsPair dependPackages, bool installWineDepends);
 
     /**
      * @brief signalMultDependPackages
      * @param breakPackages
      */
-    void signalMultDependPackages(QPair<QList<DependInfo>, QList<DependInfo>> dependPackages, bool installWineDepends);
+    void signalMultDependPackages(DependsPair dependPackages, bool installWineDepends);
     //// 后端状态相关函数
 public:
 
