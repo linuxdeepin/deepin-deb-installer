@@ -48,7 +48,7 @@
         <translation>%1 no existeix. Si us plau, refeu la selecció.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="436"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="425"/>
         <source>Bulk Install</source>
         <translation>Instal·lació massiva</translation>
     </message>
@@ -85,8 +85,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="138"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="574"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="577"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1386"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>L&apos;administrador ha establert polítiques per prevenir la instal·lació d&apos;aquest paquet.</translation>
     </message>
@@ -96,69 +96,69 @@
         <translation>Ha fallat la instal·lació.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="578"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="581"/>
         <source>Failed to install %1</source>
         <translation>Ha fallat instal·lar %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="847"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>Unable to install - no digital signature</source>
         <translation>No es pot instal·lar. No té signatura digital.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="853"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Si us plau, aneu al Centre de control per habilitar el mode de desenvolupament i torneu-ho a intentar. Voleu continuar?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="851"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="856"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="857"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="893"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1383"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="898"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1388"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="921"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Aquest paquet no té una signatura digital vàlida. Voleu continuar-ne la instal·lació?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="928"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="929"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="890"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1380"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="895"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1385"/>
         <source>Unable to install</source>
         <translation>No es pot instal·lar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="891"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Aquest paquet no té una signatura digital vàlida.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="579"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="583"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="582"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="587"/>
         <source>Broken dependencies: %1</source>
         <translation>Dependències trencades: %1</translation>
     </message>
@@ -168,7 +168,7 @@
         <translation>Ha fallat l&apos;autenticació.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="572"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="575"/>
         <source>Unmatched package architecture</source>
         <translation>L&apos;arquitectura del paquet no coincideix.</translation>
     </message>
@@ -218,17 +218,17 @@
         <translation>Enrere</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="472"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="477"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependències al repositori</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="480"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="483"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependències que manquen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="529"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="532"/>
         <source>Installing dependencies: %1</source>
         <translation>S&apos;instal·len dependències: %1</translation>
     </message>
@@ -312,36 +312,36 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="356"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="823"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="987"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="822"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
         <source>Reinstall</source>
         <translation>Reinstal·la</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="826"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="990"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="825"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
         <source>Later version installed: %1</source>
         <translation>Darrera versió instal·lada: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="828"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="992"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="827"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
         <source>Downgrade</source>
         <translation>Degrada</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="831"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="830"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="994"/>
         <source>Earlier version installed: %1</source>
         <translation>Versió instal·lada abans: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="896"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="895"/>
         <source>Installing dependencies: %1</source>
         <translation>S&apos;instal·len dependències: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1032"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1031"/>
         <source>Failed to install %1</source>
         <translation>Ha fallat instal·lar %1</translation>
     </message>
@@ -396,18 +396,18 @@
         <translation>Ha fallat la instal·lació.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="745"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="746"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependències al repositori</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="753"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="752"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependències que manquen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="833"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="997"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="832"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="996"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Actualitza</translation>
@@ -418,8 +418,8 @@
         <translation>Nom:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="822"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="821"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="985"/>
         <source>Same version installed</source>
         <translation>N&apos;hi ha instal·lada la mateixa versió.</translation>
     </message>
@@ -438,7 +438,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="43"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="58"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra&apos;n les dependències</translation>
     </message>
 </context>
 <context>
