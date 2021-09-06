@@ -20,6 +20,8 @@
 #include "../deb-installer/manager/PackageDependsStatus.h"
 #include "../deb-installer/manager/packagesmanager.h"
 #include "../deb-installer/manager/DealDependThread.h"
+#include "../deb-installer/manager/AddPackageThread.h"
+#include "../deb-installer/model/deblistmodel.h"
 
 #include <stub.h>
 #include <QFuture>
@@ -337,15 +339,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isBackendReady)
     ASSERT_TRUE(m_packageManager->isBackendReady());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_SymbolicLink)
-{
-    m_packageManager->SymbolicLink("0","1");
-}
-
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_SymbolicLink_01)
 {
     stub.set(ADDR(PackagesManager, mkTempDir), stub_is_open_false);
-    m_packageManager->SymbolicLink("0","1");
+    EXPECT_EQ("0", m_packageManager->SymbolicLink("0", "1"));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_AbsolutePath)
@@ -371,7 +368,12 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_true)
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_is_open_true);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), stub_close);
 
-    m_packageManager->dealInvalidPackage("/1");
+    EXPECT_FALSE(m_packageManager->dealInvalidPackage("/1"));
+}
+
+void stub_qthread_start(QThread::Priority = QThread::InheritPriority)
+{
+    return;
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_false)
@@ -381,7 +383,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_false)
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_is_open_false);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), stub_close);
 
-    m_packageManager->dealInvalidPackage("/1");
+    EXPECT_FALSE(m_packageManager->dealInvalidPackage("/1"));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_NoPermission)
@@ -391,7 +393,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_NoPermissio
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_is_open_false);
     stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), stub_close);
     stub.set(ADDR(QFileInfo, permission), stub_permission_false);
-    m_packageManager->dealInvalidPackage("/1");
+    EXPECT_FALSE(m_packageManager->dealInvalidPackage("/1"));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage)
@@ -403,7 +405,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage)
     m_packageManager->appendPackage({"/1"});
 
     ASSERT_FALSE(m_packageManager->m_packageMd5.isEmpty());
-
+    stub.set(ADDR(QThread, start), stub_qthread_start);
+    m_packageManager->appendPackage(QStringList() << "/1"
+                                                  << "/2");
+    ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_invalid)
@@ -415,6 +420,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_invalid)
     m_packageManager->appendPackage({"/1"});
 
     ASSERT_FALSE(m_packageManager->m_packageMd5.isEmpty());
+    stub.set(ADDR(QThread, start), stub_qthread_start);
+    m_packageManager->appendPackage(QStringList() << "/1"
+                                                  << "/2");
+    ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_openFailed)
@@ -426,6 +435,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_openFailed)
     m_packageManager->appendPackage({"/1"});
 
     ASSERT_FALSE(m_packageManager->m_packageMd5.isEmpty());
+    stub.set(ADDR(QThread, start), stub_qthread_start);
+    m_packageManager->appendPackage(QStringList() << "/1"
+                                                  << "/2");
+    ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 void stub_appendNoThread(QStringList , int )
 {
@@ -439,10 +452,7 @@ void stub_start(const QString &program, const QStringList &arguments, QIODevice:
     Q_UNUSED(mode);
     return;
 }
-void stub_qthread_start(QThread::Priority = QThread::InheritPriority)
-{
-    return;
-}
+
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_multi)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -467,7 +477,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_refreshPage)
     m_packageManager->refreshPage(2);
     m_packageManager->m_preparedPackages.append("/3");
     m_packageManager->refreshPage(2);
-
+    EXPECT_EQ(3, m_packageManager->m_preparedPackages.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isArchError)
@@ -501,6 +511,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat)
 
     ConflictResult cr = m_packageManager->packageConflictStat(0);
     ASSERT_TRUE(cr.is_ok());
+    ASSERT_EQ(1, m_packageManager->m_preparedPackages.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat_invalid)
@@ -611,8 +622,6 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_03)
     stub.set(ADDR(Package, availableVersion), package_version);
     stub.set(ADDR(PackagesManager, isArchMatches), stub_isArchMatches);
 
-
-//    m_packageManager->appendPackage({"/1"});
     usleep(50 *1000);
     ConflictResult cr = m_packageManager->isConflictSatisfy("i386", conflicts());
     ASSERT_FALSE(cr.is_ok());
@@ -823,8 +832,11 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_01)
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
 
+    m_packageManager->m_packageMd5.insert(0, "deb");
+
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
+    ASSERT_EQ(DebListModel::NotInstalled, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_02)
@@ -835,9 +847,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_02)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), deb_package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion1);
-
+    m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 3);
+    ASSERT_EQ(DebListModel::InstalledLaterVersion, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_03)
@@ -848,9 +861,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_03)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), deb_package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion2);
-
+    m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 2);
+    ASSERT_EQ(DebListModel::InstalledEarlierVersion, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_04)
@@ -867,6 +881,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_04)
     m_packageManager->m_packageInstallStatus.insert("0",1);
 
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 1);
+    ASSERT_EQ(DebListModel::InstalledSameVersion, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 bool ut_isArchError_false(int index)
@@ -912,13 +927,22 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
 
     m_packageManager->m_dependInstallMark.append("deb");
     m_packageManager->m_packageMd5.append("deb");
+    m_packageManager->m_packageMd5DependsStatus.insert("deb", PackageDependsStatus::ok());
 
     m_packageManager->m_dependInstallMark.append("test success");
     m_packageManager->slotDealDependResult(4, 0, "");
+    EXPECT_EQ(DebListModel::DependsOk, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->slotDealDependResult(2, 0, "");
+    EXPECT_EQ(DebListModel::DependsAuthCancel, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->slotDealDependResult(5, 0, "");
+    EXPECT_EQ(DebListModel::DependsBreak, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->installWineDepends = true;
     m_packageManager->slotDealDependResult(5, 0, "");
+    EXPECT_EQ(DebListModel::DependsBreak, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
+    m_packageManager->m_preparedPackages.append({"1", "2"});
+    m_packageManager->slotDealDependResult(5, 0, "");
+    EXPECT_FALSE(m_packageManager->installWineDepends);
+    EXPECT_EQ(DebListModel::DependsBreak, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
 }
 
 bool ut_isArchError(int index)
