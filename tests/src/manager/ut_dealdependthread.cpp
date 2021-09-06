@@ -45,7 +45,8 @@ TEST_F(ut_dealDependThread_Test, DealDependThread_UT_setDependsList)
     dependsList << "package1" << "package";
     m_dThread->setDependsList(dependsList, 0);
 
-    ASSERT_EQ(m_dThread->m_dependsList.size(), 2);
+    EXPECT_EQ(m_dThread->m_dependsList.size(), 2);
+    EXPECT_EQ(0, m_dThread->m_index);
 }
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_setBrokenDepend)
@@ -65,15 +66,25 @@ void proc_start(const QString &program, const QStringList &arguments, QIODevice:
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_start)
 {
+    QStringList dependsList;
+    dependsList << "package1"
+                << "package";
+    m_dThread->setDependsList(dependsList, 1);
+    m_dThread->setBrokenDepend("package");
     m_dThread->run();
+    EXPECT_EQ(m_dThread->m_brokenDepend.toLocal8Bit(), "package");
+    EXPECT_EQ(1, m_dThread->m_index);
 }
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_onFinished)
 {
     m_dThread->bDependsStatusErr = false;
     m_dThread->slotInstallFinished(-1);
+    EXPECT_FALSE(m_dThread->bDependsStatusErr);
 
-    ASSERT_FALSE(m_dThread->bDependsStatusErr);
+    m_dThread->bDependsStatusErr = true;
+    m_dThread->slotInstallFinished(2);
+    EXPECT_FALSE(m_dThread->bDependsStatusErr);
 }
 
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_finished)
@@ -92,4 +103,5 @@ TEST_F(ut_dealDependThread_Test, DealDependThread_UT_on_readoutput)
 {
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
     m_dThread->slotReadOutput();
+    EXPECT_TRUE(m_dThread->bDependsStatusErr);
 }

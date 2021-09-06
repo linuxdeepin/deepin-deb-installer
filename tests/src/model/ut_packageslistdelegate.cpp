@@ -123,16 +123,21 @@ protected:
 TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_getItemHeight)
 {
     m_delegate->getItemHeight(48);
+    EXPECT_EQ(48, m_delegate->m_itemHeight);
 }
 
 TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatus)
 {
     PackagesListDelegate *delegate = new PackagesListDelegate(nullptr, m_listview);
     QPainter painter(m_listview);
-    m_delegate->refreshDebItemStatus(1, QRect(0, 0, 10, 10), &painter, true, true);
-    m_delegate->refreshDebItemStatus(2, QRect(0, 0, 10, 10), &painter, true, true);
-    m_delegate->refreshDebItemStatus(4, QRect(0, 0, 10, 10), &painter, true, true);
-    m_delegate->refreshDebItemStatus(0, QRect(0, 0, 10, 10), &painter, true, true);
+    bool isselected = true;
+    bool isEnable = true;
+    m_delegate->refreshDebItemStatus(1, QRect(0, 0, 10, 10), &painter, isselected, isEnable);
+    m_delegate->refreshDebItemStatus(2, QRect(0, 0, 10, 10), &painter, isselected, isEnable);
+    m_delegate->refreshDebItemStatus(4, QRect(0, 0, 10, 10), &painter, isselected, isEnable);
+    m_delegate->refreshDebItemStatus(0, QRect(0, 0, 10, 10), &painter, isselected, isEnable);
+    EXPECT_TRUE(isselected);
+    EXPECT_TRUE(isEnable);
 }
 
 QVariant stud_data(int role)
@@ -167,6 +172,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
     m_listview->setModel(model);
     QModelIndex index = m_listview->model()->index(0, 0);
     m_delegate->paint(&painter, option, index);
+    EXPECT_EQ(0, index.row());
 }
 
 PackageDependsStatus delegate_getPackageDependsStatus(const int index)
@@ -201,5 +207,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
     DebListModel *model = new DebListModel;
     model->slotAppendPackage(QStringList() << "\n");
     QModelIndex index = model->index(0);
+    m_delegate->getItemHeight(50);
     m_delegate->sizeHint(option, index);
+    EXPECT_EQ(50, m_delegate->m_itemHeight);
 }
