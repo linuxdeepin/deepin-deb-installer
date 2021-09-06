@@ -60,22 +60,29 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_initShortcus)
 TEST_F(ut_packagelistview_Test, packagelistview_UT_initRightContextMenu)
 {
     m_listview->initRightContextMenu();
+    EXPECT_EQ(1, m_listview->m_rightMenu->actions().size());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onShortcutDeleteAction)
 {
     m_listview->slotShortcutDeleteAction();
+    EXPECT_FALSE(m_listview->m_rightMenu->isVisible());
+    EXPECT_EQ(-1, m_listview->m_currModelIndex.row());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onListViewShowContextMenu)
 {
     QModelIndex index;
     m_listview->slotListViewShowContextMenu(index);
+    EXPECT_FALSE(m_listview->m_bShortcutDelete);
+    EXPECT_FALSE(m_listview->m_bIsRightMenuShow);
+    EXPECT_FALSE(m_listview->m_rightMenu->isVisible());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_onRightMenuDeleteAction)
 {
     m_listview->slotRightMenuDeleteAction();
+    EXPECT_EQ(-1, m_listview->m_currModelIndex.row());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_getPos)
@@ -87,6 +94,7 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_getPos)
 TEST_F(ut_packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)
 {
     m_listview->setRightMenuShowStatus(true);
+    EXPECT_TRUE(m_listview->m_bIsRightMenuShow);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_setSelection)
