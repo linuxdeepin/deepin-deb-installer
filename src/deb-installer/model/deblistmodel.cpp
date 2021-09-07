@@ -1018,8 +1018,8 @@ bool DebListModel::checkDigitalSignature()
     const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex); //获取包的依赖状态
     if (stat.isBreak() || stat.isAuthCancel())
         return true;
-    SettingDialog dialog;
-    m_isDigitalVerify = dialog.isDigitalVerified();
+//    SettingDialog dialog;
+//    m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex)); //判断是否有数字签名
     qInfo() << "m_isDevelopMode:" << m_isDevelopMode << " /m_isDigitalVerify:" << m_isDigitalVerify << " /digitalSigntual:" << digitalSigntual;
     if (m_isDevelopMode && !m_isDigitalVerify) { //开发者模式且未设置验签功能

@@ -107,17 +107,18 @@ void DebInstaller::initTitleBar()
 {
     //title bar settings
     DTitlebar *tb = titlebar();
-    QAction *settingAction(new QAction(tr("Settings"), this));
-    DMenu *menu = new DMenu;
-    menu->addAction(settingAction);
-    tb->setMenu(menu);
+    //社区版去除开发者模式下验签功能
+//    QAction *settingAction(new QAction(tr("Settings"), this));
+//    DMenu *menu = new DMenu;
+//    menu->addAction(settingAction);
+//    tb->setMenu(menu);
     if (tb) {
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
         tb->setAutoFillBackground(true);
         tb->setDisableFlags(Qt::CustomizeWindowHint);
     }
-    connect(settingAction, &QAction::triggered, this, &DebInstaller::slotSettingDialogVisiable);
+//    connect(settingAction, &QAction::triggered, this, &DebInstaller::slotSettingDialogVisiable);
 }
 
 void DebInstaller::initConnections()
