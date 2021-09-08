@@ -26,13 +26,11 @@
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
-class ColoredProgressBarPrivate;
-
 /*!
  * \class ColoredProgressBar
  * \brief ColoredProgressBar is the same as QProgressBar, except it can change its appearance depending on the value displayed.
  */
-class ColoredProgressBar : public QProgressBar, public DObject
+class ColoredProgressBar : public QProgressBar
 {
     Q_OBJECT
 public:
@@ -63,7 +61,7 @@ protected:
 
 private:
     DGuiApplicationHelper::ColorType m_themeType;
-    Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_d_ptr), ColoredProgressBar)
+    QMap<int, QBrush> threshmap;
 
 private slots:
     void themeChanged();

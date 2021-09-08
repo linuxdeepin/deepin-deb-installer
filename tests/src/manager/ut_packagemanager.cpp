@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QApt/DependencyInfo>
 #include <QList>
+#include <QSignalSpy>
 
 #include <gtest/gtest.h>
 typedef Result<QString> ConflictResult;
@@ -932,6 +933,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
     m_packageManager->m_dependInstallMark.append("test success");
     m_packageManager->slotDealDependResult(4, 0, "");
     EXPECT_EQ(DebListModel::DependsOk, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
+    EXPECT_TRUE(m_packageManager->m_errorIndex.isEmpty());
     m_packageManager->slotDealDependResult(2, 0, "");
     EXPECT_EQ(DebListModel::DependsAuthCancel, m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->slotDealDependResult(5, 0, "");
@@ -1056,7 +1058,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_03)
     stub.set(ADDR(Package, isInstalled), stub_isInstalled);
     PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
 
-//    ASSERT_EQ(pd.status, 6);
+    ASSERT_EQ(pd.status, 6);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_04)
@@ -1681,6 +1683,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_mkTempDir)
 TEST_F(ut_packagesManager_test, PackageManager_UT_link)
 {
     m_packageManager->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit();
+    EXPECT_TRUE(m_packageManager->m_tempLinkDir.startsWith("/tmp/LinkTemp/"));
 }
 
 
@@ -1714,7 +1717,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
 TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackageFinished)
 {
     usleep(10 * 1000);
+    QSignalSpy spy(m_packageManager, SIGNAL(signalAppendFinished(QList<QByteArray>)));
     m_packageManager->slotAppendPackageFinished();
+    EXPECT_EQ(1, spy.count());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_01)
@@ -1823,6 +1828,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
     usleep(10 * 1000);
     QSet<QString> set;
     m_packageManager->checkDependsPackageStatus(set, "", conflicts());
+    EXPECT_EQ(PackageDependsStatus::_break("").status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
 }
 
 QString ut_availableversion()
@@ -1851,8 +1857,10 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
     m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    EXPECT_EQ(PackageDependsStatus::ok().status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
     stub.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch);
     m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    EXPECT_EQ(PackageDependsStatus::_break("").status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus02)
@@ -1873,31 +1881,40 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus02)
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
 
     stub.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch);
-    m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    EXPECT_EQ(PackageDependsStatus::_break("").status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
     Stub stub1;
     set.insert("");
     stub1.set(ADDR(PackagesManager, dependencyVersionMatch), ut_packagesManager_dependencyVersionMatch1);
     m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
+    EXPECT_EQ("", m_packageManager->m_dinfo.packageName);
+    EXPECT_EQ(PackageDependsStatus::ok().status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageMd5)
 {
     m_packageManager->m_packageMd5.append({"1","2"});
-    m_packageManager->getPackageMd5(0);
+    EXPECT_EQ("1", m_packageManager->getPackageMd5(0));
+}
+
+QByteArray ut_readAll()
+{
+    return " ";
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_getBlackApplications)
 {
     stub.set((bool(QFile::*)()const)ADDR(QFile, exists), pm_exits);
+    stub.set(ADDR(QIODevice, readAll), ut_readAll);
     m_packageManager->getBlackApplications();
+    EXPECT_TRUE(m_packageManager->m_blackApplicationList.first().isEmpty());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_isBlackApplication)
 {
     m_packageManager->m_blackApplicationList.append("black");
 
-
     ASSERT_TRUE(m_packageManager->isBlackApplication("black"));
+    ASSERT_TRUE(m_packageManager->m_blackApplicationList.contains("black"));
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose)
@@ -1928,6 +1945,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose)
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus);
 
     m_packageManager->packageCandidateChoose(choosed_set,debArch,cadicateList);
+    EXPECT_EQ("", debArch);
+    EXPECT_EQ(1, choosed_set.size());
+    EXPECT_EQ(1, cadicateList.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_1)
@@ -1958,6 +1978,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_1)
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus);
 
     m_packageManager->packageCandidateChoose(choosed_set,debArch,cadicateList);
+    EXPECT_EQ("", debArch);
+    EXPECT_EQ(1, choosed_set.size());
+    EXPECT_EQ(1, cadicateList.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_2)
@@ -1988,6 +2011,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_2)
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
     m_packageManager->packageCandidateChoose(choosed_set,debArch,cadicateList);
+    EXPECT_EQ("", debArch);
+    EXPECT_EQ(2, choosed_set.size());
+    EXPECT_EQ(1, cadicateList.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_3)
@@ -2018,6 +2044,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_3)
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
     m_packageManager->packageCandidateChoose(choosed_set,debArch,cadicateList);
+    EXPECT_EQ("", debArch);
+    EXPECT_EQ(0, choosed_set.size());
+    EXPECT_EQ(1, cadicateList.size());
 }
 
 TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_4)
@@ -2048,6 +2077,9 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_4)
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
     m_packageManager->packageCandidateChoose(choosed_set,debArch,cadicateList);
+    EXPECT_EQ("", debArch);
+    EXPECT_EQ(1, choosed_set.size());
+    EXPECT_EQ(1, cadicateList.size());
 }
 
 

@@ -333,6 +333,7 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_dragEnterEvent)
     stub.set(ADDR(QMimeData,hasUrls),ut_hasUrls);
     QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &enterEvent);
+    EXPECT_TRUE(deb->m_fileChooseWidget->acceptDrops());
     delete  mimeData;
 }
 TEST_F(UT_Debinstaller, UT_Debinstaller_dragMoveEvent)
