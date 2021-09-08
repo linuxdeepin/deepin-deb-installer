@@ -121,6 +121,7 @@ find_package(DtkWidget REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(Qt5DBus REQUIRED)
+find_package(Qt5Test REQUIRED)
 set(LINK_LIBS
     Qt5::Core
     Qt5::Widgets
@@ -186,6 +187,7 @@ target_link_libraries(${APP_BIN_NAME_TEST}
     Qt5::Gui
     Qt5::DBus
     QApt
+    Qt5::Test
     Qt5::Concurrent
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}

@@ -73,6 +73,12 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_parseCmdLine
     singleInstaller->m_selectedFiles.append(" ");
     singleInstaller->parseCmdLine();
     EXPECT_TRUE(singleInstaller->m_selectedFiles.isEmpty());
+    QStringList debPathList;
+    singleInstaller->InstallerDeb(debPathList);
+    EXPECT_EQ(0, debPathList.size());
+    debPathList.append("test.deb");
+    singleInstaller->InstallerDeb(debPathList);
+    EXPECT_EQ(1, debPathList.size());
 }
 
 TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_activateWindow)
@@ -81,19 +87,4 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_activateWind
     singleInstaller->activateWindow();
 
     EXPECT_TRUE(singleInstaller->m_qspMainWnd.get()->isVisible());
-}
-
-TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb)
-{
-    QStringList debPathList;
-    singleInstaller->InstallerDeb(debPathList);
-    EXPECT_EQ(0, debPathList.size());
-}
-
-TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDeb_01)
-{
-    QStringList debPathList;
-    debPathList.append("test.deb");
-    singleInstaller->InstallerDeb(debPathList);
-    EXPECT_EQ(1, debPathList.size());
 }

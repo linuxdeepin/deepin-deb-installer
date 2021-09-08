@@ -21,11 +21,14 @@
 #include "../deb-installer/manager/packagesmanager.h"
 #include "../deb-installer/manager/PackageDependsStatus.h"
 #include "utils/utils.h"
+#include "utils/result.h"
 
 #include <stub.h>
 
 #include <QProcess>
 #include <QList>
+#include <QSignalSpy>
+
 #include <fstream>
 
 using namespace QApt;
@@ -633,6 +636,11 @@ bool ut_model_isBreak()
     return true;
 }
 
+ConflictResult ut_packageConflictStat()
+{
+    return ConflictResult::err("");
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
 {
     QStringList list;
@@ -643,7 +651,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
     Stub stub;
     stub.set(ADDR(PackagesManager,isArchError),model_package_isArchError1);
     stub.set(ADDR(PackageDependsStatus,isBreak),ut_model_isBreak);
+    stub.set(ADDR(PackagesManager, packageConflictStat), ut_packageConflictStat);
     m_debListModel->packageFailedReason(0);
+    EXPECT_TRUE(m_debListModel->packageFailedReason(0).contains("Broken dependencies"));
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
@@ -658,7 +668,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
 
     ASSERT_EQ(m_debListModel->m_packageOperateStatus.find("deb").value(), DebListModel::Waiting);
 }
-
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 {
@@ -854,7 +863,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionStatusChanged)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_setEndEnable)
 {
+    QSignalSpy spy(m_debListModel, SIGNAL(signalEnableReCancelBtn(bool)));
     m_debListModel->setEndEnable();
+    EXPECT_EQ(1, spy.count());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkBoxStatus)
@@ -976,6 +987,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInputWrite)
     stub.set((qint64(QProcess::*)(const QByteArray &))ADDR(QProcess, write), ut_process_write);
 
     m_debListModel->slotConfigInputWrite("\n");
+    EXPECT_TRUE(m_debListModel->m_procInstallConfig);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)

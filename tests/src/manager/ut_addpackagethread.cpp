@@ -160,20 +160,6 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_mkTempDir)
     ASSERT_TRUE(m_addPkgThread->mkTempDir());
 }
 
-TEST_F(UT_AddPackageThread, UT_AddPackageThread_link)
-{
-    QStringList dependsList;
-    dependsList << "package1" << "package";
-    m_addPkgThread->setPackages(dependsList);
-
-    stub.set(ADDR(DebFile, isValid), isValid);
-    stub.set(ADDR(DebFile, md5Sum), md5sum);
-    stub.set(ADDR(DebFile, packageName), packagename);
-
-    stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
-}
-
 bool thread_stub_is_open()
 {
     qDebug() << "stb——is_open";
