@@ -78,16 +78,18 @@ TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged_01)
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_addThreshold)
 {
     m_colorProcessBar->addThreshold(0, QBrush(nullptr));
+    EXPECT_EQ(1, m_colorProcessBar->threshmap.size());
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_removeThreshold)
 {
     m_colorProcessBar->removeThreshold(1);
+    EXPECT_TRUE(m_colorProcessBar->threshmap.isEmpty());
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_thresholds)
 {
-    qDebug() << m_colorProcessBar->thresholds();
+    EXPECT_TRUE(m_colorProcessBar->thresholds().isEmpty());
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_paintEvent_Light)

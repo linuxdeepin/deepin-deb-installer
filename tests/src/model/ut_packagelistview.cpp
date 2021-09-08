@@ -89,6 +89,7 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_getPos)
 {
     m_listview->m_currentIndex = 1;
     m_listview->slotGetPos(QRect(1, 1, 1, 1), 1);
+    EXPECT_EQ(1, m_listview->m_rightMenuPos.y());
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_setRightMenuShowStatus)
@@ -108,18 +109,21 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_mousePressEvent)
 {
     QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_listview->mousePressEvent(&mousePressEvent);
+    EXPECT_TRUE(m_listview->m_bLeftMouse);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_PaintEvent)
 {
     QPaintEvent paint(QRect(m_listview->rect()));
     m_listview->paintEvent(&paint);
+    EXPECT_EQ(-1, m_listview->m_currentIndex);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_keyPressEvent)
 {
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
     QCoreApplication::sendEvent(m_listview, &keyPressEvent);
+    EXPECT_TRUE(m_listview->m_bLeftMouse);
 }
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_focusInEvent)

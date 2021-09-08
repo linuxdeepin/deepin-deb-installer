@@ -22,16 +22,12 @@
 
 #include <gtest/gtest.h>
 
-void ut_bindFontBySizeAndWeight()
+TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_setFamily)
 {
     InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
     btn->setFocusPolicy(Qt::TabFocus);
+    EXPECT_EQ(Qt::TabFocus, btn->focusPolicy());
     delete btn;
-}
-
-TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_setFamily)
-{
-    ut_bindFontBySizeAndWeight();
 }
 
 TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_keyPressEvent)
@@ -39,5 +35,6 @@ TEST(InfoCommandLinkButton_TEST, InfoCommandLinkButton_UT_keyPressEvent)
     InfoCommandLinkButton *btn = new InfoCommandLinkButton("");
     QKeyEvent keyPressEvent(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier);
     QCoreApplication::sendEvent(btn, &keyPressEvent);
+    EXPECT_FALSE(btn->hasFocus());
     delete btn;
 }
