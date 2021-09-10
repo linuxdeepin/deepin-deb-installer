@@ -639,8 +639,10 @@ void DebListModel::slotTransactionFinished()
         }
     }
     //    delete trans;
-    m_currentTransaction->deleteLater();
-    m_currentTransaction = nullptr;
+    if (!m_currentTransaction.isNull()) {
+        m_currentTransaction->deleteLater();
+        m_currentTransaction = nullptr;
+    }
     transaction = nullptr;
     bumpInstallIndex();                 //进入安装进度控制
 }
@@ -670,8 +672,10 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
     }
 
     //    delete trans;
-    m_currentTransaction->deleteLater();
-    m_currentTransaction = nullptr;
+    if (!m_currentTransaction.isNull()) {
+        m_currentTransaction->deleteLater();
+        m_currentTransaction = nullptr;
+    }
     transaction = nullptr;
 
     // check current operate exit status to install or install next
