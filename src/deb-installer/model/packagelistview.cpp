@@ -182,7 +182,12 @@ void PackagesListView::initRightContextMenu()
 void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
-    emit signalCurrentIndexRow(index.row());
+    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model()); //获取debListModel
+    if (debListModel) {
+        if (debListModel->isWorkerPrepare()) //当前model未就绪
+            emit signalCurrentIndexRow(index.row());
+    }
+
     m_bShortcutDelete = false;                          //右键菜单显示时不允许使用快捷键删除
     m_currModelIndex = index;
     DMenu *rightMenu = m_rightMenu;
