@@ -315,7 +315,7 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_SymbolicLink_1)
     stub.set(ADDR(AddPackageThread, SymbolicLink), thread_stub_SymbolicLink);
     stub.set(ADDR(DebFile, packageName), packagename);
 
-    ASSERT_STREQ("", m_addPkgThread->dealPackagePath("/ 1").toUtf8());
+    ASSERT_STREQ("/ 1", m_addPkgThread->dealPackagePath("/ 1").toUtf8());
 }
 
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_mkTempDir)
