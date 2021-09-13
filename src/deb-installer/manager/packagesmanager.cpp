@@ -147,7 +147,8 @@ bool PackagesManager::isArchError(const int idx)
 {
     Backend *backend = m_backendFuture.result();
     DebFile deb(m_preparedPackages[idx]);
-
+    if(!deb.isValid())
+        return false;
     const QString arch = deb.architecture();
 
     if ("all" == arch ||"any" == arch ) 
@@ -161,6 +162,8 @@ bool PackagesManager::isArchError(const int idx)
 const ConflictResult PackagesManager::packageConflictStat(const int index)
 {
     DebFile debfile(m_preparedPackages[index]);
+    if(!debfile.isValid())
+        return ConflictResult::err("");
 
     ConflictResult ConflictResult = isConflictSatisfy(debfile.architecture(), debfile.conflicts());
     return ConflictResult;
@@ -286,23 +289,24 @@ int PackagesManager::packageInstallStatus(const int index)
     if (m_packageInstallStatus.contains(currentPackageMd5))
         return m_packageInstallStatus[currentPackageMd5];
 
-    DebFile *debFile = new DebFile(m_preparedPackages[index]);
-
-    const QString packageName = debFile->packageName();
-    const QString packageArch = debFile->architecture();
+    DebFile debFile(m_preparedPackages[index]);
+    if(!debFile.isValid())
+       return DebListModel::NotInstalled;
+    const QString packageName = debFile.packageName();
+    const QString packageArch = debFile.architecture();
     Backend *backend = m_backendFuture.result();
     Package *package = backend->package(packageName + ":" + packageArch);
 
     int ret = DebListModel::NotInstalled;
     do {
-        if (!package) 
+        if (!package)
             break;
 
         const QString installedVersion = package->installedVersion();
-        if (installedVersion.isEmpty()) 
+        if (installedVersion.isEmpty())
             break;
 
-        const QString packageVersion = debFile->version();
+        const QString packageVersion = debFile.version();
         const int result = Package::compareVersion(packageVersion, installedVersion);
 
         if (result == 0)
@@ -316,7 +320,6 @@ int PackagesManager::packageInstallStatus(const int index)
     //存储包的安装状态
     //2020-11-19 修改安装状态的存储绑定方式
     m_packageInstallStatus[currentPackageMd5] = ret;
-    delete debFile;
     return ret;
 }
 
@@ -375,42 +378,43 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         return m_packageMd5DependsStatus[currentPackageMd5];
     }
 
-    DebFile *debFile = new DebFile(m_preparedPackages[index]);
-    const QString architecture = debFile->architecture();
+    DebFile debFile(m_preparedPackages[index]);
+    if(!debFile.isValid())
+        return PackageDependsStatus::_break("");
+    const QString architecture = debFile.architecture();
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
 
     if (isArchError(index)) {
         dependsStatus.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
-        dependsStatus.package = debFile->packageName();
+        dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);//更换依赖的存储方式
         
-        QString packageName = debFile->packageName();
-        delete debFile;
+        QString packageName = debFile.packageName();
         return PackageDependsStatus::_break(packageName);
     }
 
     // conflicts
-    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile->conflicts());
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts());
 
     if (!debConflitsResult.is_ok()) {
-        qWarning() << "PackagesManager:" << "depends break because conflict" << debFile->packageName();
+        qWarning() << "PackagesManager:" << "depends break because conflict" << debFile.packageName();
         dependsStatus.package = debConflitsResult.unwrap();
         dependsStatus.status = DebListModel::DependsBreak;
     } else {
         const ConflictResult localConflictsResult =
-            isInstalledConflict(debFile->packageName(), debFile->version(), architecture);
+            isInstalledConflict(debFile.packageName(), debFile.version(), architecture);
         if (!localConflictsResult.is_ok()) {
-            qWarning() << "PackagesManager:" << "depends break because conflict with local package" << debFile->packageName();
+            qWarning() << "PackagesManager:" << "depends break because conflict with local package" << debFile.packageName();
             dependsStatus.package = localConflictsResult.unwrap();
             dependsStatus.status = DebListModel::DependsBreak;
         } else {
             QSet<QString> choose_set;
-            choose_set << debFile->packageName();
+            choose_set << debFile.packageName();
             QStringList dependList;
             bool isWineApplication = false;             //判断是否是wine应用
-            for (auto ditem : debFile->depends()) {
+            for (auto ditem : debFile.depends()) {
                 for (auto dinfo : ditem) {
-                    Package *depend = packageWithArch(dinfo.packageName(), debFile->architecture());
+                    Package *depend = packageWithArch(dinfo.packageName(), debFile.architecture());
                     if (depend) {
                         if (depend->name() == "deepin-elf-verify") {    //deepi-elf-verify 是amd64架构非i386
                             dependList << depend->name();
@@ -423,7 +427,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                 }
             }
-            dependsStatus = checkDependsPackageStatus(choose_set, debFile->architecture(), debFile->depends());
+            dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
             // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
             if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
@@ -446,20 +450,19 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 
     m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
 
-    delete debFile;
     return dependsStatus;
 }
 
 const QString PackagesManager::packageInstalledVersion(const int index)
 {
     //更换安装状态的存储结构
-    DebFile *debFile = new DebFile(m_preparedPackages[index]);
-
-    const QString packageName = debFile->packageName();
-    const QString packageArch = debFile->architecture();
+    DebFile debFile(m_preparedPackages[index]);
+    if(!debFile.isValid())
+        return "";
+    const QString packageName = debFile.packageName();
+    const QString packageArch = debFile.architecture();
     Backend *backend = m_backendFuture.result();
     Package *package = backend->package(packageName + ":" + packageArch);
-    delete  debFile;
 
     //修复可能某些包无法package的错误，如果遇到此类包，返回安装版本为空
     if (package)
@@ -471,14 +474,15 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
-    DebFile *debFile = new DebFile(m_preparedPackages[index]);
+    DebFile debFile(m_preparedPackages[index]);
+    if(!debFile.isValid())
+        return QStringList();
     QSet<QString> choose_set;
-    const QString debArch = debFile->architecture();
-    const auto &depends = debFile->depends();
+    const QString debArch = debFile.architecture();
+    const auto &depends = debFile.depends();
     packageCandidateChoose(choose_set, debArch, depends);
 
     // TODO: check upgrade from conflicts
-    delete debFile;
     return choose_set.toList();
 }
 
@@ -716,11 +720,9 @@ void PackagesManager::checkInvalid(QStringList packages)
 {
     m_validPackageCount = 0; //每次添加时都清零
     for (QString package : packages) {
-        QApt::DebFile *pkgFile = new DebFile(package);
-        if (pkgFile && pkgFile->isValid())            //只有有效文件才会计入
+        QApt::DebFile pkgFile(package);
+        if (pkgFile.isValid())            //只有有效文件才会计入
             m_validPackageCount ++;
-        
-        delete pkgFile;
     }
 }
 
@@ -753,7 +755,7 @@ bool PackagesManager::dealInvalidPackage(QString packagePath)
 QString PackagesManager::dealPackagePath(QString packagePath)
 {
     //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
-    if (packagePath[0] != "/") {
+    if (!packagePath.startsWith("/")) {
         QFileInfo packageAbsolutePath(packagePath);
         packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
         qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
@@ -761,10 +763,12 @@ QString PackagesManager::dealPackagePath(QString packagePath)
 
     // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
     if (packagePath.contains(" ")) {
-        QApt::DebFile *p = new DebFile(packagePath);
-        packagePath = SymbolicLink(packagePath, p->packageName());
-        qWarning() << "PackagesManager:" << "There are spaces in the path, add a soft link" << packagePath;
-        delete p;
+        QApt::DebFile p(packagePath);
+        if (p.isValid()) {
+            packagePath = SymbolicLink(packagePath, p.packageName());
+            qWarning() << "PackagesManager:"
+                       << "There are spaces in the path, add a soft link" << packagePath;
+        }
     }
     return packagePath;
 }
@@ -787,20 +791,18 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         //处理package文件路径相关问题
         debPackage = dealPackagePath(debPackage);
 
-        QApt::DebFile *pkgFile = new DebFile(debPackage);
+        QApt::DebFile pkgFile(debPackage);
         //判断当前文件是否是无效文件
-        if (pkgFile && !pkgFile->isValid()) {
-            delete pkgFile;
+        if (!pkgFile.isValid()) {
             emit signalInvalidPackage();
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile->md5Sum();
+        const auto md5 = pkgFile.md5Sum();
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
             emit signalPackageAlreadyExists();
-            delete pkgFile;
             continue;
         }
         // 可以添加,发送添加信号
@@ -812,7 +814,6 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         DRecentManager::addItem(debPackage, data);
 
         addPackage(m_validPackageCount, debPackage, md5);
-        delete pkgFile;
     }
 
     //所有包都添加结束.

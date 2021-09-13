@@ -74,17 +74,20 @@ bool AddPackageThread::dealInvalidPackage(QString packagePath)
 QString AddPackageThread::dealPackagePath(QString packagePath)
 {
     //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
-    if ("/" != packagePath[0]) {
+    if (!packagePath.startsWith("/")) {
         QFileInfo packageAbsolutePath(packagePath);
-        //获取绝对路径
-        packagePath = packageAbsolutePath.absoluteFilePath();
+        packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
+        qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
     }
 
     // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
     if (packagePath.contains(" ")) {
-        QApt::DebFile *p = new DebFile(packagePath);
-        packagePath = SymbolicLink(packagePath, p->packageName());
-        delete p;
+        QApt::DebFile p(packagePath);
+        if (p.isValid()) {
+            packagePath = SymbolicLink(packagePath, p.packageName());
+            qWarning() << "PackagesManager:"
+                       << "There are spaces in the path, add a soft link" << packagePath;
+        }
     }
     return packagePath;
 }
@@ -101,22 +104,20 @@ void AddPackageThread::run()
 
         debPackage = dealPackagePath(debPackage);
 
-        QApt::DebFile *pkgFile = new DebFile(debPackage);
+        QApt::DebFile pkgFile(debPackage);
         //判断当前文件是否是无效文件
-        if (pkgFile && !pkgFile->isValid()) {
+        if (!pkgFile.isValid()) {
             // 根据文件无效的类型提示不同的文案
             emit signalInvalidPackage();
-            delete pkgFile;
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile->md5Sum();
+        const auto md5 = pkgFile.md5Sum();
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
             emit signalPackageAlreadyExists();
-            delete pkgFile;
             continue;
         }
         //管理最近文件列表
@@ -130,7 +131,6 @@ void AddPackageThread::run()
 
         // 可以添加,发送添加信号
         emit signalAddPackageToInstaller(m_validPackageCount, debPackage, md5);
-        delete pkgFile;
     }
 
     emit signalAppendFinished();

@@ -274,15 +274,15 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         m_packagesManager->removePackage(currentRow);
         return QVariant();
     }
-    const DebFile *deb = new DebFile(m_packagesManager->package(currentRow));
-
-    QString packageName = deb->packageName();                       //包名
-    QString filePath = deb->filePath();                             //包的路径
-    QString version = deb->version();                               //包的版本
-    QString architecture = deb->architecture();                     //包可用的架构
-    QString shortDescription = deb->shortDescription();             //包的短描述
-    QString longDescription = deb->longDescription();               //包的长描述
-    delete deb;                                                     //删除该指针，以免内存泄露
+    const DebFile deb(m_packagesManager->package(currentRow));
+    if(!deb.isValid())
+        return QVariant();
+    QString packageName = deb.packageName();                       //包名
+    QString filePath = deb.filePath();                             //包的路径
+    QString version = deb.version();                               //包的版本
+    QString architecture = deb.architecture();                     //包可用的架构
+    QString shortDescription = deb.shortDescription();             //包的短描述
+    QString longDescription = deb.longDescription();               //包的长描述
     switch (role) {
     case WorkerIsPrepareRole:
         return isWorkerPrepare();                                   //获取当前工作状态是否准备九局
@@ -358,16 +358,20 @@ void DebListModel::slotUninstallPackage(const int index)
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = index;                       //刷新操作状态的index
 
-    DebFile *debFile = new DebFile(m_packagesManager->package(m_operatingIndex));   //获取到包
-    const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile->packageName(), debFile->architecture());     //检查是否有应用依赖到该包
+    DebFile debFile(m_packagesManager->package(m_operatingIndex));   //获取到包
+    if(!debFile.isValid())
+        return;
+    const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture());     //检查是否有应用依赖到该包
     Backend *backend = m_packagesManager->m_backendFuture.result();
+    if(!backend)
+        return;
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
         if (backend->package(r))
             backend->markPackageForRemoval(r);
         else
             qWarning() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
-    backend->markPackageForRemoval(debFile->packageName() + ':' + debFile->architecture());       //卸载当前包
+    backend->markPackageForRemoval(debFile.packageName() + ':' + debFile.architecture());       //卸载当前包
 
     refreshOperatingPackageStatus(Operating);                                       //刷新当前index的操作状态
     Transaction *transsaction = backend->commitChanges();
@@ -393,7 +397,6 @@ void DebListModel::slotUninstallPackage(const int index)
     m_currentTransaction = transsaction;   //保存trans指针
 
     transsaction->run();                   //开始卸载
-    delete debFile;
 }
 
 void DebListModel::slotRemovePackage(const int idx)
