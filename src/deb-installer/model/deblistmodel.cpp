@@ -348,30 +348,34 @@ void DebListModel::slotInstallPackages()
 
 void DebListModel::slotUninstallPackage(const int index)
 {
-    Q_ASSERT(index == 0);
-    Q_ASSERT_X(m_workerStatus == WorkerPrepare, Q_FUNC_INFO, "uninstall status error");
-
     m_workerStatus = WorkerProcessing;                  //刷新当前包安装器的工作状态
-    m_workerStatus_temp = m_workerStatus;               //保存工作状态
     m_operatingIndex = index;                             //获取卸载的包的indx
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = index;                       //刷新操作状态的index
 
-    DebFile debFile(m_packagesManager->package(m_operatingIndex));   //获取到包
-    if(!debFile.isValid())
+    DebFile debFile(m_packagesManager->package(m_operatingIndex)); //获取到包
+    if (!debFile.isValid())
         return;
-    const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture());     //检查是否有应用依赖到该包
+    const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture()); //检查是否有应用依赖到该包
     Backend *backend = m_packagesManager->m_backendFuture.result();
-    if(!backend)
-        return;
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (backend->package(r))
-            backend->markPackageForRemoval(r);
+        if (backend->package(r)){
+            // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+            backend->package(r)->setPurge();
+        }
         else
             qWarning() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
-    backend->markPackageForRemoval(debFile.packageName() + ':' + debFile.architecture());       //卸载当前包
+    //卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+    QApt::Package *uninstalledPackage = backend->package(debFile.packageName() + ':' + debFile.architecture());
+
+    //未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
+    if(!uninstalledPackage){
+        refreshOperatingPackageStatus(Failed);
+        return;
+    }
+    uninstalledPackage->setPurge();
 
     refreshOperatingPackageStatus(Operating);                                       //刷新当前index的操作状态
     Transaction *transsaction = backend->commitChanges();

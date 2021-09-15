@@ -94,7 +94,7 @@ QString AddPackageThread::dealPackagePath(QString packagePath)
 
 void AddPackageThread::run()
 {
-    checkInvalid();     //运行之前先计算有效文件的数量
+    m_validPackageCount = 0;
     for (QString debPackage : m_packages) {
 
         // 处理包不在本地的情况。
@@ -128,7 +128,7 @@ void AddPackageThread::run()
 
         // 添加到set中，用来判断重复
         m_appendedPackagesMd5 << md5;
-
+        m_validPackageCount++;
         // 可以添加,发送添加信号
         emit signalAddPackageToInstaller(m_validPackageCount, debPackage, md5);
     }

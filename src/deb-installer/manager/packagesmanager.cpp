@@ -238,16 +238,24 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
             //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
             //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
-            Package *package = m_backendFuture.result()->package(name);
+            Backend *backend = m_backendFuture.result();
+            if(!backend)
+                return ConflictResult::err(QString());
+            Package *package = backend->package(name);
 
-            if (!package || !package->isInstalled())
+            if(!package)
                 continue;
-            
+
+            if (!package->isInstalled()){
+                package = nullptr;
+                continue;
+            }
             // arch error, conflicts
             if (!isArchMatches(arch, package->architecture(), package->multiArchType())) {
                 qWarning() << "PackagesManager:" << "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString();
+                package = nullptr;
                 return ConflictResult::err(name);
             }
 
@@ -257,9 +265,10 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             const auto result = Package::compareVersion(installed_version, conflict_version);
 
             // not match, ok
-            if (!dependencyVersionMatch(result, type)) 
+            if (!dependencyVersionMatch(result, type)) {
+                package = nullptr;
                 continue;
-
+            }
             // test package
             const QString mirror_version = package->availableVersion();
 
@@ -270,6 +279,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
                 qWarning() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString() << mirror_version << conflict_version;
+                package = nullptr;
                 return ConflictResult::err(name);
             }
 
@@ -280,6 +290,8 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
 
 int PackagesManager::packageInstallStatus(const int index)
 {
+    if(index < 0 || index >= m_preparedPackages.size())
+        return -1;
     //修改安装状态的存放方式，将安装状态与MD5绑定，而非与index绑定
     //如果此时已经刷新过安装状态，则直接返回。
     //PS: 修改原因见头文件
@@ -290,32 +302,37 @@ int PackagesManager::packageInstallStatus(const int index)
         return m_packageInstallStatus[currentPackageMd5];
 
     DebFile debFile(m_preparedPackages[index]);
-    if(!debFile.isValid())
-       return DebListModel::NotInstalled;
+    if (!debFile.isValid())
+        return DebListModel::NotInstalled;
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
     Backend *backend = m_backendFuture.result();
-    Package *package = backend->package(packageName + ":" + packageArch);
+    if(!backend){
+        qWarning()<< "Failed to load libqapt backend";
+        return DebListModel::NotInstalled;
+    }
+    Package *package = packageWithArch(packageName, packageArch);
 
     int ret = DebListModel::NotInstalled;
-    do {
-        if (!package)
-            break;
 
-        const QString installedVersion = package->installedVersion();
-        if (installedVersion.isEmpty())
-            break;
+    if (!package)
+        return ret;
 
-        const QString packageVersion = debFile.version();
-        const int result = Package::compareVersion(packageVersion, installedVersion);
+    const QString installedVersion = package->installedVersion();
+    package = nullptr;
+    if (installedVersion.isEmpty())
+        return ret;
 
-        if (result == 0)
-            ret = DebListModel::InstalledSameVersion;
-        else if (result < 0)
-            ret = DebListModel::InstalledLaterVersion;
-        else
-            ret = DebListModel::InstalledEarlierVersion;
-    } while (false);
+    const QString packageVersion = debFile.version();
+    const int result = Package::compareVersion(packageVersion, installedVersion);
+
+    if (result == 0)
+        ret = DebListModel::InstalledSameVersion;
+    else if (result < 0)
+        ret = DebListModel::InstalledLaterVersion;
+    else
+        ret = DebListModel::InstalledEarlierVersion;
+
 
     //存储包的安装状态
     //2020-11-19 修改安装状态的存储绑定方式
@@ -421,6 +438,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         } else {
                             dependList << depend->name() + ":" + depend->architecture();
                         }
+
+                        depend = nullptr;
+
                         if (dinfo.packageName().contains("deepin-wine")) {              // 如果依赖中出现deepin-wine字段。则是wine应用
                             isWineApplication = true;
                         }
@@ -497,13 +517,14 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 {
     for (const auto &info : candidateList) {
         Package *package = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
-        if (!package) 
+        if (!package)
             continue;
 
         const auto choosed_name = package->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-        if (choosed_set.contains(choosed_name))
+        if (choosed_set.contains(choosed_name)){
+            package = nullptr;
             break;
-        
+        }
         //当前依赖未安装，则安装当前依赖。
         if (package->installedVersion().isEmpty()) {
             choosed_set << choosed_name;
@@ -513,30 +534,43 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             // 删除无用冗余的日志
             if (Package::compareVersion(package->installedVersion(), info.packageVersion()) < 0) {
                 Backend *backend = m_backendFuture.result();
-                Package *updatePackage = backend->package(package->name() + resolvMultiArchAnnotation(QString(), package->architecture()));
-                if (updatePackage) 
+                if(!backend){
+                    qWarning()<<"libqapt backend loading error";
+                    package = nullptr;
+                    return;
+                }
+                Package *updatePackage = backend->package(package->name()
+                                                          + resolvMultiArchAnnotation(QString(), package->architecture()));
+                if (updatePackage){
                     choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), package->architecture());
-                else 
-                    choosed_set << updatePackage->name() + " not found";
-                
+                    updatePackage = nullptr;
+                }
+                else{
+                    choosed_set << info.packageName() + " not found";
+                }
             } else { //若依赖包符合版本要求,则不进行升级
+                package = nullptr;
                 continue;
             }
         }
 
-        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok()) {
+        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok()){
+            package = nullptr;
             continue;
         }
 
         QSet<QString> upgradeDependsSet = choosed_set;
         upgradeDependsSet << choosed_name;
         const auto stat = checkDependsPackageStatus(upgradeDependsSet, package->architecture(), package->depends());
-        if (stat.isBreak()) {
+        if (stat.isBreak()){
+            package = nullptr;
             continue;
         }
 
         choosed_set << choosed_name;
         packageCandidateChoose(choosed_set, debArch, package->depends());
+
+        package = nullptr;
         break;
     }
 
@@ -555,6 +589,13 @@ QMap<QString, QString> PackagesManager::specialPackage()
 const QStringList PackagesManager::packageReverseDependsList(const QString &packageName, const QString &sysArch)
 {
     Package *package = packageWithArch(packageName, sysArch);
+    if(!package){
+        qWarning()<<"Failed to package from"<<packageName<<"with"<< sysArch;
+        return {};
+    }
+    QStringList requiredList = package->requiredByList();
+
+    package = nullptr;
 
     //确定和当前包存在直接或间接反向依赖的包的集合
     QSet<QString> reverseDependSet{packageName};
@@ -562,23 +603,28 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     // 存放当前需要验证反向依赖的包
     QQueue<QString> reverseQueue;
 
-    for (const auto &requiredPackage : package->requiredByList().toSet())
+    for (const auto &requiredPackage : requiredList.toSet())
         reverseQueue.append(requiredPackage);
     while (!reverseQueue.isEmpty()) {
         const auto item = reverseQueue.first();
         reverseQueue.pop_front();
 
-        if (reverseDependSet.contains(item)) 
+        if (reverseDependSet.contains(item))
             continue;
 
         Package *currentPackage = packageWithArch(item, sysArch);
-        if (!currentPackage || !currentPackage->isInstalled()) 
+        if (!currentPackage || !currentPackage->isInstalled()){
+            currentPackage = nullptr;
             continue;
-        if (currentPackage->recommendsList().contains(packageName)) 
+        }
+        if (currentPackage->recommendsList().contains(packageName)){
+            currentPackage = nullptr;
             continue;
-        if (currentPackage->suggestsList().contains(packageName)) 
+        }
+        if (currentPackage->suggestsList().contains(packageName)) {
+            currentPackage = nullptr;
             continue;
-
+        }
 
         reverseDependSet << item;
 
@@ -597,14 +643,22 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
                     }
                 }
             }
-            if (!subPackage || !subPackage->isInstalled())      //增加对package指针的检查
+            if (!subPackage || !subPackage->isInstalled()){      //增加对package指针的检查
+                subPackage = nullptr;
                 continue;
-            if (subPackage->recommendsList().contains(item))
+            }
+            if (subPackage->recommendsList().contains(item)){
+                subPackage = nullptr;
                 continue;
-            if (subPackage->suggestsList().contains(item))
+            }
+            if (subPackage->suggestsList().contains(item)) {
+                subPackage = nullptr;
                 continue;
+            }
             reverseQueue.append(dependRequiredPackage);
         }
+
+        currentPackage = nullptr;
     }
     // remove self
     reverseDependSet.remove(packageName);
@@ -695,7 +749,6 @@ void PackagesManager::appendPackage(QStringList packages)
 {
     if (packages.isEmpty())//当前放进来的包列表为空（可能拖入的是文件夹）
         return;
-    checkInvalid(packages);     //运行之前先计算有效文件的数量
     if (1 == packages.size()) {
         appendNoThread(packages, packages.size());
     } else {
@@ -781,6 +834,7 @@ QString PackagesManager::dealPackagePath(QString packagePath)
 void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 {
     qDebug() << "[PackagesManager]" << "[appendNoThread]" << "start add packages";
+    m_validPackageCount = 0;
     for (QString debPackage : packages) {                 //通过循环添加所有的包
 
         // 处理包不在本地的情况。
@@ -812,7 +866,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         data.appName = "Deepin Deb Installer";
         data.appExec = "deepin-deb-installer";
         DRecentManager::addItem(debPackage, data);
-
+        m_validPackageCount++;
         addPackage(m_validPackageCount, debPackage, md5);
     }
 

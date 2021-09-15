@@ -107,7 +107,7 @@ TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_run)
 
     m_addPkgThread->run();
 
-    ASSERT_EQ(m_addPkgThread->m_validPackageCount, 2);
+    ASSERT_EQ(m_addPkgThread->m_validPackageCount, 1);
     m_addPkgThread->terminate();
 }
 bool apt_mkdir(const QString &dirName)
