@@ -102,7 +102,7 @@ bool PackagesManager::dependencyVersionMatch(const int result, const RelationTyp
 
 void PackagesManager::selectedIndexRow(int row)
 {
-    if (row < m_packageMd5.size())
+    if (row < m_packageMd5.size() && row > 0)
         emit signalMultDependPackages(m_dependsPackages.value(m_packageMd5[row]), installWineDepends);
 }
 
@@ -820,7 +820,6 @@ void PackagesManager::appendPackage(QStringList packages)
 {
     if (packages.isEmpty())//当前放进来的包列表为空（可能拖入的是文件夹）
         return;
-    checkInvalid(packages);     //运行之前先计算有效文件的数量
     if (1 == packages.size()) {
         appendNoThread(packages, packages.size());
     } else {
@@ -905,6 +904,7 @@ QString PackagesManager::dealPackagePath(QString packagePath)
  */
 void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 {
+    m_validPackageCount = 0;
     for (QString debPackage : packages) {                 //通过循环添加所有的包
 
         // 处理包不在本地的情况。
@@ -934,7 +934,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         data.appName = "Deepin Deb Installer";
         data.appExec = "deepin-deb-installer";
         DRecentManager::addItem(debPackage, data);
-
+        m_validPackageCount++;
         addPackage(m_validPackageCount, debPackage, md5);
     }
 
