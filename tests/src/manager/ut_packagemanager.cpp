@@ -287,7 +287,7 @@ Package *backend_package(const QString &)
     return nullptr;
 }
 
-class ut_packagesManager_test : public ::testing::Test
+class UT_packagesManager : public ::testing::Test
 {
     // Test interface
 protected:
@@ -298,7 +298,7 @@ protected:
     Stub stub;
 };
 
-void ut_packagesManager_test::SetUp()
+void UT_packagesManager::SetUp()
 {
     stub.set(ADDR(DebFile, architecture), deb_arch_all);
     stub.set(ADDR(Backend, architectures), backend_architectures);
@@ -314,7 +314,7 @@ void ut_packagesManager_test::SetUp()
     usleep(10 * 1000);
 }
 
-void ut_packagesManager_test::TearDown()
+void UT_packagesManager::TearDown()
 {
     stub.set(ADDR(PackagesManager, rmTempDir), stub_is_open_false);
 
@@ -335,18 +335,40 @@ Package *packagesManager_package(const QString &)
     return package.get();
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isBackendReady)
+TEST_F(UT_packagesManager, PackageManager_UT_isBackendReady)
 {
     ASSERT_TRUE(m_packageManager->isBackendReady());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_SymbolicLink_01)
+TEST_F(UT_packagesManager, PackageManager_UT_selectedIndexRow)
+{
+    QSignalSpy spy(m_packageManager, SIGNAL(signalMultDependPackages(DependsPair, bool)));
+    m_packageManager->m_packageMd5.insert(0, "sweat00001adscws1");
+    m_packageManager->selectedIndexRow(0);
+    EXPECT_EQ(1, spy.count());
+}
+
+TEST_F(UT_packagesManager, PackageManager_UT_checkInvalid)
+{
+    QStringList packages;
+    packages << "package1"
+             << "package2";
+    m_packageManager->checkInvalid(packages);
+    EXPECT_EQ(2, m_packageManager->m_validPackageCount);
+}
+
+int stub_swappedPackageIndex()
+{
+    return 1;
+}
+
+TEST_F(UT_packagesManager, PackageManager_UT_dealPackagePath_SymbolicLink_01)
 {
     stub.set(ADDR(PackagesManager, mkTempDir), stub_is_open_false);
     EXPECT_EQ("0", m_packageManager->SymbolicLink("0", "1"));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_AbsolutePath)
+TEST_F(UT_packagesManager, PackageManager_UT_dealPackagePath_AbsolutePath)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(QFileInfo, absoluteFilePath), stub_absoluteFilePath);
@@ -354,7 +376,18 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_AbsolutePath)
     ASSERT_STREQ("", m_packageManager->dealPackagePath(" ").toUtf8());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_space)
+TEST_F(UT_packagesManager, PackageManager_UT_addPackage)
+{
+    m_packageManager->m_preparedPackages.insert(0, "package1");
+    m_packageManager->m_packageMd5.insert(0, "abc");
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, swappedPackageIndex), stub_swappedPackageIndex);
+    m_packageManager->addPackage(1, "/", "deb");
+    EXPECT_EQ(2, m_packageManager->m_preparedPackages.size());
+    EXPECT_EQ(2, m_packageManager->m_packageMd5.size());
+}
+
+TEST_F(UT_packagesManager, PackageManager_UT_dealPackagePath_space)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(QFileInfo, absoluteFilePath), stub_absoluteFilePath);
@@ -362,7 +395,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealPackagePath_space)
     ASSERT_STREQ("", m_packageManager->dealPackagePath("/ ").toUtf8());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_true)
+TEST_F(UT_packagesManager, PackageManager_UT_dealInvalidPackage_true)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_open);
@@ -377,7 +410,7 @@ void stub_qthread_start(QThread::Priority = QThread::InheritPriority)
     return;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_false)
+TEST_F(UT_packagesManager, PackageManager_UT_dealInvalidPackage_false)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_open);
@@ -387,7 +420,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_false)
     EXPECT_FALSE(m_packageManager->dealInvalidPackage("/1"));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_NoPermission)
+TEST_F(UT_packagesManager, PackageManager_UT_dealInvalidPackage_NoPermission)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_open);
@@ -397,7 +430,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_dealInvalidPackage_NoPermissio
     EXPECT_FALSE(m_packageManager->dealInvalidPackage("/1"));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage)
+TEST_F(UT_packagesManager, PackageManager_UT_appendPackage)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -412,7 +445,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage)
     ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_invalid)
+TEST_F(UT_packagesManager, PackageManager_UT_appendPackage_invalid)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -427,7 +460,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_invalid)
     ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_openFailed)
+TEST_F(UT_packagesManager, PackageManager_UT_appendPackage_openFailed)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -454,7 +487,7 @@ void stub_start(const QString &program, const QStringList &arguments, QIODevice:
     return;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_multi)
+TEST_F(UT_packagesManager, PackageManager_UT_appendPackage_multi)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -466,7 +499,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackage_multi)
     ASSERT_TRUE(m_packageManager->m_packageMd5.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_refreshPage)
+TEST_F(UT_packagesManager, PackageManager_UT_refreshPage)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -481,13 +514,13 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_refreshPage)
     EXPECT_EQ(3, m_packageManager->m_preparedPackages.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isArchError)
+TEST_F(UT_packagesManager, PackageManager_UT_isArchError)
 {
     m_packageManager->m_preparedPackages.insert(0,"/1");
     ASSERT_FALSE(m_packageManager->isArchError(0));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isArchError_1)
+TEST_F(UT_packagesManager, PackageManager_UT_isArchError_1)
 {
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
@@ -498,7 +531,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isArchError_1)
     ASSERT_FALSE(m_packageManager->isArchError(0));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat)
+TEST_F(UT_packagesManager, PackageManager_UT_packageConflictStat)
 {
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -515,7 +548,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat)
     ASSERT_EQ(1, m_packageManager->m_preparedPackages.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat_invalid)
+TEST_F(UT_packagesManager, PackageManager_UT_packageConflictStat_invalid)
 {
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -531,7 +564,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageConflictStat_invalid)
     ASSERT_FALSE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -544,7 +577,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy)
     ASSERT_TRUE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_01)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_01)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
 
@@ -578,8 +611,7 @@ bool ut_packagesManager_dependencyVersionMatch1(const int, const RelationType)
     return true;
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_02)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_02)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -608,7 +640,7 @@ bool stub_isArchMatches(QString , const QString &, const int ){
     return false;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_03)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_03)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), packagesManager_package);
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
@@ -628,7 +660,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_03)
     ASSERT_FALSE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
+TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict)
 {
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -660,7 +692,7 @@ QString deb_package_version()
     return "1";
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_001)
+TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict_001)
 {
     qDebug()<<"PackageManager_UT_isInstalledConflict_001";
     usleep(10 *1000);
@@ -685,7 +717,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_001)
     ASSERT_TRUE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_002)
+TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict_002)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(Backend, availablePackages),stub_availablePackages_nullptr);
@@ -706,7 +738,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_002)
     ASSERT_TRUE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0001)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_0001)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -725,7 +757,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0001)
     delete package;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0002)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_0002)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -755,8 +787,7 @@ const ConflictResult stub_isInstalledConflict_ok(const QString &, const QString 
     return ConflictResult::ok("1");
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0003)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_0003)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -788,7 +819,7 @@ const ConflictResult stub_isConflictSatisfy_error(const QString &, const QList<Q
     return ConflictResult::err("1");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0004)
+TEST_F(UT_packagesManager, PackageManager_UT_isConflictSatisfy_0004)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -811,7 +842,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isConflictSatisfy_0004)
     ASSERT_TRUE(cr.is_ok());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -824,7 +855,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus)
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_01)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_01)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -840,7 +871,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_01)
     ASSERT_EQ(DebListModel::NotInstalled, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_02)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_02)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -854,7 +885,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_02)
     ASSERT_EQ(DebListModel::InstalledLaterVersion, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_03)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_03)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -868,7 +899,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_03)
     ASSERT_EQ(DebListModel::InstalledEarlierVersion, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstallStatus_04)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_04)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
@@ -907,7 +938,7 @@ QList<DependencyItem> deb_depends()
     return conflicts;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_DealDependResult)
+TEST_F(UT_packagesManager, PackageManager_UT_DealDependResult)
 {
     Stub stub;
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -953,7 +984,15 @@ bool ut_isArchError(int index)
     return true;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
+TEST_F(UT_packagesManager, PackageManager_UT_getAllDepends)
+{
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
+    stub.set(ADDR(Package, depends), deb_depends);
+    m_packageManager->getAllDepends("/", "/");
+    EXPECT_EQ(1, m_packageManager->getAllDepends("/", "/").size());
+}
+
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -979,7 +1018,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus)
     ASSERT_TRUE(pd.isBreak());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_01)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_01)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -1014,7 +1053,7 @@ bool stub_isBlackApplication_true(QString)
 {
     return true;
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_02)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_02)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -1037,7 +1076,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_02)
 
     ASSERT_EQ(pd.status, 2);
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_03)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_03)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -1061,7 +1100,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_03)
     ASSERT_EQ(pd.status, 6);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_04)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_04)
 {
 
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
@@ -1072,7 +1111,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_04)
     ASSERT_EQ(pd.status, 2);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_05)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_05)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -1121,7 +1160,7 @@ const PackageDependsStatus stub_checkDependsPackageStatus_DI(QSet<QString> &,
     return PackageDependsStatus::_break("1");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_06)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_06)
 {
     stub.set(ADDR(DependencyInfo, packageName), deb_package_name);
     stub.set(ADDR(DependencyInfo, packageVersion), deb_package_name);
@@ -1171,7 +1210,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_06)
 
 void stub_run()
 {
-
+    return;
 }
 bool stub_isRunning()
 {
@@ -1188,7 +1227,7 @@ void stub_setBrokenDepend(QString)
 
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_07)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_07)
 {
     stub.set(ADDR(DependencyInfo, packageName), deb_package_name1);
     stub.set(ADDR(DependencyInfo, packageVersion), deb_package_name);
@@ -1221,15 +1260,16 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_07)
 
     stub.set(ADDR(QThread, isRunning), stub_isRunning);
 
-//    typedef void (*fptr)(DealDependThread*);
-//    fptr run    = (fptr)((void(DealDependThread::*)(   ))&DealDependThread::run);
+    typedef void (*fptr)(DealDependThread *);
+    fptr run = (fptr)(&DealDependThread::run);
+    stub.set(run, stub_run);
 
     stub.set(ADDR(DealDependThread, setDependsList), stub_setDependsList);
     stub.set(ADDR(DealDependThread, setBrokenDepend), stub_setBrokenDepend);
 
     m_packageManager->m_preparedPackages.insert(0,"0");
     m_packageManager->m_packageMd5.insert(0,"0");
-    m_packageManager->m_dependInstallMark.insert(0,"0");
+    m_packageManager->m_dependInstallMark.insert(0, "1");
     m_packageManager->m_packageMd5DependsStatus.clear();
 
     PackageDependsStatus pd = m_packageManager->getPackageDependsStatus(0);
@@ -1237,7 +1277,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageDependsStatus_07)
     ASSERT_EQ(pd.status, 2);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
+TEST_F(UT_packagesManager, PackageManager_UT_packageInstalledVersion)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
 
@@ -1261,7 +1301,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageInstalledVersion)
     ASSERT_TRUE(version.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageAvailableDepends)
+TEST_F(UT_packagesManager, PackageManager_UT_packageAvailableDepends)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1282,7 +1322,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageAvailableDepends)
     ASSERT_TRUE(ads.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_specialPackage)
+TEST_F(UT_packagesManager, PackageManager_UT_specialPackage)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1322,8 +1362,7 @@ QStringList package_suggestList()
     return rbl;
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1348,7 +1387,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList)
     ASSERT_TRUE(ads.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_1)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList_1)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1376,7 +1415,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_1)
     ASSERT_FALSE(ads.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_2)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList_2)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1404,7 +1443,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_2)
     ASSERT_TRUE(ads.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_3)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList_3)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1432,7 +1471,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_3)
     ASSERT_TRUE(ads.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_4)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList_4)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1460,8 +1499,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_4)
     ASSERT_TRUE(ads.isEmpty());
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageReverseDependsList_5)
+TEST_F(UT_packagesManager, PackageManager_UT_packageReverseDependsList_5)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1494,7 +1532,7 @@ bool backend_reloadCache()
     return true;
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_reset)
+TEST_F(UT_packagesManager, PackageManager_UT_reset)
 {
     stub.set(ADDR(Backend, reloadCache), backend_reloadCache);
     stub.set(ADDR(DebFile, depends), deb_depends);
@@ -1514,7 +1552,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_reset)
     ASSERT_TRUE(m_packageManager->m_appendedPackagesMd5.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus)
+TEST_F(UT_packagesManager, PackageManager_UT_resetPackageDependsStatus)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1537,7 +1575,7 @@ bool stub_reloadCache()
 {
     return false;
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus_01)
+TEST_F(UT_packagesManager, PackageManager_UT_resetPackageDependsStatus_01)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1560,7 +1598,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_resetPackageDependsStatus_01)
     ASSERT_TRUE(m_packageManager->m_packageMd5DependsStatus.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage)
+TEST_F(UT_packagesManager, PackageManager_UT_removePackage)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1579,7 +1617,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage)
     ASSERT_TRUE(m_packageManager->m_appendedPackagesMd5.isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_01)
+TEST_F(UT_packagesManager, PackageManager_UT_removePackage_01)
 {
     m_packageManager->m_preparedPackages.append("1");
 
@@ -1588,7 +1626,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_01)
     ASSERT_EQ(m_packageManager->m_preparedPackages.size(),1);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_02)
+TEST_F(UT_packagesManager, PackageManager_UT_removePackage_02)
 {
     m_packageManager->m_preparedPackages.append("1");
 
@@ -1601,7 +1639,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_02)
     ASSERT_EQ(m_packageManager->m_preparedPackages.size(),0);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeMulti)
+TEST_F(UT_packagesManager, PackageManager_UT_removePackage_removeMulti)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1624,7 +1662,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeMulti)
     ASSERT_EQ(m_packageManager->m_preparedPackages.size(), 2);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeTwo)
+TEST_F(UT_packagesManager, PackageManager_UT_removePackage_removeTwo)
 {
     stub.set(ADDR(DebFile, depends), deb_depends);
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
@@ -1646,14 +1684,14 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_removePackage_removeTwo)
     ASSERT_EQ(m_packageManager->m_preparedPackages.size(), 1);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_rmTempDir)
+TEST_F(UT_packagesManager, PackageManager_UT_rmTempDir)
 {
 
     usleep(10 * 1000);
     m_packageManager->rmTempDir();
     ASSERT_STREQ(m_packageManager->SymbolicLink("test", "test").toLocal8Bit(), (QString("/tmp/LinkTemp/") + QString("test")).toLocal8Bit());
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_020)
+TEST_F(UT_packagesManager, PackageManager_UT_020)
 {
 
     usleep(10 * 1000);
@@ -1670,7 +1708,7 @@ bool pm_exits()
 {
     return true;
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_mkTempDir)
+TEST_F(UT_packagesManager, PackageManager_UT_mkTempDir)
 {
 
     stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), pm_mkdir);
@@ -1680,14 +1718,13 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_mkTempDir)
     ASSERT_TRUE(m_packageManager->mkTempDir());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_link)
+TEST_F(UT_packagesManager, PackageManager_UT_link)
 {
     m_packageManager->link("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit();
     EXPECT_TRUE(m_packageManager->m_tempLinkDir.startsWith("/tmp/LinkTemp/"));
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
+TEST_F(UT_packagesManager, PackageManager_UT_packageWithArch)
 {
 //    stub.set(ADDR(DebFile, architecture), deb_arch_i386);
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
@@ -1714,7 +1751,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageWithArch)
     m_packageManager->deleteLater();
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackageFinished)
+TEST_F(UT_packagesManager, PackageManager_UT_appendPackageFinished)
 {
     usleep(10 * 1000);
     QSignalSpy spy(m_packageManager, SIGNAL(signalAppendFinished(QList<QByteArray>)));
@@ -1722,93 +1759,92 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_appendPackageFinished)
     EXPECT_EQ(1, spy.count());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_01)
+TEST_F(UT_packagesManager, PackageManager_UT_isArchMatches_01)
 {
     ASSERT_TRUE(m_packageManager->isArchMatches("all", "", 0));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_02)
+TEST_F(UT_packagesManager, PackageManager_UT_isArchMatches_02)
 {
     ASSERT_FALSE(m_packageManager->isArchMatches("amd64", "", 0));
 }
-TEST_F(ut_packagesManager_test, PackageManager_UT_isArchMatches_03)
+TEST_F(UT_packagesManager, PackageManager_UT_isArchMatches_03)
 {
     ASSERT_FALSE(m_packageManager->isArchMatches(":amd64", "", 0));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("all", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_any)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation_any)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("any", "", InvalidMultiArchType).toLocal8Bit(), "");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_MultiArchForeign)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation_MultiArchForeign)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("any", "", MultiArchForeign).toLocal8Bit(), "");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_01)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation_01)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation("testAnnotation", "", InvalidMultiArchType).toLocal8Bit(), ":testAnnotation");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_02)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation_02)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation(":i386", "", InvalidMultiArchType).toLocal8Bit(), ":i386");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_resolvMultiArchAnnotation_03)
+TEST_F(UT_packagesManager, PackageManager_UT_resolvMultiArchAnnotation_03)
 {
     ASSERT_STREQ(m_packageManager->resolvMultiArchAnnotation(":i386", "", MultiArchForeign).toLocal8Bit(), "");
 }
 
-
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(0, Equals));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_01)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_01)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(0, LessOrEqual));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_02)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_02)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(-1, LessThan));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_03)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_03)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, GreaterThan));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_04)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_04)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, NotEqual));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_05)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_05)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, GreaterOrEqual));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_dependencyVersionMatch_06)
+TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_06)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, NoOperand));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_backend)
+TEST_F(UT_packagesManager, PackageManager_UT_backend)
 {
     usleep(10 * 1000);
     ASSERT_TRUE(m_packageManager->backend());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_package)
+TEST_F(UT_packagesManager, PackageManager_UT_package)
 {
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
@@ -1820,7 +1856,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_package)
     ASSERT_STREQ(m_packageManager->package(0).toLocal8Bit(), "");
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus)
+TEST_F(UT_packagesManager, PackageManager_UT_checkDependsPackageStatus)
 {
     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
@@ -1841,7 +1877,7 @@ QString ut_version()
     return "1.1";
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
+TEST_F(UT_packagesManager, PackageManager_UT_checkDependsPackageStatus01)
 {
     usleep(10 * 1000);
     QSet<QString> set;
@@ -1863,7 +1899,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus01)
     EXPECT_EQ(PackageDependsStatus::_break("").status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus02)
+TEST_F(UT_packagesManager, PackageManager_UT_checkDependsPackageStatus02)
 {
     usleep(10 * 1000);
     QSet<QString> set;
@@ -1890,7 +1926,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_checkDependsPackageStatus02)
     EXPECT_EQ(PackageDependsStatus::ok().status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getPackageMd5)
+TEST_F(UT_packagesManager, PackageManager_UT_getPackageMd5)
 {
     m_packageManager->m_packageMd5.append({"1","2"});
     EXPECT_EQ("1", m_packageManager->getPackageMd5(0));
@@ -1901,7 +1937,7 @@ QByteArray ut_readAll()
     return " ";
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_getBlackApplications)
+TEST_F(UT_packagesManager, PackageManager_UT_getBlackApplications)
 {
     stub.set((bool(QFile::*)()const)ADDR(QFile, exists), pm_exits);
     stub.set(ADDR(QIODevice, readAll), ut_readAll);
@@ -1909,7 +1945,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_getBlackApplications)
     EXPECT_TRUE(m_packageManager->m_blackApplicationList.first().isEmpty());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_isBlackApplication)
+TEST_F(UT_packagesManager, PackageManager_UT_isBlackApplication)
 {
     m_packageManager->m_blackApplicationList.append("black");
 
@@ -1917,7 +1953,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isBlackApplication)
     ASSERT_TRUE(m_packageManager->m_blackApplicationList.contains("black"));
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose)
+TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose)
 {
     QSet<QString> choosed_set;
     QString debArch = "";
@@ -1950,7 +1986,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose)
     EXPECT_EQ(1, cadicateList.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_1)
+TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_1)
 {
     QSet<QString> choosed_set;
     QString debArch = "";
@@ -1983,7 +2019,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_1)
     EXPECT_EQ(1, cadicateList.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_2)
+TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_2)
 {
     QSet<QString> choosed_set;
     QString debArch = "";
@@ -2016,7 +2052,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_2)
     EXPECT_EQ(1, cadicateList.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_3)
+TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_3)
 {
     QSet<QString> choosed_set;
     QString debArch = "";
@@ -2049,7 +2085,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_3)
     EXPECT_EQ(1, cadicateList.size());
 }
 
-TEST_F(ut_packagesManager_test, PackageManager_UT_packageCandidateChoose_4)
+TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_4)
 {
     QSet<QString> choosed_set;
     QString debArch = "";

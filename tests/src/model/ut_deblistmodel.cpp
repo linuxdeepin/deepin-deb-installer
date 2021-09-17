@@ -491,7 +491,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_rowCount)
 
 bool stub_recheckPackagePath(QString )
 {
-    return false;
+    return true;
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
@@ -499,25 +499,27 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
     QStringList list;
     list << "/";
     m_debListModel->slotAppendPackage(list);
-
     QModelIndex index = m_debListModel->index(0);
     int i = 1;
+    m_debListModel->data(index, 1);
+    i = 2;
+    m_debListModel->slotAppendPackage(QStringList() << "deb");
+    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
+    stub.set(ADDR(DebListModel, recheckPackagePath), stub_recheckPackagePath);
     while (i <= 13) {
         m_debListModel->data(index, i);
         i++;
     }
 
-    stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     for (int i = 257;i <=269; i++) {
         m_debListModel->data(index, i);
     }
 
-    stub.set(ADDR(DebListModel,recheckPackagePath), stub_recheckPackagePath);
     m_debListModel->data(index, 1);
 
     m_debListModel->m_packageOperateStatus[""] = 1;
     m_debListModel->data(index,268);
-    EXPECT_EQ(0, m_debListModel->m_packagesManager->m_preparedPackages.size());
+    EXPECT_EQ(1, m_debListModel->m_packagesManager->m_preparedPackages.size());
 }
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
 {
@@ -528,6 +530,21 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
     QModelIndex index = m_debListModel->index(0);
 
     EXPECT_EQ(1, m_debListModel->m_packagesManager->m_preparedPackages.size());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_isDevelopMode)
+{
+    m_debListModel->m_isDevelopMode = true;
+
+    EXPECT_TRUE(m_debListModel->isDevelopMode());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_selectedIndexRow)
+{
+    QSignalSpy spy(m_debListModel->m_packagesManager, SIGNAL(signalMultDependPackages(DependsPair, bool)));
+    m_debListModel->m_packagesManager->m_packageMd5.insert(0, "sweat00001adscws1");
+    m_debListModel->selectedIndexRow(0);
+    EXPECT_EQ(1, spy.count());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initPrepareStatus)

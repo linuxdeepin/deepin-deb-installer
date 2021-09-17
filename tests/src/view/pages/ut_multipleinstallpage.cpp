@@ -143,11 +143,37 @@ TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_afterGetAutherFalse)
     EXPECT_FALSE(multiplepage->m_installButton->isVisible());
 }
 
+TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_slotHideDependsInfo)
+{
+    multiplepage->slotHideDependsInfo();
+    EXPECT_FALSE(multiplepage->m_appsListView->hasFocus());
+    EXPECT_FALSE(multiplepage->m_showDependsView->isVisible());
+    multiplepage->slotShowDependsInfo();
+    EXPECT_FALSE(multiplepage->m_showDependsView->isVisible());
+    EXPECT_FALSE(multiplepage->m_appsListView->hasFocus());
+}
+
 TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_slotRequestRemoveItemClicked)
 {
     multiplepage->slotRequestRemoveItemClicked(debListModel->index(0));
     EXPECT_TRUE(debListModel->isWorkerPrepare());
     EXPECT_TRUE(multiplepage->m_debListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_FALSE(multiplepage->m_showDependsButton->isVisible());
+}
+
+TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_slotDependPackages)
+{
+    DependInfo info;
+    info.packageName = "libopencl1";
+    info.version = "1.0";
+    QList<DependInfo> list;
+    list.append(info);
+    QPair<QList<DependInfo>, QList<DependInfo>> pair;
+    pair.first.append(list);
+    pair.second.append(list);
+    //    dependPackages.insert("deb", pair);
+    multiplepage->slotDependPackages(pair, false);
+    EXPECT_EQ(1, pair.first.size());
     EXPECT_FALSE(multiplepage->m_showDependsButton->isVisible());
 }
 

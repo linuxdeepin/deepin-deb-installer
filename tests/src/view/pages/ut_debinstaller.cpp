@@ -173,6 +173,14 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_total)
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 }
 
+TEST_F(UT_Debinstaller, UT_Debinstaller_refreshSingle)
+{
+    deb->refreshSingle();
+    EXPECT_EQ(2, deb->m_dragflag);
+    EXPECT_EQ(2, deb->m_Filterflag);
+    EXPECT_TRUE(!deb->m_lastPage.isNull());
+}
+
 TEST_F(UT_Debinstaller, UT_Debinstaller_slotEnableCloseButton)
 {
     deb->slotEnableCloseButton(false);
