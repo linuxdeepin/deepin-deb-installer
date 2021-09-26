@@ -435,52 +435,63 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
                                              const DependencyItem &candidateList)
 {
-    bool choosed = false;
-
     for (const auto &info : candidateList) {
-        Package *dep = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
-        if (!dep) continue;
+        Package *package = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
+        if (!package)
+            continue;
 
-        const auto choosed_name = dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
+        const auto choosed_name = package->name() + resolvMultiArchAnnotation(QString(), package->architecture());
         if (choosed_set.contains(choosed_name)) {
-            choosed = true;
+            package = nullptr;
             break;
         }
-
-        // TODO: upgrade?
-        //        if (!dep->installedVersion().isEmpty()) return;
-        //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
-        // 删除无用冗余的日志
-        if (Package::compareVersion(dep->installedVersion(), info.packageVersion()) < 0) {
-            Backend *b = m_backendFuture.result();
-            Package *p = b->package(dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture()));
-            if (p)
-                choosed_set << dep->name() + resolvMultiArchAnnotation(QString(), dep->architecture());
-            else
-                choosed_set << dep->name() + " not found";
+        //当前依赖未安装，则安装当前依赖。
+        if (package->installedVersion().isEmpty()) {
+            choosed_set << choosed_name;
+        } else {
+            // 当前依赖已安装，判断是否需要升级
+            //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
+            // 删除无用冗余的日志
+            if (Package::compareVersion(package->installedVersion(), info.packageVersion()) < 0) {
+                Backend *backend = m_backendFuture.result();
+                if (!backend) {
+                    qWarning() << "libqapt backend loading error";
+                    package = nullptr;
+                    return;
+                }
+                Package *updatePackage = backend->package(package->name()
+                                                          + resolvMultiArchAnnotation(QString(), package->architecture()));
+                if (updatePackage) {
+                    choosed_set << updatePackage->name() + resolvMultiArchAnnotation(QString(), package->architecture());
+                    updatePackage = nullptr;
+                } else {
+                    choosed_set << info.packageName() + " not found";
+                }
+            } else { //若依赖包符合版本要求,则不进行升级
+                package = nullptr;
+                continue;
+            }
         }
 
-        if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
-            qDebug() << "PackagesManager:" << "conflict error in choose candidate" << dep->name();
+        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok()) {
+            package = nullptr;
             continue;
         }
 
-        // pass if break
-        QSet<QString> set = choosed_set;
-        set << choosed_name;
-        const auto stat = checkDependsPackageStatus(set, dep->architecture(), dep->depends());
+        QSet<QString> upgradeDependsSet = choosed_set;
+        upgradeDependsSet << choosed_name;
+        const auto stat = checkDependsPackageStatus(upgradeDependsSet, package->architecture(), package->depends());
         if (stat.isBreak()) {
-            qDebug() << "PackagesManager:" << "depends error in choose candidate" << dep->name();
+            package = nullptr;
             continue;
         }
 
-        choosed = true;
         choosed_set << choosed_name;
-        packageCandidateChoose(choosed_set, debArch, dep->depends());
+        packageCandidateChoose(choosed_set, debArch, package->depends());
+
+        package = nullptr;
         break;
     }
-
-    Q_ASSERT(choosed);
 }
 
 QMap<QString, QString> PackagesManager::specialPackage()
