@@ -820,6 +820,7 @@ void PackagesManager::appendPackage(QStringList packages)
 {
     if (packages.isEmpty())//当前放进来的包列表为空（可能拖入的是文件夹）
         return;
+    checkInvalid(packages);
     if (1 == packages.size()) {
         appendNoThread(packages, packages.size());
     } else {
@@ -843,11 +844,32 @@ void PackagesManager::appendPackage(QStringList packages)
 void PackagesManager::checkInvalid(QStringList packages)
 {
     m_validPackageCount = 0; //每次添加时都清零
+    QSet<QByteArray> packagesMd5 = {}; //获取所有有效包的md5，用于刷新界面判断
     for (QString package : packages) {
+        //获取路径信息
+        QStorageInfo info(package);
+
+        //判断路径信息是不是本地路径
+        if (!info.device().startsWith("/dev/"))
+            continue;
+
+        package = dealPackagePath(package);
+
         QApt::DebFile pkgFile(package);
-        if (pkgFile.isValid())            //只有有效文件才会计入
-            m_validPackageCount ++;
+        //判断当前文件是否是无效文件
+        if (!pkgFile.isValid()) {
+            continue;
+        }
+        // 获取当前文件的md5的值,防止重复添加
+        const auto md5 = pkgFile.md5Sum();
+
+        m_allPackages.insert(package, md5);
+
+        if (packagesMd5.contains(md5))
+            continue;
+        packagesMd5 << md5;
     }
+    m_validPackageCount = packagesMd5.size();
 }
 
 /**
@@ -904,7 +926,6 @@ QString PackagesManager::dealPackagePath(QString packagePath)
  */
 void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
 {
-    m_validPackageCount = 0;
     for (QString debPackage : packages) {                 //通过循环添加所有的包
 
         // 处理包不在本地的情况。
@@ -920,7 +941,8 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile.md5Sum();
+        const auto md5 = m_allPackages.value(debPackage);
+
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
@@ -934,7 +956,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         data.appName = "Deepin Deb Installer";
         data.appExec = "deepin-deb-installer";
         DRecentManager::addItem(debPackage, data);
-        m_validPackageCount++;
+
         addPackage(m_validPackageCount, debPackage, md5);
     }
 
@@ -1038,12 +1060,16 @@ int PackagesManager::swappedPackageIndex(const QString &packagePath)
 
     //安装列表中的安装包为正在添加的包的依赖
     QList<QString> preparedPackages = m_preparedPackages;
+
     for (int i = 0; i < allDependsList.size();i++) {
-        for (int j = 1; j < preparedPackages.size(); j++) {
-            if(m_preparedPackages.at(j).contains(allDependsList.at(i))){ //判断安装列表中是否有包为当前安装包的依赖包
-                    //列表中存在多个安装包为当前包的依赖包，取最大行号
-                    if (j > insertIndex)
-                        insertIndex = j;
+        for (int j = 0; j < preparedPackages.size(); j++) {
+            DebFile deb(preparedPackages.at(j));
+            if (!deb.isValid())
+                return -1;
+            if (deb.packageName().contains(allDependsList.at(i))) { //判断安装列表中是否有包为当前安装包的依赖包
+                //列表中存在多个安装包为当前包的依赖包，取最大行号
+                if (j > insertIndex)
+                    insertIndex = j;
             }
         }
     }
@@ -1060,7 +1086,7 @@ QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depen
         }
     }
     m_allDependsList = m_allDependsList.toSet().toList();
-    qInfo() << m_allDependsList.size();
+
     return m_allDependsList;
 }
 
