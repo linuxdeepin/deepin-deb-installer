@@ -514,7 +514,9 @@ private:
     QList<QString> m_preparedPackages       = {};   
 
     //存放包MD5的集合       
-    QSet<QByteArray> m_appendedPackagesMd5  = {};     
+    QSet<QByteArray> m_appendedPackagesMd5  = {};
+
+    QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
 
     //包MD5与下标绑定的list
     QList<QByteArray> m_packageMd5          = {};

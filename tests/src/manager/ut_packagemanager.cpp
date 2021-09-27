@@ -354,7 +354,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_checkInvalid)
     packages << "package1"
              << "package2";
     m_packageManager->checkInvalid(packages);
-    EXPECT_EQ(2, m_packageManager->m_validPackageCount);
+    EXPECT_EQ(0, m_packageManager->m_validPackageCount);
 }
 
 int stub_swappedPackageIndex()
