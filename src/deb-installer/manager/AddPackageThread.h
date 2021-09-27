@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QThread>
 #include <QSet>
+#include <QMap>
 #include <QByteArray>
 
 class PackagesManager;
@@ -104,6 +105,8 @@ private:
 
     //已经添加的deb包的MD5值的集合
     QSet<QByteArray> m_appendedPackagesMd5  = {};
+
+    QMap<QString, QByteArray> m_allPackages = {};
 
 private:
     /**

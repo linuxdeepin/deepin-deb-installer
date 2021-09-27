@@ -465,6 +465,8 @@ private:
     //包MD5与下标绑定的list
     QList<QByteArray> m_packageMd5          = {};
 
+    QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
+
     /**
      * @brief m_packageMd5DependsStatus 包的依赖状态的Map
      * QByteArray 包的下标
