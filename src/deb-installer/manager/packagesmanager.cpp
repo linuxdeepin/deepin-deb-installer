@@ -820,7 +820,7 @@ bool PackagesManager::dealInvalidPackage(QString packagePath)
 QString PackagesManager::dealPackagePath(QString packagePath)
 {
     //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
-    if (packagePath[0] != "/") {
+    if (!packagePath.startsWith("/")) {
         QFileInfo packageAbsolutePath(packagePath);
         packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
         qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
@@ -828,10 +828,12 @@ QString PackagesManager::dealPackagePath(QString packagePath)
 
     // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
     if (packagePath.contains(" ")) {
-        QApt::DebFile *p = new DebFile(packagePath);
-        packagePath = SymbolicLink(packagePath, p->packageName());
-        qWarning() << "PackagesManager:" << "There are spaces in the path, add a soft link" << packagePath;
-        delete p;
+        QApt::DebFile p(packagePath);
+        if (p.isValid()) {
+            packagePath = SymbolicLink(packagePath, p.packageName());
+            qWarning() << "PackagesManager:"
+                       << "There are spaces in the path, add a soft link" << packagePath;
+        }
     }
     return packagePath;
 }
