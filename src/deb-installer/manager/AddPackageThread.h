@@ -43,14 +43,19 @@ public:
      * @brief setPackages 获取需要安装的软件包的列表
      * @param packages 软件包列表
      */
-    void setPackages(QStringList packages);
-
+    void setPackages(QStringList packages, int validPkgCount);
 
     /**
      * @brief setAppendPackagesMd5 获取到已经添加到应用的deb包的Md5的set
      * @param appendPackagesMd5 目前应用中的deb包的Md5的set
      */
     void setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5);
+
+    /**
+     * @brief setSamePackageMd5
+     * @param packagesMd5
+     */
+    void setSamePackageMd5(QMap<QString, QByteArray> packagesMd5);
 
 signals:
 
@@ -157,11 +162,6 @@ private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
 
 private:
-
-    /**
-     * @brief checkInvalid 检查有效文件的数量
-     */
-    void checkInvalid();
 
     //有效文件的数量
     int m_validPackageCount = 0;

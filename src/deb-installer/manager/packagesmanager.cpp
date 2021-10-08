@@ -831,7 +831,9 @@ void PackagesManager::appendPackage(QStringList packages)
 
         if (packages.isEmpty())
             return;
-        m_pAddPackageThread->setPackages(packages);                     //传递要添加的包到添加线程中
+        if (!m_allPackages.isEmpty())
+            m_pAddPackageThread->setSamePackageMd5(m_allPackages);
+        m_pAddPackageThread->setPackages(packages, m_validPackageCount); //传递要添加的包到添加线程中
         m_pAddPackageThread->setAppendPackagesMd5(m_appendedPackagesMd5);       //传递当前已经添加的包的MD5 判重时使用
 
         m_pAddPackageThread->start();   //开始添加线程
@@ -843,33 +845,40 @@ void PackagesManager::appendPackage(QStringList packages)
  */
 void PackagesManager::checkInvalid(QStringList packages)
 {
-    m_validPackageCount = 0; //每次添加时都清零
-    QSet<QByteArray> packagesMd5 = {}; //获取所有有效包的md5，用于刷新界面判断
-    for (QString package : packages) {
-        //获取路径信息
-        QStorageInfo info(package);
-
-        //判断路径信息是不是本地路径
-        if (!info.device().startsWith("/dev/"))
-            continue;
-
-        package = dealPackagePath(package);
-
-        QApt::DebFile pkgFile(package);
-        //判断当前文件是否是无效文件
-        if (!pkgFile.isValid()) {
+    m_allPackages.clear();
+    m_validPackageCount = packages.size();
+    int validCount = 0; //计入有效包的数量
+    QSet<qint64> pkgSize; //存储安装包的安装大小,初步去除无效包以及可能重复的包
+    for (auto package : packages) {
+        QApt::DebFile file(package);
+        if (!file.isValid()) {
+            m_validPackageCount--;
             continue;
         }
-        // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile.md5Sum();
-
-        m_allPackages.insert(package, md5);
-
-        if (packagesMd5.contains(md5))
+        validCount++;
+        auto size = file.installedSize();
+        if (pkgSize.contains(size)) {
+            m_validPackageCount--;
             continue;
-        packagesMd5 << md5;
+        }
+        pkgSize << size;
     }
-    m_validPackageCount = packagesMd5.size();
+    //m_validPackageCount==1,可能有效包都是重复包，需要最终根据md5值来判定
+    QSet<QByteArray> pkgMd5; //最后通过md5来区分是否是重复包
+    if (1 == m_validPackageCount && validCount > 1) {
+        for (auto package : packages) {
+            QApt::DebFile pkgFile(package);
+            if (!pkgFile.isValid())
+                continue;
+            auto md5 = pkgFile.md5Sum();
+            m_allPackages.insert(package, md5);
+            if (!pkgMd5.isEmpty() && !pkgMd5.contains(md5)) { //根据md5判断，有不是重复的包，刷新批量界面
+                m_validPackageCount = 2;
+                break;
+            }
+            pkgMd5 << md5;
+        }
+    }
 }
 
 /**
@@ -931,6 +940,7 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
         // 处理包不在本地的情况。
         if (!dealInvalidPackage(debPackage))
             continue;
+        QString debPkg = debPackage;
         //处理package文件路径相关问题
         debPackage = dealPackagePath(debPackage);
 
@@ -940,8 +950,11 @@ void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
             emit signalInvalidPackage();
             continue;
         }
-        // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = m_allPackages.value(debPackage);
+        //获取当前文件的md5的值,防止重复添加
+        //在checkInvalid中已经获取过md5,避免2次获取影响性能
+        QByteArray md5 = m_allPackages.value(debPkg);
+        if (md5.isEmpty())
+            md5 = pkgFile.md5Sum();
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
