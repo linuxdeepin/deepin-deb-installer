@@ -36,10 +36,11 @@ AddPackageThread::AddPackageThread(QSet<QByteArray> appendedPackagesMd5)
 {
 }
 
-void AddPackageThread::setPackages(QStringList packages)
+void AddPackageThread::setPackages(QStringList packages, int validPkgCount)
 {
     m_packages.clear();
     m_packages.append(packages);
+    m_validPackageCount = validPkgCount;
 }
 
 void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5)
@@ -47,33 +48,9 @@ void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5
     m_appendedPackagesMd5 = appendedPackagesMd5;
 }
 
-void AddPackageThread::checkInvalid()
+void AddPackageThread::setSamePackageMd5(QMap<QString, QByteArray> packagesMd5)
 {
-    m_validPackageCount = 0; //每次添加时都清零
-    QSet<QByteArray> packageMd5 = {};
-    for (QString package : m_packages) {
-        //获取路径信息
-        QStorageInfo info(package);
-
-        //判断路径信息是不是本地路径
-        if (!info.device().startsWith("/dev/"))
-            continue;
-
-        package = dealPackagePath(package);
-
-        QApt::DebFile pkgFile(package);
-        //判断当前文件是否是无效文件
-        if (!pkgFile.isValid()) {
-            continue;
-        }
-        // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile.md5Sum();
-        m_allPackages.insert(package, md5);
-        if (packageMd5.contains(md5))
-            continue;
-        packageMd5 << md5;
-    }
-    m_validPackageCount = packageMd5.size();
+    m_allPackages = packagesMd5;
 }
 
 bool AddPackageThread::dealInvalidPackage(QString packagePath)
@@ -112,14 +89,13 @@ QString AddPackageThread::dealPackagePath(QString packagePath)
 
 void AddPackageThread::run()
 {
-    checkInvalid();
     for (QString debPackage : m_packages) {
 
         // 处理包不在本地的情况。
         if (!dealInvalidPackage(debPackage)) {
             continue;
         }
-
+        QString debPkg = debPackage;
         debPackage = dealPackagePath(debPackage);
 
         QApt::DebFile pkgFile(debPackage);
@@ -130,7 +106,10 @@ void AddPackageThread::run()
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = m_allPackages.value(debPackage);
+        //先查看之前检测包有效性时是否获取过md5
+        QByteArray md5 = m_allPackages.value(debPkg);
+        if (md5.isEmpty())
+            md5 = pkgFile.md5Sum();
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
