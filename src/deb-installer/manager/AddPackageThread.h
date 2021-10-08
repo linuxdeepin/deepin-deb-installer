@@ -52,6 +52,12 @@ public:
      */
     void setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5);
 
+    /**
+     * @brief setSamePackageMd5
+     * @param packagesMd5
+     */
+    void setSamePackageMd5(QMap<QString, QByteArray> packagesMd5);
+
 signals:
 
     /**
@@ -157,11 +163,6 @@ private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
 
 private:
-
-    /**
-     * @brief checkInvalid 检查有效文件的数量
-     */
-    void checkInvalid();
 
     //有效文件的数量
     int m_validPackageCount = 0;

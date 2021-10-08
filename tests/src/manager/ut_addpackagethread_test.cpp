@@ -67,18 +67,7 @@ bool isValid()
 {
     return true;
 }
-TEST_F(ut_addPackageThread_Test, UT_AddPackageThread_checkInvalid)
-{
-    QStringList dependsList;
-    dependsList << "package1" << "package";
-    m_addPkgThread->setPackages(dependsList);
 
-    stub.set(ADDR(DebFile, isValid), isValid);
-
-    m_addPkgThread->checkInvalid();
-
-    ASSERT_EQ(m_addPkgThread->m_validPackageCount, 0);
-}
 QByteArray md5sum()
 {
     return "";

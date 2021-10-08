@@ -47,33 +47,9 @@ void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5
     m_appendedPackagesMd5 = appendedPackagesMd5;
 }
 
-void AddPackageThread::checkInvalid()
+void AddPackageThread::setSamePackageMd5(QMap<QString, QByteArray> packagesMd5)
 {
-    m_validPackageCount = 0; //每次添加时都清零
-    QSet<QByteArray> packageMd5 = {};
-    for (QString package : m_packages) {
-        //获取路径信息
-        QStorageInfo info(package);
-
-        //判断路径信息是不是本地路径
-        if (!info.device().startsWith("/dev/"))
-            continue;
-
-        package = dealPackagePath(package);
-
-        QApt::DebFile pkgFile(package);
-        //判断当前文件是否是无效文件
-        if (!pkgFile.isValid()) {
-            continue;
-        }
-        // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = pkgFile.md5Sum();
-        m_allPackages.insert(package, md5);
-        if (packageMd5.contains(md5))
-            continue;
-        packageMd5 << md5;
-    }
-    m_validPackageCount = packageMd5.size();
+    m_allPackages = packagesMd5;
 }
 
 bool AddPackageThread::dealInvalidPackage(QString packagePath)
@@ -112,32 +88,33 @@ QString AddPackageThread::dealPackagePath(QString packagePath)
 
 void AddPackageThread::run()
 {
-    checkInvalid();
     for (QString debPackage : m_packages) {
 
         // 处理包不在本地的情况。
         if (!dealInvalidPackage(debPackage)) {
             continue;
         }
-
+        QString debPkg = debPackage;
         debPackage = dealPackagePath(debPackage);
 
-        QApt::DebFile *pkgFile = new DebFile(debPackage);
+        QApt::DebFile pkgFile(debPackage);
         //判断当前文件是否是无效文件
-        if (pkgFile && !pkgFile->isValid()) {
+        if (!pkgFile.isValid()) {
             // 根据文件无效的类型提示不同的文案
             emit signalInvalidPackage();
-            delete pkgFile;
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
-        const auto md5 = m_allPackages.value(debPackage);
+        QByteArray md5;
+        //先查看之前检测包有效性时是否获取过md5
+        md5 = m_allPackages.value(debPkg);
+        if(md5.isEmpty())
+             md5 = pkgFile.md5Sum();
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             //处理重复文件
             emit signalPackageAlreadyExists();
-            delete pkgFile;
             continue;
         }
         //管理最近文件列表
@@ -151,7 +128,6 @@ void AddPackageThread::run()
 
         // 可以添加,发送添加信号
         emit signalAddPackageToInstaller(m_validPackageCount, debPackage, md5);
-        delete pkgFile;
     }
 
     emit signalAppendFinished();
