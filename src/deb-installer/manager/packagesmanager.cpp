@@ -760,7 +760,7 @@ void PackagesManager::appendPackage(QStringList packages)
             return;
         if(!m_allPackages.isEmpty())
             m_pAddPackageThread->setSamePackageMd5(m_allPackages);
-        m_pAddPackageThread->setPackages(packages);                     //传递要添加的包到添加线程中
+        m_pAddPackageThread->setPackages(packages, m_validPackageCount);                     //传递要添加的包到添加线程中
         m_pAddPackageThread->setAppendPackagesMd5(m_appendedPackagesMd5);       //传递当前已经添加的包的MD5 判重时使用
 
         m_pAddPackageThread->start();   //开始添加线程

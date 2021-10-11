@@ -43,7 +43,7 @@ public:
      * @brief setPackages 获取需要安装的软件包的列表
      * @param packages 软件包列表
      */
-    void setPackages(QStringList packages);
+    void setPackages(QStringList packages, int validPkgCount);
 
 
     /**

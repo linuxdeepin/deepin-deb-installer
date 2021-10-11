@@ -36,10 +36,11 @@ AddPackageThread::AddPackageThread(QSet<QByteArray> appendedPackagesMd5)
 {
 }
 
-void AddPackageThread::setPackages(QStringList packages)
+void AddPackageThread::setPackages(QStringList packages, int validPkgCount)
 {
     m_packages.clear();
     m_packages.append(packages);
+    m_validPackageCount = validPkgCount;
 }
 
 void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5)
