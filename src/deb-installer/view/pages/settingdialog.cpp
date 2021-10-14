@@ -41,13 +41,30 @@ void SettingDialog::init()
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation); // 换了枚举值，待验证
 
     const QString confPath = confDir + QDir::separator() + "deepin-deb-installer.conf";
-
+    QDir dir;
+    bool isexist = dir.exists(confDir);
+    if (!isexist)
+        dir.mkpath(confDir);
     // 创建设置项存储后端
     auto backend = new QSettingBackend(confPath, this);
     m_setting->setBackend(backend);
     updateSettings(m_setting);
+
+    // 打开配置文件
+    QFile file(confPath);
+    bool isOpened = file.open(QIODevice::ReadWrite | QIODevice::Text);
+    if (!isOpened)
+        return;
+    // 写配置
+    QString key = "basic.develop_digital_verify.";
+    QString content;
+    QString bValue = m_setting->option(key)->value().toString();
+    content = "[" + key + "]" + "\n" + m_setting->option(key)->name() + "=" + bValue + "\n";
+    file.write(content.toUtf8());
+
+    file.close();
+
     connect(m_setting, &DSettings::valueChanged, this, [=] {
-        //        writeConfbf();
         m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
     });
     m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
