@@ -221,6 +221,10 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
         }
     }
 
+    Package *pkg = packageWithArch(packageName, packageArch);
+    if (pkg && pkg->installedVersion() == packageVersion)
+       return ConflictResult::ok(QString());
+
     for (const auto &info : sysConflicts) {
         const auto &conflict = info.second;
         const auto &pkgName = conflict.packageName();

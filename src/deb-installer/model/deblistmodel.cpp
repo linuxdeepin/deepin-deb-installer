@@ -885,6 +885,7 @@ void DebListModel::checkSystemVersion()
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
+    case Dtk::Core::DSysInfo::UosDeviceEdition: //专用设备
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
         QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式

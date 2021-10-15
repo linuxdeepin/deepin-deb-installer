@@ -597,6 +597,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict)
 {
 
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
     stub.set(ADDR(Package, conflicts), deb_conflicts);
 
@@ -630,6 +631,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_001)
     qDebug()<<"PackageManager_UT_isInstalledConflict_001";
     usleep(10 *1000);
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(Backend, availablePackages),stub_availablePackages);
 
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
@@ -654,6 +656,7 @@ TEST_F(ut_packagesManager_test, PackageManager_UT_isInstalledConflict_002)
 {
     stub.set((QApt::Package *(QApt::Backend::*)(const QString & name) const)ADDR(Backend, package), package_package);
     stub.set(ADDR(Backend, availablePackages),stub_availablePackages);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
 
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
