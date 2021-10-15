@@ -906,6 +906,10 @@ void DebListModel::checkSystemVersion()
 
 bool DebListModel::checkDigitalSignature()
 {
+    const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex);              //获取包的依赖状态
+    if (stat.isBreak() || stat.isAuthCancel())
+        return true;
+
     if (m_isDevelopMode) {
         qInfo() << "The developer mode is currently enabled, and the digital signature is not verified";
         return true;
