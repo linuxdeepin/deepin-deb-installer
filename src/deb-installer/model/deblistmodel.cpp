@@ -760,7 +760,6 @@ void DebListModel::installDebs()
                     << "dpkg running, waitting...";
             // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
             QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-            emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
             return;
         }
         // 依赖可用 但是需要下载
@@ -794,7 +793,6 @@ void DebListModel::installDebs()
                     << "dpkg running, waitting...";
             // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
             QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-            emit signalAppendOutputInfo("dpkg running, waitting..."); //发送提示，告知用户dpkg正在运行
             return;
         }
         transaction = backend->installFile(deb);//触发Qapt授权框和安装线程
