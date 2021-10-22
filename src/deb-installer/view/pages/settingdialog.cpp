@@ -23,6 +23,7 @@
 #include <qsettingbackend.h>
 #include <QDebug>
 #include <QTextStream>
+#include <QSettings>
 
 SettingDialog::SettingDialog(QWidget *parent)
     : DSettingsDialog(parent)
@@ -50,19 +51,12 @@ void SettingDialog::init()
     m_setting->setBackend(backend);
     updateSettings(m_setting);
 
-    // 打开配置文件
-    QFile file(confPath);
-    bool isOpened = file.open(QIODevice::ReadWrite | QIODevice::Text);
-    if (!isOpened)
-        return;
-    // 写配置
     QString key = "basic.develop_digital_verify.";
-    QString content;
     QString bValue = m_setting->option(key)->value().toString();
-    content = "[" + key + "]" + "\n" + m_setting->option(key)->name() + "=" + bValue + "\n";
-    file.write(content.toUtf8());
 
-    file.close();
+    QSettings setting(confPath, QSettings::IniFormat);
+    setting.setValue(key + "/" + "value", bValue);
+    setting.sync();
 
     connect(m_setting, &DSettings::valueChanged, this, [=] {
         m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
