@@ -250,6 +250,7 @@ private:
     int m_Filterflag        = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     bool m_packageAppending = false;
+    int m_wineAuthStatus = -1; //记录依赖配置授权状态
 };
 
 #endif  // DEBINSTALLER_H

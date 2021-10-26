@@ -267,9 +267,8 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
     this->showNormal();                                                 //非特效模式下激活窗口
     this->activateWindow();                                             //特效模式下激活窗口
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
-    if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare) ||
-            m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing ||
-            m_fileListModel->getWorkerStatus() == DebListModel::WorkerUnInstall) {
+    // 依赖配置过程中，不添加其他包
+    if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare) || m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing || m_fileListModel->getWorkerStatus() == DebListModel::WorkerUnInstall || m_wineAuthStatus == DebListModel::AuthPop || m_wineAuthStatus == DebListModel::AuthConfirm) {
     } else {
         //开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(packagesPathList);
@@ -539,6 +538,7 @@ void DebInstaller::slotDealDependResult(int authDependsStatus, QString dependNam
     //Set the display effect according to the status of deepin-wine installation authorization.
     //Before authorization, authorization confirmation, and when the authorization box pops up, it is not allowed to add packages.
     //依赖下载时、授权时不允许拖入
+    m_wineAuthStatus = authDependsStatus;
     if (authDependsStatus == DebListModel::AuthBefore || authDependsStatus == DebListModel::AuthConfirm || authDependsStatus == DebListModel::AuthPop) {
         this->setAcceptDrops(false);
     } else {
