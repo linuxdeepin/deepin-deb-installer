@@ -192,13 +192,16 @@ void DebInstaller::enableCloseButton(bool enable)
 // closed is forbidden during install/uninstall
 void DebInstaller::disableCloseAndExit()
 {
-
-    qDebug() << "disableCloseAndExit";
-    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);
+    titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
     QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();
-    action->setDisabled(true);
+    if (titleMenu) {
+        QList<QAction *> actions = titleMenu->actions();
+        if (!actions.isEmpty()) {
+            QAction *action = actions.last();
+            if (action)
+                action->setDisabled(true);
+        }
+    }
 
     // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
     titlebar()->setFocusPolicy(Qt::NoFocus);
@@ -212,13 +215,19 @@ void DebInstaller::disableCloseAndExit()
 // closed is allowed after install/uninstall
 void DebInstaller::enableCloseAndExit()
 {
-    qDebug() << "enableCloseAndExit";
-    titlebar()->setDisableFlags(titlebar()->windowFlags() & ~Qt::WindowMinimizeButtonHint & ~Qt::WindowCloseButtonHint);
+    titlebar()->setDisableFlags(titlebar()->windowFlags() &
+                                ~Qt::WindowMinimizeButtonHint &
+                                ~Qt::WindowCloseButtonHint);
 
     QMenu *titleMenu = titlebar()->menu();
-    QList<QAction *> actions = titleMenu->actions();
-    QAction *action = actions.last();
-    action->setDisabled(false);
+    if (titleMenu) {
+        QList<QAction *> actions = titleMenu->actions();
+        if (!actions.isEmpty()) {
+            QAction *action = actions.last();
+            if (action)
+                action->setDisabled(false);
+        }
+    }
 
     // fix bug: 36125 During the installation process, clicking the window close button has a hover effect
     titlebar()->setFocusPolicy(Qt::NoFocus);
