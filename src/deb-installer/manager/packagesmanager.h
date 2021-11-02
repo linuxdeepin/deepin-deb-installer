@@ -589,6 +589,10 @@ private:
     QString m_brokenDepend = "";
 
     QStringList m_blackApplicationList = {}; //域管黑名单
+
+    QList<QVector<QString>> m_orDepends; //存储或依赖关系
+
+    QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
 };
 
 #endif  // PACKAGESMANAGER_H
