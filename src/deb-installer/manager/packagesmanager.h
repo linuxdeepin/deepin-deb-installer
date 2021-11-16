@@ -588,6 +588,8 @@ private:
 
     QString m_brokenDepend = "";
 
+    QString m_currentPkgName = "";
+
     QStringList m_blackApplicationList = {}; //域管黑名单
 
     QList<QVector<QString>> m_orDepends; //存储或依赖关系

@@ -576,7 +576,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     if(dependStatus.isProhibit())
         return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
-        if (!dependStatus.package.isEmpty()) {
+         if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
                 return tr("Failed to install %1").arg(m_brokenDepend); //wine依赖安装失败
             return tr("Broken dependencies: %1").arg(dependStatus.package);                         //依赖不满足
@@ -585,7 +585,6 @@ QString DebListModel::packageFailedReason(const int idx) const
         const auto conflictStatus = m_packagesManager->packageConflictStat(idx);                  //获取冲突情况
         if (!conflictStatus.is_ok())
             return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
-        qInfo() << "================" << dependStatus.package;
     }
 
     if(m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
@@ -939,8 +938,6 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
     cancelBtn->setFocusPolicy(Qt::TabFocus);
     cancelBtn->setFocus();
 
-    bool continueBtnClicked = false;
-
     // 点击弹出窗口的关闭图标按钮
     connect(Ddialog, &DDialog::aboutToClose, this, [=] {
         //刷新当前包的操作状态，失败原因为数字签名校验失败
@@ -956,7 +953,6 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
 
     QPushButton *continueBtn = qobject_cast<QPushButton *>(Ddialog->getButton(1));
     connect(continueBtn, &DPushButton::clicked, this, [&] {
-        continueBtnClicked = true;
         installNextDeb();
     }); //点击继续，进入安装流程
     connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
