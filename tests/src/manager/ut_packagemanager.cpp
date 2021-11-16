@@ -670,6 +670,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
     stub.set(ADDR(Package, conflicts), deb_conflicts);
+     stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
@@ -711,6 +712,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict_001)
     stub.set(ADDR(DependencyInfo, packageName), deb_isInstalledConflict_packageName);
     stub.set(ADDR(DependencyInfo, packageVersion), deb_package_version);
     stub.set(ADDR(DependencyInfo, multiArchAnnotation), deb_package_version);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
@@ -731,6 +733,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_isInstalledConflict_002)
     stub.set(ADDR(Package, isInstalled), package_isInstalled);
     stub.set(ADDR(Package, conflicts), deb_conflicts);
     stub.set(ADDR(Package, name), package_name);
+    stub.set(ADDR(PackagesManager, packageWithArch), stub_packageWithArch);
     stub.set(ADDR(DependencyInfo, packageName), deb_isInstalledConflict_packageName);
     stub.set(ADDR(DependencyInfo, packageVersion), deb_package_version);
     stub.set(ADDR(DependencyInfo, multiArchAnnotation), package_installedVersion);

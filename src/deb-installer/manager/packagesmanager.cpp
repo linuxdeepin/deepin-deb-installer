@@ -234,6 +234,10 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
         }
     }
 
+    Package *pkg = packageWithArch(packageName, packageArch);
+    if (pkg && pkg->installedVersion() == packageVersion)
+       return ConflictResult::ok(QString());
+
     for (const auto &info : sysConflicts) {
         const auto &conflict = info.second;
         const auto &pkgName = conflict.packageName();
@@ -305,7 +309,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             //删除版本相同比较，如果安装且版本符合则判断冲突，此前逻辑存在问题
             // mirror version is also break
             const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
-            if (dependencyVersionMatch(mirror_result, type)) {
+            if (dependencyVersionMatch(mirror_result, type) && name != m_currentPkgName) {
                 qWarning() << "PackagesManager:" <<  "conflicts package installed: "
                          << arch << package->name() << package->architecture()
                          << package->multiArchTypeString() << mirror_version << conflict_version;
@@ -386,7 +390,7 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, QString dep
         }
         emit signalEnableCloseButton(true);
     }
-    if (iAuthRes == DebListModel::AuthDependsErr) {
+    if (iAuthRes == DebListModel::AuthDependsErr || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;//更换依赖的存储结构
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
@@ -396,6 +400,7 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, QString dep
             qInfo() << "check wine depends again !" << iIndex;
             getPackageDependsStatus(iIndex);
             if (!m_dependsPackages.isEmpty()) {
+                qInfo() << m_dependsPackages.size() << m_dependsPackages.value(m_currentPkgMd5).second.size();
                 if (1 == m_preparedPackages.size())
                     emit signalSingleDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
                 else if (m_preparedPackages.size() > 1)
@@ -444,7 +449,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     DebFile debFile(m_preparedPackages[index]);
     if (!debFile.isValid())
         return PackageDependsStatus::_break("");
-
+    m_currentPkgName = debFile.packageName();
     /*
          * 解析安装包依赖，若存在或依赖关系则进行处理并且存储
          *such as,teamviewer depends: "libc6 (>= 2.17), libdbus-1-3, libqt5gui5 (>= 5.5)| qt56-teamviewer,
@@ -551,8 +556,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         m_installWineThread->run();
                     }
                 }
-                //                dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
-                dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
+                dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
             }
         }
     }
