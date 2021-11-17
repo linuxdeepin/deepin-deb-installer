@@ -37,6 +37,12 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5DBus REQUIRED)
 
+#安全测试加固编译参数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
+
 set(LINK_LIBS
     Qt5::Core
     Qt5::DBus
