@@ -70,6 +70,12 @@ target_link_libraries(${APP_BIN_NAME}
 set(CMAKE_INSTALL_PREFIX /usr)
 # Install files
 
+#安全测试加固编译参数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -z relro -z now -z noexecstack -pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
+
 SET_TARGET_PROPERTIES(${APP_BIN_NAME} PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 install(TARGETS ${APP_BIN_NAME} LIBRARY DESTINATION lib)
