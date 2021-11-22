@@ -572,7 +572,8 @@ QString DebListModel::packageFailedReason(const int idx) const
 {
     const auto dependStatus = m_packagesManager->getPackageDependsStatus(idx);                         //获取包的依赖状态
     const auto md5 = m_packagesManager->getPackageMd5(idx);                                 //获取包的md5值
-    if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
+    if (m_packagesManager->isArchError(idx))
+        return tr("Unmatched package architecture");   //判断是否架构冲突
     if(dependStatus.isProhibit())
         return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
@@ -991,12 +992,13 @@ void DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
-#if(DTK_VERSION > DTK_VERSION_CHECK(5,4,10,0))
+#if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
     case Dtk::Core::DSysInfo::UosEducation:                     //教育版
 #endif
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
-    case Dtk::Core::DSysInfo::UosDeviceEdition: //专用设备
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
         QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
         bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
@@ -1013,6 +1015,31 @@ void DebListModel::checkSystemVersion()
         m_isDevelopMode =  true;
         break;
     }
+#else
+    switch (Dtk::Core::DSysInfo::deepinType()) {
+    case Dtk::Core::DSysInfo::DeepinDesktop:
+        m_isDevelopMode = true;
+        break;
+    case Dtk::Core::DSysInfo::DeepinPersonal:
+    case Dtk::Core::DSysInfo::DeepinProfessional:
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+        m_isDevelopMode = deviceMode;
+        delete dbusInterFace;
+        break;
+    case Dtk::Core::DSysInfo::isCommunityEdition():
+    case Dtk::Core::DSysInfo::DeepinServer:
+        m_isDevelopMode = true;
+        break;
+    default:
+        m_isDevelopMode = true;
+        break;
+    }
+
+#endif
+
+
 }
 
 bool DebListModel::checkDigitalSignature()
