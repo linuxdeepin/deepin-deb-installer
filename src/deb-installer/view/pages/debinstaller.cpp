@@ -269,11 +269,11 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
     // 依赖配置过程中，不添加其他包
     if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare)
-            || m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing
-            || m_fileListModel->getWorkerStatus() == DebListModel::WorkerUnInstall
-            || m_wineAuthStatus == DebListModel::AuthPop
-            || m_wineAuthStatus == DebListModel::AuthConfirm
-            || m_wineAuthStatus == DebListModel::AuthDependsErr) {
+            || DebListModel::WorkerProcessing == m_fileListModel->getWorkerStatus()
+            || DebListModel::WorkerUnInstall == m_fileListModel->getWorkerStatus()
+            || DebListModel::AuthPop == m_wineAuthStatus
+            || DebListModel::AuthConfirm == m_wineAuthStatus
+            || DebListModel::AuthDependsErr == m_wineAuthStatus) {
     } else {
         //开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(packagesPathList);
@@ -390,6 +390,7 @@ void DebInstaller::slotReset()
     m_fileChooseWidget->setAcceptDrops(true);
     // 安装完成后，清除文件选择按钮的焦点
     m_fileChooseWidget->clearChooseFileBtnFocus();
+    m_wineAuthStatus = DebListModel::AuthBefore;
 }
 
 void DebInstaller::appendPackageStart()
