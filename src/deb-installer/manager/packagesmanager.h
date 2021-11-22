@@ -522,6 +522,8 @@ private:
     QList<QVector<QString>> m_orDepends;                //存储或依赖关系
 
     QMap<QString, DependencyInfo> m_dependsInfo;        //所有依赖的信息
+
+    QString m_currentPkgName = "";      //保存当前包的包名
 };
 
 #endif  // PACKAGESMANAGER_H
