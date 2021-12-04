@@ -61,7 +61,15 @@ Please read the prompt carefully, common causes include:
 
 ![unable](fig/unable.png)
 
+- No digital signature. 
+  
 
+![cant](fig/cant3.png) 
+
+- Lack of valid digital signature.
+  
+
+![cant4](fig/cant4.png)
 
 ### Uninstall
 
@@ -70,13 +78,9 @@ Package Installer is used to uninstall .deb packages of those the same or differ
 1. On Package Installer interface, you can:
    - click **Select File**, select the package you want to install, click **Open**. 
    - drag a .deb package directly into the interface.
-
-2. Click **Remove**. 
-
+2. Click **Remove**.
 3. Click **Confirm** to uninstall. Authentication window pops up, enter your login password required to continue.
-
 4. Click ![arrow_down](../common/down.svg) or ![arrow_up](../common/up.svg) to display or collapse the uninstalling process during uninstallation.
-
 5. Click **OK** to exit.
 
 ![1|remove](fig/remove.png)
@@ -86,6 +90,12 @@ Package Installer is used to uninstall .deb packages of those the same or differ
 ## Main Menu
 
 In the main menu, you can switch window themes, view manual and get more information about Package Installer.
+
+### Settings
+
+1. Click ![icon_menu](../common/icon_menu.svg) on the interface.
+2. Click **Settings**.
+3. Check **Check digital signatures if the developer mode is enabled**, so when an installation package is being installed, this application will detect whether the installation package has a signature and whether the signature is valid. 
 
 ### Theme
 
