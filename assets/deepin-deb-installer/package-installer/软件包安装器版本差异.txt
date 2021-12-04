@@ -1,8 +1,6 @@
 版本区别：
-专业版、个人版、教育版：package-installer.md
-社区版：d_package-installer.md
-服务器通用版：s_package-installer.md
-其中：社区版和服务器通用版内容是一样的，只是文件名称不一样，便于开发获取文档。
+专业版：p_package-installer.md
+社区版和服务器版：package-installer.md
 
 
 
@@ -14,3 +12,5 @@
 将图片中的版本名和版本号进行马赛克处理。
 2021年7月19日
 更换图片（图片按钮增加空格）
+2021年12月1日
+修改md文件名、专业版增加设置功能、更换依赖图片。
