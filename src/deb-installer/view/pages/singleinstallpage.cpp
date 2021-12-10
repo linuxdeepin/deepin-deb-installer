@@ -255,8 +255,8 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
-    Utils::bindFontBySizeAndWeight(packageVersion, mediumFontFamily, 14, QFont::Medium);        //设置版本提示label的字体大小和样式
-    Utils::bindFontBySizeAndWeight(packageName, mediumFontFamily, 14, QFont::Medium);           //设置包名提示Label的字体大小和样式
+    Utils::bindFontBySizeAndWeight(packageVersion, mediumFontFamily, 14, QFont::DemiBold);        //设置版本提示label的字体大小和样式
+    Utils::bindFontBySizeAndWeight(packageName, mediumFontFamily, 14, QFont::DemiBold);           //设置包名提示Label的字体大小和样式
     Utils::bindFontBySizeAndWeight(m_packageName, normalFontFamily, 14, QFont::ExtraLight);     //设置实际包名label的字体大小和样式
     Utils::bindFontBySizeAndWeight(m_packageVersion, normalFontFamily, 14, QFont::ExtraLight);  //设置实际版本Label的字体大小和样式
 
