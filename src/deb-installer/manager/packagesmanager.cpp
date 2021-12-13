@@ -541,6 +541,12 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             m_pair.second.clear(); //清空broken依赖
             if (m_dependsPackages.contains(m_currentPkgMd5))
                 m_dependsPackages.remove(m_currentPkgMd5);
+            // 检测或依赖的依赖状态前，先保存依赖DependInfo
+            m_dependsInfo.clear();
+            for (const auto &candicate_list : debFile.depends()) {
+                for (const auto &info : candicate_list)
+                    m_dependsInfo.insert(info.packageName(), info);
+            }
             dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
             // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
@@ -1207,13 +1213,6 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                                                                       const QString &architecture,
                                                                       const QList<DependencyItem> &depends)
 {
-    m_dependsInfo.clear();
-    for (const auto &candicate_list : depends) {
-        for (const auto &info : candicate_list) {
-            m_dependsInfo.insert(info.packageName(), info);
-        }
-    }
-
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
     QList<DependInfo> break_list;
     QList<DependInfo> available_list;
