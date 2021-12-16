@@ -667,7 +667,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 }
             }
         } else { // 存在或依赖且当前依赖属于或依赖关系
-            static bool isInstalling = false;
+            bool isInstalling = false;
             for (auto iter = infos.begin(); iter != infos.end(); iter++) {
                 Backend *backend = m_backendFuture.result();
                 if(!backend){
