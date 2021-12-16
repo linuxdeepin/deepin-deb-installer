@@ -26,6 +26,7 @@
 #include <QTextLayout>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QFontMetrics>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -711,9 +712,13 @@ void SingleInstallPage::slotWorkerFinished()
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
-        if (m_operate == Install || m_operate == Reinstall)
-            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());   //添加安装失败原因的提示
-        else {
+        if (m_operate == Install || m_operate == Reinstall){
+            //添加安装失败原因的提示
+            QFont font;
+            QFontMetrics elideFont(font);
+            m_tipsLabel->setText(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, m_tipsLabel->width()-100));//修复授权取消后无提示的问题
+            m_tipsLabel->setToolTip(index.data(DebListModel::PackageFailReasonRole).toString());
+        } else {
             m_tipsLabel->setText(tr("Uninstall Failed"));                                       //卸载只显示卸载失败
         }
     } else {
@@ -918,7 +923,6 @@ void SingleInstallPage::setAuthBefore()
             || dependsStat == DebListModel::ArchBreak   //添加架构不匹配的处理
 //            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
         ) {
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
