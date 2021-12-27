@@ -450,35 +450,10 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     if (!debFile.isValid())
         return PackageDependsStatus::_break("");
     m_currentPkgName = debFile.packageName();
-    /*
-         * 解析安装包依赖，若存在或依赖关系则进行处理并且存储
-         *such as,teamviewer depends: "libc6 (>= 2.17), libdbus-1-3, libqt5gui5 (>= 5.5)| qt56-teamviewer,
-         * libqt5widgets5 (>= 5.5) | qt56-teamviewer, libqt5qml5 (>= 5.5) | qt56-teamviewer, libqt5quick5 (>= 5.5) | qt56-teamviewer..."
-        */
-    const QString controlDepends = debFile.controlField("Depends");
-    qInfo() << __func__ << controlDepends;
-    QStringList dependsList = controlDepends.split(",");
-    for (QString depends : dependsList) {
-        if (!depends.contains("|"))
-            dependsList.removeOne(depends);
-    }
     m_orDepends.clear();
-    //使用二维数组进行存储
-    for (QString depend : dependsList) {
-        depend = depend.remove(QRegExp("\\s"));
-        QStringList orDepends = depend.split("|");
-        QVector<QString> dependStatus;
-        for (QString ordepend : orDepends) {
-            //截取依赖包名
-            if (ordepend.contains("(")) {
-                int mid = ordepend.indexOf("(");
-                ordepend = ordepend.left(mid);
-            }
-            dependStatus.append(ordepend);
-        }
-        m_orDepends.append(dependStatus);
-    }
-    qInfo() << __func__ << m_orDepends;
+    m_checkedOrDependsStatus.clear();
+    m_checkedOrDepends.clear();
+    getPackageOrDepends(debFile.packageName(), debFile.architecture(), true);
 
     const QString architecture = debFile.architecture();
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
@@ -573,6 +548,50 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     return dependsStatus;
 }
 
+void PackagesManager::getPackageOrDepends(const QString &package, const QString &arch, bool flag)
+{
+    /*
+         * 解析安装包依赖，若存在或依赖关系则进行处理并且存储
+         *such as,teamviewer depends: "libc6 (>= 2.17), libdbus-1-3, libqt5gui5 (>= 5.5)| qt56-teamviewer,
+         * libqt5widgets5 (>= 5.5) | qt56-teamviewer, libqt5qml5 (>= 5.5) | qt56-teamviewer, libqt5quick5 (>= 5.5) | qt56-teamviewer..."
+        */
+    QString controlDepends;
+    if (flag) {
+        DebFile debFile(package);
+        if(!debFile.isValid())
+            return;
+        controlDepends = debFile.controlField("Depends");
+    } else {
+        QApt::Package *pkg = packageWithArch(package, arch);
+        if (!pkg)
+            return;
+        controlDepends = pkg->controlField("Depends");
+    }
+    qInfo() << __func__ << controlDepends;
+    QStringList dependsList = controlDepends.split(",");
+    for (QString depends : dependsList) {
+        if (!depends.contains("|"))
+            dependsList.removeOne(depends);
+    }
+    //使用二维数组进行存储
+    for (QString depend : dependsList) {
+        depend = depend.remove(QRegExp("\\s"));
+        QStringList orDepends = depend.split("|");
+        QVector<QString> dependStatus;
+        for (QString ordepend : orDepends) {
+            //截取依赖包名
+            if (ordepend.contains("(")) {
+                int mid = ordepend.indexOf("(");
+                ordepend = ordepend.left(mid);
+            }
+            dependStatus.append(ordepend);
+        }
+        m_orDepends.append(dependStatus);
+    }
+    m_checkedOrDepends = m_orDepends;
+    qInfo() << __func__ << m_orDepends;
+}
+
 const QString PackagesManager::packageInstalledVersion(const int index)
 {
     //更换安装状态的存储结构
@@ -604,6 +623,7 @@ const QStringList PackagesManager::packageAvailableDepends(const int index)
     QSet<QString> choose_set;
     const QString debArch = debFile.architecture();
     const auto &depends = debFile.depends();
+    m_checkedOrDepends = m_orDepends;
     packageCandidateChoose(choose_set, debArch, depends);
 
     // TODO: check upgrade from conflicts
@@ -632,10 +652,11 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         QVector<QString> infos;
         if (!m_orDepends.isEmpty()) {
             for (auto dInfo : m_orDepends) { //遍历或依赖容器中容器中是否存在当前依赖
-                if (!dInfo.contains(package->name())) {
+                if (!dInfo.contains(package->name()) && m_checkedOrDepends.contains(dInfo)) {
                     continue;
                 } else {
                     infos = dInfo;
+                    m_checkedOrDepends.removeOne(dInfo);
                 }
             }
         }
@@ -1248,11 +1269,20 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             QVector<QString> depends;
             for (auto orDepends : m_orDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
                 depends = orDepends;
-                if (orDepends.contains(info.packageName())) {
+                if (orDepends.contains(info.packageName()) && m_checkedOrDepends.contains(orDepends)) {
+                    m_checkedOrDepends.removeOne(orDepends);
+                    m_checkedOrDependsStatus.insert(info.packageName(), r);
                     depends.removeOne(info.packageName()); //将当前依赖从或依赖中删除，检测或依赖中剩余依赖状态
                     qInfo() << depends << orDepends;
                     for (auto otherDepend : depends) {
-                        PackageDependsStatus status = checkDependsPackageStatus(choosed_set, architecture, m_dependsInfo.find(otherDepend).value());
+                        // 避免检测过的或依赖重复检测
+                        PackageDependsStatus status;
+                        if (m_checkedOrDependsStatus.contains(otherDepend)) {
+                            status = m_checkedOrDependsStatus[otherDepend];
+                        } else {
+                            status = checkDependsPackageStatus(choosed_set, architecture, m_dependsInfo.find(otherDepend).value());
+                            m_checkedOrDependsStatus.insert(otherDepend, status);
+                        }
                         qInfo() << status.status;
                         if (status.isBreak()) //若剩余依赖中存在状态不为break，则说明依赖关系满足
                             continue;
@@ -1382,7 +1412,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         // time to check depends' dependencies, but first, we need
         // to add this package to choose list
         choosed_set << package->name();
-
+        // 判断并获取依赖的或依赖关系
+        getPackageOrDepends(package->name(), package->architecture(), false);
         const auto dependsStatus = checkDependsPackageStatus(choosed_set, package->architecture(), package->depends());
         if (dependsStatus.isBreak()) {
             choosed_set.remove(package->name());
