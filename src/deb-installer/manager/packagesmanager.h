@@ -270,6 +270,14 @@ public:
     PackageDependsStatus getPackageDependsStatus(const int index);
 
     /**
+     * @brief getPackageOrDepends 解析或依赖关系
+     * @param package 包的路径或者包名
+     * @param arch  架构
+     * @param flag  标记是依赖还是安装包
+     */
+    void getPackageOrDepends(const QString &package, const QString &arch, bool flag);
+
+    /**
      * @brief getPackageMd5 获取包的md5值
      * @param index 下标
      * @return 包的MD5值
@@ -593,6 +601,10 @@ private:
     QStringList m_blackApplicationList = {}; //域管黑名单
 
     QList<QVector<QString>> m_orDepends; //存储或依赖关系
+
+    QList<QVector<QString>> m_checkedOrDepends; //存储还未检测的或依赖关系
+
+    QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
 
     QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
 };
