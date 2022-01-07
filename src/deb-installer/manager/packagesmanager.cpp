@@ -533,6 +533,8 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
                         qInfo() << "PackagesManager:" << "command install depends:" << dependList;
                         m_installWineThread->setDependsList(dependList, index);
+                        if(m_brokenDepend.isEmpty())
+                            m_brokenDepend = dependsStatus.package;
                         m_installWineThread->setBrokenDepend(m_brokenDepend);
                         m_installWineThread->run();
                     }
@@ -587,8 +589,8 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
             dependStatus.append(ordepend);
         }
         m_orDepends.append(dependStatus);
+        m_checkedOrDepends.append(dependStatus);
     }
-    m_checkedOrDepends = m_orDepends;
     qInfo() << __func__ << m_orDepends;
 }
 
@@ -650,9 +652,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             break;
 
         QVector<QString> infos;
-        if (!m_orDepends.isEmpty()) {
-            for (auto dInfo : m_orDepends) { //遍历或依赖容器中容器中是否存在当前依赖
-                if (!dInfo.contains(package->name()) && m_checkedOrDepends.contains(dInfo)) {
+        if (!m_checkedOrDepends.isEmpty()) {
+            for (auto dInfo : m_checkedOrDepends) { //遍历或依赖容器中容器中是否存在当前依赖
+                if (!dInfo.contains(package->name())) {
                     continue;
                 } else {
                     infos = dInfo;
@@ -1265,11 +1267,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
         dependsStatus.minEq(r);
 
-        if (!m_orDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
+        if (!m_checkedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
             QVector<QString> depends;
-            for (auto orDepends : m_orDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
+            for (auto orDepends : m_checkedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
                 depends = orDepends;
-                if (orDepends.contains(info.packageName()) && m_checkedOrDepends.contains(orDepends)) {
+                if (orDepends.contains(info.packageName())) {
                     m_checkedOrDepends.removeOne(orDepends);
                     m_checkedOrDependsStatus.insert(info.packageName(), r);
                     depends.removeOne(info.packageName()); //将当前依赖从或依赖中删除，检测或依赖中剩余依赖状态
@@ -1288,6 +1290,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                             continue;
                         dependsStatus.minEq(status);
                     }
+                    break;
                 }
             }
         }
