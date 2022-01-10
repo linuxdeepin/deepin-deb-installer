@@ -684,7 +684,7 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
     } else {
         //检查当前应用是否在黑名单中
         //非开发者模式且数字签名验证失败
-        if (checkBlackListApplication() || !checkDigitalSignature())
+        if (checkBlackListApplication() || (!checkDigitalSignature() && !m_isDevelopMode))
             return;
         installNextDeb();                                                       //依赖安装成功，开始安装这个包
     }
