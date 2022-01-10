@@ -274,24 +274,13 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 void SingleInstallPage::initTabOrder()
 {
     // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
-    if(m_installButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
-    }
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
+    QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
+    QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
 
-    if(m_backButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
-        if(m_doneButton->isVisible()){
-            QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
-        }
-        if(m_confirmButton->isVisible()){
-            QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
-        }
-    }
-
-    if(m_uninstallButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
-        QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
-    }
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
+    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
 }
 
 void SingleInstallPage::initButtonFocusPolicy()
