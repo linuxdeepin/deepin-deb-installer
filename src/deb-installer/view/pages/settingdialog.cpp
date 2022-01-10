@@ -39,6 +39,7 @@ SettingDialog::~SettingDialog()
 void SettingDialog::init()
 {
     m_setting = DSettings::fromJsonFile(":/data/deepin-deb-installer.json");
+    setFocus(Qt::PopupFocusReason);
     const QString confDir = DStandardPaths::writableLocation(QStandardPaths::AppConfigLocation); // 换了枚举值，待验证
 
     const QString confPath = confDir + QDir::separator() + "deepin-deb-installer.conf";
@@ -62,6 +63,7 @@ void SettingDialog::init()
         m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
     });
     m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
+
 }
 
 bool SettingDialog::isDigitalVerified()
