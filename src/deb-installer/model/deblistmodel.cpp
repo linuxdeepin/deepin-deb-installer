@@ -682,10 +682,7 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
     if (transExitStatus) {
         bumpInstallIndex();                                                     //依赖安装失败，直接安装下一个包
     } else {
-        //检查当前应用是否在黑名单中
-        //非开发者模式且数字签名验证失败
-        if (checkBlackListApplication() || (!checkDigitalSignature() && !m_isDevelopMode))
-            return;
+        // 安装依赖前已对此包进行黑名单及验签校验，无需二次验证
         installNextDeb();                                                       //依赖安装成功，开始安装这个包
     }
 }
