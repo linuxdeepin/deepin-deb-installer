@@ -58,7 +58,6 @@ Please read the prompt carefully, common causes include:
 
 - Broken dependencies.
   
-
 ![unable](fig/unable.png)
 
 - No digital signature. 
