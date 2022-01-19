@@ -1321,20 +1321,25 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
     const RelationType relation = dependencyInfo.relationType();
     const QString &installedVersion = package->installedVersion();
-
+    DependencyInfo virInfo;
+    if (package->name() != dependencyInfo.packageName())
+        virInfo = m_dependsInfo[package->name()];
+    else
+        virInfo = dependencyInfo;
     if (!installedVersion.isEmpty()) {
-        const int result = Package::compareVersion(installedVersion, dependencyInfo.packageVersion());
+        // 若是虚包，则之前此处版本比较是虚包本身与提供虚包的依赖包版本进行比较
+        const int result = Package::compareVersion(installedVersion, virInfo.packageVersion());
         if (dependencyVersionMatch(result, relation)){
             return PackageDependsStatus::ok();
         }else {
             const QString &mirror_version = package->availableVersion();
             if (mirror_version != installedVersion) {
-                const auto mirror_result = Package::compareVersion(mirror_version, dependencyInfo.packageVersion());
+                const auto mirror_result = Package::compareVersion(mirror_version, virInfo.packageVersion());
                 if (dependencyVersionMatch(mirror_result, relation)) {
                     qInfo() << "PackagesManager:" << "availble by upgrade package" << package->name() + ":" + package->architecture() << "from"
                              << installedVersion << "to" << mirror_version;
                     // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
-                    m_dinfo.packageName = package_name + ":" + package->architecture();
+                    m_dinfo.packageName = package->name() + ":" + package->architecture();
                     m_dinfo.version = package->availableVersion();
                     return PackageDependsStatus::available(package->name());
                 }
@@ -1342,17 +1347,17 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
             qWarning() << "PackagesManager:" << "depends break by" << package->name() << package->architecture() << dependencyInfo.packageVersion();
             qWarning() << "PackagesManager:" << "installed version not match" << installedVersion;
-            m_dinfo.packageName = package_name + ":" + package->architecture();
-            m_dinfo.version = dependencyInfo.packageVersion();
+            m_dinfo.packageName = package->name() + ":" + package->architecture();
+            m_dinfo.version = virInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
     } else {
-        const int result = Package::compareVersion(package->version(), dependencyInfo.packageVersion());
+        const int result = Package::compareVersion(package->version(), virInfo.packageVersion());
         if (!dependencyVersionMatch(result, relation)) {
             qWarning() << "PackagesManager:" << "depends break by" << package->name() << package->architecture() << dependencyInfo.packageVersion();
             qWarning() << "PackagesManager:" << "available version not match" << package->version();
-            m_dinfo.packageName = package_name + ":" + package->architecture();
-            m_dinfo.version = dependencyInfo.packageVersion();
+            m_dinfo.packageName = package->name()+ ":" + package->architecture();
+            m_dinfo.version = virInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
 
@@ -1406,8 +1411,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             }
 
             qWarning() << "PackagesManager:" << "providers not found, still break: " << package->name();
-            m_dinfo.packageName = package_name + ":" + package->architecture();
-            m_dinfo.version = dependencyInfo.packageVersion();
+            m_dinfo.packageName = package->name() + ":" + package->architecture();
+            m_dinfo.version = virInfo.packageVersion();
             return PackageDependsStatus::_break(package->name());
         }
 
@@ -1423,8 +1428,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             qWarning() << "PackagesManager:"
                        << "depends break by direct depends" << package->name() << package->architecture() << dependsStatus.package << isDependsExists;
             if (!isDependsExists) {
-                m_dinfo.packageName = package_name + ":" + package->architecture();
-                m_dinfo.version = dependencyInfo.packageVersion();
+                m_dinfo.packageName = package->name() + ":" + package->architecture();
+                m_dinfo.version = virInfo.packageVersion();
             } else {
                 m_dinfo.packageName = "";
                 m_dinfo.version = "";
@@ -1434,7 +1439,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
         qInfo() << "PackagesManager:" << "Check finshed for package" << package->name();
         // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
-        m_dinfo.packageName = package_name;
+        m_dinfo.packageName = package->name();
         m_dinfo.version = package->availableVersion();
         return PackageDependsStatus::available(package->name());
     }
