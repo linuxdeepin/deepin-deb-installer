@@ -774,7 +774,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_03)
     m_debListModel->m_isDevelopMode = true;
     m_debListModel->m_isDigitalVerify = true;
     stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
-    ASSERT_TRUE(m_debListModel->checkDigitalSignature());
+    ASSERT_FALSE(m_debListModel->checkDigitalSignature());
     m_debListModel->showDevelopDigitalErrWindow(DebListModel::NoDigitalSignature);
     EXPECT_EQ(1, m_debListModel->preparedPackages().size());
 }
