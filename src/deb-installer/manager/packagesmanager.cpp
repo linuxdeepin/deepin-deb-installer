@@ -347,19 +347,19 @@ int PackagesManager::packageInstallStatus(const int index)
     }
     Package *package = packageWithArch(packageName, packageArch);
 
-    int ret = DebListModel::NotInstalled;
 
     if (!package)
-        return ret;
+        return DebListModel::NotInstalled;
 
     const QString installedVersion = package->installedVersion();
     package = nullptr;
     if (installedVersion.isEmpty())
-        return ret;
+        return DebListModel::NotInstalled;
 
     const QString packageVersion = debFile.version();
     const int result = Package::compareVersion(packageVersion, installedVersion);
 
+    int ret;
     if (result == 0)
         ret = DebListModel::InstalledSameVersion;
     else if (result < 0)
@@ -453,7 +453,10 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     m_orDepends.clear();
     m_checkedOrDependsStatus.clear();
     m_checkedOrDepends.clear();
-    getPackageOrDepends(debFile.packageName(), debFile.architecture(), true);
+    m_dependsInfo.clear();
+    //用debFile.packageName()无法打开deb文件，故替换成debFile.filePath()
+    //更新m_dependsInfo
+    getPackageOrDepends(debFile.filePath(), debFile.architecture(), true);
 
     const QString architecture = debFile.architecture();
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
@@ -516,12 +519,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             m_pair.second.clear(); //清空broken依赖
             if (m_dependsPackages.contains(m_currentPkgMd5))
                 m_dependsPackages.remove(m_currentPkgMd5);
-            // 检测或依赖的依赖状态前，先保存依赖DependInfo
-            m_dependsInfo.clear();
-            for (const auto &candicate_list : debFile.depends()) {
-                for (const auto &info : candicate_list)
-                    m_dependsInfo.insert(info.packageName(), info);
-            }
+
             dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
             // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
@@ -557,17 +555,30 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
          *such as,teamviewer depends: "libc6 (>= 2.17), libdbus-1-3, libqt5gui5 (>= 5.5)| qt56-teamviewer,
          * libqt5widgets5 (>= 5.5) | qt56-teamviewer, libqt5qml5 (>= 5.5) | qt56-teamviewer, libqt5quick5 (>= 5.5) | qt56-teamviewer..."
         */
+
+    //更新m_dependsInfo
+    auto insertToDependsInfo = [this](const QList<DependencyItem> &depends){
+        for(auto candicate_list : depends) {
+            for (const auto &info : candicate_list) {
+                m_dependsInfo.insert(info.packageName(), info);
+            }
+        }
+    };
     QString controlDepends;
     if (flag) {
         DebFile debFile(package);
         if(!debFile.isValid())
             return;
         controlDepends = debFile.controlField("Depends");
+        //软件包
+        insertToDependsInfo(debFile.depends());
     } else {
         QApt::Package *pkg = packageWithArch(package, arch);
         if (!pkg)
             return;
         controlDepends = pkg->controlField("Depends");
+        //子依赖
+        insertToDependsInfo(pkg->depends());
     }
     qInfo() << __func__ << controlDepends;
     QStringList dependsList = controlDepends.split(",");
