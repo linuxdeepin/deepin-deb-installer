@@ -452,7 +452,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     m_currentPkgName = debFile.packageName();
     m_orDepends.clear();
     m_checkedOrDependsStatus.clear();
-    m_checkedOrDepends.clear();
+    m_unCheckedOrDepends.clear();
     m_dependsInfo.clear();
     //用debFile.packageName()无法打开deb文件，故替换成debFile.filePath()
     //更新m_dependsInfo
@@ -600,7 +600,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
             dependStatus.append(ordepend);
         }
         m_orDepends.append(dependStatus);
-        m_checkedOrDepends.append(dependStatus);
+        m_unCheckedOrDepends.append(dependStatus);
     }
     qInfo() << __func__ << m_orDepends;
 }
@@ -636,7 +636,7 @@ const QStringList PackagesManager::packageAvailableDepends(const int index)
     QSet<QString> choose_set;
     const QString debArch = debFile.architecture();
     const auto &depends = debFile.depends();
-    m_checkedOrDepends = m_orDepends;
+    m_unCheckedOrDepends = m_orDepends;
     packageCandidateChoose(choose_set, debArch, depends);
 
     // TODO: check upgrade from conflicts
@@ -663,13 +663,13 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             break;
 
         QVector<QString> infos;
-        if (!m_checkedOrDepends.isEmpty()) {
-            for (auto dInfo : m_checkedOrDepends) { //遍历或依赖容器中容器中是否存在当前依赖
+        if (!m_unCheckedOrDepends.isEmpty()) {
+            for (auto dInfo : m_unCheckedOrDepends) { //遍历或依赖容器中容器中是否存在当前依赖
                 if (!dInfo.contains(package->name())) {
                     continue;
                 } else {
                     infos = dInfo;
-                    m_checkedOrDepends.removeOne(dInfo);
+                    m_unCheckedOrDepends.removeOne(dInfo);
                 }
             }
         }
@@ -1278,12 +1278,12 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
         dependsStatus.minEq(r);
 
-        if (!m_checkedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
+        if (!m_unCheckedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
             QVector<QString> depends;
-            for (auto orDepends : m_checkedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
+            for (auto orDepends : m_unCheckedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
                 depends = orDepends;
                 if (orDepends.contains(info.packageName())) {
-                    m_checkedOrDepends.removeOne(orDepends);
+                    m_unCheckedOrDepends.removeOne(orDepends);
                     m_checkedOrDependsStatus.insert(info.packageName(), r);
                     depends.removeOne(info.packageName()); //将当前依赖从或依赖中删除，检测或依赖中剩余依赖状态
                     qInfo() << depends << orDepends;
