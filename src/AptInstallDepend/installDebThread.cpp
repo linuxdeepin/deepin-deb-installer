@@ -115,7 +115,8 @@ void InstallDebThread::run()
             if (debPath.contains(" ")
                     || debPath.contains("&")
                     || debPath.contains(";")
-                    || debPath.contains("|")) {
+                    || debPath.contains("|")
+                    || debPath.contains("`")) {  //过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
                 debPath = SymbolicLink(debPath, "installPackage");
             }
 
