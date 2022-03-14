@@ -37,7 +37,10 @@ void InstallDebThread::setParam(QStringList tParam)
 void InstallDebThread::getDescription(QString debPath)
 {
     QString str = "dpkg -e " + debPath + " " + TEMPLATE_DIR;
-    system(str.toUtf8());
+    // system() 存在可控命令参数注入漏洞，即使拼接也存在命令分隔符（特殊字符）机制，因此更换方式去执行命令
+    QProcess process;
+    process.start(str);
+    process.waitForFinished(-1);
 
     QFile file;
     file.setFileName(TEMPLATE_PATH);
@@ -121,7 +124,7 @@ void InstallDebThread::run()
             }
 
             if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
-                qDebug() << "StartInstallAptConfig";
+                qInfo() << "StartInstallAptConfig";
 
                 getDescription(debPath);
 
