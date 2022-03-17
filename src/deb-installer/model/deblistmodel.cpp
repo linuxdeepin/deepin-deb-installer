@@ -997,8 +997,9 @@ void DebListModel::checkSystemVersion()
 #endif
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
-        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.sync.Helper", "/com/deepin/sync/Helper",
+                                                           "com.deepin.sync.Helper", QDBusConnection::systemBus());
+        bool deviceMode = dbusInterFace->property("DeveloperMode").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
         delete dbusInterFace;
