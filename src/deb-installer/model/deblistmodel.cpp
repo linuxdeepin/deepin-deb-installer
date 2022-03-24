@@ -51,10 +51,7 @@ DebListModel::DebListModel(QObject *parent)
     , m_packagesManager(new PackagesManager(this))
 {
     // 配置包安装的进程
-    m_procInstallConfig = new QProcess;
-    m_procInstallConfig->setProcessChannelMode(QProcess::MergedChannels);               //获取子进程所有的输出数据
-    m_procInstallConfig->setReadChannel(QProcess::StandardOutput);                      //QProcess 当前从标准输出中读取所有的数据
-
+    m_procInstallConfig = new Konsole::Pty;
     configWindow = new AptConfigMessage;
 
     // 链接信号与槽
@@ -175,7 +172,7 @@ void DebListModel::initInstallConnections()
     connect(m_procInstallConfig, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DebListModel::slotConfigInstallFinish);
 
     // 配置安装的过程数据
-    connect(m_procInstallConfig, &QProcess::readyReadStandardOutput, this, &DebListModel::slotConfigReadOutput);
+    connect(m_procInstallConfig, &Konsole::Pty::receivedData, this, &DebListModel::slotConfigReadOutput);
 
     // 向安装进程中写入配置信息（一般是配置的序号）
     connect(configWindow, &AptConfigMessage::AptConfigInputStr, this, &DebListModel::slotConfigInputWrite);
@@ -280,7 +277,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int currentRow = index.row();
     // 判断当前下标是否越界
-    if (currentRow >= m_packagesManager->m_preparedPackages.size() ) {
+    if (currentRow >= m_packagesManager->m_preparedPackages.size()) {
         return QVariant();
     }
     //当前给出的路径文件已不可访问.直接删除该文件
@@ -386,18 +383,17 @@ void DebListModel::slotUninstallPackage(const int index)
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture()); //检查是否有应用依赖到该包
     Backend *backend = m_packagesManager->m_backendFuture.result();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (backend->package(r)){
+        if (backend->package(r)) {
             // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
             backend->package(r)->setPurge();
-        }
-        else
+        } else
             qWarning() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
     //卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
     QApt::Package *uninstalledPackage = backend->package(debFile.packageName() + ':' + debFile.architecture());
 
     //未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
-    if(!uninstalledPackage){
+    if (!uninstalledPackage) {
         refreshOperatingPackageStatus(Failed);
         return;
     }
@@ -431,8 +427,8 @@ void DebListModel::slotUninstallPackage(const int index)
 
 void DebListModel::removePackage(const int idx)
 {
-    if(WorkerPrepare != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerPrepare != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     // 去除操作状态 中的index
     int packageOperateStatusCount = m_packageOperateStatus.size() - 1;
@@ -446,8 +442,8 @@ void DebListModel::removePackage(const int idx)
 
 void DebListModel::slotAppendPackage(QStringList package)
 {
-    if(WorkerPrepare != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerPrepare != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     m_packagesManager->appendPackage(package);      //添加包，并返回添加结果
 }
@@ -518,11 +514,11 @@ void DebListModel::bumpInstallIndex()
 
 void DebListModel::slotTransactionErrorOccurred()
 {
-    if(WorkerProcessing != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerProcessing != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     Transaction *transaction = qobject_cast<Transaction *>(sender());
-    if(!transaction)
+    if (!transaction)
         return;
     //失败时刷新操作状态为failed,并记录失败原因
     refreshOperatingPackageStatus(Failed);
@@ -542,7 +538,7 @@ void DebListModel::slotTransactionErrorOccurred()
     if (transaction->isCancellable()) transaction->cancel();
 
     //特殊处理授权错误
-    if (AuthError == errorCode ) {
+    if (AuthError == errorCode) {
         transaction->deleteLater();                                                       //删除 trans指针
         QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);           //检查授权弹窗的状态 如果弹窗仍然在只是超时，则底层窗口按钮不可用
         qWarning() << "DebListModel:" << "Authorization error";
@@ -574,10 +570,10 @@ QString DebListModel::packageFailedReason(const int idx) const
     const auto md5 = m_packagesManager->getPackageMd5(idx);                                 //获取包的md5值
     if (m_packagesManager->isArchError(idx))
         return tr("Unmatched package architecture");   //判断是否架构冲突
-    if(dependStatus.isProhibit())
+    if (dependStatus.isProhibit())
         return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
-         if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
+        if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
             if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
                 return tr("Failed to install %1").arg(m_brokenDepend); //wine依赖安装失败
             return tr("Broken dependencies: %1").arg(dependStatus.package);                         //依赖不满足
@@ -588,8 +584,8 @@ QString DebListModel::packageFailedReason(const int idx) const
             return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
     }
 
-    if(m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
-        qWarning()<<"package operate status failed";
+    if (m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
+        qWarning() << "package operate status failed";
     //判断当前这个包是否错误
     if (!m_packageFailCode.contains(md5))
         qWarning() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
@@ -605,8 +601,8 @@ void DebListModel::slotTransactionFinished()
     }
     // 获取trans指针
     Transaction *transaction = qobject_cast<Transaction *>(sender());
-    if(!transaction)
-       return;
+    if (!transaction)
+        return;
     // prevent next signal
     disconnect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);  //不再接收trans结束的信号
 
@@ -654,8 +650,8 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
         qWarning() << "installer status error";
     }
     Transaction *transaction = qobject_cast<Transaction *>(sender());
-    if(!transaction)
-       return;
+    if (!transaction)
+        return;
 
     const auto transExitStatus = transaction->exitStatus();
 
@@ -937,14 +933,14 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
     cancelBtn->setFocus();
 
     // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, this, [=] {
+    connect(Ddialog, &DDialog::aboutToClose, this, [ = ] {
         //刷新当前包的操作状态，失败原因为数字签名校验失败
         digitalVerifyFailed(code);
     });
     connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 
     //点击弹出窗口的确定按钮
-    connect(cancelBtn, &DPushButton::clicked, this, [=] {
+    connect(cancelBtn, &DPushButton::clicked, this, [ = ] {
         digitalVerifyFailed(code);
     });
     connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
@@ -954,7 +950,7 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
         installNextDeb();
     }); //点击继续，进入安装流程
     connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
-    connect(Ddialog, &Dialog::signalClosed, this, [=] { digitalVerifyFailed(code); });
+    connect(Ddialog, &Dialog::signalClosed, this, [ = ] { digitalVerifyFailed(code); });
     connect(Ddialog, &Dialog::signalClosed, Ddialog, &DDialog::deleteLater);
 }
 
@@ -1093,14 +1089,15 @@ bool DebListModel::checkDigitalSignature()
 
 void DebListModel::installNextDeb()
 {
-        QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
-        QStringList strFilePath;
-        if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
-            rmdir();                                            //删除临时路径
-            m_procInstallConfig->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName);
-        } else {
-            installDebs();                                      //普通安装
-        }
+    QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
+    QStringList strFilePath;
+    if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
+        rmdir();                                            //删除临时路径
+//        m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false);
+        m_procInstallConfig->start("pkexec", {"pkexec", "dpkg", "-i", sPackageName}, {}, 0, false);
+    } else {
+        installDebs();                                      //普通安装
+    }
 }
 
 void DebListModel::rmdir()
@@ -1109,7 +1106,7 @@ void DebListModel::rmdir()
     if (filePath.exists()) {
         if (!filePath.removeRecursively()) {
             qWarning() << "DebListModel:" << "remove temporary path failed";
-        } 
+        }
     }
 }
 
@@ -1189,7 +1186,7 @@ void DebListModel::slotUninstallFinished()
         m_packageOperateStatus[m_operatingPackageMd5] = Success;
     }
     emit signalWorkerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
-    trans->deleteLater();                                 
+    trans->deleteLater();
 }
 
 void DebListModel::slotSetCurrentIndex(const QModelIndex &modelIndex)
@@ -1300,9 +1297,9 @@ void DebListModel::slotConfigInstallFinish(int installResult)
     m_procInstallConfig->close();
 }
 
-void DebListModel::slotConfigReadOutput()
+void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isCommandExec)
 {
-    QString tmp = m_procInstallConfig->readAllStandardOutput().data();                  //获取配置读取到的信息
+    QString tmp = QByteArray(buffer, length);                  //获取配置读取到的信息
 
     //检查命令返回的结果，如果是 没有发现命令。直接报错，安装失败
     slotCheckInstallStatus(tmp);
@@ -1310,35 +1307,22 @@ void DebListModel::slotConfigReadOutput()
     tmp.remove(QChar('"'), Qt::CaseInsensitive);
     tmp.remove(QChar('\n'), Qt::CaseInsensitive);
 
-    if (tmp.contains("StartInstallAptConfig")) {                                        //获取到当前正在安装配置
-        emit signalStartInstall();
-        refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
-        configWindow->show();                                        //显示配置窗口
-        QString startFlagStr = "StartInstallAptConfig";
-        int num = tmp.indexOf(startFlagStr) + startFlagStr.size();
-        int iCutoutNum = tmp.size() - num;
-        if (iCutoutNum > 0)
-            configWindow->appendTextEdit(tmp.mid(num, iCutoutNum));  //显示配置信息
-        return;
-    }
+    //获取到当前正在安装配置
+    emit signalStartInstall();
+    refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
+    configWindow->show();                                        //显示配置窗口
 
-    QString appendInfoStr = tmp;
-    appendInfoStr.remove(QChar('\"'), Qt::CaseInsensitive);
-    appendInfoStr.remove(QChar('"'), Qt::CaseInsensitive);
-    appendInfoStr.replace("\\n", "\n");
-    appendInfoStr.replace("\n\n", "\n");
-    emit signalAppendOutputInfo(appendInfoStr);                                               //将信息同步显示到安装信息中
-    if (tmp.contains("Not authorized")) {
-        configWindow->close();                                       //没有授权，关闭配置窗口
-    } else {
-        configWindow->appendTextEdit(tmp);                           //授权成功，继续配置
+    int iCutoutNum = tmp.size();
+    if (iCutoutNum > 0) {
+        emit signalAppendOutputInfo(tmp);   // 原本安装信息界面信息也要添加，以备安装完成后查看安装信息
+        configWindow->appendTextEdit(tmp);  // 配置包安装信息界面显示配置信息
     }
 }
 
 void DebListModel::slotConfigInputWrite(QString str)
 {
-    m_procInstallConfig->write(str.toUtf8());                                          //将用户输入的配置项写入到配置安装进程中。
-    m_procInstallConfig->write("\n");                                                  //写入换行，配置生效
+    m_procInstallConfig->pty()->write(str.toUtf8());                                          //将用户输入的配置项写入到配置安装进程中。
+    m_procInstallConfig->pty()->write("\n");                                                  //写入换行，配置生效
 }
 
 void DebListModel::slotCheckInstallStatus(QString installInfo)

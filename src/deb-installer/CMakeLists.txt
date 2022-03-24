@@ -151,6 +151,7 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/manager/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/model/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/process/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/*.cpp
 

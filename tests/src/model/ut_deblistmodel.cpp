@@ -143,16 +143,16 @@ PackageDependsStatus model_getPackageDependsStatus(const int index)
     return status;
 }
 
-bool model_stud_recheckPackagePath_true(QString )
+bool model_stud_recheckPackagePath_true(QString)
 {
     return true;
 }
 
-bool model_stud_recheckPackagePath_false(QString )
+bool model_stud_recheckPackagePath_false(QString)
 {
     return false;
 }
-bool model_stub_dealInvalidPackage(QString )
+bool model_stub_dealInvalidPackage(QString)
 {
     return true;
 }
@@ -282,30 +282,30 @@ bool stud_toBool()
 {
     return true;
 }
-Utils::VerifyResultCode model_Digital_Verify(QString )
+Utils::VerifyResultCode model_Digital_Verify(QString)
 {
     qDebug() << "model_Digital_Verify";
     return Utils::VerifySuccess;
 }
 
-Utils::VerifyResultCode model_Digital_Verify1(QString )
+Utils::VerifyResultCode model_Digital_Verify1(QString)
 {
     qDebug() << "model_Digital_Verify";
     return Utils::DebfileInexistence;
 }
 
-Utils::VerifyResultCode model_Digital_Verify2(QString )
+Utils::VerifyResultCode model_Digital_Verify2(QString)
 {
     qDebug() << "model_Digital_Verify";
     return Utils::ExtractDebFail;
 }
 
-Utils::VerifyResultCode model_Digital_Verify3(QString )
+Utils::VerifyResultCode model_Digital_Verify3(QString)
 {
     return Utils::DebVerifyFail;
 }
 
-Utils::VerifyResultCode model_Digital_Verify4(QString )
+Utils::VerifyResultCode model_Digital_Verify4(QString)
 {
     return Utils::OtherError;
 }
@@ -489,7 +489,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_rowCount)
     ASSERT_EQ(m_debListModel->rowCount(index), 1);
 }
 
-bool stub_recheckPackagePath(QString )
+bool stub_recheckPackagePath(QString)
 {
     return true;
 }
@@ -511,14 +511,14 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_data)
         i++;
     }
 
-    for (int i = 257;i <=269; i++) {
+    for (int i = 257; i <= 269; i++) {
         m_debListModel->data(index, i);
     }
 
     m_debListModel->data(index, 1);
 
     m_debListModel->m_packageOperateStatus[""] = 1;
-    m_debListModel->data(index,268);
+    m_debListModel->data(index, 268);
     EXPECT_EQ(1, m_debListModel->m_packagesManager->m_preparedPackages.size());
 }
 TEST_F(ut_DebListModel_test, deblistmodel_UT_data_recheck)
@@ -638,7 +638,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage1)
     stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
 //    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), stub_model_packageWithArch);
-    stub.set(ADDR(Package,setPurge),stub_setPurge);
+    stub.set(ADDR(Package, setPurge), stub_setPurge);
     QStringList list;
     list << "/";
     m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
@@ -666,8 +666,8 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
 
     ASSERT_STREQ(m_debListModel->packageFailedReason(0).toLocal8Bit(), "Unmatched package architecture");
     Stub stub;
-    stub.set(ADDR(PackagesManager,isArchError),model_package_isArchError1);
-    stub.set(ADDR(PackageDependsStatus,isBreak),ut_model_isBreak);
+    stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError1);
+    stub.set(ADDR(PackageDependsStatus, isBreak), ut_model_isBreak);
     stub.set(ADDR(PackagesManager, packageConflictStat), ut_packageConflictStat);
     m_debListModel->packageFailedReason(0);
     EXPECT_TRUE(m_debListModel->packageFailedReason(0).contains("Broken dependencies"));
@@ -923,14 +923,13 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->m_packageOperateStatus.insert("deb", QApt::CommitError);
 
-    stub.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput);
-    m_debListModel->slotConfigReadOutput();
+    stub.set(ADDR(Konsole::Pty, receivedData), model_readAllStandardOutput);
+    const char *buffer = "111111"; int length = sizeof(buffer); bool isCommandExec = false;
+    m_debListModel->slotConfigReadOutput(buffer, length, isCommandExec);
     EXPECT_EQ(DebListModel::PackageOperationStatus::Operating, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
-
-    Stub stub1;
-    stub1.set(ADDR(QProcess, readAllStandardOutput), model_readAllStandardOutput1);
-    m_debListModel->slotConfigReadOutput();
 }
+
+
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
 {
@@ -939,7 +938,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->m_packageFailCode.insert("deb", QApt::CommitError);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
-    stub.set(ADDR(Transaction,error),model_transaction_error);
+    stub.set(ADDR(Transaction, error), model_transaction_error);
     m_debListModel->m_operatingIndex = 0;
     m_debListModel->m_packageMd5.append("test");
     m_debListModel->m_packageMd5.append("test1");
@@ -1025,7 +1024,7 @@ ExitStatus ut_exitStatus()
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallFinished)
 {
-    stub.set(ADDR(Transaction,error), model_transaction_run);
+    stub.set(ADDR(Transaction, error), model_transaction_run);
     Stub stub1;
     stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotUninstallFinished();

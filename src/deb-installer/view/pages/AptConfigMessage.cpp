@@ -61,8 +61,7 @@ void AptConfigMessage::initTabOrder()
 void AptConfigMessage::initTitlebar()
 {
     DTitlebar *tb = titlebar();
-    if(tb)
-    {
+    if (tb) {
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));      //设置图标
         tb->setTitle("");
         tb->setVisible(false);
@@ -152,26 +151,27 @@ void AptConfigMessage::initUI()
 void AptConfigMessage::appendTextEdit(QString processInfo)
 {
     //保证焦点在输入框上
-    m_inputEdit->lineEdit()->setFocus();   
-    //如果添加的数据是空的或者只有换行，则不添加                
-    if (processInfo.isEmpty() || processInfo == "\\n")      
+    m_inputEdit->lineEdit()->setFocus();
+    //如果添加的数据是空的或者只有换行，则不添加
+    qInfo() << processInfo;
+    if (processInfo.isEmpty() || processInfo == "\\r\\n")
         return;
 
-    QString configMessage;                                                                    
+    QString configMessage;
     configMessage = processInfo.replace("  ", "     ");
 
     //移除多余的“"”
-    configMessage.remove(QChar('\"'), Qt::CaseInsensitive); 
-
-    //获取配置的第一行的最后一个字符的下标，用于判断当前是否还有信息需要展示         
-    int num = configMessage.indexOf("\\n");                          
+    configMessage.remove(QChar('\"'), Qt::CaseInsensitive);
+    configMessage.remove("\\r");
+    //获取配置的第一行的最后一个字符的下标，用于判断当前是否还有信息需要展示
+    int num = configMessage.indexOf("\\n");
     //下标为-1 表明此时只有一行数据需要展示，则直接添加
     if (num == -1) {
-        m_textEdit->appendText(processInfo);                        
-        m_textEdit->appendText("\n");
+        m_textEdit->appendText(processInfo);
+//        m_textEdit->appendText("\n");
         return;
     }
-    int messageSize = configMessage.size();                                 
+    int messageSize = configMessage.size();
     while (num != -1) {
         num = configMessage.indexOf("\\n");                 //获取第一行的下标
 
@@ -187,8 +187,8 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
         m_textEdit->appendText(strFilter);                       //添加数据
         qDebug() << "strFilter" << strFilter;
 
-            //如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
-        if (num == -1 && configMessage.size() > 0 && !configMessage.contains("\n")) {     
+        //如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
+        if (num == -1 && configMessage.size() > 0 && !configMessage.contains("\n")) {
             break;
         }
     }
