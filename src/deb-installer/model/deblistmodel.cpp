@@ -270,7 +270,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int currentRow = index.row();
     // 判断当前下标是否越界
-    if (currentRow >= m_packagesManager->m_preparedPackages.size() ) {
+    if (currentRow >= m_packagesManager->m_preparedPackages.size()) {
         return QVariant();
     }
     //当前给出的路径文件已不可访问.直接删除该文件
@@ -360,18 +360,17 @@ void DebListModel::slotUninstallPackage(const int index)
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile->packageName(), debFile->architecture());     //检查是否有应用依赖到该包
     Backend *backend = m_packagesManager->m_backendFuture.result();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (backend->package(r)){
+        if (backend->package(r)) {
             // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
             backend->package(r)->setPurge();
-        }
-        else
+        } else
             qWarning() << "DebListModel:" << "reverse depend" << r << "error ,please check it!";
     }
     //卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
-    QApt::Package* uninstalledPackage = backend->package(debFile->packageName() + ':' + debFile->architecture());
+    QApt::Package *uninstalledPackage = backend->package(debFile->packageName() + ':' + debFile->architecture());
 
     //未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
-    if(!uninstalledPackage){
+    if (!uninstalledPackage) {
         refreshOperatingPackageStatus(Failed);
         delete debFile;
         return;
@@ -407,8 +406,8 @@ void DebListModel::slotUninstallPackage(const int index)
 
 void DebListModel::slotRemovePackage(const int idx)
 {
-    if(WorkerPrepare != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerPrepare != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     // 去除操作状态 中的index
     int packageOperateStatusCount = m_packageOperateStatus.size() - 1;
@@ -422,8 +421,8 @@ void DebListModel::slotRemovePackage(const int idx)
 
 void DebListModel::slotAppendPackage(QStringList package)
 {
-    if(WorkerPrepare != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerPrepare != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     m_packagesManager->appendPackage(package);      //添加包，并返回添加结果
 }
@@ -490,8 +489,8 @@ void DebListModel::bumpInstallIndex()
 
 void DebListModel::slotTransactionErrorOccurred()
 {
-    if(WorkerProcessing != m_workerStatus){
-        qWarning()<<"installer status error";
+    if (WorkerProcessing != m_workerStatus) {
+        qWarning() << "installer status error";
     }
     Transaction *transaction = static_cast<Transaction *>(sender());
 
@@ -513,7 +512,7 @@ void DebListModel::slotTransactionErrorOccurred()
     if (transaction->isCancellable()) transaction->cancel();
 
     //特殊处理授权错误
-    if (AuthError == errorCode ) {
+    if (AuthError == errorCode) {
         transaction->deleteLater();                                                       //删除 trans指针
         QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);           //检查授权弹窗的状态 如果弹窗仍然在只是超时，则底层窗口按钮不可用
         qWarning() << "DebListModel:" << "Authorization error";
@@ -544,7 +543,7 @@ QString DebListModel::packageFailedReason(const int idx) const
     const auto dependStatus = m_packagesManager->getPackageDependsStatus(idx);                         //获取包的依赖状态
     const auto md5 = m_packagesManager->getPackageMd5(idx);                                 //获取包的md5值
     if (m_packagesManager->isArchError(idx)) return tr("Unmatched package architecture");   //判断是否架构冲突
-    if(dependStatus.isProhibit())
+    if (dependStatus.isProhibit())
         return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
         if (!dependStatus.package.isEmpty()) {
@@ -557,8 +556,8 @@ QString DebListModel::packageFailedReason(const int idx) const
         if (!conflictStatus.is_ok()) return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
     }
 
-    if(m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
-        qWarning()<<"package operate status failed";
+    if (m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
+        qWarning() << "package operate status failed";
     //判断当前这个包是否错误
     if (!m_packageFailCode.contains(md5))
         qWarning() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
@@ -681,7 +680,7 @@ void DebListModel::checkBoxStatus()
 void DebListModel::installDebs()
 {
     DebFile deb(m_packagesManager->package(m_operatingIndex)) ;
-    
+
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
     //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
@@ -883,12 +882,17 @@ void DebListModel::checkSystemVersion()
 {
     // add for judge OS Version
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
+#if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
+    case Dtk::Core::DSysInfo::UosEducation:                     //教育版
+#endif
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
-    case Dtk::Core::DSysInfo::UosDeviceEdition: //专用设备
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
-        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.sync.Helper", "/com/deepin/sync/Helper",
+                                                           "com.deepin.sync.Helper", QDBusConnection::systemBus());
+        bool deviceMode = dbusInterFace->property("DeveloperMode").toBool();                            // 判断当前是否处于开发者模式
         qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
         m_isDevelopMode = deviceMode;
         delete dbusInterFace;
@@ -902,6 +906,29 @@ void DebListModel::checkSystemVersion()
         m_isDevelopMode =  true;
         break;
     }
+#else
+    switch (Dtk::Core::DSysInfo::deepinType()) {
+    case Dtk::Core::DSysInfo::DeepinDesktop:
+        m_isDevelopMode = true;
+        break;
+    case Dtk::Core::DSysInfo::DeepinPersonal:
+    case Dtk::Core::DSysInfo::DeepinProfessional:
+        QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+        bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+        qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+        m_isDevelopMode = deviceMode;
+        delete dbusInterFace;
+        break;
+    case Dtk::Core::DSysInfo::isCommunityEdition():
+    case Dtk::Core::DSysInfo::DeepinServer:
+        m_isDevelopMode = true;
+        break;
+    default:
+        m_isDevelopMode = true;
+        break;
+    }
+
+#endif
 }
 
 bool DebListModel::checkDigitalSignature()
@@ -942,7 +969,7 @@ void DebListModel::installNextDeb()
 {
     //检查当前应用是否在黑名单中
     //非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature() ) {
+    if (checkBlackListApplication() || !checkDigitalSignature()) {
         return;
     } else {
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
@@ -962,7 +989,7 @@ void DebListModel::rmdir()
     if (filePath.exists()) {
         if (!filePath.removeRecursively()) {
             qWarning() << "DebListModel:" << "remove temporary path failed";
-        } 
+        }
     }
 }
 
@@ -1026,7 +1053,7 @@ void DebListModel::slotUninstallFinished()
     //增加卸载失败的情况
     //此前的做法是发出commitError的信号，现在全部在Finished中进行处理。不再特殊处理。
     Transaction *trans = static_cast<Transaction *>(sender());
-    
+
     if (trans->exitStatus()) {
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
         refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
@@ -1038,7 +1065,7 @@ void DebListModel::slotUninstallFinished()
         m_packageOperateStatus[m_operatingPackageMd5] = Success;
     }
     emit signalWorkerFinished();                                          //发送结束信号（只有单包卸载）卸载结束就是整个流程的结束
-    trans->deleteLater();                                 
+    trans->deleteLater();
 }
 
 void DebListModel::slotSetCurrentIndex(const QModelIndex &modelIndex)
