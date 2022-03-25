@@ -22,6 +22,7 @@
 #include <DGuiApplicationHelper>
 
 #include <QPaintEvent>
+#include <QDebug>
 
 #include <gtest/gtest.h>
 
