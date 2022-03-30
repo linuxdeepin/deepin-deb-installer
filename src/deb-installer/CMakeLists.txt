@@ -112,6 +112,7 @@ find_package(DtkWidget REQUIRED)
 find_package(DtkGui REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(Qt5DBus REQUIRED)
+find_package(PolkitQt5-1 REQUIRED)
 set(LINK_LIBS
     Qt5::Core
     Qt5::Widgets
@@ -172,6 +173,7 @@ target_link_libraries(${APP_BIN_NAME}
     Qt5::DBus
     QApt
     Qt5::Concurrent
+    PolkitQt5-1::Agent
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
     ${DtkGUI_LIBRARIES}

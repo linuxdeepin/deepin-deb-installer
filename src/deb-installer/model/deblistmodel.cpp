@@ -37,8 +37,22 @@
 #include <QApt/Backend>
 #include <QApt/Package>
 
-using namespace QApt;
+#include <polkit-qt5-1/PolkitQt1/Authority>
 
+using namespace QApt;
+using namespace PolkitQt1;
+
+bool checkAuthorization(const QString &actionId, qint64 applicationPid)
+{
+    Authority::Result result;
+    result = Authority::instance()->checkAuthorizationSync(actionId, UnixProcessSubject(applicationPid), /// 第一个参数是需要验证的action，和规则文件写的保持一致
+                                                           Authority::AllowUserInteraction);
+    if (result == Authority::Yes) {
+        return true;
+    } else {
+        return false;
+    }
+}
 /**
  * @brief isDpkgRunning 判断当前dpkg 是否在运行
  * @return
@@ -1094,7 +1108,11 @@ void DebListModel::installNextDeb()
     if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
         rmdir();                                            //删除临时路径
 //        m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false);
-        m_procInstallConfig->start("pkexec", {"pkexec", "dpkg", "-i", sPackageName}, {}, 0, false);
+        // bug 121345配置授权弹窗文案需修改与需求一致
+        bool isAuth = checkAuthorization("com.deepin.pkexec.deepin-deb-installer-dependsInstall", QCoreApplication::applicationPid());
+        if (isAuth) {
+            m_procInstallConfig->start("sudo", {"sudo", "-S", "dpkg", "-i", sPackageName}, {}, 0, false);
+        }
     } else {
         installDebs();                                      //普通安装
     }
@@ -1274,6 +1292,8 @@ void DebListModel::slotConfigInstallFinish(int installResult)
     if (0 == installResult) {        //安装成功
         if (m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[m_operatingIndex]].status == DependsOk) {
             refreshOperatingPackageStatus(Success);                 //刷新安装状态
+            m_procInstallConfig->terminate();                               //结束配置
+            m_procInstallConfig->close();
         }
         bumpInstallIndex();                                         //开始安装下一个
     } else {
@@ -1293,8 +1313,8 @@ void DebListModel::slotConfigInstallFinish(int installResult)
     }
     configWindow->hide();                        //隐藏配置窗口
     configWindow->clearTexts();                  //清楚配置信息
-    m_procInstallConfig->terminate();                               //结束配置
-    m_procInstallConfig->close();
+//    m_procInstallConfig->terminate();                               //结束配置
+//    m_procInstallConfig->close();
 }
 
 void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isCommandExec)
