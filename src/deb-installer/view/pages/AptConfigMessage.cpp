@@ -243,6 +243,15 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
     }
 }
 
+void AptConfigMessage::closeEvent(QCloseEvent *event)
+{
+    // bug121131  右键dock栏软件包安装器，选择“关闭所有”，关闭配置项弹窗
+    // bug121123  禁用Alt+f4组合键关闭 配置包窗口
+    // Alt+F4按键是由系统驱动实现的，根本无法捕获这个事件
+    // Alt+F4 触发关闭事件，则忽略关闭事件即可
+    event->ignore();
+}
+
 /**
  * @brief AptConfigMessage::clearTexts  清除输入框和信息框的内容
  */
