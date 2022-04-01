@@ -1112,6 +1112,18 @@ void DebListModel::installNextDeb()
         bool isAuth = checkAuthorization("com.deepin.pkexec.deepin-deb-installer-dependsInstall", QCoreApplication::applicationPid());
         if (isAuth) {
             m_procInstallConfig->start("sudo", {"sudo", "-S", "dpkg", "-i", sPackageName}, {}, 0, false);
+        } else {
+            // 取消授权框
+            emit signalAppendOutputInfo("Error executing command as another user: Request dismissed");                                 //输出安装错误的原因
+            m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
+
+            refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
+
+            // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+            m_packageOperateStatus[m_operatingPackageMd5] = Failed;
+            m_packageFailCode.insert(m_operatingPackageMd5, 0);       //保存失败原因
+            m_packageFailReason.insert(m_operatingPackageMd5, "");
+            bumpInstallIndex();
         }
     } else {
         installDebs();                                      //普通安装
@@ -1348,7 +1360,7 @@ void DebListModel::slotConfigInputWrite(QString str)
 void DebListModel::slotCheckInstallStatus(QString installInfo)
 {
     // 判断当前的信息是否是错误提示信息
-    if (installInfo.contains("Cannot run program deepin-deb-installer-dependsInstall: No such file or directory")) {
+    if (installInfo.contains("Error executing command as another user: Request dismissed")) {
         emit signalAppendOutputInfo(installInfo);                                 //输出安装错误的原因
         m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
 

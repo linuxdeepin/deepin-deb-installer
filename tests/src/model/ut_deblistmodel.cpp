@@ -1039,7 +1039,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkInstallStatus)
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
 
-    QString str = "Cannot run program deepin-deb-installer-dependsInstall: No such file or directory";
+    QString str = "Error executing command as another user: Request dismissed";
     m_debListModel->slotCheckInstallStatus(str);
     EXPECT_EQ(DebListModel::WorkerFinished, m_debListModel->m_workerStatus);
     EXPECT_EQ(1, m_debListModel->m_packageFailCode.size());
