@@ -37,22 +37,8 @@
 #include <QApt/Backend>
 #include <QApt/Package>
 
-#include <polkit-qt5-1/PolkitQt1/Authority>
-
 using namespace QApt;
-using namespace PolkitQt1;
 
-bool checkAuthorization(const QString &actionId, qint64 applicationPid)
-{
-    Authority::Result result;
-    result = Authority::instance()->checkAuthorizationSync(actionId, UnixProcessSubject(applicationPid), /// 第一个参数是需要验证的action，和规则文件写的保持一致
-                                                           Authority::AllowUserInteraction);
-    if (result == Authority::Yes) {
-        return true;
-    } else {
-        return false;
-    }
-}
 /**
  * @brief isDpkgRunning 判断当前dpkg 是否在运行
  * @return
@@ -1107,24 +1093,7 @@ void DebListModel::installNextDeb()
     QStringList strFilePath;
     if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
         rmdir();                                            //删除临时路径
-//        m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false);
-        // bug 121345配置授权弹窗文案需修改与需求一致
-        bool isAuth = checkAuthorization("com.deepin.pkexec.deepin-deb-installer-dependsInstall", QCoreApplication::applicationPid());
-        if (isAuth) {
-            m_procInstallConfig->start("sudo", {"sudo", "-S", "dpkg", "-i", sPackageName}, {}, 0, false);
-        } else {
-            // 取消授权框
-            emit signalAppendOutputInfo("Error executing command as another user: Request dismissed");                                 //输出安装错误的原因
-            m_workerStatus = WorkerFinished;                            //刷新包安装器的工作状态
-
-            refreshOperatingPackageStatus(Failed);                      //刷新当前包的操作状态
-
-            // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-            m_packageOperateStatus[m_operatingPackageMd5] = Failed;
-            m_packageFailCode.insert(m_operatingPackageMd5, 0);       //保存失败原因
-            m_packageFailReason.insert(m_operatingPackageMd5, "");
-            bumpInstallIndex();
-        }
+        m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false);
     } else {
         installDebs();                                      //普通安装
     }

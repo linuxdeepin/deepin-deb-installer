@@ -19,7 +19,7 @@
 
 InstallDebThread::InstallDebThread()
 {
-    m_proc = new QProcess;
+    m_proc = new KProcess;
     connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
 }
@@ -101,12 +101,19 @@ void InstallDebThread::run()
             }
 
             system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-            m_proc->start("sudo", QStringList() << "apt-get"
-                          << "install"
-                          << depends
-                          << "deepin-wine-helper"
-                          << "--fix-missing"
-                          << "-y");
+//            m_proc->start("sudo", QStringList() << "apt-get"
+//                          << "install"
+//                          << depends
+//                          << "deepin-wine-helper"
+//                          << "--fix-missing"
+//                          << "-y");
+            m_proc->setProgram("sudo", QStringList() << "apt-get"
+                               << "install"
+                               << depends
+                               << "deepin-wine-helper"
+                               << "--fix-missing"
+                               << "-y");
+            m_proc->start();
             m_proc->waitForFinished(-1);
             m_proc->close();
         } else if (m_listParam[0] == "InstallConfig") {
@@ -129,7 +136,9 @@ void InstallDebThread::run()
                 getDescription(debPath);
 
                 //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+//                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+                m_proc->setProgram("sudo", QStringList() <<  "-S" <<  "dpkg" << "-i" << debPath);
+                m_proc->start();
                 m_proc->waitForFinished(-1);
 
                 QDir filePath(TEMPLATE_DIR);

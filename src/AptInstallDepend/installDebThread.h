@@ -22,6 +22,7 @@
 #include <QProcess>
 #include <QFile>
 #include <QDir>
+#include "kprocess.h"
 
 #define TEMPLATE_DIR "/tmp/DEBIAN_TMP"
 #define TEMPLATE_PATH "/tmp/DEBIAN_TMP/templates"
@@ -42,7 +43,7 @@ public slots:
     void on_readoutput();
 
 private:
-    QProcess *m_proc;
+    KProcess *m_proc;
     QStringList m_listParam;
     QList<QString> m_listDescribeData;
 
