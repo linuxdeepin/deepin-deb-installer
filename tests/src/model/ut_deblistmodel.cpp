@@ -897,7 +897,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex)
     m_debListModel->m_packageMd5.append("\n");
     m_debListModel->m_packageMd5.append("1");
     m_debListModel->bumpInstallIndex();
-    EXPECT_EQ("1", m_debListModel->m_operatingPackageMd5);
+    EXPECT_EQ("", m_debListModel->m_operatingPackageMd5);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInstallFinish)

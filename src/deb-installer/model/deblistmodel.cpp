@@ -492,7 +492,7 @@ void DebListModel::bumpInstallIndex()
     if (m_currentTransaction.isNull()) {
         qWarning() << "previous transaction not finished";
     }
-    if (++m_operatingIndex == m_packagesManager->m_preparedPackages.size()) {
+    if (++m_operatingIndex >= m_packagesManager->m_preparedPackages.size()) {
         m_workerStatus = WorkerFinished;                                        //设置包安装器的工作状态为Finish
         emit signalWorkerFinished();                                                  //发送安装完成信号
         emit signalWorkerProgressChanged(100);                                        //修改安装进度
@@ -1301,9 +1301,6 @@ void DebListModel::slotConfigInstallFinish(int installResult)
 void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isCommandExec)
 {
     QString tmp = QByteArray(buffer, length);                  //获取配置读取到的信息
-
-    //检查命令返回的结果，如果是 没有发现命令。直接报错，安装失败
-    slotCheckInstallStatus(tmp);
 
     tmp.remove(QChar('"'), Qt::CaseInsensitive);
     tmp.remove(QChar('\n'), Qt::CaseInsensitive);
