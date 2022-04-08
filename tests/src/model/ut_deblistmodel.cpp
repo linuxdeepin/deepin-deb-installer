@@ -1166,9 +1166,10 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotNoDigitalSignature)
     QStringList list;
     list << "/";
     m_debListModel->slotAppendPackage(list);
+    m_debListModel->m_isDevelopMode = true;
     m_debListModel->slotNoDigitalSignature();
-    m_debListModel->m_operatingIndex = 0;
-    EXPECT_TRUE(m_debListModel->m_operatingIndex >= m_debListModel->m_packagesManager->m_preparedPackages.size() - 1);
+    EXPECT_EQ(1, m_debListModel->m_packageFailCode.size());
+
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkPrepare)
