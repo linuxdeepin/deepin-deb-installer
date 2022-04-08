@@ -924,8 +924,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
     m_debListModel->m_packageOperateStatus.insert("deb", QApt::CommitError);
 
     stub.set(ADDR(Konsole::Pty, receivedData), model_readAllStandardOutput);
-    const char *buffer = "111111"; int length = sizeof(buffer); bool isCommandExec = false;
-    m_debListModel->slotConfigReadOutput(buffer, length, isCommandExec);
+    // asan检查 内存泄露
+    QString buffer = "11111111";
+    int length = sizeof(buffer);
+    bool isCommandExec = false;
+    m_debListModel->slotConfigReadOutput(buffer.toStdString().c_str(), length, isCommandExec);
     EXPECT_EQ(DebListModel::PackageOperationStatus::Operating, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
 }
 
