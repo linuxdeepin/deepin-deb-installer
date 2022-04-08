@@ -714,6 +714,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosCommunity)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_default)
 {
+    stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_default);
     m_debListModel->checkSystemVersion();
     EXPECT_TRUE(m_debListModel->m_isDevelopMode);
 }
