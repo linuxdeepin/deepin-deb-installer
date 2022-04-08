@@ -1305,15 +1305,18 @@ void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isC
     tmp.remove(QChar('"'), Qt::CaseInsensitive);
     tmp.remove(QChar('\n'), Qt::CaseInsensitive);
 
-    //获取到当前正在安装配置
-    emit signalStartInstall();
-    refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
-    configWindow->show();                                        //显示配置窗口
+    // 取消授权弹窗，则不显示配置安装界面
+    if (!tmp.contains("Error executing command as another user: Request dismissed")) {
+        //获取到当前正在安装配置
+        emit signalStartInstall();
+        refreshOperatingPackageStatus(Operating);                                       //刷新当前的操作状态
+        configWindow->show();                                        //显示配置窗口
 
-    int iCutoutNum = tmp.size();
-    if (iCutoutNum > 0) {
-        emit signalAppendOutputInfo(tmp);   // 原本安装信息界面信息也要添加，以备安装完成后查看安装信息
-        configWindow->appendTextEdit(tmp);  // 配置包安装信息界面显示配置信息
+        int iCutoutNum = tmp.size();
+        if (iCutoutNum > 0) {
+            emit signalAppendOutputInfo(tmp);   // 原本安装信息界面信息也要添加，以备安装完成后查看安装信息
+            configWindow->appendTextEdit(tmp);  // 配置包安装信息界面显示配置信息
+        }
     }
 }
 
