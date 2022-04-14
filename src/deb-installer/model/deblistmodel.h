@@ -20,6 +20,7 @@
 #define DEBLISTMODEL_H
 
 #include "manager/packagesmanager.h"
+#include "process/Pty.h"
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -462,7 +463,7 @@ public slots:
     /**
      * @brief slotConfigReadOutput 处理配置包的输出并显示
      */
-    void slotConfigReadOutput();
+    void slotConfigReadOutput(const char *buffer, int length, bool isCommandExec);
 
     /**
      * @brief slotConfigInstallFinish 配置结束
@@ -634,7 +635,7 @@ private:
 
     /**
      * @brief 数字签名校验失败 弹窗处理的槽函数
-     * 
+     *
      * @param errorCode 错误原因代码
      */
     void digitalVerifyFailed(ErrorCode errorCode);
@@ -675,7 +676,7 @@ private:
 
     /**
      * @brief Get the Package Md5 object
-     * 
+     *
      * @param packagesMD5 所有包的md5的列表
      */
     void getPackageMd5(const QList<QByteArray> &packagesMD5);
@@ -742,10 +743,10 @@ private:
     QMap<QByteArray, int> m_packageFailCode = {};
 
     //FailReason , trans返回的详细错误信息
-    QMap<QByteArray, QString> m_packageFailReason= {};
+    QMap<QByteArray, QString> m_packageFailReason = {};
 
     // 配置安装进程
-    QProcess *m_procInstallConfig = {};
+    Konsole::Pty *m_procInstallConfig = {};
 
     // 配置的临时目录
     const QString tempPath = "/tmp/DEBIAN";
