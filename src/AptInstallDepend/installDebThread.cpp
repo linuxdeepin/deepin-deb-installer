@@ -19,7 +19,7 @@
 
 InstallDebThread::InstallDebThread()
 {
-    m_proc = new QProcess;
+    m_proc = new KProcess;
     connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
 }
@@ -37,7 +37,10 @@ void InstallDebThread::setParam(QStringList tParam)
 void InstallDebThread::getDescription(QString debPath)
 {
     QString str = "dpkg -e " + debPath + " " + TEMPLATE_DIR;
-    system(str.toUtf8());
+    // system() 存在可控命令参数注入漏洞，即使拼接也存在命令分隔符（特殊字符）机制，因此更换方式去执行命令
+    QProcess process;
+    process.start(str);
+    process.waitForFinished(-1);
 
     QFile file;
     file.setFileName(TEMPLATE_PATH);
@@ -98,12 +101,19 @@ void InstallDebThread::run()
             }
 
             system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-            m_proc->start("sudo", QStringList() << "apt-get"
-                          << "install"
-                          << depends
-                          << "deepin-wine-helper"
-                          << "--fix-missing"
-                          << "-y");
+//            m_proc->start("sudo", QStringList() << "apt-get"
+//                          << "install"
+//                          << depends
+//                          << "deepin-wine-helper"
+//                          << "--fix-missing"
+//                          << "-y");
+            m_proc->setProgram("sudo", QStringList() << "apt-get"
+                               << "install"
+                               << depends
+                               << "deepin-wine-helper"
+                               << "--fix-missing"
+                               << "-y");
+            m_proc->start();
             m_proc->waitForFinished(-1);
             m_proc->close();
         } else if (m_listParam[0] == "InstallConfig") {
@@ -115,17 +125,20 @@ void InstallDebThread::run()
             if (debPath.contains(" ")
                     || debPath.contains("&")
                     || debPath.contains(";")
-                    || debPath.contains("|")) {
+                    || debPath.contains("|")
+                    || debPath.contains("`")) {  //过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
                 debPath = SymbolicLink(debPath, "installPackage");
             }
 
             if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
-                qDebug() << "StartInstallAptConfig";
+                qInfo() << "StartInstallAptConfig";
 
                 getDescription(debPath);
 
                 //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+//                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+                m_proc->setProgram("sudo", QStringList() <<  "-S" <<  "dpkg" << "-i" << debPath);
+                m_proc->start();
                 m_proc->waitForFinished(-1);
 
                 QDir filePath(TEMPLATE_DIR);

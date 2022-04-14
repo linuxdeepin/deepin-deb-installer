@@ -17,7 +17,8 @@
 #ifndef INSTALLDEBTHREAD_H
 #define INSTALLDEBTHREAD_H
 
-//#include <QObject>
+#include "kprocess.h"
+
 #include <QThread>
 #include <QProcess>
 #include <QFile>
@@ -42,7 +43,7 @@ public slots:
     void on_readoutput();
 
 private:
-    QProcess *m_proc;
+    KProcess *m_proc = nullptr;
     QStringList m_listParam;
     QList<QString> m_listDescribeData;
 
