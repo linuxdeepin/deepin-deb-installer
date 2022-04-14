@@ -107,6 +107,7 @@ void DebInstaller::initTitleBar()
 {
     //title bar settings
     DTitlebar *tb = titlebar();
+
     if (tb) {
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
@@ -180,7 +181,7 @@ void DebInstaller::disableCloseAndExit()
 {
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
     DTitlebar *tbar = this->titlebar();
-    if(tbar){
+    if (tbar) {
         tbar->setQuitMenuDisabled(true);
     }
 
@@ -193,7 +194,7 @@ void DebInstaller::enableCloseAndExit()
                                 ~Qt::WindowCloseButtonHint);
 
     DTitlebar *tbar = this->titlebar();
-    if(tbar){
+    if (tbar) {
         tbar->setQuitMenuDisabled(false);
     }
 }
@@ -318,7 +319,7 @@ void DebInstaller::slotShowPkgRemovedMessage(QString packageName)
 
 void DebInstaller::slotShowUninstallConfirmPage()
 {
-    m_fileListModel->setWorkerStatus( DebListModel::WorkerUnInstall);                       //刷新当前安装器的工作状态
+    m_fileListModel->setWorkerStatus(DebListModel::WorkerUnInstall);                        //刷新当前安装器的工作状态
 
     this->setAcceptDrops(false);                                                                //卸载页面不允许添加/拖入包
 
@@ -502,7 +503,7 @@ void DebInstaller::slotSetEnableButton(bool bButtonEnabled)
     if (m_packageAppending)
         return;
     //Set button enabled after installation canceled
-    if (2 == m_dragflag ) {//单包安装按钮的启用与禁用
+    if (2 == m_dragflag) { //单包安装按钮的启用与禁用
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         if (singlePage)
             singlePage->setEnableButton(bButtonEnabled);

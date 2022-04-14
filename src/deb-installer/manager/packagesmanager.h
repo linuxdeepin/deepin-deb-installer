@@ -602,7 +602,7 @@ private:
 
     QList<QVector<QString>> m_orDepends; //存储或依赖关系
 
-    QList<QVector<QString>> m_checkedOrDepends; //存储还未检测的或依赖关系
+    QList<QVector<QString>> m_unCheckedOrDepends; //存储还未检测的或依赖关系
 
     QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
 

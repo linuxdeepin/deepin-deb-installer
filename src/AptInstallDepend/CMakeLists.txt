@@ -39,14 +39,25 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -z relro -z now -z noexecstack -pie")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fstack-protector-all")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 
-file(GLOB_RECURSE AUTH_CPP_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
+#add process directories
+string(REGEX REPLACE "(.*)/(.*)" "\\1" PROJECT_INIT_PATH  ${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_INIT_PATH}/deb-installer/process)
+
+file(GLOB_RECURSE AUTH_CPP_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp ${PROJECT_INIT_PATH}/deb-installer/process/*.cpp)
 add_executable (${EXE_NAME}
     ${AUTH_CPP_FILES}
 )
 
 # Find the library
+find_package(PkgConfig REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Gui REQUIRED)
 find_package(Qt5Core REQUIRED)
 set(CMAKE_INSTALL_PREFIX /usr)
 # Install files
 install(TARGETS ${EXE_NAME} DESTINATION bin)
 target_link_libraries(${EXE_NAME} ${LINK_LIBS} )
+target_link_libraries(${EXE_NAME}
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Gui)

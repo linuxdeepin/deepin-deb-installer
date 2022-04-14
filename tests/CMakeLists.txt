@@ -109,6 +109,8 @@ find_package(DtkGui REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Test REQUIRED)
+
+
 set(LINK_LIBS
     Qt5::Core
     Qt5::Widgets
@@ -146,6 +148,7 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/manager/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/model/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/utils/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/process/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/widgets/*.cpp
     )
