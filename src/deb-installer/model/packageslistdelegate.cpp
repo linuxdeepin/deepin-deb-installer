@@ -291,8 +291,6 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);       //将提示绘制到item上
 
         painter->restore();
-    } else {
-        DStyledItemDelegate::paint(painter, option, index);
     }
 }
 
