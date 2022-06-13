@@ -49,6 +49,13 @@ class AddPackageThread;
  */
 Backend *init_backend();
 
+struct DependInfo {
+    QString packageName; //依赖的包名称
+    QString version; //依赖的包的版本
+};
+
+typedef QPair<QList<DependInfo>, QList<DependInfo>> DependsPair;
+
 class PackagesManager : public QObject
 {
     Q_OBJECT
@@ -85,6 +92,12 @@ public:
      * @return
      */
     static bool dependencyVersionMatch(const int result, const RelationType relation);
+
+    /**
+     * @brief selectedIndexRow 当前选择安装包列表的行
+     * @param row 行号
+     */
+    void selectedIndexRow(int row);
 
 public slots:
     /**
@@ -164,7 +177,19 @@ signals:
      * @brief refreshFileChoosePage 刷新首页
      */
     void signalRefreshFileChoosePage();
-//// 后端状态相关函数
+
+    /**
+     * @brief signalSingleDependPackages
+     * @param breakPackages
+     */
+    void signalSingleDependPackages(DependsPair dependPackages, bool installWineDepends);
+
+    /**
+     * @brief signalMultDependPackages
+     * @param breakPackages
+     */
+    void signalMultDependPackages(DependsPair dependPackages, bool installWineDepends);
+    //// 后端状态相关函数
 public:
 
     /**
@@ -243,6 +268,14 @@ public:
      * @return 包的依赖状态
      */
     PackageDependsStatus getPackageDependsStatus(const int index);
+
+    /**
+     * @brief getPackageOrDepends 解析或依赖关系
+     * @param package 包的路径或者包名
+     * @param arch  架构
+     * @param flag  标记是依赖还是安装包
+     */
+    void getPackageOrDepends(const QString &package, const QString &arch, bool flag);
 
     /**
      * @brief getPackageMd5 获取包的md5值
@@ -393,6 +426,35 @@ private:
     void addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum);
 
     /**
+     * @brief swapPackages   对列表中第一个包位置交换
+     * @param packagePath    包的路径
+     */
+    void swapPackages(const QString &packagePath);
+
+    /**
+     * @brief swappedPackageIndex 获取当前包要插入的位置
+     * @param packagePath     包的路径
+     * @return
+     */
+    int swappedPackageIndex(const QString &packagePath);
+
+    /**
+     * @brief getAllDepends 获取安装包所有依赖
+     * @param depends       依赖列表
+     * @param architecture  安装包架构
+     * @return
+     */
+    QList<QString> getAllDepends(const QList<DependencyItem> &depends,QString architecture);
+
+    /**
+     * @brief getAllDepends 获取依赖包所有依赖
+     * @param packageName   依赖包包名
+     * @param architecture  架构
+     * @return
+     */
+    QList<QString> getAllDepends(const QString &packageName,QString architecture);
+
+    /**
      * @brief refreshPage 刷新当前的页面
      * @param pkgCount  需要添加的包的数量
      */
@@ -460,7 +522,9 @@ private:
     QList<QString> m_preparedPackages       = {};   
 
     //存放包MD5的集合       
-    QSet<QByteArray> m_appendedPackagesMd5  = {};     
+    QSet<QByteArray> m_appendedPackagesMd5  = {};
+
+    QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
 
     //包MD5与下标绑定的list
     QList<QByteArray> m_packageMd5          = {};
@@ -490,17 +554,31 @@ private:
      */
     QMap<QByteArray, int> m_packageInstallStatus = {};
 
+    QByteArray m_currentPkgMd5; //当前包的md5
+
+    /**
+     * @brief m_dependsPackages  包依赖关系的map
+     * QPair<QList<dependInfo>, QList<dependInfo>> 仓库可获取依赖与仓库不可获取依赖
+     * 与md5进行绑定
+     */
+    QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> m_dependsPackages;
+    DependInfo m_dinfo; //依赖包的包名及版本
+
     // wine应用处理的下标
-    int m_DealDependIndex                        = -1; 
-    
-    //下载依赖的线程            
+    int m_DealDependIndex = -1;
+
+    //下载依赖的线程
     DealDependThread *m_installWineThread        = nullptr;    
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记
      * 将依赖下载的标记修改为md5sum  与包绑定 而非下标
      */
-    QList<QByteArray> m_dependInstallMark        = {};         
+    QList<QByteArray> m_dependInstallMark = {};
+
+    QPair<QList<DependInfo>, QList<DependInfo>> m_pair; //存储available及broken依赖
+
+    QList<QString> m_allDependsList; //存储当前添加的包的所有依赖
 
 private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";     //软链接临时路径
@@ -508,14 +586,27 @@ private:
 private:
     AddPackageThread *m_pAddPackageThread = nullptr;    //添加包的线程
 
-    bool installWineDepends               = false;
+    bool installWineDepends = false;
 
-    int m_validPackageCount               = 0;
+    bool isDependsExists = false;
 
-    qint64 dependsStatusTotalTime         = 0;
+    int m_validPackageCount = 0;
 
+    qint64 dependsStatusTotalTime = 0;
 
-    QStringList m_blackApplicationList    = {};         //域管黑名单
+    QString m_brokenDepend = "";
+
+    QString m_currentPkgName = "";
+
+    QStringList m_blackApplicationList = {}; //域管黑名单
+
+    QList<QVector<QString>> m_orDepends; //存储或依赖关系
+
+    QList<QVector<QString>> m_unCheckedOrDepends; //存储还未检测的或依赖关系
+
+    QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
+
+    QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
 };
 
 #endif  // PACKAGESMANAGER_H

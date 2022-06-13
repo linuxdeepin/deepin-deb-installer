@@ -22,12 +22,12 @@
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
 
+#include <DLabel>
+
 #include <QApplication>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QVBoxLayout>
-
-#include <DLabel>
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
@@ -39,6 +39,8 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_centralLayout(new QVBoxLayout())
     , m_appsListView(new PackagesListView(this))
     , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
+    , m_showDependsView(new InstallProcessInfoView(440, 170, this))
+    , m_showDependsButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show dependencies"), tr("Collapse", "button"), this))
     , m_installProgress(nullptr)
     , m_progressAnimation(nullptr)
     , m_infoControlButton(new InfoControlButton(tr("Show details"), tr("Collapse", "button"), this))
@@ -46,7 +48,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
 
-      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -126,6 +128,18 @@ void MultipleInstallPage::initContentLayout()
 #ifdef SHOWBGCOLOR
     m_contentFrame->setStyleSheet("QFrame{background: cyan}");
 #endif
+}
+
+void MultipleInstallPage::initPkgDependsInfoView()
+{
+    m_showDependsView->setVisible(false);
+    m_showDependsButton->setVisible(false);
+    m_showDependsView->setAcceptDrops(false); //不接受拖入的数据
+    m_showDependsView->setMinimumHeight(200); //设置高度
+    m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_contentLayout->addWidget(m_showDependsButton);
+    m_contentLayout->addSpacing(2);
+    m_contentLayout->addWidget(m_showDependsView);
 }
 
 void MultipleInstallPage::initUI()
@@ -241,7 +255,9 @@ void MultipleInstallPage::initUI()
     btnsFrame->setLayout(btnsFrameLayout);
 
     m_contentLayout->addWidget(m_appsListViewBgFrame, Qt::AlignHCenter);                        //主布局添加listView frame并居中
-    m_contentLayout->addSpacing(10);
+    m_contentLayout->addSpacing(5);
+    initPkgDependsInfoView();
+    m_contentLayout->addSpacing(5);
     m_contentLayout->addWidget(m_infoControlButton);                                            //主布局添加infoControlButton
     m_contentLayout->setAlignment(m_infoControlButton, Qt::AlignHCenter);                       //居中显示infoControlButton
     m_contentLayout->addWidget(m_installProcessInfoView);                                       //添加详细信息框
@@ -299,6 +315,11 @@ void MultipleInstallPage::initConnections()
     //详细信息收缩
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &MultipleInstallPage::slotHideInfo);
 
+    // showDependsButton的展开与收缩
+    connect(m_showDependsButton, &InfoControlButton::expand, this, &MultipleInstallPage::slotShowDependsInfo);
+
+    connect(m_showDependsButton, &InfoControlButton::shrink, this, &MultipleInstallPage::slotHideDependsInfo);
+
     //开始安装
     connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::slotInstallPackages);
 
@@ -327,6 +348,14 @@ void MultipleInstallPage::initConnections()
 
     //一个包安装结束后 listView滚动到其在listview中的位置
     connect(m_debListModel, &DebListModel::signalChangeOperateIndex, this, &MultipleInstallPage::slotAutoScrollInstallList);
+
+    //点击安装包列表时，向后端传递当前选中行
+    connect(m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [=](int row) {
+        m_debListModel->selectedIndexRow(row);
+    });
+
+    //批量包依赖关系显示
+    connect(m_debListModel, &DebListModel::signalMultDependPackages, this, &MultipleInstallPage::slotDependPackages);
 }
 
 void MultipleInstallPage::slotWorkerFinshed()
@@ -376,11 +405,14 @@ void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 
 void MultipleInstallPage::slotRequestRemoveItemClicked(const QModelIndex &index)
 {
-    if (!m_debListModel->isWorkerPrepare()) return;     //当前未处于准备阶段，不允许删除
+    if (!m_debListModel->isWorkerPrepare())
+        return;     //当前未处于准备阶段，不允许删除
 
     const int row = index.row();                          //要删除的包的下标转换
 
-    emit signalRequestRemovePackage(row);                       //发送删除信号
+    m_showDependsButton->setVisible(false);
+
+    m_debListModel->removePackage(row); //删除指定包
 }
 
 void MultipleInstallPage::slotShowInfo()
@@ -411,6 +443,48 @@ void MultipleInstallPage::slotHiddenCancelButton()
     m_appsListView->setRightMenuShowStatus(false);      //安装开始时，不允许调用右键菜单
     m_backButton->setVisible(false);                    //隐藏返回按钮
     m_installButton->setVisible(false);                 //隐藏安装按钮
+    m_showDependsButton->setVisible(false);
+}
+
+void MultipleInstallPage::slotShowDependsInfo()
+{
+    m_showDependsView->setVisible(true);
+    m_appsListView->setFocusPolicy(Qt::NoFocus); //详细信息出现后 设置appListView不接受焦点
+    m_contentLayout->setContentsMargins(20, 0, 20, 0); //设置上下左右边距
+    m_appsListViewBgFrame->setVisible(false); //隐藏applistView
+    m_appsListView->setVisible(false);
+}
+
+void MultipleInstallPage::slotHideDependsInfo()
+{
+    m_showDependsView->setVisible(false);
+    m_appsListView->setFocusPolicy(Qt::TabFocus); //隐藏详细信息后，设置appListView的焦点策略
+    m_contentLayout->setContentsMargins(10, 0, 10, 0); //设置边距
+    m_appsListViewBgFrame->setVisible(true); //显示appListView
+    m_appsListView->setVisible(true);
+}
+
+void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
+{
+    // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
+    m_showDependsView->clearText();
+    if (!(dependPackages.second.size() > 0 && !installWineDepends)) {
+        m_showDependsButton->setVisible(false);
+        return;
+    }
+    m_showDependsButton->setVisible(true);
+    if (dependPackages.first.size() > 0) {
+        m_showDependsView->appendText(tr("Dependencies in the repository"));
+        for (int i = 0; i < dependPackages.first.size(); i++)
+            m_showDependsView->appendText(dependPackages.first.at(i).packageName + "   " + dependPackages.first.at(i).version);
+        m_showDependsView->appendText(tr(""));
+    }
+    if (dependPackages.second.size() > 0) {
+        m_showDependsView->appendText(tr("Missing dependencies"));
+        for (int i = 0; i < dependPackages.second.size(); i++)
+            m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
+    }
+    m_showDependsView->setTextCursor(QTextCursor::Start);
 }
 
 void MultipleInstallPage::setEnableButton(bool bEnable)

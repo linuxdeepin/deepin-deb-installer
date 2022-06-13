@@ -24,5 +24,6 @@
         <file>icons/deepin/builtin/light/icons/di_popwarning_32px.svg</file>
         <file>icons/deepin/builtin/light/icons/di_split_line_220px.svg</file>
         <file>icons/deepin/builtin/light/icons/di_warning_16px.svg</file>
+        <file>data/deepin-deb-installer.json</file>
     </qresource>
 </RCC>

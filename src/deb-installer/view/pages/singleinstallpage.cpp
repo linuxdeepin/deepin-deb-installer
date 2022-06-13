@@ -26,6 +26,7 @@
 #include <QTextLayout>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QFontMetrics>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -53,7 +54,9 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
     , m_installProcessView(new InstallProcessInfoView(440, 170, this))
+    , m_showDependsView(new InstallProcessInfoView(440, 170, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse", "button")))
+    , m_showDependsButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show dependencies"), tr("Collapse", "button")))
     , m_installButton(new DPushButton(this))
     , m_uninstallButton(new DPushButton(this))
     , m_reinstallButton(new DPushButton(this))
@@ -75,6 +78,7 @@ void SingleInstallPage::initUI()
     int fontsize = fontinfo.pixelSize();        //获得字体大小
     initContentLayout();                        //初始化主布局
     initPkgInfoView(fontsize);                  //初始化包信息布局
+    initPkgDependsInfoView(); //初始化依赖显示布局
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
@@ -202,7 +206,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *pkgNameValueLayout = new QVBoxLayout();        //实际获取到包名
     pkgNameValueLayout->setSpacing(0);                              //设置控件间距
     pkgNameValueLayout->setContentsMargins(0, 0, 0, 0);
-    pkgNameValueLayout->addSpacing(4 + 4);                          //增加空间
+    pkgNameValueLayout->addSpacing(4); //增加空间
     pkgNameValueLayout->addWidget(m_packageName);                   //添加控件
 
     QHBoxLayout *pkgNameLayout = new QHBoxLayout();             //包名的控件布局
@@ -255,8 +259,8 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
-    Utils::bindFontBySizeAndWeight(packageVersion, mediumFontFamily, 14, QFont::Medium);        //设置版本提示label的字体大小和样式
-    Utils::bindFontBySizeAndWeight(packageName, mediumFontFamily, 14, QFont::Medium);           //设置包名提示Label的字体大小和样式
+    Utils::bindFontBySizeAndWeight(packageVersion, mediumFontFamily, 14, QFont::DemiBold);        //设置版本提示label的字体大小和样式
+    Utils::bindFontBySizeAndWeight(packageName, mediumFontFamily, 14, QFont::DemiBold);           //设置包名提示Label的字体大小和样式
     Utils::bindFontBySizeAndWeight(m_packageName, normalFontFamily, 14, QFont::ExtraLight);     //设置实际包名label的字体大小和样式
     Utils::bindFontBySizeAndWeight(m_packageVersion, normalFontFamily, 14, QFont::ExtraLight);  //设置实际版本Label的字体大小和样式
 
@@ -270,24 +274,13 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 void SingleInstallPage::initTabOrder()
 {
     // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
-    if(m_installButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
-    }
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);        //当前包首次安装
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
+    QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
+    QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
 
-    if(m_backButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);           //安装完成或安装失败
-        if(m_doneButton->isVisible()){
-            QWidget::setTabOrder(m_backButton, m_doneButton);                                   //安装完成场景
-        }
-        if(m_confirmButton->isVisible()){
-            QWidget::setTabOrder(m_backButton, m_confirmButton);                                //不能安装场景
-        }
-    }
-
-    if(m_uninstallButton->isVisible()){
-        QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
-        QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
-    }
+    QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);      //当前场景为重新安装
+    QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                         //重新安装场景
 }
 
 void SingleInstallPage::initButtonFocusPolicy()
@@ -450,11 +443,27 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addWidget(btnsFrame);
 }
 
+void SingleInstallPage::initPkgDependsInfoView()
+{
+    m_showDependsView->setVisible(false);
+    m_showDependsButton->setVisible(false);
+    m_showDependsView->setAcceptDrops(false); //不接受拖入的数据
+    m_showDependsView->setMinimumHeight(200); //设置高度
+    m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_contentLayout->addWidget(m_showDependsButton);
+    m_contentLayout->addSpacing(2);
+    m_contentLayout->addWidget(m_showDependsView);
+}
+
 void SingleInstallPage::initConnections()
 {
     // infoControlButton的展开与收缩
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideInfomation);
+
+    // showDependsButton的展开与收缩
+    connect(m_showDependsButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowDependsInfo);
+    connect(m_showDependsButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideDependsInfo);
 
     //各个按钮的触发事件
     connect(m_installButton, &DPushButton::clicked, this, &SingleInstallPage::slotInstall);
@@ -469,6 +478,8 @@ void SingleInstallPage::initConnections()
 
     //transaction 进度改变 进度条进度改变
     connect(m_packagesModel, &DebListModel::signalTransactionProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
+
+    connect(m_packagesModel, &DebListModel::signalSingleDependPackages, this, &SingleInstallPage::slotDependPackages);
 
     //安装结束
     connect(m_packagesModel, &DebListModel::signalWorkerFinished, this, &SingleInstallPage::slotWorkerFinished);
@@ -551,6 +562,7 @@ void SingleInstallPage::slotInstall()
     //安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
 
     //重置工作状态
@@ -576,6 +588,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_infoControlButton->setVisible(true);
     m_progressFrame->setVisible(true);
+    m_showDependsButton->setVisible(false);
 
     //重置工作状态
     m_operate = Uninstall;
@@ -599,10 +612,23 @@ void SingleInstallPage::slotHideInfomation()
     m_itemInfoFrame->setVisible(true);
 }
 
+void SingleInstallPage::slotShowDependsInfo()
+{
+    m_showDependsView->setVisible(true);
+    m_itemInfoFrame->setVisible(false);
+}
+
+void SingleInstallPage::slotHideDependsInfo()
+{
+    m_showDependsView->setVisible(false);
+    m_itemInfoFrame->setVisible(true);
+}
+
 void SingleInstallPage::slotShowInfo()
 {
     //显示进度信息
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
     m_progress->setValue(0);
 
@@ -675,9 +701,13 @@ void SingleInstallPage::slotWorkerFinished()
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
-        if (m_operate == Install || m_operate == Reinstall)
-            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());   //添加安装失败原因的提示
-        else {
+        if (m_operate == Install || m_operate == Reinstall){
+            //添加安装失败原因的提示
+            QFont font;
+            QFontMetrics elideFont(font);
+            m_tipsLabel->setText(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, m_tipsLabel->width()-100));//修复授权取消后无提示的问题
+            m_tipsLabel->setToolTip(index.data(DebListModel::PackageFailReasonRole).toString());
+        } else {
             m_tipsLabel->setText(tr("Uninstall Failed"));                                       //卸载只显示卸载失败
         }
     } else {
@@ -697,6 +727,27 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     }
 
     m_progress->setValue(progress);             //进度增加
+}
+
+void SingleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
+{
+    // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
+    m_showDependsView->clearText();
+    if (!(dependPackages.second.size() > 0 && !installWineDepends))
+        return;
+    m_showDependsButton->setVisible(true);
+    if (dependPackages.first.size() > 0) {
+        m_showDependsView->appendText(tr("Dependencies in the repository"));
+        for (int i = 0; i < dependPackages.first.size(); i++)
+            m_showDependsView->appendText(dependPackages.first.at(i).packageName + "   " + dependPackages.first.at(i).version);
+        m_showDependsView->appendText(tr(""));
+    }
+    if (dependPackages.second.size() > 0) {
+        m_showDependsView->appendText(tr("Missing dependencies"));
+        for (int i = 0; i < dependPackages.second.size(); i++)
+            m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
+    }
+    m_showDependsView->setTextCursor(QTextCursor::Start);
 }
 
 /**
@@ -861,7 +912,6 @@ void SingleInstallPage::setAuthBefore()
             || dependsStat == DebListModel::ArchBreak   //添加架构不匹配的处理
 //            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
         ) {
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
