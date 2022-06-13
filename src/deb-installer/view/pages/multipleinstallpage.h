@@ -21,14 +21,15 @@
 #include "view/widgets/infocontrolbutton.h"
 #include "view/widgets/droundbgframe.h"
 #include "view/widgets/installprocessinfoview.h"
-
-#include <QPropertyAnimation>
-#include <QWidget>
+#include "manager/packagesmanager.h"
 
 #include <DPushButton>
 #include <DProgressBar>
 #include <DSpinner>
 #include <DCommandLinkButton>
+
+#include <QPropertyAnimation>
+#include <QWidget>
 
 class PackagesListView;
 class DebListModel;
@@ -121,6 +122,23 @@ private slots:
      */
     void slotHiddenCancelButton();
 
+    /**
+     * @brief slotShowDependsInfo 显示依赖关系的视图
+     */
+    void slotShowDependsInfo();
+
+    /**
+     * @brief slotHideDependsInfo  隐藏依赖关系的视图
+     */
+    void slotHideDependsInfo();
+
+    /**
+     * @brief slotDependPackages  缺失依赖显示
+     * @param dependPackages  依赖包存储
+     * @param installWineDepends 是否进入wine依赖配置
+     */
+    void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
+
 private:
 
     /**
@@ -137,6 +155,11 @@ private:
      * @brief initContentLayout 初始化中心layout
      */
     void initContentLayout();
+
+    /**
+     * @brief initPkgDependsInfoView 初始化依赖信息显示布局
+     */
+    void initPkgDependsInfoView();
 
     /**
      * @brief initTabOrder 初始化切换顺序
@@ -160,30 +183,31 @@ private:
 
 
 private:
+    DRoundBgFrame *m_appsListViewBgFrame = nullptr; //listView的背景frame 修改listView的背景样式
+    DebListModel *m_debListModel = nullptr; //listModel类
+    QWidget *m_contentFrame = nullptr; //applistview  infoControlButton的frame
+    QWidget *m_processFrame = nullptr; //process 的frame
+    QVBoxLayout *m_contentLayout = nullptr; //applistview  infoControlButton的布局
+    QVBoxLayout *m_centralLayout = nullptr; //主布局
 
-    DRoundBgFrame           *m_appsListViewBgFrame      = nullptr;  //listView的背景frame 修改listView的背景样式
-    DebListModel            *m_debListModel             = nullptr;  //listModel类
-    QWidget                 *m_contentFrame             = nullptr;  //applistview  infoControlButton的frame
-    QWidget                 *m_processFrame             = nullptr;  //process 的frame
-    QVBoxLayout             *m_contentLayout            = nullptr;  //applistview  infoControlButton的布局
-    QVBoxLayout             *m_centralLayout            = nullptr;  //主布局
+    PackagesListView *m_appsListView = nullptr; //listView
 
-    PackagesListView        *m_appsListView             = nullptr;  //listView
+    InstallProcessInfoView *m_installProcessInfoView = nullptr; //安装进程信息显示窗口
+    InstallProcessInfoView *m_showDependsView = nullptr; //依赖关系显示
 
-    InstallProcessInfoView  *m_installProcessInfoView   = nullptr;  //安装进程信息显示窗口
+    InfoControlButton *m_showDependsButton = nullptr; //显示依赖关系按钮
 
-    WorkerProgress          *m_installProgress          = nullptr;  //进度显示
-    QPropertyAnimation      *m_progressAnimation        = nullptr;  //进度动画
+    WorkerProgress *m_installProgress = nullptr; //进度显示
+    QPropertyAnimation *m_progressAnimation = nullptr; //进度动画
 
-    InfoControlButton       *m_infoControlButton        = nullptr;  //展开收缩控制按钮
-    DPushButton             *m_installButton            = nullptr;  //安装按钮
-    DPushButton             *m_backButton               = nullptr;  //返回文件选择窗口的按钮
-    DPushButton             *m_acceptButton             = nullptr;  //确认按钮
+    InfoControlButton *m_infoControlButton = nullptr; //展开收缩控制按钮
+    DPushButton *m_installButton = nullptr; //安装按钮
+    DPushButton *m_backButton = nullptr; //返回文件选择窗口的按钮
+    DPushButton *m_acceptButton = nullptr; //确认按钮
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
-    DCommandLinkButton      *m_tipsLabel                = nullptr;  //依赖安装提示按钮
-    DSpinner                *m_dSpinner                 = nullptr;  //依赖安装动画
-
+    DCommandLinkButton *m_tipsLabel = nullptr; //依赖安装提示按钮
+    DSpinner *m_dSpinner = nullptr; //依赖安装动画
 
     int m_index             = -1;                                   //当前添加的index
     bool m_upDown           = true;                                 //展开收缩的标识

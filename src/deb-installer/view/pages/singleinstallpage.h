@@ -21,6 +21,7 @@
 #include "view/widgets/infocontrolbutton.h"
 #include "view/widgets/installprocessinfoview.h"
 #include "view/widgets/debinfolabel.h"
+#include "manager/packagesmanager.h"
 
 #include <DLabel>
 #include <DProgressBar>
@@ -130,6 +131,11 @@ private:
     void initPkgInstallProcessView(int fontinfosize);
 
     /**
+     * @brief initPkgDependsInfoView 初始化依赖信息显示布局
+     */
+    void initPkgDependsInfoView();
+
+    /**
      * @brief initConnections 初始化链接信号与槽
      */
     void initConnections();
@@ -212,6 +218,16 @@ private slots:
     void slotHideInfomation();
 
     /**
+     * @brief slotShowDependsInfo 显示依赖关系的视图
+     */
+    void slotShowDependsInfo();
+
+    /**
+     * @brief slotHideDependsInfo  隐藏依赖关系的视图
+     */
+    void slotHideDependsInfo();
+
+    /**
      * @brief showInfo 显示信息的界面调整
      */
     void slotShowInfo();
@@ -233,47 +249,56 @@ private slots:
      */
     void slotWorkerProgressChanged(const int progress);
 
-private:
-    Operate                 m_operate               = Unknown; //当前的操作
-    bool                    m_workerStarted         = false;   //安装是否开始
-    bool                    m_upDown                = false;   //当前是详细信息是展开还是收缩
-
-    DebListModel            *m_packagesModel        = nullptr;  //model类
-
-    QWidget                 *m_contentFrame         = nullptr;  //主布局
-    QWidget                 *m_itemInfoFrame        = nullptr;  //包信息框架
-    QWidget                 *m_progressFrame        = nullptr;  //安装进度框架
-
-    DLabel                  *m_packageIcon          = nullptr;  //包的图标
-    DebInfoLabel            *m_packageName          = nullptr;  //包名
-    DebInfoLabel            *m_packageVersion       = nullptr;  //包的版本
-    DLabel                  *m_packageDescription   = nullptr;  //包的描述
-    DebInfoLabel            *m_tipsLabel            = nullptr;  //包的状态提示label
-
-    WorkerProgress          *m_progress             = nullptr;  //安装进度条
-    InstallProcessInfoView  *m_installProcessView   = nullptr;  //安装进度的详细信息
-
-    InfoControlButton       *m_infoControlButton    = nullptr;  //安装信息显示/隐藏控制按钮
-    DPushButton             *m_installButton        = nullptr;  //安装按钮
-    DPushButton             *m_uninstallButton      = nullptr;  //卸载按钮
-    DPushButton             *m_reinstallButton      = nullptr;  //重新安装按钮
-    DPushButton             *m_confirmButton        = nullptr;  //确认按钮
-    DPushButton             *m_backButton           = nullptr;  //返回按钮
-    DPushButton             *m_doneButton           = nullptr;  //完成按钮
+    /**
+     * @brief slotDependPackages  缺失依赖显示
+     * @param dependPackages  依赖包存储
+     * @param installWineDepends 是否进入wine依赖配置
+     */
+    void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
 
 private:
-    QVBoxLayout             *m_contentLayout        = nullptr;  
-    QVBoxLayout             *m_centralLayout        = nullptr;  //主布局
+    Operate m_operate = Unknown; //当前的操作
+    bool m_workerStarted = false; //安装是否开始
+    bool m_upDown = false; //当前是详细信息是展开还是收缩
 
-    QString                 m_description           = "";       //包的描述文本
-    QString                 m_pkgNameDescription    = "";       //包名的文本
-    QString                 m_versionDescription    = "";       //包版本的文本
+    DebListModel *m_packagesModel = nullptr; //model类
 
-    DSpinner                *m_pDSpinner            = nullptr;  //依赖安装加载动画
+    QWidget *m_contentFrame = nullptr; //主布局
+    QWidget *m_itemInfoFrame = nullptr; //包信息框架
+    QWidget *m_progressFrame = nullptr; //安装进度框架
+
+    DLabel *m_packageIcon = nullptr; //包的图标
+    DebInfoLabel *m_packageName = nullptr; //包名
+    DebInfoLabel *m_packageVersion = nullptr; //包的版本
+    DLabel *m_packageDescription = nullptr; //包的描述
+    DebInfoLabel *m_tipsLabel = nullptr; //包的状态提示label
+
+    WorkerProgress *m_progress = nullptr; //安装进度条
+    InstallProcessInfoView *m_installProcessView = nullptr; //安装进度的详细信息
+    InstallProcessInfoView *m_showDependsView = nullptr; //依赖关系显示
+
+    InfoControlButton *m_infoControlButton = nullptr; //安装信息显示/隐藏控制按钮
+    InfoControlButton *m_showDependsButton = nullptr; //显示依赖关系按钮
+    DPushButton *m_installButton = nullptr; //安装按钮
+    DPushButton *m_uninstallButton = nullptr; //卸载按钮
+    DPushButton *m_reinstallButton = nullptr; //重新安装按钮
+    DPushButton *m_confirmButton = nullptr; //确认按钮
+    DPushButton *m_backButton = nullptr; //返回按钮
+    DPushButton *m_doneButton = nullptr; //完成按钮
+
+private:
+    QVBoxLayout *m_contentLayout = nullptr;
+    QVBoxLayout *m_centralLayout = nullptr; //主布局
+
+    QString m_description = ""; //包的描述文本
+    QString m_pkgNameDescription = ""; //包名的文本
+    QString m_versionDescription = ""; //包版本的文本
+
+    DSpinner *m_pDSpinner = nullptr; //依赖安装加载动画
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
-    DCommandLinkButton      *m_pLoadingLabel        = nullptr;  //依赖安装提示信息
-    int                     dependAuthStatu         = -1;       //存储依赖授权状态
+    DCommandLinkButton *m_pLoadingLabel = nullptr; //依赖安装提示信息
+    int dependAuthStatu = -1; //存储依赖授权状态
 };
 
 #endif  // SINGLEINSTALLPAGE_H

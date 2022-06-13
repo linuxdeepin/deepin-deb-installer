@@ -66,6 +66,9 @@ int main(int argc, char *argv[])
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
 
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin"))
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+
     DApplicationSettings settings;
 
     DLogManager::registerConsoleAppender();

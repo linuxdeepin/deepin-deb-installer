@@ -17,7 +17,7 @@ lcov -d $workdir -c -o ./report/coverage.info
 
 lcov --extract ./report/coverage.info '*/src/*' -o ./report/coverage.info
 
-lcov --remove ./report/coverage.info '*/tests/*' -o ./report/coverage.info
+lcov --remove ./report/coverage.info '*/tests/*' '*/process/*' -o ./report/coverage.info
 
 genhtml -o ./report ./report/coverage.info
 

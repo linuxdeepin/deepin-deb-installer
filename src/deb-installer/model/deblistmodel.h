@@ -19,22 +19,38 @@
 #ifndef DEBLISTMODEL_H
 #define DEBLISTMODEL_H
 
+#include "manager/packagesmanager.h"
+#include "process/Pty.h"
+
 #include <QApt/Backend>
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
 #include <DSysInfo>
+#include <DPushButton>
+#include <DDialog>
 
 #include <QAbstractListModel>
 #include <QFuture>
 #include <QPointer>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include <DPushButton>
 #include <QProcess>
+#include <QKeyEvent>
 
-class PackagesManager;
+DWIDGET_USE_NAMESPACE
+
 class AptConfigMessage;
+
+class Dialog : public DDialog
+{
+    Q_OBJECT
+public:
+    explicit Dialog();
+    void keyPressEvent(QKeyEvent *event);
+signals:
+    void signalClosed();
+};
 
 class DebListModel : public QAbstractListModel
 {
@@ -171,7 +187,7 @@ public:
      * 重置包的操作状态
      * 清空安装错误原因的缓存
      */
-    void resetFilestatus();
+    void resetFileStatus();
 
     /**
      * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
@@ -212,6 +228,17 @@ public:
      */
     QVariant data(const QModelIndex &index, int role) const override;
 
+    /**
+     * @brief isDevelopMode 是否是开发者模式
+     * @return
+     */
+    bool isDevelopMode();
+
+    /**
+     * @brief selectedIndexRow 当前选择安装包列表的行
+     * @param row 行号
+     */
+    void selectedIndexRow(int row);
 
 public:
     /**
@@ -238,6 +265,12 @@ public:
      * @param workerStatus 当前需要设置的安装状态
      */
     void setWorkerStatus(int workerStatus);
+
+    /**
+     * @brief removePackage 删除某一个包
+     * @param idx 要删除的包的index
+     */
+    void removePackage(const int idx);
 
 signals:
     /**
@@ -339,6 +372,18 @@ signals:
      * @brief signalPackageAlreadyExists 包已添加的信号
      */
     void signalPackageAlreadyExists();
+
+    /**
+     * @brief signalSingleDependPackages 单包依赖关系显示信号
+     * @param breakPackages
+     */
+    void signalSingleDependPackages(DependsPair breakPackages, bool intallWineDepends);
+
+    /**
+     * @brief signalMultDependPackages 批量包依赖关系显示信号
+     * @param breakPackages
+     */
+    void signalMultDependPackages(DependsPair breakPackages, bool intallWineDepends);
 signals:
     /**
      * @brief signalRefreshSinglePage 刷新单包安装界面的信号
@@ -390,12 +435,6 @@ public slots:
     void slotUninstallPackage(const int index);
 
     /**
-     * @brief slotRemovePackage 删除某一个包
-     * @param idx 要删除的包的index
-     */
-    void slotRemovePackage(const int idx);
-
-    /**
      * @brief slotAppendPackage 添加包
      * @param package 添加的包的路径
      */
@@ -424,7 +463,7 @@ public slots:
     /**
      * @brief slotConfigReadOutput 处理配置包的输出并显示
      */
-    void slotConfigReadOutput();
+    void slotConfigReadOutput(const char *buffer, int length, bool isCommandExec);
 
     /**
      * @brief slotConfigInstallFinish 配置结束
@@ -539,7 +578,7 @@ private:
      * @brief refreshOperatingPackageStatus 刷新当前操作的包的操作状态
      * @param oprationStatus  要修改的操作状态
      */
-    void refreshOperatingPackageStatus(const PackageOperationStatus oprationStatus);
+    void refreshOperatingPackageStatus(PackageOperationStatus oprationStatus);
 
     /**
      * @brief packageFailedReason  获取包安装失败的原因
@@ -577,6 +616,11 @@ private:
     void showDigitalErrWindow();
 
     /**
+     * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
+     */
+    void showDevelopDigitalErrWindow(ErrorCode code);
+
+    /**
      * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
      */
     void showProhibitWindow();
@@ -591,7 +635,7 @@ private:
 
     /**
      * @brief 数字签名校验失败 弹窗处理的槽函数
-     * 
+     *
      * @param errorCode 错误原因代码
      */
     void digitalVerifyFailed(ErrorCode errorCode);
@@ -632,10 +676,10 @@ private:
 
     /**
      * @brief Get the Package Md5 object
-     * 
+     *
      * @param packagesMD5 所有包的md5的列表
      */
-    void getPackageMd5(QList<QByteArray> packagesMD5);
+    void getPackageMd5(const QList<QByteArray> &packagesMD5);
 
 //// 文件移动、删除、修改检查
 private:
@@ -687,7 +731,7 @@ private:
     QModelIndex m_currentIdx;
 
     //后端类
-    PackagesManager *m_packagesManager  = nullptr;
+    PackagesManager *m_packagesManager = nullptr;
 
     //当前正在运行的Trans
     QPointer<QApt::Transaction> m_currentTransaction;
@@ -696,24 +740,27 @@ private:
     QMap<QByteArray, int> m_packageOperateStatus = {};
 
     //FailCode 错误代码 ，trans返回的错误代码
-    QMap<QByteArray, int> m_packageFailCode      = {};
+    QMap<QByteArray, int> m_packageFailCode = {};
 
     //FailReason , trans返回的详细错误信息
-    QMap<QByteArray, QString> m_packageFailReason= {};
+    QMap<QByteArray, QString> m_packageFailReason = {};
 
     // 配置安装进程
-    QProcess *m_procInstallConfig                = {};
+    Konsole::Pty *m_procInstallConfig = {};
 
     // 配置的临时目录
-    const QString tempPath                       = "/tmp/DEBIAN";
+    const QString tempPath = "/tmp/DEBIAN";
+
+    QString m_brokenDepend = "";
 
     // 开发者模式的标志变量
     //部分系统版本无需签名验证，默认开发者模式
-    bool m_isDevelopMode                         = true;
+    bool m_isDevelopMode = true;
+    bool m_isDigitalVerify = false;
 
-    QList<QByteArray> m_packageMd5               = {};
+    QList<QByteArray> m_packageMd5 = {};
 
-    AptConfigMessage *configWindow               = nullptr;
+    AptConfigMessage *configWindow = nullptr;
 };
 
 #endif  // DEBLISTMODEL_H
