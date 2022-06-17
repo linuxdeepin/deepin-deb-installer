@@ -268,7 +268,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_itemInfoFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_itemInfoFrame->setVisible(false);
 
-    m_contentLayout->addWidget(m_itemInfoFrame);                                                //添加到主窗口中
+    m_contentLayout->addWidget(m_itemInfoFrame);
 }
 
 void SingleInstallPage::initTabOrder()
@@ -372,8 +372,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     initButtonFocusPolicy();
     // 设置按钮回车触发
     initButtonAutoDefault();
-    // 初始化按钮焦点切换策略。
-    initTabOrder();
 
     //设置描述信息的size 与位置
     m_packageDescription->setMinimumHeight(65);
@@ -441,6 +439,9 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(btnsFrame);
+
+    // bug 139875  Tab Order要在布局之后设置才能生效
+    initTabOrder();
 }
 
 void SingleInstallPage::initPkgDependsInfoView()
@@ -701,11 +702,11 @@ void SingleInstallPage::slotWorkerFinished()
         m_confirmButton->setVisible(true);
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
-        if (m_operate == Install || m_operate == Reinstall){
+        if (m_operate == Install || m_operate == Reinstall) {
             //添加安装失败原因的提示
             QFont font;
             QFontMetrics elideFont(font);
-            m_tipsLabel->setText(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, m_tipsLabel->width()-100));//修复授权取消后无提示的问题
+            m_tipsLabel->setText(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(), Qt::ElideRight, m_tipsLabel->width() - 100)); //修复授权取消后无提示的问题
             m_tipsLabel->setToolTip(index.data(DebListModel::PackageFailReasonRole).toString());
         } else {
             m_tipsLabel->setText(tr("Uninstall Failed"));                                       //卸载只显示卸载失败
@@ -779,7 +780,7 @@ void SingleInstallPage::showPackageInfo()
                 || dependsStat == DebListModel::DependsAuthCancel
                 || dependsStat == DebListModel::ArchBreak
 //                || dependsStat == DebListModel::Prohibit
-             )
+            )
                 && dependAuthStatu != DebListModel::AuthConfirm) { //添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -911,7 +912,7 @@ void SingleInstallPage::setAuthBefore()
             || dependsStat == DebListModel::DependsAuthCancel
             || dependsStat == DebListModel::ArchBreak   //添加架构不匹配的处理
 //            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
-        ) {
+       ) {
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
@@ -949,7 +950,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             || dependsStatus == DebListModel::DependsAuthCancel
             || dependsStatus == DebListModel::ArchBreak         //添加架构不匹配的处理
             || dependsStatus == DebListModel::Prohibit          //增加域管黑名单处理
-        ) {
+       ) {
         //依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());//修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
