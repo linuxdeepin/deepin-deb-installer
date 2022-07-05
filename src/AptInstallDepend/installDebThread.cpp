@@ -101,16 +101,9 @@ void InstallDebThread::run()
             }
 
             system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-//            m_proc->start("sudo", QStringList() << "apt-get"
-//                          << "install"
-//                          << depends
-//                          << "deepin-wine-helper"
-//                          << "--fix-missing"
-//                          << "-y");
             m_proc->setProgram("sudo", QStringList() << "apt-get"
                                << "install"
                                << depends
-                               << "deepin-wine-helper"
                                << "--fix-missing"
                                << "-y");
             m_proc->start();
