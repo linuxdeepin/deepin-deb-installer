@@ -245,11 +245,6 @@ void DebListModel::slotDealDependResult(int authType, int dependIndex, QString d
     emit signalDependResult(authType, dependName);                //发送信号，由debinstaller处理界面状态。
 }
 
-bool DebListModel::isReady() const
-{
-    return m_packagesManager->isBackendReady();
-}
-
 bool DebListModel::isWorkerPrepare() const
 {
     return m_workerStatus == WorkerPrepare;
@@ -381,7 +376,7 @@ void DebListModel::slotUninstallPackage(const int index)
     if (!debFile.isValid())
         return;
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture()); //检查是否有应用依赖到该包
-    Backend *backend = m_packagesManager->m_backendFuture.result();
+    Backend *backend = m_packagesManager->backend();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
         if (backend->package(r)) {
             // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
@@ -693,7 +688,7 @@ void DebListModel::checkBoxStatus()
 {
     QTime startTime = QTime::currentTime();                                      //获取弹出的时间
     Transaction *transation = nullptr;
-    auto *const backend = m_packagesManager->m_backendFuture.result();
+    auto *const backend = m_packagesManager->backend();
     transation = backend->commitChanges();
 
     QTime stopTime = QTime::currentTime();
@@ -726,7 +721,7 @@ void DebListModel::installDebs()
     emit signalStartInstall();
 
     // fetch next deb
-    auto *const backend = m_packagesManager->m_backendFuture.result();
+    auto *const backend = m_packagesManager->backend();
     if (!backend)
         return;
 

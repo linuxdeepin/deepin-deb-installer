@@ -43,12 +43,6 @@ class DebListModel;
 class DealDependThread;
 class AddPackageThread;
 
-/**
- * @brief init_backend 初始化后端
- * @return 初始化完成的后端指针
- */
-Backend *init_backend();
-
 struct DependInfo {
     QString packageName; //依赖的包名称
     QString version; //依赖的包的版本
@@ -193,22 +187,10 @@ signals:
 public:
 
     /**
-     * @brief isBackendReady 判断安装程序后端是否加载完成
-     * @return 安装程序后端加载的结果
-     *
-     * true: 加载完成
-     * false: 未加载完成
-     */
-    bool isBackendReady();
-
-    /**
      * @brief backend 获取后端指针
      * @return  后端的指针
      */
-    QApt::Backend *backend() const
-    {
-        return m_backendFuture.result();
-    }
+    QApt::Backend *backend();
 
 //// 包状态相关函数
 public:
@@ -516,7 +498,7 @@ private:
 private:
 
     //安装程序后端指针(异步加载)
-    QFuture<QApt::Backend *> m_backendFuture;           
+    QApt::Backend *m_backendFuture;
 
     //存放包路径的列表
     QList<QString> m_preparedPackages       = {};   
@@ -607,6 +589,8 @@ private:
     QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
 
     QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
+
+    std::once_flag backendLoadFlag; //后端加载标记
 };
 
 #endif  // PACKAGESMANAGER_H

@@ -322,7 +322,7 @@ void UT_packagesManager::TearDown()
 {
     stub.set(ADDR(PackagesManager, rmTempDir), stub_is_open_false);
 
-    for (auto pkg : m_packageManager->m_backendFuture.result()->availablePackages()) {
+    for (auto pkg : m_packageManager->backend()->availablePackages()) {
         delete pkg;
         pkg =  nullptr;
     }
@@ -337,11 +337,6 @@ Package *packagesManager_package(const QString &)
     pkgCache::PkgIterator packageIter;
     QScopedPointer<Package> package(new Package(bac, packageIter));
     return package.get();
-}
-
-TEST_F(UT_packagesManager, PackageManager_UT_isBackendReady)
-{
-    ASSERT_TRUE(m_packageManager->isBackendReady());
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_selectedIndexRow)

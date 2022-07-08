@@ -401,7 +401,6 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(PackagesManager, getPackageMd5), model_package_getPackageMd5);
     stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), model_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, isBackendReady), model_BackendReady);
     stub.set(ADDR(PackagesManager, packageWithArch), model_packageWithArch);
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
@@ -441,12 +440,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
     EXPECT_TRUE(m_debListModel->m_packageOperateStatus.isEmpty());
     EXPECT_TRUE(m_debListModel->m_packageFailReason.isEmpty());
     EXPECT_TRUE(m_debListModel->m_packageFailCode.isEmpty());
-}
-
-
-TEST_F(ut_DebListModel_test, deblistmodel_UT_isReady)
-{
-    EXPECT_TRUE(m_debListModel->isReady());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkerPrepare)

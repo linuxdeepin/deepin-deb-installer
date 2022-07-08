@@ -196,12 +196,6 @@ public:
     bool isWorkerPrepare() const;
 
     /**
-     * @brief isReady 查看后端初始化的状态
-     * @return 后端是否准备就绪
-     */
-    bool isReady() const;
-
-    /**
      * @brief preparedPackages 获取当前已经添加的包的列表
      * @return 添加的包的列表
      */
