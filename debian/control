@@ -2,13 +2,29 @@ Source: deepin-deb-installer
 Section: utils
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: debhelper (>= 9), pkg-config, cmake, libqt5widgets5, libqt5concurrent5, libqapt-dev, libdtkwidget-dev, qtbase5-dev, qttools5-dev-tools, qttools5-dev, qtchooser, libgtest-dev,  deepin-gettext-tools
-Standards-Version: 4.3.0
-Homepage: https://www.deepin.com/
+Build-Depends:
+ debhelper-compat (= 13),
+ cmake,
+ deepin-gettext-tools,
+ libdtkwidget-dev (>= 5.5.17~),
+ libqapt-dev,
+ libqt5concurrent5,
+ libqt5widgets5,
+ pkg-config,
+ qtbase5-dev,
+ qttools5-dev,
+ qttools5-dev-tools,
+ libpolkit-qt5-1-dev,
+Rules-Requires-Root: no
+Standards-Version: 4.6.1.0
+Homepage: https://github.com/linuxdeepin/deepin-deb-installer
 
 Package: deepin-deb-installer
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqapt3-runtime, libqapt3
+Depends:
+ libqapt3-runtime,
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: Package Installer helps users install and remove local packages.
  Package Installer is an easy-to-use .deb package management tool 
  with a simple interface for users to quickly install customized applications

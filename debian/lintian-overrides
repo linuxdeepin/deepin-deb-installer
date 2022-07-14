@@ -1,0 +1,2 @@
+# deepin-deb-installer-dependsInstall doesn't have command line arguments.
+deepin-deb-installer: no-manual-page usr/bin/deepin-deb-installer-dependsInstall

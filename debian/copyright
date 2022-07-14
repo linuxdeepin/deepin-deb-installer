@@ -1,12 +1,43 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: deepin-deb-installer
+Source: https://github.com/linuxdeepin/deepin-deb-installer
+Upstream-Contact: https://github.com/linuxdeepin/developer-center/issues
 
 Files: *
-Copyright: 2017 Deepin Technology Co., Ltd.
+Copyright: 2017-2020 Deepin Technology Co., Ltd. <support@deepin.org>
 License: GPL-3+
- This package is free software; you can redistribute it and/or modify
+
+Files: debian/*
+Copyright: 2017 Deepin Packages Builder <packages@deepin.com>
+           2018 Yangfl <mmyangfl@gmail.com>
+           2020 Clay Stan <claystan97@gmail.com>
+           2020 Arun Kumar Pariyar <openarungeek@gmail.com>
+License: GPL-3+
+
+Files: src/deb-installer/process/Pty.cpp
+       src/deb-installer/process/Pty.h
+Copyright: 1997-1998 by Lars Doelle <lars.doelle@on-line.de>
+           2007-2008 by Robert Knight <robertknight@gmail.com>
+License: GPL-2+
+
+Files: src/deb-installer/process/kprocess.cpp
+       src/deb-installer/process/kprocess.h
+       src/deb-installer/process/kpty.cpp
+       src/deb-installer/process/kpty.h
+       src/deb-installer/process/kpty_p.h
+       src/deb-installer/process/kptydevice.cpp
+       src/deb-installer/process/kptydevice.h
+       src/deb-installer/process/kptyprocess.cpp
+       src/deb-installer/process/kptyprocess.h
+Copyright: 2002-2007 Oswald Buddenhagen <ossi@kde.org>
+           2002 Waldo Bastian <bastian@kde.org>
+           2010 KDE e.V. <kde-ev-board@kde.org>
+License: LGPL-2+
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 3 of the License, or
+ the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
  .
  This package is distributed in the hope that it will be useful,
@@ -15,7 +46,37 @@ License: GPL-3+
  GNU General Public License for more details.
  .
  You should have received a copy of the GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
+ along with this program. If not, see <https://www.gnu.org/licenses/>.
  .
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+License: LGPL-2+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
+ .
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
