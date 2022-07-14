@@ -19,6 +19,8 @@
 #define PACKAGEDEPENDSSTATUS_H
 #include "result.h"
 
+#include <unistd.h>
+
 #include <QObject>
 #include <QFuture>
 
