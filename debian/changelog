@@ -1,5 +1,5 @@
-deepin-deb-installer (5.3.9) unstable; urgency=medium
+deepin-deb-installer (5.12.4) unstable; urgency=medium
 
-  * Initial Release.
+  * Init.
 
- -- Deepin Packages Builder <packages@deepin.com>  Wed, 11 Oct 2017 17:38:35 +0800
+ -- Clay Stan <claystan97@gmail.com>  Thu, 14 Jul 2022 13:46:16 +0800
