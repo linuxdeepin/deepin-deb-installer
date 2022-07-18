@@ -987,9 +987,11 @@ void DebListModel::checkSystemVersion()
     // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
+    qInfo() << "system code(UOS): " << Dtk::Core::DSysInfo::uosEditionType();
     switch (Dtk::Core::DSysInfo::uosEditionType()) {            //获取系统的类型
 #if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
     case Dtk::Core::DSysInfo::UosEducation:                     //教育版
+    case Dtk::Core::DSysInfo::UosDeviceEdition:                 //专用设备版
 #endif
     case Dtk::Core::DSysInfo::UosProfessional: //专业版
     case Dtk::Core::DSysInfo::UosHome: {                     //个人版
@@ -1010,6 +1012,7 @@ void DebListModel::checkSystemVersion()
         break;
     }
 #else
+    qInfo() << "system code(Deepin): " << Dtk::Core::DSysInfo::deepinType();
     switch (Dtk::Core::DSysInfo::deepinType()) {
     case Dtk::Core::DSysInfo::DeepinDesktop:
         m_isDevelopMode = true;
