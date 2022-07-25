@@ -298,5 +298,14 @@ bool PackagesListView::event(QEvent *event)
             emit signalChangeItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
         }
     }
+
+    //焦点切出事件
+    if(event->type() == QEvent::FocusOut) {
+        this->clearSelection();
+        m_currentIndex = -1;
+        m_currModelIndex = this->model()->index(-1, -1);
+        emit signalCurrentIndexRow(-1);
+    }
+
     return DListView::event(event);
 }
