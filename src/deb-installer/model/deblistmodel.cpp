@@ -855,20 +855,27 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);  //添加前往按钮
     Ddialog->show();    //显示弹窗
 
+    //消息框reject后的操作
+    std::function<void(void)> rejectOperate = [this, Ddialog](){
+        this->slotNoDigitalSignature();
+        Ddialog->deleteLater();
+    };
+
     //取消按钮
     QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
-    connect(btnCancel, &DPushButton::clicked, this, &DebListModel::slotNoDigitalSignature);
-    connect(btnCancel, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    connect(btnCancel, &DPushButton::clicked, rejectOperate);
+
+    //关闭图标
+    connect(Ddialog, &DDialog::aboutToClose, rejectOperate);
+
+    //ESC退出
+    connect(Ddialog, &DDialog::rejected, rejectOperate);
 
     //前往按钮1
     QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
     connect(btnProceedControlCenter, &DPushButton::clicked, this, &DebListModel::slotShowDevelopModeWindow);
     connect(btnProceedControlCenter, &DPushButton::clicked, this, &QApplication::exit);
     connect(btnProceedControlCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
-
-    //关闭图标
-    connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotNoDigitalSignature);
-    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
 }
 
 
@@ -898,13 +905,21 @@ void DebListModel::showDigitalErrWindow()
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
+
+    //窗口退出操作
+    std::function<void(void)> exitOperate = [this, Ddialog](){
+        this->slotDigitalSignatureError();
+        Ddialog->deleteLater();
+    };
+
     // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotDigitalSignatureError);
-    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
+    connect(Ddialog, &DDialog::aboutToClose, exitOperate);
 
     //点击弹出窗口的确定按钮
-    connect(btnOK, &DPushButton::clicked, this, &DebListModel::slotDigitalSignatureError);
-    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    connect(btnOK, &DPushButton::clicked, exitOperate);
+
+    //ESC退出
+    connect(Ddialog, &DDialog::rejected, exitOperate);
 }
 
 void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
@@ -1404,16 +1419,23 @@ void DebListModel::showProhibitWindow()
     Ddialog->show();
     QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
 
-
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
+
+    //窗口退出操作
+    std::function<void(void)> exitOperate = [this, Ddialog](){
+        this->slotShowProhibitWindow();
+        Ddialog->deleteLater();
+    };
+
     // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, this, &DebListModel::slotShowProhibitWindow);
-    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
+    connect(Ddialog, &DDialog::aboutToClose, exitOperate);
 
     //点击弹出窗口的确定按钮
-    connect(btnOK, &DPushButton::clicked, this, &DebListModel::slotShowProhibitWindow);
-    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    connect(btnOK, &DPushButton::clicked, exitOperate);
+
+    //ESC
+    connect(Ddialog, &DDialog::rejected, exitOperate);
 }
 
 bool DebListModel::checkBlackListApplication()
