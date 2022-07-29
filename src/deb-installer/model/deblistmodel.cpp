@@ -855,7 +855,7 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);  //添加前往按钮
     Ddialog->show();    //显示弹窗
 
-    //消息框reject后的操作
+    //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
     std::function<void(void)> rejectOperate = [this, Ddialog](){
         this->slotNoDigitalSignature();
         Ddialog->deleteLater();
@@ -906,7 +906,7 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
 
-    //窗口退出操作
+    //窗口退出操作，包括所有可以退出此窗口的操作
     std::function<void(void)> exitOperate = [this, Ddialog](){
         this->slotDigitalSignatureError();
         Ddialog->deleteLater();
@@ -1107,13 +1107,17 @@ bool DebListModel::checkDigitalSignature()
 
 void DebListModel::installNextDeb()
 {
-    QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
-    QStringList strFilePath;
-    if (checkTemplate(sPackageName)) {                      //检查当前包是否需要配置
-        rmdir();                                            //删除临时路径
-        m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false);
-    } else {
-        installDebs();                                      //普通安装
+    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex); //刷新软件包依赖状态
+    if(m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex).isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+        installDebs();
+    } else { //如果当前包的依赖全部安装完毕，则进入配置判断流程
+        QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
+        if (checkTemplate(sPackageName)) { //检查当前包是否需要配置
+            rmdir(); //删除临时路径
+            m_procInstallConfig->start("pkexec", QStringList() << "pkexec" << "deepin-deb-installer-dependsInstall" << "InstallConfig" << sPackageName, {}, 0, false); //配置安装流程
+        } else {
+            installDebs(); //普通安装流程
+        }
     }
 }
 
@@ -1422,7 +1426,7 @@ void DebListModel::showProhibitWindow()
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
 
-    //窗口退出操作
+    //窗口退出操作，包括所有可以退出此窗口的操作
     std::function<void(void)> exitOperate = [this, Ddialog](){
         this->slotShowProhibitWindow();
         Ddialog->deleteLater();

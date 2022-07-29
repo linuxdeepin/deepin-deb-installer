@@ -883,7 +883,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     }
     // reload backend cache
     //reloadCache必须要加
-    m_backendFuture.result()->reloadCache();;
+    m_backendFuture.result()->reloadCache();
     m_packageMd5DependsStatus.remove(currentPackageMd5);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
 }
 
@@ -1446,7 +1446,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             return PackageDependsStatus::_break(package->name());
         }
 
-        qInfo() << "PackagesManager:" << "Check finshed for package" << package->name();
+        qInfo() << "PackagesManager:" << "Check finished for package" << package->name();
         // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
         m_dinfo.packageName = package_name;
         m_dinfo.version = package->availableVersion();
