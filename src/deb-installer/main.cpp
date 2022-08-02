@@ -21,6 +21,7 @@
 #include "utils/utils.h"
 #include "singleInstallerApplication.h"
 #include "environments.h"
+#include "utils/eventlogutils.h"
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -83,6 +84,14 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/DebInstaller", &app, QDBusConnection::ExportScriptableSlots);
         app.parseCmdLine();
         app.activateWindow();
+        //埋点记录启动数据
+        QJsonObject objStartEvent{
+            {"tid", Eventlogutils::StartUp},
+            {"vsersion", VERSION},
+            {"mode", 1},
+        };
+
+        Eventlogutils::GetInstance()->writeLogs(objStartEvent);
         return app.exec();
     } else {
         QCommandLineParser parser;
