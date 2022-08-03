@@ -53,7 +53,7 @@ SigntureStatus PackageSigntureStatus::checkPackageSignture(QString packagePath)
         packagePath = "\"" + packagePath + "\"";
         program = program + packagePath;
         m_pCheckSignProc->start(program);
-        m_pCheckSignProc->waitForFinished();
+        m_pCheckSignProc->waitForFinished(-1);
         const QString output = m_pCheckSignProc->readAllStandardOutput();
         const QString output1 = m_pCheckSignProc->readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
