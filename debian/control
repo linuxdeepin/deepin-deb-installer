@@ -14,3 +14,4 @@ Description: Package Installer helps users install and remove local packages.
  with a simple interface for users to quickly install customized applications
  not included in App Store supporting bulk installation, version identification
  and auto completion.
+Recommends: uos-reporter, deepin-event-log
