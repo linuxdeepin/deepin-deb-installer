@@ -59,7 +59,8 @@ bool AddPackageThread::dealInvalidPackage(QString packagePath)
     QStorageInfo info(packagePath);
 
     //判断路径信息是不是本地路径
-    if (!info.device().startsWith("/dev/")) {
+    QString device = info.device();     //获取设备信息
+    if (!device.startsWith("/dev/") && device != QString::fromLocal8Bit("tmpfs")) {
         emit signalNotLocalPackage();
         return false;
     }
