@@ -189,8 +189,8 @@ target_link_libraries(${APP_BIN_NAME_TEST}
     pthread
 )
 
-add_custom_target(test
-    COMMAND echo " =================== TEST BEGIN ==================== "
-    COMMAND ${CMAKE_BINARY_DIR}/tests/${APP_BIN_NAME_TEST}
-    COMMAND echo " =================== TEST END ==================== "
-)
+#add_custom_target(test
+#    COMMAND echo " =================== TEST BEGIN ==================== "
+#    COMMAND ${CMAKE_BINARY_DIR}/tests/${APP_BIN_NAME_TEST}
+#    COMMAND echo " =================== TEST END ==================== "
+#)
