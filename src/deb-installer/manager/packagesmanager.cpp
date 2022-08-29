@@ -25,6 +25,7 @@
 #include "AddPackageThread.h"
 #include "utils/utils.h"
 #include "model/deblistmodel.h"
+#include "model/dependgraph.h"
 
 #include <DRecentManager>
 
@@ -501,7 +502,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             choose_set << debFile.packageName();
             QStringList dependList;
             bool isWineApplication = false;             //判断是否是wine应用
-            for (auto ditem : debFile.depends()) {
+            for (auto ditem : debFile.depends()) {      //每一个list中的关系是或的关系
                 for (auto dinfo : ditem) {
                     Package *depend = packageWithArch(dinfo.packageName(), debFile.architecture());
                     if (depend) {
@@ -528,22 +529,37 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
             // 删除无用冗余的日志
             //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
-            if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
-
-                if (!m_dependInstallMark.contains(currentPackageMd5)) {           //更换判断依赖错误的标记
-                    installWineDepends = true;
-                    if (!m_installWineThread->isRunning()) {
-                        m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
-                        qInfo() << "PackagesManager:" << "command install depends:" << dependList;
-                        m_installWineThread->setDependsList(dependList, index);
-                        if (m_brokenDepend.isEmpty())
-                            m_brokenDepend = dependsStatus.package;
-                        m_installWineThread->setBrokenDepend(m_brokenDepend);
-                        m_installWineThread->run();
+            //wine应用+非wine依赖不满足即可导致出问题
+            do {
+                if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
+                    //额外判断wine依赖是否已安装，同时剔除非wine依赖
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString &eachDepend){
+                        if(!eachDepend.contains("deepin-wine")) {
+                            return true;
+                        }
+                        auto package = packageWithArch(eachDepend, debFile.architecture());
+                        return !package->installedVersion().isEmpty();
+                    });
+                    dependList.erase(removedIter, dependList.end());
+                    if(dependList.isEmpty()) { //所有的wine依赖均已安装
+                        break;
                     }
+
+                    if (!m_dependInstallMark.contains(currentPackageMd5)) {           //更换判断依赖错误的标记
+                        installWineDepends = true;
+                        if (!m_installWineThread->isRunning()) {
+                            m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
+                            qInfo() << "PackagesManager:" << "command install depends:" << dependList;
+                            m_installWineThread->setDependsList(dependList, index);
+                            if (m_brokenDepend.isEmpty())
+                                m_brokenDepend = dependsStatus.package;
+                            m_installWineThread->setBrokenDepend(m_brokenDepend);
+                            m_installWineThread->run();
+                        }
+                    }
+                    dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
                 }
-                dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
-            }
+            }while(0);
         }
     }
     if (dependsStatus.isBreak())
@@ -587,10 +603,12 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
     }
     qInfo() << __func__ << controlDepends;
     QStringList dependsList = controlDepends.split(",");
-    for (QString depends : dependsList) {
-        if (!depends.contains("|"))
-            dependsList.removeOne(depends);
-    }
+
+    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString &str){
+        return !str.contains("|");
+    });
+    dependsList.erase(removedIter, dependsList.end());
+
     //使用二维数组进行存储
     for (QString depend : dependsList) {
         depend = depend.remove(QRegExp("\\s"));
@@ -862,6 +880,7 @@ void PackagesManager::reset()
     m_packageMd5DependsStatus.clear();  //修改依赖状态的存储结构，此处清空存储的依赖状态数据
     m_appendedPackagesMd5.clear();
     m_packageMd5.clear();
+    m_dependGraph.reset();
 
     //reloadCache必须要加
     m_backendFuture.result()->reloadCache();
@@ -912,6 +931,8 @@ void PackagesManager::removePackage(const int index)
     m_packageMd5DependsStatus.remove(md5);      //删除指定包的依赖状态
     m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
     m_dependsPackages.remove(md5); //删除指定包的依赖关系
+
+    m_dependGraph.remove(md5); //从依赖关系图中删除对应节点
 
     m_packageInstallStatus.clear();
 
@@ -1144,71 +1165,34 @@ void PackagesManager::slotAppendPackageFinished()
 
 void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum)
 {
-    //一定要保持 m_preparedPacjages 和 packageMd5的下标保持一致
-    //二者一定是一一对应的。
-    //此后的依赖状态和安装状态都是与md5绑定的 md5是与index绑定
-    m_preparedPackages.insert(0, packagePath); //每次添加的包都放到最前面
-    m_packageMd5.insert(0, packageMd5Sum); //添加MD5Sum
-    m_appendedPackagesMd5 << packageMd5Sum; //将MD5添加到集合中，这里是为了判断包不再重复
-    const int indexRow = swappedPackageIndex(packagePath);
-    if (-1 == indexRow)
+    //预先校验包是否有效或是否重复
+    DebFile currentDebfile(packagePath);
+    if(!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
         return;
-    if (indexRow != 0) {
-        m_preparedPackages.swap(0, indexRow); //交换依赖包与安装包列表位置
-        m_packageMd5.swap(0, indexRow); //md5下标统一
-        swapPackages(m_preparedPackages.at(0));
     }
 
-    getPackageDependsStatus(indexRow);                     //刷新当前添加包的依赖
-    refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
-}
+    //加入md5集合
+    m_appendedPackagesMd5 << packageMd5Sum;
 
-void PackagesManager::swapPackages(const QString &packagePath)
-{
-    //在当前安装包交换后，对与他交换位置的包再进行依赖判断
-    int indexRow = swappedPackageIndex(packagePath);
-    if (indexRow != 0) {
-        m_preparedPackages.swap(0, indexRow); //交换依赖包与安装包列表位置
-        m_packageMd5.swap(0, indexRow); //md5下标统一
-    }
-}
-
-int PackagesManager::swappedPackageIndex(const QString &packagePath)
-{
-    m_allDependsList.clear();
-    DebFile debfile(packagePath);
-    if (!debfile.isValid())
-        return -1;
-
-    int insertIndex = 0;
-
-    //若当前列表中只有正在添加的包，则直接插入到安装列表中
-    if (1 == m_preparedPackages.size())
-        return 0;
-
-    QList<QString> allDependsList;
-    allDependsList = getAllDepends(debfile.depends(), debfile.architecture());
-
-    //若当前安装包无依赖，则在安装列表第一行插入
-    if (0 == allDependsList.size())
-        return 0;
-
-    //安装列表中的安装包为正在添加的包的依赖
-    QList<QString> preparedPackages = m_preparedPackages;
-
-    for (int i = 0; i < allDependsList.size(); i++) {
-        for (int j = 0; j < preparedPackages.size(); j++) {
-            DebFile deb(preparedPackages.at(j));
-            if (!deb.isValid())
-                return -1;
-            if (deb.packageName().contains(allDependsList.at(i))) { //判断安装列表中是否有包为当前安装包的依赖包
-                //列表中存在多个安装包为当前包的依赖包，取最大行号
-                if (j > insertIndex)
-                    insertIndex = j;
-            }
+    //使用依赖图计算安装顺序
+    auto currentDebDepends = currentDebfile.depends();
+    m_dependGraph.addNode(packagePath, packageMd5Sum, currentDebfile.packageName(), currentDebDepends); //添加图节点
+    auto installQueue = m_dependGraph.getBestInstallQueue(); //输出最佳安装顺序
+    m_preparedPackages = installQueue.first;
+    m_packageMd5 = installQueue.second;
+    int indexRow = 0;
+    for (;indexRow != m_packageMd5.size();++indexRow) {
+        if(m_packageMd5[indexRow] == packageMd5Sum) {
+            break;
         }
     }
-    return insertIndex;
+    if(indexRow == m_packageMd5.size()) { //error
+        return;
+    }
+
+    //需要在此之前刷新出正确的安装顺序
+    getPackageDependsStatus(indexRow);                     //刷新当前添加包的依赖
+    refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
 }
 
 QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depends, QString architecture)
@@ -1476,20 +1460,12 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     }
 
     // check virtual package providers
-    for (auto *virtualPackage : backend->availablePackages())
+    for (auto *virtualPackage : backend->availablePackages()) {
         if (virtualPackage->name() != packageName && virtualPackage->providesList().contains(packageName)) {
-            QVector<QString> infos;
-            for (auto dInfo : m_orDepends) { //遍历或依赖容器中容器中是否存在当前依赖
-                if (!dInfo.contains(packageName))
-                    continue;
-                else
-                    infos = dInfo;
-            }
-            if (!infos.contains(packageName)) //如果提供虚包的实包与此虚包不是或依赖关系
-                return packageWithArch(virtualPackage->name(), sysArch, annotation);
-            else
-                return nullptr;
+            return packageWithArch(virtualPackage->name(), sysArch, annotation);
         }
+    }
+
     return nullptr;
 }
 

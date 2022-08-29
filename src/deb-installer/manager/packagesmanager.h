@@ -23,6 +23,7 @@
 #define PACKAGESMANAGER_H
 
 #include "utils/result.h"
+#include "model/dependgraph.h"
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -426,19 +427,6 @@ private:
     void addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum);
 
     /**
-     * @brief swapPackages   对列表中第一个包位置交换
-     * @param packagePath    包的路径
-     */
-    void swapPackages(const QString &packagePath);
-
-    /**
-     * @brief swappedPackageIndex 获取当前包要插入的位置
-     * @param packagePath     包的路径
-     * @return
-     */
-    int swappedPackageIndex(const QString &packagePath);
-
-    /**
      * @brief getAllDepends 获取安装包所有依赖
      * @param depends       依赖列表
      * @param architecture  安装包架构
@@ -607,6 +595,8 @@ private:
     QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
 
     QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
+
+    DependGraph m_dependGraph; //依赖关系图计算器
 };
 
 #endif  // PACKAGESMANAGER_H

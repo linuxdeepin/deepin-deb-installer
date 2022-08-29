@@ -1108,8 +1108,13 @@ bool DebListModel::checkDigitalSignature()
 void DebListModel::installNextDeb()
 {
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex); //刷新软件包依赖状态
-    if(m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex).isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+    auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+    if(dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
+    } else if(dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
+        refreshOperatingPackageStatus(Failed);
+        bumpInstallIndex();
+        return;
     } else { //如果当前包的依赖全部安装完毕，则进入配置判断流程
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         if (checkTemplate(sPackageName)) { //检查当前包是否需要配置

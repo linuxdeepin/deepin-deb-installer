@@ -385,7 +385,6 @@ TEST_F(UT_packagesManager, PackageManager_UT_addPackage)
     m_packageManager->m_preparedPackages.insert(0, "package1");
     m_packageManager->m_packageMd5.insert(0, "abc");
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
-    stub.set(ADDR(PackagesManager, swappedPackageIndex), stub_swappedPackageIndex);
     m_packageManager->addPackage(1, "/", "deb");
     EXPECT_EQ(2, m_packageManager->m_preparedPackages.size());
     EXPECT_EQ(2, m_packageManager->m_packageMd5.size());
