@@ -4,6 +4,8 @@
 
 #include "PackageStatus.h"
 
+#include <unistd.h>
+
 #include <QtConcurrent>
 #include <QDebug>
 #include <QSet>
