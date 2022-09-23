@@ -54,9 +54,9 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # kde
-Files: src/deb-installer/process
+Files: src/deb-installer/process/*
 Copyright: 2007, Oswald Buddenhagen
-License: GPL-2.0-or-later
+License: LGPL-2.0-or-later
 
 # Fuzzy Test
 Files: tests/FuzzyTest/include
