@@ -1277,8 +1277,9 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             }
         }
 
-        if (!dependsStatus.isBreak())
+        if (dependsStatus.status == DebListModel::DependsOk) {
             break;
+        }
     }
     return dependsStatus;
 }
