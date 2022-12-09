@@ -251,6 +251,90 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
     return ConflictResult::ok(QString());
 }
 
+const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
+                                                        const QList<DependencyItem> &conflicts,
+                                                        const QList<DependencyItem> &replaces)
+{
+    for (const auto &conflict_list : conflicts) {
+        for (const auto &conflict : conflict_list) {
+            const QString name = conflict.packageName();
+
+            //修复依赖中 conflict与provides 存在相同 virtual package
+            //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
+            //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
+            //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
+            Backend *backend = m_backendFuture.result();
+            if (!backend)
+                return ConflictResult::err(QString());
+            Package *package = backend->package(name);
+
+            if (!package)
+                continue;
+
+            if (!package->isInstalled()) {
+                package = nullptr;
+                continue;
+            }
+            // arch error, conflicts
+            if (!isArchMatches(arch, package->architecture(), package->multiArchType())) {
+                qWarning() << "PackagesManager:" << "conflicts package installed: "
+                           << arch << package->name() << package->architecture()
+                           << package->multiArchTypeString();
+                package = nullptr;
+                return ConflictResult::err(name);
+            }
+
+            const QString conflict_version = conflict.packageVersion();
+            const QString installed_version = package->installedVersion();
+            const auto type = conflict.relationType();
+            const auto result = Package::compareVersion(installed_version, conflict_version);
+
+            // not match, ok
+            if (!dependencyVersionMatch(result, type)) {
+                package = nullptr;
+                continue;
+            }
+            // test package
+            const QString mirror_version = package->availableVersion();
+
+            //删除版本相同比较，如果安装且版本符合则判断冲突，此前逻辑存在问题
+            // mirror version is also break
+            const auto mirror_result = Package::compareVersion(mirror_version, conflict_version);
+            if (dependencyVersionMatch(mirror_result, type) && name != m_currentPkgName) { //此处即可确认冲突成立
+                //额外判断是否会替换此包
+                bool conflict_yes = true;
+                for (auto replace_list : replaces) {
+                    for (auto replace : replace_list) {
+                        if (replace.packageName() == name) { //包名符合
+                            auto replaceType = replace.relationType(); //提取版本号规则
+                            auto versionCompare = Package::compareVersion(installed_version, replace.packageVersion()); //比较版本号
+                            if (dependencyVersionMatch(versionCompare, replaceType)) { //如果版本号符合要求，即判定replace成立
+                                conflict_yes = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!conflict_yes) {
+                        break;
+                    }
+                }
+
+                if (!conflict_yes) {
+                    package = nullptr;
+                    continue;
+                }
+
+                qWarning() << "PackagesManager:" <<  "conflicts package installed: "
+                           << arch << package->name() << package->architecture()
+                           << package->multiArchTypeString() << mirror_version << conflict_version;
+                return ConflictResult::err(name);
+            }
+
+        }
+    }
+    return ConflictResult::ok(QString());
+}
+
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
 {
     for (const auto &conflict_list : conflicts) {
@@ -467,7 +551,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
 
     // conflicts
-    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts());
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts(), debFile.replaces());
 
     if (!debConflitsResult.is_ok()) {
         qWarning() << "PackagesManager:" << "depends break because conflict" << debFile.packageName();
@@ -516,15 +600,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                     //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString &eachDepend){
-                        if(!eachDepend.contains("deepin-wine")) {
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
+                        if (!eachDepend.contains("deepin-wine")) {
                             return true;
                         }
                         auto package = packageWithArch(eachDepend, debFile.architecture());
                         return !package->installedVersion().isEmpty();
                     });
                     dependList.erase(removedIter, dependList.end());
-                    if(dependList.isEmpty()) { //所有的wine依赖均已安装
+                    if (dependList.isEmpty()) { //所有的wine依赖均已安装
                         break;
                     }
 
@@ -542,7 +626,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                     dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
                 }
-            }while(0);
+            } while (0);
         }
     }
     if (dependsStatus.isBreak())
@@ -587,7 +671,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
     qInfo() << __func__ << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
-    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString &str){
+    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
         return !str.contains("|");
     });
     dependsList.erase(removedIter, dependsList.end());
@@ -1150,7 +1234,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
 {
     //预先校验包是否有效或是否重复
     DebFile currentDebfile(packagePath);
-    if(!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
+    if (!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
         return;
     }
 
@@ -1164,12 +1248,12 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_preparedPackages = installQueue.first;
     m_packageMd5 = installQueue.second;
     int indexRow = 0;
-    for (;indexRow != m_packageMd5.size();++indexRow) {
-        if(m_packageMd5[indexRow] == packageMd5Sum) {
+    for (; indexRow != m_packageMd5.size(); ++indexRow) {
+        if (m_packageMd5[indexRow] == packageMd5Sum) {
             break;
         }
     }
-    if(indexRow == m_packageMd5.size()) { //error
+    if (indexRow == m_packageMd5.size()) { //error
         return;
     }
 
