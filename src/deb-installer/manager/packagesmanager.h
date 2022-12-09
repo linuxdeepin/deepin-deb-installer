@@ -67,7 +67,7 @@ public:
      * @return
      */
     static QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                      const int multiArchType = InvalidMultiArchType);
+                                             const int multiArchType = InvalidMultiArchType);
 
     /**
      * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
@@ -353,6 +353,11 @@ private:
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
 
+    //带replaces的检查，如果判定待安装包可以替换冲突包，则认为不构成冲突
+    const ConflictResult isConflictSatisfy(const QString &arch,
+                                           const QList<DependencyItem> &conflicts,
+                                           const QList<DependencyItem> &replaces);
+
 private:
     /**
      * @brief packageWithArch 从指定的架构上打包
@@ -415,7 +420,7 @@ private:
      * @param architecture  安装包架构
      * @return
      */
-    QList<QString> getAllDepends(const QList<DependencyItem> &depends,QString architecture);
+    QList<QString> getAllDepends(const QList<DependencyItem> &depends, QString architecture);
 
     /**
      * @brief getAllDepends 获取依赖包所有依赖
@@ -423,7 +428,7 @@ private:
      * @param architecture  架构
      * @return
      */
-    QList<QString> getAllDepends(const QString &packageName,QString architecture);
+    QList<QString> getAllDepends(const QString &packageName, QString architecture);
 
     /**
      * @brief refreshPage 刷新当前的页面
@@ -487,12 +492,12 @@ private:
 private:
 
     //安装程序后端指针(异步加载)
-    QFuture<QApt::Backend *> m_backendFuture;           
+    QFuture<QApt::Backend *> m_backendFuture;
 
     //存放包路径的列表
-    QList<QString> m_preparedPackages       = {};   
+    QList<QString> m_preparedPackages       = {};
 
-    //存放包MD5的集合       
+    //存放包MD5的集合
     QSet<QByteArray> m_appendedPackagesMd5  = {};
 
     QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
@@ -539,7 +544,7 @@ private:
     int m_DealDependIndex = -1;
 
     //下载依赖的线程
-    DealDependThread *m_installWineThread        = nullptr;    
+    DealDependThread *m_installWineThread        = nullptr;
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记
