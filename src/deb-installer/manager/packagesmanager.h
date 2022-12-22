@@ -83,6 +83,26 @@ public:
      */
     void selectedIndexRow(int row);
 
+    /**
+     * @brief searchPackageInstallInfo 查找指定包安装状态
+     * @param package_path 路径
+     */
+    int checkInstallStatus(const QString &package_path);
+    /**
+     * @brief searchPackageInstallInfo 查找指定包依赖
+     * @param package_path 包名字
+     */
+    PackageDependsStatus checkDependsStatus(const QString &package_path);
+    /**
+     * @brief searchPackageInstallInfo 查找指定包信息
+     * @param package_path 包名字
+     */
+    QStringList getPackageInfo(const QString &package_path);
+    /**
+     * @brief checkPackageValid 检查包有效性
+     * @param package_path 包名字
+     */
+    QString checkPackageValid(const QStringList &package_path);
 public slots:
     /**
      * @brief DealDependResult 处理wine依赖下载结果的槽函数
@@ -213,7 +233,7 @@ public:
      * true: 不符合当前系统架构的要求
      */
     bool isArchError(const int idx);
-
+    bool isArchErrorQstring(const QString &package_name);
 
     /**
      * @brief packageInstallStatus 获取指定index的包的安装状态
