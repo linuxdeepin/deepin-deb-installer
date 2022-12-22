@@ -131,7 +131,6 @@ foreach(subdir ${all_src})
 endforeach()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utils)
-
 file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/manager/*.cpp
@@ -140,7 +139,6 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/process/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/*.cpp
-
     )
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
@@ -170,4 +168,6 @@ install(DIRECTORY ${APP_RES_DIR}/deepin-deb-installer DESTINATION /usr/share/dee
 install(TARGETS deepin-deb-installer RUNTIME DESTINATION bin)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
 install(FILES ${APP_DESKTOP} DESTINATION share/applications)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dbus/com.deepin.DebInstaller.service DESTINATION share/dbus-1/services/)
+
 

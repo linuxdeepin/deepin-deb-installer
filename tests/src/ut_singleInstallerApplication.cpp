@@ -54,8 +54,7 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_parseCmdLine
     Stub stub;
     stub.set((void (QCommandLineParser::*)(const QCoreApplication &))ADDR(QCommandLineParser, process), stud_singleaAppProcess);
     singleInstaller->m_selectedFiles.append(" ");
-    singleInstaller->parseCmdLine();
-    EXPECT_TRUE(singleInstaller->m_selectedFiles.isEmpty());
+    EXPECT_TRUE(singleInstaller->parseCmdLine());
     QStringList debPathList;
     singleInstaller->InstallerDeb(debPathList);
     EXPECT_EQ(0, debPathList.size());
@@ -71,3 +70,37 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_activateWind
 
     EXPECT_TRUE(singleInstaller->m_qspMainWnd.get()->isVisible());
 }
+
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_checkInstallStatus)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(0, singleInstaller->checkInstallStatus("test.db"));
+}
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_checkDependsStatus)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(2, singleInstaller->checkDependsStatus("test.db"));
+}
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_checkDigitalSignature)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(0, singleInstaller->checkDigitalSignature("test.db"));
+}
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_getPackageInfo)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(QString(""), singleInstaller->getPackageInfo("test.db"));
+}
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_InstallerDebPackge)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(QString("You can only install local deb packages"), singleInstaller->InstallerDebPackge("test.db"));
+}
+TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_unInstallDebPackge)
+{
+    singleInstaller->activateWindow();
+    EXPECT_EQ(QString("currentdeb not install, uninstall package faild"), singleInstaller->unInstallDebPackge("test.db"));
+}
+
+
+
