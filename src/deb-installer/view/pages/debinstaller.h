@@ -144,6 +144,43 @@ private slots:
      * 显示设置框
      */
     void slotSettingDialogVisiable();
+    /**
+     * @brief PackagesSelected
+     * 添加包，但是不显示主窗口
+     */
+    void PackagesSelected(const QStringList &debPathList);
+
+    /**
+     * @brief startInstallPackge
+     * 开始安装，包并返回安装信息
+     */
+    QString startInstallPackge(const QString &debPath);
+    /**
+     * @brief startUnInstallPackge
+     * 卸载包，包并返回卸载信息
+     */
+    QString startUnInstallPackge(const QString &debPath);
+
+    /**
+     * @brief checkInstallStatus
+     * 查找包的安装状态
+     */
+    int checkInstallStatus(const QString &debPath);
+    /**
+     * @brief checkDependsStatus
+     * 查找包的依赖状态
+     */
+    int checkDependsStatus(const QString &debPath);
+    /**
+     * @brief checkDigitalSignature
+     * 查找包的数字签名
+     */
+    int checkDigitalSignature(const QString &debPath);
+    /**
+     * @brief getPackageInfo
+     * 查找包信息,返回(包名，包的路径，包的版本，包可用的架构，包的短描述，包的长描述)
+     */
+    QString getPackageInfo(const QString &debPath);
 
 private:
     /**

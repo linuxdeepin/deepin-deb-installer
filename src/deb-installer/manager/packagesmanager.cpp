@@ -95,6 +95,195 @@ void PackagesManager::selectedIndexRow(int row)
         emit signalMultDependPackages(m_dependsPackages.value(m_packageMd5[row]), installWineDepends);
 }
 
+int PackagesManager::checkInstallStatus(const QString &package_path)
+{
+    DebFile debFile(package_path);
+    if (!debFile.isValid())
+        return DebListModel::NotInstalled;
+    const QString packageName = debFile.packageName();
+    const QString packageArch = debFile.architecture();
+    Backend *backend = m_backendFuture.result();
+    if (!backend) {
+        qWarning() << "Failed to load libqapt backend";
+        return DebListModel::NotInstalled;
+    }
+    Package *package = packageWithArch(packageName, packageArch);
+
+
+    if (!package)
+        return DebListModel::NotInstalled;
+
+    const QString installedVersion = package->installedVersion();
+    package = nullptr;
+    if (installedVersion.isEmpty())
+        return DebListModel::NotInstalled;
+
+    const QString packageVersion = debFile.version();
+    const int result = Package::compareVersion(packageVersion, installedVersion);
+
+    int ret;
+    if (result == 0)
+        ret = DebListModel::InstalledSameVersion;
+    else if (result < 0)
+        ret = DebListModel::InstalledLaterVersion;
+    else
+        ret = DebListModel::InstalledEarlierVersion;
+
+    return ret;
+
+}
+
+PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_path)
+{
+    DebFile debFile(package_path);
+    if (!debFile.isValid())
+        return PackageDependsStatus::_break("");
+    m_currentPkgName = debFile.packageName();
+    m_orDepends.clear();
+    m_checkedOrDependsStatus.clear();
+    m_unCheckedOrDepends.clear();
+    m_dependsInfo.clear();
+    //用debFile.packageName()无法打开deb文件，故替换成debFile.filePath()
+    //更新m_dependsInfo
+    getPackageOrDepends(debFile.filePath(), debFile.architecture(), true);
+
+    const QString architecture = debFile.architecture();
+    PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
+
+    if (isBlackApplication(debFile.packageName())) {
+        dependsStatus.status  = DebListModel::Prohibit;
+        dependsStatus.package = debFile.packageName();
+        qWarning() << debFile.packageName() << "In the blacklist";
+        return dependsStatus;
+    }
+
+    if (isArchErrorQstring(package_path)) {
+        dependsStatus.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
+        dependsStatus.package = debFile.packageName();
+        QString packageName = debFile.packageName();
+        return PackageDependsStatus::_break(packageName);
+    }
+
+    // conflicts
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts(), debFile.replaces());
+
+    if (!debConflitsResult.is_ok()) {
+        qWarning() << "PackagesManager:" << "depends break because conflict" << debFile.packageName();
+        dependsStatus.package = debConflitsResult.unwrap();
+        dependsStatus.status = DebListModel::DependsBreak;
+    } else {
+        const ConflictResult localConflictsResult =
+            isInstalledConflict(debFile.packageName(), debFile.version(), architecture);
+        if (!localConflictsResult.is_ok()) {
+            qWarning() << "PackagesManager:" << "depends break because conflict with local package" << debFile.packageName();
+            dependsStatus.package = localConflictsResult.unwrap();
+            dependsStatus.status = DebListModel::DependsBreak;
+        } else {
+            QSet<QString> choose_set;
+            choose_set << debFile.packageName();
+            QStringList dependList;
+            bool isWineApplication = false;             //判断是否是wine应用
+            for (auto ditem : debFile.depends()) {      //每一个list中的关系是或的关系
+                for (auto dinfo : ditem) {
+                    Package *depend = packageWithArch(dinfo.packageName(), debFile.architecture());
+                    if (depend) {
+                        if (depend->name() == "deepin-elf-verify")   //deepi-elf-verify 是amd64架构非i386
+                            dependList << depend->name();
+                        else
+                            dependList << depend->name() + ":" + depend->architecture();
+
+                        depend = nullptr;
+
+                        if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
+                            isWineApplication = true;
+
+                    }
+                }
+            }
+            installWineDepends = false; //标记wine依赖下载线程开启
+            isDependsExists = false; //标记多架构依赖冲突
+            m_pair.first.clear(); //清空available依赖
+            m_pair.second.clear(); //清空broken依赖
+            if (m_dependsPackages.contains(m_currentPkgMd5))
+                m_dependsPackages.remove(m_currentPkgMd5);
+
+            dependsStatus = checkDependsPackageStatus(choose_set, debFile.architecture(), debFile.depends());
+            // 删除无用冗余的日志
+            //由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
+            //wine应用+非wine依赖不满足即可导致出问题
+            do {
+                if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
+                    //额外判断wine依赖是否已安装，同时剔除非wine依赖
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
+                        if (!eachDepend.contains("deepin-wine")) {
+                            return true;
+                        }
+                        auto package = packageWithArch(eachDepend, debFile.architecture());
+                        return !package->installedVersion().isEmpty();
+                    });
+                    dependList.erase(removedIter, dependList.end());
+                    if (dependList.isEmpty()) { //所有的wine依赖均已安装
+                        break;
+                    }
+                    dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
+                }
+            } while (0);
+        }
+    }
+    if (dependsStatus.isBreak())
+        Q_ASSERT(!dependsStatus.package.isEmpty());
+
+    return dependsStatus;
+}
+
+QStringList PackagesManager::getPackageInfo(const QString &package_path)
+{
+    QStringList value_list;
+    const DebFile deb(package_path);
+    if (!deb.isValid())
+        return value_list;
+    QString packageName = deb.packageName(); //包名
+    QString filePath = deb.filePath(); //包的路径
+    QString version = deb.version(); //包的版本
+    QString architecture = deb.architecture(); //包可用的架构
+    QString shortDescription = deb.shortDescription(); //包的短描述
+    QString longDescription = deb.longDescription(); //包的长描述
+    value_list << packageName << filePath << version << architecture << shortDescription << longDescription;
+    return value_list;
+}
+
+QString PackagesManager::checkPackageValid(const QStringList &package_path)
+{
+    for (QString debPackage : package_path) {                 //通过循环添加所有的包
+        QStorageInfo info(debPackage);                               //获取路径信息
+        QString device = info.device();   //获取设备信息
+        // 处理包不在本地的情况。
+        if (!device.startsWith("/dev/") && device != QString::fromLocal8Bit("tmpfs")) {  //判断路径信息是不是本地路径
+            return "You can only install local deb packages";
+        }
+        QString debPkg = debPackage;
+        //处理package文件路径相关问题
+        debPackage = dealPackagePath(debPackage);
+
+        QApt::DebFile pkgFile(debPackage);
+        //判断当前文件是否是无效文件
+        if (!pkgFile.isValid()) {
+            return "The deb package may be broken";
+        }
+        //获取当前文件的md5的值,防止重复添加
+        //在checkInvalid中已经获取过md5,避免2次获取影响性能
+        QByteArray md5 = m_allPackages.value(debPkg);
+        if (md5.isEmpty())
+            md5 = pkgFile.md5Sum();
+
+        // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
+        if (m_appendedPackagesMd5.contains(md5)) {
+            return "The deb package Already Added";
+        }
+    }
+    return "";
+}
+
 Backend *init_backend()
 {
     Backend *backend = new Backend;
@@ -150,6 +339,28 @@ bool PackagesManager::isArchError(const int idx)
         return true;
     }
     DebFile deb(m_preparedPackages[idx]);
+
+    if (!deb.isValid())
+        return false;
+
+    const QString arch = deb.architecture();
+
+    if ("all" == arch || "any" == arch)
+        return false;
+
+    bool architectures = !backend->architectures().contains(deb.architecture());
+
+    return architectures;
+}
+
+bool PackagesManager::isArchErrorQstring(const QString &package_name)
+{
+    Backend *backend = m_backendFuture.result();
+    if (!backend) {
+        qWarning() << "Failed to load libqapt backend";
+        return true;
+    }
+    DebFile deb(package_name);
 
     if (!deb.isValid())
         return false;
@@ -1515,6 +1726,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         qWarning() << "Failed to load libqapt backend";
         return nullptr;
     }
+
     Package *package = backend->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
     // change: 按照当前支持的CPU架构进行打包。取消对deepin-wine的特殊处理
     if (!package)
