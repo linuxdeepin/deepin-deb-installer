@@ -258,6 +258,36 @@ public:
      */
     void removePackage(const int idx);
 
+    /**
+     * @brief checkPackageDigitalSignature 查找指定包安装状态
+     * @param package_path 路径
+     */
+    int checkInstallStatus(const QString &package_path);
+    /**
+     * @brief searchPackageInstallInfo 查找指定包依赖
+     * @param package_path 路径
+     */
+    int checkDependsStatus(const QString &package_path);
+    /**
+     * @brief searchPackageInstallInfo 查找指定包数字签名
+     * @param package_path 路径
+     */
+    int checkDigitalSignature(const QString &package_path);
+    /**
+     * @brief searchPackageInstallInfo 查找指定包信息
+     * @param package_path 路径
+     */
+    QStringList getPackageInfo(const QString &package_path);
+    /**
+     * @brief getInstallErrorMessage 安装错误信息
+     */
+    QString getInstallErrorMessage();
+    /**
+     * @brief checkPackageValid 查找指定包信息
+     * @param package_path 路径
+     */
+    QString checkPackageValid(const QString &package_path);
+
 signals:
     /**
      * @brief signalLockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
