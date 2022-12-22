@@ -426,6 +426,49 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);       //在packageManager中删除标记的下标
 }
 
+int DebListModel::checkInstallStatus(const QString &package_path)
+{
+    return m_packagesManager->checkInstallStatus(package_path);
+}
+
+int DebListModel::checkDependsStatus(const QString &package_path)
+{
+    return m_packagesManager->checkDependsStatus(package_path).status;
+}
+
+int DebListModel::checkDigitalSignature(const QString &package_path)
+{
+    const auto stat = m_packagesManager->checkDependsStatus(package_path); //获取包的依赖状态
+    if (stat.isBreak() || stat.isAuthCancel())
+        return Utils::VerifySuccess;
+    SettingDialog dialog;
+    m_isDigitalVerify = dialog.isDigitalVerified();
+    int digitalSigntual = Utils::Digital_Verify(package_path); //判断是否有数字签名
+    if (m_isDevelopMode && !m_isDigitalVerify) { //开发者模式且未设置验签功能
+        return Utils::VerifySuccess;
+    } else if (m_isDevelopMode && m_isDigitalVerify) { //开发者模式且设置验签功能
+        return digitalSigntual;
+    } else { //非开发者模式
+        return digitalSigntual;
+    }
+}
+
+QStringList DebListModel::getPackageInfo(const QString &package_path)
+{
+    return m_packagesManager->getPackageInfo(package_path);
+}
+
+QString DebListModel::getInstallErrorMessage()
+{
+    if (m_currentTransaction)
+        return m_currentTransaction->errorString();
+    return "faild";
+}
+
+QString DebListModel::checkPackageValid(const QString &package_path)
+{
+    return m_packagesManager->checkPackageValid(QStringList(package_path));
+}
 
 void DebListModel::slotAppendPackage(QStringList package)
 {
@@ -843,7 +886,7 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->show();    //显示弹窗
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
-    std::function<void(void)> rejectOperate = [this, Ddialog](){
+    std::function<void(void)> rejectOperate = [this, Ddialog]() {
         this->slotNoDigitalSignature();
         Ddialog->deleteLater();
     };
@@ -894,7 +937,7 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog](){
+    std::function<void(void)> exitOperate = [this, Ddialog]() {
         this->slotDigitalSignatureError();
         Ddialog->deleteLater();
     };
@@ -1096,9 +1139,9 @@ void DebListModel::installNextDeb()
 {
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex); //刷新软件包依赖状态
     auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if(dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+    if (dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
-    } else if(dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
+    } else if (dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
         return;
@@ -1419,7 +1462,7 @@ void DebListModel::showProhibitWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog](){
+    std::function<void(void)> exitOperate = [this, Ddialog]() {
         this->slotShowProhibitWindow();
         Ddialog->deleteLater();
     };
