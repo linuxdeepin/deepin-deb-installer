@@ -167,11 +167,88 @@ void DebInstaller::slotSettingDialogVisiable()
     m_settingDialog->exec();
 }
 
+void DebInstaller::PackagesSelected(const QStringList &debPathList)
+{
+    // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
+    // 依赖配置过程中，不添加其他包
+    if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare)
+            || DebListModel::WorkerProcessing == m_fileListModel->getWorkerStatus()
+            || DebListModel::WorkerUnInstall == m_fileListModel->getWorkerStatus()
+            || DebListModel::AuthPop == m_wineAuthStatus
+            || DebListModel::AuthConfirm == m_wineAuthStatus
+            || DebListModel::AuthDependsErr == m_wineAuthStatus) {
+    } else {
+        //开始添加包，将要添加的包传递到后端，添加包由后端处理
+        m_fileListModel->slotAppendPackage(debPathList);
+    }
+}
+
+QString DebInstaller::startInstallPackge(const QString &debPath)
+{
+    QString message;
+    //判断包有效性
+    message = m_fileListModel->checkPackageValid(debPath);
+    if (!message.isEmpty())
+        return message;
+    //添加包
+    PackagesSelected(QStringList(debPath));
+    //安装包
+    m_fileListModel->slotInstallPackages();
+    //获取安装结果
+    message = m_fileListModel->getInstallErrorMessage();
+    if (message.isEmpty())
+        message = "install succeeded";
+    return message;
+}
+
+QString DebInstaller::startUnInstallPackge(const QString &debPath)
+{
+    //查询的当前包是否安装,避免重复卸载
+    if (DebListModel::PackageInstallStatus::NotInstalled == checkInstallStatus(debPath))
+        return "currentdeb not install, uninstall package faild";
+    //添加包
+    PackagesSelected(QStringList(debPath));
+    //开始卸载
+    m_fileListModel->slotUninstallPackage(0);
+    //获取卸载结果
+    QString message = m_fileListModel->getInstallErrorMessage();
+    if (message.isEmpty())
+        message = "Uninstall succeeded";
+    return message;
+}
+
+int DebInstaller::checkInstallStatus(const QString &debPath)
+{
+    if (debPath.isEmpty())
+        return -1;
+    return m_fileListModel->checkInstallStatus(debPath);
+}
+
+int DebInstaller::checkDependsStatus(const QString &debPath)
+{
+    if (debPath.isEmpty())
+        return -1;
+    return  m_fileListModel->checkDependsStatus(debPath);
+}
+
+int DebInstaller::checkDigitalSignature(const QString &debPath)
+{
+    if (debPath.isEmpty())
+        return -1;
+    return  m_fileListModel->checkDependsStatus(debPath);
+}
+
+QString DebInstaller::getPackageInfo(const QString &debPath)
+{
+    if (debPath.isEmpty())
+        return "";
+    return  m_fileListModel->getPackageInfo(debPath).join(";");
+}
 void DebInstaller::disableCloseAndExit()
 {
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
     DTitlebar *tbar = this->titlebar();
-    if(tbar){
+    if (tbar) {
         tbar->setQuitMenuDisabled(true);
     }
 
@@ -184,7 +261,7 @@ void DebInstaller::enableCloseAndExit()
                                 ~Qt::WindowCloseButtonHint);
 
     DTitlebar *tbar = this->titlebar();
-    if(tbar){
+    if (tbar) {
         tbar->setQuitMenuDisabled(false);
     }
 }
@@ -309,7 +386,7 @@ void DebInstaller::slotShowPkgRemovedMessage(QString packageName)
 
 void DebInstaller::slotShowUninstallConfirmPage()
 {
-    m_fileListModel->setWorkerStatus( DebListModel::WorkerUnInstall);                       //刷新当前安装器的工作状态
+    m_fileListModel->setWorkerStatus(DebListModel::WorkerUnInstall);                        //刷新当前安装器的工作状态
 
     this->setAcceptDrops(false);                                                                //卸载页面不允许添加/拖入包
 
@@ -493,7 +570,7 @@ void DebInstaller::slotSetEnableButton(bool bButtonEnabled)
     if (m_packageAppending)
         return;
     //Set button enabled after installation canceled
-    if (2 == m_dragflag ) {//单包安装按钮的启用与禁用
+    if (2 == m_dragflag) { //单包安装按钮的启用与禁用
         SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
         if (singlePage)
             singlePage->setEnableButton(bButtonEnabled);

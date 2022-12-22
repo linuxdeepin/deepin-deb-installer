@@ -21,7 +21,6 @@
 
 #include <QDBusConnection>
 #include <QDBusInterface>
-
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
@@ -66,9 +65,7 @@ int main(int argc, char *argv[])
     qDebug() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    if (dbus.registerService("com.deepin.DebInstaller")) {
-        dbus.registerObject("/com/deepin/DebInstaller", &app, QDBusConnection::ExportScriptableSlots);
-        app.parseCmdLine();
+    if (app.parseCmdLine()) {
         app.activateWindow();
         //埋点记录启动数据
         QJsonObject objStartEvent{
@@ -80,12 +77,12 @@ int main(int argc, char *argv[])
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
         return app.exec();
     } else {
-        QCommandLineParser parser;
-        parser.process(app);
-        QList<QVariant> debInstallPathList;
-        debInstallPathList << parser.positionalArguments();
-        QDBusInterface notification("com.deepin.DebInstaller", "/com/deepin/DebInstaller", "com.deepin.DebInstaller", QDBusConnection::sessionBus());
-        QDBusMessage msg = notification.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
-        return 0;
+        qDebug() << "argument_parser.parseArguments()";
+        //解析参数失败，１００ｍｓ退出进程
+        QTimer::singleShot(100, [&]() {
+            app.quit();
+        });
+        return app.exec();
     }
+
 }
