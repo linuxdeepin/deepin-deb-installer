@@ -8,6 +8,21 @@ if (NOT DEFINED VERSION)
     set(VERSION 5.3.9)
 endif ()
 
+#检查qapt版本
+execute_process(COMMAND dpkg -s libqapt-dev
+                COMMAND grep Version
+                TIMEOUT 5
+                OUTPUT_VARIABLE QAPT_VERSION_STR)
+string(REPLACE "Version: " "" QAPT_VERSION_STR ${QAPT_VERSION_STR})
+message(STATUS "BUILD QAPT VERSION ${QAPT_VERSION_STR}")
+
+if(${QAPT_VERSION_STR} STRLESS "3.0.4.8-1+deepin2")
+    message(STATUS "disable virtual package enhance")
+else()
+    message(STATUS "enable virtual package enhance")
+    add_definitions(-DENABLE_VIRTUAL_PACKAGE_ENHANCE)
+endif()
+
 #common resource names
 set(APP_RES_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(APP_BIN_NAME "deepin-deb-installer")
