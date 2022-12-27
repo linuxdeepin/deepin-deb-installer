@@ -1597,10 +1597,29 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         return PackageDependsStatus::_break(package_name);
     }
 
+    //虚拟包版本号处理步骤
+    QString pkgRealVer = package->version();
+    bool isVirtualPackage = false;
+
+#ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
+    if (package->name() != package_name) {
+        auto pkgMap = package->providesListEnhance();
+        auto iter = pkgMap.find(package_name);
+        if (iter != pkgMap.end()) {
+            pkgRealVer = *iter;
+            isVirtualPackage = true;
+        }
+    }
+#endif
+
     const RelationType relation = dependencyInfo.relationType();
-    const QString &installedVersion = package->installedVersion();
+    QString installedVersion = package->installedVersion();
 
     if (!installedVersion.isEmpty()) {
+        if (isVirtualPackage) {
+            installedVersion = pkgRealVer;
+        }
+
         const int result = Package::compareVersion(installedVersion, dependencyInfo.packageVersion());
         if (dependencyVersionMatch(result, relation)) {
             return PackageDependsStatus::ok();
@@ -1625,7 +1644,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             return PackageDependsStatus::_break(package->name());
         }
     } else {
-        const int result = Package::compareVersion(package->version(), dependencyInfo.packageVersion());
+        const int result = Package::compareVersion(pkgRealVer, dependencyInfo.packageVersion());
         if (!dependencyVersionMatch(result, relation)) {
             qWarning() << "PackagesManager:" << "depends break by" << package->name() << package->architecture() << dependencyInfo.packageVersion();
             qWarning() << "PackagesManager:" << "available version not match" << package->version();
