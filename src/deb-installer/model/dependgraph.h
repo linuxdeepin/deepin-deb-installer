@@ -10,13 +10,12 @@
 
 #include <vector>
 
-struct DependGraphNode
-{
+struct DependGraphNode {
     QString packageName;
     QString packagePath;
     QByteArray md5;
     QList<QApt::DependencyItem> depends;
-    std::vector<DependGraphNode*> dependsInGraph;
+    std::vector<DependGraphNode *> dependsInGraph;
 };
 
 class DependGraph
@@ -30,7 +29,9 @@ public:
 
     void reset();
     void remove(const QByteArray &md5);
+protected:
+    void removeInGraph(const DependGraphNode *dependnode);
 
 private:
-    std::vector<DependGraphNode*> nodes;
+    std::vector<DependGraphNode *> nodes;
 };
