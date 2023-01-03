@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dependgraph.h"
+#include <QtDebug>
 
 DependGraph::~DependGraph()
 {
@@ -52,6 +53,14 @@ void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, con
     nodes.push_back(node);
 }
 
+bool isCircularDepend(DependGraphNode *currentNode, DependGraphNode *dependNode)
+{
+    auto iter = std::find_if(dependNode->dependsInGraph.begin(), dependNode->dependsInGraph.end(), [currentNode](DependGraphNode * node) {
+        return currentNode->packageName == node->packageName;
+    });
+    return iter != dependNode->dependsInGraph.end();
+}
+
 void addDepend(QList<QString> &paths, QList<QByteArray> &md5s, QStringList &result, DependGraphNode *node)
 {
     if (result.contains(node->packageName)) {
@@ -67,6 +76,10 @@ void addDepend(QList<QString> &paths, QList<QByteArray> &md5s, QStringList &resu
             paths.push_back(eachDependNode->packagePath);
             md5s.push_back(eachDependNode->md5);
         } else {
+            if (isCircularDepend(node, eachDependNode)) { //检查循环依赖
+                qWarning() << "Detect circular depend: lhs:" << node->packageName << "rhs:" << eachDependNode->packageName;
+                continue;
+            }
             addDepend(paths, md5s, result, eachDependNode);
             if (result.contains(eachDependNode->packageName)) {
                 continue;
