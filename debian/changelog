@@ -1,3 +1,8 @@
+deepin-deb-installer (5.8.25) unstable; urgency=medium
+
+  * New version 5.8.25
+
+ -- Deepin Packages Builder <packages@deepin.com>  Tue, 3 Jan 2023 16:51:35 +0800
 deepin-deb-installer (5.3.9) unstable; urgency=medium
 
   * Initial Release.
