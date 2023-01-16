@@ -30,18 +30,15 @@ bool PackageSigntureStatus::checkDeviceLock()
 
 SigntureStatus PackageSigntureStatus::checkPackageSignture(QString packagePath)
 {
-
     if (checkDeviceLock()) {
         qInfo() << "已打开开发者模式，默认签名验证通过";
         return SigntureVerifySuccess;
     }
     if (checkDigitalVerifyTools()) {
-        QString program = "/usr/bin/deepin-deb-verify ";
+        QString program = "/usr/bin/deepin-deb-verify";
         packagePath = "\"" + packagePath + "\"";
-        program = program + packagePath;
-        m_pCheckSignProc->start(program);
+        m_pCheckSignProc->start(program, {"\"" + packagePath + "\""});
         m_pCheckSignProc->waitForFinished(-1);
-        const QString output = m_pCheckSignProc->readAllStandardOutput();
         const QString output1 = m_pCheckSignProc->readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
         for (const auto &item : output1.split('\n')) {

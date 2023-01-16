@@ -17,17 +17,16 @@ InstallDebThread::~InstallDebThread()
         delete m_proc;
 }
 
-void InstallDebThread::setParam(QStringList tParam)
+void InstallDebThread::setParam(const QStringList &tParam)
 {
     m_listParam = tParam;
 }
 
-void InstallDebThread::getDescription(QString debPath)
+void InstallDebThread::getDescription(const QString &debPath)
 {
-    QString str = "dpkg -e " + debPath + " " + TEMPLATE_DIR;
     // system() 存在可控命令参数注入漏洞，即使拼接也存在命令分隔符（特殊字符）机制，因此更换方式去执行命令
     QProcess process;
-    process.start(str);
+    process.start("dpkg", {"-e", debPath, TEMPLATE_DIR});
     process.waitForFinished(-1);
 
     QFile file;
@@ -54,8 +53,8 @@ void InstallDebThread::on_readoutput()
     QString tmp = m_proc->readAllStandardOutput().data();
     qDebug() << tmp;
 
-    foreach (QString str, m_listDescribeData) {
-        if (tmp.contains(str)) {
+    foreach (QString eachData, m_listDescribeData) {
+        if (tmp.contains(eachData)) {
             char c_input[20];
             while (fgets(c_input, 10, stdin)) {
                 QString str = c_input;
@@ -141,7 +140,7 @@ void InstallDebThread::run()
  * @param packageName 软件包的包名
  * @return 软链接的路径
  */
-QString InstallDebThread::SymbolicLink(QString previousName, QString packageName)
+QString InstallDebThread::SymbolicLink(const QString &previousName, const QString &packageName)
 {
     if (!mkTempDir()) {
         qWarning() << "InstallDebThread:" << "Failed to create temporary folder";
@@ -184,7 +183,7 @@ bool InstallDebThread::rmTempDir()
  * @param packageName           包的packageName
  * @return                      软链接之后的路径
  */
-QString InstallDebThread::link(QString linkPath, QString packageName)
+QString InstallDebThread::link(const QString &linkPath, const QString &packageName)
 {
     qDebug() << "InstallDebThread: Create soft link for" << packageName;
     QFile linkDeb(linkPath);

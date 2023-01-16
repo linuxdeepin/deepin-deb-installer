@@ -66,7 +66,7 @@ public:
      * @param errorInfo 库返回的或自定义的安装错误的原因
      * @return 要显示的安装失败的原因
      */
-    static const QString workerErrorString(const int errorCode, const QString errorInfo);
+    static const QString workerErrorString(const int errorCode, const QString &errorInfo);
     /**
      * @brief The PackageRole enum
      * 包的各种数据角色
@@ -473,7 +473,7 @@ public slots:
      * @param dependIndex   依赖包的index（因为这个包的依赖不被满足）
      * @param dependName    发生依赖安装失败的依赖名称
      */
-    void slotDealDependResult(int authType, int dependIndex, QString dependName);
+    void slotDealDependResult(int authType, int dependIndex, const QString &dependName);
 
 public slots:
     /**
@@ -491,7 +491,7 @@ public slots:
      * @brief slotConfigInputWrite 配置的输入数据处理
      * @param str 输入的数据（一般是输入的选项）
      */
-    void slotConfigInputWrite(QString str);
+    void slotConfigInputWrite(const QString &str);
 
     /**
      * @brief slotCheckInstallStatus 根据命令返回的消息判断安装状态
@@ -499,7 +499,7 @@ public slots:
      * 如果命令返回的信息是Cannot run program deepin-deb-installer-dependsInstall: No such file or directory
      * 意味着当前/usr/bin下没有deepin-deb-installer-dependsInstall命令，此版本有问题，需要重新安装deepin-deb-installer-dependsInstall命令
      */
-    void slotCheckInstallStatus(QString str);
+    void slotCheckInstallStatus(const QString &str);
 
 private slots:
 
@@ -663,13 +663,13 @@ private:
      * @param debPath   包的路径
      * @return  是否需要配置
      */
-    bool checkTemplate(QString debPath);
+    bool checkTemplate(const QString &debPath);
 
     /**
      * @brief getDebian    获取包的DEBIAN文件
      * @param debPath      包的路径
      */
-    void getDebian(QString debPath);
+    void getDebian(const QString &debPath);
 
     /**
      * @brief mkdir     创建临时目录 ，存放DEBIAN文件
@@ -706,7 +706,7 @@ private:
      *         true : 文件存在
      *         false: 文件不存在
      */
-    bool recheckPackagePath(QString packagePath) const;
+    bool recheckPackagePath(const QString &packagePath) const;
 
 private:
     /**

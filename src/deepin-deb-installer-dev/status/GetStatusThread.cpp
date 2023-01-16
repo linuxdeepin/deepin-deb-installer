@@ -16,7 +16,7 @@ GetStatusThread::GetStatusThread(PackageStatus *packageStatus)
     m_pPackageStatus = packageStatus;
 }
 
-void GetStatusThread::setPackage(int index, QString packagePath)
+void GetStatusThread::setPackage(int index, const QString &packagePath)
 {
     m_index  = index;
     m_packagePath = packagePath;

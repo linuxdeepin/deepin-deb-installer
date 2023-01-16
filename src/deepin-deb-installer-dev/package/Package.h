@@ -14,8 +14,8 @@
 class Package
 {
 public:
-    Package(QString packagePath);
-    Package(int index, QString packagePath);
+    explicit Package(const QString &packagePath);
+    explicit Package(int index, const QString &packagePath);
     Package();
 
     ~Package();
@@ -30,7 +30,7 @@ public:
      * @brief setPackagePath 设置包的路径
      * @param packagePath   包的路径
      */
-    void setPackagePath(QString packagePath);
+    void setPackagePath(const QString &packagePath);
 
     /**
      * @brief setPackageDependStatus 设置包的依赖状态
@@ -42,7 +42,7 @@ public:
      * @brief setPackageAvailableDepends 设置包的可用依赖列表
      * @param depends 依赖列表
      */
-    void setPackageAvailableDepends(QStringList depends);
+    void setPackageAvailableDepends(const QStringList &depends);
 
     /**
      * @brief setPackageInstallStatus 设置包的安装状态
@@ -54,7 +54,7 @@ public:
      * @brief setPackageReverseDependsList 设置依赖于这个包的应用列表
      * @param reverseDepends    应用列表
      */
-    void setPackageReverseDependsList(QStringList reverseDepends);
+    void setPackageReverseDependsList(const QStringList &reverseDepends);
 
     /**
      * @brief getIndex 获取包的下标
@@ -150,6 +150,8 @@ private:
      */
     PackageSigntureStatus *m_pSigntureStatus    = nullptr;
 
+    Package(const Package &rhs) = delete;
+    Package& operator=(const Package &rhs) = delete;
 };
 
 #endif // PACKAGE_H

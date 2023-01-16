@@ -10,13 +10,7 @@
 
 #include <vector>
 
-struct DependGraphNode {
-    QString packageName;
-    QString packagePath;
-    QByteArray md5;
-    QList<QApt::DependencyItem> depends;
-    std::vector<DependGraphNode *> dependsInGraph;
-};
+struct DependGraphNode;
 
 class DependGraph
 {

@@ -21,8 +21,8 @@ class InstallDebThread : public QThread
 public:
     InstallDebThread();
     virtual ~InstallDebThread();
-    void setParam(QStringList tParam);
-    void getDescription(QString debPath);
+    void setParam(const QStringList &tParam);
+    void getDescription(const QString &debPath);
     void run();
     int m_resultFlag = -1;
 
@@ -39,8 +39,8 @@ private:
 
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
     //使用软连接方式解决文件路径中存在空格的问题。
-    QString SymbolicLink(QString previousName, QString packageName);
-    QString link(QString linkPath, QString packageName);
+    QString SymbolicLink(const QString &previousName, const QString &packageName);
+    QString link(const QString &linkPath, const QString &packageName);
     bool mkTempDir();
     bool rmTempDir();
 

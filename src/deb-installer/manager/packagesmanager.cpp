@@ -658,7 +658,7 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
-void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, QString dependName)
+void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QString &dependName)
 {
     if (iIndex < 0 || iIndex > m_preparedPackages.size())
         return;
@@ -762,7 +762,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
 
     // conflicts
-    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts(), debFile.replaces());
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts());
 
     if (!debConflitsResult.is_ok()) {
         qWarning() << "PackagesManager:" << "depends break because conflict" << debFile.packageName();
@@ -811,15 +811,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                     //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
-                        if (!eachDepend.contains("deepin-wine")) {
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString &eachDepend){
+                        if(!eachDepend.contains("deepin-wine")) {
                             return true;
                         }
                         auto package = packageWithArch(eachDepend, debFile.architecture());
                         return !package->installedVersion().isEmpty();
                     });
                     dependList.erase(removedIter, dependList.end());
-                    if (dependList.isEmpty()) { //所有的wine依赖均已安装
+                    if(dependList.isEmpty()) { //所有的wine依赖均已安装
                         break;
                     }
 
@@ -837,7 +837,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                     dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
                 }
-            } while (0);
+            }while(0);
         }
     }
     if (dependsStatus.isBreak())
@@ -882,7 +882,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
     qInfo() << __func__ << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
-    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
+    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString &str){
         return !str.contains("|");
     });
     dependsList.erase(removedIter, dependsList.end());
@@ -1263,7 +1263,7 @@ void PackagesManager::appendPackage(QStringList packages)
 /**
  * @brief AddPackageThread::checkInvalid 检查有效文件的数量
  */
-void PackagesManager::checkInvalid(QStringList packages)
+void PackagesManager::checkInvalid(const QStringList &packages)
 {
     m_allPackages.clear();
     m_validPackageCount = packages.size();
@@ -1308,7 +1308,7 @@ void PackagesManager::checkInvalid(QStringList packages)
  *   true   : 包在本地
  *   fasle  : 文件不在本地
  */
-bool PackagesManager::dealInvalidPackage(QString packagePath)
+bool PackagesManager::dealInvalidPackage(const QString &packagePath)
 {
     QStorageInfo info(packagePath);                               //获取路径信息
 
@@ -1328,25 +1328,26 @@ bool PackagesManager::dealInvalidPackage(QString packagePath)
  *      1： 相对路径             --------> 转化为绝对路径
  *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
  */
-QString PackagesManager::dealPackagePath(QString packagePath)
+QString PackagesManager::dealPackagePath(const QString &packagePath)
 {
+    auto tempPath = packagePath;
     //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
-    if (!packagePath.startsWith("/")) {
-        QFileInfo packageAbsolutePath(packagePath);
-        packagePath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
+    if (!tempPath.startsWith("/")) {
+        QFileInfo packageAbsolutePath(tempPath);
+        tempPath = packageAbsolutePath.absoluteFilePath();                           //获取绝对路径
         qInfo() << "get AbsolutePath" << packageAbsolutePath.absoluteFilePath();
     }
 
     // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
-    if (packagePath.contains(" ")) {
-        QApt::DebFile p(packagePath);
+    if (tempPath.contains(" ")) {
+        QApt::DebFile p(tempPath);
         if (p.isValid()) {
-            packagePath = SymbolicLink(packagePath, p.packageName());
+            tempPath = SymbolicLink(tempPath, p.packageName());
             qWarning() << "PackagesManager:"
-                       << "There are spaces in the path, add a soft link" << packagePath;
+                       << "There are spaces in the path, add a soft link" << tempPath;
         }
     }
-    return packagePath;
+    return tempPath;
 }
 
 /**
@@ -1354,7 +1355,7 @@ QString PackagesManager::dealPackagePath(QString packagePath)
  * @param packages
  * @param allPackageSize
  */
-void PackagesManager::appendNoThread(QStringList packages, int allPackageSize)
+void PackagesManager::appendNoThread(const QStringList &packages, int allPackageSize)
 {
     for (QString debPackage : packages) {                 //通过循环添加所有的包
 
@@ -1441,11 +1442,11 @@ void PackagesManager::slotAppendPackageFinished()
     emit signalAppendFinished(m_packageMd5);
 }
 
-void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum)
+void PackagesManager::addPackage(int validPkgCount, const QString &packagePath, const QByteArray &packageMd5Sum)
 {
     //预先校验包是否有效或是否重复
     DebFile currentDebfile(packagePath);
-    if (!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
+    if(!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
         return;
     }
 
@@ -1459,12 +1460,12 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     m_preparedPackages = installQueue.first;
     m_packageMd5 = installQueue.second;
     int indexRow = 0;
-    for (; indexRow != m_packageMd5.size(); ++indexRow) {
-        if (m_packageMd5[indexRow] == packageMd5Sum) {
+    for (;indexRow != m_packageMd5.size();++indexRow) {
+        if(m_packageMd5[indexRow] == packageMd5Sum) {
             break;
         }
     }
-    if (indexRow == m_packageMd5.size()) { //error
+    if(indexRow == m_packageMd5.size()) { //error
         return;
     }
 
@@ -1473,7 +1474,7 @@ void PackagesManager::addPackage(int validPkgCount, QString packagePath, QByteAr
     refreshPage(validPkgCount);                     //添加后，根据添加的状态刷新界面
 }
 
-QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depends, QString architecture)
+QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depends, const QString &architecture)
 {
     //检索当前包的所有依赖
     for (const auto &list : depends) {
@@ -1482,12 +1483,12 @@ QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depen
             m_allDependsList << info.packageName() << dList; //存储所有依赖
         }
     }
-    m_allDependsList = m_allDependsList.toSet().toList();
+    m_allDependsList = m_allDependsList.toSet().values();
 
     return m_allDependsList;
 }
 
-QList<QString> PackagesManager::getAllDepends(const QString &packageName, QString architecture)
+QList<QString> PackagesManager::getAllDepends(const QString &packageName, const QString &architecture)
 {
     QList<QString> dDepends; //存储依赖的依赖
     dDepends << packageName;
@@ -1545,12 +1546,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         dependsStatus.minEq(r);
 
         if (!m_unCheckedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
-            QVector<QString> depends;
             for (auto orDepends : m_unCheckedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
-                depends = orDepends;
                 if (orDepends.contains(info.packageName())) {
                     m_unCheckedOrDepends.removeOne(orDepends);
                     m_checkedOrDependsStatus.insert(info.packageName(), r);
+                    auto depends = orDepends;
                     depends.removeOne(info.packageName()); //将当前依赖从或依赖中删除，检测或依赖中剩余依赖状态
                     qInfo() << depends << orDepends;
                     for (auto otherDepend : depends) {
@@ -1774,7 +1774,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
  * @param packageName 软件包的包名
  * @return 软链接的路径
  */
-QString PackagesManager::SymbolicLink(QString previousName, QString packageName)
+QString PackagesManager::SymbolicLink(const QString &previousName, const QString &packageName)
 {
     if (!mkTempDir()) {//如果创建临时目录失败,则提示
         qWarning() << "PackagesManager:" << "Failed to create temporary folder";
@@ -1803,7 +1803,7 @@ bool PackagesManager::mkTempDir()
  * @param packageName           包的packageName
  * @return                      软链接之后的路径
  */
-QString PackagesManager::link(QString linkPath, QString packageName)
+QString PackagesManager::link(const QString &linkPath, const QString &packageName)
 {
     QFile linkDeb(linkPath);
 
@@ -1871,7 +1871,7 @@ void PackagesManager::getBlackApplications()
     qWarning() << "Black File not Found";
 }
 
-bool PackagesManager::isBlackApplication(QString applicationName)
+bool PackagesManager::isBlackApplication(const QString &applicationName)
 {
     if (m_blackApplicationList.contains(applicationName))
         return true;
