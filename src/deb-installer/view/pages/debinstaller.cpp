@@ -92,12 +92,12 @@ void DebInstaller::initUI()
 void DebInstaller::initTitleBar()
 {
     //title bar settings
-    DTitlebar *tb = titlebar();
     QAction *settingAction(new QAction(tr("Settings"), this));
     DMenu *menu = new DMenu;
     menu->addAction(settingAction);
-    tb->setMenu(menu);
-    if (tb) {
+    DTitlebar *tb = titlebar();
+    if (tb != nullptr) {
+        tb->setMenu(menu);
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
         tb->setAutoFillBackground(true);

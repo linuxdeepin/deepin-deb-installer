@@ -45,7 +45,7 @@ signals:
      * @brief packagesSelected 选择文件信号
      * @param files 通过文件选择窗口选择的文件
      */
-    void packagesSelected(const QStringList files) const;
+    void packagesSelected(const QStringList &files) const;
 
 private slots:
     /**

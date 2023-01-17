@@ -18,13 +18,13 @@ DealDependThread::~DealDependThread()
     delete proc;
 }
 
-void DealDependThread::setDependsList(QStringList dependList, int index)
+void DealDependThread::setDependsList(const QStringList &dependList, int index)
 {
     m_index = index;
     m_dependsList = dependList;
 }
 
-void DealDependThread::setBrokenDepend(QString dependName)
+void DealDependThread::setBrokenDepend(const QString &dependName)
 {
     m_brokenDepend = dependName;
 }

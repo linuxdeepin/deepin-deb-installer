@@ -30,16 +30,16 @@ PackageStatus::PackageStatus()
 }
 
 PackageStatus::PackageStatus(DependsStatus ds, const QString &pkg)
-    : m_backendFuture(QtConcurrent::run(init_backend))
+    : m_status(ds)
+    , m_package(pkg)
+    , m_backendFuture(QtConcurrent::run(init_backend))
 {
-    status = ds;
-    package = pkg;
 }
 
 PackageStatus &PackageStatus::operator=(const PackageStatus &other)
 {
-    status = other.status;
-    package = other.package;
+    m_status = other.m_status;
+    m_package = other.m_package;
     m_backendFuture = other.m_backendFuture;
 
     return *this;
@@ -47,45 +47,45 @@ PackageStatus &PackageStatus::operator=(const PackageStatus &other)
 
 PackageStatus PackageStatus::max(const PackageStatus &other)
 {
-    if (other.status > status) *this = other;
+    if (other.m_status > m_status) *this = other;
 
     return *this;
 }
 
 PackageStatus PackageStatus::maxEq(const PackageStatus &other)
 {
-    if (other.status >= status) *this = other;
+    if (other.m_status >= m_status) *this = other;
 
     return *this;
 }
 
 PackageStatus PackageStatus::min(const PackageStatus &other)
 {
-    if (other.status < status) *this = other;
+    if (other.m_status < m_status) *this = other;
 
     return *this;
 }
 
 PackageStatus PackageStatus::minEq(const PackageStatus &other)
 {
-    if (other.status <= status) *this = other;
+    if (other.m_status <= m_status) *this = other;
 
     return *this;
 }
 
 bool PackageStatus::isBreak() const
 {
-    return status == DependsBreak;
+    return m_status == DependsBreak;
 }
 
 bool PackageStatus::isAuthCancel() const
 {
-    return status == DependsAuthCancel;
+    return m_status == DependsAuthCancel;
 }
 
 bool PackageStatus::isAvailable() const
 {
-    return status == DependsAvailable;
+    return m_status == DependsAvailable;
 }
 
 
@@ -223,7 +223,7 @@ const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, const
     return ConflictResult::ok(QString());
 }
 
-bool PackageStatus::isArchError(QString packagePath)
+bool PackageStatus::isArchError(const QString &packagePath)
 {
     DebFile deb(packagePath);
     Backend *backend = m_backendFuture.result();
@@ -287,15 +287,15 @@ DependsStatus PackageStatus::checkDependsPackageStatus(QSet<QString> &choosed_se
         const auto r = checkDependsPackageStatus(choosed_set, architecture, candicate_list);
 //        ret.maxEq(r);
         if (ret >= r)
-            this->status = ret;
+            this->m_status = ret;
         else {
-            this->status = r;
+            this->m_status = r;
         }
 
-        if (ret == DependsBreak) break;
+        if (this->m_status == DependsBreak) break;
     }
 
-    return this->status;
+    return this->m_status;
 }
 
 DependsStatus PackageStatus::checkDependsPackageStatus(QSet<QString> &choosed_set,
@@ -310,15 +310,15 @@ DependsStatus PackageStatus::checkDependsPackageStatus(QSet<QString> &choosed_se
         const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
 //        ret.minEq(r);
         if (ret <= r)
-            this->status = ret;
+            this->m_status = ret;
         else {
-            this->status = r;
+            this->m_status = r;
         }
 
-        if (ret != DependsBreak) break;
+        if (this->m_status != DependsBreak) break;
     }
 
-    return this->status;
+    return this->m_status;
 }
 
 DependsStatus PackageStatus::checkDependsPackageStatus(QSet<QString> &choosed_set,
@@ -423,7 +423,7 @@ DependsStatus PackageStatus::checkDependsPackageStatus(QSet<QString> &choosed_se
     }
 }
 
-DependsStatus PackageStatus::getPackageDependsStatus(QString packagePath)
+DependsStatus PackageStatus::getPackageDependsStatus(const QString &packagePath)
 {
     while (true) {
         if (m_backendFuture.isFinished()) {
@@ -467,7 +467,7 @@ DependsStatus PackageStatus::getPackageDependsStatus(QString packagePath)
 }
 
 
-const QStringList PackageStatus::getPackageAvailableDepends(QString packagePath)
+const QStringList PackageStatus::getPackageAvailableDepends(const QString &packagePath)
 {
     DebFile *deb = new DebFile(packagePath);
     QSet<QString> choose_set;
@@ -477,10 +477,10 @@ const QStringList PackageStatus::getPackageAvailableDepends(QString packagePath)
 
     // TODO: check upgrade from conflicts
     delete deb;
-    return choose_set.toList();
+    return choose_set.values();
 }
 
-InstallStatus PackageStatus::getPackageInstallStatus(QString packagePath)
+InstallStatus PackageStatus::getPackageInstallStatus(const QString &packagePath)
 {
     m_backendFuture.result()->reloadCache();
     DebFile *debFile = new DebFile(packagePath);

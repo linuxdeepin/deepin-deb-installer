@@ -90,7 +90,6 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     //Set font and size
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
 
     Utils::bindFontBySizeAndWeight(m_tips, normalFontFamily, 14, QFont::Normal);
     Utils::bindFontBySizeAndWeight(m_cancelBtn, normalFontFamily, 14, QFont::Medium);

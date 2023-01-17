@@ -12,7 +12,7 @@ DeepinDebInstallerLib::DeepinDebInstallerLib():
     initConnections();
 }
 
-void DeepinDebInstallerLib::addPackages(QStringList debFilePath)
+void DeepinDebInstallerLib::addPackages(const QStringList &debFilePath)
 {
     m_pPackageManager->appendPackages(debFilePath);
 }

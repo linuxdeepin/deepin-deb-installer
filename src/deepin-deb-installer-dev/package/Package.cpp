@@ -6,24 +6,15 @@
 
 #include <QApt/DebFile>
 
-Package::Package():
-    m_pSigntureStatus(new PackageSigntureStatus)
+Package::Package()
+    : m_pSigntureStatus(new PackageSigntureStatus)
 {
-    m_index             = -1;
-    m_valid             = false;
-    m_name              = "";
-    m_version           = "";
-    m_architecture      = "";
-    m_md5               = "";
-    m_dependsStatus     = DependsUnknown;
-    m_signtureStatus    = SigntureUnknown;
-    m_installStatus     = InstallStatusUnknown;
 }
 
-Package::Package(QString packagePath):
-    m_pSigntureStatus(new PackageSigntureStatus)
+Package::Package(const QString &packagePath)
+    : m_packagePath(packagePath)
+    , m_pSigntureStatus(new PackageSigntureStatus)
 {
-    m_packagePath           = packagePath;
     QApt::DebFile *pDebInfo = new QApt::DebFile(packagePath);
     if (!pDebInfo || !pDebInfo->isValid()) {
         qWarning() << "Package" << "Package" << "获取包文件失败";
@@ -31,21 +22,21 @@ Package::Package(QString packagePath):
         return;
     }
 
-    m_index                 = -1;
+    m_signtureStatus = m_pSigntureStatus->checkPackageSignture(packagePath);
     m_valid                 = pDebInfo->isValid();
     m_name                  = pDebInfo->packageName();
     m_version               = pDebInfo->version();
     m_architecture          = pDebInfo->architecture();
     m_md5                   = pDebInfo->md5Sum();
-    m_signtureStatus        = m_pSigntureStatus->checkPackageSignture(packagePath);
-    m_dependsStatus         = DependsUnknown;
-    m_installStatus         = InstallStatusUnknown;
+
 
     delete pDebInfo;
 }
 
-Package::Package(int index, QString packagePath):
-    m_pSigntureStatus(new PackageSigntureStatus)
+Package::Package(int index, const QString &packagePath)
+    : m_index(index)
+    , m_packagePath(packagePath)
+    , m_pSigntureStatus(new PackageSigntureStatus)
 {
     QApt::DebFile *pDebInfo = new QApt::DebFile(packagePath);
 
@@ -55,9 +46,6 @@ Package::Package(int index, QString packagePath):
         return;
     }
 
-    m_packagePath           = packagePath;
-
-    m_index                 = index;
     m_valid                 = pDebInfo->isValid();
     m_name                  = pDebInfo->packageName();
     m_version               = pDebInfo->version();
@@ -65,12 +53,9 @@ Package::Package(int index, QString packagePath):
     m_md5                   = pDebInfo->md5Sum();
 
     m_signtureStatus        = m_pSigntureStatus->checkPackageSignture(packagePath);
-
-    m_dependsStatus         = DependsUnknown;
-    m_installStatus         = InstallStatusUnknown;
 }
 
-void Package::setPackageReverseDependsList(QStringList reverseDepends)
+void Package::setPackageReverseDependsList(const QStringList &reverseDepends)
 {
     m_packageReverseDepends = reverseDepends;
 }
@@ -85,7 +70,7 @@ void Package::setPackageIndex(int index)
     m_index = index;
 }
 
-void Package::setPackagePath(QString packagePath)
+void Package::setPackagePath(const QString &packagePath)
 {
     m_packagePath = packagePath;
 }
@@ -95,7 +80,7 @@ void Package::setPackageDependStatus(DependsStatus packageDependStatus)
     m_dependsStatus = packageDependStatus;
 }
 
-void Package::setPackageAvailableDepends(QStringList depends)
+void Package::setPackageAvailableDepends(const QStringList &depends)
 {
     m_packageAvailableDependList.clear();
     m_packageAvailableDependList << depends;

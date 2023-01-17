@@ -69,14 +69,14 @@ public:
     bool isAuthCancel() const;
     bool isAvailable() const;
 
-    DependsStatus getPackageDependsStatus(QString packagePath);
+    DependsStatus getPackageDependsStatus(const QString &packagePath);
 
     /**
      * @brief packageInstallStatus 获取指定index的包的安装状态
      * @param index 指定的index
      * @return 包的安装状态s
      */
-    InstallStatus getPackageInstallStatus(QString packagePath);
+    InstallStatus getPackageInstallStatus(const QString &packagePath);
 
 
     /**
@@ -84,7 +84,7 @@ public:
      * @param index 下标
      * @return  指定包所有的需要下载的依赖
      */
-    const QStringList getPackageAvailableDepends(QString packagePath);
+    const QStringList getPackageAvailableDepends(const QString &packagePath);
 
     /**
      * @brief packageReverseDependsList 获取依赖于此包的所有应用名称
@@ -119,7 +119,7 @@ private:
      * false: 符合架构要求
      * true: 不符合当前系统架构的要求
      */
-    bool isArchError(const QString packagePath);
+    bool isArchError(const QString &packagePath);
 
     /**
      * @brief dependencyVersionMatch
@@ -177,14 +177,13 @@ private:
 
 
 private:
-
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
     QMap<QString, QString> specialPackage();
 
 public:
-    DependsStatus   status  = DependsUnknown;
-    QString         package = "";
+    DependsStatus   m_status  = DependsUnknown;
+    QString         m_package = "";
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;

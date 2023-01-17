@@ -17,7 +17,7 @@ class PackageInstaller: public QObject
 {
     Q_OBJECT
 public:
-    PackageInstaller(QApt::Backend *b);
+    explicit PackageInstaller(QApt::Backend *b);
 
     virtual ~PackageInstaller();
 

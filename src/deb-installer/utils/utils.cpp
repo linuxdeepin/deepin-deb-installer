@@ -35,7 +35,7 @@ QString Utils::loadFontFamilyByType(FontType fontType)
     return font.family();
 }
 
-QFont Utils::loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontWeight)
+QFont Utils::loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, int fontWeight)
 {
     Q_UNUSED(fontSize)
 
@@ -45,7 +45,7 @@ QFont Utils::loadFontBySizeAndWeight(QString fontFamily, int fontSize, int fontW
     return font;
 }
 
-void Utils::bindFontBySizeAndWeight(QWidget *widget, QString fontFamily, int fontSize, int fontWeight)
+void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, int fontSize, int fontWeight)
 {
     if (nullptr == widget)
         return;
@@ -115,7 +115,7 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
         return inputStr;
     }
 }
-bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
+bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &strfilename)
 {
     QDir dir(strfilepath);
     if (!dir.exists()) {
@@ -130,7 +130,6 @@ bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
         qDebug() << "当前文件夹为空";
         return false;
     }
-    QStringList string_list;
     for (int i = 0; i < list.count(); i++) {
         QFileInfo file_info = list.at(i);
         if (file_info.fileName() == strfilename) {
@@ -141,7 +140,7 @@ bool Utils::Return_Digital_Verify(QString strfilepath, QString strfilename)
     return false;
 }
 
-Utils::VerifyResultCode Utils::Digital_Verify(QString filepath_name)
+Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
 {
     QString verifyfilepath = "/usr/bin/";
     QString verifyfilename = "deepin-deb-verify";
@@ -149,12 +148,9 @@ Utils::VerifyResultCode Utils::Digital_Verify(QString filepath_name)
     qDebug() << "result_verify_file" << result_verify_file;
     if (result_verify_file) {
         QProcess proc;
-        QString program = "/usr/bin/deepin-deb-verify ";
-        filepath_name = "\"" + filepath_name + "\"";
-        program = program + filepath_name;
-        proc.start(program);
+        QString program = "/usr/bin/deepin-deb-verify";
+        proc.start(program, {"\"" + filepath_name + "\""});
         proc.waitForFinished(-1);
-        const QString output = proc.readAllStandardOutput();
         const QString output1 = proc.readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
         for (const auto &item : output1.split('\n')) {
@@ -175,7 +171,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(QString filepath_name)
     return OtherError;
 }
 
-QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &size)
+QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const QSize &size)
 {
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
 
@@ -240,7 +236,7 @@ QString Utils::holdTextInRect(const QFont &font, QString srcText, const QSize &s
     return text;
 }
 
-QString Utils::holdTextInRect(const QFont &font, QString srcText, const int &width)
+QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const int &width)
 {
 
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));

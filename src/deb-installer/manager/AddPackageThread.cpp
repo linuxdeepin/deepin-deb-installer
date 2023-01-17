@@ -22,24 +22,24 @@ AddPackageThread::AddPackageThread(QSet<QByteArray> appendedPackagesMd5)
 {
 }
 
-void AddPackageThread::setPackages(QStringList packages, int validPkgCount)
+void AddPackageThread::setPackages(const QStringList &packages, int validPkgCount)
 {
     m_packages.clear();
     m_packages.append(packages);
     m_validPackageCount = validPkgCount;
 }
 
-void AddPackageThread::setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5)
+void AddPackageThread::setAppendPackagesMd5(const QSet<QByteArray> &appendedPackagesMd5)
 {
     m_appendedPackagesMd5 = appendedPackagesMd5;
 }
 
-void AddPackageThread::setSamePackageMd5(QMap<QString, QByteArray> packagesMd5)
+void AddPackageThread::setSamePackageMd5(const QMap<QString, QByteArray> &packagesMd5)
 {
     m_allPackages = packagesMd5;
 }
 
-bool AddPackageThread::dealInvalidPackage(QString packagePath)
+bool AddPackageThread::dealInvalidPackage(const QString &packagePath)
 {
     //获取路径信息
     QStorageInfo info(packagePath);
@@ -53,25 +53,26 @@ bool AddPackageThread::dealInvalidPackage(QString packagePath)
     return true;
 }
 
-QString AddPackageThread::dealPackagePath(QString packagePath)
+QString AddPackageThread::dealPackagePath(const QString &packagePath)
 {
+    auto tempPath = packagePath;
     //判断当前文件路径是否是绝对路径，不是的话转换为绝对路径
-    if (!packagePath.startsWith("/")) {
-        QFileInfo packageAbsolutePath(packagePath);
+    if (!tempPath.startsWith("/")) {
+        QFileInfo packageAbsolutePath(tempPath);
         //获取绝对路径
-        packagePath = packageAbsolutePath.absoluteFilePath();
+        tempPath = packageAbsolutePath.absoluteFilePath();
     }
 
     // 判断当前文件路径中是否存在空格,如果存在则创建软链接并在之后的安装时使用软链接进行访问.
-    if (packagePath.contains(" ")) {
-        QApt::DebFile p(packagePath);
+    if (tempPath.contains(" ")) {
+        QApt::DebFile p(tempPath);
         if (p.isValid()) {
-            packagePath = SymbolicLink(packagePath, p.packageName());
+            tempPath = SymbolicLink(tempPath, p.packageName());
             qWarning() << "PackagesManager:"
-                       << "There are spaces in the path, add a soft link" << packagePath;
+                       << "There are spaces in the path, add a soft link" << tempPath;
         }
     }
-    return packagePath;
+    return tempPath;
 }
 
 void AddPackageThread::run()
@@ -120,7 +121,7 @@ void AddPackageThread::run()
     emit signalAppendFinished();
 }
 
-QString AddPackageThread::SymbolicLink(QString previousName, QString packageName)
+QString AddPackageThread::SymbolicLink(const QString &previousName, const QString &packageName)
 {
     //如果创建临时目录失败,则提示
     if (!mkTempDir()) {
@@ -144,7 +145,7 @@ bool AddPackageThread::mkTempDir()
     }
 }
 
-QString AddPackageThread::link(QString linkPath, QString packageName)
+QString AddPackageThread::link(const QString &linkPath, const QString &packageName)
 {
     QFile linkDeb(linkPath);
 

@@ -77,7 +77,7 @@ const QStringList DebListModel::netErrors()
     return errorDetails;
 }
 
-const QString DebListModel::workerErrorString(const int errorCode, const QString errorInfo)
+const QString DebListModel::workerErrorString(const int errorCode, const QString &errorInfo)
 {
     switch (errorCode) {
     case FetchError:
@@ -211,7 +211,7 @@ void DebListModel::initConnections()
     initInstallConnections();
 }
 
-void DebListModel::slotDealDependResult(int authType, int dependIndex, QString dependName)
+void DebListModel::slotDealDependResult(int authType, int dependIndex, const QString &dependName)
 {
     m_brokenDepend = dependName;
     switch (authType) {
@@ -685,12 +685,11 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
 
     const auto transExitStatus = transaction->exitStatus();
 
-    if (transExitStatus) qWarning() << transaction->error() << transaction->errorDetails() << transaction->errorString();     //transaction发生错误
-
     if (transExitStatus) {
         // record error
         // 记录错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        qWarning() << transaction->error() << transaction->errorDetails() << transaction->errorString(); //向终端打印错误
         m_packageFailCode[m_operatingPackageMd5] = transaction->error();
         m_packageFailReason[m_operatingPackageMd5] = transaction->errorString();
         refreshOperatingPackageStatus(Failed);                                  // 刷新操作状态
@@ -886,7 +885,7 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->show();    //显示弹窗
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
-    std::function<void(void)> rejectOperate = [this, Ddialog]() {
+    std::function<void(void)> rejectOperate = [this, Ddialog](){
         this->slotNoDigitalSignature();
         Ddialog->deleteLater();
     };
@@ -937,7 +936,7 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog]() {
+    std::function<void(void)> exitOperate = [this, Ddialog](){
         this->slotDigitalSignatureError();
         Ddialog->deleteLater();
     };
@@ -1139,9 +1138,9 @@ void DebListModel::installNextDeb()
 {
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex); //刷新软件包依赖状态
     auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if (dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+    if(dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
-    } else if (dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
+    } else if(dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
         return;
@@ -1166,7 +1165,7 @@ void DebListModel::rmdir()
     }
 }
 
-bool DebListModel::checkTemplate(QString debPath)
+bool DebListModel::checkTemplate(const QString &debPath)
 {
     rmdir();
     getDebian(debPath);
@@ -1188,7 +1187,7 @@ bool DebListModel::mkdir()
     return true;
 }
 
-void DebListModel::getDebian(QString debPath)
+void DebListModel::getDebian(const QString &debPath)
 {
     if (!mkdir()) {                                                             //创建临时路径
         qWarning() << "check error mkdir" << tempPath << "failed";              //创建失败
@@ -1377,13 +1376,13 @@ void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isC
     }
 }
 
-void DebListModel::slotConfigInputWrite(QString str)
+void DebListModel::slotConfigInputWrite(const QString &str)
 {
     m_procInstallConfig->pty()->write(str.toUtf8());                                          //将用户输入的配置项写入到配置安装进程中。
     m_procInstallConfig->pty()->write("\n");                                                  //写入换行，配置生效
 }
 
-void DebListModel::slotCheckInstallStatus(QString installInfo)
+void DebListModel::slotCheckInstallStatus(const QString &installInfo)
 {
     // 判断当前的信息是否是错误提示信息
     if (installInfo.contains("Error executing command as another user: Request dismissed")) {
@@ -1401,16 +1400,16 @@ void DebListModel::slotCheckInstallStatus(QString installInfo)
     }
 }
 
-bool DebListModel::recheckPackagePath(QString packagePath) const
+bool DebListModel::recheckPackagePath(const QString &packagePath) const
 {
     QFile packagePathFile(packagePath);
     do {
-        if (packagePathFile.readLink().isEmpty()) {
+        if (packagePathFile.symLinkTarget().isEmpty()) {
             if (packagePathFile.exists()) {
                 return true;
             }
         } else {
-            QFile realPath(packagePathFile.readLink());
+            QFile realPath(packagePathFile.symLinkTarget());
             if (realPath.exists() && packagePathFile.exists()) {
                 return true;
             }
@@ -1462,7 +1461,7 @@ void DebListModel::showProhibitWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog]() {
+    std::function<void(void)> exitOperate = [this, Ddialog](){
         this->slotShowProhibitWindow();
         Ddialog->deleteLater();
     };

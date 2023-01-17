@@ -67,7 +67,7 @@ public:
      * @return
      */
     static QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                             const int multiArchType = InvalidMultiArchType);
+                                      const int multiArchType = InvalidMultiArchType);
 
     /**
      * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
@@ -110,14 +110,14 @@ public slots:
      * @param iIndex    wine应用的下标
      * @param dependName    wine依赖错误的依赖名称
      */
-    void slotDealDependResult(int iAuthRes, int iIndex, QString dependName);
+    void slotDealDependResult(int iAuthRes, int iIndex, const QString &dependName);
 
 //// 依赖下载相关信号
 signals:
     /**
      * @brief DependResult 处理wine依赖下载结果
      */
-    void signalDependResult(int, int, QString);
+    void signalDependResult(int, int, const QString &);
 
     /**
      * @brief enableCloseButton 设置关闭按钮是否可用的信号
@@ -152,13 +152,13 @@ signals:
      * @brief appendFinished 批量安装添加包结束的信号
      * @param packageMd5List 添加后的md5列表
      */
-    void signalAppendFinished(QList<QByteArray> packageMd5List);
+    void signalAppendFinished(const QList<QByteArray> &packageMd5List);
 
     /**
      * @brief packageMd5Changed 添加完成之后更新MD5的列表
      * @param packageMd5List 当前的MD5列表
      */
-    void signalPackageMd5Changed(QList<QByteArray> packageMd5List);
+    void signalPackageMd5Changed(const QList<QByteArray> &packageMd5List);
 
 //// 界面刷新相关信号
 signals:
@@ -401,7 +401,7 @@ private:
      * @param packageName  当前包的包名
      * @return 创建成功后软链接的全路径
      */
-    QString SymbolicLink(QString previousName, QString packageName);
+    QString SymbolicLink(const QString &previousName, const QString &packageName);
 
     /**
      * @brief link          创建软链接
@@ -409,7 +409,7 @@ private:
      * @param packageName   包名
      * @return  创建软链接之后的路径
      */
-    QString link(QString linkPath, QString packageName);
+    QString link(const QString &linkPath, const QString &packageName);
 
     /**
      * @brief mkTempDir 创建存放软链接的临时路径
@@ -432,7 +432,7 @@ private:
      * @param packagePath   此次添加包的路径
      * @param packageMd5Sum 此次添加的包的md5值
      */
-    void addPackage(int validPkgCount, QString packagePath, QByteArray packageMd5Sum);
+    void addPackage(int validPkgCount, const QString &packagePath, const QByteArray &packageMd5Sum);
 
     /**
      * @brief getAllDepends 获取安装包所有依赖
@@ -440,7 +440,7 @@ private:
      * @param architecture  安装包架构
      * @return
      */
-    QList<QString> getAllDepends(const QList<DependencyItem> &depends, QString architecture);
+    QList<QString> getAllDepends(const QList<DependencyItem> &depends, const QString &architecture);
 
     /**
      * @brief getAllDepends 获取依赖包所有依赖
@@ -448,7 +448,7 @@ private:
      * @param architecture  架构
      * @return
      */
-    QList<QString> getAllDepends(const QString &packageName, QString architecture);
+    QList<QString> getAllDepends(const QString &packageName, const QString &architecture);
 
     /**
      * @brief refreshPage 刷新当前的页面
@@ -461,12 +461,12 @@ private:
      * @param packages 要添加的包
      * @param allPackageSize 要添加的包的数量
      */
-    void appendNoThread(QStringList packages, int allPackageSize);
+    void appendNoThread(const QStringList &packages, int allPackageSize);
 
     /**
      * @brief checkInvalid 检查有效文件的数量
      */
-    void checkInvalid(QStringList packages);
+    void checkInvalid(const QStringList &packages);
 
     /**
      * @brief dealInvalidPackage 处理无效的安装包
@@ -475,7 +475,7 @@ private:
      *   true   : 文件能打开
      *   fasle  : 文件不在本地或无权限
      */
-    bool dealInvalidPackage(QString packagePath);
+    bool dealInvalidPackage(const QString &packagePath);
 
     /**
      * @brief dealPackagePath 处理包的路径
@@ -485,7 +485,7 @@ private:
      *      1： 相对路径             --------> 转化为绝对路径
      *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
      */
-    QString dealPackagePath(QString packagePath);
+    QString dealPackagePath(const QString &packagePath);
 
 private slots:
     /**
@@ -501,7 +501,7 @@ private:
      * @return true 是黑名单应用
      * @return false 不是黑名单应用
      */
-    bool isBlackApplication(QString applicationName);
+    bool isBlackApplication(const QString &applicationName);
 
     /**
      * @brief 获取当前黑名单应用列表
@@ -512,12 +512,12 @@ private:
 private:
 
     //安装程序后端指针(异步加载)
-    QFuture<QApt::Backend *> m_backendFuture;
+    QFuture<QApt::Backend *> m_backendFuture;           
 
     //存放包路径的列表
-    QList<QString> m_preparedPackages       = {};
+    QList<QString> m_preparedPackages       = {};   
 
-    //存放包MD5的集合
+    //存放包MD5的集合       
     QSet<QByteArray> m_appendedPackagesMd5  = {};
 
     QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
@@ -564,7 +564,7 @@ private:
     int m_DealDependIndex = -1;
 
     //下载依赖的线程
-    DealDependThread *m_installWineThread        = nullptr;
+    DealDependThread *m_installWineThread        = nullptr;    
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记
