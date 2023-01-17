@@ -21,13 +21,13 @@ public:
      * @param dependList 依赖列表
      * @param index 需要安装的依赖下标
      */
-    void setDependsList(QStringList dependList, int index);
+    void setDependsList(const QStringList &dependList, int index);
 
     /**
      * @brief setBrokenDepend 设置依赖不满足的依赖名称
      * @param dependName    break的依赖名
      */
-    void setBrokenDepend(QString dependName);
+    void setBrokenDepend(const QString &dependName);
 
     /**
      * @brief run 线程的运行函数

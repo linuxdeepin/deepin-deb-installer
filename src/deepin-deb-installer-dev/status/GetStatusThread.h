@@ -17,11 +17,11 @@ class GetStatusThread : public QThread
     Q_OBJECT
 public:
 
-    GetStatusThread(PackageStatus *);
+    explicit GetStatusThread(PackageStatus *);
 
     void run();
 
-    void setPackage(int index, QString packagePath);
+    void setPackage(int index, const QString &packagePath);
 
 signals:
 

@@ -26,7 +26,7 @@ public:
      * @brief addPackages 添加deb包到程序中
      * @param debFilePath 包的路径
      */
-    void addPackages(QStringList debFilePath);
+    void addPackages(const QStringList &debFilePath);
 
     /**
      * @brief deletePackage 在程序中删除指定包

@@ -1951,10 +1951,10 @@ TEST_F(UT_packagesManager, PackageManager_UT_getBlackApplications)
 
 TEST_F(UT_packagesManager, PackageManager_UT_isBlackApplication)
 {
-    m_packageManager->m_blackApplicationList.append("black");
+    m_packageManager->m_blackApplicationList.append(QString("black"));
 
-    ASSERT_TRUE(m_packageManager->isBlackApplication("black"));
-    ASSERT_TRUE(m_packageManager->m_blackApplicationList.contains("black"));
+    ASSERT_TRUE(m_packageManager->isBlackApplication(QString("black")));
+    ASSERT_TRUE(m_packageManager->m_blackApplicationList.contains(QString("black")));
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose)

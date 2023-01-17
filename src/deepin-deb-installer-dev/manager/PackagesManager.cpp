@@ -234,10 +234,11 @@ void PackagesManager::uninstall(int index)
 
 Package *PackagesManager::searchByIndex(int index)
 {
-    for (auto package : m_packages) {
-        if (package->getIndex() == index) {
-            return package;
-        }
+    auto iter = std::find_if(m_packages.begin(), m_packages.end(), [index](const auto &package) {
+        return package->getIndex() == index;
+    });
+    if(iter != m_packages.end()) {
+        return *iter;
     }
     emit signal_invalidIndex(index);
     qWarning() << "[PackagesManager]<< searchByIndex" << "Package not found";

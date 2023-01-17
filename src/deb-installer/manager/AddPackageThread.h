@@ -29,19 +29,19 @@ public:
      * @brief setPackages 获取需要安装的软件包的列表
      * @param packages 软件包列表
      */
-    void setPackages(QStringList packages, int validPkgCount);
+    void setPackages(const QStringList &packages, int validPkgCount);
 
     /**
      * @brief setAppendPackagesMd5 获取到已经添加到应用的deb包的Md5的set
      * @param appendPackagesMd5 目前应用中的deb包的Md5的set
      */
-    void setAppendPackagesMd5(QSet<QByteArray> appendedPackagesMd5);
+    void setAppendPackagesMd5(const QSet<QByteArray> &appendedPackagesMd5);
 
     /**
      * @brief setSamePackageMd5
      * @param packagesMd5
      */
-    void setSamePackageMd5(QMap<QString, QByteArray> packagesMd5);
+    void setSamePackageMd5(const QMap<QString, QByteArray> &packagesMd5);
 
 signals:
 
@@ -106,7 +106,7 @@ private:
      * @param packageName  当前包的包名
      * @return 创建成功后软链接的全路径
      */
-    QString SymbolicLink(QString previousName, QString packageName);
+    QString SymbolicLink(const QString &previousName, const QString &packageName);
 
     /**
      * @brief link          创建软链接
@@ -114,7 +114,7 @@ private:
      * @param packageName   包名
      * @return  创建软链接之后的路径
      */
-    QString link(QString linkPath, QString packageName);
+    QString link(const QString &linkPath, const QString &packageName);
 
     /**
      * @brief mkTempDir 创建存放软链接的临时路径
@@ -131,7 +131,7 @@ private:
      *   true   : 文件能打开
      *   fasle  : 文件不在本地或无权限
      */
-    bool dealInvalidPackage(QString packagePath);
+    bool dealInvalidPackage(const QString &packagePath);
 
     /**
      * @brief dealPackagePath 处理包的路径
@@ -141,7 +141,7 @@ private:
      *      1： 相对路径             --------> 转化为绝对路径
      *      2： 包的路径中存在空格     --------> 使用软链接，链接到/tmp下
      */
-    QString dealPackagePath(QString packagePath);
+    QString dealPackagePath(const QString &packagePath);
 
 private:
     // 软链接的存放路径

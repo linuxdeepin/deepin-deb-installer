@@ -3,7 +3,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dependgraph.h"
-#include <QtDebug>
+#include <algorithm>
+#include <QDebug>
+
+struct DependGraphNode {
+    QString packageName;
+    QString packagePath;
+    QByteArray md5;
+    QList<QApt::DependencyItem> depends;
+    std::vector<DependGraphNode *> dependsInGraph;
+};
 
 DependGraph::~DependGraph()
 {
@@ -24,11 +33,12 @@ void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, con
     //1.搜索当前节点的潜在依赖关系
     for (auto &eachDepend : depends) {
         for (auto &eachOrDepend : eachDepend) {
-            for (auto &eachNode : nodes) {
-                if (eachNode->packageName == eachOrDepend.packageName()) {
-                    dependsInGraph.push_back(eachNode);
-                    break;
-                }
+            auto pkgName = eachOrDepend.packageName();
+            auto iter = std::find_if(nodes.begin(), nodes.end(), [pkgName](const auto & eachNode) {
+                return eachNode->packageName == pkgName;
+            });
+            if (iter != nodes.end()) {
+                dependsInGraph.push_back(*iter);
             }
         }
     }

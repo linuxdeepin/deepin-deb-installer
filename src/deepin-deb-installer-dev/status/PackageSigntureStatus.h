@@ -50,6 +50,9 @@ private:
 
 private:
     QProcess *m_pCheckSignProc = nullptr;
+
+    PackageSigntureStatus(const PackageSigntureStatus &rhs) = delete;
+    PackageSigntureStatus& operator=(const PackageSigntureStatus &rhs) = delete;
 };
 
 #endif // PackageSigntureStatus_H
