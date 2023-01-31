@@ -1010,19 +1010,47 @@ void DebListModel::slotNoDigitalSignature()
 
 void DebListModel::slotShowDevelopModeWindow()
 {
-    //弹出设置 通用窗口
-    QString command = " dbus-send --print-reply "
-                      "--dest=com.deepin.dde.ControlCenter "
-                      "/com/deepin/dde/ControlCenter "
-                      "com.deepin.dde.ControlCenter.ShowModule "
-                      "\"string:commoninfo\"";
+    // 弹出设置 通用窗口
+
+    //1.读取系统版本号
     QProcess *unlock = new QProcess(this);
-
-    connect(unlock, static_cast<void (QProcess::*)(int)>(&QProcess::finished), unlock, &QProcess::deleteLater);
-
-    unlock->startDetached(command);
+    unlock->start("lsb_release", {"-r"});
     unlock->waitForFinished();
-    return;
+    auto output = unlock->readAllStandardOutput();
+    auto str = QString::fromUtf8(output);
+    QRegExp re("\t.+\n");
+    QString osVerStr;
+    if(re.indexIn(str) > -1) {
+        auto result = re.cap(0);
+        osVerStr = result.remove(0, 1).remove(result.size() - 1, 1);
+        qInfo() << "lsb_release -r:" << output;
+        qInfo() << "OS version:" << osVerStr;
+    }
+
+    //2.打开控制中心
+    if(osVerStr == "20") { // V20模式
+        QString command = "dbus-send --print-reply "
+                          "--dest=com.deepin.dde.ControlCenter "
+                          "/com/deepin/dde/ControlCenter "
+                          "com.deepin.dde.ControlCenter.ShowModule "
+                          "\"string:commoninfo\"";
+        unlock->startDetached(command);
+        unlock->waitForFinished();
+    } else if (osVerStr == "23") { // V23模式
+        if(unlock->exitCode() != QProcess::NormalExit) {
+            QString command = "dbus-send --print-reply "
+                              "--dest=org.deepin.dde.ControlCenter1 "
+                              "/org/deepin/dde/ControlCenter1 "
+                              "org.deepin.dde.ControlCenter1.ShowPage "
+                              "\"string:commoninfo\"";
+            unlock->startDetached(command);
+            unlock->waitForFinished();
+        }
+    } else {
+        qWarning() << "Unknown OS version, connot open dde-control-center";
+    }
+
+    unlock->deleteLater();
 }
 
 void DebListModel::checkSystemVersion()
