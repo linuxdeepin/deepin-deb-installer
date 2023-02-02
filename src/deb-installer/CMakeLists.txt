@@ -194,4 +194,3 @@ install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
 install(FILES ${APP_DESKTOP} DESTINATION share/applications)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dbus/com.deepin.DebInstaller.service DESTINATION share/dbus-1/services/)
 
-
