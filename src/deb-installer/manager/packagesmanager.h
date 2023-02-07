@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -67,7 +67,7 @@ public:
      * @return
      */
     static QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                      const int multiArchType = InvalidMultiArchType);
+                                             const int multiArchType = InvalidMultiArchType);
 
     /**
      * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
@@ -130,6 +130,11 @@ signals:
      * @brief invalidPackage 无效包的信号
      */
     void signalInvalidPackage();
+
+    /**
+     * @brief signalNotDdimProcess 非DDIM处理流程
+     */
+    void signalNotDdimProcess();
 
     /**
      * @brief notLocalPackage 包不在本地的信号
@@ -512,12 +517,12 @@ private:
 private:
 
     //安装程序后端指针(异步加载)
-    QFuture<QApt::Backend *> m_backendFuture;           
+    QFuture<QApt::Backend *> m_backendFuture;
 
     //存放包路径的列表
-    QList<QString> m_preparedPackages       = {};   
+    QList<QString> m_preparedPackages       = {};
 
-    //存放包MD5的集合       
+    //存放包MD5的集合
     QSet<QByteArray> m_appendedPackagesMd5  = {};
 
     QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
@@ -564,7 +569,7 @@ private:
     int m_DealDependIndex = -1;
 
     //下载依赖的线程
-    DealDependThread *m_installWineThread        = nullptr;    
+    DealDependThread *m_installWineThread        = nullptr;
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记

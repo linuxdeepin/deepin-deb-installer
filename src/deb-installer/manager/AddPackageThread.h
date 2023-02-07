@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -61,6 +61,11 @@ signals:
      * @brief invalidPackage 当前包是无效的包
      */
     void signalInvalidPackage();
+
+    /**
+     * @brief signalNotDdimProcess 非DDIM处理流程
+     */
+    void signalNotDdimProcess();
 
     /**
      * @brief notLocalPackage 包不在本地的信号

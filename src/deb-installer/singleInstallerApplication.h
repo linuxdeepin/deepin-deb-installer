@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,12 +16,18 @@ class SingleInstallerApplication : public DApplication
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.DebInstaller")
 public:
+    enum AppWorkChannel {
+        NormalChannel,
+        DdimChannel
+    };
+
     explicit SingleInstallerApplication(int &argc, char **argv);
     /**
      * @brief 激活软件包安装器窗口
      *
      */
     void activateWindow();
+
     /**
      * @brief 解析命令行参数
      *
@@ -29,6 +35,9 @@ public:
      * @return false
      */
     bool parseCmdLine();
+
+    static AppWorkChannel mode; //当前运行的工作模式,用于判断二次启动的时候走哪个通道
+    static std::atomic_bool BackendIsRunningInit;
 
 public slots:
 
@@ -99,7 +108,7 @@ public slots:
 
 private:
     QStringList m_selectedFiles;
-
+    QStringList m_ddimFiles;
     QScopedPointer<DMainWindow> m_qspMainWnd;  // MainWindow ptr
 
     bool bIsDbus = false;
