@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -371,6 +371,11 @@ signals:
     void signalInvalidPackage();
 
     /**
+     * @brief signalNotDdimProcess 非DDIM处理流程
+     */
+    void signalNotDdimProcess();
+
+    /**
      * @brief signalNotLocalPackage 包不在本地的信号
      *
      * ps: 包不在本地无法安装
@@ -635,6 +640,11 @@ private:
      * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
      */
     void showDevelopDigitalErrWindow(ErrorCode code);
+
+    /**
+     * @brief showNoDigitalErrWindowInDdimProcess DDIM流程下的签名错误弹窗
+     */
+    void showNoDigitalErrWindowInDdimProcess(void (DebListModel::*failedFunction)());
 
     /**
      * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
