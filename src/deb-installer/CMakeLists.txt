@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -37,6 +37,7 @@ set(APP_RES_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(APP_BIN_NAME "deepin-deb-installer")
 set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 set(APP_DESKTOP "${APP_RES_DIR}/deepin-deb-installer.desktop")
+set(APP_MIME "${APP_RES_DIR}/deepin-deb-installer.xml")
 set(APP_QRC "${APP_RES_DIR}/resources.qrc")
 
 project(${APP_BIN_NAME})
@@ -192,6 +193,7 @@ install(DIRECTORY ${APP_RES_DIR}/deepin-deb-installer DESTINATION /usr/share/dee
 install(TARGETS deepin-deb-installer RUNTIME DESTINATION bin)
 install(FILES ${APP_CONFIG} DESTINATION share/deepin-deb-installer)
 install(FILES ${APP_DESKTOP} DESTINATION share/applications)
+install(FILES ${APP_MIME} DESTINATION share/mime/packages)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dbus/com.deepin.DebInstaller.service DESTINATION share/dbus-1/services/)
 
 

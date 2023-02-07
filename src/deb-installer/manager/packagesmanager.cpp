@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,6 +9,7 @@
 #include "utils/utils.h"
 #include "model/deblistmodel.h"
 #include "model/dependgraph.h"
+#include "singleInstallerApplication.h"
 
 #include <DRecentManager>
 
@@ -286,10 +287,20 @@ QString PackagesManager::checkPackageValid(const QStringList &package_path)
 
 Backend *init_backend()
 {
-    Backend *backend = new Backend;
+    while (SingleInstallerApplication::BackendIsRunningInit) {
+        QThread::msleep(10);
+    }
 
-    if (backend->init())
+    SingleInstallerApplication::BackendIsRunningInit = true;
+
+    Backend *backend = new Backend;
+    bool initSuccess = backend->init();
+
+    SingleInstallerApplication::BackendIsRunningInit = false;
+
+    if (initSuccess) {
         return backend;
+    }
 
     qFatal("%s", backend->initErrorMessage().toStdString().c_str());
 }
@@ -310,6 +321,9 @@ PackagesManager::PackagesManager(QObject *parent)
 
     //转发无效包的信号
     connect(m_pAddPackageThread, &AddPackageThread::signalInvalidPackage, this, &PackagesManager::signalInvalidPackage);
+
+    //转发无效ddim的信号
+    connect(m_pAddPackageThread, &AddPackageThread::signalNotDdimProcess, this, &PackagesManager::signalNotDdimProcess);
 
     //转发不是本地包的信号
     connect(m_pAddPackageThread, &AddPackageThread::signalNotLocalPackage, this, &PackagesManager::signalNotLocalPackage);
@@ -1365,6 +1379,12 @@ void PackagesManager::appendNoThread(const QStringList &packages, int allPackage
         QString debPkg = debPackage;
         //处理package文件路径相关问题
         debPackage = dealPackagePath(debPackage);
+
+        //检测到是ddim文件
+        if (debPackage.endsWith(".ddim")) {
+            emit signalNotDdimProcess();
+            continue;
+        }
 
         QApt::DebFile pkgFile(debPackage);
         //判断当前文件是否是无效文件
