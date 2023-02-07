@@ -1,14 +1,19 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "debinstaller.h"
 #include "model/deblistmodel.h"
+#include "model/packageanalyzer.h"
 #include "view/widgets/filechoosewidget.h"
 #include "view/pages/multipleinstallpage.h"
 #include "view/pages/singleinstallpage.h"
 #include "view/pages/uninstallconfirmpage.h"
 #include "view/pages/AptConfigMessage.h"
+#include "view/pages/packageselectview.h"
+#include "view/pages/ddimerrorpage.h"
+#include "singleInstallerApplication.h"
+#include "model/packageselectmodel.h"
 #include "settingdialog.h"
 #include "utils/utils.h"
 
@@ -33,6 +38,10 @@
 #include <QStyleFactory>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFileInfo>
+#include <QtConcurrent/QtConcurrent>
 
 using QApt::DebFile;
 
@@ -45,13 +54,19 @@ DebInstaller::DebInstaller(QWidget *parent)
     , m_fileChooseWidget(new FileChooseWidget(this))
     , m_centralLayout(new QStackedLayout())
     , m_settingDialog(new SettingDialog(this))
+    , m_ddimModel(new PackageSelectModel(this))
 {
     initUI();
     initConnections();
+
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+        QtConcurrent::run([]() {
+            PackageAnalyzer::instance().initBackend();
+        });
+    }
 }
 
 DebInstaller::~DebInstaller() {}
-
 
 void DebInstaller::initUI()
 {
@@ -112,6 +127,11 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::signalInvalidPackage, this, &DebInstaller::slotShowInvalidePackageMessage);
 
     //接收到添加无效包的信号则弹出无效包的弹窗
+    connect(m_fileListModel, &DebListModel::signalNotDdimProcess, [this]() {
+        slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
+    });
+
+    //接收到添加无效包的信号则弹出无效包的弹窗
     connect(m_fileListModel, &DebListModel::signalNotLocalPackage, this, &DebInstaller::slotShowNotLocalPackageMessage);
 
     //接收到包已经添加的信号则弹出已添加的弹窗
@@ -150,6 +170,29 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::signalDependResult, this, &DebInstaller::slotDealDependResult);
     connect(m_fileListModel, &DebListModel::signalEnableCloseButton, this, &DebInstaller::slotEnableCloseButton);
     connect(m_fileListModel, &DebListModel::signalPackageCannotFind, this, &DebInstaller::slotShowPkgRemovedMessage);
+
+    //选择安装页面
+    connect(m_ddimModel, &PackageSelectModel::selectInfosChanged, this, &DebInstaller::slotShowSelectPage);
+    connect(m_ddimModel, &PackageSelectModel::selectInfosDoNotHaveChange, this, &DebInstaller::slotShowPkgExistMessage);
+
+    //阻塞界面
+    connect(&PackageAnalyzer::instance(), &PackageAnalyzer::runBackend, this, [this](bool inProcess) {
+        if (inProcess) {
+            slotShowPkgProcessBlockPage(BackendProcessPage::APT_INIT, 0, 0);
+        } else {
+            slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        }
+    });
+
+    connect(&PackageAnalyzer::instance(), &PackageAnalyzer::runAnalyzeDeb, this, [this](bool inProcess, int currentRote, int pkgCount) {
+        if (inProcess) {
+            slotShowPkgProcessBlockPage(BackendProcessPage::READ_PKG, currentRote, pkgCount);
+        } else {
+            slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        }
+    });
+
+    connect(this, &DebInstaller::runOldProcess, this, &DebInstaller::slotPackagesSelected, Qt::ConnectionType::QueuedConnection);
 }
 
 void DebInstaller::slotEnableCloseButton(bool enable)
@@ -244,6 +287,86 @@ QString DebInstaller::getPackageInfo(const QString &debPath)
         return "";
     return  m_fileListModel->getPackageInfo(debPath).join(";");
 }
+
+void DebInstaller::slotShowSelectInstallPage(const QList<int> &selectIndexes)
+{
+    QtConcurrent::run([this, selectIndexes]() {
+        //1.交给model分析需要装哪些包
+        auto needInstallIrs = m_ddimModel->analyzePackageInstallNeeded(selectIndexes);
+
+        //2.汇集安装路径
+        QStringList paths;
+        for (auto &ir : needInstallIrs) {
+            paths.push_back(ir.filePath);
+        }
+
+        //3.按老流程进行安装
+        emit runOldProcess(paths);
+    });
+}
+
+void DebInstaller::slotShowSelectPage(const QList<DebIr> &selectedInfos)
+{
+    if (selectedInfos.isEmpty() && m_ddimView == nullptr) {
+        //不应该能够跳转至此
+        qWarning() << "ddim error process";
+        return;
+    }
+
+    if (selectedInfos.isEmpty() && m_centralLayout->currentWidget() == m_ddimView) { //此时已经判定m_ddimView界面是存在的，属于界面刷新操作
+        slotShowSelectInstallPage({});
+        return;
+    }
+
+    bool haveMustInstallDeb = !m_ddimModel->mustInstallData().isEmpty();
+
+    if (m_ddimView != nullptr) {
+        if (m_centralLayout->currentWidget() == m_ddimView) { //正处于此页面时直接刷新
+            m_ddimView->flushDebList(selectedInfos);
+            m_ddimView->setHaveMustInstallDeb(haveMustInstallDeb);
+        } else {
+            return;
+        }
+    } else { //初次进入
+        titlebar()->setTitle(tr("Bulk Install"));
+        m_ddimView = new PackageSelectView;
+        m_ddimView->flushDebList(selectedInfos);
+        m_ddimView->setHaveMustInstallDeb(haveMustInstallDeb);
+        m_lastPage = m_ddimView;
+        m_dragflag = 0;
+        m_Filterflag = 0;
+        m_centralLayout->addWidget(m_ddimView);
+        //m_centralLayout->setCurrentIndex(1);
+        m_centralLayout->setCurrentWidget(m_ddimView);
+        connect(m_ddimView, &PackageSelectView::packageInstallConfim, this, &DebInstaller::slotShowSelectInstallPage); //选择完毕信号
+    }
+}
+
+void DebInstaller::slotShowPkgProcessBlockPage(BackendProcessPage::DisplayMode mode, int currentRate, int pkgCount)
+{
+    if (m_backendProcessPage == nullptr) {
+        m_backendProcessPage = new BackendProcessPage;
+        m_centralLayout->addWidget(m_backendProcessPage);
+    }
+
+    m_backendProcessPage->setDisplayPage(mode);
+
+    if (mode == BackendProcessPage::PROCESS_FIN) {
+        if (m_lastPage != nullptr) {
+            if (m_centralLayout->currentWidget() == m_backendProcessPage) {
+                m_centralLayout->setCurrentWidget(m_lastPage);
+            }
+        }
+    } else {
+        if (mode == BackendProcessPage::READ_PKG) {
+            m_backendProcessPage->setPkgProcessRate(currentRate, pkgCount);
+        }
+        if (m_centralLayout->currentWidget() != m_backendProcessPage) {
+            m_centralLayout->setCurrentWidget(m_backendProcessPage);
+        }
+    }
+}
+
 void DebInstaller::disableCloseAndExit()
 {
     titlebar()->setDisableFlags(Qt::WindowCloseButtonHint);             //设置标题栏中的关闭按钮不可用
@@ -343,10 +466,156 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
     }
 }
 
+void DebInstaller::slotDdimSelected(const QStringList &ddimFiles)
+{
+    this->activateWindow();
+
+    if (ddimFiles.isEmpty()) {
+        return;
+    }
+
+    QList<DdimSt> ddimResults;
+    bool jsonError = false;
+    bool versionError = false;
+    bool haveDeb = false;
+    for (auto eachFile : ddimFiles) {
+        //0.打开文件
+        if (eachFile.endsWith(".deb")) { //直接排除掉deb包
+            haveDeb = true;
+            continue;
+        }
+        QFile ddimFile(eachFile);
+        ddimFile.open(QIODevice::ReadOnly);
+        auto jsonData = ddimFile.readAll();
+        auto jsonDoc = QJsonDocument::fromJson(jsonData);
+        if (jsonDoc.isNull()) {
+            jsonError = true;
+            continue;
+        }
+        auto jsonObj = jsonDoc.object();
+
+        //1.校验版本号
+        auto version = jsonObj["version"].toString();
+        if (version.isNull()) {
+            versionError = true;
+            continue;
+        }
+
+        //2.根据版本号信息读取JSON文件内容
+        //后续版本号多了以后，需要建立跳转表以进行速度优化，版本号少的时候使用跳转表不划算
+        QFileInfo info(ddimFile);
+        DdimSt ddimResult;
+        auto dirPath = info.absoluteDir().path();
+        if (version == "1.0") {
+            for (auto &st : ddimResults) {
+                if (st.version == "1.0" && st.dirPath == dirPath) { //ddim文件去重
+                    continue;
+                }
+            }
+            ddimResult = analyzeV10(jsonObj, info.absoluteDir().path());
+        } else {
+            versionError = true;
+            continue; //无法处理的版本号
+        }
+
+        if (!ddimResult.isAvailable) {
+            continue;
+        }
+
+        ddimResult.dirPath = dirPath;
+        ddimResult.version = version;
+
+        //3.建立列表
+        ddimResults.push_back(ddimResult);
+    }
+
+    //4.转入包数据分析模块处理
+    if (!ddimResults.isEmpty()) {
+        QtConcurrent::run([this, ddimResults]() {
+            m_ddimModel->appendDdimPackages(ddimResults);
+        });
+    } else {
+        if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel && haveDeb) { //处于流程中的报错
+            slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
+        } else { //初次进入时的报错，未定义二次进入时的报错提示
+            QString errorString;
+            if (jsonError) {
+                errorString = tr("Parsing failed: An illegal file structure was found in the manifest file!");
+            } else if (versionError) {
+                errorString = tr("Parsing failed: An illegal version number was found in the manifest file!");
+            } else { //ddim error
+                errorString = tr("No deb packages found. Please check the folder.");
+            }
+            QMetaObject::invokeMethod(this, "slotShowDdimErrorMessage", Qt::QueuedConnection, Q_ARG(QString, errorString));
+        }
+    }
+}
+
+//获取文件夹下的文件
+void getAllDebFileInDir(const QDir &dir, QFileInfoList &result)
+{
+    QDir root(dir);
+    auto list = root.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+    for (auto &eachInfo : list) {
+        if (eachInfo.isDir()) {
+            getAllDebFileInDir(eachInfo.absoluteFilePath(), result);
+        } else {
+            if (eachInfo.absoluteFilePath().endsWith(".deb")) { //只抓deb包
+                result.push_back(eachInfo);
+            }
+        }
+    }
+}
+
+DdimSt DebInstaller::analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir)
+{
+    //1.0版ddim解析策略
+    Q_UNUSED(ddimobj)
+    DdimSt result;
+
+    //0.搜索三个主要路径
+    QDir selectDir(ddimDir + "/Softwares");
+    QDir dependDir(ddimDir + "/Depends");
+    QDir mustInstallDir(ddimDir + "/Updates");
+
+    //1.抓取软件包路径
+    if (selectDir.exists()) {
+        getAllDebFileInDir(selectDir, result.selectList);
+    }
+
+    if (dependDir.exists()) {
+        getAllDebFileInDir(dependDir, result.dependList);
+    }
+
+    if (mustInstallDir.exists()) {
+        getAllDebFileInDir(mustInstallDir, result.mustInstallList);
+    }
+
+    //1.1.抓取可选包的应用名
+    for (auto &info : result.selectList) {
+        auto fileName = info.fileName();
+        if (fileName.size() > 4) {
+            result.selectAppNameList.push_back(fileName.left(fileName.size() - 4));
+        }
+    }
+
+    if (!result.selectList.isEmpty() || !result.mustInstallList.isEmpty()) {
+        result.token = ddimDir;
+        result.isAvailable = true;
+    }
+
+    //2.返回数据
+    return result;
+}
+
 void DebInstaller::refreshMulti()
 {
     qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
-    m_dragflag = 1;                                                                 //之前有多个包，之后又添加了包，则直接刷新listview
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) { //之前有多个包，之后又添加了包，则直接刷新listview
+        m_dragflag = 0;
+    } else {
+        m_dragflag = 1;
+    }
     MulRefreshPage();
 }
 
@@ -368,6 +637,11 @@ void DebInstaller::slotShowNotLocalPackageMessage()
 
 void DebInstaller::slotShowPkgExistMessage()
 {
+    if (m_ddimView == nullptr) { //如果选择界面未创建，则表示是第一次进入且只有必装包和依赖包
+        slotShowSelectInstallPage({});
+        return;
+    }
+
     qWarning() << "DebInstaller:" << "package is Exist! ";
     DFloatingMessage *floatingMsg = new DFloatingMessage;
     floatingMsg->setMessage(tr("Already Added"));
@@ -384,6 +658,28 @@ void DebInstaller::slotShowPkgRemovedMessage(QString packageName)
     DMessageManager::instance()->sendMessage(this, floatingMsg);                        //已经添加的包会提示
 }
 
+void DebInstaller::slotShowDdimErrorMessage(const QString &message)
+{
+    titlebar()->setTitle(tr("Bulk Install"));
+    m_ddimErrorPage = new DdimErrorPage;
+    m_ddimErrorPage->setErrorMessage(message);
+    m_dragflag = 0;
+    m_Filterflag = 0;
+    m_centralLayout->addWidget(m_ddimErrorPage);
+    //m_centralLayout->setCurrentIndex(1);
+    m_centralLayout->setCurrentWidget(m_ddimErrorPage);
+
+    connect(m_ddimErrorPage, &DdimErrorPage::comfimPressed, this, &QMainWindow::close);
+}
+
+void DebInstaller::slotShowDdimFloatingMessage(const QString &message)
+{
+    DFloatingMessage *floatingMsg = new DFloatingMessage;
+    floatingMsg->setMessage(message);
+    floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
+    DMessageManager::instance()->sendMessage(this, floatingMsg);
+}
+
 void DebInstaller::slotShowUninstallConfirmPage()
 {
     m_fileListModel->setWorkerStatus(DebListModel::WorkerUnInstall);                        //刷新当前安装器的工作状态
@@ -398,7 +694,8 @@ void DebInstaller::slotShowUninstallConfirmPage()
 
     m_Filterflag = 3;
     m_centralLayout->addWidget(m_uninstallPage);                                                              //添加卸载页面到主界面中
-    m_centralLayout->setCurrentIndex(2);                                                        //显示卸载页面
+    //m_centralLayout->setCurrentIndex(2);                                                        //显示卸载页面
+    m_centralLayout->setCurrentWidget(m_uninstallPage);
     m_uninstallPage->setAcceptDrops(false);                                                                   //卸载页面不允许拖入包
     connect(m_uninstallPage, &UninstallConfirmPage::signalUninstallAccepted, this, &DebInstaller::slotUninstallAccepted);      //卸载页面确认卸载
     connect(m_uninstallPage, &UninstallConfirmPage::signalUninstallCanceled, this, &DebInstaller::slotUninstallCancel);        //卸载页面取消卸载
@@ -447,7 +744,8 @@ void DebInstaller::slotReset()
     if (!m_lastPage.isNull()) {
         m_lastPage->deleteLater();
     }
-    m_centralLayout->setCurrentIndex(0);
+    //m_centralLayout->setCurrentIndex(0);
+    m_centralLayout->setCurrentWidget(m_fileChooseWidget);
 
     this->setAcceptDrops(true);
     m_fileChooseWidget->setAcceptDrops(true);
@@ -501,10 +799,17 @@ void DebInstaller::single2Multi()
     multiplePage->refreshModel();
     m_lastPage = multiplePage;
     m_centralLayout->addWidget(multiplePage);
-    m_dragflag = 1;
+
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+        m_dragflag = 0;
+    } else {
+        m_dragflag = 1;
+    }
+
     m_Filterflag = 1;
 
-    m_centralLayout->setCurrentIndex(1);
+    //m_centralLayout->setCurrentIndex(1);
+    m_centralLayout->setCurrentWidget(multiplePage);
 }
 
 void DebInstaller::refreshSingle()
@@ -529,10 +834,16 @@ void DebInstaller::refreshSingle()
     m_centralLayout->addWidget(singlePage);
 
     // 重置安装器拖入的状态与工作的状态
-    m_dragflag = 2;
-    m_Filterflag = 2;
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+        m_dragflag = 0;
+        m_Filterflag = 0;
+    } else {
+        m_dragflag = 2;
+        m_Filterflag = 2;
+    }
     // switch to new page.
-    m_centralLayout->setCurrentIndex(1);
+    //m_centralLayout->setCurrentIndex(1);
+    m_centralLayout->setCurrentWidget(singlePage);
 }
 
 SingleInstallPage *DebInstaller::backToSinglePage()
@@ -585,19 +896,20 @@ void DebInstaller::slotShowHiddenButton()
 {
     enableCloseAndExit();
     m_fileListModel->resetFileStatus();        //授权取消，重置所有的状态，包括安装状态，依赖状态等
-    if (2 == m_dragflag) {// 单包安装显示按钮
-        SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
-        if (singlePage)
-            singlePage->afterGetAutherFalse();
-    } else if (1 == m_dragflag) {//批量安装显示按钮
+    SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+    if (singlePage) {// 单包安装显示按钮
+        singlePage->afterGetAutherFalse();
+    } else {
         MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
-        if (multiplePage)
+        if (multiplePage) { //批量安装显示按钮
             multiplePage->afterGetAutherFalse();
+        }
     }
 }
 
 void DebInstaller::closeEvent(QCloseEvent *event)
 {
+    PackageAnalyzer::instance().setUiExit();
     DMainWindow::closeEvent(event);
 }
 
