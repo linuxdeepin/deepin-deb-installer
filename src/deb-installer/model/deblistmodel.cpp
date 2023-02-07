@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,7 +8,7 @@
 #include "view/pages/AptConfigMessage.h"
 #include "view/pages/settingdialog.h"
 #include "utils/utils.h"
-
+#include "singleInstallerApplication.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -130,6 +130,9 @@ void DebListModel::initAppendConnection()
 {
     //添加的包是无效的包
     connect(m_packagesManager, &PackagesManager::signalInvalidPackage, this, &DebListModel::signalInvalidPackage);
+
+    //添加的包是无效的ddim
+    connect(m_packagesManager, &PackagesManager::signalNotDdimProcess, this, &DebListModel::signalNotDdimProcess);
 
     //添加的包不在本地
     connect(m_packagesManager, &PackagesManager::signalNotLocalPackage, this, &DebListModel::signalNotLocalPackage);
@@ -866,8 +869,45 @@ void DebListModel::digitalVerifyFailed(ErrorCode errorCode)
     }
 }
 
+void DebListModel::showNoDigitalErrWindowInDdimProcess(void (DebListModel::*failedFunction)())
+{
+    DDialog *Ddialog = new DDialog(); //弹出窗口
+    Ddialog->setModal(true);
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint); //窗口一直置顶
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+    Ddialog->addButton(QString(tr("OK", "button")), true, DDialog::ButtonNormal); //添加确认按钮
+
+    auto fullPath = m_packagesManager->package(m_operatingIndex);
+    QFileInfo info(fullPath);
+    Ddialog->setMessage(QString(tr("Failed to install %1: no valid digital singature").arg(info.fileName())));
+
+    //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
+    std::function<void(void)> rejectOperate = [this, Ddialog, failedFunction]() {
+        (this->*failedFunction)();
+        Ddialog->deleteLater();
+    };
+
+    //取消按钮
+    QPushButton *btnOk = qobject_cast<QPushButton *>(Ddialog->getButton(0));
+    connect(btnOk, &DPushButton::clicked, Ddialog, &DDialog::reject);
+
+    //关闭图标
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::reject);
+
+    //ESC退出
+    connect(Ddialog, &DDialog::rejected, rejectOperate);
+
+    Ddialog->exec(); //显示弹窗
+}
+
 void DebListModel::showNoDigitalErrWindow()
 {
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+        showNoDigitalErrWindowInDdimProcess(&DebListModel::slotNoDigitalSignature);
+        return;
+    }
+
     //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         digitalVerifyFailed(NoDigitalSignature);//刷新安装错误，并记录错误原因
@@ -907,9 +947,13 @@ void DebListModel::showNoDigitalErrWindow()
     connect(btnProceedControlCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
-
 void DebListModel::showDigitalErrWindow()
 {
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+        showNoDigitalErrWindowInDdimProcess(&DebListModel::slotDigitalSignatureError);
+        return;
+    }
+
     //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
@@ -1030,12 +1074,12 @@ void DebListModel::slotShowDevelopModeWindow()
     //2.打开控制中心
     if(osVerStr == "20") { // V20模式
         QString command = "dbus-send --print-reply "
-                          "--dest=com.deepin.dde.ControlCenter "
-                          "/com/deepin/dde/ControlCenter "
-                          "com.deepin.dde.ControlCenter.ShowModule "
-                          "\"string:commoninfo\"";
-        unlock->startDetached(command);
-        unlock->waitForFinished();
+                      "--dest=com.deepin.dde.ControlCenter "
+                      "/com/deepin/dde/ControlCenter "
+                      "com.deepin.dde.ControlCenter.ShowModule "
+                      "\"string:commoninfo\"";
+    unlock->startDetached(command);
+    unlock->waitForFinished();
     } else if (osVerStr == "23") { // V23模式
         if(unlock->exitCode() != QProcess::NormalExit) {
             QString command = "dbus-send --print-reply "
@@ -1107,8 +1151,6 @@ void DebListModel::checkSystemVersion()
     }
 
 #endif
-
-
 }
 
 bool DebListModel::checkDigitalSignature()

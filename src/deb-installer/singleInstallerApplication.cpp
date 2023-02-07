@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,14 +12,24 @@
 #include <QtDBus/QtDBus>
 const QString kDebInstallManagerService = "com.deepin.DebInstaller";
 const QString kDebInstallManagerIface = "/com/deepin/DebInstaller";
+
+SingleInstallerApplication::AppWorkChannel SingleInstallerApplication::mode;
+std::atomic_bool SingleInstallerApplication::BackendIsRunningInit;
+
 SingleInstallerApplication::SingleInstallerApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
-
+    BackendIsRunningInit = false;
 }
 
 void SingleInstallerApplication::activateWindow()
 {
+    if (!m_ddimFiles.isEmpty()) {
+        mode = DdimChannel;
+    } else {
+        mode = NormalChannel;
+    }
+
     if (nullptr == m_qspMainWnd.get()) {
         m_qspMainWnd.reset(new DebInstaller());
         Dtk::Widget::moveToCenter(m_qspMainWnd.get());
@@ -29,17 +39,24 @@ void SingleInstallerApplication::activateWindow()
         m_qspMainWnd->activateWindow(); // Reactive main window
         m_qspMainWnd->showNormal();     //非特效模式下激活窗口
     }
-    if (bIsDbus)
+
+    if (bIsDbus) {
         m_qspMainWnd->hide();
-    if (m_selectedFiles.size() > 0) {
+    }
+
+    if (!m_ddimFiles.isEmpty()) {
+        QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotDdimSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_ddimFiles));
+    } else if (!m_selectedFiles.isEmpty()) {
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_selectedFiles));
+    } else { //do nothing
     }
 }
 
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
-    qDebug() << Q_FUNC_INFO << debPathList;
-    if (debPathList.size() > 0) {
+    if (mode == DdimChannel) {
+        QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotDdimSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
+    } else if (debPathList.size() > 0) {
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     } else {
         if (m_qspMainWnd.get()) {                   //先判断当前是否已经存在一个进程。
@@ -115,6 +132,9 @@ bool SingleInstallerApplication::parseCmdLine()
     parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
     parser.process(*this);
 
+    m_selectedFiles.clear();
+    m_ddimFiles.clear();
+
     QDBusConnection conn = QDBusConnection::sessionBus();
 
     if (!conn.registerService(kDebInstallManagerService) ||
@@ -136,13 +156,21 @@ bool SingleInstallerApplication::parseCmdLine()
                 bIsDbus = true;
             }
         } else {
+            QStringList paraList = parser.positionalArguments();
             for (auto it : paraList) {
-                m_selectedFiles.append(it);
+                if (it.endsWith("ddim")) {
+                    m_ddimFiles.append(it);
+                } else {
+                    m_selectedFiles.append(it);
+                }
             }
-            if (paraList.size() > 0 && m_selectedFiles.size() == 0) {
+
+            if (!paraList.isEmpty() && m_selectedFiles.isEmpty() && m_ddimFiles.isEmpty()) {
                 return false;
             }
         }
         return true;
     }
+
+    return true;
 }

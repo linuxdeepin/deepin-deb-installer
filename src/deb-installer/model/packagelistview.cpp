@@ -1,10 +1,11 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "packagelistview.h"
 #include "model/deblistmodel.h"
 #include "utils/utils.h"
+#include "singleInstallerApplication.h"
 
 #include <QPainter>
 #include <QShortcut>
@@ -29,7 +30,13 @@ void PackagesListView::initUI()
     QScroller::grabGesture(this, QScroller::TouchGesture);              //添加触控屏触控
 
     setVerticalScrollMode(ScrollPerPixel);                              //设置垂直滚动的模式
-    setSelectionMode(QListView::SingleSelection);                       //只允许单选
+
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) {
+        setSelectionMode(QListView::SingleSelection);                       //只允许单选
+    } else {
+        setSelectionMode(QListView::NoSelection);
+    }
+
     setAutoScroll(true);                                                //允许自动滚动
     setMouseTracking(true);                                             //设置鼠标跟踪
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
@@ -53,9 +60,11 @@ void PackagesListView::initConnections()
  */
 void PackagesListView::initShortcuts()
 {
-    QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);              //初始化快捷键
-    deleteShortcut->setContext(Qt::ApplicationShortcut);                                //设置快捷键的显示提示
-    connect(deleteShortcut, &QShortcut::activated, this, &PackagesListView::slotShortcutDeleteAction); //链接快捷键
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) {
+        QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);              //初始化快捷键
+        deleteShortcut->setContext(Qt::ApplicationShortcut);                                //设置快捷键的显示提示
+        connect(deleteShortcut, &QShortcut::activated, this, &PackagesListView::slotShortcutDeleteAction); //链接快捷键
+    }
 }
 
 /**
@@ -150,7 +159,7 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
  */
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu) {                               //当前右键菜单未初始化
+    if (nullptr == m_rightMenu && SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) { //当前右键菜单未初始化
         m_rightMenu = new DMenu(this);                          //初始化右键菜单
 
         //给右键菜单添加快捷键Delete
@@ -176,11 +185,10 @@ void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 
     m_bShortcutDelete = false;                          //右键菜单显示时不允许使用快捷键删除
     m_currModelIndex = index;
-    DMenu *rightMenu = m_rightMenu;
     //修改右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
-    if (m_bIsRightMenuShow) {
+    if (m_bIsRightMenuShow && m_rightMenu != nullptr) {
         //在当前鼠标位置显示右键菜单
-        rightMenu->exec(QCursor::pos());
+        m_rightMenu->exec(QCursor::pos());
     }
 }
 
@@ -286,7 +294,7 @@ bool PackagesListView::event(QEvent *event)
     }
 
     //焦点切出事件
-    if(event->type() == QEvent::FocusOut) {
+    if (event->type() == QEvent::FocusOut) {
         this->clearSelection();
         m_currentIndex = -1;
         m_currModelIndex = this->model()->index(-1, -1);
