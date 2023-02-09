@@ -733,7 +733,7 @@ QByteArray PackagesManager::getPackageMd5(const int index)
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
     //提前获取需要的md5
-    if (index < 0 || index > m_preparedPackages.size()) {
+    if (index < 0 || index >= m_preparedPackages.size()) {
         qWarning() << "invalid param index";
         return PackageDependsStatus::_break("");
     }
@@ -771,8 +771,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         dependsStatus.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);//更换依赖的存储方式
-        QString packageName = debFile.packageName();
-        return PackageDependsStatus::_break(packageName);
+        return dependsStatus;
     }
 
     // conflicts
@@ -825,15 +824,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                     //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString &eachDepend){
-                        if(!eachDepend.contains("deepin-wine")) {
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
+                        if (!eachDepend.contains("deepin-wine")) {
                             return true;
                         }
                         auto package = packageWithArch(eachDepend, debFile.architecture());
                         return !package->installedVersion().isEmpty();
                     });
                     dependList.erase(removedIter, dependList.end());
-                    if(dependList.isEmpty()) { //所有的wine依赖均已安装
+                    if (dependList.isEmpty()) { //所有的wine依赖均已安装
                         break;
                     }
 
@@ -851,7 +850,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                     dependsStatus.status = DebListModel::DependsBreak;                                    //只要是下载，默认当前wine应用依赖为break
                 }
-            }while(0);
+            } while (0);
         }
     }
     if (dependsStatus.isBreak())
@@ -896,7 +895,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
     qInfo() << __func__ << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
-    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString &str){
+    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
         return !str.contains("|");
     });
     dependsList.erase(removedIter, dependsList.end());
@@ -1466,7 +1465,7 @@ void PackagesManager::addPackage(int validPkgCount, const QString &packagePath, 
 {
     //预先校验包是否有效或是否重复
     DebFile currentDebfile(packagePath);
-    if(!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
+    if (!currentDebfile.isValid() || m_appendedPackagesMd5.contains(packageMd5Sum)) {
         return;
     }
 
@@ -1480,12 +1479,12 @@ void PackagesManager::addPackage(int validPkgCount, const QString &packagePath, 
     m_preparedPackages = installQueue.first;
     m_packageMd5 = installQueue.second;
     int indexRow = 0;
-    for (;indexRow != m_packageMd5.size();++indexRow) {
-        if(m_packageMd5[indexRow] == packageMd5Sum) {
+    for (; indexRow != m_packageMd5.size(); ++indexRow) {
+        if (m_packageMd5[indexRow] == packageMd5Sum) {
             break;
         }
     }
-    if(indexRow == m_packageMd5.size()) { //error
+    if (indexRow == m_packageMd5.size()) { //error
         return;
     }
 

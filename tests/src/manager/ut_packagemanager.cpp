@@ -218,6 +218,14 @@ bool stub_permission_false(QFile::Permissions permissions)
     return false;
 }
 
+void stub_addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends)
+{
+    Q_UNUSED(packagePath)
+    Q_UNUSED(md5)
+    Q_UNUSED(packageName)
+    Q_UNUSED(depends)
+    return;
+}
 
 QString stub_dealPackagePath(QString packagePath)
 {
@@ -230,11 +238,20 @@ bool stub_dealInvalidPackage(QString)
     return true;
 }
 
+std::pair<QList<QString>, QList<QByteArray>> stub_getBestInstallQueue()
+{
+    return {{"package1"}, {"0010"}};
+}
+
+QList<DependencyItem> deb_depends_2()
+{
+    return {};
+}
+
 bool deb_isValid_false()
 {
     return true;
 }
-
 
 Package *package_package(const QString &name)
 {
@@ -300,6 +317,8 @@ void UT_packagesManager::SetUp()
     stub.set(ADDR(DebFile, packageName), deb_packageName);
     stub.set(ADDR(DebFile, longDescription), deb_longDescription);
     stub.set(ADDR(DebFile, version), deb_version);
+    stub.set(ADDR(DebFile, depends), deb_depends_2);
+    stub.set(ADDR(DependGraph, addNode), stub_addNode);
 
     m_packageManager = new PackagesManager();
     usleep(10 * 1000);
@@ -369,12 +388,11 @@ TEST_F(UT_packagesManager, PackageManager_UT_dealPackagePath_AbsolutePath)
 
 TEST_F(UT_packagesManager, PackageManager_UT_addPackage)
 {
-    m_packageManager->m_preparedPackages.insert(0, "package1");
-    m_packageManager->m_packageMd5.insert(0, "abc");
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     m_packageManager->addPackage(1, "/", "deb");
-    EXPECT_EQ(2, m_packageManager->m_preparedPackages.size());
-    EXPECT_EQ(2, m_packageManager->m_packageMd5.size());
+    EXPECT_EQ(1, m_packageManager->m_preparedPackages.size());
+    EXPECT_EQ(1, m_packageManager->m_packageMd5.size());
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_dealPackagePath_space)
@@ -425,13 +443,13 @@ TEST_F(UT_packagesManager, PackageManager_UT_appendPackage)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     m_packageManager->appendPackage({"/1"});
 
     ASSERT_FALSE(m_packageManager->m_packageMd5.isEmpty());
     stub.set(ADDR(QThread, start), stub_qthread_start);
-    m_packageManager->appendPackage(QStringList() << "/1"
-                                    << "/2");
+    m_packageManager->appendPackage(QStringList() << "/1" << "/2");
     ASSERT_EQ(1, m_packageManager->m_pAddPackageThread->m_packages.size());
 }
 
@@ -440,6 +458,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_appendPackage_invalid)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     m_packageManager->appendPackage({"/1"});
 
@@ -455,6 +474,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_appendPackage_openFailed)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     m_packageManager->appendPackage({"/1"});
 
@@ -531,6 +551,8 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageConflictStat)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
+
     m_packageManager->appendPackage({"/1"});
 
     ConflictResult cr = m_packageManager->packageConflictStat(0);
@@ -845,6 +867,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
@@ -858,6 +881,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_01)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     m_packageManager->m_packageMd5.insert(0, "deb");
 
@@ -874,6 +898,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_02)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), deb_package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion1);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
     m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 3);
@@ -888,6 +913,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_03)
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(Package, installedVersion), deb_package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion2);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
     m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 2);
@@ -943,6 +969,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_DealDependResult)
     stub.set(ADDR(PackagesManager, isArchError), ut_isArchError_false);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
     stub.set((QString(DebFile::*)(const QString & name) const)ADDR(DebFile, controlField), ut_controlField);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     usleep(10 * 1000);
@@ -1026,6 +1053,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_01)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
@@ -1087,6 +1115,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_03)
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
     stub.set(ADDR(PackagesManager, isBlackApplication), stub_isBlackApplication_true);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
@@ -1292,12 +1321,13 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstalledVersion)
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
 
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
+
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
 
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), package_compareVersion);
-
 
     m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5[0]] = 0;
     QString version = m_packageManager->packageInstalledVersion(0);
@@ -1315,6 +1345,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageAvailableDepends)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
 
@@ -1566,6 +1597,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_resetPackageDependsStatus)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
@@ -1590,7 +1622,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_resetPackageDependsStatus_01)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
-
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
@@ -1612,6 +1644,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_removePackage)
 
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/"});
@@ -1853,11 +1886,12 @@ TEST_F(UT_packagesManager, PackageManager_UT_package)
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stub_getPackageDependsStatus);
     stub.set(ADDR(PackagesManager, dealPackagePath), stub_dealPackagePath);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), stub_dealInvalidPackage);
+    stub.set(ADDR(DependGraph, getBestInstallQueue), stub_getBestInstallQueue);
 
     usleep(10 * 1000);
     m_packageManager->appendPackage({"/1"});
 
-    ASSERT_STREQ(m_packageManager->package(0).toLocal8Bit(), "");
+    ASSERT_STREQ(m_packageManager->package(0).toLocal8Bit(), "package1");
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_checkDependsPackageStatus)
@@ -1895,6 +1929,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_checkDependsPackageStatus01)
     stub.set(ADDR(Package, availableVersion), ut_availableversion);
     stub.set(ADDR(Package, depends), deb_conflicts_null);
     stub.set(ADDR(DebFile, conflicts), deb_conflicts);
+    stub.set(ADDR(Package, version), ut_version);
 
     m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0));
     EXPECT_EQ(PackageDependsStatus::ok().status, m_packageManager->checkDependsPackageStatus(set, "", conflicts().at(0).at(0)).status);
