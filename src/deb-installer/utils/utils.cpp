@@ -149,7 +149,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify";
-        proc.start(program, {"\"" + filepath_name + "\""});
+        proc.start(program, {filepath_name});
         proc.waitForFinished(-1);
         const QString output1 = proc.readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
