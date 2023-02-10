@@ -805,7 +805,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_removePackage)
     m_debListModel->slotAppendPackage(list);
     m_debListModel->m_packageOperateStatus[""] = 1;
     m_debListModel->removePackage(0);
-    ASSERT_EQ(m_debListModel->m_packagesManager->m_preparedPackages.size(), 1);
+    ASSERT_EQ(m_debListModel->m_packagesManager->m_preparedPackages.size(), 0);
     ASSERT_TRUE(m_debListModel->m_packageOperateStatus.isEmpty());
 }
 
