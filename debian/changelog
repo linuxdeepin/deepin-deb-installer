@@ -1,3 +1,9 @@
+deepin-deb-installer (6.0.2) unstable; urgency=medium
+
+  * Merge version to 6.0.2
+  * Add DDIM routine
+
+ -- wangzhengyang <wangzhengyang@uniontech.com>  Thu, 15 Feb 2023 15:07:35 +0800
 deepin-deb-installer (5.8.27) unstable; urgency=medium
 
   * New version 5.8.27
