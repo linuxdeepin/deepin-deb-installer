@@ -1,3 +1,8 @@
+deepin-deb-installer (6.0.4) unstable; urgency=medium
+
+  * Update version
+
+ -- wangzhengyang <wangzhengyang@uniontech.com>  Fri, 10 Mar 2023 10:59:41 +0800
 deepin-deb-installer (6.0.3) unstable; urgency=medium
 
   * Add check for wine depend install
