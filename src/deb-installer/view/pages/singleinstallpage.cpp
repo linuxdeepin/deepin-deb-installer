@@ -618,7 +618,6 @@ void SingleInstallPage::slotShowInfo()
     m_infoControlButton->setVisible(true);
     m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
-    m_progress->setValue(0);
 
     //清空提示  此处可优化 m_tipsLabel->setVisiable(true);
     m_tipsLabel->clear();
