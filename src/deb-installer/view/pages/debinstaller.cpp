@@ -636,7 +636,7 @@ void DebInstaller::slotShowNotLocalPackageMessage()
 
 void DebInstaller::slotShowPkgExistMessage()
 {
-    if (m_ddimView == nullptr) { //如果选择界面未创建，则表示是第一次进入且只有必装包和依赖包
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel && m_ddimView == nullptr) { //如果选择界面未创建，则表示是第一次进入且只有必装包和依赖包
         slotShowSelectInstallPage({});
         return;
     }
