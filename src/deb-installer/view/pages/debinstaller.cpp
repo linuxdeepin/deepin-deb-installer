@@ -374,7 +374,6 @@ void DebInstaller::disableCloseAndExit()
     if (tbar) {
         tbar->setQuitMenuDisabled(true);
     }
-
 }
 
 void DebInstaller::enableCloseAndExit()
@@ -909,6 +908,12 @@ void DebInstaller::slotShowHiddenButton()
 
 void DebInstaller::closeEvent(QCloseEvent *event)
 {
+    DTitlebar *tbar = this->titlebar();
+    if (tbar && tbar->quitMenuIsDisabled()) {
+        event->ignore();
+        return;
+    }
+
     PackageAnalyzer::instance().setUiExit();
     DMainWindow::closeEvent(event);
 }
