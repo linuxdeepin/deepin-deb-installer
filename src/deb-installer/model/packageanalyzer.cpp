@@ -70,6 +70,16 @@ void PackageAnalyzer::initBackend()
     emit runBackend(false);
 }
 
+bool PackageAnalyzer::isBackendReady()
+{
+    return backend != nullptr;
+}
+
+QApt::Backend *PackageAnalyzer::backendPtr()
+{
+    return backend;
+}
+
 QPair<PackageAnalyzer::PackageInstallStatus, QString> PackageAnalyzer::packageInstallStatus(const DebIr &ir) const
 {
     PackageAnalyzer::PackageInstallStatus status;

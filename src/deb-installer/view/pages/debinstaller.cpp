@@ -59,11 +59,9 @@ DebInstaller::DebInstaller(QWidget *parent)
     initUI();
     initConnections();
 
-    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
-        QtConcurrent::run([]() {
-            PackageAnalyzer::instance().initBackend();
-        });
-    }
+    QtConcurrent::run([]() {
+        PackageAnalyzer::instance().initBackend();
+    });
 }
 
 DebInstaller::~DebInstaller() {}
