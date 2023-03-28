@@ -20,12 +20,21 @@ NoProcessWidget::NoProcessWidget(QWidget *parent)
 
     actionTextLabel = new Dtk::Widget::DLabel;
     Dtk::Widget::DFontSizeManager::instance()->bind(actionTextLabel, Dtk::Widget::DFontSizeManager::T6, QFont::Medium);
-    actionTextLabel->setForegroundRole(Dtk::Gui::DPalette::LightLively);
+
+    Dtk::Gui::DPalette pe;
+    pe.setColor(QPalette::WindowText, Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
+    actionTextLabel->setPalette(pe);
 
     auto allLayer = new QVBoxLayout;
     allLayer->addWidget(spinner, 0, Qt::AlignHCenter | Qt::AlignBottom);
     allLayer->addWidget(actionTextLabel, 0, Qt::AlignHCenter | Qt::AlignTop);
     setLayout(allLayer);
+
+    connect(Dtk::Gui::DGuiApplicationHelper::instance(), &Dtk::Gui::DGuiApplicationHelper::applicationPaletteChanged, [this]() {
+        Dtk::Gui::DPalette pe;
+        pe.setColor(QPalette::WindowText, Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
+        actionTextLabel->setPalette(pe);
+    });
 }
 
 void NoProcessWidget::start()
