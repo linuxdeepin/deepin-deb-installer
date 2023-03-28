@@ -30,13 +30,7 @@ void PackagesListView::initUI()
     QScroller::grabGesture(this, QScroller::TouchGesture);              //添加触控屏触控
 
     setVerticalScrollMode(ScrollPerPixel);                              //设置垂直滚动的模式
-
-    if (SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) {
-        setSelectionMode(QListView::SingleSelection);                       //只允许单选
-    } else {
-        setSelectionMode(QListView::NoSelection);
-    }
-
+    setSelectionMode(QListView::SingleSelection);                       //只允许单选
     setAutoScroll(true);                                                //允许自动滚动
     setMouseTracking(true);                                             //设置鼠标跟踪
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
