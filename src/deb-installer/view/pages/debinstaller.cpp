@@ -81,6 +81,7 @@ void DebInstaller::initUI()
 
     //初始化 加载文件选择widget
     m_centralLayout->addWidget(m_fileChooseWidget);
+    m_lastPage = m_fileChooseWidget;
     m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
@@ -738,10 +739,9 @@ void DebInstaller::slotReset()
     m_fileListModel->reset();                                               // 重置model
 
     // 删除所有的页面
-    if (!m_lastPage.isNull()) {
+    if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
         m_lastPage->deleteLater();
     }
-    //m_centralLayout->setCurrentIndex(0);
     m_centralLayout->setCurrentWidget(m_fileChooseWidget);
 
     this->setAcceptDrops(true);
@@ -783,7 +783,9 @@ void DebInstaller::single2Multi()
     // 刷新文件的状态，初始化包的状态为准备状态
     m_fileListModel->resetFileStatus();
     m_fileListModel->initPrepareStatus();
-    if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
+    if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
+        m_lastPage->deleteLater();                    //清除widgets缓存
+    }
 
     // multiple packages install
     titlebar()->setTitle(tr("Bulk Install"));
@@ -817,7 +819,9 @@ void DebInstaller::refreshSingle()
     m_fileListModel->resetFileStatus();
     m_fileListModel->initPrepareStatus();
     // clear widgets if needed
-    if (!m_lastPage.isNull()) m_lastPage->deleteLater();                    //清除widgets缓存
+    if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
+        m_lastPage->deleteLater();                    //清除widgets缓存
+    }
     //安装器中只有一个包，刷新单包安装页面
     //刷新成单包安装界面时，删除标题
     titlebar()->setTitle(QString());

@@ -35,7 +35,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_backButton(new DPushButton(this))
     , m_acceptButton(new DPushButton(this))
 
-    // fix bug:33999 change DButton to DCommandLinkButton for Activity color
+      // fix bug:33999 change DButton to DCommandLinkButton for Activity color
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
@@ -153,7 +153,7 @@ void MultipleInstallPage::initUI()
     m_appsListView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     //监听字体大小变化,设置高度
-    connect(m_appsListView, &PackagesListView::signalChangeItemHeight,delegate, &PackagesListDelegate::getItemHeight);
+    connect(m_appsListView, &PackagesListView::signalChangeItemHeight, delegate, &PackagesListDelegate::getItemHeight);
 
     //使用代理重绘listView
     m_appsListView->setItemDelegate(delegate);
@@ -337,7 +337,7 @@ void MultipleInstallPage::initConnections()
     connect(m_debListModel, &DebListModel::signalChangeOperateIndex, this, &MultipleInstallPage::slotAutoScrollInstallList);
 
     //点击安装包列表时，向后端传递当前选中行
-    connect(m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [=](int row) {
+    connect(m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [ = ](int row) {
         m_debListModel->selectedIndexRow(row);
     });
 
@@ -410,6 +410,10 @@ void MultipleInstallPage::slotShowInfo()
     m_appsListViewBgFrame->setVisible(false);               //隐藏applistView
     m_appsListView->setVisible(false);
     m_installProcessInfoView->setVisible(true);             //显示相关安装进度信息
+
+    auto contentsMargins = m_infoControlButton->contentsMargins();
+    contentsMargins.setBottom(5);
+    m_infoControlButton->setContentsMargins(contentsMargins);
 }
 
 void MultipleInstallPage::slotHideInfo()
