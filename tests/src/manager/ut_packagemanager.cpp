@@ -9,6 +9,7 @@
 #include "../deb-installer/manager/DealDependThread.h"
 #include "../deb-installer/manager/AddPackageThread.h"
 #include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/model/packageanalyzer.h"
 
 #include <stub.h>
 #include <QFuture>
@@ -328,7 +329,7 @@ void UT_packagesManager::TearDown()
 {
     stub.set(ADDR(PackagesManager, rmTempDir), stub_is_open_false);
 
-    for (auto pkg : m_packageManager->m_backendFuture.result()->availablePackages()) {
+    for (auto pkg : PackageAnalyzer::instance().backendPtr()->availablePackages()) {
         delete pkg;
         pkg =  nullptr;
     }
@@ -1873,12 +1874,6 @@ TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_05)
 TEST_F(UT_packagesManager, PackageManager_UT_dependencyVersionMatch_06)
 {
     ASSERT_TRUE(m_packageManager->dependencyVersionMatch(1, NoOperand));
-}
-
-TEST_F(UT_packagesManager, PackageManager_UT_backend)
-{
-    usleep(10 * 1000);
-    ASSERT_TRUE(m_packageManager->backend());
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_package)

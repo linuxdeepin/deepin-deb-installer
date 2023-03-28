@@ -37,6 +37,8 @@ public:
     //初始化阶段
 
     void initBackend();
+    bool isBackendReady();
+    QApt::Backend *backendPtr();
 
     //选择阶段
 
