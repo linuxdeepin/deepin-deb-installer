@@ -5,6 +5,7 @@
 #include "deblistmodel.h"
 #include "manager/packagesmanager.h"
 #include "manager/PackageDependsStatus.h"
+#include "packageanalyzer.h"
 #include "view/pages/AptConfigMessage.h"
 #include "view/pages/settingdialog.h"
 #include "utils/utils.h"
@@ -371,7 +372,7 @@ void DebListModel::slotUninstallPackage(const int index)
     if (!debFile.isValid())
         return;
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture()); //检查是否有应用依赖到该包
-    Backend *backend = m_packagesManager->m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
         if (backend->package(r)) {
             // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
@@ -725,7 +726,7 @@ void DebListModel::checkBoxStatus()
 {
     QTime startTime = QTime::currentTime();                                      //获取弹出的时间
     Transaction *transation = nullptr;
-    auto *const backend = m_packagesManager->m_backendFuture.result();
+    auto *const backend = PackageAnalyzer::instance().backendPtr();
     transation = backend->commitChanges();
 
     QTime stopTime = QTime::currentTime();
@@ -758,7 +759,7 @@ void DebListModel::installDebs()
     emit signalStartInstall();
 
     // fetch next deb
-    auto *const backend = m_packagesManager->m_backendFuture.result();
+    auto *const backend = PackageAnalyzer::instance().backendPtr();
     if (!backend)
         return;
 
@@ -925,7 +926,7 @@ void DebListModel::showNoDigitalErrWindow()
     Ddialog->show();    //显示弹窗
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
-    std::function<void(void)> rejectOperate = [this, Ddialog](){
+    std::function<void(void)> rejectOperate = [this, Ddialog]() {
         this->slotNoDigitalSignature();
         Ddialog->deleteLater();
     };
@@ -980,7 +981,7 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog](){
+    std::function<void(void)> exitOperate = [this, Ddialog]() {
         this->slotDigitalSignatureError();
         Ddialog->deleteLater();
     };
@@ -1064,7 +1065,7 @@ void DebListModel::slotShowDevelopModeWindow()
     auto str = QString::fromUtf8(output);
     QRegExp re("\t.+\n");
     QString osVerStr;
-    if(re.indexIn(str) > -1) {
+    if (re.indexIn(str) > -1) {
         auto result = re.cap(0);
         osVerStr = result.remove(0, 1).remove(result.size() - 1, 1);
         qInfo() << "lsb_release -r:" << output;
@@ -1072,16 +1073,16 @@ void DebListModel::slotShowDevelopModeWindow()
     }
 
     //2.打开控制中心
-    if(osVerStr == "20") { // V20模式
+    if (osVerStr == "20") { // V20模式
         QString command = "dbus-send --print-reply "
-                      "--dest=com.deepin.dde.ControlCenter "
-                      "/com/deepin/dde/ControlCenter "
-                      "com.deepin.dde.ControlCenter.ShowModule "
-                      "\"string:commoninfo\"";
-    unlock->startDetached(command);
-    unlock->waitForFinished();
+                          "--dest=com.deepin.dde.ControlCenter "
+                          "/com/deepin/dde/ControlCenter "
+                          "com.deepin.dde.ControlCenter.ShowModule "
+                          "\"string:commoninfo\"";
+        unlock->startDetached(command);
+        unlock->waitForFinished();
     } else if (osVerStr == "23") { // V23模式
-        if(unlock->exitCode() != QProcess::NormalExit) {
+        if (unlock->exitCode() != QProcess::NormalExit) {
             QString command = "dbus-send --print-reply "
                               "--dest=org.deepin.dde.ControlCenter1 "
                               "/org/deepin/dde/ControlCenter1 "
@@ -1208,9 +1209,9 @@ void DebListModel::installNextDeb()
 {
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex); //刷新软件包依赖状态
     auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if(dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+    if (dependStatus.isAvailable()) { //存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
-    } else if(dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
+    } else if (dependStatus.status >= DependsBreak) { //安装前置条件不满足，无法处理
         refreshOperatingPackageStatus(Failed);
         bumpInstallIndex();
         return;
@@ -1531,7 +1532,7 @@ void DebListModel::showProhibitWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog](){
+    std::function<void(void)> exitOperate = [this, Ddialog]() {
         this->slotShowProhibitWindow();
         Ddialog->deleteLater();
     };

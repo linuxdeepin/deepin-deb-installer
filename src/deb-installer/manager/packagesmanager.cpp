@@ -9,6 +9,7 @@
 #include "utils/utils.h"
 #include "model/deblistmodel.h"
 #include "model/dependgraph.h"
+#include "model/packageanalyzer.h"
 #include "singleInstallerApplication.h"
 
 #include <DRecentManager>
@@ -103,7 +104,7 @@ int PackagesManager::checkInstallStatus(const QString &package_path)
         return DebListModel::NotInstalled;
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
         return DebListModel::NotInstalled;
@@ -285,29 +286,8 @@ QString PackagesManager::checkPackageValid(const QStringList &package_path)
     return "";
 }
 
-Backend *init_backend()
-{
-    while (SingleInstallerApplication::BackendIsRunningInit) {
-        QThread::msleep(10);
-    }
-
-    SingleInstallerApplication::BackendIsRunningInit = true;
-
-    Backend *backend = new Backend;
-    bool initSuccess = backend->init();
-
-    SingleInstallerApplication::BackendIsRunningInit = false;
-
-    if (initSuccess) {
-        return backend;
-    }
-
-    qFatal("%s", backend->initErrorMessage().toStdString().c_str());
-}
-
 PackagesManager::PackagesManager(QObject *parent)
     : QObject(parent)
-    , m_backendFuture(QtConcurrent::run(init_backend))
 {
     m_installWineThread = new DealDependThread();
     connect(m_installWineThread, &DealDependThread::signalDependResult, this, &PackagesManager::slotDealDependResult);
@@ -339,7 +319,7 @@ PackagesManager::PackagesManager(QObject *parent)
 
 bool PackagesManager::isBackendReady()
 {
-    return m_backendFuture.isFinished();
+    return PackageAnalyzer::instance().isBackendReady();
 }
 
 bool PackagesManager::isArchError(const int idx)
@@ -347,7 +327,7 @@ bool PackagesManager::isArchError(const int idx)
     if (idx < 0 || idx >= m_preparedPackages.size())
         return true;
 
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
         return true;
@@ -369,7 +349,7 @@ bool PackagesManager::isArchError(const int idx)
 
 bool PackagesManager::isArchErrorQstring(const QString &package_name)
 {
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
         return true;
@@ -426,7 +406,7 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
     static QList<QPair<QLatin1String, DependencyInfo>> sysConflicts;
 
     if (sysConflicts.isEmpty()) {
-        Backend *backend = m_backendFuture.result();
+        Backend *backend = PackageAnalyzer::instance().backendPtr();
         for (Package *pkg : backend->availablePackages()) {
             if (!pkg)
                 continue;
@@ -488,7 +468,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
             //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
             //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
             //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
-            Backend *backend = m_backendFuture.result();
+            Backend *backend = PackageAnalyzer::instance().backendPtr();
             if (!backend)
                 return ConflictResult::err(QString());
             Package *package = backend->package(name);
@@ -570,7 +550,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, con
             //此前使用packageWithArch, 在package打包失败时，会寻找virtual package的提供的其他包
             //在dde-daemon中 lastore-daemon-migration与dde-daemon为conflict,
             //lastore-daemon-migration 又提供了dde-daemon,导致最后打成的包不是virtual package而是provides的包
-            Backend *backend = m_backendFuture.result();
+            Backend *backend = PackageAnalyzer::instance().backendPtr();
             if (!backend)
                 return ConflictResult::err(QString());
             Package *package = backend->package(name);
@@ -638,7 +618,7 @@ int PackagesManager::packageInstallStatus(const int index)
         return DebListModel::NotInstalled;
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
         return DebListModel::NotInstalled;
@@ -927,7 +907,7 @@ const QString PackagesManager::packageInstalledVersion(const int index)
         return "";
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "libqapt backend loading error";
         return "";
@@ -997,7 +977,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 //  修复升级依赖时，因为依赖包版本过低，造成安装循环。
                 // 删除无用冗余的日志
                 if (Package::compareVersion(package->installedVersion(), info.packageVersion()) < 0) {
-                    Backend *backend = m_backendFuture.result();
+                    Backend *backend = PackageAnalyzer::instance().backendPtr();
                     if (!backend) {
                         qWarning() << "libqapt backend loading error";
                         return;
@@ -1016,7 +996,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         } else { // 存在或依赖且当前依赖属于或依赖关系
             bool isInstalling = false;
             for (auto iter = infos.begin(); iter != infos.end(); iter++) {
-                Backend *backend = m_backendFuture.result();
+                Backend *backend = PackageAnalyzer::instance().backendPtr();
                 if (!backend) {
                     qWarning() << "libqapt backend loading error";
                     return;
@@ -1037,7 +1017,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                     choosed_set << choosed_name;
                 } else {
                     if (Package::compareVersion(package->installedVersion(), info.packageVersion()) < 0) {
-                        Backend *backend = m_backendFuture.result();
+                        Backend *backend = PackageAnalyzer::instance().backendPtr();
                         if (!backend)
                             return;
                         Package *updatePackage = backend->package(package->name()
@@ -1174,7 +1154,7 @@ void PackagesManager::reset()
     m_dependGraph.reset();
 
     //reloadCache必须要加
-    m_backendFuture.result()->reloadCache();
+    PackageAnalyzer::instance().backendPtr()->reloadCache();
     m_dependsPackages.clear();
 }
 
@@ -1193,7 +1173,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     }
     // reload backend cache
     //reloadCache必须要加
-    m_backendFuture.result()->reloadCache();
+    PackageAnalyzer::instance().backendPtr()->reloadCache();
     m_packageMd5DependsStatus.remove(currentPackageMd5);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
 }
 
@@ -1678,7 +1658,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
         // check arch conflicts
         if (package->multiArchType() == MultiArchSame) {
-            Backend *backend = m_backendFuture.result();
+            Backend *backend = PackageAnalyzer::instance().backendPtr();
             for (const auto &arch : backend->architectures()) {
                 if (arch == package->architecture())
                     continue;
@@ -1697,7 +1677,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         // let's check conflicts
         if (!isConflictSatisfy(architecture, package).is_ok()) {
 
-            Backend *backend = m_backendFuture.result();
+            Backend *backend = PackageAnalyzer::instance().backendPtr();
             for (auto *availablePackage : backend->availablePackages()) {
                 if (!availablePackage->providesList().contains(package->name())) {
                     availablePackage = nullptr;
@@ -1759,7 +1739,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch,
                                           const QString &annotation)
 {
-    Backend *backend = m_backendFuture.result();
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
         return nullptr;
@@ -1912,14 +1892,6 @@ PackagesManager::~PackagesManager()
         rmTempDirCount++;
     }
     delete m_installWineThread;
-
-    //先取消当前异步计算的后端。
-    m_backendFuture.cancel();
     delete m_pAddPackageThread;
-
-    Backend *backend = m_backendFuture.result();
-
-    delete backend;
-    backend = nullptr;
 }
 

@@ -210,15 +210,6 @@ public:
      */
     bool isBackendReady();
 
-    /**
-     * @brief backend 获取后端指针
-     * @return  后端的指针
-     */
-    QApt::Backend *backend() const
-    {
-        return m_backendFuture.result();
-    }
-
 //// 包状态相关函数
 public:
 
@@ -515,10 +506,6 @@ private:
     void getBlackApplications();
 
 private:
-
-    //安装程序后端指针(异步加载)
-    QFuture<QApt::Backend *> m_backendFuture;
-
     //存放包路径的列表
     QList<QString> m_preparedPackages       = {};
 
