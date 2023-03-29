@@ -361,7 +361,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     initButtonAutoDefault();
 
     //设置描述信息的size 与位置
-    m_packageDescription->setMinimumHeight(65);
+    m_packageDescription->setMinimumHeight(60);
     m_packageDescription->setMinimumWidth(270);
     m_packageDescription->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
@@ -742,7 +742,7 @@ void SingleInstallPage::slotDependPackages(DependsPair dependPackages, bool inst
  */
 void SingleInstallPage::showPackageInfo()
 {
-    const QSize boundingSize = QSize(m_packageDescription->width(), 50);
+    const QSize boundingSize = QSize(m_packageDescription->width(), m_packageDescription->height());
     QFontInfo fontinfosize = this->fontInfo(); //获取系统字体
     int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);
