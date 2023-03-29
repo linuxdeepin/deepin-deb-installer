@@ -70,6 +70,8 @@ void InstallProcessInfoView::initUI(int w, int h)
     DPalette pa = pdebhelp->palette(m_editor);
     m_colorType = DPalette::TextTips;
     pa.setColor(DPalette::Text, pa.color(m_colorType));
+    pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+    pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
     m_editor->setPalette(pa);
 
     //设置只读，不允许对其进行修改
@@ -99,6 +101,8 @@ void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
     m_colorType = ct;                                                   //保存传入的颜色类型
     DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
     pa.setColor(DPalette::Text, pa.color(m_colorType));                 //editor设置传入的颜色类型
+    pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+    pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
     m_editor->setPalette(pa);
 }
 
@@ -122,19 +126,25 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 
     if (themeType == DGuiApplicationHelper::LightType) {      //当前是浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));
+        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         m_editor->setPalette(pa);
     } else if (themeType == DGuiApplicationHelper::DarkType) {// 当前是深色主题
         pa.setColor(DPalette::Text, QColor(109, 124, 136));
+        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         m_editor->setPalette(pa);
     } else {                                                  //默认使用浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));
+        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
         m_editor->setPalette(pa);
     }
 }
 
 /**
  * @brief 清除当前展示框中的内容
- * 
+ *
  */
 void InstallProcessInfoView::clearText()
 {
