@@ -16,14 +16,14 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     mainIcon = new Dtk::Widget::DLabel;
 
     mainLabel = new Dtk::Widget::DLabel;
-    Dtk::Widget::DFontSizeManager::instance()->bind(mainLabel, Dtk::Widget::DFontSizeManager::T5, QFont::Medium);
+    Dtk::Widget::DFontSizeManager::instance()->bind(mainLabel, Dtk::Widget::DFontSizeManager::T6, QFont::Medium);
     mainLabel->setForegroundRole(Dtk::Gui::DPalette::TextTitle);
 
     processBar = new Dtk::Widget::DProgressBar;
     processBar->setFixedSize(300, 8);
 
     processTextLabel = new Dtk::Widget::DLabel(this);
-    Dtk::Widget::DFontSizeManager::instance()->bind(processTextLabel, Dtk::Widget::DFontSizeManager::T6, QFont::Medium);
+    Dtk::Widget::DFontSizeManager::instance()->bind(processTextLabel, Dtk::Widget::DFontSizeManager::T8, QFont::Medium);
     processTextLabel->setForegroundRole(Dtk::Gui::DPalette::TextTips);
 
     auto allLayer = new QVBoxLayout;
