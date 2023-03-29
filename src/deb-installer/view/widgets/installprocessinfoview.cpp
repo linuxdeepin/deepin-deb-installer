@@ -67,7 +67,7 @@ void InstallProcessInfoView::initUI(int w, int h)
         return;
     }
 
-    DPalette pa = pdebhelp->palette(m_editor);
+    DPalette pa = m_editor->palette();
     m_colorType = DPalette::TextTips;
     pa.setColor(DPalette::Text, pa.color(m_colorType));
     pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
@@ -99,7 +99,7 @@ void InstallProcessInfoView::setTextFontSize(int fontSize, int fontWeight)
 void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
 {
     m_colorType = ct;                                                   //保存传入的颜色类型
-    DPalette pa = DebApplicationHelper::instance()->palette(m_editor);
+    DPalette pa = m_editor->palette();
     pa.setColor(DPalette::Text, pa.color(m_colorType));                 //editor设置传入的颜色类型
     pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
     pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
@@ -119,27 +119,22 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
-    DPalette pa = DebApplicationHelper::instance()->palette(this);
+    DPalette pa = m_editor->palette();
 
     // 获取当前的主题
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
 
     if (themeType == DGuiApplicationHelper::LightType) {      //当前是浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));
-        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
-        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
-        m_editor->setPalette(pa);
     } else if (themeType == DGuiApplicationHelper::DarkType) {// 当前是深色主题
         pa.setColor(DPalette::Text, QColor(109, 124, 136));
-        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
-        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
-        m_editor->setPalette(pa);
     } else {                                                  //默认使用浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));
-        pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
-        pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
-        m_editor->setPalette(pa);
     }
+
+    pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
+    pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
+    m_editor->setPalette(pa);
 }
 
 /**
