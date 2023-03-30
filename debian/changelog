@@ -1,3 +1,8 @@
+deepin-deb-installer (6.0.5) unstable; urgency=medium
+
+  * Update version
+
+ -- wangzhengyang <wangzhengyang@uniontech.com>  Thu, 30 Mar 2023 17:19:43 +0800
 deepin-deb-installer (6.0.4) unstable; urgency=medium
 
   * Update version
