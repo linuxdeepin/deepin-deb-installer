@@ -850,13 +850,13 @@ void DebInstaller::refreshSingle()
 SingleInstallPage *DebInstaller::backToSinglePage()
 {
     // 获取当前的页面并删除
-    QWidget *confirmPage = m_centralLayout->widget(2);
+    QWidget *confirmPage = m_centralLayout->widget(3);
     if (nullptr == confirmPage)
         return nullptr;
     m_centralLayout->removeWidget(confirmPage);
     confirmPage->deleteLater();
 
-    SingleInstallPage *singleInstallPage = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(1));           //获取单包安装widget
+    SingleInstallPage *singleInstallPage = qobject_cast<SingleInstallPage *>(m_centralLayout->widget(2));           //获取单包安装widget
     if (!singleInstallPage) {
         return nullptr;
     }
