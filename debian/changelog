@@ -1,3 +1,9 @@
+deepin-deb-installer (6.0.6) unstable; urgency=medium
+
+  * Merge version to 6.0.6
+  * Community Edition/Server branch merge
+
+ -- wangzhengyang <wangzhengyang@uniontech.com>  Fri, 31 Mar 2023 10:45:35 +0800
 deepin-deb-installer (6.0.2) unstable; urgency=medium
 
   * Merge version to 6.0.2
