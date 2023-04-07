@@ -8,7 +8,7 @@ Homepage: https://www.deepin.com/
 
 Package: deepin-deb-installer
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqapt3-runtime, libqapt3
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqapt3-runtime, libqapt3, deepin-elf-verify, deepin-elf-sign-tool
 Description: Package Installer helps users install and remove local packages.
  Package Installer is an easy-to-use .deb package management tool 
  with a simple interface for users to quickly install customized applications
