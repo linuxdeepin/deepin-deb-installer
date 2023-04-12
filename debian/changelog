@@ -1,3 +1,9 @@
+deepin-deb-installer (6.0.10) unstable; urgency=medium
+
+  * fix: 修复libqapt包名带后缀无法准确区分版本的问题(Bug: 195557)(Influence: 虚包安装依赖)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Wed, 12 Apr 2023 12:27:31 +0800
+
 deepin-deb-installer (6.0.9) unstable; urgency=medium
 
   * fix: 移除安装依赖 deepin-elf-verify(Bug: 195557)(Influence: 安装依赖)
