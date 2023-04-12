@@ -1,3 +1,9 @@
+deepin-deb-installer (6.0.9) unstable; urgency=medium
+
+  * fix: 移除安装依赖 deepin-elf-verify(Bug: 195557)(Influence: 安装依赖)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Wed, 12 Apr 2023 09:52:04 +0800
+
 deepin-deb-installer (6.0.8) unstable; urgency=medium
 
   * fix: 移除对 deepin-elf-sign-tool 的强依赖(Influence: 安装依赖)
