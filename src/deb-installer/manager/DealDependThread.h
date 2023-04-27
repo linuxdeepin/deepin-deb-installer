@@ -68,6 +68,8 @@ private:
 
     //依赖安装状态是否错误的标识
     bool bDependsStatusErr      = false;
+    // 分级管控验签失败的标识
+    bool bVerifyStatusErr       = false;
 
     //下载失败的依赖的名称
     QString m_brokenDepend      ="";

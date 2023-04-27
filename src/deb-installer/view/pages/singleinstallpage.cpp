@@ -1011,6 +1011,11 @@ void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
         m_tipsLabel->setText(tr("Failed to install %1").arg(dependName));
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         break;
+    case DebListModel::VerifyDependsErr:
+        setCancelAuthOrAuthDependsErr();
+        m_tipsLabel->setText(dependName + tr("Invalid digital signature"));
+        m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+        break;
     default:
         break;
     }
