@@ -4,6 +4,7 @@
 
 #include "DealDependThread.h"
 #include "model/deblistmodel.h"
+#include "utils/hierarchicalverify.h"
 
 DealDependThread::DealDependThread(QObject *parent)
 {
@@ -39,8 +40,15 @@ void DealDependThread::slotReadOutput()
     }
     if (tmp.contains("Not authorized")) {
         bDependsStatusErr = true;
-        qWarning()<<"install Wine dependency Not authorized";
+        qWarning()<< qPrintable("install Wine dependency Not authorized");
         emit signalDependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
+    }
+
+    // 检测是否包含分级验签错误信息
+    if (HierarchicalVerify::instance()->checkTransactionError(m_brokenDepend, tmp)) {
+        bVerifyStatusErr = true;
+        qWarning() << QString("[Hierarchical] Install Wine dependency not verify, [output]: %1").arg(tmp);
+        emit signalDependResult(DebListModel::VerifyDependsErr, m_index, m_brokenDepend);
     }
 }
 
@@ -49,6 +57,9 @@ void DealDependThread::run()
     proc->setProcessChannelMode(QProcess::MergedChannels);
     msleep(100);
 
+    bDependsStatusErr = false;
+    bVerifyStatusErr = false;
+
     emit signalDependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
     proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall"  << "InstallDeepinWine" << m_dependsList);
     emit signalEnableCloseButton(false);
@@ -56,19 +67,21 @@ void DealDependThread::run()
 
 void DealDependThread::slotInstallFinished(int num = -1)
 {
+    if (bDependsStatusErr) {
+        emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
+        bDependsStatusErr = false;
+        return;
+    }
+
+    if (bVerifyStatusErr) {
+        emit signalDependResult(DebListModel::VerifyDependsErr, m_index, m_brokenDepend);
+        bVerifyStatusErr = false;
+        return;
+    }
+
     if (num == 0) {
-        if (bDependsStatusErr) {
-            emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
-            bDependsStatusErr = false;
-            return;
-        }
         emit signalDependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
     } else {
-        if (bDependsStatusErr) {
-            emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
-            bDependsStatusErr = false;
-            return;
-        }
         qWarning() << m_dependsList << "install error" << num;
         emit signalDependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
     }
