@@ -9,6 +9,7 @@
 #include "view/pages/AptConfigMessage.h"
 #include "view/pages/settingdialog.h"
 #include "utils/utils.h"
+#include "utils/hierarchicalverify.h"
 #include "singleInstallerApplication.h"
 
 #include <DDialog>
@@ -442,6 +443,11 @@ int DebListModel::checkDependsStatus(const QString &package_path)
 
 int DebListModel::checkDigitalSignature(const QString &package_path)
 {
+    // 分级管控可用时，交由分级管控进行签名验证
+    if (HierarchicalVerify::instance()->isValid()) {
+        return Utils::VerifySuccess;
+    }
+
     const auto stat = m_packagesManager->checkDependsStatus(package_path); //获取包的依赖状态
     if (stat.isBreak() || stat.isAuthCancel())
         return Utils::VerifySuccess;
@@ -549,7 +555,7 @@ void DebListModel::bumpInstallIndex()
 void DebListModel::slotTransactionErrorOccurred()
 {
     if (WorkerProcessing != m_workerStatus) {
-        qWarning() << "installer status error";
+        qWarning() << "installer status error" << m_workerStatus;
     }
     Transaction *transaction = qobject_cast<Transaction *>(sender());
     if (!transaction)
@@ -649,9 +655,18 @@ void DebListModel::slotTransactionFinished()
     if (transaction->exitStatus()) {
         //安装失败
         qWarning() << transaction->error() << transaction->errorDetails() << transaction->errorString();
-        //保存错误原因和错误代码
+        // 检测错误信息是否包含分级管控错误码，若存在，则当前错误为分级管控验证签名不通过
+        QString errorInfo = transaction->errorDetails();
+        if (errorInfo.isEmpty()) {
+            errorInfo = transaction->errorString();
+        }
+        QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
+        bool verifyError = HierarchicalVerify::instance()->checkTransactionError(sPackageName, errorInfo);
+
+        // 保存错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode[m_operatingPackageMd5] = transaction->error();
+        m_packageFailCode[m_operatingPackageMd5] =
+            verifyError ? static_cast<int>(DebListModel::DigitalSignatureError) : static_cast<int>(transaction->error());
         m_packageFailReason[m_operatingPackageMd5] = transaction->errorString();
 
         //刷新操作状态
@@ -1156,6 +1171,11 @@ void DebListModel::checkSystemVersion()
 
 bool DebListModel::checkDigitalSignature()
 {
+    // 分级管控可用时，交由分级管控进行签名验证
+    if (HierarchicalVerify::instance()->isValid()) {
+        return true;
+    }
+
     const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex); //获取包的依赖状态
     if (stat.isBreak() || stat.isAuthCancel())
         return true;
