@@ -614,8 +614,15 @@ QString DebListModel::packageFailedReason(const int idx) const
         return tr("The administrator has set policies to prevent installation of this package");
     if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {                                            //依赖状态错误
         if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
-            if (m_packagesManager->m_errorIndex.contains(md5))     //修改wine依赖的标记方式
-                return tr("Failed to install %1").arg(m_brokenDepend); //wine依赖安装失败
+            if (m_packagesManager->m_errorIndex.contains(md5)) {    //修改wine依赖的标记方式
+                auto ret = static_cast<DebListModel::DependsAuthStatus>(m_packagesManager->m_errorIndex.value(md5));
+                switch (ret) {
+                   case DebListModel::VerifyDependsErr:
+                       return m_brokenDepend + tr("Invalid digital signature");
+                    default:
+                        return tr("Failed to install %1").arg(m_brokenDepend); //wine依赖安装失败
+                }
+            }
             return tr("Broken dependencies: %1").arg(dependStatus.package);                         //依赖不满足
         }
 
