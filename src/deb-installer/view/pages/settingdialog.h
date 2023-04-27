@@ -22,12 +22,14 @@ public:
     void init();
     bool isDigitalVerified();
 
-signals:
+    static QWidget *createVerifyCheckBox(QObject *obj);
 
-public slots:
+protected:
+    void showEvent(QShowEvent *e) override;
+
 private:
     DSettings *m_setting;
     bool m_isDigital = false;
 };
 
-#endif // SETTINGDIALOG_H
+#endif  // SETTINGDIALOG_H
