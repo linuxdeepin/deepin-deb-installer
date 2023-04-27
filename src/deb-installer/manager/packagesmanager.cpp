@@ -668,11 +668,11 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
         }
         emit signalEnableCloseButton(true);
     }
-    if (iAuthRes == DebListModel::AuthDependsErr || iAuthRes == DebListModel::AnalysisErr) {
+    if (iAuthRes == DebListModel::AuthDependsErr || iAuthRes == DebListModel::AnalysisErr || iAuthRes == DebListModel::VerifyDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;//更换依赖的存储结构
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
-                m_errorIndex.push_back(m_dependInstallMark[num]);
+                m_errorIndex.insert(m_dependInstallMark[num], iAuthRes);
         }
         if (installWineDepends) { //下载wine依赖失败时，考虑出现依赖缺失的情况
             qInfo() << "check wine depends again !" << iIndex;

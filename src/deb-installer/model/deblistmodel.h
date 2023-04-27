@@ -150,6 +150,7 @@ public:
         AuthDependsSuccess, //安装成功
         AuthDependsErr,     //安装失败
         AnalysisErr,        //解析错误
+        VerifyDependsErr,   //验证签名失败(分级管控)
     };
 
     enum ErrorCode {

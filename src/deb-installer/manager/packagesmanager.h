@@ -320,10 +320,6 @@ public:
      */
     void resetPackageDependsStatus(const int index);
 
-public:
-
-    QList<QByteArray> m_errorIndex;        //wine依赖错误的包的下标
-
 //// 依赖查找 获取等相关函数
 private:
 
@@ -506,6 +502,8 @@ private:
     void getBlackApplications();
 
 private:
+    QMap<QByteArray, int> m_errorIndex;        //wine依赖错误的包的下标 QMap<MD5, DebListModel::DependsAuthStatus>
+
     //存放包路径的列表
     QList<QString> m_preparedPackages       = {};
 
