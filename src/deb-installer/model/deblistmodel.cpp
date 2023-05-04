@@ -670,6 +670,11 @@ void DebListModel::slotTransactionFinished()
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
         bool verifyError = HierarchicalVerify::instance()->checkTransactionError(sPackageName, errorInfo);
 
+        // 检测安装失败时，弹出对话框提示
+        if (verifyError) {
+            showDigitalErrWindow(false);
+        }
+
         // 保存错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
         m_packageFailCode[m_operatingPackageMd5] =
@@ -907,7 +912,9 @@ void DebListModel::showNoDigitalErrWindowInDdimProcess(void (DebListModel::*fail
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
     std::function<void(void)> rejectOperate = [this, Ddialog, failedFunction]() {
-        (this->*failedFunction)();
+        if (failedFunction) {
+            (this->*failedFunction)();
+        }
         Ddialog->deleteLater();
     };
 
@@ -970,16 +977,19 @@ void DebListModel::showNoDigitalErrWindow()
     connect(btnProceedControlCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
-void DebListModel::showDigitalErrWindow()
+void DebListModel::showDigitalErrWindow(bool recordError)
 {
     if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
-        showNoDigitalErrWindowInDdimProcess(&DebListModel::slotDigitalSignatureError);
+        // 不记录错误时仅提示，不涉及状态切换及更新记录
+        showNoDigitalErrWindowInDdimProcess(recordError ? &DebListModel::slotDigitalSignatureError : nullptr);
         return;
     }
 
     //批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
-        digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
+        if (recordError) {
+            digitalVerifyFailed(DigitalSignatureError);     //刷新安装错误，并记录错误原因
+        }
         return;
     }
     DDialog *Ddialog = new DDialog();
@@ -1003,8 +1013,10 @@ void DebListModel::showDigitalErrWindow()
     btnOK->setFocus();
 
     //窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [this, Ddialog]() {
-        this->slotDigitalSignatureError();
+    std::function<void(void)> exitOperate = [this, Ddialog, recordError]() {
+        if (recordError) {
+            this->slotDigitalSignatureError();
+        }
         Ddialog->deleteLater();
     };
 
