@@ -634,8 +634,10 @@ private:
 
     /**
      * @brief showNoDigitalErrWindow 弹出数字签名校验错误的错误弹窗
+     * @param recordError 是否记录错误信息，引入分级验签后，允许只提示验签错误信息，
+     *  不涉及状态切换及更新记录
      */
-    void showDigitalErrWindow();
+    void showDigitalErrWindow(bool recordError = true);
 
     /**
      * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
