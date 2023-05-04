@@ -81,6 +81,7 @@ bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QSt
     static QRegExp s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError));
     if (errorString.contains(s_ErrorReg)) {
         invalidPackages.insert(pkgName);
+        qWarning() << QString("[Hierarchical] Package %1 detected hierarchical error!").arg(pkgName);
         return true;
     }
 
