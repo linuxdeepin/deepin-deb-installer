@@ -1,3 +1,12 @@
+deepin-deb-installer (6.0.11) unstable; urgency=medium
+
+  * feat: 添加应用安装分级验签处理策略(Influence: 签名校验)
+  * feat: 添加分级验签时屏蔽设置验签选项(Influence: 签名校验)
+  * feat: 添加分级验签正确处理wine依赖应用提示(Influence: wine依赖安装包签名验证)
+  * feat: 添加分级验签时DDIM流程界面逻辑处理(Influence: 分级验签 DDIM)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Tue, 09 May 2023 17:28:19 +0800
+
 deepin-deb-installer (6.0.7) unstable; urgency=medium
 
   * Merge master branch code.
