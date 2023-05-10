@@ -608,6 +608,14 @@ DdimSt DebInstaller::analyzeV10(const QJsonObject &ddimobj, const QString &ddimD
 
 void DebInstaller::refreshMulti()
 {
+    // 部分场景下，由于获取后端指针 BackendPtr 等待，使用 Enter 打开多个软件包可能导致状态异常(标识为多个包状态)
+    // 场景无法从单包安装正常切换到多包安装，因此在更新界面时判断是否切换当前安装界面。
+    MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
+    if (!multiplePage) {
+        qWarning() << "Refresh multi install page but not create!";
+        single2Multi();
+    }
+
     qInfo() << "[DebInstaller]" << "[refreshMulti]" << "add a package to multiple page";
     if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) { //之前有多个包，之后又添加了包，则直接刷新listview
         m_dragflag = 0;
