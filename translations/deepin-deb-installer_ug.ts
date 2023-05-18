@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>قاچىلاش بولىقى يۈكلىنىۋاتىدۇ...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2 يۈكلەندى</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>دەسلىپىگە كەلتۈرۈۋاتىدۇ...</translation>
     </message>
 </context>
 <context>
@@ -42,60 +42,60 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="102"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="101"/>
         <source>Package Installer</source>
         <translation>بوغچا قاچىلىغۇچ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="110"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="109"/>
         <source>Settings</source>
         <translation>تەڭشەك</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="131"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="539"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="130"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="537"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>قاچىلاش باسقۇچى ئىجرا بولۇۋاتىدۇ، سەل تۇرۇپ ئېچىڭ</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="541"/>
+        <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
+        <translation>يۇمشاق دېتال بولىقىنى يېشەلمىدى، يۇمشاق دېتال بولىقى تىزىملىكىدە قانۇنسىز ھۆججەت قۇرۇلمىسى مەۋجۇت!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="543"/>
-        <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <source>Parsing failed: An illegal version number was found in the manifest file!</source>
+        <translation>يۇمشاق دېتال بولىقىنى يېشەلمىدى، يۇمشاق دېتال بولىقى تىزىملىكىدە قانۇنسىز نەشر نومۇرى مەۋجۇت!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="545"/>
-        <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="547"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>قاچىلاش بولىقىنى تاپالمىدى، قاچىلاش مۇندەرىجىسىنى تەكشۈرۈڭ!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="625"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
         <source>The deb package may be broken</source>
         <translation>deb بوغچىسى بۇزۇلغان بولۇشى مۇمكىن</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="633"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="639"/>
         <source>You can only install local deb packages</source>
         <translation>يەرلىكتىكى deb بولىقىنىلا قاچىلىيالايسىز</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="647"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="653"/>
         <source>Already Added</source>
         <translation>بۇرۇنلا قوشۇلغان</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="656"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="662"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 ھۆججەت مەۋجۇت ئەمەس، باشقىسىنى تاللاڭ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="331"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="663"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="792"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="330"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="669"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="799"/>
         <source>Bulk Install</source>
         <translation>توپ قاچىلاش</translation>
     </message>
@@ -103,126 +103,127 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="85"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="87"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="104"/>
         <source>Installation failed, please check your network connection</source>
         <translation>قاچىلاش مەغلۇپ بولدى ، تور ئۇلىنىشىڭىزنى تەكشۈرۈپ بېقىڭ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="87"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="89"/>
         <source>Installation failed, please check for updates in Control Center</source>
         <translation>قاچىلاش مەغلۇپ بولدى ، كونترول مەركىزىدىكى يېڭىلانمىلارنى تەكشۈرۈپ بېقىڭ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="90"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="94"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="106"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="92"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="96"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="108"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>قاچىلاش مەغلۇپ بولدى ، دىسكا بوشلۇقى يېتەرلىك ئەمەس</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="111"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="113"/>
         <source>No digital signature</source>
         <translation>رەقەملىك ئىمزا يوق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="115"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="621"/>
         <source>Invalid digital signature</source>
         <translation>رەقەملىك ئىمزا ئىناۋەتسىز</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="122"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="607"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1524"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="614"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1564"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>باشقۇرغۇچى چەكلىگەن، بۇ يۇمشاق دېتالنى قاچىلاش چەكلىنىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="129"/>
         <source>Installation Failed</source>
         <translation>قاچىلاش مەغلۇب بولدى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="611"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
         <source>Failed to install %1</source>
         <translation>نى قاچىلىيالمىدى %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="883"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="911"/>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation>%1 قاچىلانمىدى، بولاقنىڭ ئۈنۈملۈك رەقەملىك ئىمزاسى يوق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="919"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="949"/>
         <source>Unable to install - no digital signature</source>
         <translation>قاچىلانمىدى، قاچىلاش بولىقىنىڭ رەقەملىك ئىمزاسى يوق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="920"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>كونترول مەركىزىگە كىرىپ ، ئاچقۇچىلار ھالىتىنى ئېچىڭ ، ئاندىن قاچىلاشنى داۋاملاشتۇرۇڭ. كونترول مەركىزىگە كىرەمسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="953"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>كىرىش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="879"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="976"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1526"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="907"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1009"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1566"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>تامام</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1012"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1047"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>بۇ بولاقنىڭ ئۈنۈملۈك رەقەملىك ئىمزاسى يوق، يەنىلا قاچىلامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1014"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1049"/>
         <source>Cancel</source>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1015"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1050"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>داۋاملاشتۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="877"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="973"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1523"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="905"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1006"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1563"/>
         <source>Unable to install</source>
         <translation>قاچىلاشقا ئامالسىز</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="974"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1007"/>
         <source>This package does not have a valid digital signature</source>
         <translation>بۇ بولاقنىڭ ئۈنۈملۈك رەقەملىك ئىمزاسى يوق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="612"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="617"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="626"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="631"/>
         <source>Broken dependencies: %1</source>
         <translation>بۇزۇلغان بېقىنىشچانلىقى:%1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="119"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="121"/>
         <source>Authentication failed</source>
         <translation>دەلىللەش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="605"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="612"/>
         <source>Unmatched package architecture</source>
         <translation>تەڭداشسىز يۈرۈشلۈك قۇرۇلما</translation>
     </message>
@@ -272,17 +273,17 @@
         <translation>قايتىش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="464"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="468"/>
         <source>Dependencies in the repository</source>
         <translation>ئىسكىلاتتا بار ياتانچ بولاق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="470"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="474"/>
         <source>Missing dependencies</source>
         <translation>ئىسكىلاتتا يوق تايانچ بولاق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="519"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="523"/>
         <source>Installing dependencies: %1</source>
         <translation>بېقىنما %1 نى قاچىلاۋاتىدۇ</translation>
     </message>
@@ -315,7 +316,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="19"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>ھەممىنى تاللاش</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="20"/>
@@ -347,17 +348,17 @@
         <translation>ساقلاڭ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="233"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="231"/>
         <source>Same version installed</source>
         <translation>ئوخشاش نەشىرى قاچىلاندى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="236"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="234"/>
         <source>Later version installed: %1</source>
         <translation>ئەڭ يېڭى نەشىرى قاچىلاندى %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="239"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="237"/>
         <source>Earlier version installed: %1</source>
         <translation>بۇرۇنقى نەشىرى قاچىلاندى %1</translation>
     </message>
@@ -365,7 +366,7 @@
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb-installer/model/packagelistview.cpp" line="166"/>
+        <location filename="../src/deb-installer/model/packagelistview.cpp" line="160"/>
         <source>Delete</source>
         <translation>ئۆچۈرۈش</translation>
     </message>
@@ -397,42 +398,42 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="708"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="707"/>
         <source>Collapse</source>
         <translation>يىمىرىش</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="333"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="804"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="967"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="803"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="966"/>
         <source>Reinstall</source>
         <translation>قايتا قاچىلاش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="970"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="806"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="969"/>
         <source>Later version installed: %1</source>
         <translation>ئەڭ يېڭى نەشىرى قاچىلاندى %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="809"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="972"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
         <source>Downgrade</source>
         <translation>كونا نەشرىنى قاچىلاش</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="812"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="975"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="811"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="974"/>
         <source>Earlier version installed: %1</source>
         <translation>بۇرۇنقى نەشىرى قاچىلاندى %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="877"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="876"/>
         <source>Installing dependencies: %1</source>
         <translation>بېقىنما %1 نى قاچىلاۋاتىدۇ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1012"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1011"/>
         <source>Failed to install %1</source>
         <translation>نى قاچىلىيالمىدى %1</translation>
     </message>
@@ -472,36 +473,41 @@
         <translation>تامام</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="680"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="679"/>
         <source>Installed successfully</source>
         <translation>قاچىلاش تاماملاندى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="685"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="684"/>
         <source>Uninstalled successfully</source>
         <translation>ئۆچۈرۋېتىش تاماملاندى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="699"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="698"/>
         <source>Uninstall Failed</source>
         <translation>ئۆچۈرۈش مەغلۇپ بولدى</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="728"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="727"/>
         <source>Dependencies in the repository</source>
         <translation>ئىسكىلاتتا بار ياتانچ بولاق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="734"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="733"/>
         <source>Missing dependencies</source>
         <translation>ئىسكىلاتتا يوق تايانچ بولاق</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="814"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="977"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="813"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="976"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>يېڭىلاش</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1016"/>
+        <source>Invalid digital signature</source>
+        <translation>رەقەملىك ئىمزا ئىناۋەتسىز</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="166"/>
@@ -509,8 +515,8 @@
         <translation>ئىسمى:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="803"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="966"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="802"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="965"/>
         <source>Same version installed</source>
         <translation>ئوخشاش نەشىرى قاچىلاندى</translation>
     </message>
@@ -521,7 +527,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="45"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="526"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="551"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="679"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="678"/>
         <source>Show details</source>
         <translation>تەپسىلىي ئۇچۇرىنى كۆرسىتىش</translation>
     </message>
@@ -536,7 +542,7 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="576"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="684"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="683"/>
         <source>Show details</source>
         <translation>تەپسىلىي ئۇچۇرىنى كۆرسىتىش</translation>
     </message>
@@ -583,13 +589,13 @@ The system or other applications may not work properly</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="47"/>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
+        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
         <translation>بوغچا قاچىلىغۇچ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
+        <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
         <translation>ئورالما ئورناتقۇچ ئىشلەتكۈچىلەرنىڭ يەرلىك ئورالمىلارنى ئورنىتىشى ۋە ئۆچۈرۈشىگە ياردەم بېرىدۇ ھەمدە توپ قاچىلاشنى قوللايدۇ.</translation>
     </message>
