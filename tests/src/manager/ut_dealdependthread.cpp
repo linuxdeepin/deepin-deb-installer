@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include "../deb-installer/manager/DealDependThread.h"
+#include "../deb-installer/model/deblistmodel.h"
 
 #include <stub.h>
 #include <QProcess>
@@ -14,14 +15,8 @@ class ut_dealDependThread_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_dThread = new DealDependThread();
-    }
-    void TearDown()
-    {
-        delete m_dThread;
-    }
+    void SetUp() { m_dThread = new DealDependThread(); }
+    void TearDown() { delete m_dThread; }
 
     DealDependThread *m_dThread = nullptr;
     Stub stub;
@@ -30,7 +25,8 @@ protected:
 TEST_F(ut_dealDependThread_Test, DealDependThread_UT_setDependsList)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_dThread->setDependsList(dependsList, 0);
 
     EXPECT_EQ(m_dThread->m_dependsList.size(), 2);
@@ -92,4 +88,42 @@ TEST_F(ut_dealDependThread_Test, DealDependThread_UT_on_readoutput)
     stub.set(ADDR(QProcess, readAllStandardOutput), readAllStandardOutput_success);
     m_dThread->slotReadOutput();
     EXPECT_TRUE(m_dThread->bDependsStatusErr);
+}
+
+TEST_F(ut_dealDependThread_Test, slotReadOutput_Empty_Pass)
+{
+    m_dThread->slotReadOutput();
+    EXPECT_FALSE(m_dThread->bDependsStatusErr);
+    EXPECT_FALSE(m_dThread->bVerifyStatusErr);
+}
+
+QByteArray stub_readAllStandardOutput_Hierarchical_Failed()
+{
+    return "deepin hook exit code: 65280 ";
+}
+
+TEST_F(ut_dealDependThread_Test, slotReadOutput_HierarchicalVerify_Failed)
+{
+    int retCode = 0;
+    auto conn =
+        QObject::connect(m_dThread, &DealDependThread::signalDependResult, [&](int code, int, QString) { retCode = code; });
+
+    stub.set(ADDR(QProcess, readAllStandardOutput), stub_readAllStandardOutput_Hierarchical_Failed);
+    m_dThread->slotReadOutput();
+    EXPECT_TRUE(m_dThread->bVerifyStatusErr);
+    EXPECT_EQ(retCode, DebListModel::VerifyDependsErr);
+
+    QObject::disconnect(conn);
+}
+
+QByteArray stub_readAllStandardOutput_Hierarchical_Pass()
+{
+    return "deepin hook exit code: 65277 ";
+}
+
+TEST_F(ut_dealDependThread_Test, slotReadOutput_HierarchicalVerify_Pass)
+{
+    stub.set(ADDR(QProcess, readAllStandardOutput), stub_readAllStandardOutput_Hierarchical_Pass);
+    m_dThread->slotReadOutput();
+    EXPECT_FALSE(m_dThread->bVerifyStatusErr);
 }
