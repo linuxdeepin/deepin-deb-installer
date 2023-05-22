@@ -329,11 +329,6 @@ void UT_packagesManager::TearDown()
 {
     stub.set(ADDR(PackagesManager, rmTempDir), stub_is_open_false);
 
-    for (auto pkg : PackageAnalyzer::instance().backendPtr()->availablePackages()) {
-        delete pkg;
-        pkg =  nullptr;
-    }
-
     delete m_packageManager;
 }
 
