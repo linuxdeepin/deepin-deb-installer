@@ -7,8 +7,9 @@
 #include "../deb-installer/model/deblistmodel.h"
 #include "../deb-installer/manager/packagesmanager.h"
 #include "../deb-installer/manager/PackageDependsStatus.h"
-#include "utils/utils.h"
-#include "utils/result.h"
+#include "../deb-installer/utils/utils.h"
+#include "../deb-installer/utils/result.h"
+#include "../deb-installer/utils/hierarchicalverify.h"
 
 #include <stub.h>
 
@@ -20,8 +21,6 @@
 
 using namespace QApt;
 
-
-
 class ut_DebListModel_test : public ::testing::Test
 {
     // Test interface
@@ -32,6 +31,7 @@ protected:
 
     DebListModel *m_debListModel = nullptr;
     Stub stub;
+    Stub stubHierachicalInvalid;
 };
 
 bool model_backend_init()
@@ -39,9 +39,7 @@ bool model_backend_init()
     return true;
 }
 
-void model_checkSystemVersion()
-{
-}
+void model_checkSystemVersion() {}
 
 bool model_BackendReady()
 {
@@ -60,7 +58,6 @@ void stub_model_open(const std::string &__s, std::ios_base::openmode __mode)
     Q_UNUSED(__mode);
     qDebug() << "stb——open";
 }
-
 
 QString model_deb_arch_i386()
 {
@@ -101,7 +98,6 @@ QString model_deb_version()
 {
     return "version";
 }
-
 
 QList<DependencyItem> model_deb_conflicts()
 {
@@ -144,7 +140,6 @@ bool model_stub_dealInvalidPackage(QString)
     return true;
 }
 
-
 Package *model_package_package(const QString &name)
 {
     return nullptr;
@@ -160,7 +155,6 @@ QList<DependencyItem> model_deb_depends()
 
     return conflicts;
 }
-
 
 void model_initRowStatus()
 {
@@ -184,13 +178,12 @@ QString model_packageManager_package(const int index)
 
 const QStringList model_packageManager_packageReverseDependsList(const QString &, const QString &)
 {
-
     return {};
 }
 
 void model_backend_markPackageForRemoval(const QString &)
 {
-    return ;
+    return;
 }
 
 void model_refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus)
@@ -202,7 +195,6 @@ QApt::Transaction *model_backend_commitChanges()
 {
     return nullptr;
 }
-
 
 QByteArray model_package_getPackageMd5(const int)
 {
@@ -238,7 +230,6 @@ bool stub_exists_false()
 {
     return false;
 }
-
 
 static Dtk::Core::DSysInfo::UosEdition model_uosEditionType_UosEnterprise()
 {
@@ -296,7 +287,6 @@ Utils::VerifyResultCode model_Digital_Verify4(QString)
 {
     return Utils::OtherError;
 }
-
 
 void model_bumpInstallIndex()
 {
@@ -356,10 +346,21 @@ qint64 ut_process_write(const QByteArray &)
     return 0;
 }
 
+bool stub_DebListModel_Hierarchical_Invalid()
+{
+    return false;
+}
+
+bool stub_DebListModel_Hierarchical_Valid()
+{
+    return true;
+}
+
 void ut_DebListModel_test::stubFunction()
 {
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), stub_model_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
+    stub.set((void(std::fstream::*)(const std::string &__s, std::ios_base::openmode __mode))ADDR(std::fstream, open),
+             stub_model_open);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, is_open), stub_model_is_open);
 
     stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
@@ -393,8 +394,11 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(PackagesManager, package), model_packageManager_package);
     stub.set(ADDR(PackagesManager, dealInvalidPackage), model_stub_dealInvalidPackage);
 
-    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), model_package_package);
+    stub.set((Package * (Backend::*)(const QString &) const) ADDR(Backend, package), model_package_package);
+
+    stubHierachicalInvalid.set(ADDR(HierarchicalVerify, isValid), stub_DebListModel_Hierarchical_Invalid);
 }
+
 void ut_DebListModel_test::SetUp()
 {
     stubFunction();
@@ -429,7 +433,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
     EXPECT_TRUE(m_debListModel->m_packageFailReason.isEmpty());
     EXPECT_TRUE(m_debListModel->m_packageFailCode.isEmpty());
 }
-
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_isReady)
 {
@@ -624,7 +627,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_uninstallPackage1)
 {
     stub.set(ADDR(PackagesManager, packageReverseDependsList), model_packageManager_packageReverseDependsList);
     stub.set(ADDR(Backend, markPackageForRemoval), model_backend_markPackageForRemoval);
-//    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), stub_model_packageWithArch);
+    //    stub.set((Package * (Backend::*)(const QString &) const)ADDR(Backend, package), stub_model_packageWithArch);
     stub.set(ADDR(Package, setPurge), stub_setPurge);
     QStringList list;
     list << "/";
@@ -774,7 +777,6 @@ void model_digitalVerifyFailed()
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_showNoDigitalErrWindow)
 {
-
     stub.set(ADDR(DebListModel, digitalVerifyFailed), model_digitalVerifyFailed);
     QStringList list;
     list << "/";
@@ -842,7 +844,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult)
 {
-
     stub.set(ADDR(DebListModel, refreshOperatingPackageStatus), model_refreshOperatingPackageStatus);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
     stub.set(ADDR(DebListModel, getPackageMd5), model_getPackageMd5);
@@ -917,10 +918,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
     int length = sizeof(buffer);
     bool isCommandExec = false;
     m_debListModel->slotConfigReadOutput(buffer.toStdString().c_str(), length, isCommandExec);
-    EXPECT_EQ(DebListModel::PackageOperationStatus::Operating, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_EQ(DebListModel::PackageOperationStatus::Operating,
+              m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
 }
-
-
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
 {
@@ -933,6 +933,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
     m_debListModel->m_operatingIndex = 0;
     m_debListModel->m_packageMd5.append("test");
     m_debListModel->m_packageMd5.append("test1");
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb"));
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb1"));
+
     Stub stub1;
     stub1.set(ADDR(QObject, sender), ut_sender);
     m_debListModel->slotTransactionFinished();
@@ -941,12 +944,89 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionFinished)
     delete ut_sender();
 }
 
+static Transaction *g_transaction = nullptr;
+QObject *stub_UT_Transaction_Sender()
+{
+    return qobject_cast<QObject *>(g_transaction);
+}
+
+void stub_showDigitalErrWindow()
+{
+    // Do nothing.
+}
+
+QString stub_Transacton_ErrorDetails_Failed()
+{
+    // 65280 is hierarchical verfiy error code.
+    return QString("deepin hook exit code:65280");
+}
+
+TEST_F(ut_DebListModel_test, onTransactionFinished_HierarchicalVerify_Failed)
+{
+    // Enable hierarchical verify
+    stubHierachicalInvalid.set(ADDR(HierarchicalVerify, isValid), stub_DebListModel_Hierarchical_Valid);
+
+    m_debListModel->m_operatingPackageMd5 = "deb";
+    m_debListModel->m_packageFailCode.insert("deb", QApt::CommitError);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
+    stub.set(ADDR(DebListModel, showDigitalErrWindow), stub_showDigitalErrWindow);
+    stub.set(ADDR(Transaction, error), model_transaction_error);
+    stub.set(ADDR(Transaction, errorDetails), stub_Transacton_ErrorDetails_Failed);
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->m_packageMd5.append("test");
+    m_debListModel->m_packageMd5.append("test1");
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb"));
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb1"));
+
+    Stub stub1;
+    g_transaction = new Transaction("1");
+    stub1.set(ADDR(QObject, sender), stub_UT_Transaction_Sender);
+    m_debListModel->slotTransactionFinished();
+    EXPECT_EQ(nullptr, m_debListModel->m_currentTransaction);
+    EXPECT_EQ(DebListModel::DigitalSignatureError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
+    delete g_transaction;
+    g_transaction = nullptr;
+}
+
+QString stub_Transacton_ErrorDetails_Pass()
+{
+    return QString("deepin hook exit code:65277");
+}
+
+TEST_F(ut_DebListModel_test, onTransactionFinished_HierarchicalVerify_Pass)
+{
+    // Enable hierarchical verify
+    stubHierachicalInvalid.set(ADDR(HierarchicalVerify, isValid), stub_DebListModel_Hierarchical_Valid);
+
+    m_debListModel->m_operatingPackageMd5 = "deb";
+    m_debListModel->m_packageFailCode.insert("deb", QApt::CommitError);
+    stub.set(ADDR(DebListModel, bumpInstallIndex), model_bumpInstallIndex);
+    stub.set(ADDR(DebListModel, showDigitalErrWindow), stub_showDigitalErrWindow);
+    stub.set(ADDR(Transaction, error), model_transaction_error);
+    stub.set(ADDR(Transaction, errorDetails), stub_Transacton_ErrorDetails_Pass);
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->m_packageMd5.append("test");
+    m_debListModel->m_packageMd5.append("test1");
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb"));
+    m_debListModel->m_packagesManager->m_preparedPackages.append(QString("deb1"));
+
+    Stub stub1;
+    g_transaction = new Transaction("1");
+    stub1.set(ADDR(QObject, sender), stub_UT_Transaction_Sender);
+    m_debListModel->slotTransactionFinished();
+    EXPECT_EQ(nullptr, m_debListModel->m_currentTransaction);
+    EXPECT_EQ(QApt::AuthError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
+    delete g_transaction;
+    g_transaction = nullptr;
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_refreshOperatingPackageStatus)
 {
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->m_packageOperateStatus.insert("deb", QApt::CommitError);
     m_debListModel->refreshOperatingPackageStatus(DebListModel::PackageOperationStatus::Failed);
-    EXPECT_EQ(DebListModel::PackageOperationStatus::Failed, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_EQ(DebListModel::PackageOperationStatus::Failed,
+              m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinished)
@@ -968,10 +1048,9 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinish
     delete ut_sender();
 }
 
-
 TEST_F(ut_DebListModel_test, deblistmodel_UT_showDevelopModeWindow)
 {
-    stub.set((bool (QProcess::*)(qint64 *))ADDR(QProcess, startDetached), ut_process_startDetached);
+    stub.set((bool(QProcess::*)(qint64 *))ADDR(QProcess, startDetached), ut_process_startDetached);
     m_debListModel->slotShowDevelopModeWindow();
 }
 
@@ -1074,25 +1153,24 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initInstallConnections)
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readRealPathExist)
 {
-
-    stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink_empty);
-    stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_true);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink_empty);
+    stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_true);
 
     ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathExist)
 {
-    stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink);
-    stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_true);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink);
+    stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_true);
 
     ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathNotExist)
 {
-    stub.set((QString(QFile::*)(void)const)ADDR(QFile, readLink), stub_readLink);
-    stub.set((bool(QFile::*)(void)const)ADDR(QFile, exists), stub_exists_false);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink);
+    stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_false);
 
     ASSERT_FALSE(m_debListModel->recheckPackagePath("/0"));
 }
@@ -1122,13 +1200,14 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_workerErrorString)
 const QList<QString> ut_preparedPackages()
 {
     QList<QString> list;
-    list << "deb" << "rpm";
+    list << "deb"
+         << "rpm";
     return list;
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_digitalVerifyFailed)
 {
-//    stub.set(ADDR(DebListModel,preparedPackages),ut_preparedPackages);
+    //    stub.set(ADDR(DebListModel,preparedPackages),ut_preparedPackages);
     m_debListModel->digitalVerifyFailed(DebListModel::ErrorCode::DigitalSignatureError);
     QStringList list;
     list << "/";
@@ -1157,7 +1236,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotNoDigitalSignature)
     m_debListModel->m_isDevelopMode = true;
     m_debListModel->slotNoDigitalSignature();
     EXPECT_EQ(1, m_debListModel->m_packageFailCode.size());
-
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_isWorkPrepare)
