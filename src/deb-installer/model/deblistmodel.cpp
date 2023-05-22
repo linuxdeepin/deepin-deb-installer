@@ -908,7 +908,7 @@ void DebListModel::showNoDigitalErrWindowInDdimProcess(void (DebListModel::*fail
 
     auto fullPath = m_packagesManager->package(m_operatingIndex);
     QFileInfo info(fullPath);
-    Ddialog->setMessage(QString(tr("Failed to install %1: no valid digital singature").arg(info.fileName())));
+    Ddialog->setMessage(QString(tr("Failed to install %1: no valid digital singature").arg(info.fileName())) + QString("!"));
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
     std::function<void(void)> rejectOperate = [this, Ddialog, failedFunction]() {
@@ -1004,7 +1004,7 @@ void DebListModel::showDigitalErrWindow(bool recordError)
 
     // 设置弹出窗口显示的信息
     Ddialog->setTitle(tr("Unable to install"));
-    Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")));
+    Ddialog->setMessage(QString(tr("This package does not have a valid digital signature")) + QString("!"));
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
     Ddialog->addButton(QString(tr("OK", "button")), true, DDialog::ButtonNormal);
     Ddialog->show();

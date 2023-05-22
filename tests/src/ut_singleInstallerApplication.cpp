@@ -5,6 +5,7 @@
 #include "../deb-installer/singleInstallerApplication.h"
 #include "../deb-installer/utils/utils.h"
 #include "../deb-installer/view/pages/debinstaller.h"
+#include "../deb-installer/utils/hierarchicalverify.h"
 
 #include <stub.h>
 #include <ut_Head.h>
@@ -18,6 +19,11 @@
 void stud_singleaAppProcess(const QCoreApplication &app)
 {
     Q_UNUSED(app);
+}
+
+bool stub_SingleInstallerApplication_HierarchicalVerify_Invalid()
+{
+    return false;
 }
 
 class SingleInstallerApplication_UT : public UT_HEAD
@@ -81,11 +87,16 @@ TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_checkDepends
     singleInstaller->activateWindow();
     EXPECT_EQ(2, singleInstaller->checkDependsStatus("test.db"));
 }
+
 TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_checkDigitalSignature)
 {
+    Stub stub;
+    stub.set(ADDR(HierarchicalVerify, isValid), stub_SingleInstallerApplication_HierarchicalVerify_Invalid);
+
     singleInstaller->activateWindow();
     EXPECT_EQ(0, singleInstaller->checkDigitalSignature("test.db"));
 }
+
 TEST_F(SingleInstallerApplication_UT, UT_SingleInstallerApplication_getPackageInfo)
 {
     singleInstaller->activateWindow();
