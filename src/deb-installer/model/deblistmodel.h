@@ -655,6 +655,11 @@ private:
     void showProhibitWindow();
 
     /**
+     * @brief showHierarchicalVerifyWindow 弹出分级管控安全等级设置引导提示窗口
+     */
+    void showHierarchicalVerifyWindow();
+
+    /**
      * @brief 检查当前将要安装的包是否在黑名单中。
      *
      * @return true 当前要安装的包在黑名单中
@@ -790,6 +795,9 @@ private:
     QList<QByteArray> m_packageMd5 = {};
 
     AptConfigMessage *configWindow = nullptr;
+
+    // 当前安装是否存在分级管控签名验证失败
+    bool m_hierarchicalVerifyError = false;
 };
 
 #endif  // DEBLISTMODEL_H

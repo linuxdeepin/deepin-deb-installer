@@ -18,14 +18,16 @@ class SettingDialog : public DSettingsDialog
     Q_OBJECT
 public:
     explicit SettingDialog(QWidget *parent = nullptr);
-    ~SettingDialog();
+    ~SettingDialog() override;
     void init();
     bool isDigitalVerified();
 
-    static QWidget *createVerifyCheckBox(QObject *obj);
+    static QWidget *createProceedDefenderSafetyLabel(QObject *obj);
 
 protected:
     void showEvent(QShowEvent *e) override;
+    Q_SIGNAL void paletteChanged();
+    Q_SLOT void switchHierarchicalNotify(bool valid);
 
 private:
     DSettings *m_setting;
