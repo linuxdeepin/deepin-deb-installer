@@ -22,6 +22,7 @@ public:
     bool pkgVerifyPassed(const QString &pkgName);
     void clearVerifyResult();
 
+    Q_SLOT void proceedDefenderSafetyPage();
     Q_SIGNAL void validChanged(bool valid);
 
 private:

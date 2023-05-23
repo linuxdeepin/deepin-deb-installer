@@ -48,7 +48,7 @@ void DealDependThread::slotReadOutput()
     if (HierarchicalVerify::instance()->checkTransactionError(m_brokenDepend, tmp)) {
         bVerifyStatusErr = true;
         qWarning() << QString("[Hierarchical] Install Wine dependency not verify, [output]: %1").arg(tmp);
-        emit signalDependResult(DebListModel::VerifyDependsErr, m_index, m_brokenDepend);
+        // 结束后统一发送信号
     }
 }
 

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "hierarchicalverify.h"
+#include "hierarchicalverify.h"
 
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -14,6 +15,14 @@ const char DBUS_HIERARCHICAL_BUS[] = "com.deepin.daemon.ACL";
 const char DBUS_HIERARCHICAL_PATH[] = "/org/deepin/security/hierarchical/Control";
 const char DBUS_HIERARCHICAL_INTERFACE[] = "org.deepin.security.hierarchical.Control";
 const char DBUS_HIERARCHICAL_METHOD[] = "Availabled";
+
+// 分级管控安全中心界面跳转接口
+const char DBUS_DEFENDER_BUS[] = "com.deepin.defender.hmiscreen";
+const char DBUS_DEFENDER_PATH[] = "/com/deepin/defender/hmiscreen";
+const char DBUS_DEFENDER_INTERFACE[] = "com.deepin.defender.hmiscreen";
+const char DBUS_DEFENDER_METHOD[] = "ShowPage";
+const char DBUS_DEFENDER_SECURITYTOOLS[] = "securitytools";
+const char DBUS_DEFENDER_APP_SAFETY[] = "application-safety";
 
 // 匹配正则,%1为错误码
 const char VERIFY_ERROR_REGEXP[] = "(deepin)+[^\\n]*(hook)+[^\\n]*%1";
@@ -103,6 +112,27 @@ bool HierarchicalVerify::pkgVerifyPassed(const QString &pkgName)
 void HierarchicalVerify::clearVerifyResult()
 {
     invalidPackages.clear();
+}
+
+/**
+   @brief 请求弹出分级管控安全等级设置引导提示窗口，调用DBus接口，调出"安全中心-安全工具-应用安全"界面
+ */
+void HierarchicalVerify::proceedDefenderSafetyPage()
+{
+    QDBusInterface interface(DBUS_DEFENDER_BUS, DBUS_DEFENDER_PATH, DBUS_DEFENDER_INTERFACE, QDBusConnection::sessionBus());
+    QDBusError error = interface.lastError();
+
+    if (interface.isValid()) {
+        QDBusMessage message = interface.call(DBUS_DEFENDER_METHOD, DBUS_DEFENDER_SECURITYTOOLS, DBUS_DEFENDER_APP_SAFETY);
+        QDBusError error = interface.lastError();
+    }
+
+    if (QDBusError::NoError != error.type()) {
+        qWarning() << QString("[Hierarchical] Show defender app-safety page error [%2] %3")
+                          .arg(DBUS_DEFENDER_BUS)
+                          .arg(error.name())
+                          .arg(error.message());
+    }
 }
 
 /**
