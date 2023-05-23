@@ -127,14 +127,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="621"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="632"/>
         <source>Invalid digital signature</source>
         <translation>數字簽名無效</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="614"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1564"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="625"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1576"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>管理員已限制，該軟件禁止安裝</translation>
     </message>
@@ -144,76 +144,88 @@
         <translation>安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="634"/>
         <source>Failed to install %1</source>
         <translation>%1安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="911"/>
-        <source>Failed to install %1: no valid digital singature</source>
-        <translation>無法安裝%1，安裝包無有效的數字簽名</translation>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>安裝包沒有有效的數字簽名，已被禁止安裝/運行，請前往安全中心-安全工具-應用安全進行調整。</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="949"/>
+        <source>Failed to install %1: no valid digital singature</source>
+        <translation type="vanished">無法安裝%1，安裝包無有效的數字簽名</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
         <source>Unable to install - no digital signature</source>
         <translation>無法安裝，安裝包無數字簽名</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>請進入控制中心，開啟開發者模式後，再嘗試繼續安裝。是否前往？</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="953"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1620"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="966"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1621"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>前 往</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="907"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1009"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1566"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="919"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1021"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1578"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1047"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
+        <source>Failed to install %1: no valid digital signature</source>
+        <translation>無法安裝%1，安裝包無有效的數字簽名</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>此安裝包沒有有效的數字簽名，是否繼續安裝？</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1049"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1061"/>
         <source>Cancel</source>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1050"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1062"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="905"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1006"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1563"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1018"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1575"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1616"/>
         <source>Unable to install</source>
         <translation>無法安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1007"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1019"/>
         <source>This package does not have a valid digital signature</source>
         <translation>此安裝包沒有有效的數字簽名</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="626"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="631"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="637"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="642"/>
         <source>Broken dependencies: %1</source>
         <translation>依賴關係不滿足：%1</translation>
     </message>
@@ -223,7 +235,7 @@
         <translation>配置授權失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="612"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
         <translation>軟件包架構不匹配</translation>
     </message>
@@ -393,6 +405,16 @@
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
         <translation>開發者模式下，檢測安裝包的簽名</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>如需安裝未簽名應用，前往安全中心-安全工具-應用安全設定允許安裝的應用類型。</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>安全中心-安全工具-應用安全</translation>
     </message>
 </context>
 <context>
