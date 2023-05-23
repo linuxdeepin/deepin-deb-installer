@@ -231,6 +231,9 @@ void DebListModel::slotDealDependResult(int authType, int dependIndex, const QSt
         break;
     case DebListModel::AuthDependsErr:                      //安装失败后，状态的修改由debinstaller进行处理
         break;
+    case DebListModel::VerifyDependsErr:                    //依赖包分级管控验证签名失败，弹出分级设置提示框
+        showHierarchicalVerifyWindow();
+        break;
     default:
         break;
     }
@@ -513,6 +516,8 @@ void DebListModel::reset()
     m_packageFailCode.clear();                          //清空错误原因列表
     m_packageFailReason.clear();
     m_packagesManager->reset();                         //重置packageManager
+
+    m_hierarchicalVerifyError = false;                  // 复位分级管控安装状态
 }
 
 int DebListModel::getInstallFileSize()
@@ -537,6 +542,12 @@ void DebListModel::bumpInstallIndex()
         emit signalWorkerFinished();                                                  //发送安装完成信号
         emit signalWorkerProgressChanged(100);                                        //修改安装进度
         emit signalTransactionProgressChanged(100);
+
+        // 安装结束，弹出分级管控信息提示框
+        if (m_hierarchicalVerifyError) {
+            showHierarchicalVerifyWindow();
+            m_hierarchicalVerifyError = false;
+        }
         return;
     }
     ++ m_operatingStatusIndex;
@@ -672,7 +683,8 @@ void DebListModel::slotTransactionFinished()
 
         // 检测安装失败时，弹出对话框提示
         if (verifyError) {
-            showDigitalErrWindow(false);
+            // 安装结束后再弹出提示对话框
+            m_hierarchicalVerifyError = true;
         }
 
         // 保存错误原因和错误代码
@@ -908,7 +920,7 @@ void DebListModel::showNoDigitalErrWindowInDdimProcess(void (DebListModel::*fail
 
     auto fullPath = m_packagesManager->package(m_operatingIndex);
     QFileInfo info(fullPath);
-    Ddialog->setMessage(QString(tr("Failed to install %1: no valid digital singature").arg(info.fileName())) + QString("!"));
+    Ddialog->setMessage(QString(tr("Failed to install %1: no valid digital signature").arg(info.fileName())) + QString("!"));
 
     //消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
     std::function<void(void)> rejectOperate = [this, Ddialog, failedFunction]() {
@@ -1565,8 +1577,8 @@ void DebListModel::showProhibitWindow()
     Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
     Ddialog->addButton(QString(tr("OK", "button")), true, DDialog::ButtonNormal);
     Ddialog->show();
-    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
 
+    QPushButton *btnOK = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     btnOK->setFocusPolicy(Qt::TabFocus);
     btnOK->setFocus();
 
@@ -1584,6 +1596,48 @@ void DebListModel::showProhibitWindow()
 
     //ESC
     connect(Ddialog, &DDialog::rejected, exitOperate);
+}
+
+/**
+   @brief 弹出分级管控安全等级设置引导提示窗口
+ */
+void DebListModel::showHierarchicalVerifyWindow()
+{
+    if (!HierarchicalVerify::instance()->isValid()) {
+        return;
+    }
+
+    DDialog *dialog = new DDialog();
+    // 限制显示宽度
+    dialog->setFixedWidth(380);
+    dialog->setFocusPolicy(Qt::TabFocus);
+    dialog->setModal(true);
+    dialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    // 设置弹出窗口显示的信息
+    dialog->setTitle(tr("Unable to install"));
+    dialog->setMessage(tr("This package does not have a valid digital signature and has been blocked from installing/running. "
+                          "Go to Security Center > Tools > App Security to change the settings."));
+    dialog->setIcon(QIcon::fromTheme("di_popwarning"));
+    dialog->addButton(QString(tr("Cancel", "button")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);
+    dialog->show();
+
+    QPushButton *btnPorceed = qobject_cast<QPushButton *>(dialog->getButton(1));
+    btnPorceed->setFocusPolicy(Qt::TabFocus);
+    btnPorceed->setFocus();
+
+    //窗口退出操作，包括所有可以退出此窗口的操作
+    std::function<void(void)> exitOperate = [dialog]() {
+        dialog->deleteLater();
+    };
+
+    connect(dialog, &DDialog::finished, [dialog](int result){
+        if (QDialog::Accepted == result) {
+            HierarchicalVerify::instance()->proceedDefenderSafetyPage();
+        }
+        dialog->deleteLater();
+    });
 }
 
 bool DebListModel::checkBlackListApplication()
