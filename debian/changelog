@@ -1,3 +1,13 @@
+deepin-deb-installer (6.0.12) unstable; urgency=medium
+
+  * fix: 修复多选几个包，按回车键无法进入批量安装界面(Bug: 199167)(Influence: 回车打开软件包 界面切换)
+  * chore: 更新翻译设置及翻译文件(Influence: 翻译设置 翻译文件)
+  * test: 添加分级管控UT代码(Influence: UT)
+  * feat: 添加安全等级设置引导提示(Task: 28999)(Influence: 分级管控)
+  * chore: 添加分级管控提示翻译(Task: 28999)(Influence: 翻译文件)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Wed, 24 May 2023 13:09:42 +0800
+
 deepin-deb-installer (6.0.11) unstable; urgency=medium
 
   * feat: 添加应用安装分级验签处理策略(Influence: 签名校验)
