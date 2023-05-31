@@ -18,7 +18,10 @@ protected:
     void TearDown();
 };
 
-void ut_HierarchicalVerify_TEST::SetUp() {}
+void ut_HierarchicalVerify_TEST::SetUp()
+{
+    HierarchicalVerify::instance()->interfaceInvalid = false;
+}
 
 void ut_HierarchicalVerify_TEST::TearDown()
 {

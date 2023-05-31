@@ -356,6 +356,12 @@ bool stub_DebListModel_Hierarchical_Valid()
     return true;
 }
 
+static int g_VerifyDeependErrCount = 0;
+void stub_DebListModel_showHierarchicalVerifyWindow_DoNothing()
+{
+    g_VerifyDeependErrCount++;
+}
+
 void ut_DebListModel_test::stubFunction()
 {
     stub.set((void(std::fstream::*)(const std::string &__s, std::ios_base::openmode __mode))ADDR(std::fstream, open),
@@ -423,6 +429,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_reset)
     EXPECT_TRUE(m_debListModel->m_packageFailCode.isEmpty());
     EXPECT_TRUE(m_debListModel->m_packageFailReason.isEmpty());
     EXPECT_TRUE(m_debListModel->m_packagesManager->m_errorIndex.isEmpty());
+    EXPECT_FALSE(m_debListModel->m_hierarchicalVerifyError);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_reset_filestatus)
@@ -859,6 +866,16 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult)
     EXPECT_EQ("", m_debListModel->m_brokenDepend);
 }
 
+TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult_VerifyDependsErr)
+{
+    Stub tmpStub;
+    tmpStub.set(ADDR(DebListModel, showHierarchicalVerifyWindow), stub_DebListModel_showHierarchicalVerifyWindow_DoNothing);
+
+    g_VerifyDeependErrCount = 0;
+    m_debListModel->slotDealDependResult(DebListModel::VerifyDependsErr, 0, "");
+    EXPECT_EQ(g_VerifyDeependErrCount, 1);
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionStatusChanged)
 {
     TransactionStatus stat = TransactionStatus::AuthenticationStatus;
@@ -887,6 +904,23 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex)
     m_debListModel->m_packageMd5.append("1");
     m_debListModel->bumpInstallIndex();
     EXPECT_EQ("", m_debListModel->m_operatingPackageMd5);
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex_showHierarchicalVerifyWindow)
+{
+    stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
+    m_debListModel->m_operatingIndex = 0;
+    m_debListModel->m_packageMd5.append("\n");
+    m_debListModel->m_packageMd5.append("1");
+    m_debListModel->m_hierarchicalVerifyError = true;
+
+    Stub tmpStub;
+    tmpStub.set(ADDR(DebListModel, showHierarchicalVerifyWindow), stub_DebListModel_showHierarchicalVerifyWindow_DoNothing);
+
+    g_VerifyDeependErrCount = 0;
+    m_debListModel->bumpInstallIndex();
+    EXPECT_EQ(g_VerifyDeependErrCount, 1);
+    EXPECT_FALSE(m_debListModel->m_hierarchicalVerifyError);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigInstallFinish)
@@ -981,9 +1015,13 @@ TEST_F(ut_DebListModel_test, onTransactionFinished_HierarchicalVerify_Failed)
     Stub stub1;
     g_transaction = new Transaction("1");
     stub1.set(ADDR(QObject, sender), stub_UT_Transaction_Sender);
+    m_debListModel->m_hierarchicalVerifyError = false;
+
     m_debListModel->slotTransactionFinished();
     EXPECT_EQ(nullptr, m_debListModel->m_currentTransaction);
     EXPECT_EQ(DebListModel::DigitalSignatureError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_TRUE(m_debListModel->m_hierarchicalVerifyError);
+
     delete g_transaction;
     g_transaction = nullptr;
 }
@@ -1013,9 +1051,13 @@ TEST_F(ut_DebListModel_test, onTransactionFinished_HierarchicalVerify_Pass)
     Stub stub1;
     g_transaction = new Transaction("1");
     stub1.set(ADDR(QObject, sender), stub_UT_Transaction_Sender);
+    m_debListModel->m_hierarchicalVerifyError = false;
+
     m_debListModel->slotTransactionFinished();
     EXPECT_EQ(nullptr, m_debListModel->m_currentTransaction);
     EXPECT_EQ(QApt::AuthError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_FALSE(m_debListModel->m_hierarchicalVerifyError);
+
     delete g_transaction;
     g_transaction = nullptr;
 }
