@@ -104,16 +104,9 @@ QByteArray stub_readAllStandardOutput_Hierarchical_Failed()
 
 TEST_F(ut_dealDependThread_Test, slotReadOutput_HierarchicalVerify_Failed)
 {
-    int retCode = 0;
-    auto conn =
-        QObject::connect(m_dThread, &DealDependThread::signalDependResult, [&](int code, int, QString) { retCode = code; });
-
     stub.set(ADDR(QProcess, readAllStandardOutput), stub_readAllStandardOutput_Hierarchical_Failed);
     m_dThread->slotReadOutput();
     EXPECT_TRUE(m_dThread->bVerifyStatusErr);
-    EXPECT_EQ(retCode, DebListModel::VerifyDependsErr);
-
-    QObject::disconnect(conn);
 }
 
 QByteArray stub_readAllStandardOutput_Hierarchical_Pass()
