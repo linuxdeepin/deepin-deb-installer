@@ -29,12 +29,6 @@ NoProcessWidget::NoProcessWidget(QWidget *parent)
     allLayer->addWidget(spinner, 0, Qt::AlignHCenter | Qt::AlignBottom);
     allLayer->addWidget(actionTextLabel, 0, Qt::AlignHCenter | Qt::AlignTop);
     setLayout(allLayer);
-
-    connect(Dtk::Gui::DGuiApplicationHelper::instance(), &Dtk::Gui::DGuiApplicationHelper::applicationPaletteChanged, [this]() {
-        Dtk::Gui::DPalette pe;
-        pe.setColor(QPalette::WindowText, Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
-        actionTextLabel->setPalette(pe);
-    });
 }
 
 void NoProcessWidget::start()
@@ -45,6 +39,18 @@ void NoProcessWidget::start()
 void NoProcessWidget::stop()
 {
     spinner->stop();
+}
+
+bool NoProcessWidget::event(QEvent *e)
+{
+    if (QEvent::PaletteChange == e->type()) {
+        // 调色板更新时调整高亮颜色
+        Dtk::Gui::DPalette pe;
+        pe.setColor(QPalette::WindowText, Dtk::Gui::DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
+        actionTextLabel->setPalette(pe);
+    }
+
+    return QWidget::event(e);
 }
 
 void NoProcessWidget::setActionText(const QString &text)

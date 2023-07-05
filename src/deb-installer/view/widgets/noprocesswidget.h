@@ -24,6 +24,9 @@ public:
     void start();
     void stop();
 
+protected:
+    bool event(QEvent *e);
+
 private:
     Dtk::Widget::DSpinner *spinner;
     Dtk::Widget::DLabel *actionTextLabel;
