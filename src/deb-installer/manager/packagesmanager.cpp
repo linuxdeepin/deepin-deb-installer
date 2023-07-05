@@ -257,12 +257,11 @@ QStringList PackagesManager::getPackageInfo(const QString &package_path)
 QString PackagesManager::checkPackageValid(const QStringList &package_path)
 {
     for (QString debPackage : package_path) {                 //通过循环添加所有的包
-        QStorageInfo info(debPackage);                               //获取路径信息
-        QString device = info.device();   //获取设备信息
         // 处理包不在本地的情况。
-        if (!device.startsWith("/dev/") && device != QString::fromLocal8Bit("tmpfs")) {  //判断路径信息是不是本地路径
+        if (!Utils::checkPackageReadable(debPackage)) { //判断路径信息是不是本地路径
             return "You can only install local deb packages";
         }
+
         QString debPkg = debPackage;
         //处理package文件路径相关问题
         debPackage = dealPackagePath(debPackage);
@@ -1303,10 +1302,8 @@ void PackagesManager::checkInvalid(const QStringList &packages)
  */
 bool PackagesManager::dealInvalidPackage(const QString &packagePath)
 {
-    QStorageInfo info(packagePath);                               //获取路径信息
-
-    QString device = info.device();                               //获取设备信息
-    if (!device.startsWith("/dev/") && device != QString::fromLocal8Bit("tmpfs")) {  //判断路径信息是不是本地路径
+    //判断路径信息是不是本地路径
+    if (!Utils::checkPackageReadable(packagePath)) {
         emit signalNotLocalPackage();
         return false;
     }
