@@ -20,6 +20,8 @@
 #include <QFontDatabase>
 #include <QTextCodec>
 #include <QProcess>
+#include <QStorageInfo>
+
 QHash<QString, QPixmap> Utils::m_imgCacheHash;
 QHash<QString, QString> Utils::m_fontNameCache;
 
@@ -288,6 +290,50 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
     return text;
 }
 
+/*!
+  @brief 检测软件包 `packagePath` 是否可读，首先判断路径指向的挂载设备信息，
+    若为 gvfs 或 cifs 文件系统(文管当前及V6后的远程挂载系统)，抛出false。
+    同时判断文件是否可读/读取权限，无对应权限抛出异常。
+  @param[in] packagePath 软件包路径
+  @note 只能安装本地的软件包，samba/ftp等远程目录不允许。
+ 
+  @todo 增加对可移除设备的判断!
+*/
+bool Utils::checkPackageReadable(const QString &packagePath)
+{
+    // 获取路径信息
+    QStorageInfo info(packagePath);
+    // 判断路径信息是不是本地路径
+    QString device = info.device();    
+    // 黑名单识别 gvfs/cifs 为当前管理远程目录的文件系统
+    if (device.startsWith("gvfs") || device.startsWith("cifs")) {
+        qWarning() << "Disable open remote file, the devices is" << device;
+        return false;
+    }
+
+    QFileInfo debFileIfo(packagePath);
+    // 查看包是否能够打开，无法打开说明包不在本地或无权限。
+    QFile outfile(packagePath.toUtf8());
+    outfile.open(QFile::ReadOnly);
+
+    if (!outfile.isOpen()) { // 打不开，文件不在本地或无权限
+        if (debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)) {
+            qWarning() << "Package has permission but cannot open!";
+            // 文件有权限 打不开，说明不在本地
+            outfile.close();
+            return false;
+        }
+    } else {  // 文件能打开，说明文件在本地且有权限
+        outfile.close();
+        return true;
+    }
+
+    // 文件在本地但是因为没有权限打不开
+    qWarning() << "Package has no read permission!";
+    outfile.close();
+    return false;
+}
+
 DebApplicationHelper *DebApplicationHelper::instance()
 {
     static DebApplicationHelper *phelper = new DebApplicationHelper;
@@ -434,4 +480,3 @@ void DebApplicationHelper::resetPalette(QWidget *widget)
     widget->setProperty("_d_set_palette", QVariant());
     widget->setAttribute(Qt::WA_SetPalette, false);
 }
-

@@ -12,6 +12,8 @@
 #include <QProcess>
 #include <DGuiApplicationHelper>
 #include <QColor>
+#include <QStorageInfo>
+#include <QTemporaryFile>
 
 DWIDGET_USE_NAMESPACE
 
@@ -252,4 +254,47 @@ TEST(Utils_Test, Utils_UT_resetPalette)
     QWidget *w = nullptr;
     DPalette pa;
     helper->resetPalette(w);
+}
+
+QString stub_storageinfo_device_gvfs()
+{
+    return "gvfsd-fuse";
+}
+
+TEST(Utils_Test, checkPackageReadable_deviceError_fail)
+{
+    Stub stub;
+    stub.set(ADDR(QStorageInfo, device), stub_storageinfo_device_gvfs);
+
+    EXPECT_FALSE(Utils::checkPackageReadable("/tmp"));
+}
+
+bool stub_file_isOpen_failed()
+{
+    return false;
+}
+
+TEST(Utils_Test, checkPackageReadable_readError_fail)
+{
+    Stub stub;
+    stub.set(ADDR(QFile, isOpen), stub_file_isOpen_failed);
+
+    QTemporaryFile tempFile;
+    tempFile.open();
+    tempFile.close();
+    // This string is null before the QTemporaryFile is opened
+    QString tmpFilePath = tempFile.fileName();
+
+    EXPECT_FALSE(Utils::checkPackageReadable(tmpFilePath));
+}
+
+TEST(Utils_Test, checkPackageReadable_normal_success)
+{
+    QTemporaryFile tempFile;
+    tempFile.open();
+    tempFile.close();
+    // This string is null before the QTemporaryFile is opened
+    QString tmpFilePath = tempFile.fileName();
+
+    EXPECT_TRUE(Utils::checkPackageReadable(tmpFilePath));
 }
