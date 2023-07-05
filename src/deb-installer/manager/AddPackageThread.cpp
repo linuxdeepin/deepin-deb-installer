@@ -4,6 +4,7 @@
 
 #include "AddPackageThread.h"
 #include "packagesmanager.h"
+#include "utils/utils.h"
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -41,15 +42,11 @@ void AddPackageThread::setSamePackageMd5(const QMap<QString, QByteArray> &packag
 
 bool AddPackageThread::dealInvalidPackage(const QString &packagePath)
 {
-    //获取路径信息
-    QStorageInfo info(packagePath);
-
-    //判断路径信息是不是本地路径
-    QString device = info.device();     //获取设备信息
-    if (!device.startsWith("/dev/") && device != QString::fromLocal8Bit("tmpfs")) {
+    if (!Utils::checkPackageReadable(packagePath)) {
         emit signalNotLocalPackage();
         return false;
     }
+
     return true;
 }
 

@@ -159,17 +159,17 @@ void FileChooseWidget::chooseFiles()
     auto mode = dialog.exec();                                         //打开文件选择窗口
 
     QString currentPackageDir = dialog.directoryUrl().toLocalFile();    //获取当前打开的文件夹路径
-    // save the directory string to config file.
-    QStorageInfo info(currentPackageDir);                               //获取路径信息
 
-    QString device = info.device();                                     //获取设备信息
-    if (device.startsWith("/dev/") || device == QString::fromLocal8Bit("tmpfs")) {  //判断路径信息是不是本地路径
-        m_settings.setValue("history_dir", currentPackageDir);          //本地路径，保存当前文件路径
-    }
     if (mode != QDialog::Accepted) return;
 
     const QStringList selected_files = dialog.selectedFiles();              //获取选中的文件
     emit packagesSelected(selected_files);                                  //发送信号
+
+    // 判断路径信息是否为本地路径
+    if (!selected_files.isEmpty() && Utils::checkPackageReadable(selected_files.first())) {
+        // 本地路径，保存当前文件路径
+        m_settings.setValue("history_dir", currentPackageDir);          
+    }
 }
 
 void FileChooseWidget::themeChanged()
