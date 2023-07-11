@@ -376,6 +376,8 @@ void DebListModel::slotUninstallPackage(const int index)
     if (!debFile.isValid())
         return;
     const QStringList rdepends = m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture()); //检查是否有应用依赖到该包
+    qInfo() << QString("Will remove reverse depends before remove %1 , Lists:").arg(debFile.packageName()) << rdepends;
+    
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     for (const auto &r : rdepends) {                                        // 卸载所有依赖该包的应用（二者的依赖关系为depends）
         if (backend->package(r)) {
