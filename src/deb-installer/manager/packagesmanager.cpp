@@ -1101,6 +1101,12 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
             continue;
         }
 
+        // Conflict / Replace / Break 的反向依赖同样跳过
+        if (isNegativeReverseDepend(packageName, currentPackage)) {
+            currentPackage = nullptr;
+            continue; 
+        }
+
         reverseDependSet << item;
 
         if (specialPackage().contains(item))
@@ -1139,6 +1145,28 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     reverseDependSet.remove(packageName);
 
     return reverseDependSet.toList();
+}
+
+bool PackagesManager::isNegativeReverseDepend(const QString &packageName, const QApt::Package *reverseDepend)
+{
+    if (!reverseDepend) {
+        return false;
+    }
+
+    static auto containPackage = [](const QString &packageName, const QList<DependencyItem> &itemList) -> bool {
+        return std::any_of(itemList.begin(), itemList.end(), [&](const DependencyItem &item) {
+            return std::any_of(
+                item.begin(), item.end(), [&](const DependencyInfo &info) { return info.packageName() == packageName; });
+        });
+    };
+
+    // 不排除部分包设置 替换(Replace)/破坏(Breaks) 仍依赖 packageName ， Depends 字段设置视为非消极包
+    if (containPackage(packageName, reverseDepend->depends())) {
+        return false;
+    }
+
+    return containPackage(packageName, reverseDepend->conflicts()) || containPackage(packageName, reverseDepend->replaces()) ||
+           containPackage(packageName, reverseDepend->breaks());
 }
 
 void PackagesManager::reset()

@@ -370,6 +370,18 @@ private:
                                            const QList<DependencyItem> &conflicts,
                                            const QList<DependencyItem> &replaces);
 
+//// 依赖查找 获取查找包是否为消极的反向依赖
+private:
+    /**
+     * @brief isNegativeReverseDepend 判断软件包 `reverseDepend` 是否是 `packageName` 的消极依赖包，
+     *      例如 冲突(Conflict)/替换(Replace)/破坏(Breaks) 这些包在卸载时将被跳过，
+     *      在 依赖(Depends) 字段设置包将不会被视为消极包。
+     * @param packageName   当前处理的软件包
+     * @param reverseDepend `packageName` 的反向依赖包
+     * @return `reverseDepend` 是否为 `packageName` 的消极依赖
+     */
+    bool isNegativeReverseDepend(const QString &packageName, const QApt::Package *reverseDepend);
+
 private:
     /**
      * @brief packageWithArch 从指定的架构上打包
