@@ -402,7 +402,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
 const ConflictResult PackagesManager::isInstalledConflict(const QString &packageName, const QString &packageVersion,
                                                           const QString &packageArch)
 {
-    static QList<QPair<QLatin1String, DependencyInfo>> sysConflicts;
+    static QList<QPair<QString, DependencyInfo>> sysConflicts;
 
     if (sysConflicts.isEmpty()) {
         Backend *backend = PackageAnalyzer::instance().backendPtr();
@@ -421,7 +421,9 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
 
             for (const auto &conflict_list : conflicts)
                 for (const auto &conflict : conflict_list) {
-                    sysConflicts << QPair<QLatin1String, DependencyInfo>(pkg->name(), conflict);
+                    // FIXME: 在 Realse 模式下，某些场景后续调用 QLatin1String 时可能访问失败(内存被释放)!
+                    // 临时修改为拷贝数据。
+                    sysConflicts << QPair<QString, DependencyInfo>(pkg->name(), conflict);
                 }
             pkg = nullptr;
         }
