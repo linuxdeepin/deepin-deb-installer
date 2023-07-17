@@ -724,7 +724,6 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     if (m_packageMd5DependsStatus.contains(currentPackageMd5))
         return m_packageMd5DependsStatus[currentPackageMd5];
 
-
     DebFile debFile(m_preparedPackages[index]);
     if (!debFile.isValid())
         return PackageDependsStatus::_break("");
@@ -741,7 +740,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
 
     if (isBlackApplication(debFile.packageName())) {
-        dependsStatus.status  = DebListModel::Prohibit;
+        dependsStatus.status = DebListModel::Prohibit;
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
         qWarning() << debFile.packageName() << "In the blacklist";
@@ -749,9 +748,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
 
     if (isArchError(index)) {
-        dependsStatus.status = DebListModel::ArchBreak;       //添加ArchBreak错误。
+        dependsStatus.status = DebListModel::ArchBreak;  //添加ArchBreak错误。
         dependsStatus.package = debFile.packageName();
-        m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);//更换依赖的存储方式
+        m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);  //更换依赖的存储方式
         return dependsStatus;
     }
 
@@ -773,21 +772,31 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
             QStringList dependList;
+            QMap<QString, QString> dependArchMap;
             bool isWineApplication = false;             //判断是否是wine应用
             for (auto ditem : debFile.depends()) {      //每一个list中的关系是或的关系
                 for (auto dinfo : ditem) {
-                    Package *depend = packageWithArch(dinfo.packageName(), debFile.architecture());
-                    if (depend) {
-                        if (depend->name() == "deepin-elf-verify")   //deepi-elf-verify 是amd64架构非i386
-                            dependList << depend->name();
-                        else
-                            dependList << depend->name() + ":" + depend->architecture();
+                    // Note: 此处使用依赖包的架构查找软件包版本，某些场景下deb包架构和依赖包架构不一定一致。
+                    QString packageArch = dinfo.multiArchAnnotation();
+                    if (Q_UNLIKELY(packageArch.isEmpty())) {
+                        // 无架构信息采用deb架构
+                        packageArch = debFile.architecture();
+                    }
 
+                    Package *depend = packageWithArch(dinfo.packageName(), packageArch);
+                    if (depend) {
+                        QString dependName;
+                        if (depend->name() == "deepin-elf-verify")   //deepi-elf-verify 是amd64架构非i386
+                            dependName = depend->name();
+                        else
+                            dependName = depend->name() + ":" + depend->architecture();
+
+                        dependList << dependName;
+                        dependArchMap.insert(dependName, packageArch);
                         depend = nullptr;
 
                         if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
                             isWineApplication = true;
-
                     }
                 }
             }
@@ -805,11 +814,18 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
                     //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
+                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, &dependArchMap, this](const QString & eachDepend) {
                         if (!eachDepend.contains("deepin-wine")) {
                             return true;
                         }
-                        auto package = packageWithArch(eachDepend, debFile.architecture());
+
+                        // 使用软件包架构查询
+                        QString packageArch = dependArchMap.value(eachDepend);
+                        if (Q_UNLIKELY(packageArch.isEmpty())) {
+                            packageArch = debFile.architecture();
+                        }
+
+                        auto package = packageWithArch(eachDepend, packageArch);
                         return !package->installedVersion().isEmpty();
                     });
                     dependList.erase(removedIter, dependList.end());
