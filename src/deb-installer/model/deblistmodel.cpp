@@ -1120,27 +1120,35 @@ void DebListModel::slotShowDevelopModeWindow()
         qInfo() << "OS version:" << osVerStr;
     }
 
-    //2.打开控制中心
-    if (osVerStr == "20") { // V20模式
-        QString command = "dbus-send --print-reply "
-                          "--dest=com.deepin.dde.ControlCenter "
-                          "/com/deepin/dde/ControlCenter "
-                          "com.deepin.dde.ControlCenter.ShowModule "
-                          "\"string:commoninfo\"";
-        unlock->startDetached(command);
-        unlock->waitForFinished();
-    } else if (osVerStr == "23") { // V23模式
-        if (unlock->exitCode() != QProcess::NormalExit) {
-            QString command = "dbus-send --print-reply "
-                              "--dest=org.deepin.dde.ControlCenter1 "
-                              "/org/deepin/dde/ControlCenter1 "
-                              "org.deepin.dde.ControlCenter1.ShowPage "
-                              "\"string:commoninfo\"";
-            unlock->startDetached(command);
-            unlock->waitForFinished();
+    // 2.打开控制中心
+    if (osVerStr == "20") {  // V20模式
+        QDBusInterface interface("com.deepin.dde.ControlCenter", "/com/deepin/dde/ControlCenter", "com.deepin.dde.ControlCenter");
+        if (interface.isValid()) {
+            interface.call("ShowPage", "commoninfo", "Developer Mode");
         }
+
+        QDBusError error = interface.lastError();
+        if (error.isValid()) {
+            qWarning() << QString("DBus ControlCenter.ShowPage failed, Type: %1 MSG: %2").arg(error.type()).arg(error.message());
+        }
+
+    } else if (osVerStr == "23") {  // V23模式
+        if (unlock->exitCode() != QProcess::NormalExit) {
+            QDBusInterface interface(
+                "org.deepin.dde.ControlCenter1", "/org/deepin/dde/ControlCenter1", "org.deepin.dde.ControlCenter1");
+            if (interface.isValid()) {
+                interface.call("ShowPage", "commoninfo", "Developer Mode");
+            }
+
+            QDBusError error = interface.lastError();
+            if (error.isValid()) {
+                qWarning()
+                    << QString("DBus ControlCenter.ShowPage failed, Type: %1 MSG: %2").arg(error.type()).arg(error.message());
+            }
+        }
+
     } else {
-        qWarning() << "Unknown OS version, connot open dde-control-center";
+        qWarning() << qPrintable("Unknown OS version, connot open dde-control-center");
     }
 
     unlock->deleteLater();
