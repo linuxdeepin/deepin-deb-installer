@@ -40,7 +40,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     , m_packageDescription(new DLabel(this))
     , m_tipsLabel(new DebInfoLabel(this))
     , m_progress(new WorkerProgress(this))
-    , m_installProcessView(new InstallProcessInfoView(440, 170, this))
+    , m_installProcessView(new InstallProcessInfoView(440, 186, this))
     , m_showDependsView(new InstallProcessInfoView(440, 170, this))
     , m_infoControlButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show details"), tr("Collapse", "button")))
     , m_showDependsButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show dependencies"), tr("Collapse", "button")))
@@ -313,6 +313,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_tipsLabel->setMinimumHeight(fontinfosizetemp);                      //设置提示label的高度
     m_tipsLabel->setAlignment(Qt::AlignCenter);                         //提示居中显示
 
+    m_progressFrame->setObjectName("progressFrame");
+    m_progressFrame->setAccessibleName("progressFrame");
     m_progressFrame->setVisible(false);                                 //默认隐藏进度条view
     m_infoControlButton->setVisible(false);                             //infoControlButton 默认隐藏
 
@@ -392,14 +394,18 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);
+    // TODO：通过计算调整的高度，和UI图匹配，应当将界面修改为类 QWizardPage 方式布局
+    m_progressFrame->setFixedHeight(21);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // 把所有的按钮合并成一个widget
-    QWidget *btnsFrame = new QWidget(this);
-    btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
+    m_btnsFrame = new QWidget(this);
+    m_btnsFrame->setObjectName("btnsFrame");
+    m_btnsFrame->setAccessibleName("btnsFrame");
+    m_btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
     btnsFrameLayout->addLayout(btnsLayout);
-    btnsFrame->setLayout(btnsFrameLayout);
-    btnsFrame->setFixedHeight(45);
+    m_btnsFrame->setLayout(btnsFrameLayout);
+    m_btnsFrame->setFixedHeight(45);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     QString mediumFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
@@ -415,8 +421,11 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
     //将进度条布局。提示布局。按钮布局添加到主布局中
-    m_contentLayout->addStretch();
+    m_infoControlStretch = new QWidget(this);
+    m_infoControlStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_contentLayout->addWidget(m_infoControlStretch);
     m_contentLayout->addWidget(m_infoControlButton);
+    m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_progressFrame);
@@ -425,7 +434,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     initInstallWineLoadingLayout();
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
-    m_contentLayout->addWidget(btnsFrame);
+    m_contentLayout->addWidget(m_btnsFrame);
 
     // bug 139875  Tab Order要在布局之后设置才能生效
     initTabOrder();
@@ -439,7 +448,6 @@ void SingleInstallPage::initPkgDependsInfoView()
     m_showDependsView->setMinimumHeight(200); //设置高度
     m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_contentLayout->addWidget(m_showDependsButton);
-    m_contentLayout->addSpacing(2);
     m_contentLayout->addWidget(m_showDependsView);
 }
 
@@ -526,6 +534,7 @@ void SingleInstallPage::slotReinstall()
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
     m_progressFrame->setVisible(true);
+    m_btnsFrame->setVisible(false);
 
     //重置包的工作状态
     m_operate = Reinstall;
@@ -552,6 +561,7 @@ void SingleInstallPage::slotInstall()
     m_infoControlButton->setVisible(true);
     m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
+    m_btnsFrame->setVisible(false);
 
     //重置工作状态
     m_operate = Install;
@@ -577,6 +587,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
     m_infoControlButton->setVisible(true);
     m_progressFrame->setVisible(true);
     m_showDependsButton->setVisible(false);
+    m_btnsFrame->setVisible(false);
 
     //重置工作状态
     m_operate = Uninstall;
@@ -588,6 +599,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
 void SingleInstallPage::slotShowInfomation()
 {
     m_upDown = false;
+    m_infoControlStretch->setVisible(false);
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
 }
@@ -596,6 +608,7 @@ void SingleInstallPage::slotShowInfomation()
 void SingleInstallPage::slotHideInfomation()
 {
     m_upDown = true;
+    m_infoControlStretch->setVisible(true);
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
 }
@@ -604,12 +617,20 @@ void SingleInstallPage::slotShowDependsInfo()
 {
     m_showDependsView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
+
+    auto contentsMargins = m_showDependsButton->contentsMargins();
+    contentsMargins.setBottom(5);
+    m_showDependsButton->setContentsMargins(contentsMargins);
 }
 
 void SingleInstallPage::slotHideDependsInfo()
 {
     m_showDependsView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
+
+    auto contentsMargins = m_showDependsButton->contentsMargins();
+    contentsMargins.setBottom(0);
+    m_showDependsButton->setContentsMargins(contentsMargins);
 }
 
 void SingleInstallPage::slotShowInfo()
@@ -618,6 +639,7 @@ void SingleInstallPage::slotShowInfo()
     m_infoControlButton->setVisible(true);
     m_showDependsButton->setVisible(false);
     m_progressFrame->setVisible(true);
+    m_btnsFrame->setVisible(false);
 
     //清空提示  此处可优化 m_tipsLabel->setVisiable(true);
     m_tipsLabel->clear();
@@ -663,6 +685,7 @@ void SingleInstallPage::slotWorkerFinished()
     m_progress->setValue(0);
 
     //显示需要显示的按钮
+    m_btnsFrame->setVisible(true);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
@@ -835,6 +858,7 @@ void SingleInstallPage::afterGetAutherFalse()
     m_infoControlButton->shrink();
     m_infoControlButton->setVisible(false);
     m_progressFrame->setVisible(false);
+    m_btnsFrame->setVisible(true);
 
     //根据安装场景显示按钮
     if (m_operate == Install) {
@@ -888,6 +912,7 @@ void SingleInstallPage::setAuthBefore()
 
     //隐藏进度条
     m_progressFrame->setVisible(false);
+    m_btnsFrame->setVisible(true);
 
     //获取依赖状态
     QModelIndex index = m_packagesModel->first();
@@ -927,6 +952,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
+    m_btnsFrame->setVisible(true);
 
     //获取依赖状态
     QModelIndex index = m_packagesModel->first();

@@ -25,7 +25,7 @@ MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     , m_contentLayout(new QVBoxLayout())
     , m_centralLayout(new QVBoxLayout())
     , m_appsListView(new PackagesListView(this))
-    , m_installProcessInfoView(new InstallProcessInfoView(440, 190, this))
+    , m_installProcessInfoView(new InstallProcessInfoView(440, 186, this))
     , m_showDependsView(new InstallProcessInfoView(440, 170, this))
     , m_showDependsButton(new InfoControlButton(QApplication::translate("SingleInstallPage_Install", "Show dependencies"), tr("Collapse", "button"), this))
     , m_installProgress(nullptr)
@@ -93,11 +93,9 @@ void MultipleInstallPage::initControlAccessibleName()
 
 void MultipleInstallPage::initContentLayout()
 {
-    //子布局添加10px 的空格
-    m_contentLayout->addSpacing(10);
     //子布局设置控件间的间距为0
     m_contentLayout->setSpacing(0);
-    //子布局设定上下左右的编剧
+    //子布局设定上下左右的边距
     m_contentLayout->setContentsMargins(10, 0, 10, 0);
 
     //添加子布局到主布局中
@@ -125,7 +123,6 @@ void MultipleInstallPage::initPkgDependsInfoView()
     m_showDependsView->setMinimumHeight(200); //设置高度
     m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_contentLayout->addWidget(m_showDependsButton);
-    m_contentLayout->addSpacing(2);
     m_contentLayout->addWidget(m_showDependsView);
 }
 
@@ -444,6 +441,10 @@ void MultipleInstallPage::slotShowDependsInfo()
     m_contentLayout->setContentsMargins(20, 0, 20, 0); //设置上下左右边距
     m_appsListViewBgFrame->setVisible(false); //隐藏applistView
     m_appsListView->setVisible(false);
+
+    auto contentsMargins = m_showDependsButton->contentsMargins();
+    contentsMargins.setBottom(5);
+    m_showDependsButton->setContentsMargins(contentsMargins);
 }
 
 void MultipleInstallPage::slotHideDependsInfo()
@@ -453,6 +454,10 @@ void MultipleInstallPage::slotHideDependsInfo()
     m_contentLayout->setContentsMargins(10, 0, 10, 0); //设置边距
     m_appsListViewBgFrame->setVisible(true); //显示appListView
     m_appsListView->setVisible(true);
+
+    auto contentsMargins = m_showDependsButton->contentsMargins();
+    contentsMargins.setBottom(0);
+    m_showDependsButton->setContentsMargins(contentsMargins);
 }
 
 void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
