@@ -253,6 +253,7 @@ private:
     QWidget *m_contentFrame = nullptr; //主布局
     QWidget *m_itemInfoFrame = nullptr; //包信息框架
     QWidget *m_progressFrame = nullptr; //安装进度框架
+    QWidget *m_btnsFrame = nullptr; //按键框架
 
     DLabel *m_packageIcon = nullptr; //包的图标
     DebInfoLabel *m_packageName = nullptr; //包名
@@ -264,6 +265,7 @@ private:
     InstallProcessInfoView *m_installProcessView = nullptr; //安装进度的详细信息
     InstallProcessInfoView *m_showDependsView = nullptr; //依赖关系显示
 
+    QWidget *m_infoControlStretch = nullptr;
     InfoControlButton *m_infoControlButton = nullptr; //安装信息显示/隐藏控制按钮
     InfoControlButton *m_showDependsButton = nullptr; //显示依赖关系按钮
     DPushButton *m_installButton = nullptr; //安装按钮
