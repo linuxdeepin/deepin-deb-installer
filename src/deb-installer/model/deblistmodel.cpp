@@ -1633,6 +1633,17 @@ void DebListModel::showHierarchicalVerifyWindow()
     dialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);
     dialog->show();
 
+    // 拷贝自 ddialog.cpp 用于设置默认对话框高度，避免在大字号/高缩放比下显示不全，在 show() 之后调用。
+    QLabel *msgLabel = dialog->findChild<QLabel *>("MessageLabel");
+    if (msgLabel) {
+        auto dialogStyle = dialog->style();
+        if (dialogStyle) {
+            QSize sz = dialogStyle->itemTextRect(msgLabel->fontMetrics(), msgLabel->rect(),
+                                                 Qt::TextWordWrap, false, msgLabel->text()).size();
+            msgLabel->setMinimumHeight(qMax(sz.height(), msgLabel->sizeHint().height()));
+        }
+    }
+
     QPushButton *btnPorceed = qobject_cast<QPushButton *>(dialog->getButton(1));
     btnPorceed->setFocusPolicy(Qt::TabFocus);
     btnPorceed->setFocus();
