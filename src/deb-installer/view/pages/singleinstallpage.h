@@ -265,7 +265,6 @@ private:
     InstallProcessInfoView *m_installProcessView = nullptr; //安装进度的详细信息
     InstallProcessInfoView *m_showDependsView = nullptr; //依赖关系显示
 
-    QWidget *m_infoControlStretch = nullptr;
     InfoControlButton *m_infoControlButton = nullptr; //安装信息显示/隐藏控制按钮
     InfoControlButton *m_showDependsButton = nullptr; //显示依赖关系按钮
     DPushButton *m_installButton = nullptr; //安装按钮
