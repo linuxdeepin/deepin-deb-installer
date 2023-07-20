@@ -106,7 +106,7 @@ void SingleInstallPage::initControlAccessibleName()
 void SingleInstallPage::initContentLayout()
 {
     m_contentLayout->setSpacing(0);                             //设置控件边距
-    m_contentLayout->setContentsMargins(20, 10, 20, 25);         //设置四周边距
+    m_contentLayout->setContentsMargins(20, 10, 20, 20);        //设置四周边距
     m_contentFrame->setLayout(m_contentLayout);                 //设置布局
     m_centralLayout->addWidget(m_contentFrame);
 
@@ -130,8 +130,11 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     m_pLoadingLayout->addWidget(m_pDSpinner);                   //添加到布局中
     m_pLoadingLayout->setAlignment(m_pDSpinner, Qt::AlignHCenter);//居中显示
 
-
-    m_pLoadingLayout->addSpacing(5); //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
+    //fix bug:33999 The spinner and The Label are too close together add a distence of 4px
+    // 使用 margin 而不是 addSpacing ，在设置setVisible(false)时不再占位
+    auto spinnerMargin = m_pDSpinner->contentsMargins();
+    spinnerMargin.setBottom(5);
+    m_pDSpinner->setContentsMargins(spinnerMargin);
     m_pLoadingLabel->setVisible(false);                           //隐藏依赖安装提示信息
     m_pLoadingLabel->setFocusPolicy(Qt::NoFocus);//修复会有焦点在依赖加载提示上的问题
     m_pLoadingLayout->setEnabled(true);//fix bug:33999 Make the DCommandLinkbutton looks like a Lable O_o
@@ -215,8 +218,11 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     QVBoxLayout *itemInfoLayout = new QVBoxLayout();            //包名和包版本的布局
     itemInfoLayout->setSpacing(0);
     itemInfoLayout->setContentsMargins(0, 0, 0, 0);                 //设置四周边距
+    itemInfoLayout->addStretch();
     itemInfoLayout->addLayout(pkgNameLayout);                       //添加包名布局
+    itemInfoLayout->addSpacing(6);                                  //调整UI效果，上下文本框间距6px
     itemInfoLayout->addLayout(pkgVersionLayout);                    //添加包版本布局
+    itemInfoLayout->addStretch();
 
     QHBoxLayout *itemBlockLayout = new QHBoxLayout();           //单包安装上半部分布局（包名，包版本和图标）
     itemBlockLayout->setSpacing(0);
@@ -240,7 +246,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     itemLayout->addWidget(itemInfoWidget);                          //添加包的信息
     itemLayout->addSpacing(20);
     itemLayout->addLayout(packageDescLayout);                       //添加包的描述
-    itemLayout->setMargin(0);
+    itemLayout->setContentsMargins(0, 0, 0, 18);                    // 设置和下方的边距
     itemLayout->setSpacing(0);
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
@@ -311,7 +317,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setAccessibleName("PackageDescription");
 
     m_tipsLabel->setMinimumHeight(fontinfosizetemp);                      //设置提示label的高度
-    m_tipsLabel->setAlignment(Qt::AlignCenter);                         //提示居中显示
+    m_tipsLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);           //提示居中显示
 
     m_progressFrame->setObjectName("progressFrame");
     m_progressFrame->setAccessibleName("progressFrame");
@@ -376,12 +382,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->addStretch();
-    btnsLayout->addWidget(m_installButton);
-    btnsLayout->addWidget(m_uninstallButton);
-    btnsLayout->addWidget(m_reinstallButton);
-    btnsLayout->addWidget(m_backButton);
-    btnsLayout->addWidget(m_confirmButton);
-    btnsLayout->addWidget(m_doneButton);
+    btnsLayout->addWidget(m_installButton, 0, Qt::AlignBottom);
+    btnsLayout->addWidget(m_uninstallButton, 0, Qt::AlignBottom);
+    btnsLayout->addWidget(m_reinstallButton, 0, Qt::AlignBottom);
+    btnsLayout->addWidget(m_backButton, 0, Qt::AlignBottom);
+    btnsLayout->addWidget(m_confirmButton, 0, Qt::AlignBottom);
+    btnsLayout->addWidget(m_doneButton, 0, Qt::AlignBottom);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(20);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
@@ -389,13 +395,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(0, 0, 0, 0);
+    // TODO：通过计算调整的高度，和UI图匹配，应当将界面修改为类 QWizardPage 方式布局
+    progressLayout->setContentsMargins(0, 0, 0, 28);                                //底部边距48 内容边距20+控件边距28
     progressLayout->addStretch();
     progressLayout->addWidget(m_progress);
     progressLayout->setAlignment(m_progress, Qt::AlignHCenter);                     //进度条水平居中
     m_progressFrame->setLayout(progressLayout);
-    // TODO：通过计算调整的高度，和UI图匹配，应当将界面修改为类 QWizardPage 方式布局
-    m_progressFrame->setFixedHeight(21);
     m_progressFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // 把所有的按钮合并成一个widget
@@ -421,18 +426,15 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     Utils::bindFontBySizeAndWeight(m_packageDescription, normalFontFamily, 12, QFont::ExtraLight);
 
     //将进度条布局。提示布局。按钮布局添加到主布局中
-    m_infoControlStretch = new QWidget(this);
-    m_infoControlStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_contentLayout->addWidget(m_infoControlStretch);
     m_contentLayout->addWidget(m_infoControlButton);
-    m_contentLayout->addSpacing(4);
     m_contentLayout->addWidget(m_installProcessView);
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_progressFrame);
 
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
-    m_contentLayout->addStretch();
+    m_tipsLabel->setMinimumHeight(20);
+    m_tipsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(m_btnsFrame);
 
@@ -599,18 +601,20 @@ void SingleInstallPage::slotUninstallCurrentPackage()
 void SingleInstallPage::slotShowInfomation()
 {
     m_upDown = false;
-    m_infoControlStretch->setVisible(false);
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
+
+    m_infoControlButton->setContentsMargins(0, 0, 0, 4);
 }
 
 
 void SingleInstallPage::slotHideInfomation()
 {
     m_upDown = true;
-    m_infoControlStretch->setVisible(true);
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
+
+    m_infoControlButton->setContentsMargins(0, 0, 0, 0);
 }
 
 void SingleInstallPage::slotShowDependsInfo()
@@ -618,9 +622,7 @@ void SingleInstallPage::slotShowDependsInfo()
     m_showDependsView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
 
-    auto contentsMargins = m_showDependsButton->contentsMargins();
-    contentsMargins.setBottom(5);
-    m_showDependsButton->setContentsMargins(contentsMargins);
+    m_showDependsButton->setContentsMargins(0, 0, 0, 4);
 }
 
 void SingleInstallPage::slotHideDependsInfo()
@@ -628,9 +630,7 @@ void SingleInstallPage::slotHideDependsInfo()
     m_showDependsView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
 
-    auto contentsMargins = m_showDependsButton->contentsMargins();
-    contentsMargins.setBottom(0);
-    m_showDependsButton->setContentsMargins(contentsMargins);
+    m_showDependsButton->setContentsMargins(0, 0, 0, 0);
 }
 
 void SingleInstallPage::slotShowInfo()
