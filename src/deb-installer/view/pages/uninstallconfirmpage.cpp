@@ -85,7 +85,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
     //卸载页面上边距增加15px  底边距变为20,适应大字体
-    centralLayout->setContentsMargins(20, 15, 20, 25);
+    centralLayout->setContentsMargins(20, 15, 20, 20);
 
 
     //Set font and size
