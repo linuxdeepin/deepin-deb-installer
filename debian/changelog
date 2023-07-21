@@ -1,3 +1,18 @@
+deepin-deb-installer (6.0.13) unstable; urgency=medium
+
+  * test: Add hierarchical notify unit test case.(Influence: UnitTest)
+  * fix: Change the way packages are checked for local path.(Influence: PackageVerify)
+  * fix: Use Event() update palette.(Influence: UpdatePalette)
+  * fix: Remove package will remove "breaks" reverse depends.(Bug: 208617)(Influence: UninstallPcakge)
+  * fix: Read QLatin1String returned from QApt may be freed.(Influence: CheckConflict)
+  * fix: Wrong architecture used while install wine package.(Bug: 205805)(Influence: WineDepends)
+  * fix: Jump to develop mode page instand of common info page.(Bug: 209873)(Influence: DevelopMode)
+  * fix: Dialog text disappear when using large font size.(Bug: 201611)(Influence: DialogText)
+  * fix: UI diff for single-page and multi-page.(Bug: 193971)(Influence: UI)
+  * fix: Adjust layout spacing and margins.(Bug: 193969, 193153, 193205, 157603)(Influence: UI)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 21 Jul 2023 14:34:46 +0800
+
 deepin-deb-installer (6.0.12) unstable; urgency=medium
 
   * fix: 修复多选几个包，按回车键无法进入批量安装界面(Bug: 199167)(Influence: 回车打开软件包 界面切换)
