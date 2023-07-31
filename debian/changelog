@@ -1,3 +1,24 @@
+deepin-deb-installer (6.0.14) unstable; urgency=medium
+
+  * feat: Add application installation hierarchical verify policy.(Influence: Hierarchical)
+  * fix: Change the way packages are checked for local path.(Influence: PackageVerify)
+  * fix: Selecting multiple packages and pressing the Enter key cannot open the app.(Bug: 199167)(Influence: UI)
+  * chore: Update translation settings and translation files.(Influence: Translation)
+  * test: Add hierarchical control UT.(Influence: UT)
+  * feat: Add hierarchical setting prompt.(Task: 28999)(Influence: Hierarchical)
+  * chore: Add hierarchical setting prompt translation.(Task: 28999)(Influence: Translation)
+  * test: Add hierarchical notify unit test case.(Influence: UnitTest)
+  * fix: Use Event() update palette.(Influence: UpdatePalette)
+  * fix: Remove package will remove "breaks" reverse depends.(Bug: 208617)(Influence: UninstallPcakge)
+  * fix: Read QLatin1String returned from QApt may be freed.(Influence: CheckConflict)
+  * fix: Wrong architecture used while install wine package.(Bug: 205805)(Influence: WineDepends)
+  * fix: Jump to develop mode page instand of common info page.(Bug: 209873)(Influence: DevelopMode)
+  * fix: Dialog text disappear when using large font size.(Bug: 201611)(Influence: DialogText)
+  * fix: UI diff for single-page and multi-page.(Bug: 193971)(Influence: UI)
+  * fix: Adjust layout spacing and margins.(Bug: 193969, 193153, 193205, 157603)(Influence: UI)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Mon, 31 Jul 2023 10:13:04 +0800
+
 deepin-deb-installer (6.0.10) unstable; urgency=medium
 
   * fix: 修复libqapt包名带后缀无法准确区分版本的问题(Bug: 195557)(Influence: 虚包安装依赖)
