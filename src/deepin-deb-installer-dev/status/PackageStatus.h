@@ -146,7 +146,7 @@ private:
      * @return     冲突的结果
      */
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
-    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
+    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts, const QList<QApt::DependencyItem> &replaces = {});
 
 
     /**

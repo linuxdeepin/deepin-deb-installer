@@ -178,12 +178,12 @@ const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, Packa
     const auto ret_installed = isInstalledConflict(name, package->version(), package->architecture());
     if (!ret_installed.is_ok()) return ret_installed;
 
-    const auto ret_package = isConflictSatisfy(arch, package->conflicts());
+    const auto ret_package = isConflictSatisfy(arch, package->conflicts(), package->replaces());
 
     return ret_package;
 }
 
-const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
+const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts, const QList<QApt::DependencyItem> &replaces)
 {
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
@@ -212,9 +212,33 @@ const ConflictResult PackageStatus::isConflictSatisfy(const QString &arch, const
 
             // mirror version is also break
             const auto mirror_result = QApt::Package::compareVersion(mirror_version, conflict_version);
-            if (dependencyVersionMatch(mirror_result, type)) {
-                qWarning() << "PackagesManager:" <<  "conflicts package installed: " << arch << p->name() << p->architecture()
-                        << p->multiArchTypeString() << mirror_version << conflict_version;
+            if (dependencyVersionMatch(mirror_result, type) && name != m_package) { //此处即可确认冲突成立
+                //额外判断是否会替换此包
+                bool conflict_yes = true;
+                for (auto replace_list : replaces) {
+                    for (auto replace : replace_list) {
+                        if (replace.packageName() == name) { //包名符合
+                            auto replaceType = replace.relationType(); //提取版本号规则
+                            auto versionCompare = Package::compareVersion(installed_version, replace.packageVersion()); //比较版本号
+                            if (dependencyVersionMatch(versionCompare, replaceType)) { //如果版本号符合要求，即判定replace成立
+                                conflict_yes = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!conflict_yes) {
+                        break;
+                    }
+                }
+
+                if (!conflict_yes) {
+                    p = nullptr;
+                    continue;
+                }
+
+                qWarning() << "PackagesManager:" <<  "conflicts package installed: "
+                           << arch << p->name() << p->architecture()
+                           << p->multiArchTypeString() << mirror_version << conflict_version;
                 return ConflictResult::err(name);
             }
         }
@@ -443,7 +467,7 @@ DependsStatus PackageStatus::getPackageDependsStatus(const QString &packagePath)
     }
 
     // conflicts
-    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts());
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, deb->conflicts(), deb->replaces());
 
     if (!debConflitsResult.is_ok()) {
         qWarning() << "PackagesManager:" << "depends break because conflict" << deb->packageName();
@@ -547,7 +571,7 @@ void PackageStatus::packageCandidateChoose(QSet<QString> &choosed_set, const QSt
             }
         }
 
-        if (!isConflictSatisfy(debArch, dep->conflicts()).is_ok()) {
+        if (!isConflictSatisfy(debArch, dep->conflicts(), dep->replaces()).is_ok()) {
             continue;
         }
 

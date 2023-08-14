@@ -376,7 +376,7 @@ const ConflictResult PackagesManager::packageConflictStat(const int index)
     DebFile debfile(m_preparedPackages[index]);
     if (!debfile.isValid())
         return ConflictResult::err("");
-    ConflictResult ConflictResult = isConflictSatisfy(debfile.architecture(), debfile.conflicts());
+    ConflictResult ConflictResult = isConflictSatisfy(debfile.architecture(), debfile.conflicts(), debfile.replaces());
     return ConflictResult;
 }
 
@@ -394,7 +394,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
         return ret_installed;
     }
 
-    const auto conflictStatus = isConflictSatisfy(arch, package->conflicts());
+    const auto conflictStatus = isConflictSatisfy(arch, package->conflicts(), package->replaces());
 
     return conflictStatus;
 }
@@ -755,7 +755,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
 
     // conflicts
-    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts());
+    const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts(), debFile.replaces());
 
     if (!debConflitsResult.is_ok()) {
         qWarning() << "PackagesManager:" << "depends break because conflict" << debFile.packageName();
@@ -1054,7 +1054,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             }
         }
 
-        if (!isConflictSatisfy(debArch, package->conflicts()).is_ok())
+        if (!isConflictSatisfy(debArch, package->conflicts(), package->replaces()).is_ok())
             continue;
 
         QSet<QString> upgradeDependsSet = choosed_set;
