@@ -513,6 +513,11 @@ private:
      */
     void getBlackApplications();
 
+    /**
+       @brief 过滤已安装或无需更新的Wine软件包
+     */
+    void filterNeedInstallWinePackage(QStringList &dependList, const DebFile &debFile, const QHash<QString, DependencyInfo>& dependInfoMap);
+
 private:
     QMap<QByteArray, int> m_errorIndex;        //wine依赖错误的包的下标 QMap<MD5, DebListModel::DependsAuthStatus>
 

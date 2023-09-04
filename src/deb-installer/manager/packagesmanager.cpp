@@ -26,6 +26,11 @@ DWIDGET_USE_NAMESPACE
 
 using namespace QApt;
 
+// 特殊的 Wine 软件包标签
+static const QString g_Tagi386 = "i386";
+static const QString g_TagDeepinWine = "deepin-wine";
+static const QString g_DeepinWineHelper = "deepin-wine-helper";
+
 /**
  * @brief isArchMatches 判断包的架构是否符合系统要求
  * @param sysArch       系统架构
@@ -184,21 +189,25 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
             QStringList dependList;
+            // 依赖信息映射
+            QHash<QString, DependencyInfo> dependInfoMap;
             bool isWineApplication = false;             //判断是否是wine应用
             for (auto ditem : debFile.depends()) {      //每一个list中的关系是或的关系
                 for (auto dinfo : ditem) {
-                    Package *depend = packageWithArch(dinfo.packageName(), debFile.architecture());
+                    // Note: 此处使用依赖包的架构查找软件包版本，某些场景下deb包架构和依赖包架构不一定一致。
+                    QString packageArch = dinfo.multiArchAnnotation();
+                    Package *depend = packageWithArch(dinfo.packageName(), packageArch);
                     if (depend) {
-                        if (depend->name() == "deepin-elf-verify")   //deepi-elf-verify 是amd64架构非i386
+                        if (depend->name() == "deepin-elf-verify" || packageArch.isEmpty())   //deepi-elf-verify 是amd64架构非i386
                             dependList << depend->name();
                         else
                             dependList << depend->name() + ":" + depend->architecture();
 
+                        dependInfoMap.insert(depend->name(), dinfo);
                         depend = nullptr;
 
                         if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
                             isWineApplication = true;
-
                     }
                 }
             }
@@ -215,15 +224,9 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
             //wine应用+非wine依赖不满足即可导致出问题
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
-                    //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, this](const QString & eachDepend) {
-                        if (!eachDepend.contains("deepin-wine")) {
-                            return true;
-                        }
-                        auto package = packageWithArch(eachDepend, debFile.architecture());
-                        return !package->installedVersion().isEmpty();
-                    });
-                    dependList.erase(removedIter, dependList.end());
+                    // 额外判断wine依赖是否已安装，同时剔除非wine依赖
+                    filterNeedInstallWinePackage(dependList, debFile, dependInfoMap);
+
                     if (dependList.isEmpty()) { //所有的wine依赖均已安装
                         break;
                     }
@@ -772,27 +775,22 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
             QStringList dependList;
-            QMap<QString, QString> dependArchMap;
+            QHash<QString, DependencyInfo> dependInfoMap;
             bool isWineApplication = false;             //判断是否是wine应用
             for (auto ditem : debFile.depends()) {      //每一个list中的关系是或的关系
                 for (auto dinfo : ditem) {
                     // Note: 此处使用依赖包的架构查找软件包版本，某些场景下deb包架构和依赖包架构不一定一致。
                     QString packageArch = dinfo.multiArchAnnotation();
-                    if (Q_UNLIKELY(packageArch.isEmpty())) {
-                        // 无架构信息采用deb架构
-                        packageArch = debFile.architecture();
-                    }
-
                     Package *depend = packageWithArch(dinfo.packageName(), packageArch);
                     if (depend) {
                         QString dependName;
-                        if (depend->name() == "deepin-elf-verify")   //deepi-elf-verify 是amd64架构非i386
+                        if (depend->name() == "deepin-elf-verify" || packageArch.isEmpty())   //deepin-elf-verify 是amd64架构非i386
                             dependName = depend->name();
                         else
                             dependName = depend->name() + ":" + depend->architecture();
 
                         dependList << dependName;
-                        dependArchMap.insert(dependName, packageArch);
+                        dependInfoMap.insert(dependName, dinfo);
                         depend = nullptr;
 
                         if (dinfo.packageName().contains("deepin-wine"))             // 如果依赖中出现deepin-wine字段。则是wine应用
@@ -813,22 +811,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             //wine应用+非wine依赖不满足即可导致出问题
             do {
                 if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {               //增加是否是wine应用的判断
-                    //额外判断wine依赖是否已安装，同时剔除非wine依赖
-                    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, &dependArchMap, this](const QString & eachDepend) {
-                        if (!eachDepend.contains("deepin-wine")) {
-                            return true;
-                        }
+                    // 额外判断wine依赖是否已安装，同时剔除非wine依赖
+                    filterNeedInstallWinePackage(dependList, debFile, dependInfoMap);
 
-                        // 使用软件包架构查询
-                        QString packageArch = dependArchMap.value(eachDepend);
-                        if (Q_UNLIKELY(packageArch.isEmpty())) {
-                            packageArch = debFile.architecture();
-                        }
-
-                        auto package = packageWithArch(eachDepend, packageArch);
-                        return !package->installedVersion().isEmpty();
-                    });
-                    dependList.erase(removedIter, dependList.end());
                     if (dependList.isEmpty()) { //所有的wine依赖均已安装
                         break;
                     }
@@ -1628,13 +1613,19 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     m_dinfo.packageName.clear();
     m_dinfo.version.clear();
     const QString package_name = dependencyInfo.packageName();
+    QString realArch = architecture;
 
-    Package *package = packageWithArch(package_name, architecture, dependencyInfo.multiArchAnnotation());
+    // 对 wine 应用特殊处理，wine包依赖升级混用i386/amd64，不使用主包的架构
+    if (package_name.contains(g_TagDeepinWine) && realArch == g_Tagi386) {
+        realArch.clear();
+    }
+
+    Package *package = packageWithArch(package_name, realArch, dependencyInfo.multiArchAnnotation());
 
     if (!package) {
         qWarning() << "PackagesManager:" << "depends break because package" << package_name << "not available";
         isDependsExists = true;
-        m_dinfo.packageName = package_name + ":" + architecture;
+        m_dinfo.packageName = package_name + ":" + realArch;
         m_dinfo.version = dependencyInfo.packageVersion();
         return PackageDependsStatus::_break(package_name);
     }
@@ -1718,7 +1709,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             }
         }
         // let's check conflicts
-        if (!isConflictSatisfy(architecture, package).is_ok()) {
+        if (!isConflictSatisfy(realArch, package).is_ok()) {
 
             Backend *backend = PackageAnalyzer::instance().backendPtr();
             for (auto *availablePackage : backend->availablePackages()) {
@@ -1735,7 +1726,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 }
 
                 // provider is ok, switch to provider.
-                if (isConflictSatisfy(architecture, availablePackage).is_ok()) {
+                if (isConflictSatisfy(realArch, availablePackage).is_ok()) {
                     qInfo() << "PackagesManager:" << "switch to depends a new provider: " << availablePackage->name();
                     choosed_set << availablePackage->name();
                     availablePackage = nullptr;
@@ -1911,6 +1902,72 @@ void PackagesManager::getBlackApplications()
         return;
     }
     qWarning() << "Black File not Found";
+}
+
+/**
+   @brief 判断 \a debFile 的依赖列表 \a dependList 中 wine 依赖是否已安装，同时剔除非 wine 依赖。
+        \a dependInfoMap 提供详细的依赖项架构、版本信息。
+   @note Wine安装包升级无架构信息(i386 amd64混用)，仅使用安装包信息判断无法覆盖所有场景，
+        升降级存在问题。依赖包 deepin-wine-helper 由 i386 变更为 amd64。
+ */
+void PackagesManager::filterNeedInstallWinePackage(QStringList &dependList, const DebFile &debFile, const QHash<QString, DependencyInfo> &dependInfoMap)
+{
+    // 额外判断wine依赖是否已安装，同时剔除非wine依赖
+    auto removedIter = std::remove_if(dependList.begin(), dependList.end(), [&debFile, &dependInfoMap, this](const QString & eachDepend) {
+        if (!eachDepend.contains("deepin-wine")) {
+            return true;
+        }
+
+        // 使用软件包架构查询
+        Package *package = nullptr;
+        const DependencyInfo &info = dependInfoMap.value(eachDepend);
+        if (Q_UNLIKELY(info.multiArchAnnotation().isEmpty())) {
+            qInfo() << QString("Wine package %1 without architecture info").arg(eachDepend);
+
+            // 无依赖架构信息，使用默认包
+            Backend *backend = PackageAnalyzer::instance().backendPtr();
+            if (!backend) {
+                qWarning() << qPrintable("Failed to load libqapt backend");
+                return false;
+            }
+
+            // 使用默认无版本查找，由apt判断，优先版本高的架构
+            package = backend->package(eachDepend);
+            if (!package) {
+                package = packageWithArch(eachDepend, debFile.architecture());
+            }
+        }
+        else
+        {
+            // 有依赖架构信息，判断对应架构是否安装
+            package = packageWithArch(eachDepend, info.multiArchAnnotation());
+        }
+
+        if (!package) {
+            qWarning() << QString("Wine package %1 not found!").arg(eachDepend);
+            return false;
+        }
+        qInfo() << QString("Wine package %1 detect current package: %2, arch: %3, version: %4")
+                   .arg(eachDepend).arg(package->name()).arg(package->architecture()).arg(package->version());
+
+        // 检查安装包版本是否需要更新。
+        QString currentInstall = package->installedVersion();
+        if (currentInstall.isEmpty()) {
+            // 未安装软件包，需进行安装
+            qInfo() << QString("Wine package %1 not installed").arg(eachDepend);
+            return false;
+        } else {
+            // 判断是否需要更新，满足需求则不处理
+            const auto cmpVersion = Package::compareVersion(currentInstall, info.packageVersion());
+            bool notNeedUpdate = dependencyVersionMatch(cmpVersion, info.relationType());
+
+            qInfo() << QString("Wine package %1 check version. current installed: %2 require: %3 not need update: %4")
+                       .arg(eachDepend).arg(currentInstall).arg(info.packageVersion()).arg(notNeedUpdate);
+            return notNeedUpdate;
+        }
+    });
+
+    dependList.erase(removedIter, dependList.end());
 }
 
 bool PackagesManager::isBlackApplication(const QString &applicationName)
