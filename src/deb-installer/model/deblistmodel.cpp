@@ -657,7 +657,7 @@ QString DebListModel::packageFailedReason(const int idx) const
 void DebListModel::slotTransactionFinished()
 {
     if (m_workerStatus == WorkerProcessing) {
-        qWarning() << "installer status error";
+        qWarning() << "installer status still processing";
     }
     // 获取trans指针
     Transaction *transaction = qobject_cast<Transaction *>(sender());
@@ -722,7 +722,7 @@ void DebListModel::slotTransactionFinished()
 void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系满足
 {
     if (m_workerStatus == WorkerProcessing) {
-        qWarning() << "installer status error";
+        qWarning() << "installer status still processing";
     }
     Transaction *transaction = qobject_cast<Transaction *>(sender());
     if (!transaction)
@@ -794,6 +794,8 @@ void DebListModel::installDebs()
     DebFile deb(m_packagesManager->package(m_operatingIndex)) ;
     if (!deb.isValid())
         return;
+    qInfo() << QString("Prepare to install %1, ver: %2, arch: %3").arg(deb.packageName()).arg(deb.version()).arg(deb.architecture());
+
     Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
     Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
     //在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
@@ -835,6 +837,8 @@ void DebListModel::installDebs()
 
         // 获取到所有的依赖包 准备安装
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
+        qInfo() << QString("Prepare install package: %1 , install depends: ").arg(deb.packageName()) << availableDepends;
+
         //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
         for (auto const &p : availableDepends) {
             if (p.contains(" not found")) {                             //依赖安装失败
@@ -844,10 +848,14 @@ void DebListModel::installDebs()
                 m_packageFailReason.insert(m_operatingPackageMd5, p);
                 emit signalAppendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
                 bumpInstallIndex();                                     //开始安装下一个包或结束安装
+
+                qWarning() << QString("Packge %1 install failed, not found depend package: %2").arg(deb.packageName()).arg(p);
                 return;
             }
             backend->markPackageForInstall(p);                          //开始安装依赖包
         }
+        // 打印待安装的软件包信息
+        printDependsChanges();
 
         transaction = backend->commitChanges();
         if (!transaction)
@@ -1686,6 +1694,46 @@ DebListModel::~DebListModel()
     delete m_packagesManager;
     delete configWindow;
     delete m_procInstallConfig;
+}
+
+/**
+   @brief 打印待安装的软件包信息，将根据安装、升级、卸载等分类分别打印对应变更的软件包
+ */
+void DebListModel::printDependsChanges()
+{
+    auto *const backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        return;
+    }
+
+    auto changeList = backend->markedPackages();
+    if (changeList.isEmpty()) {
+        return;
+    }
+
+    static QMap<int, QString> tagTable = { {Package::IsManuallyHeld, "Package::IsManuallyHeld"},
+                                           {Package::NewInstall, "Package::NewInstall"},
+                                           {Package::ToReInstall, "Package::ToReInstall"},
+                                           {Package::ToUpgrade, "Package::ToUpgrade"},
+                                           {Package::ToDowngrade, "Package::ToDowngrade"},
+                                           {Package::ToRemove, "Package::ToRemove"} };
+    QMap<int, QStringList> changeInfo;
+
+    for (const Package *package : changeList) {
+        int flags = package->state();
+        int status = flags & (Package::IsManuallyHeld |
+                              Package::NewInstall |
+                              Package::ToReInstall |
+                              Package::ToUpgrade |
+                              Package::ToDowngrade |
+                              Package::ToRemove);
+        changeInfo[status] << QString("%1, %2, %3").arg(package->name()).arg(package->version()).arg(package->architecture());
+    }
+
+    qInfo() << "Install depends details:";
+    for (auto info = changeInfo.begin(); info != changeInfo.end(); info++) {
+        qInfo() << tagTable[info.key()] << info.value();
+    }
 }
 
 Dialog::Dialog()
