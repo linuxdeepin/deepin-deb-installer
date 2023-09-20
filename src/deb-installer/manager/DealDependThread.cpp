@@ -86,4 +86,6 @@ void DealDependThread::slotInstallFinished(int num = -1)
         emit signalDependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
     }
     emit signalEnableCloseButton(true);
+
+    qInfo() << qPrintable("Process(apt) install finished, num: ") << num << qPrintable("Depends list:") << m_dependsList;
 }

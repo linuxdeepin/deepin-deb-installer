@@ -32,6 +32,14 @@ static const QString g_TagDeepinWine = "deepin-wine";
 static const QString g_DeepinWineHelper = "deepin-wine-helper";
 
 /**
+ * @brief 检测传入软件包架构是否支持多架构
+ */
+bool archMultiSupport(const QString &arch)
+{
+    return "native" == arch || "all" == arch || "any" == arch;
+}
+
+/**
  * @brief isArchMatches 判断包的架构是否符合系统要求
  * @param sysArch       系统架构
  * @param packageArch   包的架构
@@ -822,7 +830,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         installWineDepends = true;
                         if (!m_installWineThread->isRunning()) {
                             m_dependInstallMark.append(currentPackageMd5);            //依赖错误的软件包的标记 更改为md5取代验证下标
-                            qInfo() << "PackagesManager:" << "command install depends:" << dependList;
+                            qInfo() << "PackagesManager:" << "wine command install depends:" << dependList;
                             m_installWineThread->setDependsList(dependList, index);
                             if (m_brokenDepend.isEmpty())
                                 m_brokenDepend = dependsStatus.package;
@@ -858,11 +866,14 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
             }
         }
     };
+
+    QString packageName;
     QString controlDepends;
     if (flag) {
         DebFile debFile(package);
         if (!debFile.isValid())
             return;
+        packageName = debFile.packageName();
         controlDepends = debFile.controlField("Depends");
         //软件包
         insertToDependsInfo(debFile.depends());
@@ -870,11 +881,12 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
         QApt::Package *pkg = packageWithArch(package, arch);
         if (!pkg)
             return;
+        packageName = pkg->name();
         controlDepends = pkg->controlField("Depends");
         //子依赖
         insertToDependsInfo(pkg->depends());
     }
-    qInfo() << __func__ << controlDepends;
+    qInfo() << qPrintable("Package:") << packageName << qPrintable("controlDepends") << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
     auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
@@ -898,7 +910,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
         m_orDepends.append(dependStatus);
         m_unCheckedOrDepends.append(dependStatus);
     }
-    qInfo() << __func__ << m_orDepends;
+    qInfo() << qPrintable("Package:") << packageName << qPrintable("orDepends") << m_orDepends;
 }
 
 const QString PackagesManager::packageInstalledVersion(const int index)
@@ -1783,6 +1795,91 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     }
 }
 
+/**
+ * @brief 检测通过包名 \a packageName 获取的软件包 \a package 架构是否支持建议架构 \a suggestArch 。
+ *      判断是否指定安装包架构类型，未指定的依赖包将按照安装包架构进行判断，注意，部分软件包提供多架构支持，
+ *      例如部分 amd64 软件包同样提供 i386 支持。
+ *
+ * @bug https://pms.uniontech.com/bug-view-220019.html
+ *
+ * @note 此函数期望查找包架构能满足架构依赖，参考 apt 实际行为处理，后续底层改造为 apt-pkg 后，建议重构为调用 apt-pkg 借口。
+ *      1. 通过命令行指令 `apt-cache showpkg [package name]` 在字段 `Provides` 中可以取得软件包支持的包别名，
+ *         `Provides` 会展示软件包提供的包名列表，这些包名会包含支持的虚包、不同的架构等;
+ *      2. 部分软件包架构标注 all/any , 但实际并未提供多架构支持，通过 multiArchType() 类型过滤;
+ *      3. 部分软件包虽然架构未标注 all/any ，但同样提供其他架构的支持，多出现于 amd64/i386 架构软件包互补;
+ *      4. 如果传入的建议架构 \a suggestArch 为空或支持多架构，同样允许此类架构支持。
+ */
+bool PackagesManager::checkPackageArchValid(const QApt::Package *package, const QString &packageName, const QString &suggestArch)
+{
+    QString resloveArch = suggestArch;
+    resloveArch.remove(':');
+    if (!package) {
+        // 不打印信息，由后续错误信息提示
+        return false;
+    } else if (resloveArch.isEmpty()
+               || (package->architecture() == resloveArch)
+               || archMultiSupport(resloveArch)) {
+        // 部分传入包名写携带了版本，若版本一致，则无需继续判断
+        // 建议架构为多架构支持，则同样允许安装
+        return true;
+    }
+
+    QApt::MultiArchType multiType = package->multiArchType();
+    QString pkgArch = package->architecture();
+    // 判断传入包是否符合多架构兼容校验
+    bool archMatch = isArchMatches(resloveArch, pkgArch, multiType);
+    // 部分软件包虽然标识 "all" "any", 但仍需进一步判断包支持类型是否为多架构支持。
+    bool archTypeMatch = bool(InvalidMultiArchType != multiType);
+
+    bool archIsValidRet = false;
+    if (archMatch && archTypeMatch) {
+        archIsValidRet = true;
+    } else if (archMatch /* && !archTypeMatch */) {
+        // 软件包标识 "all" "any"，但不支持多架构
+        Backend *backend = PackageAnalyzer::instance().backendPtr();
+        if (!backend) {
+            return false;
+        }
+
+        // 如果建议架构是当前架构，同样认为支持
+        archIsValidRet = bool(resloveArch == backend->nativeArchitecture());
+    } else if (/* !archMatch && */ archTypeMatch) {
+        // 部分软件包虽然架构和建议架构不同，但软件包提供多架构支持，多为 amd64/i386 相互支持
+        QStringList providesList = package->providesList();
+        Backend *backend = PackageAnalyzer::instance().backendPtr();
+        if (!backend) {
+            return false;
+        }
+        // 判断建议架构是否为当前系统架构，当前系统架构默认无后缀，同时若应用已包含架构名，则不再插入
+        bool isNativeArch = bool(resloveArch == backend->nativeArchitecture());
+        QString findPackage = (isNativeArch || packageName.contains(":"))
+                ? packageName : (packageName + ":" + resloveArch);
+
+        // 查找当前软件包支持的包名中是否包含对应架构软件包
+        if (providesList.contains(findPackage)) {
+            qInfo() << QString("Package %1 %2 provides %3, all provides: ").arg(package->name())
+                       .arg(package->architecture()).arg(findPackage) << providesList;
+            archIsValidRet = true;
+        }
+    } else /* !archTypeMatch && !archMatch */ {
+        // 等同 archIsValid = false;
+    }
+
+    if (archIsValidRet) {
+        qInfo() << QString("Auto detect multi arch package %1 (arch:%2, ver:%3), suggestArch: %4 multiArchType: %5")
+                   .arg(packageName).arg(package->architecture()).arg(package->version())
+                   .arg(resloveArch).arg(package->multiArchType());
+    } else {
+        qWarning() << QString("Find package %1 (arch:%2, ver:%3)").arg(packageName)
+                      .arg(package->architecture()).arg(package->version());
+        qWarning() << QString("but not compitable with %1, multiArchType: %2(%3)").arg(resloveArch)
+                      .arg(package->multiArchTypeString()).arg(package->multiArchType());
+    }
+
+    return archIsValidRet;
+}
+
+
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch,
                                           const QString &annotation)
 {
@@ -1792,15 +1889,18 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         return nullptr;
     }
 
-    Package *package = backend->package(packageName + resolvMultiArchAnnotation(annotation, sysArch));
+    QString suggestArch = resolvMultiArchAnnotation(annotation, sysArch);
+    Package *package = backend->package(packageName + suggestArch);
+
     // change: 按照当前支持的CPU架构进行打包。取消对deepin-wine的特殊处理
     if (!package)
         package = backend->package(packageName);
-    if (package)
+
+    if (checkPackageArchValid(package, packageName, suggestArch))
         return package;
     for (QString arch : backend->architectures()) {
         package = backend->package(packageName + ":" + arch);
-        if (package)
+        if (checkPackageArchValid(package, packageName, suggestArch))
             return package;
     }
 
