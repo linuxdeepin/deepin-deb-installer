@@ -394,6 +394,16 @@ private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
                                    const QString &annotation = QString());
 
+    /**
+     * @brief checkPackageArchValid 检测通过包名 \a packageName 获取的软件包 \a package 架构
+     *      是否支持建议架构 \a suggestArch
+     * @param package       软件包
+     * @param packageName   软件包名称
+     * @param resloveArch   解析建议的软件包名称
+     * @return 软件包 \a package 支持 \a suggestArch 架构
+     */
+    bool checkPackageArchValid(const QApt::Package *package, const QString &packageName, const QString &suggestArch);
+
 private:
 
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package

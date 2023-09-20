@@ -747,6 +747,11 @@ private:
      */
     void initRefreshPageConnecions();
 
+    /**
+       @brief printDependsChanges 打印安装的依赖包变更
+     */
+    void printDependsChanges();
+
 private:
     //当前工作状态
     int m_workerStatus                  = 0;
