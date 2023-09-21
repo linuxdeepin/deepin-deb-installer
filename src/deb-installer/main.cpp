@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     QAccessible::installFactory(accessibleFactory);//自动化测试
 
-    qDebug() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
+    qInfo() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     if (app.parseCmdLine()) {

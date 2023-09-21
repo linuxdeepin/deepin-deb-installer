@@ -932,21 +932,27 @@ const QStringList PackagesManager::packageAvailableDepends(const int index)
     const QString debArch = debFile.architecture();
     const auto &depends = debFile.depends();
     m_unCheckedOrDepends = m_orDepends;
-    packageCandidateChoose(choose_set, debArch, depends);
+
+    QString levelInfo = QString("%1:%2 (%3)").arg(debFile.packageName()).arg(debArch).arg(debFile.version());
+    packageCandidateChoose(choose_set, debArch, depends, levelInfo);
 
     // TODO: check upgrade from conflicts
     return choose_set.toList();
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                             const QList<DependencyItem> &dependsList)
+                                             const QList<DependencyItem> &dependsList, const QString &levelInfo)
 {
+    qInfo() << "[Package Choose]" << levelInfo;
+
     for (auto const &candidate_list : dependsList)
-        packageCandidateChoose(choosed_set, debArch, candidate_list);
+        packageCandidateChoose(choosed_set, debArch, candidate_list, levelInfo);
+
+    qInfo() << "[Package Choose End]" << levelInfo;
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                             const DependencyItem &candidateList)
+                                             const DependencyItem &candidateList, const QString &levelInfo)
 {
     for (const auto &info : candidateList) {
         Package *package = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation());
@@ -957,6 +963,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
         if (choosed_set.contains(choosed_name))
             break;
 
+        QString packageInfo = QString("%1 (%2)").arg(choosed_name).arg(package->version());
         QVector<QString> infos;
         if (!m_unCheckedOrDepends.isEmpty()) {
             for (auto dInfo : m_unCheckedOrDepends) { //遍历或依赖容器中容器中是否存在当前依赖
@@ -968,7 +975,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 }
             }
         }
-        qInfo() << __func__ << infos << package->name();
+
+        qInfo() << __func__ << infos << package->name() << "ChooseName:" << choosed_name;
+
         if (infos.isEmpty()) { //没有或依赖关系或者当前依赖不属于或依赖关系
             qInfo() << "not ordepends or not contain depend";
             //当前依赖未安装，则安装当前依赖。
@@ -1013,8 +1022,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                     break;
                 }
             }
+
             if (!isInstalling) { //若或依赖中其他依赖也需要下载或者存在缺失，则当前依赖需要下载
-                qInfo() << __func__ << isInstalling << "need to install current depend";
+                qInfo() << __func__ << isInstalling << QString("%1 need to install current depend").arg(packageInfo);
                 if (package->installedVersion().isEmpty()) {
                     choosed_set << choosed_name;
                 } else {
@@ -1033,8 +1043,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                         continue;
                     }
                 }
+
             } else {
-                qInfo() << __func__ << isInstalling << "other ordepend is installed";
+                qInfo() << __func__ << isInstalling << QString("%1 other ordepend is installed").arg(packageInfo);
                 break;
             }
         }
@@ -1049,7 +1060,9 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             continue;
 
         choosed_set << choosed_name;
-        packageCandidateChoose(choosed_set, debArch, package->depends());
+        // 使用依赖包请求架构递归解析，而不是使用安装包的架构！(例如：i386 软件包依赖 amd64 软件包)
+        packageCandidateChoose(choosed_set, package->architecture(), package->depends(),
+                               QString("%1 -> %2").arg(levelInfo).arg(packageInfo));
         break;
     }
 }
@@ -1107,7 +1120,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
         // Conflict / Replace / Break 的反向依赖同样跳过
         if (isNegativeReverseDepend(packageName, currentPackage)) {
             currentPackage = nullptr;
-            continue; 
+            continue;
         }
 
         reverseDependSet << item;
