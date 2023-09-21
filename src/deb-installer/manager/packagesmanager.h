@@ -341,11 +341,12 @@ private:
      * @param choosed_set   包的依赖候选的集合
      * @param debArch       包的架构
      * @param dependsList   依赖列表
+       @param levelInfo     提供用于打印的软件包查找层级依赖信息
      */
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QList<QApt::DependencyItem> &dependsList);
+                                const QList<QApt::DependencyItem> &dependsList, const QString& levelInfo);
     void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QApt::DependencyItem &candidateItem);
+                                const QApt::DependencyItem &candidateItem, const QString &levelInfo);
 
     /**
      * @brief isInstalledConflict 是否存在下载冲突

@@ -2028,7 +2028,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose)
                                                              const QList<QApt::DependencyItem> &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus);
 
-    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList);
+    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList, QString());
     EXPECT_EQ("", debArch);
     EXPECT_EQ(1, choosed_set.size());
     EXPECT_EQ(1, cadicateList.size());
@@ -2063,7 +2063,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_1)
                                                              const QList<QApt::DependencyItem> &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus);
 
-    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList);
+    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList, QString());
     EXPECT_EQ("", debArch);
     EXPECT_EQ(1, choosed_set.size());
     EXPECT_EQ(1, cadicateList.size());
@@ -2098,7 +2098,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_2)
                                                              const QList<QApt::DependencyItem> &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
-    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList);
+    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList, QString());
     EXPECT_EQ("", debArch);
     EXPECT_EQ(2, choosed_set.size());
     EXPECT_EQ(1, cadicateList.size());
@@ -2132,7 +2132,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_3)
                                                              const QList<QApt::DependencyItem> &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
-    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList);
+    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList, QString());
     EXPECT_EQ("", debArch);
     EXPECT_EQ(0, choosed_set.size());
     EXPECT_EQ(1, cadicateList.size());
@@ -2167,7 +2167,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_4)
                                                              const QList<QApt::DependencyItem> &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_ok);
 
-    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList);
+    m_packageManager->packageCandidateChoose(choosed_set, debArch, cadicateList, QString());
     EXPECT_EQ("", debArch);
     EXPECT_EQ(1, choosed_set.size());
     EXPECT_EQ(1, cadicateList.size());
