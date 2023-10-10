@@ -1846,14 +1846,25 @@ bool PackagesManager::checkPackageArchValid(const QApt::Package *package, const 
     } else if (/* !archMatch && */ archTypeMatch) {
         // 部分软件包虽然架构和建议架构不同，但软件包提供多架构支持，多为 amd64/i386 相互支持
         QStringList providesList = package->providesList();
+
+#if 0
+        // TODO: 改造 QApt 以对 providesList 同样检测架构
         Backend *backend = PackageAnalyzer::instance().backendPtr();
         if (!backend) {
             return false;
         }
+
         // 判断建议架构是否为当前系统架构，当前系统架构默认无后缀，同时若应用已包含架构名，则不再插入
         bool isNativeArch = bool(resloveArch == backend->nativeArchitecture());
         QString findPackage = (isNativeArch || packageName.contains(":"))
                 ? packageName : (packageName + ":" + resloveArch);
+#else
+        // QApt 返回 providesList 不带 arch 后缀, 移除查找包架构后缀
+        // providesList 列表中含当前包名的则认为满足多架构支持
+        // i386 包一般不提供 amd64 架构支持，而 amd64 经常提供 i386
+        QString findPackage = packageName;
+        findPackage.remove(QRegExp(":[^:]*$"));
+#endif
 
         // 查找当前软件包支持的包名中是否包含对应架构软件包
         if (providesList.contains(findPackage)) {
