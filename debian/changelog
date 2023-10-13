@@ -1,3 +1,12 @@
+deepin-deb-installer (6.0.16) unstable; urgency=medium
+
+  * fix: Install wine package depends detection error.(Influence: Wine)
+  * fix: Use depends package arch instead of deb file arch.(Bug: 220943)(Influence: DependsAnalysis)
+  * fix: Check for dependency architecture error.(Bug: 220019)(Influence: Dependency)
+  * fix: Remove check provides architecture.(Bug: 222531)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 13 Oct 2023 15:58:25 +0800
+
 deepin-deb-installer (6.0.15) unstable; urgency=medium
 
   * fix: Fix package conflicts and replaces depends error.(Bug: 214693)(Influence: PackageInstall)
