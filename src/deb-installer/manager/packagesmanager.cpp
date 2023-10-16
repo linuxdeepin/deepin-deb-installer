@@ -158,6 +158,7 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
     m_checkedOrDependsStatus.clear();
     m_unCheckedOrDepends.clear();
     m_dependsInfo.clear();
+    m_loopErrorDeepends.clear();
     //用debFile.packageName()无法打开deb文件，故替换成debFile.filePath()
     //更新m_dependsInfo
     getPackageOrDepends(debFile.filePath(), debFile.architecture(), true);
@@ -743,6 +744,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     m_checkedOrDependsStatus.clear();
     m_unCheckedOrDepends.clear();
     m_dependsInfo.clear();
+    m_loopErrorDeepends.clear();
     //用debFile.packageName()无法打开deb文件，故替换成debFile.filePath()
     //更新m_dependsInfo
     getPackageOrDepends(debFile.filePath(), debFile.architecture(), true);
@@ -1566,6 +1568,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                                                                       const QString &architecture,
                                                                       const QList<DependencyItem> &depends)
 {
+    // 只有单包，认为首次进入
+    if (choosed_set.size() <= 1) {
+        m_loopErrorDeepends.clear();
+    }
+
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
     QList<DependInfo> break_list;
     QList<DependInfo> available_list;
@@ -1597,6 +1604,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         const auto r = checkDependsPackageStatus(choosed_set, architecture, info);
         dependsStatus.minEq(r);
 
+        // 空包名表示只返回 ok
+        if (!r.package.isEmpty() && !m_loopErrorDeepends.contains(r.package)) {
+            m_loopErrorDeepends.insert(r.package, r.status);
+        }
+
         if (!m_unCheckedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
             for (auto orDepends : m_unCheckedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
                 if (orDepends.contains(info.packageName())) {
@@ -1613,6 +1625,12 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                         } else {
                             status = checkDependsPackageStatus(choosed_set, architecture, m_dependsInfo.find(otherDepend).value());
                             m_checkedOrDependsStatus.insert(otherDepend, status);
+
+                            // 空包名表示只返回 ok
+                            if (!status.package.isEmpty() && !m_loopErrorDeepends.contains(status.package)) {
+                                m_loopErrorDeepends.insert(status.package, status.status);
+                            }
+
                         }
                         qInfo() << status.status;
                         if (status.isBreak()) //若剩余依赖中存在状态不为break，则说明依赖关系满足
@@ -1712,8 +1730,14 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         }
 
         // is that already choosed?
-        if (choosed_set.contains(package->name()))
+        if (choosed_set.contains(package->name())) {
+            // 已有记录，返回之前排查的结果，而不是直接返回 Ok , 当前包名可能为虚包。
+            if (m_loopErrorDeepends.contains(package->name())) {
+                return PackageDependsStatus(m_loopErrorDeepends.value(package->name()), package->name());
+            }
+
             return PackageDependsStatus::ok();
+        }
 
         // check arch conflicts
         if (package->multiArchType() == MultiArchSame) {
