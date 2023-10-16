@@ -578,6 +578,13 @@ private:
     QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> m_dependsPackages;
     DependInfo m_dinfo; //依赖包的包名及版本
 
+    /**
+       @brief m_loopErrorDeepends 循环判断依赖时缓存非 Ok 的前置包状态
+        用于对 OR 或依赖及 Provides 虚包依赖在循环中依赖中返回前置已检测的包状态，
+        而不是直接返回 Ok .
+     */
+    QHash<QString, int> m_loopErrorDeepends;
+
     // wine应用处理的下标
     int m_DealDependIndex = -1;
 
