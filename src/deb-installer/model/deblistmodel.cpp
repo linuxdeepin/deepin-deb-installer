@@ -644,12 +644,6 @@ QString DebListModel::packageFailedReason(const int idx) const
             return tr("Broken dependencies: %1").arg(conflictStatus.unwrap()); //依赖冲突
     }
 
-    if (m_packageOperateStatus.contains(md5) && m_packageOperateStatus[md5] == Failed)
-        qWarning() << "package operate status failed";
-    //判断当前这个包是否错误
-    if (!m_packageFailCode.contains(md5))
-        qWarning() << "DebListModel:" << "failed to get reason" << m_packageFailCode.size() << idx;
-
     // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
     return workerErrorString(m_packageFailCode[md5], m_packageFailReason[md5]);             //根据错误代码和错误原因返回具体的错误原因
 }
