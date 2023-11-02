@@ -888,7 +888,8 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
         //子依赖
         insertToDependsInfo(pkg->depends());
     }
-    qInfo() << qPrintable("Package:") << packageName << qPrintable("controlDepends") << controlDepends;
+    // 仅在Debug下打印
+    qDebug() << qPrintable("Package:") << packageName << qPrintable("controlDepends") << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
     auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
@@ -912,7 +913,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
         m_orDepends.append(dependStatus);
         m_unCheckedOrDepends.append(dependStatus);
     }
-    qInfo() << qPrintable("Package:") << packageName << qPrintable("orDepends") << m_orDepends;
+    qDebug() << qPrintable("Package:") << packageName << qPrintable("orDepends") << m_orDepends;
 }
 
 const QString PackagesManager::packageInstalledVersion(const int index)
@@ -990,10 +991,10 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             }
         }
 
-        qInfo() << __func__ << infos << package->name() << "ChooseName:" << choosed_name;
+        qDebug() << __func__ << infos << package->name() << "ChooseName:" << choosed_name;
 
         if (infos.isEmpty()) { //没有或依赖关系或者当前依赖不属于或依赖关系
-            qInfo() << "not ordepends or not contain depend";
+            qDebug() << "not ordepends or not contain depend";
             //当前依赖未安装，则安装当前依赖。
             if (package->installedVersion().isEmpty()) {
                 choosed_set << choosed_name;
@@ -1029,7 +1030,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 Package *otherPackage = backend->package(*iter + resolvMultiArchAnnotation(QString(), debArch));
                 if (!otherPackage)
                     continue;
-                qInfo() << __func__ << *iter << otherPackage->installedVersion() << m_dependsInfo[*iter].packageVersion();
+                qDebug() << __func__ << *iter << otherPackage->installedVersion() << m_dependsInfo[*iter].packageVersion();
                 if (otherPackage->compareVersion(otherPackage->installedVersion(), m_dependsInfo[*iter].packageVersion()) >= 0 && !otherPackage->installedVersion().isEmpty()) {
                     //如果或依赖中有依赖已安装且符合版本要求，则当前依赖不进行下载
                     isInstalling = true;
@@ -1038,7 +1039,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
             }
 
             if (!isInstalling) { //若或依赖中其他依赖也需要下载或者存在缺失，则当前依赖需要下载
-                qInfo() << __func__ << isInstalling << QString("%1 need to install current depend").arg(packageInfo);
+                qDebug() << __func__ << isInstalling << QString("%1 need to install current depend").arg(packageInfo);
                 if (package->installedVersion().isEmpty()) {
                     choosed_set << choosed_name;
                 } else {
@@ -1059,7 +1060,7 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set, const Q
                 }
 
             } else {
-                qInfo() << __func__ << isInstalling << QString("%1 other ordepend is installed").arg(packageInfo);
+                qDebug() << __func__ << isInstalling << QString("%1 other ordepend is installed").arg(packageInfo);
                 break;
             }
         }
