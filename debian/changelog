@@ -1,3 +1,10 @@
+deepin-deb-installer (6.0.17) unstable; urgency=medium
+
+  * fix: Detect Provides/Or dependencies error.(Bug: 212307)
+    (Influence: ProvidesDepends OrDepends)
+
+ -- renbin <renbin@uniontech.com>  Fri, 03 Nov 2023 10:58:37 +0800
+
 deepin-deb-installer (6.0.16) unstable; urgency=medium
 
   * fix: Install wine package depends detection error.(Influence: Wine)
