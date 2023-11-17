@@ -1190,7 +1190,8 @@ const PackageDependsStatus stub_checkDependsPackageStatus_ok(QSet<QString> &, co
 
 const PackageDependsStatus stub_checkDependsPackageStatus_DI(QSet<QString> &,
                                                              const QString &,
-                                                             const DependencyInfo &)
+                                                             const DependencyInfo &,
+                                                             const QString &)
 {
     return PackageDependsStatus::_break("1");
 }
@@ -1232,7 +1233,8 @@ TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_06)
 
     stub.set((const PackageDependsStatus(PackagesManager::*)(QSet<QString> &,
                                                              const QString &,
-                                                             const DependencyInfo &))
+                                                             const DependencyInfo &,
+                                                             const QString &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_DI);
 
 
@@ -1293,7 +1295,8 @@ TEST_F(UT_packagesManager, PackageManager_UT_getPackageDependsStatus_07)
 
     stub.set((const PackageDependsStatus(PackagesManager::*)(QSet<QString> &,
                                                              const QString &,
-                                                             const DependencyInfo &))
+                                                             const DependencyInfo &,
+                                                             const QString &))
              ADDR(PackagesManager, checkDependsPackageStatus), stub_checkDependsPackageStatus_DI);
 
     stub.set(ADDR(QThread, isRunning), stub_isRunning);
