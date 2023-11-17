@@ -908,7 +908,30 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
                 int mid = ordepend.indexOf("(");
                 ordepend = ordepend.left(mid);
             }
-            dependStatus.append(ordepend);
+
+            // 判断是否为虚包，若为虚包，将实现包都加入或列表
+            Package *package = packageWithArch(ordepend, arch, arch);
+            if (package && ordepend != package->name()) {
+                Backend *backend = PackageAnalyzer::instance().backendPtr();
+                for (auto *availablePackage : backend->availablePackages()) {
+                    if (!availablePackage->providesList().contains(ordepend)) {
+                        continue;
+                    }
+
+                    if (!dependStatus.contains(availablePackage->name())) {
+                        dependStatus.append(availablePackage->name());
+
+                        // 使用虚包的依赖关系
+                        if (m_dependsInfo.contains(ordepend)) {
+                            m_dependsInfo.insert(availablePackage->name(), m_dependsInfo.value(ordepend));
+
+                            qInfo() << QString("Detect or depends %1 contains virtual package: %2").arg(ordepend).arg(availablePackage->name());
+                        }
+                    }
+                }
+            } else {
+                dependStatus.append(ordepend);
+            }
         }
         m_orDepends.append(dependStatus);
         m_unCheckedOrDepends.append(dependStatus);
@@ -1624,16 +1647,28 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                         if (m_checkedOrDependsStatus.contains(otherDepend)) {
                             status = m_checkedOrDependsStatus[otherDepend];
                         } else {
-                            status = checkDependsPackageStatus(choosed_set, architecture, m_dependsInfo.find(otherDepend).value());
+                            // 虚拟或包共用，区分判断
+                            if (m_dependsInfo.contains(otherDepend)) {
+                                DependencyInfo dependencyInfo = m_dependsInfo.value(otherDepend);
+                                if (dependencyInfo.packageName() == otherDepend) {
+                                    status = checkDependsPackageStatus(choosed_set, architecture, dependencyInfo);
+                                } else {
+                                    // 依赖名和包名不同，为虚包依赖
+                                    status = checkDependsPackageStatus(choosed_set, architecture, dependencyInfo, otherDepend);
+                                }
+                            } else {
+                                // 虚包使用或包判断
+                                status = checkDependsPackageStatus(choosed_set, architecture, m_dependsInfo.find(info.packageName()).value(), otherDepend);
+                            }
+
                             m_checkedOrDependsStatus.insert(otherDepend, status);
 
                             // 空包名表示只返回 ok
                             if (!status.package.isEmpty() && !m_loopErrorDeepends.contains(status.package)) {
                                 m_loopErrorDeepends.insert(status.package, status.status);
                             }
-
                         }
-                        qInfo() << status.status;
+                        qInfo() << qPrintable("Orpackage depends") << status.status;
                         if (status.isBreak()) //若剩余依赖中存在状态不为break，则说明依赖关系满足
                             continue;
                         dependsStatus.minEq(status);
@@ -1652,11 +1687,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
 const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QString> &choosed_set,
                                                                       const QString &architecture,
-                                                                      const DependencyInfo &dependencyInfo)
+                                                                      const DependencyInfo &dependencyInfo, const QString &providesName)
 {
     m_dinfo.packageName.clear();
     m_dinfo.version.clear();
-    const QString package_name = dependencyInfo.packageName();
+    const QString package_name = providesName.isEmpty() ? dependencyInfo.packageName() : providesName;
     QString realArch = architecture;
 
     // 对 wine 应用特殊处理，wine包依赖升级混用i386/amd64，不使用主包的架构
