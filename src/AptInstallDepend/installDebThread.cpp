@@ -8,6 +8,12 @@
 InstallDebThread::InstallDebThread()
 {
     m_proc = new KProcess;
+
+    // Note: 目前 deepin-deb-installer 使用 KPty 捕获所有通道进行设置，因此旧版的
+    // installDebThread 手动捕获输入流程不再响应。
+    // 修改输入模式为响应主进程输入，而不是手动管理。
+    m_proc->setInputChannelMode(QProcess::ForwardedInputChannel);
+
     connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
 }
