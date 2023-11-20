@@ -2015,6 +2015,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose)
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
 
+    stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, installedVersion), package_installedVersion);
     stub.set(ADDR(Package, compareVersion), ut_packagesManager_compareVersion);
     stub.set(ADDR(Package, name), package_name);
@@ -2050,6 +2051,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_1)
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
 
+    stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, installedVersion), package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion1);
     stub.set(ADDR(Package, name), package_name);
@@ -2085,6 +2087,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_2)
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
 
+    stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, installedVersion), package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion1);
     stub.set(ADDR(Package, name), package_name);
@@ -2120,6 +2123,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_3)
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
 
+    stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, installedVersion), package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion2);
     stub.set(ADDR(Package, name), package_name);
@@ -2154,6 +2158,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_4)
 
     stub.set(ADDR(PackagesManager, packageWithArch), stub_avaialbe_packageWithArch);
 
+    stub.set(ADDR(Package, version), package_version);
     stub.set(ADDR(Package, installedVersion), package_version);
     stub.set(ADDR(Package, compareVersion), package_compareVersion1);
     stub.set(ADDR(Package, name), package_name);
