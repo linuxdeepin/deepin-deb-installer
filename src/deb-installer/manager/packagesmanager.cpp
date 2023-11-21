@@ -869,6 +869,28 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
         }
     };
 
+    auto checkVirtualPackage = [this](QVector<QString> &dependStatus, const QString &depend){
+        QVector<QString> virtualPackage;
+        Backend *backend = PackageAnalyzer::instance().backendPtr();
+        for (auto *availablePackage : backend->availablePackages()) {
+            if (!availablePackage->providesList().contains(depend)) {
+                continue;
+            }
+
+            if (!dependStatus.contains(availablePackage->name())) {
+                dependStatus.append(availablePackage->name());
+                virtualPackage.append(availablePackage->name());
+
+                // 使用虚包的依赖关系
+                if (m_dependsInfo.contains(depend)) {
+                    m_dependsInfo.insert(availablePackage->name(), m_dependsInfo.value(depend));
+                }
+            }
+        }
+
+        qInfo() << QString("Detect or depends %1 contains virtual packages: ").arg(depend) << virtualPackage;
+    };
+
     QString packageName;
     QString controlDepends;
     if (flag) {
@@ -892,14 +914,38 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
     qDebug() << qPrintable("Package:") << packageName << qPrintable("controlDepends") << controlDepends;
     QStringList dependsList = controlDepends.split(",");
 
-    auto removedIter = std::remove_if(dependsList.begin(), dependsList.end(), [](const QString & str) {
-        return !str.contains("|");
-    });
-    dependsList.erase(removedIter, dependsList.end());
+    // Fix 229757，不直接移除非或包依赖，而是判断是否存在虚包。
 
-    //使用二维数组进行存储
+    // 使用二维数组进行存储
     for (QString depend : dependsList) {
         depend = depend.remove(QRegExp("\\s"));
+
+        // 非或包，判断虚包依赖
+        if (!depend.contains("|")) {
+            //截取依赖包名
+            if (depend.contains("(")) {
+                int mid = depend.indexOf("(");
+                depend = depend.left(mid);
+            }
+
+            QVector<QString> dependStatus;
+            // 判断是否为虚包，若为虚包，将实现包都加入或列表
+            Package *package = packageWithArch(depend, arch, arch);
+            if (package && depend != package->name()) {
+                // 需要将当前包同样插入，方便查找
+                dependStatus.append(depend);
+
+                checkVirtualPackage(dependStatus, depend);
+            }
+
+            if (!dependStatus.isEmpty()) {
+                m_orDepends.append(dependStatus);
+                m_unCheckedOrDepends.append(dependStatus);
+            }
+
+            continue;
+        }
+
         QStringList orDepends = depend.split("|");
         QVector<QString> dependStatus;
         for (QString ordepend : orDepends) {
@@ -912,23 +958,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
             // 判断是否为虚包，若为虚包，将实现包都加入或列表
             Package *package = packageWithArch(ordepend, arch, arch);
             if (package && ordepend != package->name()) {
-                Backend *backend = PackageAnalyzer::instance().backendPtr();
-                for (auto *availablePackage : backend->availablePackages()) {
-                    if (!availablePackage->providesList().contains(ordepend)) {
-                        continue;
-                    }
-
-                    if (!dependStatus.contains(availablePackage->name())) {
-                        dependStatus.append(availablePackage->name());
-
-                        // 使用虚包的依赖关系
-                        if (m_dependsInfo.contains(ordepend)) {
-                            m_dependsInfo.insert(availablePackage->name(), m_dependsInfo.value(ordepend));
-
-                            qInfo() << QString("Detect or depends %1 contains virtual package: %2").arg(ordepend).arg(availablePackage->name());
-                        }
-                    }
-                }
+                checkVirtualPackage(dependStatus, ordepend);
             } else {
                 dependStatus.append(ordepend);
             }
@@ -1633,7 +1663,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             m_loopErrorDeepends.insert(r.package, r.status);
         }
 
-        if (!m_unCheckedOrDepends.isEmpty() && r.isBreak()) { //安装包存在或依赖关系且当前依赖状态为break
+        // 安装包存在或依赖关系且当前依赖状态不能直接满足，筛选依赖关系最优的选项
+        if (!m_unCheckedOrDepends.isEmpty() && DebListModel::DependsOk != r.status) {
             for (auto orDepends : m_unCheckedOrDepends) { //遍历或依赖组，检测当前依赖是否存在或依赖关系
                 if (orDepends.contains(info.packageName())) {
                     m_unCheckedOrDepends.removeOne(orDepends);
@@ -1672,6 +1703,11 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                         if (status.isBreak()) //若剩余依赖中存在状态不为break，则说明依赖关系满足
                             continue;
                         dependsStatus.minEq(status);
+
+                        if (DebListModel::DependsOk == dependsStatus.status) {
+                            qDebug() << QString("Select or package %1 for %2.").arg(otherDepend).arg(info.packageName());
+                            break;
+                        }
                     }
                     break;
                 }
