@@ -1,3 +1,18 @@
+deepin-deb-installer (6.0.18) unstable; urgency=medium
+
+  * fix: Fix package conflicts and replaces depends error.(Bug: 214693)(Influence: PackageInstall)
+  * fix: Install wine package depends detection error.(Influence: Wine)
+  * fix: Use depends package arch instead of deb file arch.(Bug: 220943)(Influence: DependsAnalysis)
+  * fix: Check for dependency architecture error.(Bug: 220019)(Influence: Dependency)
+  * fix: Remove check provides architecture.(Bug: 222531)
+  * fix: Detect Provides/Or dependencies error.(Issue: #212307)(Influence: ProvidesDepends OrDepends)
+  * fix: Print useless log after install failed.(Bug: 225161)
+  * fix: or/provides depends error when first pkg fails.(Influence: ProvidesDepends)
+  * fix: not responding to template settings input.(Influence: Templates)
+  * fix: Optimize virtual pkg install strategy.(Bug: 229757)(Influence: VirtualPackage)
+
+ -- renbin <renbin@uniontech.com>  Wed, 06 Dec 2023 13:22:46 +0800
+
 deepin-deb-installer (6.0.14) unstable; urgency=medium
 
   * feat: Add application installation hierarchical verify policy.(Influence: Hierarchical)
