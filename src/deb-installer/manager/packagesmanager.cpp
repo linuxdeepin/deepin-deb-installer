@@ -454,6 +454,16 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
         if (pkgName != packageName)
             continue;
 
+        /* 部分特殊软件包 conflicts 包名和当前包名一致，若一致，则认为无效
+           e.g.:
+            Pakcage: ImageEnhance
+            Conflicts: ImageEnhance
+            Replaces: ImageEnhnace
+        */
+        if (pkg->name() == info.first) {
+            continue;
+        }
+
         // pass if arch not match
         if (!pkgArch.isEmpty() && pkgArch != packageArch && pkgArch != "any" && pkgArch != "native")
             continue;
