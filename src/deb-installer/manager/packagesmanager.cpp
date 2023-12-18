@@ -455,7 +455,7 @@ const ConflictResult PackagesManager::isInstalledConflict(const QString &package
             continue;
 
         /* 部分特殊软件包 conflicts 包名和当前包名一致，若一致，则认为无效
-           e.g.:
+           e.g.: 在 debian/control 文件配置中按如下设置的软件包
             Pakcage: ImageEnhance
             Conflicts: ImageEnhance
             Replaces: ImageEnhnace
