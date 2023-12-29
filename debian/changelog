@@ -1,3 +1,15 @@
+deepin-deb-installer (6.0.20) unstable; urgency=medium
+
+  * fix: Print useless log after install failed.(Bug: 225161)
+  * fix: or/provides depends error when first pkg fails.(Influence: ProvidesDepends)
+  * fix: not responding to template settings input.(Influence: Templates)
+  * fix: Optimize virtual pkg install strategy.(Bug: 229757)(Influence: VirtualPackage)
+  * fix: Update qapt version check.
+  * fix: Conflicts contain pkg name install failed.(Bug: 233895)(Influence: Conflicts)
+  * chore: Add comment details.
+
+ -- renbin <renbin@uniontech.com>  Fri, 29 Dec 2023 10:57:55 +0800
+
 deepin-deb-installer (6.0.17) unstable; urgency=medium
 
   * fix: Detect Provides/Or dependencies error.(Bug: 212307)
