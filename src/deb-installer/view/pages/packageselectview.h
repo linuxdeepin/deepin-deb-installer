@@ -31,6 +31,9 @@ signals:
 public slots:
     void onInstallClicked();
 
+protected:
+    void showEvent(QShowEvent *e) override;
+
 private:
     void clearDebList();
 
