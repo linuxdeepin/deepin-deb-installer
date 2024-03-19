@@ -696,6 +696,7 @@ void SingleInstallPage::slotWorkerFinished()
 
     if (stat == DebListModel::Success) {                        //操作成功
         m_doneButton->setVisible(true);
+        m_doneButton->setFocus();
         if (m_operate == Install || m_operate == Reinstall) {  // 安装成功
             qDebug() << "SingleInstallPage:" << "Installed successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
@@ -709,6 +710,7 @@ void SingleInstallPage::slotWorkerFinished()
         }
     } else if (stat == DebListModel::Failed) {                   //安装/卸载失败
         m_confirmButton->setVisible(true);
+        m_confirmButton->setFocus();
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
         if (m_operate == Install || m_operate == Reinstall) {
@@ -723,6 +725,7 @@ void SingleInstallPage::slotWorkerFinished()
     } else {
         //正常情况不会进入此分支，如果进入此分支表明状态错误。
         m_confirmButton->setVisible(true);
+        m_confirmButton->setFocus();
         qDebug() << "Operate Status Error. current"
                  << "index=" << index.row() << "stat=" << stat;
     }
@@ -799,6 +802,11 @@ void SingleInstallPage::showPackageInfo()
             m_confirmButton->setVisible(true);
             m_backButton->setVisible(true);
             m_infoControlButton->setVisible(false);
+
+            if (resetButtonFocus) {
+                resetButtonFocus = false;
+                m_confirmButton->setFocus();
+            }
             return;
         }
 
@@ -813,6 +821,15 @@ void SingleInstallPage::showPackageInfo()
             m_installButton->setVisible(!installed);
             m_uninstallButton->setVisible(installed);
             m_reinstallButton->setVisible(installed);
+
+            if (resetButtonFocus) {
+                resetButtonFocus = false;
+                if (installed) {
+                    m_reinstallButton->setFocus();
+                } else {
+                    m_installButton->setFocus();
+                }
+            }
         }
 
         m_confirmButton->setVisible(false);
@@ -854,6 +871,9 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    // 取消授权/授权失败后，界面重绘，复位焦点
+    resetButtonFocus = true;
+
     //等待dpkg启动但是授权取消后，如果详细信息是expend状态，则shrink
     m_infoControlButton->shrink();
     m_infoControlButton->setVisible(false);
@@ -863,13 +883,23 @@ void SingleInstallPage::afterGetAutherFalse()
     //根据安装场景显示按钮
     if (m_operate == Install) {
         m_installButton->setVisible(true);
+        m_installButton->setFocus();
     } else if (m_operate == Uninstall) {
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
+        m_reinstallButton->setFocus();
     } else if (m_operate == Reinstall) {
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
+        m_reinstallButton->setFocus();
     }
+}
+
+void SingleInstallPage::showEvent(QShowEvent *e)
+{
+    // 每次切换展示当前页面，复位焦点状态
+    resetButtonFocus = true;
+    QWidget::showEvent(e);
 }
 
 void SingleInstallPage::paintEvent(QPaintEvent *event)
@@ -927,15 +957,20 @@ void SingleInstallPage::setAuthBefore()
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
         m_backButton->setVisible(true);
+
+        m_confirmButton->setFocus();
     } else {    //依赖正常
         if (m_operate == Install) {
             m_installButton->setVisible(true);
+            m_installButton->setFocus();
         } else if (m_operate == Uninstall) {
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);
+            m_reinstallButton->setFocus();
         } else if (m_operate == Reinstall) {
             m_reinstallButton->setVisible(true);
             m_uninstallButton->setVisible(true);
+            m_reinstallButton->setFocus();
         }
         m_installButton->setEnabled(false);
         m_reinstallButton->setEnabled(false);
@@ -974,6 +1009,8 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_installButton->setVisible(false);
         m_reinstallButton->setVisible(false);
         m_uninstallButton->setVisible(false);
+
+        m_confirmButton->setFocus();
     } else {
         //依赖安装成功
         m_tipsLabel->clear();                   //依赖安装成功后，去除依赖错误的提示信息。
@@ -984,6 +1021,8 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
+
+            m_installButton->setFocus();
         } else {// 已经安装过其他版本
             //增加提示 依赖安装完成后的提示
             if (installStat == DebListModel::InstalledSameVersion) {
@@ -1005,6 +1044,8 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             m_uninstallButton->setVisible(true);
             m_reinstallButton->setEnabled(true);
             m_uninstallButton->setEnabled(true);
+
+            m_reinstallButton->setFocus();
         }
     }
 
