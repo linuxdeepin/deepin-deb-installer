@@ -347,6 +347,8 @@ void MultipleInstallPage::slotWorkerFinshed()
     //安装结束显示返回和确认按钮
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
+    m_acceptButton->setFocus();
+
     m_processFrame->setVisible(false);                  //隐藏进度条
     //当前安装结束后，不允许调出右键菜单
     m_appsListView->setRightMenuShowStatus(false);      //安装结束不允许删除包
@@ -486,6 +488,7 @@ void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool in
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
     m_installButton->setEnabled(bEnable);//设置按钮是否可用
+    m_installButton->setFocus();
     if (bEnable) {                     //按钮可用时刷新一次model 保证所有的包都能显示出来
         m_appsListView->reset();
     }
@@ -496,6 +499,7 @@ void MultipleInstallPage::afterGetAutherFalse()
     m_processFrame->setVisible(false);          //隐藏进度条
     m_infoControlButton->setVisible(false);     //隐藏infoControlButton
     m_installButton->setVisible(true);          //显示安装按钮
+    m_installButton->setFocus();
     m_infoControlButton->shrink();              //收缩安装信息，下次出现时是收缩的
 
     //授权取消或授权失败后，允许右键菜单弹出
@@ -522,6 +526,7 @@ void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
         m_appsListView->setEnabled(true);       //appListView可用
         m_installButton->setVisible(true);      //安装按钮可见并可用
         m_installButton->setEnabled(true);
+        m_installButton->setFocus();
         break;
     case DebListModel::AuthConfirm:             //确认授权
         m_appsListView->setEnabled(false);      //listView不可用
@@ -538,6 +543,7 @@ void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
         m_appsListView->setEnabled(true);       //listView可以操作
         m_installButton->setVisible(true);      //显示安装按钮
         m_installButton->setEnabled(true);      //安装按钮可用
+        m_installButton->setFocus();
         m_dSpinner->stop();                     //隐藏并停止安装动画
         m_dSpinner->hide();
         m_tipsLabel->setVisible(false);         //隐藏依赖安装提示
