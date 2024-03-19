@@ -47,6 +47,12 @@ signals:
      */
     void packagesSelected(const QStringList &files) const;
 
+protected:
+    /**
+       @brief 展示控件时设置默认焦点
+     */
+    void showEvent(QShowEvent *e);
+
 private slots:
     /**
      * @brief chooseFiles 打开文件选择窗口，选择文件后将文件保存

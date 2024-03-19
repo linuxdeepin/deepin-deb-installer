@@ -144,6 +144,13 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
                      this, &FileChooseWidget::themeChanged);
 }
 
+void FileChooseWidget::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+
+    m_chooseFileBtn->setFocus();
+}
+
 void FileChooseWidget::chooseFiles()
 {
     QString historyDir = m_settings.value("history_dir").toString();        //获取保存的文件路径
@@ -160,7 +167,10 @@ void FileChooseWidget::chooseFiles()
 
     QString currentPackageDir = dialog.directoryUrl().toLocalFile();    //获取当前打开的文件夹路径
 
-    if (mode != QDialog::Accepted) return;
+    if (mode != QDialog::Accepted) {
+        m_chooseFileBtn->setFocus();
+        return;
+    }
 
     const QStringList selected_files = dialog.selectedFiles();              //获取选中的文件
     emit packagesSelected(selected_files);                                  //发送信号

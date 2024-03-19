@@ -19,6 +19,11 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     , selectAllBox(new QCheckBox(tr("Select all")))
     , installButton(new QPushButton(tr("Install", "button")))
 {
+    this->setFocusPolicy(Qt::NoFocus);
+    selectAllBox->setFocusPolicy(Qt::StrongFocus);
+    installButton->setFocusPolicy(Qt::StrongFocus);
+    installButton->setDefault(true);
+
     //全选+安装
     auto bottomLayout = new QHBoxLayout;
     bottomLayout->addWidget(selectAllBox);
@@ -53,6 +58,14 @@ void PackageSelectView::onInstallClicked()
         }
     }
     emit packageInstallConfim(selectIndexes);
+}
+
+void PackageSelectView::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+
+    // 首次展示焦点在全选(默认安装是被禁用的)
+    selectAllBox->setFocus();
 }
 
 void PackageSelectView::selectAll(bool select)
