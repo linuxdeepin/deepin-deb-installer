@@ -462,6 +462,9 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
             || DebListModel::AuthConfirm == m_wineAuthStatus
             || DebListModel::AuthDependsErr == m_wineAuthStatus) {
     } else {
+        // 下一指令第1个包大小较大时，解析操作会阻塞当前线程，导致界面设置的逻辑顺序出现混乱，优先处理界面交互，然后再执行加载
+        qApp->processEvents();
+
         //开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(packagesPathList);
     }
