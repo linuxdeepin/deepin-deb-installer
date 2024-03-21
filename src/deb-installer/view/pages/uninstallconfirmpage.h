@@ -43,6 +43,11 @@ signals:
      */
     void signalUninstallCanceled() const;
 
+protected:
+    /**
+       @brief 展示时设置默认焦点
+     */
+    void showEvent(QShowEvent *e) override;
 
 private slots:
 

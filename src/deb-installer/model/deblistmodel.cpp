@@ -599,9 +599,9 @@ void DebListModel::slotTransactionErrorOccurred()
         QTimer::singleShot(100 * 1, this, &DebListModel::checkBoxStatus);           //检查授权弹窗的状态 如果弹窗仍然在只是超时，则底层窗口按钮不可用
         qWarning() << "DebListModel:" << "Authorization error";
 
-        // reset env
-        emit signalAuthCancel();                                                          //发送授权被取消的信号
+        // 复位，注意先取消锁定状态再设置界面，否则焦点设置丢失
         emit signalLockForAuth(false);                                                    //取消授权锁定，设置按钮可用
+        emit signalAuthCancel();                                                          //发送授权被取消的信号
         emit signalEnableCloseButton(true);
         m_workerStatus = WorkerPrepare;                                             // 重置工作状态为准备态
         return;

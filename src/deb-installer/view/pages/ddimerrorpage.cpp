@@ -16,6 +16,7 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     , errorPicLabel(new Dtk::Widget::DLabel)
     , confimButton(new QPushButton(tr("OK")))
 {
+    setFocusPolicy(Qt::NoFocus);
     auto allLayout = new QVBoxLayout;
     allLayout->addWidget(errorPicLabel, 0, Qt::AlignCenter | Qt::AlignBottom);
     allLayout->addWidget(errorMessageLabel, 0, Qt::AlignCenter | Qt::AlignBottom);
@@ -40,10 +41,18 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     allLayout->setSpacing(0);
 
     confimButton->setFixedSize(120, 36);
+    confimButton->setDefault(true);
     connect(confimButton, &QPushButton::clicked, this, &DdimErrorPage::comfimPressed);
 }
 
 void DdimErrorPage::setErrorMessage(const QString &message)
 {
     errorMessageLabel->setText(message);
+}
+
+void DdimErrorPage::showEvent(QShowEvent *event)
+{
+    // 每次展示时固定默认焦点，缩放后弹出也是
+    confimButton->setFocus();
+    QWidget::showEvent(event);
 }

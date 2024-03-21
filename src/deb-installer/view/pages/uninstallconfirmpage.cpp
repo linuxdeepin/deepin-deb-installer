@@ -131,6 +131,13 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     m_dependsInfomation->appendText(requiredList.join(", "));
 }
 
+void UninstallConfirmPage::showEvent(QShowEvent *e)
+{
+    // 每次展示时设置默认焦点
+    m_confirmBtn->setFocus();
+    QWidget::showEvent(e);
+}
+
 void UninstallConfirmPage::slotShowDetail()
 {
     // Show dependency information
