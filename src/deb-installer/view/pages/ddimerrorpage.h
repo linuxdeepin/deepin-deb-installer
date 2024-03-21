@@ -25,6 +25,9 @@ public:
 signals:
     void comfimPressed();
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     Dtk::Widget::DLabel *errorMessageLabel;
     Dtk::Widget::DLabel *errorPicLabel;
