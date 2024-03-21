@@ -192,9 +192,3 @@ void FileChooseWidget::themeChanged()
     QIcon icon_split_line = QIcon::fromTheme("di_split_line");
     split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
 }
-
-void FileChooseWidget::clearChooseFileBtnFocus()
-{
-    m_chooseFileBtn->clearFocus();                              //清除文件选择按钮的焦点
-}
-

@@ -34,11 +34,3 @@ TEST(FileChooseWidget_TEST, FileChooseWidget_UT_chooseFiles)
     ASSERT_EQ("/", fchooseWidget->m_settings.value("history_dir"));
     delete fchooseWidget;
 }
-
-TEST(FileChooseWidget_TEST, FileChooseWidget_UT_clearChooseFileBtnFocus)
-{
-    FileChooseWidget *fchooseWidget = new FileChooseWidget;
-    fchooseWidget->clearChooseFileBtnFocus();
-    ASSERT_FALSE(fchooseWidget->hasFocus());
-    delete fchooseWidget;
-}

@@ -757,8 +757,6 @@ void DebInstaller::slotReset()
 
     this->setAcceptDrops(true);
     m_fileChooseWidget->setAcceptDrops(true);
-    // 安装完成后，清除文件选择按钮的焦点
-    m_fileChooseWidget->clearChooseFileBtnFocus();
     m_wineAuthStatus = DebListModel::AuthBefore;
 }
 
@@ -824,8 +822,6 @@ void DebInstaller::single2Multi()
 
 void DebInstaller::refreshSingle()
 {
-    m_fileChooseWidget->clearChooseFileBtnFocus();
-
     // 刷新文件的状态，初始化包的状态为准备状态
     m_fileListModel->resetFileStatus();
     m_fileListModel->initPrepareStatus();
