@@ -13,6 +13,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+// 选中框最低高度（低字号下可能使得选中框显示不全）
+static const int s_MinimumBoxHeight = 32;
+
 PackageSelectView::PackageSelectView(QWidget *parent)
     : QWidget(parent)
     , packageListWidget(new QListWidget)
@@ -23,6 +26,8 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     selectAllBox->setFocusPolicy(Qt::StrongFocus);
     installButton->setFocusPolicy(Qt::StrongFocus);
     installButton->setDefault(true);
+
+    selectAllBox->setMinimumHeight(s_MinimumBoxHeight);
 
     //全选+安装
     auto bottomLayout = new QHBoxLayout;
