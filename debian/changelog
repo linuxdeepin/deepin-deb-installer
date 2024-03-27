@@ -1,3 +1,15 @@
+deepin-deb-installer (6.0.21) unstable; urgency=medium
+
+  * fix: Set default focus widget on each page(Bug: 247435)(Influence: FocusWidget)
+  * fix: UI init wrong when load large package(Bug: 247435)(Influence: FocusWidget)
+  * fix: Change default focus widget(Bug: 247435, 248153, 248161)(Influence: FocusWidget)
+  * fix: Remove clear focus code(Bug: 247435)(Influence: FocusWidget)
+  * fix: Button focus not work in wayland(Bug: 247435)
+  * fix: The effect of checkbox is not fully displayed(Bug: 248145)(Influence: UI)
+  * fix: App cannot start when apt is configure error(Bug: 224605)
+
+ -- renbin <renbin@uniontech.com>  Wed, 27 Mar 2024 15:55:30 +0800
+
 deepin-deb-installer (6.0.20) unstable; urgency=medium
 
   * fix: Print useless log after install failed.(Bug: 225161)
