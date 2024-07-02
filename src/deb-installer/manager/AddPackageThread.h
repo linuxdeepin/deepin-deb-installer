@@ -75,6 +75,13 @@ signals:
     void signalNotLocalPackage();
 
     /**
+     * @brief notInstallablePackage 包无安装权限的信号
+     *
+     * 包无安装权限无法安装
+     */
+    void signalNotInstallablePackage();
+
+    /**
      * @brief packageAlreadyExists 当前包已经被添加到应用中
      */
     void signalPackageAlreadyExists();

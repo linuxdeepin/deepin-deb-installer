@@ -130,8 +130,11 @@ void DebInstaller::initConnections()
         slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
     });
 
-    //接收到添加无效包的信号则弹出无效包的弹窗
+    //接收到添加非本地包的信号则弹出无效包的弹窗
     connect(m_fileListModel, &DebListModel::signalNotLocalPackage, this, &DebInstaller::slotShowNotLocalPackageMessage);
+
+    //接收到添加无安装权限包的信号则弹出无效包的弹窗
+    connect(m_fileListModel, &DebListModel::signalNotInstallablePackage, this, &DebInstaller::slotShowNotInstallablePackageMessage);
 
     //接收到包已经添加的信号则弹出已添加的弹窗
     connect(m_fileListModel, &DebListModel::signalPackageAlreadyExists, this, &DebInstaller::slotShowPkgExistMessage);
@@ -640,6 +643,14 @@ void DebInstaller::slotShowNotLocalPackageMessage()
 {
     DFloatingMessage *floatingMsg = new DFloatingMessage;
     floatingMsg->setMessage(tr("You can only install local deb packages"));
+    floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
+    DMessageManager::instance()->sendMessage(this, floatingMsg);                        //如果损坏，提示
+}
+
+void DebInstaller::slotShowNotInstallablePackageMessage()
+{
+    DFloatingMessage *floatingMsg = new DFloatingMessage;
+    floatingMsg->setMessage(tr("No permission to access this folder"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
     DMessageManager::instance()->sendMessage(this, floatingMsg);                        //如果损坏，提示
 }

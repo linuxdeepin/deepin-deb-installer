@@ -384,6 +384,14 @@ signals:
     void signalNotLocalPackage();
 
     /**
+     * @brief notInstallablePackage 包无安装权限的信号
+     *
+     * 包无安装权限无法安装
+     */
+    void signalNotInstallablePackage();
+
+
+    /**
      * @brief signalPackageCannotFind 包已经被移动的信号 通知前端发送浮动消息
      * @param packageName 被移动的文件名
      */
