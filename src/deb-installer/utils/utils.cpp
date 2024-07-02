@@ -293,7 +293,7 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
 /*!
   @brief 检测软件包 `packagePath` 是否可读，首先判断路径指向的挂载设备信息，
     若为 gvfs 或 cifs 文件系统(文管当前及V6后的远程挂载系统)，抛出false。
-    同时判断文件是否可读/读取权限，无对应权限抛出异常。
+    同时判断文件是否有权限安装，无权限则抛出异常。
   @param[in] packagePath 软件包路径
   @note 只能安装本地的软件包，samba/ftp等远程目录不允许。
  
@@ -316,22 +316,21 @@ bool Utils::checkPackageReadable(const QString &packagePath)
     QFile outfile(packagePath.toUtf8());
     outfile.open(QFile::ReadOnly);
 
-    if (!outfile.isOpen()) { // 打不开，文件不在本地或无权限
-        if (debFileIfo.permission(QFile::Permission::ReadOwner) && debFileIfo.permission(QFile::Permission::ReadUser)) {
+    if (!outfile.isOpen()) { // 打不开，文件不在本地或无安装权限
+        QFile::FileError error = outfile.error();
+        if (error == QFile::FileError::NoError) {
+            // 文件不存在或路径错误
             qWarning() << "Package has permission but cannot open!";
-            // 文件有权限 打不开，说明不在本地
-            outfile.close();
+            return false;
+        } else {
+            //无安装权限
+            qWarning() << "Package has no read permission!";
             return false;
         }
     } else {  // 文件能打开，说明文件在本地且有权限
         outfile.close();
         return true;
     }
-
-    // 文件在本地但是因为没有权限打不开
-    qWarning() << "Package has no read permission!";
-    outfile.close();
-    return false;
 }
 
 DebApplicationHelper *DebApplicationHelper::instance()

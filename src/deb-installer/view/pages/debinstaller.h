@@ -79,6 +79,11 @@ private slots:
     void slotShowNotLocalPackageMessage();
 
     /**
+     * @brief slotShowNotInstallablePackageMessage 弹出无安装权限的消息通知
+     */
+    void slotShowNotInstallablePackageMessage();
+
+    /**
      * @brief slotShowPkgExistMessage 弹出包已存在的消息通知
      */
     void slotShowPkgExistMessage();

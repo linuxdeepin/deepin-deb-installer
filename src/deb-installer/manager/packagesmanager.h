@@ -144,6 +144,13 @@ signals:
     void signalNotLocalPackage();
 
     /**
+     * @brief notInstallablePackage 包无安装权限的信号
+     *
+     * 包无安装权限无法安装
+     */
+    void signalNotInstallablePackage();
+
+    /**
      * @brief packageAlreadyExists 包重复添加的信号
      */
     void signalPackageAlreadyExists();
