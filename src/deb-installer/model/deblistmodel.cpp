@@ -139,6 +139,9 @@ void DebListModel::initAppendConnection()
     //添加的包不在本地
     connect(m_packagesManager, &PackagesManager::signalNotLocalPackage, this, &DebListModel::signalNotLocalPackage);
 
+    //添加的包无安装权限
+    connect(m_packagesManager, &PackagesManager::signalNotInstallablePackage, this, &DebListModel::signalNotInstallablePackage);
+
     //要添加的包早就已经被添加到程序中
     connect(m_packagesManager, &PackagesManager::signalPackageAlreadyExists, this, &DebListModel::signalPackageAlreadyExists);
 

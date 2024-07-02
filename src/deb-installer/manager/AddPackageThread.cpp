@@ -43,10 +43,24 @@ void AddPackageThread::setSamePackageMd5(const QMap<QString, QByteArray> &packag
 bool AddPackageThread::dealInvalidPackage(const QString &packagePath)
 {
     if (!Utils::checkPackageReadable(packagePath)) {
-        emit signalNotLocalPackage();
-        return false;
-    }
+        QFileInfo debFileIfo(packagePath);
+        // 查看包是否能够打开，无法打开说明包不在本地或无权限。
+        QFile outfile(packagePath.toUtf8());
+        outfile.open(QFile::ReadOnly);
 
+        if (!outfile.isOpen()) { // 打不开，文件不在本地或无安装权限
+            QFile::FileError error = outfile.error();
+            if (error == QFile::FileError::NoError) {
+                // 文件不存在或路径错误
+                emit signalNotLocalPackage();
+                return false;
+            } else {
+                //无安装权限
+                emit signalNotInstallablePackage();
+                return false;
+            }
+        }
+    }
     return true;
 }
 

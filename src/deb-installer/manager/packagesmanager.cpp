@@ -319,6 +319,9 @@ PackagesManager::PackagesManager(QObject *parent)
     //转发不是本地包的信号
     connect(m_pAddPackageThread, &AddPackageThread::signalNotLocalPackage, this, &PackagesManager::signalNotLocalPackage);
 
+    //转发无安装权限的信号
+    connect(m_pAddPackageThread, &AddPackageThread::signalNotInstallablePackage, this, &PackagesManager::signalNotInstallablePackage);
+
     //转发包已经添加的信号
     connect(m_pAddPackageThread, &AddPackageThread::signalPackageAlreadyExists, this, &PackagesManager::signalPackageAlreadyExists);
 
@@ -1426,8 +1429,23 @@ bool PackagesManager::dealInvalidPackage(const QString &packagePath)
 {
     //判断路径信息是不是本地路径
     if (!Utils::checkPackageReadable(packagePath)) {
-        emit signalNotLocalPackage();
-        return false;
+        QFileInfo debFileIfo(packagePath);
+        // 查看包是否能够打开，无法打开说明包不在本地或无权限。
+        QFile outfile(packagePath.toUtf8());
+        outfile.open(QFile::ReadOnly);
+
+        if (!outfile.isOpen()) { // 打不开，文件不在本地或无安装权限
+            QFile::FileError error = outfile.error();
+            if (error == QFile::FileError::NoError) {
+                // 文件不存在或路径错误
+                emit signalNotLocalPackage();
+                return false;
+            } else {
+                //无安装权限
+                emit signalNotInstallablePackage();
+                return false;
+            }
+        }
     }
     return true;
 }
