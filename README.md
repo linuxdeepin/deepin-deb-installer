@@ -6,6 +6,7 @@ Deepin deb installer helps users install and remove local packages. Deepin deb i
 
 - libqapt3
 - libqapt3-runtime
+- deepin-elf-verify
 - deepin-elf-sign-tool
 
 ### Build dependencies
