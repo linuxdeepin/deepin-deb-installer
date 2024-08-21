@@ -25,13 +25,14 @@ const char DBUS_DEFENDER_SECURITYTOOLS[] = "securitytools";
 const char DBUS_DEFENDER_APP_SAFETY[] = "application-safety";
 
 // 匹配正则,%1为错误码
-const char VERIFY_ERROR_REGEXP[] = "(deepin)+[^\\n]*(hook)+[^\\n]*%1";
+const char VERIFY_ERROR_REGEXP[] = "(deepin)+[^\\n]*(hook)+[^\\n]*(%1|%2)\\b";
 
 /**
    @brief dpkg校验错误码，当前仅验签错误
  */
 enum HierarchicalError {
-    VerifyError = 65280,  ///< dpkg hook 签名校验错误码
+    VerifyError = 65280,    ///< dpkg hook 签名校验错误码
+    VerffyErrorVer2 = 256,  ///< dpkg hook 签名校验错误码 1071 及之后更新使用
 };
 
 /**
@@ -43,9 +44,9 @@ enum HierarchicalError {
        安装器接收输出信息并判断是否为验签错误。
  */
 
-HierarchicalVerify::HierarchicalVerify() {}
+HierarchicalVerify::HierarchicalVerify() { }
 
-HierarchicalVerify::~HierarchicalVerify() {}
+HierarchicalVerify::~HierarchicalVerify() { }
 
 /**
    @return 返回分级管控签名校验辅助类实例
@@ -84,10 +85,11 @@ bool HierarchicalVerify::isValid()
    @brief 检测软件包 \a pkgName 安装失败时的错误信息 \a errorString 中是否包含验签不通过的错误信息。
 
    @warning 通过正则表达式匹配输出，当前通过 hook 标志和错误码 65280 匹配，需注意命令行输出信息更新未正常匹配的情况
+    * 1071 更新错误码为 256 ,进行兼容处理
  */
 bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QString &errorString)
 {
-    static QRegExp s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError));
+    static QRegExp s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError).arg(VerffyErrorVer2));
     if (errorString.contains(s_ErrorReg)) {
         invalidPackages.insert(pkgName);
         qWarning() << QString("[Hierarchical] Package %1 detected hierarchical error!").arg(pkgName);
