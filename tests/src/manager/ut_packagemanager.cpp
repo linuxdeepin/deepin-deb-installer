@@ -346,14 +346,6 @@ TEST_F(UT_packagesManager, PackageManager_UT_isBackendReady)
     ASSERT_TRUE(m_packageManager->isBackendReady());
 }
 
-TEST_F(UT_packagesManager, PackageManager_UT_selectedIndexRow)
-{
-    QSignalSpy spy(m_packageManager, SIGNAL(signalMultDependPackages(DependsPair, bool)));
-    m_packageManager->m_packageMd5.insert(0, "sweat00001adscws1");
-    m_packageManager->selectedIndexRow(0);
-    EXPECT_EQ(1, spy.count());
-}
-
 TEST_F(UT_packagesManager, PackageManager_UT_checkInvalid)
 {
     QStringList packages;

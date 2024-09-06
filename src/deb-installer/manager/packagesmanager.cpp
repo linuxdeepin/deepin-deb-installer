@@ -104,12 +104,6 @@ bool PackagesManager::dependencyVersionMatch(const int result, const RelationTyp
     }
 }
 
-void PackagesManager::selectedIndexRow(int row)
-{
-    if (row < m_packageMd5.size() && row >= 0)
-        emit signalMultDependPackages(m_dependsPackages.value(m_packageMd5[row]), installWineDepends);
-}
-
 int PackagesManager::checkInstallStatus(const QString &package_path)
 {
     DebFile debFile(package_path);
@@ -313,23 +307,10 @@ PackagesManager::PackagesManager(QObject *parent)
             &PackagesManager::addPackage,
             Qt::AutoConnection);
 
-    // 转发无效包的信号
-    connect(m_pAddPackageThread, &AddPackageThread::signalInvalidPackage, this, &PackagesManager::signalInvalidPackage);
+    // append fail reason
+    connect(m_pAddPackageThread, &AddPackageThread::signalAppendFailMessage, this, &PackagesManager::signalAppendFailMessage);
 
-    // 转发无效ddim的信号
-    connect(m_pAddPackageThread, &AddPackageThread::signalNotDdimProcess, this, &PackagesManager::signalNotDdimProcess);
-
-    // 转发不是本地包的信号
-    connect(m_pAddPackageThread, &AddPackageThread::signalNotLocalPackage, this, &PackagesManager::signalNotLocalPackage);
-
-    // 转发无安装权限的信号
-    connect(
-        m_pAddPackageThread, &AddPackageThread::signalNotInstallablePackage, this, &PackagesManager::signalNotInstallablePackage);
-
-    // 转发包已经添加的信号
-    connect(
-        m_pAddPackageThread, &AddPackageThread::signalPackageAlreadyExists, this, &PackagesManager::signalPackageAlreadyExists);
-
+    // 处理包添加结束的信号
     // 处理包添加结束的信号
     connect(m_pAddPackageThread, &AddPackageThread::signalAppendFinished, this, &PackagesManager::slotAppendPackageFinished);
 
@@ -687,12 +668,14 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;  // 更换依赖的存储结构
         }
         m_errorIndex.clear();
     }
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsAuthCancel;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status =
+                DebListModel::DependsAuthCancel;  // 更换依赖的存储结构
         }
         emit signalEnableCloseButton(true);
     }
@@ -708,8 +691,8 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
             getPackageDependsStatus(iIndex);
             if (!m_dependsPackages.isEmpty()) {
                 qInfo() << m_dependsPackages.size() << m_dependsPackages.value(m_currentPkgMd5).second.size();
-                if (1 == m_preparedPackages.size())
-                    emit signalSingleDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
+                if (1 == m_preparedPackages.size()) {}
+                    // Q_EMIT signalDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
                 else if (m_preparedPackages.size() > 1)
                     installWineDepends = false;
             }
@@ -1182,7 +1165,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     package = nullptr;
 
     // 确定和当前包存在直接或间接反向依赖的包的集合
-    QSet<QString> reverseDependSet{packageName};
+    QSet<QString> reverseDependSet { packageName };
 
     // 存放当前需要验证反向依赖的包
     QQueue<QString> reverseQueue;
@@ -1349,17 +1332,8 @@ void PackagesManager::removePackage(const int index)
     // 告诉model md5更新了
     emit signalPackageMd5Changed(m_packageMd5);
 
-    // 如果后端只剩余一个包,刷新单包安装界面
-    if (1 == m_preparedPackages.size()) {
-        emit signalRefreshSinglePage();
-        if (m_packageMd5.size() != 1)
-            return;
-        emit signalSingleDependPackages(m_dependsPackages.value(m_packageMd5.at(0)), installWineDepends);
-    } else if (m_preparedPackages.size() >= 2) {
-        emit signalRefreshMultiPage();
-    } else if (0 == m_preparedPackages.size()) {
-        emit signalRefreshFileChoosePage();
-    }
+    // notify data changed
+    Q_EMIT signalPackageCountChanged(m_preparedPackages.size());
 }
 
 /**
@@ -1453,11 +1427,11 @@ bool PackagesManager::dealInvalidPackage(const QString &packagePath)
             QFile::FileError error = outfile.error();
             if (error == QFile::FileError::NoError) {
                 // 文件不存在或路径错误
-                emit signalNotLocalPackage();
+                Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal);
                 return false;
             } else {
                 // 无安装权限
-                emit signalNotInstallablePackage();
+                Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable);
                 return false;
             }
         }
@@ -1495,6 +1469,13 @@ QString PackagesManager::dealPackagePath(const QString &packagePath)
     return tempPath;
 }
 
+Pkg::DependsPair PackagesManager::getPackageDependsDetail(const int index)
+{
+    if (index < m_packageMd5.size() && index >= 0)
+        return m_dependsPackages.value(m_packageMd5[index]);
+    return {};
+}
+
 /**
  * @brief PackagesManager::appendNoThread
  * @param packages
@@ -1513,14 +1494,14 @@ void PackagesManager::appendNoThread(const QStringList &packages, int allPackage
 
         // 检测到是ddim文件
         if (debPackage.endsWith(".ddim")) {
-            emit signalNotDdimProcess();
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotDdim);
             continue;
         }
 
         QApt::DebFile pkgFile(debPackage);
         // 判断当前文件是否是无效文件
         if (!pkgFile.isValid()) {
-            emit signalInvalidPackage();
+            Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid);
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
@@ -1532,7 +1513,7 @@ void PackagesManager::appendNoThread(const QStringList &packages, int allPackage
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
             // 处理重复文件
-            emit signalPackageAlreadyExists();
+            Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
             continue;
         }
         // 可以添加,发送添加信号
@@ -1549,9 +1530,6 @@ void PackagesManager::appendNoThread(const QStringList &packages, int allPackage
     // 所有包都添加结束.
     if (1 == allPackageSize) {
         emit signalAppendFinished(m_packageMd5);  // 添加一个包时 发送添加结束信号,启用安装按钮
-
-        if (!m_dependsPackages.isEmpty() && 1 == m_preparedPackages.size())  // 过滤掉依赖冲突的包不显示依赖关系的情况
-            emit signalSingleDependPackages(m_dependsPackages.value(m_currentPkgMd5), installWineDepends);
     }
 }
 
@@ -1563,23 +1541,29 @@ void PackagesManager::refreshPage(int validPkgCount)
 {
     // 获取当前已经添加到程序中的包的数量
     int packageCount = m_preparedPackages.size();
-    if (1 == packageCount) {                 // 当前程序中只添加了一个包
-        if (1 == validPkgCount) {            // 此次只有一个包将会被添加的程序中
-            emit signalRefreshSinglePage();  // 刷新单包安装界面
+    // if (1 == packageCount) { //当前程序中只添加了一个包
+    //     if (1 == validPkgCount) { //此次只有一个包将会被添加的程序中
+    //         emit signalRefreshSinglePage();   //刷新单包安装界面
 
-        } else if (validPkgCount > 1) {  // 当前程序中值添加了一个包，但是这次有不止一个包将会被添加到程序中
-            emit signalSingle2MultiPage();  // 刷新批量安装界面
-            emit signalAppendStart();       // 开始批量添加
-        }
-    } else if (2 == packageCount) {
-        // 当前程序中已经添加了两个包
-        // 1.第一次是添加了一个包，第二次又添加了多于一个包
-        emit signalSingle2MultiPage();  // 刷新批量安装界面
-        emit signalAppendStart();       // 发送批量添加信号
-    } else {
-        // 此时批量安装界面已经刷新过。如果再添加，就只刷新model
-        emit signalRefreshMultiPage();
-        emit signalAppendStart();
+    //     } else if (validPkgCount > 1) { //当前程序中值添加了一个包，但是这次有不止一个包将会被添加到程序中
+    //         emit signalSingle2MultiPage();     //刷新批量安装界面
+    //         emit signalAppendStart();          //开始批量添加
+    //     }
+    // } else if (2 == packageCount) {
+    //     //当前程序中已经添加了两个包
+    //     //1.第一次是添加了一个包，第二次又添加了多于一个包
+    //     emit signalSingle2MultiPage();        //刷新批量安装界面
+    //     emit signalAppendStart();             //发送批量添加信号
+    // } else {
+    //     //此时批量安装界面已经刷新过。如果再添加，就只刷新model
+    //     emit signalRefreshMultiPage();
+    //     emit signalAppendStart();
+    // }
+
+    Q_EMIT signalPackageCountChanged(packageCount);
+    // If current first append and only one package, will append directly.
+    if (1 != packageCount || 1 != validPkgCount) {
+        Q_EMIT signalAppendStart();
     }
 }
 
@@ -1671,8 +1655,8 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     }
 
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
-    QList<DependInfo> break_list;
-    QList<DependInfo> available_list;
+    QList<Pkg::DependInfo> break_list;
+    QList<Pkg::DependInfo> available_list;
     for (const auto &candicate_list : depends) {
         const auto r = checkDependsPackageStatus(choosed_set, architecture, candicate_list);
         dependsStatus.maxEq(r);

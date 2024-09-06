@@ -34,8 +34,7 @@ using namespace QApt;
  */
 
 DebListModel::DebListModel(QObject *parent)
-    : QAbstractListModel(parent)
-    , m_workerStatus(WorkerPrepare)
+    : AbstractPackageListModel(parent)
     , m_packagesManager(new PackagesManager(this))
 {
     // 配置包安装的进程
@@ -45,7 +44,7 @@ DebListModel::DebListModel(QObject *parent)
     // 链接信号与槽
     initConnections();
     // 检查系统版本与是否开启了开发者模式
-    checkSystemVersion();
+    m_isDevelopMode = Utils::isDevelopMode();
 }
 
 bool DebListModel::isDpkgRunning()
@@ -130,20 +129,7 @@ const QString DebListModel::workerErrorString(const int errorCode, const QString
 }
 void DebListModel::initAppendConnection()
 {
-    // 添加的包是无效的包
-    connect(m_packagesManager, &PackagesManager::signalInvalidPackage, this, &DebListModel::signalInvalidPackage);
-
-    // 添加的包是无效的ddim
-    connect(m_packagesManager, &PackagesManager::signalNotDdimProcess, this, &DebListModel::signalNotDdimProcess);
-
-    // 添加的包不在本地
-    connect(m_packagesManager, &PackagesManager::signalNotLocalPackage, this, &DebListModel::signalNotLocalPackage);
-
-    // 添加的包无安装权限
-    connect(m_packagesManager, &PackagesManager::signalNotInstallablePackage, this, &DebListModel::signalNotInstallablePackage);
-
-    // 要添加的包早就已经被添加到程序中
-    connect(m_packagesManager, &PackagesManager::signalPackageAlreadyExists, this, &DebListModel::signalPackageAlreadyExists);
+    connect(m_packagesManager, &PackagesManager::signalAppendFailMessage, this, &DebListModel::signalAppendFailMessage);
 
     // 告诉前端当前处在添加过程中
     connect(m_packagesManager, &PackagesManager::signalAppendStart, this, &DebListModel::signalAppendStart);
@@ -187,23 +173,8 @@ void DebListModel::initInstallConnections()
  */
 void DebListModel::initRefreshPageConnecions()
 {
-    // 刷新单包安装界面
-    connect(m_packagesManager, &PackagesManager::signalRefreshSinglePage, this, &DebListModel::signalRefreshSinglePage);
-
-    // 刷新批量安装界面的model
-    connect(m_packagesManager, &PackagesManager::signalRefreshMultiPage, this, &DebListModel::signalRefreshMultiPage);
-
-    // 刷新批量安装界面
-    connect(m_packagesManager, &PackagesManager::signalSingle2MultiPage, this, &DebListModel::signalSingle2MultiPage);
-
-    // 刷新首页
-    connect(m_packagesManager, &PackagesManager::signalRefreshFileChoosePage, this, &DebListModel::signalRefreshFileChoosePage);
-
-    // 显示单包依赖关系
-    connect(m_packagesManager, &PackagesManager::signalSingleDependPackages, this, &DebListModel::signalSingleDependPackages);
-
-    // 显示批量包依赖关系
-    connect(m_packagesManager, &PackagesManager::signalMultDependPackages, this, &DebListModel::signalMultDependPackages);
+    // Refresh the current install page based on the packge count, single / multiple or choose file page.
+    connect(m_packagesManager, &PackagesManager::signalPackageCountChanged, this, &DebListModel::signalPackageCountChanged);
 }
 
 /**
@@ -233,7 +204,7 @@ void DebListModel::slotDealDependResult(int authType, int dependIndex, const QSt
             break;
         case DebListModel::AuthDependsSuccess:  // 安装成功后，状态的修改由debinstaller进行处理
             m_packageOperateStatus[m_packagesManager->getPackageMd5(dependIndex)] = Prepare;
-            m_workerStatus = Prepare;
+            m_workerStatus = WorkerPrepare;
             break;
         case DebListModel::AuthDependsErr:  // 安装失败后，状态的修改由debinstaller进行处理
             break;
@@ -249,11 +220,6 @@ void DebListModel::slotDealDependResult(int authType, int dependIndex, const QSt
 bool DebListModel::isReady() const
 {
     return m_packagesManager->isBackendReady();
-}
-
-bool DebListModel::isWorkerPrepare() const
-{
-    return m_workerStatus == WorkerPrepare;
 }
 
 const QList<QString> DebListModel::preparedPackages() const
@@ -277,7 +243,7 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int currentRow = index.row();
     // 判断当前下标是否越界
-    if (currentRow >= m_packagesManager->m_preparedPackages.size()) {
+    if (currentRow < 0 || currentRow >= m_packagesManager->m_preparedPackages.size()) {
         return QVariant();
     }
     // 当前给出的路径文件已不可访问.直接删除该文件
@@ -328,6 +294,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             else
                 return Prepare;
         }
+        case PackageDependsDetailRole:
+            return QVariant::fromValue(m_packagesManager->getPackageDependsDetail(currentRow));
         case Qt::SizeHintRole:  // 设置当前index的大小
             return QSize(0, 48);
 
@@ -341,11 +309,6 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
 bool DebListModel::isDevelopMode()
 {
     return m_isDevelopMode;
-}
-
-void DebListModel::selectedIndexRow(int row)
-{
-    m_packagesManager->selectedIndexRow(row);
 }
 
 void DebListModel::slotInstallPackages()
@@ -406,7 +369,7 @@ void DebListModel::slotUninstallPackage(const int index)
     Transaction *transsaction = backend->commitChanges();
 
     // trans 进度change 链接
-    connect(transsaction, &Transaction::progressChanged, this, &DebListModel::signalTransactionProgressChanged);
+    connect(transsaction, &Transaction::progressChanged, this, &DebListModel::signalCurrentPacakgeProgressChanged);
 
     // 详细状态信息（安装情况）展示链接
     connect(transsaction, &Transaction::statusDetailsChanged, this, &DebListModel::signalAppendOutputInfo);
@@ -491,7 +454,7 @@ QString DebListModel::checkPackageValid(const QString &package_path)
     return m_packagesManager->checkPackageValid(QStringList(package_path));
 }
 
-void DebListModel::slotAppendPackage(QStringList package)
+void DebListModel::slotAppendPackage(const QStringList &package)
 {
     if (WorkerPrepare != m_workerStatus) {
         qWarning() << "installer status error";
@@ -540,6 +503,15 @@ void DebListModel::resetFileStatus()
     m_packageFailCode.clear();
 }
 
+void DebListModel::resetInstallStatus()
+{
+    m_packageOperateStatus.clear();  // 重置包的操作状态
+    m_packageFailReason.clear();     // 重置包的错误状态
+    m_packageFailCode.clear();
+
+    initPrepareStatus();
+}
+
 void DebListModel::bumpInstallIndex()
 {
     if (m_currentTransaction.isNull()) {
@@ -548,8 +520,8 @@ void DebListModel::bumpInstallIndex()
     if (++m_operatingIndex >= m_packagesManager->m_preparedPackages.size()) {
         m_workerStatus = WorkerFinished;        // 设置包安装器的工作状态为Finish
         emit signalWorkerFinished();            // 发送安装完成信号
-        emit signalWorkerProgressChanged(100);  // 修改安装进度
-        emit signalTransactionProgressChanged(100);
+        emit signalWholeProgressChanged(100);  // 修改安装进度
+        emit signalCurrentPacakgeProgressChanged(100);
 
         // 安装结束，弹出分级管控信息提示框
         if (m_hierarchicalVerifyError) {
@@ -560,7 +532,7 @@ void DebListModel::bumpInstallIndex()
     }
     ++m_operatingStatusIndex;
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
-    emit signalChangeOperateIndex(m_operatingIndex);  // 修改当前操作的下标
+    emit signalCurrentProcessPackageIndex(m_operatingIndex);  // 修改当前操作的下标
     // install next
     qInfo() << "DebListModel:"
             << "install next deb package";
@@ -675,7 +647,7 @@ void DebListModel::slotTransactionFinished()
     // report new progress
     // 更新安装进度（批量安装进度控制）
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) / m_packagesManager->m_preparedPackages.size());
-    emit signalWorkerProgressChanged(progressValue);
+    emit signalWholeProgressChanged(progressValue);
 
     qInfo() << "DebListModel:"
             << "transaciont finished with exit status:" << transaction->exitStatus();
@@ -884,7 +856,7 @@ void DebListModel::installDebs()
         if (!transaction)
             return;
         // 进度变化和结束过程处理
-        connect(transaction, &Transaction::progressChanged, this, &DebListModel::signalTransactionProgressChanged);
+        connect(transaction, &Transaction::progressChanged, this, &DebListModel::signalCurrentPacakgeProgressChanged);
         connect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);
     }
 
@@ -1121,7 +1093,7 @@ void DebListModel::slotShowDevelopModeWindow()
 
     // 1.读取系统版本号
     QProcess *unlock = new QProcess(this);
-    unlock->start("lsb_release", {"-r"});
+    unlock->start("lsb_release", { "-r" });
     unlock->waitForFinished();
     auto output = unlock->readAllStandardOutput();
     auto str = QString::fromUtf8(output);
@@ -1166,65 +1138,6 @@ void DebListModel::slotShowDevelopModeWindow()
     }
 
     unlock->deleteLater();
-}
-
-void DebListModel::checkSystemVersion()
-{
-    // add for judge OS Version
-    // 修改获取系统版本的方式 此前为  DSysInfo::deepinType()
-
-#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
-    qInfo() << "system code(UOS): " << Dtk::Core::DSysInfo::uosEditionType();
-    switch (Dtk::Core::DSysInfo::uosEditionType()) {  // 获取系统的类型
-#if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
-        case Dtk::Core::DSysInfo::UosEducation:      // 教育版
-        case Dtk::Core::DSysInfo::UosDeviceEdition:  // 专用设备版
-#endif
-        case Dtk::Core::DSysInfo::UosProfessional:  // 专业版
-        case Dtk::Core::DSysInfo::UosHome: {        // 个人版
-            QDBusInterface *dbusInterFace = new QDBusInterface(
-                "com.deepin.sync.Helper", "/com/deepin/sync/Helper", "com.deepin.sync.Helper", QDBusConnection::systemBus());
-            bool deviceMode = dbusInterFace->property("DeveloperMode").toBool();  // 判断当前是否处于开发者模式
-            qInfo() << "DebListModel:"
-                    << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
-            m_isDevelopMode = deviceMode;
-            delete dbusInterFace;
-            break;
-        }
-        case Dtk::Core::DSysInfo::UosCommunity:   // 社区版 不验证签名
-        case Dtk::Core::DSysInfo::UosEnterprise:  // 服务器版
-            m_isDevelopMode = true;
-            break;
-        default:
-            m_isDevelopMode = true;
-            break;
-    }
-#else
-    qInfo() << "system code(Deepin): " << Dtk::Core::DSysInfo::deepinType();
-    switch (Dtk::Core::DSysInfo::deepinType()) {
-        case Dtk::Core::DSysInfo::DeepinDesktop:
-            m_isDevelopMode = true;
-            break;
-        case Dtk::Core::DSysInfo::DeepinPersonal:
-        case Dtk::Core::DSysInfo::DeepinProfessional:
-            QDBusInterface *dbusInterFace =
-                new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-            bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();  // 判断当前是否处于开发者模式
-            qInfo() << "DebListModel:"
-                    << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
-            m_isDevelopMode = deviceMode;
-            delete dbusInterFace;
-            break;
-        case Dtk::Core::DSysInfo::isCommunityEdition():
-        case Dtk::Core::DSysInfo::DeepinServer:
-            m_isDevelopMode = true;
-            break;
-        default:
-            m_isDevelopMode = true;
-            break;
-    }
-
-#endif
 }
 
 bool DebListModel::checkDigitalSignature()
@@ -1478,7 +1391,7 @@ void DebListModel::slotUpWrongStatusRow()
     emit dataChanged(idxStart, idxEnd);
 
     // update scroll
-    emit signalChangeOperateIndex(-1);
+    emit signalCurrentProcessPackageIndex(-1);
 }
 
 void DebListModel::slotConfigInstallFinish(int installResult)
@@ -1487,7 +1400,7 @@ void DebListModel::slotConfigInstallFinish(int installResult)
         return;
     int progressValue = static_cast<int>(100. * (m_operatingIndex + 1) /
                                          m_packagesManager->m_preparedPackages.size());  // 批量安装时对进度进行处理
-    emit signalWorkerProgressChanged(progressValue);
+    emit signalWholeProgressChanged(progressValue);
     if (0 == installResult) {  // 安装成功
         if (m_packagesManager->m_packageMd5DependsStatus[m_packagesManager->m_packageMd5[m_operatingIndex]].status == DependsOk) {
             refreshOperatingPackageStatus(Success);  // 刷新安装状态
@@ -1700,16 +1613,6 @@ bool DebListModel::checkBlackListApplication()
     return false;
 }
 
-int DebListModel::getWorkerStatus()
-{
-    return m_workerStatus;
-}
-
-void DebListModel::setWorkerStatus(int workerStatus)
-{
-    m_workerStatus = workerStatus;
-}
-
 DebListModel::~DebListModel()
 {
     delete m_packagesManager;
@@ -1732,12 +1635,11 @@ void DebListModel::printDependsChanges()
         return;
     }
 
-    static QMap<int, QString> tagTable = {{Package::IsManuallyHeld, "Package::IsManuallyHeld"},
-                                          {Package::NewInstall, "Package::NewInstall"},
-                                          {Package::ToReInstall, "Package::ToReInstall"},
-                                          {Package::ToUpgrade, "Package::ToUpgrade"},
-                                          {Package::ToDowngrade, "Package::ToDowngrade"},
-                                          {Package::ToRemove, "Package::ToRemove"}};
+    static QMap<int, QString> tagTable = {
+        { Package::IsManuallyHeld, "Package::IsManuallyHeld" }, { Package::NewInstall, "Package::NewInstall" },
+        { Package::ToReInstall, "Package::ToReInstall" },       { Package::ToUpgrade, "Package::ToUpgrade" },
+        { Package::ToDowngrade, "Package::ToDowngrade" },       { Package::ToRemove, "Package::ToRemove" }
+    };
     QMap<int, QStringList> changeInfo;
 
     for (const Package *package : changeList) {
@@ -1753,7 +1655,7 @@ void DebListModel::printDependsChanges()
     }
 }
 
-Dialog::Dialog() {}
+Dialog::Dialog() { }
 
 void Dialog::keyPressEvent(QKeyEvent *event)
 {

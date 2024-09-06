@@ -52,11 +52,11 @@ bool AddPackageThread::dealInvalidPackage(const QString &packagePath)
             QFile::FileError error = outfile.error();
             if (error == QFile::FileError::NoError) {
                 // 文件不存在或路径错误
-                emit signalNotLocalPackage();
+                emit signalAppendFailMessage(Pkg::PackageNotLocal);
                 return false;
             } else {
-                // 无安装权限
-                emit signalNotInstallablePackage();
+                //无安装权限
+                emit signalAppendFailMessage(Pkg::PackageNotInstallable);
                 return false;
             }
         }
@@ -97,7 +97,7 @@ void AddPackageThread::run()
         debPackage = dealPackagePath(debPackage);
 
         if (debPackage.endsWith(".ddim")) {
-            emit signalNotDdimProcess();
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotDdim);
             continue;
         }
 
@@ -105,7 +105,7 @@ void AddPackageThread::run()
         // 判断当前文件是否是无效文件
         if (!pkgFile.isValid()) {
             // 根据文件无效的类型提示不同的文案
-            emit signalInvalidPackage();
+            Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid);
             continue;
         }
         // 获取当前文件的md5的值,防止重复添加
@@ -116,8 +116,8 @@ void AddPackageThread::run()
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
-            // 处理重复文件
-            emit signalPackageAlreadyExists();
+            //处理重复文件
+            Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
             continue;
         }
         // 管理最近文件列表

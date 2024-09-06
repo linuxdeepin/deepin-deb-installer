@@ -138,18 +138,18 @@ TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_slotRequestRemoveItemClick
 {
     multiplepage->slotRequestRemoveItemClicked(debListModel->index(0));
     EXPECT_TRUE(debListModel->isWorkerPrepare());
-    EXPECT_TRUE(multiplepage->m_debListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_TRUE(debListModel->m_packageOperateStatus.isEmpty());
     EXPECT_FALSE(multiplepage->m_showDependsButton->isVisible());
 }
 
 TEST_F(UT_MultipleInstallPage, UT_MultipleInstallPage_slotDependPackages)
 {
-    DependInfo info;
+    Pkg::DependInfo info;
     info.packageName = "libopencl1";
     info.version = "1.0";
-    QList<DependInfo> list;
+    QList<Pkg::DependInfo> list;
     list.append(info);
-    QPair<QList<DependInfo>, QList<DependInfo>> pair;
+    QPair<QList<Pkg::DependInfo>, QList<Pkg::DependInfo>> pair;
     pair.first.append(list);
     pair.second.append(list);
     //    dependPackages.insert("deb", pair);

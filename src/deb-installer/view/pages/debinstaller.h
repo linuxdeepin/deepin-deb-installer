@@ -5,6 +5,7 @@
 #ifndef DEBINSTALLER_H
 #define DEBINSTALLER_H
 
+#include "utils/package_defines.h"
 #include "model/packageselectmodel.h"
 #include "view/pages/backendprocesspage.h"
 
@@ -18,6 +19,7 @@
 #include <QFileInfoList>
 
 class FileChooseWidget;
+class AbstractPackageListModel;
 class DebListModel;
 class SingleInstallPage;
 class UninstallConfirmPage;
@@ -67,6 +69,9 @@ private slots:
      * 根据清单文件进行解析操作
      */
     void slotDdimSelected(const QStringList &ddimFiles);
+
+    // Append package failed, show floating message based on diff error.
+    void slotReceiveAppendFailed(Pkg::AppendFailReason reason);
 
     /**
      * @brief slotShowInvalidePackageMessage 弹出无效包的消息通知
@@ -177,6 +182,8 @@ private slots:
      */
     void slotSettingDialogVisiable();
 
+    // TODO(renbin): DBus interface, refactor later
+#if 0
     /**
      * @brief PackagesSelected
      * 添加包，但是不显示主窗口
@@ -214,6 +221,7 @@ private slots:
      * 查找包信息,返回(包名，包的路径，包的版本，包可用的架构，包的短描述，包的长描述)
      */
     QString getPackageInfo(const QString &debPath);
+#endif
 
     /**
      * @brief slotShowSelectPage
@@ -320,7 +328,7 @@ private:
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
 
 private:
-    DebListModel *m_fileListModel = nullptr;         // model 类
+    AbstractPackageListModel *m_fileListModel = nullptr;         // model 类
     FileChooseWidget *m_fileChooseWidget = nullptr;  // 文件选择的widget
     UninstallConfirmPage *m_uninstallPage = nullptr;
 
@@ -340,7 +348,15 @@ private:
     int m_iOptionWindowFlag = 0;    // 判断菜单栏是否手动弹出
     bool bTabFlag = false;          // Control focus is re-identified from titlebar
     bool bActiveWindowFlag = true;  // Window activation id
-    int m_Filterflag = -1;          // Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+
+    enum CurrentPage {
+        ChoosePage = -1,
+        NonePage = 0,
+        MultiPage = 1,
+        SinglePage = 2,
+        UninstallPage = 3,
+    };
+    CurrentPage m_Filterflag { ChoosePage };  // Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     bool m_packageAppending = false;
     int m_wineAuthStatus = -1;  // 记录依赖配置授权状态

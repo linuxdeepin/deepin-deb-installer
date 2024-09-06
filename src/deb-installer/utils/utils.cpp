@@ -4,6 +4,8 @@
 
 #include "utils.h"
 
+#include <mutex>
+
 #include <QUrl>
 #include <QDir>
 #include <QFile>
@@ -21,6 +23,9 @@
 #include <QTextCodec>
 #include <QProcess>
 #include <QStorageInfo>
+#include <QDBusInterface>
+
+#include <DSysInfo>
 
 QHash<QString, QPixmap> Utils::m_imgCacheHash;
 QHash<QString, QString> Utils::m_fontNameCache;
@@ -142,7 +147,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify";
-        proc.start(program, {filepath_name});
+        proc.start(program, { filepath_name });
         proc.waitForFinished(-1);
         const QString output1 = proc.readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
@@ -320,6 +325,72 @@ bool Utils::checkPackageReadable(const QString &packagePath)
         outfile.close();
         return true;
     }
+}
+
+/**
+   @return Check if the current mode is development mode, the status will be called once and stored.
+ */
+bool Utils::isDevelopMode()
+{
+    static bool kIsDevelopMode = false;
+    static std::once_flag kDevelopOnceFlag;
+    std::call_once(kDevelopOnceFlag, [&]() {
+    // Add for judge OS Version
+#if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
+        qInfo() << "system code(UOS): " << Dtk::Core::DSysInfo::uosEditionType();
+        switch (Dtk::Core::DSysInfo::uosEditionType()) {
+#if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
+            case Dtk::Core::DSysInfo::UosEducation:
+            case Dtk::Core::DSysInfo::UosDeviceEdition:
+#endif
+            case Dtk::Core::DSysInfo::UosProfessional:
+            case Dtk::Core::DSysInfo::UosHome: {
+                // Check if current is develop mode
+                QDBusInterface *dbusInterFace = new QDBusInterface(
+                    "com.deepin.sync.Helper", "/com/deepin/sync/Helper", "com.deepin.sync.Helper", QDBusConnection::systemBus());
+                bool deviceMode = dbusInterFace->property("DeveloperMode").toBool();
+                qInfo() << "DebListModel:"
+                        << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+                kIsDevelopMode = deviceMode;
+                delete dbusInterFace;
+                break;
+            }
+            case Dtk::Core::DSysInfo::UosCommunity:   // The community edition does not need signature verification
+            case Dtk::Core::DSysInfo::UosEnterprise:  // Server Version
+                kIsDevelopMode = true;
+                break;
+            default:
+                kIsDevelopMode = true;
+                break;
+        }
+#else
+        qInfo() << "system code(Deepin): " << Dtk::Core::DSysInfo::deepinType();
+        switch (Dtk::Core::DSysInfo::deepinType()) {
+        case Dtk::Core::DSysInfo::DeepinDesktop:
+            kIsDevelopMode = true;
+            break;
+        case Dtk::Core::DSysInfo::DeepinPersonal:
+        case Dtk::Core::DSysInfo::DeepinProfessional:
+            // Check if develop mode
+            QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
+            bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();
+            qInfo() << "DebListModel:" << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
+            kIsDevelopMode = deviceMode;
+            delete dbusInterFace;
+            break;
+        case Dtk::Core::DSysInfo::isCommunityEdition():
+        case Dtk::Core::DSysInfo::DeepinServer:
+            kIsDevelopMode = true;
+            break;
+        default:
+            kIsDevelopMode = true;
+            break;
+        }
+
+#endif
+    });
+
+    return kIsDevelopMode;
 }
 
 DebApplicationHelper *DebApplicationHelper::instance()

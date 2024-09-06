@@ -117,6 +117,8 @@ public:
         stub.set(ADDR(Backend, init), stud_run);
         stub.set(ADDR(PackagesManager, appendNoThread), stud_appendNoThread);
         deb = new DebInstaller();
+        debListModel = qobject_cast<DebListModel *>(deb->m_fileListModel);
+
         usleep(1000 * 1000);
         qDebug() << "SetUp" << endl;
     }
@@ -125,6 +127,7 @@ public:
         delete deb;
     }
     DebInstaller *deb;
+    DebListModel *debListModel;
 };
 void stub_enableCloseAndExit()
 {
@@ -168,7 +171,7 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_slotSetAuthingStatus)
 TEST_F(UT_Debinstaller, UT_Debinstaller_single2Multi)
 {
     deb->single2Multi();
-    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_TRUE(debListModel->m_packageOperateStatus.isEmpty());
     EXPECT_EQ(1, deb->m_Filterflag);
     EXPECT_EQ(1, deb->m_dragflag);
 }
@@ -182,7 +185,7 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_slotChangeDragFlag)
 TEST_F(UT_Debinstaller, UT_Debinstaller_slotDealDependResult)
 {
     deb->slotDealDependResult(DebListModel::AuthDependsSuccess, "test");
-    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_TRUE(debListModel->m_packageOperateStatus.isEmpty());
     deb->slotDealDependResult(DebListModel::AuthBefore, "test");
 }
 
@@ -200,7 +203,7 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_slotSetEnableButton)
     deb->slotShowHiddenButton();
     EXPECT_FALSE(deb->m_packageAppending);
     EXPECT_EQ(1, deb->m_dragflag);
-    EXPECT_TRUE(deb->m_fileListModel->m_packageOperateStatus.isEmpty());
+    EXPECT_TRUE(debListModel->m_packageOperateStatus.isEmpty());
     deb->m_packageAppending = true;
     deb->slotSetEnableButton(true);
     EXPECT_TRUE(deb->m_packageAppending);

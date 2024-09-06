@@ -7,6 +7,7 @@
 
 #include "manager/packagesmanager.h"
 #include "process/Pty.h"
+#include "abstract_package_list_model.h"
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -38,13 +39,12 @@ signals:
     void signalClosed();
 };
 
-class DebListModel : public QAbstractListModel
+class DebListModel : public AbstractPackageListModel
 {
     Q_OBJECT
 
 public:
     explicit DebListModel(QObject *parent = nullptr);
-
     ~DebListModel() override;
 
     /**
@@ -67,98 +67,6 @@ public:
      * @return 要显示的安装失败的原因
      */
     static const QString workerErrorString(const int errorCode, const QString &errorInfo);
-    /**
-     * @brief The PackageRole enum
-     * 包的各种数据角色
-     */
-    enum PackageRole {
-        PackageNameRole = Qt::DisplayRole,  // 包名
-        UnusedRole = Qt::UserRole,          //
-        WorkerIsPrepareRole,                // 当前工作是否处于准备状态
-        ItemIsCurrentRole,                  // 获取当前下标
-        PackageVersionRole,                 // 包的版本
-        PackagePathRole,                    // 包的路径
-        PackageInstalledVersionRole,        // 包已经安装的版本
-        PackageShortDescriptionRole,        // 包的短描述
-        PackageLongDescriptionRole,         // 包的长描述
-        PackageVersionStatusRole,           // 包的安装状态
-        PackageDependsStatusRole,           // 包的依赖状态
-        PackageAvailableDependsListRole,    // 包可用的依赖
-        PackageFailReasonRole,              // 包安装失败的原因
-        PackageOperateStatusRole,           // 包的操作状态
-        PackageReverseDependsListRole,      // 依赖于此包的程序
-    };
-
-    /**
-     * @brief The WorkerStatus enum
-     * 安装器的工作状态
-     */
-    enum WorkerStatus {
-        WorkerPrepare,     // 准备，可以进行安装或卸载
-        WorkerProcessing,  // 正在安装
-        WorkerFinished,    // 安装结束
-        WorkerUnInstall    // 正在卸载
-    };
-
-    /**
-     * @brief The PackageInstallStatus enum
-     * 包的安装状态
-     */
-    enum PackageInstallStatus {
-        NotInstalled,             // 当前包没有被安装
-        InstalledSameVersion,     // 当前已经安装过相同的版本
-        InstalledEarlierVersion,  // 当前已经安装过较早的版本
-        InstalledLaterVersion,    // 当前已经安装过更新的版本
-    };
-
-    /**
-     * @brief The PackageDependsStatus enum
-     * 当前包的依赖状态
-     */
-    enum DependsStatus {
-        DependsOk,            // 依赖满足
-        DependsAvailable,     // 依赖可用但是需要下载
-        DependsBreak,         // 依赖不满足
-        DependsVerifyFailed,  // 签名验证失败
-        DependsAuthCancel,    // 依赖授权失败（wine依赖）
-        ArchBreak,  // 架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
-        Prohibit,  // 应用被域管限制，无法安装
-    };
-
-    /**
-     * @brief The PackageOperationStatus enum
-     * 包的当前操作状态
-     */
-    enum PackageOperationStatus {
-        Prepare,       // 准备安装
-        Operating,     // 正在安装
-        Success,       // 安装成功
-        Failed,        // 安装失败
-        Waiting,       // 等待安装
-        VerifyFailed,  // 签名验证失败
-    };
-
-    /**
-     * @brief The DependsAuthStatus enum
-     * wine 依赖安装时的状态
-     */
-    enum DependsAuthStatus {
-        AuthBefore,          // 鉴权框弹出之前
-        AuthPop,             // 鉴权框弹出
-        CancelAuth,          // 鉴权取消
-        AuthConfirm,         // 鉴权确认后
-        AuthDependsSuccess,  // 安装成功
-        AuthDependsErr,      // 安装失败
-        AnalysisErr,         // 解析错误
-        VerifyDependsErr,    // 验证签名失败(分级管控)
-    };
-
-    enum ErrorCode {
-        NoDigitalSignature = 101,   // 无有效的数字签名
-        DigitalSignatureError,      // 数字签名校验失败
-        ConfigAuthCancel = 127,     // 配置安装授权被取消
-        ApplocationProhibit = 404,  // 当前包在黑名单中禁止安装
-    };
 
     /**
      * @brief reset
@@ -167,7 +75,7 @@ public:
      * 清空安装错误的缓存
      * 重置packageManage的状态
      */
-    void reset();
+    void reset() override;
 
     /**
      * @brief resetFilestatus
@@ -176,11 +84,7 @@ public:
      */
     void resetFileStatus();
 
-    /**
-     * @brief isWorkerPrepare 获取当前的工作状态是否是就绪状态
-     * @return 当前是否就绪
-     */
-    bool isWorkerPrepare() const;
+    void resetInstallStatus() override;
 
     /**
      * @brief isReady 查看后端初始化的状态
@@ -221,12 +125,6 @@ public:
      */
     bool isDevelopMode();
 
-    /**
-     * @brief selectedIndexRow 当前选择安装包列表的行
-     * @param row 行号
-     */
-    void selectedIndexRow(int row);
-
 public:
     /**
      * @brief initPrepareStatus  初始化所有包的状态为Prepare
@@ -242,22 +140,10 @@ public:
 
 public:
     /**
-     * @brief getWorkerStatus 获取当前安装器的安装状态
-     * @return 当前安装器的安装状态
-     */
-    int getWorkerStatus();
-
-    /**
-     * @brief setWorkerStatus 设置当前安装器的安装状态
-     * @param workerStatus 当前需要设置的安装状态
-     */
-    void setWorkerStatus(int workerStatus);
-
-    /**
      * @brief removePackage 删除某一个包
      * @param idx 要删除的包的index
      */
-    void removePackage(const int idx);
+    void removePackage(const int idx) override;
 
     /**
      * @brief checkPackageDigitalSignature 查找指定包安装状态
@@ -291,40 +177,6 @@ public:
 
 signals:
     /**
-     * @brief signalLockForAuth  授权框弹出后 禁用按钮  授权框取消后，启用按钮
-     * @param lock 启用/禁用按钮
-     */
-    void signalLockForAuth(const bool lock) const;
-
-    /**
-     * @brief signalAuthCancel    授权取消
-     */
-    void signalAuthCancel();
-
-    /**
-     * @brief signalStartInstall  开始安装
-     */
-    void signalStartInstall();
-
-    /**
-     * @brief signalWorkerFinished  安装结束
-     */
-    void signalWorkerFinished() const;
-
-    /**
-     * @brief signalTransactionProgressChanged
-     * 某一个包的安装进度改变
-     * @param progress
-     */
-    void signalTransactionProgressChanged(const int progress) const;
-
-    /**
-     * @brief signalWorkerProgressChanged 整体的安装进度改变
-     * @param progress
-     */
-    void signalWorkerProgressChanged(const int progress) const;
-
-    /**
      * @brief signalPackageOperationChanged 包操作状态改变
      * @param index 包的index
      * @param status    修改的状态
@@ -338,111 +190,6 @@ signals:
      */
     void signalPackageDependsChanged(const QModelIndex &index, int status) const;
 
-    /**
-     * @brief signalAppendOutputInfo      安装输出信息
-     * @param info      要显示的信息
-     */
-    void signalAppendOutputInfo(const QString &info) const;
-
-    /**
-     * @brief signalChangeOperateIndex  index 被修改
-     * @param opIndex       修改后的index
-     */
-    void signalChangeOperateIndex(int opIndex);
-
-    /**
-     * @brief signalEnableReCancelBtn         授权框弹出后禁用按钮，授权框取消后启用按钮
-     * @param bEnable       启用/禁用按钮的标识
-     */
-    void signalEnableReCancelBtn(bool bEnable);
-
-    /**
-     * @brief signalDependResult  依赖下载的状态
-     */
-    void signalDependResult(int, QString);
-
-    /**
-     * @brief signalEnableCloseButton        设置关闭按钮是否可用
-     */
-    void signalEnableCloseButton(bool);
-
-    /**
-     * @brief signalInvalidPackage 无效包的信号
-     */
-    void signalInvalidPackage();
-
-    /**
-     * @brief signalNotDdimProcess 非DDIM处理流程
-     */
-    void signalNotDdimProcess();
-
-    /**
-     * @brief signalNotLocalPackage 包不在本地的信号
-     *
-     * ps: 包不在本地无法安装
-     */
-    void signalNotLocalPackage();
-
-    /**
-     * @brief notInstallablePackage 包无安装权限的信号
-     *
-     * 包无安装权限无法安装
-     */
-    void signalNotInstallablePackage();
-
-    /**
-     * @brief signalPackageCannotFind 包已经被移动的信号 通知前端发送浮动消息
-     * @param packageName 被移动的文件名
-     */
-    void signalPackageCannotFind(QString packageName) const;
-
-    /**
-     * @brief signalPackageAlreadyExists 包已添加的信号
-     */
-    void signalPackageAlreadyExists();
-
-    /**
-     * @brief signalSingleDependPackages 单包依赖关系显示信号
-     * @param breakPackages
-     */
-    void signalSingleDependPackages(DependsPair breakPackages, bool intallWineDepends);
-
-    /**
-     * @brief signalMultDependPackages 批量包依赖关系显示信号
-     * @param breakPackages
-     */
-    void signalMultDependPackages(DependsPair breakPackages, bool intallWineDepends);
-signals:
-    /**
-     * @brief signalRefreshSinglePage 刷新单包安装界面的信号
-     */
-    void signalRefreshSinglePage();
-
-    /**
-     * @brief signalRefreshMultiPage 刷新批量安装model的信号
-     */
-    void signalRefreshMultiPage();
-
-    /**
-     * @brief signalSingle2MultiPage 刷新批量安装的信号
-     */
-    void signalSingle2MultiPage();
-
-    /**
-     * @brief signalRefreshFileChoosePage 刷新首页
-     */
-    void signalRefreshFileChoosePage();
-
-    /**
-     * @brief signalAppendStart 正在添加的信号
-     */
-    void signalAppendStart();
-
-    /**
-     * @brief signalAppendFinished 添加结束的信号
-     */
-    void signalAppendFinished();
-
 public slots:
 
     /**
@@ -454,7 +201,7 @@ public slots:
     /**
      * @brief slotInstallPackages 开始安装所有的包
      */
-    void slotInstallPackages();
+    void slotInstallPackages() override;
 
     /**
      * @brief slotUninstallPackage     卸载某一个包
@@ -466,7 +213,7 @@ public slots:
      * @brief slotAppendPackage 添加包
      * @param package 添加的包的路径
      */
-    void slotAppendPackage(QStringList packages);
+    void slotAppendPackage(const QStringList &packages);
 
     /**
      * @brief slotTransactionErrorOccurred 安装过程中出现错误
@@ -621,12 +368,6 @@ private:
 
 private:
     /**
-     * @brief checkSystemVersion  check 当前操作系统的版本
-     * 个人版专业版需要验证数字签名，其余版本不需要
-     */
-    void checkSystemVersion();
-
-    /**
      * @brief checkDigitalSignature  检查数字签名
      * @return  检查当前包是否有数字签名
      */
@@ -756,9 +497,6 @@ private:
     void printDependsChanges();
 
 private:
-    // 当前工作状态
-    int m_workerStatus = 0;
-
     // 当前正在操作的index
     int m_operatingIndex = 0;
 

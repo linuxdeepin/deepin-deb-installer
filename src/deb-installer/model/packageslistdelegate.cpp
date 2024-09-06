@@ -17,8 +17,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-// delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
-PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent)
+//delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
+PackagesListDelegate::PackagesListDelegate(AbstractPackageListModel *m_model, QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_fileListModel(m_model)  // 从新new一个对象修改为获取传入的对象
     , m_parentView(parent)

@@ -137,7 +137,6 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)
     QStyleOptionViewItem option;
     stub.set(ADDR(Backend, init), delegate_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
 
     stub.set(ADDR(DebFile, architecture), delegate_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), delegate_backend_architectures);
@@ -173,7 +172,6 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
 
     stub.set(ADDR(Backend, init), delegate_backend_init);
     stub.set(ADDR(PackagesManager, isBackendReady), delegate_backendReady);
-    stub.set(ADDR(DebListModel, checkSystemVersion), delegate_checkSystemVersion);
 
     stub.set(ADDR(DebFile, architecture), delegate_deb_arch_i386);
     stub.set(ADDR(Backend, architectures), delegate_backend_architectures);

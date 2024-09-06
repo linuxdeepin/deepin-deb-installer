@@ -5,6 +5,8 @@
 #ifndef ADDPACKAGETHREAD_H
 #define ADDPACKAGETHREAD_H
 
+#include "utils/package_defines.h"
+
 #include <QObject>
 #include <QThread>
 #include <QSet>
@@ -43,7 +45,7 @@ public:
      */
     void setSamePackageMd5(const QMap<QString, QByteArray> &packagesMd5);
 
-signals:
+Q_SIGNALS:
 
     /**
      * @brief sigAddPackageToInstaller 把包添加到安装器中
@@ -56,51 +58,8 @@ signals:
      */
     void signalAppendFinished();
 
-signals:
-    /**
-     * @brief invalidPackage 当前包是无效的包
-     */
-    void signalInvalidPackage();
-
-    /**
-     * @brief signalNotDdimProcess 非DDIM处理流程
-     */
-    void signalNotDdimProcess();
-
-    /**
-     * @brief notLocalPackage 包不在本地的信号
-     *
-     * ps: 包不在本地无法安装
-     */
-    void signalNotLocalPackage();
-
-    /**
-     * @brief notInstallablePackage 包无安装权限的信号
-     *
-     * 包无安装权限无法安装
-     */
-    void signalNotInstallablePackage();
-
-    /**
-     * @brief packageAlreadyExists 当前包已经被添加到应用中
-     */
-    void signalPackageAlreadyExists();
-
-signals:
-    /**
-     * @brief refreshSinglePage 刷新单包界面
-     */
-    void signalRefreshSinglePage();
-
-    /**
-     * @brief refreshMultiPage 刷新批量安装界面
-     */
-    void signalRefreshMultiPage();
-
-    /**
-     * @brief single2MultiPage 从单包安装界面刷新为批量安装界面
-     */
-    void signalSingleToMultiPage();
+    // Manange package insert failed reason.
+    void signalAppendFailMessage(Pkg::AppendFailReason reason);
 
 private:
     // 要添加的软件包列表

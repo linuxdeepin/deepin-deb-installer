@@ -158,13 +158,8 @@ endforeach()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utils)
 file(GLOB_RECURSE APP_SRCS
+    ${CMAKE_CURRENT_LIST_DIR}/*.h
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/manager/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/model/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/utils/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/process/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/pages/*.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/*.cpp
     )
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})

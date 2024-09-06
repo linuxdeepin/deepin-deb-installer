@@ -5,17 +5,20 @@
 #ifndef PACKAGESLISTDELEGATE_H
 #define PACKAGESLISTDELEGATE_H
 
+#include "packagelistview.h"
+
 #include <DStyledItemDelegate>
 #include <QSettings>
-#include "packagelistview.h"
-#include "deblistmodel.h"
+
+class AbstractPackageListModel;
+
 class PackagesListDelegate : public DStyledItemDelegate
 {
     Q_OBJECT
 
 public:
     // delegate使用传入的model而非重新new一个对象 解决多次创建model packagemanager导致崩溃的问题
-    explicit PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent = nullptr);
+    explicit PackagesListDelegate(AbstractPackageListModel *m_model, QAbstractItemView *parent = nullptr);
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 public:
@@ -59,7 +62,7 @@ private:
     int m_itemHeight = 0;
 
     // 传入的model
-    DebListModel *m_fileListModel = nullptr;
+    AbstractPackageListModel *m_fileListModel = nullptr;
 
     QAbstractItemView *m_parentView;
 };

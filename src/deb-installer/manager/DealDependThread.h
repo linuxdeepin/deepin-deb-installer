@@ -33,8 +33,8 @@ public:
      * @brief run 线程的运行函数
      */
     void run();
-signals:
 
+signals:
     /**
      * @brief signalDependResult 依赖下载的过程处理信号
      */
@@ -46,7 +46,6 @@ signals:
     void signalEnableCloseButton(bool);
 
 public slots:
-
     /**
      * @brief onFinished 依赖下载完成的处理槽函数
      */
@@ -65,7 +64,7 @@ private:
     int m_index = -1;
 
     // 需要安装的依赖列表
-    QStringList m_dependsList = {nullptr};
+    QStringList m_dependsList = { nullptr };
 
     // 依赖安装状态是否错误的标识
     bool bDependsStatusErr = false;

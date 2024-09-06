@@ -48,6 +48,13 @@ using QApt::DebFile;
 DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+// Avoid magic number
+enum PackageCountType {
+    NoPackage = 0,
+    OnePackage = 1,
+    TwoPackages = 2,
+};
+
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
     , m_fileListModel(new DebListModel(this))
@@ -62,7 +69,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     QtConcurrent::run([]() { PackageAnalyzer::instance().initBackend(); });
 }
 
-DebInstaller::~DebInstaller() {}
+DebInstaller::~DebInstaller() { }
 
 void DebInstaller::initUI()
 {
@@ -120,34 +127,25 @@ void DebInstaller::initTitleBar()
 
 void DebInstaller::initConnections()
 {
-    // 接收到添加无效包的信号则弹出无效包的弹窗
-    connect(m_fileListModel, &DebListModel::signalInvalidPackage, this, &DebInstaller::slotShowInvalidePackageMessage);
-
-    // 接收到添加无效包的信号则弹出无效包的弹窗
-    connect(m_fileListModel, &DebListModel::signalNotDdimProcess, [this]() {
-        slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
+    connect(m_fileListModel, &DebListModel::signalAppendFailMessage, this, &DebInstaller::slotReceiveAppendFailed);
+    connect(m_fileListModel, &DebListModel::signalPackageCountChanged, this, [this](int count) {
+        switch (count) {
+            case NoPackage:
+                slotReset();
+                break;
+            case OnePackage:
+                refreshSingle();
+                break;
+            default:
+                // If current not multi page, change.
+                if (MultiPage != m_Filterflag) {
+                    single2Multi();
+                } else {
+                    refreshMulti();
+                }
+                break;
+        }
     });
-
-    // 接收到添加非本地包的信号则弹出无效包的弹窗
-    connect(m_fileListModel, &DebListModel::signalNotLocalPackage, this, &DebInstaller::slotShowNotLocalPackageMessage);
-
-    // 接收到添加无安装权限包的信号则弹出无效包的弹窗
-    connect(
-        m_fileListModel, &DebListModel::signalNotInstallablePackage, this, &DebInstaller::slotShowNotInstallablePackageMessage);
-
-    // 接收到包已经添加的信号则弹出已添加的弹窗
-    connect(m_fileListModel, &DebListModel::signalPackageAlreadyExists, this, &DebInstaller::slotShowPkgExistMessage);
-
-    // 刷新单包安装界面的信号
-    connect(m_fileListModel, &DebListModel::signalRefreshSinglePage, this, &DebInstaller::refreshSingle);
-
-    // 刷新批量安装mode的信号
-    connect(m_fileListModel, &DebListModel::signalRefreshMultiPage, this, &DebInstaller::refreshMulti);
-
-    // 刷新批量安装界面的信号
-    connect(m_fileListModel, &DebListModel::signalSingle2MultiPage, this, &DebInstaller::single2Multi);
-
-    connect(m_fileListModel, &DebListModel::signalRefreshFileChoosePage, this, &DebInstaller::slotReset);
 
     // 正在添加的信号
     connect(m_fileListModel, &DebListModel::signalAppendStart, this, &DebInstaller::appendPackageStart);
@@ -160,16 +158,17 @@ void DebInstaller::initConnections()
 
     // Select the focus of the page
 
+    // TODO: remove to instance later.
     // Determine the status of the current application based on the status of the authorization box.
     connect(m_fileListModel, &DebListModel::signalLockForAuth, this, &DebInstaller::slotSetAuthingStatus);
-
-    // During installing/uninstalling, drag is not allowed
-    connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotChangeDragFlag);
     connect(m_fileListModel, &DebListModel::signalAuthCancel, this, &DebInstaller::slotShowHiddenButton);
-    connect(m_fileListModel, &DebListModel::signalStartInstall, this, &DebInstaller::disableCloseAndExit);
     connect(m_fileListModel, &DebListModel::signalEnableReCancelBtn, this, &DebInstaller::slotSetEnableButton);
     connect(m_fileListModel, &DebListModel::signalDependResult, this, &DebInstaller::slotDealDependResult);
     connect(m_fileListModel, &DebListModel::signalEnableCloseButton, this, &DebInstaller::slotEnableCloseButton);
+
+    // During installing/uninstalling, drag is not allowed
+    connect(m_fileListModel, &DebListModel::signalStartInstall, this, &DebInstaller::disableCloseAndExit);
+    connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotChangeDragFlag);
     connect(m_fileListModel, &DebListModel::signalPackageCannotFind, this, &DebInstaller::slotShowPkgRemovedMessage);
 
     // 选择安装页面
@@ -214,6 +213,7 @@ void DebInstaller::slotSettingDialogVisiable()
     m_settingDialog->show();
 }
 
+#if 0
 void DebInstaller::PackagesSelected(const QStringList &debPathList)
 {
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
@@ -289,6 +289,7 @@ QString DebInstaller::getPackageInfo(const QString &debPath)
         return "";
     return m_fileListModel->getPackageInfo(debPath).join(";");
 }
+#endif
 
 void DebInstaller::slotShowSelectInstallPage(const QList<int> &selectIndexes)
 {
@@ -337,7 +338,7 @@ void DebInstaller::slotShowSelectPage(const QList<DebIr> &selectedInfos)
         m_ddimView->setHaveMustInstallDeb(haveMustInstallDeb);
         m_lastPage = m_ddimView;
         m_dragflag = 0;
-        m_Filterflag = 0;
+        m_Filterflag = NonePage;
         m_centralLayout->addWidget(m_ddimView);
         // m_centralLayout->setCurrentIndex(1);
         m_centralLayout->setCurrentWidget(m_ddimView);
@@ -632,6 +633,29 @@ void DebInstaller::refreshMulti()
     MulRefreshPage();
 }
 
+void DebInstaller::slotReceiveAppendFailed(Pkg::AppendFailReason reason)
+{
+    switch (reason) {
+        case Pkg::PackageInvalid:
+            slotShowInvalidePackageMessage();
+            break;
+        case Pkg::PackageNotDdim:
+            slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
+            break;
+        case Pkg::PackageNotLocal:
+            slotShowNotLocalPackageMessage();
+            break;
+        case Pkg::PackageNotInstallable:
+            slotShowNotInstallablePackageMessage();
+            break;
+        case Pkg::PackageAlreadyExists:
+            slotShowPkgExistMessage();
+            break;
+        default:
+            break;
+    }
+}
+
 void DebInstaller::slotShowInvalidePackageMessage()
 {
     DFloatingMessage *floatingMsg = new DFloatingMessage;
@@ -687,7 +711,7 @@ void DebInstaller::slotShowDdimErrorMessage(const QString &message)
     m_ddimErrorPage = new DdimErrorPage;
     m_ddimErrorPage->setErrorMessage(message);
     m_dragflag = 0;
-    m_Filterflag = 0;
+    m_Filterflag = NonePage;
     m_centralLayout->addWidget(m_ddimErrorPage);
     // m_centralLayout->setCurrentIndex(1);
     m_centralLayout->setCurrentWidget(m_ddimErrorPage);
@@ -709,14 +733,14 @@ void DebInstaller::slotShowUninstallConfirmPage()
 
     this->setAcceptDrops(false);  // 卸载页面不允许添加/拖入包
 
-    const QModelIndex index = m_fileListModel->first();  // 只有单包才有卸载界面
+    const QModelIndex index = m_fileListModel->index(0);  // 只有单包才有卸载界面
 
     m_uninstallPage = new UninstallConfirmPage(this);  // 初始化卸载页面
     m_uninstallPage->setRequiredList(
         index.data(DebListModel::PackageReverseDependsListRole).toStringList());  // 查看是否有包依赖于当前要卸载的包，病获取列表
     m_uninstallPage->setPackage(index.data().toString());                         // 添加卸载提示语
 
-    m_Filterflag = 3;
+    m_Filterflag = UninstallPage;
     m_centralLayout->addWidget(m_uninstallPage);  // 添加卸载页面到主界面中
     // m_centralLayout->setCurrentIndex(2);                                                        //显示卸载页面
     m_centralLayout->setCurrentWidget(m_uninstallPage);
@@ -743,7 +767,7 @@ void DebInstaller::slotUninstallAccepted()
     // set close button disabled while uninstalling
     disableCloseAndExit();  // 卸载时不允许关闭或退出
 
-    m_Filterflag = m_dragflag;
+    m_Filterflag = static_cast<CurrentPage>(m_dragflag);
 }
 
 void DebInstaller::slotUninstallCancel()
@@ -753,7 +777,7 @@ void DebInstaller::slotUninstallCancel()
     m_fileListModel->setWorkerStatus(DebListModel::WorkerPrepare);  // 重置工作状态为准备状态
     backToSinglePage();                                             // 返回单包安装页面
 
-    m_Filterflag = m_dragflag;
+    m_Filterflag = static_cast<CurrentPage>(m_dragflag);
 }
 
 void DebInstaller::slotSetAuthingStatus(const bool authing)
@@ -766,7 +790,7 @@ void DebInstaller::slotReset()
 {
     // reset page status
     m_dragflag = -1;                  // 是否被允许拖入或添加
-    m_Filterflag = -1;                // 当前显示的页面
+    m_Filterflag = ChoosePage;        // 当前显示的页面
     titlebar()->setTitle(QString());  // 重置标题栏
     m_fileListModel->reset();         // 重置model
 
@@ -813,8 +837,7 @@ void DebInstaller::MulRefreshPage()
 void DebInstaller::single2Multi()
 {
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->resetFileStatus();
-    m_fileListModel->initPrepareStatus();
+    m_fileListModel->resetInstallStatus();
     if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
         m_lastPage->deleteLater();  // 清除widgets缓存
     }
@@ -837,7 +860,7 @@ void DebInstaller::single2Multi()
         m_dragflag = 1;
     }
 
-    m_Filterflag = 1;
+    m_Filterflag = MultiPage;
 
     // m_centralLayout->setCurrentIndex(1);
     m_centralLayout->setCurrentWidget(multiplePage);
@@ -846,8 +869,7 @@ void DebInstaller::single2Multi()
 void DebInstaller::refreshSingle()
 {
     // 刷新文件的状态，初始化包的状态为准备状态
-    m_fileListModel->resetFileStatus();
-    m_fileListModel->initPrepareStatus();
+    m_fileListModel->resetInstallStatus();
     // clear widgets if needed
     if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
         m_lastPage->deleteLater();  // 清除widgets缓存
@@ -867,10 +889,10 @@ void DebInstaller::refreshSingle()
     // 重置安装器拖入的状态与工作的状态
     if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
         m_dragflag = 0;
-        m_Filterflag = 0;
+        m_Filterflag = NonePage;
     } else {
         m_dragflag = 2;
-        m_Filterflag = 2;
+        m_Filterflag = SinglePage;
     }
     // switch to new page.
     // m_centralLayout->setCurrentIndex(1);
@@ -926,7 +948,7 @@ void DebInstaller::slotSetEnableButton(bool bButtonEnabled)
 void DebInstaller::slotShowHiddenButton()
 {
     enableCloseAndExit();
-    m_fileListModel->resetFileStatus();  // 授权取消，重置所有的状态，包括安装状态，依赖状态等
+    m_fileListModel->resetInstallStatus();  // 授权取消，重置所有的状态，包括安装状态，依赖状态等
     SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
     if (singlePage) {  // 单包安装显示按钮
         singlePage->afterGetAutherFalse();
@@ -965,18 +987,17 @@ void DebInstaller::slotDealDependResult(int authDependsStatus, QString dependNam
     }
 
     if (authDependsStatus == DebListModel::AuthDependsSuccess) {  // 依赖下载成功
-        m_fileListModel->resetFileStatus();                       // 清除包的状态和包的错误原因
-        m_fileListModel->initPrepareStatus();                     // 重置包的prepare状态。
+        m_fileListModel->resetInstallStatus();  // 清除包的状态和包的错误原因 重置包的prepare状态
     }
-    if (authDependsStatus == DebListModel::AuthBefore) {        // 授权框弹出时
-        this->setEnabled(false);                                // 设置界面不可用
-    } else {                                                    // 授权成功或失败后
-        this->setEnabled(true);                                 // 根据授权的结果刷新单包或者批量安装界面
-        if (m_fileListModel->preparedPackages().size() == 1) {  // 刷新单包安装界面
+    if (authDependsStatus == DebListModel::AuthBefore) {  // 授权框弹出时
+        this->setEnabled(false);                          // 设置界面不可用
+    } else {                                              // 授权成功或失败后
+        this->setEnabled(true);                           // 根据授权的结果刷新单包或者批量安装界面
+        if (m_fileListModel->rowCount() == OnePackage) {  // 刷新单包安装界面
             SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
             if (singlePage)
                 singlePage->DealDependResult(authDependsStatus, dependName);
-        } else if (m_fileListModel->preparedPackages().size() >= 2) {  // 刷新批量安装界面
+        } else if (m_fileListModel->rowCount() >= TwoPackages) {  // 刷新批量安装界面
             MultipleInstallPage *multiplePage = qobject_cast<MultipleInstallPage *>(m_lastPage);
             if (multiplePage) {
                 multiplePage->DealDependResult(authDependsStatus, dependName);

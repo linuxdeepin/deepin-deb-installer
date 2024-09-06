@@ -27,14 +27,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-class DebListModel;
+class AbstractPackageListModel;
 class WorkerProgress;
 class SingleInstallPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
+    explicit SingleInstallPage(AbstractPackageListModel *model, QWidget *parent = nullptr);
 
 public:
     /**
@@ -243,14 +243,17 @@ private slots:
      * @param dependPackages  依赖包存储
      * @param installWineDepends 是否进入wine依赖配置
      */
-    void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
+    void slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends);
+
+    // refresh the single package depend info.
+    void slotRefreshSinglePackageDepends();
 
 private:
     Operate m_operate = Unknown;   // 当前的操作
     bool m_workerStarted = false;  // 安装是否开始
     bool m_upDown = false;         // 当前是详细信息是展开还是收缩
 
-    DebListModel *m_packagesModel = nullptr;  // model类
+    AbstractPackageListModel *m_packagesModel = nullptr; //model类
 
     QWidget *m_contentFrame = nullptr;   // 主布局
     QWidget *m_itemInfoFrame = nullptr;  // 包信息框架
