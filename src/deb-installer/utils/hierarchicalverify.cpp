@@ -44,9 +44,9 @@ enum HierarchicalError {
        安装器接收输出信息并判断是否为验签错误。
  */
 
-HierarchicalVerify::HierarchicalVerify() {}
+HierarchicalVerify::HierarchicalVerify() { }
 
-HierarchicalVerify::~HierarchicalVerify() {}
+HierarchicalVerify::~HierarchicalVerify() { }
 
 /**
    @return 返回分级管控签名校验辅助类实例
@@ -150,19 +150,20 @@ bool HierarchicalVerify::checkHierarchicalInterface()
         QDBusMessage message = interface.call(DBUS_HIERARCHICAL_METHOD);
         QDBusError error = interface.lastError();
         if (QDBusError::NoError != error.type()) {
-            qWarning() << QString("[Hierarchical] DBus %1 read property %2 error: type(%2) [%3] %4")
-                              .arg(DBUS_HIERARCHICAL_BUS)
-                              .arg(DBUS_HIERARCHICAL_METHOD)
-                              .arg(error.type())
-                              .arg(error.name())
-                              .arg(error.message());
+            // The log not need warning level.
+            qInfo() << QString("[Hierarchical] DBus %1 read property %2 error: type(%2) [%3] %4")
+                           .arg(DBUS_HIERARCHICAL_BUS)
+                           .arg(DBUS_HIERARCHICAL_METHOD)
+                           .arg(error.type())
+                           .arg(error.name())
+                           .arg(error.message());
 
             // QDBusInterface 在构造时不一定能判断接口是否有效，调用后二次判断
             if (!interface.isValid() || QDBusError::UnknownInterface == error.type() ||
                 QDBusError::InvalidInterface == error.type()) {
                 interfaceInvalid = true;
-                qWarning() << QString("[Hierarchical] Interface %1 is not valid! Disable check hierarchical control interface.")
-                                  .arg(DBUS_HIERARCHICAL_INTERFACE);
+                qInfo() << QString("[Hierarchical] Interface %1 is not valid! Disable check hierarchical control interface.")
+                               .arg(DBUS_HIERARCHICAL_INTERFACE);
             }
         } else {
             QDBusReply<bool> reply(message);
@@ -175,10 +176,10 @@ bool HierarchicalVerify::checkHierarchicalInterface()
         }
     } else {
         interfaceInvalid = true;
-        qWarning() << QString("[Hierarchical] DBus interface %1 invalid! error: [%2] %3")
-                          .arg(DBUS_HIERARCHICAL_INTERFACE)
-                          .arg(interface.lastError().name())
-                          .arg(interface.lastError().message());
+        qInfo() << QString("[Hierarchical] DBus interface %1 invalid! error: [%2] %3")
+                       .arg(DBUS_HIERARCHICAL_INTERFACE)
+                       .arg(interface.lastError().name())
+                       .arg(interface.lastError().message());
     }
 
     return availabled;

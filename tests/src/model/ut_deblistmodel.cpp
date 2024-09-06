@@ -536,14 +536,6 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_isDevelopMode)
     EXPECT_TRUE(m_debListModel->isDevelopMode());
 }
 
-TEST_F(ut_DebListModel_test, deblistmodel_UT_selectedIndexRow)
-{
-    QSignalSpy spy(m_debListModel->m_packagesManager, SIGNAL(signalMultDependPackages(DependsPair, bool)));
-    m_debListModel->m_packagesManager->m_packageMd5.insert(0, "sweat00001adscws1");
-    m_debListModel->selectedIndexRow(0);
-    EXPECT_EQ(1, spy.count());
-}
-
 TEST_F(ut_DebListModel_test, deblistmodel_UT_initPrepareStatus)
 {
     QStringList list;
@@ -686,34 +678,31 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);
-    m_debListModel->checkSystemVersion();
-    EXPECT_TRUE(m_debListModel->m_isDevelopMode);
+    EXPECT_TRUE(Utils::isDevelopMode());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosProfessional)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosProfessional);
-    m_debListModel->checkSystemVersion();
+    Utils::isDevelopMode();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosHome)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosHome);
-    m_debListModel->checkSystemVersion();
+    Utils::isDevelopMode();
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosCommunity)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosCommunity);
-    m_debListModel->checkSystemVersion();
-    EXPECT_TRUE(m_debListModel->m_isDevelopMode);
+    EXPECT_TRUE(Utils::isDevelopMode());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_default)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_default);
-    m_debListModel->checkSystemVersion();
-    EXPECT_TRUE(m_debListModel->m_isDevelopMode);
+    EXPECT_TRUE(Utils::isDevelopMode());
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature)
@@ -835,7 +824,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->m_packageOperateStatus.insert("deb", QApt::CommitError);
     m_debListModel->m_packageFailCode.insert("deb", QApt::FetchError);
-    m_debListModel->checkSystemVersion();
+    m_debListModel->m_isDevelopMode = Utils::isDevelopMode();
     m_debListModel->m_workerStatus = DebListModel::WorkerProcessing;
     m_debListModel->m_packageMd5.insert(0, "00000");
     m_debListModel->m_operatingIndex = 0;

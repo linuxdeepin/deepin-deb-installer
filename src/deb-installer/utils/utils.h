@@ -64,6 +64,8 @@ public:
     static VerifyResultCode Digital_Verify(const QString &filepath_name);                        // 验证deb数字签名
     static bool Return_Digital_Verify(const QString &strfilepath, const QString &strfilename);  // 返回验证工具是否存在
     static bool checkPackageReadable(const QString &packagePath);  // 返回软件包是否允许读取
+
+    static bool isDevelopMode();  // Check if develop mode (root)
 };
 
 #endif

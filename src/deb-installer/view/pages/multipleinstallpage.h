@@ -18,6 +18,7 @@
 #include <QPropertyAnimation>
 #include <QWidget>
 
+class AbstractPackageListModel;
 class PackagesListView;
 class DebListModel;
 class WorkerProgress;
@@ -26,7 +27,7 @@ class MultipleInstallPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
+    explicit MultipleInstallPage(AbstractPackageListModel *model, QWidget *parent = nullptr);
 
     /**
      * @brief setEnableButton 根据授权框的弹出/取消，设置安装按钮禁用/请
@@ -124,7 +125,7 @@ private slots:
      * @param dependPackages  依赖包存储
      * @param installWineDepends 是否进入wine依赖配置
      */
-    void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
+    void slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends);
 
 private:
     /**
@@ -169,7 +170,7 @@ private:
 
 private:
     DRoundBgFrame *m_appsListViewBgFrame = nullptr;  // listView的背景frame 修改listView的背景样式
-    DebListModel *m_debListModel = nullptr;          // listModel类
+    AbstractPackageListModel *m_debListModel = nullptr;          // listModel类
     QWidget *m_contentFrame = nullptr;               // applistview  infoControlButton的frame
     QWidget *m_processFrame = nullptr;               // process 的frame
     QVBoxLayout *m_contentLayout = nullptr;          // applistview  infoControlButton的布局

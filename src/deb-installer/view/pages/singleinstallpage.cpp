@@ -26,7 +26,7 @@ using QApt::Transaction;
 
 DWIDGET_USE_NAMESPACE
 
-SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
+SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *parent)
     : QWidget(parent)
     , m_operate(Install)
     , m_workerStarted(false)
@@ -76,6 +76,9 @@ void SingleInstallPage::initUI()
     m_itemInfoFrame->setVisible(true);
     m_packageIcon->setPixmap(iconPix);
     m_upDown = true;  // 当前是收缩的
+
+    // refresh depends at init.
+    slotRefreshSinglePackageDepends();
 }
 
 void SingleInstallPage::initControlAccessibleName()
@@ -476,12 +479,9 @@ void SingleInstallPage::initConnections()
 
     // model 安装进程信息的展示
     connect(m_packagesModel, &DebListModel::signalAppendOutputInfo, this, &SingleInstallPage::slotOutputAvailable);
-
     // transaction 进度改变 进度条进度改变
     connect(
-        m_packagesModel, &DebListModel::signalTransactionProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
-
-    connect(m_packagesModel, &DebListModel::signalSingleDependPackages, this, &SingleInstallPage::slotDependPackages);
+        m_packagesModel, &DebListModel::signalCurrentPacakgeProgressChanged, this, &SingleInstallPage::slotWorkerProgressChanged);
 
     // 安装结束
     connect(m_packagesModel, &DebListModel::signalWorkerFinished, this, &SingleInstallPage::slotWorkerFinished);
@@ -692,7 +692,7 @@ void SingleInstallPage::slotWorkerFinished()
     m_backButton->setVisible(true);
 
     // 获取当前包的安装结果
-    QModelIndex index = m_packagesModel->first();
+    QModelIndex index = m_packagesModel->index(0);
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
     if (stat == DebListModel::Success) {  // 操作成功
@@ -747,7 +747,7 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
     m_progress->setValue(progress);  // 进度增加
 }
 
-void SingleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
+void SingleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends)
 {
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();
@@ -766,6 +766,22 @@ void SingleInstallPage::slotDependPackages(DependsPair dependPackages, bool inst
             m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
     }
     m_showDependsView->setTextCursor(QTextCursor::Start);
+}
+
+/**
+   @brief Refresh package error depends info, do nothing if no errors occur.
+        Will call at init.
+ */
+void SingleInstallPage::slotRefreshSinglePackageDepends()
+{
+    if (1 == m_packagesModel->rowCount()) {
+        QModelIndex index = m_packagesModel->index(0);
+        QVariant data = m_packagesModel->data(index, AbstractPackageListModel::PackageDependsDetailRole);
+        auto depends = data.value<Pkg::DependsPair>();
+
+        // TODO: implement later
+        slotDependPackages(depends, false);
+    }
 }
 
 /**
@@ -949,7 +965,7 @@ void SingleInstallPage::setAuthBefore()
     m_btnsFrame->setVisible(true);
 
     // 获取依赖状态
-    QModelIndex index = m_packagesModel->first();
+    QModelIndex index = m_packagesModel->index(0);
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
     // 依赖不满足或依赖授权被取消
@@ -993,7 +1009,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     m_btnsFrame->setVisible(true);
 
     // 获取依赖状态
-    QModelIndex index = m_packagesModel->first();
+    QModelIndex index = m_packagesModel->index(0);
     const int dependsStatus = index.data(DebListModel::PackageDependsStatusRole).toInt();
     // 根据依赖状态 调整界面显示
     if (dependsStatus == DebListModel::DependsBreak || dependsStatus == DebListModel::DependsAuthCancel ||

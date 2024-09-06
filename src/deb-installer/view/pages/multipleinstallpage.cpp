@@ -16,7 +16,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
+MultipleInstallPage::MultipleInstallPage(AbstractPackageListModel *model, QWidget *parent)
     : QWidget(parent)
     , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
     , m_debListModel(model)
@@ -305,7 +305,7 @@ void MultipleInstallPage::initConnections()
     connect(m_showDependsButton, &InfoControlButton::shrink, this, &MultipleInstallPage::slotHideDependsInfo);
 
     // 开始安装
-    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::slotInstallPackages);
+    connect(m_installButton, &DPushButton::clicked, m_debListModel, &AbstractPackageListModel::slotInstallPackages);
 
     // 开始安装后隐藏安装按钮等
     connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::slotHiddenCancelButton);
@@ -320,7 +320,7 @@ void MultipleInstallPage::initConnections()
     connect(m_appsListView, &PackagesListView::signalRemoveItemClicked, this, &MultipleInstallPage::slotRequestRemoveItemClicked);
 
     // 安装过程中进度发生变化
-    connect(m_debListModel, &DebListModel::signalWorkerProgressChanged, this, &MultipleInstallPage::slotProgressChanged);
+    connect(m_debListModel, &DebListModel::signalWholeProgressChanged, this, &MultipleInstallPage::slotProgressChanged);
 
     // 安装过程中安装信息变化
     connect(m_debListModel, &DebListModel::signalAppendOutputInfo, this, &MultipleInstallPage::slotOutputAvailable);
@@ -329,14 +329,18 @@ void MultipleInstallPage::initConnections()
     connect(m_debListModel, &DebListModel::signalStartInstall, this, [=] { m_processFrame->setVisible(true); });
 
     // 一个包安装结束后 listView滚动到其在listview中的位置
-    connect(m_debListModel, &DebListModel::signalChangeOperateIndex, this, &MultipleInstallPage::slotAutoScrollInstallList);
+    connect(
+        m_debListModel, &DebListModel::signalCurrentProcessPackageIndex, this, &MultipleInstallPage::slotAutoScrollInstallList);
 
     // 点击安装包列表时，向后端传递当前选中行
-    connect(
-        m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [=](int row) { m_debListModel->selectedIndexRow(row); });
+    connect(m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [this](int row) {
+        QModelIndex index = m_debListModel->index(row);
+        QVariant data = m_debListModel->data(index, AbstractPackageListModel::PackageDependsDetailRole);
+        auto depends = data.value<Pkg::DependsPair>();
 
-    // 批量包依赖关系显示
-    connect(m_debListModel, &DebListModel::signalMultDependPackages, this, &MultipleInstallPage::slotDependPackages);
+        // TODO: implement later
+        slotDependPackages(depends, false);
+    });
 }
 
 void MultipleInstallPage::slotWorkerFinshed()
@@ -377,7 +381,7 @@ void MultipleInstallPage::slotProgressChanged(const int progress)
 void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 {
     // 当前安装包的下标是合法的
-    if (opIndex > 1 && opIndex < m_debListModel->getInstallFileSize()) {
+    if (opIndex > 1 && opIndex < m_debListModel->rowCount()) {
         QModelIndex currIndex = m_debListModel->index(opIndex - 1);
         m_appsListView->scrollTo(currIndex, QAbstractItemView::PositionAtTop);  // 跳动到下标的位置
     } else if (opIndex == -1) {                                                 // to top            //下标不合法
@@ -459,8 +463,12 @@ void MultipleInstallPage::slotHideDependsInfo()
     m_showDependsButton->setContentsMargins(contentsMargins);
 }
 
-void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool installWineDepends)
+void MultipleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends)
 {
+    if (m_debListModel->rowCount() <= 1) {
+        return;
+    }
+
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();
     if (!(dependPackages.second.size() > 0 && !installWineDepends)) {

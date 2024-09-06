@@ -5,6 +5,7 @@
 #ifndef PACKAGESMANAGER_H
 #define PACKAGESMANAGER_H
 
+#include "utils/package_defines.h"
 #include "utils/result.h"
 #include "model/dependgraph.h"
 
@@ -32,14 +33,6 @@ class AddPackageThread;
  * @return 初始化完成的后端指针
  */
 Backend *init_backend();
-
-struct DependInfo
-{
-    QString packageName;  // 依赖的包名称
-    QString version;      // 依赖的包的版本
-};
-
-typedef QPair<QList<DependInfo>, QList<DependInfo>> DependsPair;
 
 class PackagesManager : public QObject
 {
@@ -77,12 +70,6 @@ public:
      * @return
      */
     static bool dependencyVersionMatch(const int result, const RelationType relation);
-
-    /**
-     * @brief selectedIndexRow 当前选择安装包列表的行
-     * @param row 行号
-     */
-    void selectedIndexRow(int row);
 
     /**
      * @brief searchPackageInstallInfo 查找指定包安装状态
@@ -127,34 +114,8 @@ signals:
 
     ////添加包相关信号
 signals:
-    /**
-     * @brief invalidPackage 无效包的信号
-     */
-    void signalInvalidPackage();
-
-    /**
-     * @brief signalNotDdimProcess 非DDIM处理流程
-     */
-    void signalNotDdimProcess();
-
-    /**
-     * @brief notLocalPackage 包不在本地的信号
-     *
-     * 包不在本地无法安装
-     */
-    void signalNotLocalPackage();
-
-    /**
-     * @brief notInstallablePackage 包无安装权限的信号
-     *
-     * 包无安装权限无法安装
-     */
-    void signalNotInstallablePackage();
-
-    /**
-     * @brief packageAlreadyExists 包重复添加的信号
-     */
-    void signalPackageAlreadyExists();
+    // Manange package insert failed reason.
+    void signalAppendFailMessage(Pkg::AppendFailReason reason);
 
     /**
      * @brief appendStart 批量安装开始添加包的信号
@@ -176,36 +137,10 @@ signals:
     //// 界面刷新相关信号
 signals:
     /**
-     * @brief single2MultiPage 单包安装刷新为批量安装的信号
+       @brief signalPacakgeCountChanged notify pacakge append or remove.
      */
-    void signalSingle2MultiPage();
+    void signalPackageCountChanged(int count);
 
-    /**
-     * @brief refreshSinglePage 刷新单包安装界面的信号
-     */
-    void signalRefreshSinglePage();
-
-    /**
-     * @brief refreshMultiPage 刷新批量安装界面的信号
-     */
-    void signalRefreshMultiPage();
-
-    /**
-     * @brief refreshFileChoosePage 刷新首页
-     */
-    void signalRefreshFileChoosePage();
-
-    /**
-     * @brief signalSingleDependPackages
-     * @param breakPackages
-     */
-    void signalSingleDependPackages(DependsPair dependPackages, bool installWineDepends);
-
-    /**
-     * @brief signalMultDependPackages
-     * @param breakPackages
-     */
-    void signalMultDependPackages(DependsPair dependPackages, bool installWineDepends);
     //// 后端状态相关函数
 public:
     /**
@@ -507,6 +442,8 @@ private:
      */
     QString dealPackagePath(const QString &packagePath);
 
+    Pkg::DependsPair getPackageDependsDetail(const int index);
+
 private slots:
     /**
      * @brief slotAppendPackageFinished 添加包结束后，如果此时需要下载wine依赖，则直接开始下载
@@ -581,8 +518,8 @@ private:
      * QPair<QList<dependInfo>, QList<dependInfo>> 仓库可获取依赖与仓库不可获取依赖
      * 与md5进行绑定
      */
-    QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> m_dependsPackages;
-    DependInfo m_dinfo;  // 依赖包的包名及版本
+    QMap<QByteArray, Pkg::DependsPair> m_dependsPackages;
+    Pkg::DependInfo m_dinfo;  // 依赖包的包名及版本
 
     /**
        @brief m_loopErrorDeepends 循环判断依赖时缓存非 Ok 的前置包状态
@@ -603,7 +540,7 @@ private:
      */
     QList<QByteArray> m_dependInstallMark = {};
 
-    QPair<QList<DependInfo>, QList<DependInfo>> m_pair;  // 存储available及broken依赖
+    QPair<QList<Pkg::DependInfo>, QList<Pkg::DependInfo>> m_pair;  // 存储available及broken依赖
 
     QList<QString> m_allDependsList;  // 存储当前添加的包的所有依赖
 
