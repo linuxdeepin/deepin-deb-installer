@@ -17,14 +17,8 @@ class ut_packageSelectView_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new PackageSelectView;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new PackageSelectView; }
+    void TearDown() { delete w; }
 
 private:
     PackageSelectView *w;
@@ -80,9 +74,8 @@ TEST_F(ut_packageSelectView_TEST, PackageSelectView_UT_setHaveMustInstallDeb)
 
 TEST_F(ut_packageSelectView_TEST, PackageSelectView_UT_onInstallClicked)
 {
-    QObject::connect(w, &PackageSelectView::packageInstallConfim, [](const QList<int> &indexes) {
-        ASSERT_EQ(indexes.size(), 2);
-    });
+    QObject::connect(
+        w, &PackageSelectView::packageInstallConfim, [](const QList<int> &indexes) { ASSERT_EQ(indexes.size(), 2); });
 
     DebIr ir1;
     ir1.archMatched = true;

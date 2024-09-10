@@ -1,19 +1,6 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// SPDX-FileCopyrightText: 2019 - 2024 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "debinfolabel.h"
 #include "utils/utils.h"
@@ -34,8 +21,8 @@ DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags windowFlags)
 
 void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
 {
-    m_colorRole = colorRole;                                                //获取当前使用QPalette的字体颜色角色
-    m_bUserColorType = false;                                               //当前使用的不是DPalette
+    m_colorRole = colorRole;   // 获取当前使用QPalette的字体颜色角色
+    m_bUserColorType = false;  // 当前使用的不是DPalette
 
     // 判断传入的QPalette是否是WindowText 如果是则设置当前Label的Palette的画刷为DApplicationHelper画刷,颜色为WindowText
     // 否则设置当前的Label的Palette的画刷为DebApplicationHelperr画刷,颜色为传入的颜色
@@ -52,11 +39,11 @@ void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
 
 void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
 {
-    m_colorType = colorType;                                                //获取当前使用DPalette的字体颜色类型
-    m_bUserColorType = true;                                                //当前使用的是DPalette
-    m_bMultiIns = false;                                                    //当前使用的不是默认颜色
+    m_colorType = colorType;  // 获取当前使用DPalette的字体颜色类型
+    m_bUserColorType = true;  // 当前使用的是DPalette
+    m_bMultiIns = false;      // 当前使用的不是默认颜色
 
-    //设置当前的Label的Palette的画刷为DebApplicationHelperr画刷,颜色为传入的颜色
+    // 设置当前的Label的Palette的画刷为DebApplicationHelperr画刷,颜色为传入的颜色
     DPalette palette = DebApplicationHelper::instance()->palette(this);
     palette.setBrush(DPalette::WindowText, palette.color(m_colorType));
     this->setPalette(palette);
@@ -64,10 +51,10 @@ void DebInfoLabel::setCustomDPalette(DPalette::ColorType colorType)
 
 void DebInfoLabel::setCustomDPalette()
 {
-    m_bMultiIns = true;                                                     //当前使用的是默认的颜色
-    m_bUserColorType = true;                                                //当前是用的是DPalette
+    m_bMultiIns = true;       // 当前使用的是默认的颜色
+    m_bUserColorType = true;  // 当前是用的是DPalette
 
-    //设置当前的Label的Palette的画刷为DApplicationHelper画刷,颜色为默认的颜色
+    // 设置当前的Label的Palette的画刷为DApplicationHelper画刷,颜色为默认的颜色
     DPalette palette = DApplicationHelper::instance()->palette(this);
     palette.setBrush(DPalette::WindowText, QColor(00, 130, 252));
     this->setPalette(palette);
@@ -106,5 +93,4 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
             QWidget::paintEvent(event);
         }
     }
-
 }

@@ -22,8 +22,6 @@
 #include "model/packagelistview.h"
 #include "model/deblistmodel.h"
 
-
-
 #include <DSwitchButton>
 #include <DBackgroundGroup>
 #include <DFloatingButton>
@@ -44,7 +42,7 @@
 #include <DFileDialog>
 
 DWIDGET_USE_NAMESPACE
-//using namespace DCC_NAMESPACE;
+// using namespace DCC_NAMESPACE;
 SET_FORM_ACCESSIBLE(SingleInstallPage, "SingleInstallPage")
 SET_FORM_ACCESSIBLE(UninstallConfirmPage, "UninstallConfirmPage")
 SET_FORM_ACCESSIBLE(MultipleInstallPage, "MultipleInstallPage")
@@ -65,7 +63,7 @@ SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objec
 SET_BUTTON_ACCESSIBLE(QPushButton, m_w->text().isEmpty() ? "qpushbutton" : m_w->text())
 SET_SLIDER_ACCESSIBLE(QSlider, "qslider")
 SET_FORM_ACCESSIBLE(QMenu, "qmenu")
-//SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? "qlabel" : m_w->text())
+// SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? "qlabel" : m_w->text())
 
 // Dtk控件
 
@@ -79,7 +77,7 @@ SET_BUTTON_ACCESSIBLE(DIconButton, m_w->objectName().isEmpty() ? "DIconButton" :
 SET_BUTTON_ACCESSIBLE(DCheckBox, m_w->objectName().isEmpty() ? "DCheckBox" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DCommandLinkButton, "DCommandLinkButton")
 SET_FORM_ACCESSIBLE(DTitlebar, m_w->objectName().isEmpty() ? "DTitlebar" : m_w->objectName())
-//SET_LABEL_ACCESSIBLE(DLabel, m_w->text().isEmpty() ? "DLabel" : m_w->text())
+// SET_LABEL_ACCESSIBLE(DLabel, m_w->text().isEmpty() ? "DLabel" : m_w->text())
 SET_BUTTON_ACCESSIBLE(DToolButton, m_w->objectName().isEmpty() ? "DToolButton" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DDialog, m_w->objectName().isEmpty() ? "DDialog" : m_w->objectName())
 SET_FORM_ACCESSIBLE(DFileDialog, m_w->objectName().isEmpty() ? "DFileDialog" : m_w->objectName())
@@ -101,7 +99,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), SingleInstallPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), UninstallConfirmPage);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), WorkerProgress);
-
 
     //  Qt 控件
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QFrame);
@@ -129,4 +126,4 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     return interface;
 }
 
-#endif // ACCESSIBLE_H
+#endif  // ACCESSIBLE_H

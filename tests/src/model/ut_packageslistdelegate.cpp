@@ -22,9 +22,7 @@ bool delegate_backend_init()
     return true;
 }
 
-void delegate_checkSystemVersion()
-{
-}
+void delegate_checkSystemVersion() {}
 
 bool delegate_backendReady()
 {
@@ -188,7 +186,6 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_sizeHint)
     stub.set(ADDR(PackagesManager, packageWithArch), delegate_packageWithArch);
     stub.set(ADDR(PackagesManager, removePackage), delegate_checkSystemVersion);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), delegate_getPackageDependsStatus);
-
 
     stub.set(ADDR(DebFile, conflicts), delegate_deb_conflicts);
     DebListModel *model = new DebListModel;

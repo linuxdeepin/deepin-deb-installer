@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 
-
 #include "../deb-installer/utils/utils.h"
 
 #include <stub.h>
@@ -49,13 +48,12 @@ void util_bind(QWidget *, DFontSizeManager::SizeType, int)
 
 TEST(Utils_Test, Utils_UT_bindFontBySizeAndWeight)
 {
-
     Stub stub;
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansMedium);
     QWidget *widget = nullptr;
 
     stub.set(ADDR(QWidget, setFont), util_setFont);
-    stub.set((void (DFontSizeManager::*)(QWidget *, DFontSizeManager::SizeType, int))ADDR(DFontSizeManager, bind), util_bind);
+    stub.set((void(DFontSizeManager::*)(QWidget *, DFontSizeManager::SizeType, int))ADDR(DFontSizeManager, bind), util_bind);
 
     Utils::bindFontBySizeAndWeight(widget, fontFamily, 14, QFont::Medium);
     EXPECT_EQ(nullptr, widget);
@@ -97,9 +95,10 @@ QFileInfoList utils_entryInfoList(QDir::Filters filters = QDir::NoFilter, QDir::
 TEST(Utils_Test, Utils_UT_Return_Digital_Verify_01)
 {
     Stub stub;
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), utils_exits);
-    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags)const)ADDR(QDir, entryInfoList), utils_entryInfoList);
-    stub.set((void (QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), utils_exits);
+    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags) const)ADDR(QDir, entryInfoList),
+             utils_entryInfoList);
+    stub.set((void(QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
     ASSERT_TRUE(Utils::Return_Digital_Verify("strfilepath", "deepin-deb-verify"));
 }
 
@@ -134,52 +133,57 @@ QByteArray util_readAllStandardOutput_DebVerifyFail()
 TEST(Utils_Test, Utils_UT_Digital_Verify_DebfileInexistence)
 {
     Stub stub;
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), utils_exits);
-    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags)const)ADDR(QDir, entryInfoList), utils_entryInfoList);
-    stub.set((void (QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), util_proc_start);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), utils_exits);
+    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags) const)ADDR(QDir, entryInfoList),
+             utils_entryInfoList);
+    stub.set((void(QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
+    stub.set((void(QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start),
+             util_proc_start);
 
     stub.set(ADDR(QProcess, readAllStandardOutput), util_readAllStandardOutput_DebfileInexistence);
     stub.set(ADDR(QProcess, readAllStandardError), util_readAllStandardOutput_DebfileInexistence);
     ASSERT_EQ(Utils::Digital_Verify("strfilepath"), Utils::DebfileInexistence);
 }
 
-
 TEST(Utils_Test, Utils_UT_Digital_Verify_ExtractDebFail)
 {
     Stub stub;
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), utils_exits);
-    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags)const)ADDR(QDir, entryInfoList), utils_entryInfoList);
-    stub.set((void (QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), util_proc_start);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), utils_exits);
+    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags) const)ADDR(QDir, entryInfoList),
+             utils_entryInfoList);
+    stub.set((void(QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
+    stub.set((void(QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start),
+             util_proc_start);
 
     stub.set(ADDR(QProcess, readAllStandardOutput), util_readAllStandardOutput_ExtractDebFail);
     stub.set(ADDR(QProcess, readAllStandardError), util_readAllStandardOutput_ExtractDebFail);
     ASSERT_EQ(Utils::Digital_Verify("strfilepath"), Utils::ExtractDebFail);
 }
 
-
 TEST(Utils_Test, Utils_UT_Digital_Verify_DebVerifyFail)
 {
     Stub stub;
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), utils_exits);
-    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags)const)ADDR(QDir, entryInfoList), utils_entryInfoList);
-    stub.set((void (QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), util_proc_start);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), utils_exits);
+    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags) const)ADDR(QDir, entryInfoList),
+             utils_entryInfoList);
+    stub.set((void(QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
+    stub.set((void(QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start),
+             util_proc_start);
 
     stub.set(ADDR(QProcess, readAllStandardOutput), util_readAllStandardOutput_DebVerifyFail);
     stub.set(ADDR(QProcess, readAllStandardError), util_readAllStandardOutput_DebVerifyFail);
     ASSERT_EQ(Utils::Digital_Verify("strfilepath"), Utils::DebVerifyFail);
 }
 
-
 TEST(Utils_Test, Utils_UT_Digital_Verify)
 {
     Stub stub;
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), utils_exits);
-    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags)const)ADDR(QDir, entryInfoList), utils_entryInfoList);
-    stub.set((void (QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
-    stub.set((void (QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start), util_proc_start);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), utils_exits);
+    stub.set((QFileInfoList(QDir::*)(const QStringList &, QDir::Filters, QDir::SortFlags) const)ADDR(QDir, entryInfoList),
+             utils_entryInfoList);
+    stub.set((void(QDir::*)(QDir::Filters))ADDR(QDir, setFilter), util_setFilter);
+    stub.set((void(QProcess::*)(const QString &, const QStringList &, QIODevice::OpenMode))ADDR(QProcess, start),
+             util_proc_start);
 
     stub.set(ADDR(QProcess, readAllStandardOutput), util_readAllStandardOutput_success);
     stub.set(ADDR(QProcess, readAllStandardError), util_readAllStandardOutput_success);
@@ -242,7 +246,6 @@ TEST(Utils_Test, Utils_UT_setPalette)
 void util_setAttribute(Qt::WidgetAttribute, bool)
 {
     return;
-
 }
 TEST(Utils_Test, Utils_UT_resetPalette)
 {

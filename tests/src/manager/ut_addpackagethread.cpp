@@ -23,10 +23,7 @@ protected:
         md5 << "24b0ce68d7af97ede709f3b723e686af";
         m_addPkgThread = new AddPackageThread(md5);
     }
-    void TearDown()
-    {
-        delete m_addPkgThread;
-    }
+    void TearDown() { delete m_addPkgThread; }
 
     AddPackageThread *m_addPkgThread = nullptr;
     Stub stub;
@@ -36,7 +33,8 @@ protected:
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_setPackage)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     ASSERT_EQ(m_addPkgThread->m_packages.size(), 2);
@@ -74,7 +72,8 @@ bool ut_dealInvalidPackage()
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_run)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(DebFile, isValid), isValid);
@@ -98,7 +97,6 @@ bool apt_exits()
     return true;
 }
 
-
 bool ut_mkTempDir()
 {
     return false;
@@ -107,16 +105,17 @@ bool ut_mkTempDir()
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_SymbolicLink)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
     stub.set(ADDR(DebFile, packageName), packagename);
 
-    stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
+    stub.set((bool(QDir::*)(const QString &) const)ADDR(QDir, mkdir), apt_mkdir);
     //(int(A::*)(int))ADDR(A,foo)
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), apt_exits);
     stub.set(ADDR(AddPackageThread, mkTempDir), ut_mkTempDir);
     ASSERT_STREQ(m_addPkgThread->SymbolicLink("test", "test1").toLocal8Bit(), (QString("test")).toLocal8Bit());
 }
@@ -124,16 +123,17 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_SymbolicLink)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_mkTempDir)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(DebFile, isValid), isValid);
     stub.set(ADDR(DebFile, md5Sum), md5sum);
     stub.set(ADDR(DebFile, packageName), packagename);
 
-    stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), apt_mkdir);
+    stub.set((bool(QDir::*)(const QString &) const)ADDR(QDir, mkdir), apt_mkdir);
     //(int(A::*)(int))ADDR(A,foo)
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), apt_exits);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), apt_exits);
     ASSERT_TRUE(m_addPkgThread->mkTempDir());
 }
 
@@ -150,10 +150,7 @@ void thread_stub_open(const std::string &__s, std::ios_base::openmode __mode)
     qDebug() << "stb——open";
 }
 
-void thread_stub_close()
-{
-
-}
+void thread_stub_close() {}
 
 QString thread_stub_SymbolicLink(QString previousName, QString packageName)
 {
@@ -199,10 +196,7 @@ void add_stub_open(const std::string &__s, std::ios_base::openmode __mode)
     qDebug() << "stb——open";
 }
 
-void add_stub_close()
-{
-
-}
+void add_stub_close() {}
 bool add_stub_permission_true(QFile::Permissions permissions)
 {
     Q_UNUSED(permissions);
@@ -218,11 +212,13 @@ bool add_stub_permission_false(QFile::Permissions permissions)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_true);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
+    stub.set((void(std::fstream::*)(const std::string &__s, std::ios_base::openmode __mode))ADDR(std::fstream, open),
+             add_stub_open);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_true);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
 
     EXPECT_FALSE(m_addPkgThread->dealInvalidPackage(""));
 }
@@ -230,12 +226,14 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage_false)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
+    stub.set((void(std::fstream::*)(const std::string &__s, std::ios_base::openmode __mode))ADDR(std::fstream, open),
+             add_stub_open);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_true);
 
     EXPECT_FALSE(m_addPkgThread->dealInvalidPackage(""));
@@ -244,12 +242,14 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage_false)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage_noPermission)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
-    stub.set((void (std::fstream::*)(const std::string & __s, std::ios_base::openmode __mode))ADDR(std::fstream, open), add_stub_open);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
-    stub.set((bool (std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
+    stub.set((void(std::fstream::*)(const std::string &__s, std::ios_base::openmode __mode))ADDR(std::fstream, open),
+             add_stub_open);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, is_open), add_stub_is_open_false);
+    stub.set((bool(std::fstream::*)())ADDR(std::fstream, close), add_stub_close);
     stub.set(ADDR(QFileInfo, permission), add_stub_permission_false);
 
     EXPECT_FALSE(m_addPkgThread->dealInvalidPackage(""));
@@ -258,7 +258,8 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealInvalidPackage_noPermission)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_absoluteFilePath)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
@@ -271,7 +272,8 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_absoluteFilePath
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_SymbolicLink)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
@@ -284,7 +286,8 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_SymbolicLink)
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_SymbolicLink_1)
 {
     QStringList dependsList;
-    dependsList << "package1" << "package";
+    dependsList << "package1"
+                << "package";
     m_addPkgThread->setPackages(dependsList, 1);
 
     stub.set(ADDR(QFileInfo, absoluteFilePath), thread_stub_absoluteFilePath);
@@ -297,9 +300,9 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_SymbolicLink_1)
 
 TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_mkTempDir)
 {
-    stub.set((bool(QDir::*)(const QString &)const)ADDR(QDir, mkdir), ut_mkTempDir);
+    stub.set((bool(QDir::*)(const QString &) const)ADDR(QDir, mkdir), ut_mkTempDir);
     //(int(A::*)(int))ADDR(A,foo)
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), ut_mkTempDir);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), ut_mkTempDir);
 
     EXPECT_FALSE(m_addPkgThread->mkTempDir());
 }
@@ -308,7 +311,7 @@ TEST_F(UT_AddPackageThread, UT_AddPackageThread_dealPackagePath_link)
 {
     stub.set((bool(QFile::*)(const QString &))ADDR(QFile, link), apt_exits);
     //(int(A::*)(int))ADDR(A,foo)
-    stub.set((bool(QDir::*)()const)ADDR(QDir, exists), ut_mkTempDir);
+    stub.set((bool(QDir::*)() const)ADDR(QDir, exists), ut_mkTempDir);
 
     QFile file;
     EXPECT_TRUE(m_addPkgThread->link("", "").startsWith("/tmp/LinkTemp/"));

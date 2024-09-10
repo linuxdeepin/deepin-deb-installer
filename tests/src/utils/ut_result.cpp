@@ -21,6 +21,6 @@ TEST(Result_Test, Result_UT_002)
 }
 TEST(Result_Test, Result_UT_003)
 {
-    Result<QString> t(true,"QString");
+    Result<QString> t(true, "QString");
     t.is_ok();
 }

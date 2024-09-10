@@ -10,13 +10,11 @@
 #include <QObject>
 #include <QThread>
 
-
 class Package;
 class GetStatusThread : public QThread
 {
     Q_OBJECT
 public:
-
     explicit GetStatusThread(PackageStatus *);
 
     void run();
@@ -27,10 +25,11 @@ signals:
 
     void signal_dependsStatus(int, DependsStatus);
     void signal_installStatus(int, InstallStatus);
+
 private:
-    int             m_index             = -1;
-    PackageStatus   *m_pPackageStatus   = nullptr;
-    QString         m_packagePath       = "";
+    int m_index = -1;
+    PackageStatus *m_pPackageStatus = nullptr;
+    QString m_packagePath = "";
 };
 
-#endif // GETSTATUSTHREAD_H
+#endif  // GETSTATUSTHREAD_H

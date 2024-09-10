@@ -29,9 +29,9 @@ private:
     bool checkHierarchicalInterface();
 
 private:
-    bool valid = false;                 ///< 分级管控是否开启
-    bool interfaceInvalid = false;      ///< DBus接口是否有效
-    QSet<QString> invalidPackages;      ///< 验签失败的包集合
+    bool valid = false;             ///< 分级管控是否开启
+    bool interfaceInvalid = false;  ///< DBus接口是否有效
+    QSet<QString> invalidPackages;  ///< 验签失败的包集合
 
     Q_DISABLE_COPY(HierarchicalVerify)
 };

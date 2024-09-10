@@ -33,9 +33,10 @@ class AddPackageThread;
  */
 Backend *init_backend();
 
-struct DependInfo {
-    QString packageName; //依赖的包名称
-    QString version; //依赖的包的版本
+struct DependInfo
+{
+    QString packageName;  // 依赖的包名称
+    QString version;      // 依赖的包的版本
 };
 
 typedef QPair<QList<DependInfo>, QList<DependInfo>> DependsPair;
@@ -66,8 +67,8 @@ public:
      * @param multiArchType 多架构的类型
      * @return
      */
-    static QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
-                                             const int multiArchType = InvalidMultiArchType);
+    static QString
+    resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType = InvalidMultiArchType);
 
     /**
      * @brief dependencyVersionMatch 判断当前依赖版本是否匹配
@@ -112,7 +113,7 @@ public slots:
      */
     void slotDealDependResult(int iAuthRes, int iIndex, const QString &dependName);
 
-//// 依赖下载相关信号
+    //// 依赖下载相关信号
 signals:
     /**
      * @brief DependResult 处理wine依赖下载结果
@@ -124,7 +125,7 @@ signals:
      */
     void signalEnableCloseButton(bool);
 
-////添加包相关信号
+    ////添加包相关信号
 signals:
     /**
      * @brief invalidPackage 无效包的信号
@@ -172,7 +173,7 @@ signals:
      */
     void signalPackageMd5Changed(const QList<QByteArray> &packageMd5List);
 
-//// 界面刷新相关信号
+    //// 界面刷新相关信号
 signals:
     /**
      * @brief single2MultiPage 单包安装刷新为批量安装的信号
@@ -207,7 +208,6 @@ signals:
     void signalMultDependPackages(DependsPair dependPackages, bool installWineDepends);
     //// 后端状态相关函数
 public:
-
     /**
      * @brief isBackendReady 判断安装程序后端是否加载完成
      * @return 安装程序后端加载的结果
@@ -217,9 +217,8 @@ public:
      */
     bool isBackendReady();
 
-//// 包状态相关函数
+    //// 包状态相关函数
 public:
-
     /**
      * @brief package   获取指定下标的包的路径
      * @param index  下标
@@ -245,7 +244,6 @@ public:
      */
     int packageInstallStatus(const int index);
 
-
     /**
      * @brief packageInstalledVersion 获取指定下标的包的安装版本
      * @param index 下标
@@ -253,14 +251,12 @@ public:
      */
     const QString packageInstalledVersion(const int index);
 
-
     /**
      * @brief packageConflictStat 获取指定包的冲突状态
      * @param index 下标
      * @return 包的冲突状态
      */
     const ConflictResult packageConflictStat(const int index);
-
 
     /**
      * @brief packageAvailableDepends 获取指定包的可用的依赖
@@ -299,7 +295,7 @@ public:
      */
     const QStringList packageReverseDependsList(const QString &packageName, const QString &sysArch);
 
-//// 添加删除相关函数
+    //// 添加删除相关函数
 public:
     /**
      * @brief appendPackage 添加包到程序中
@@ -314,7 +310,7 @@ public:
      */
     void removePackage(const int index);
 
-//// 重置状态相关函数
+    //// 重置状态相关函数
 public:
     /**
      * @brief reset 重置 PackageManager的状态
@@ -327,9 +323,8 @@ public:
      */
     void resetPackageDependsStatus(const int index);
 
-//// 依赖查找 获取等相关函数
+    //// 依赖查找 获取等相关函数
 private:
-
     /**
      * @brief checkDependsPackageStatus 检查依赖包的状态
      * @param choosed_set   被选择安装或卸载的包的集合
@@ -337,12 +332,15 @@ private:
      * @param depends       包的依赖列表
      * @return
      */
-    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,
+                                                         const QString &architecture,
                                                          const QList<QApt::DependencyItem> &depends);
-    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
-                                                         const QApt::DependencyItem &candicate);
-    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
-                                                         const QApt::DependencyInfo &dependencyInfo, const QString &providesName = QString::null);
+    const PackageDependsStatus
+    checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const QApt::DependencyItem &candicate);
+    const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,
+                                                         const QString &architecture,
+                                                         const QApt::DependencyInfo &dependencyInfo,
+                                                         const QString &providesName = QString::null);
     /**
      * @brief packageCandidateChoose   查找包的依赖候选
      * @param choosed_set   包的依赖候选的集合
@@ -350,10 +348,14 @@ private:
      * @param dependsList   依赖列表
        @param levelInfo     提供用于打印的软件包查找层级依赖信息
      */
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QList<QApt::DependencyItem> &dependsList, const QString& levelInfo);
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QApt::DependencyItem &candidateItem, const QString &levelInfo);
+    void packageCandidateChoose(QSet<QString> &choosed_set,
+                                const QString &debArch,
+                                const QList<QApt::DependencyItem> &dependsList,
+                                const QString &levelInfo);
+    void packageCandidateChoose(QSet<QString> &choosed_set,
+                                const QString &debArch,
+                                const QApt::DependencyItem &candidateItem,
+                                const QString &levelInfo);
 
     /**
      * @brief isInstalledConflict 是否存在下载冲突
@@ -362,8 +364,8 @@ private:
      * @param packageArch         包的架构
      * @return
      */
-    const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
-                                             const QString &packageArch);
+    const ConflictResult
+    isInstalledConflict(const QString &packageName, const QString &packageVersion, const QString &packageArch);
     /**
      * @brief isConflictSatisfy 是否冲突满足
      * @param arch              架构
@@ -373,12 +375,11 @@ private:
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
     const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts);
 
-    //带replaces的检查，如果判定待安装包可以替换冲突包，则认为不构成冲突
-    const ConflictResult isConflictSatisfy(const QString &arch,
-                                           const QList<DependencyItem> &conflicts,
-                                           const QList<DependencyItem> &replaces);
+    // 带replaces的检查，如果判定待安装包可以替换冲突包，则认为不构成冲突
+    const ConflictResult
+    isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts, const QList<DependencyItem> &replaces);
 
-//// 依赖查找 获取查找包是否为消极的反向依赖
+    //// 依赖查找 获取查找包是否为消极的反向依赖
 private:
     /**
      * @brief isNegativeReverseDepend 判断软件包 `reverseDepend` 是否是 `packageName` 的消极依赖包，
@@ -398,8 +399,7 @@ private:
      * @param annotation    注解
      * @return  package指针
      */
-    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
-                                   const QString &annotation = QString());
+    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
 
     /**
      * @brief checkPackageArchValid 检测通过包名 \a packageName 获取的软件包 \a package 架构
@@ -412,7 +412,6 @@ private:
     bool checkPackageArchValid(const QApt::Package *package, const QString &packageName, const QString &suggestArch);
 
 private:
-
     // 卸载deepin-wine-plugin-virture 时无法卸载deepin-wine-helper. Temporary solution：Special treatment for these package
     QMap<QString, QString> specialPackage();
 
@@ -439,7 +438,7 @@ private:
      */
     bool mkTempDir();
 
-    //使用软连接方式解决文件路径中存在空格的问题。
+    // 使用软连接方式解决文件路径中存在空格的问题。
     /**
      * @brief rmTempDir 删除存放软链接的临时目录
      * @return 删除临时目录的结果
@@ -447,7 +446,6 @@ private:
     bool rmTempDir();
 
 private:
-
     /**
      * @brief addPackage   添加包的处理槽函数
      * @param validPkgCount 有效包的数量
@@ -516,7 +514,6 @@ private slots:
     void slotAppendPackageFinished();
 
 private:
-
     /**
      * @brief 判断当前应用是否为黑名单应用
      *
@@ -534,21 +531,23 @@ private:
     /**
        @brief 过滤已安装或无需更新的Wine软件包
      */
-    void filterNeedInstallWinePackage(QStringList &dependList, const DebFile &debFile, const QHash<QString, DependencyInfo>& dependInfoMap);
+    void filterNeedInstallWinePackage(QStringList &dependList,
+                                      const DebFile &debFile,
+                                      const QHash<QString, DependencyInfo> &dependInfoMap);
 
 private:
-    QMap<QByteArray, int> m_errorIndex;        //wine依赖错误的包的下标 QMap<MD5, DebListModel::DependsAuthStatus>
+    QMap<QByteArray, int> m_errorIndex;  // wine依赖错误的包的下标 QMap<MD5, DebListModel::DependsAuthStatus>
 
-    //存放包路径的列表
-    QList<QString> m_preparedPackages       = {};
+    // 存放包路径的列表
+    QList<QString> m_preparedPackages = {};
 
-    //存放包MD5的集合
-    QSet<QByteArray> m_appendedPackagesMd5  = {};
+    // 存放包MD5的集合
+    QSet<QByteArray> m_appendedPackagesMd5 = {};
 
-    QMap<QString, QByteArray> m_allPackages; //存放有效包路径及md5，避免二次获取消耗时间
+    QMap<QString, QByteArray> m_allPackages;  // 存放有效包路径及md5，避免二次获取消耗时间
 
-    //包MD5与下标绑定的list
-    QList<QByteArray> m_packageMd5          = {};
+    // 包MD5与下标绑定的list
+    QList<QByteArray> m_packageMd5 = {};
 
     /**
      * @brief m_packageMd5DependsStatus 包的依赖状态的Map
@@ -575,7 +574,7 @@ private:
      */
     QMap<QByteArray, int> m_packageInstallStatus = {};
 
-    QByteArray m_currentPkgMd5; //当前包的md5
+    QByteArray m_currentPkgMd5;  // 当前包的md5
 
     /**
      * @brief m_dependsPackages  包依赖关系的map
@@ -583,7 +582,7 @@ private:
      * 与md5进行绑定
      */
     QMap<QByteArray, QPair<QList<DependInfo>, QList<DependInfo>>> m_dependsPackages;
-    DependInfo m_dinfo; //依赖包的包名及版本
+    DependInfo m_dinfo;  // 依赖包的包名及版本
 
     /**
        @brief m_loopErrorDeepends 循环判断依赖时缓存非 Ok 的前置包状态
@@ -595,8 +594,8 @@ private:
     // wine应用处理的下标
     int m_DealDependIndex = -1;
 
-    //下载依赖的线程
-    DealDependThread *m_installWineThread        = nullptr;
+    // 下载依赖的线程
+    DealDependThread *m_installWineThread = nullptr;
 
     /**
      * @brief m_dependInstallMark wine依赖下标的标记
@@ -604,15 +603,15 @@ private:
      */
     QList<QByteArray> m_dependInstallMark = {};
 
-    QPair<QList<DependInfo>, QList<DependInfo>> m_pair; //存储available及broken依赖
+    QPair<QList<DependInfo>, QList<DependInfo>> m_pair;  // 存储available及broken依赖
 
-    QList<QString> m_allDependsList; //存储当前添加的包的所有依赖
-
-private:
-    const QString m_tempLinkDir = "/tmp/LinkTemp/";     //软链接临时路径
+    QList<QString> m_allDependsList;  // 存储当前添加的包的所有依赖
 
 private:
-    AddPackageThread *m_pAddPackageThread = nullptr;    //添加包的线程
+    const QString m_tempLinkDir = "/tmp/LinkTemp/";  // 软链接临时路径
+
+private:
+    AddPackageThread *m_pAddPackageThread = nullptr;  // 添加包的线程
 
     bool installWineDepends = false;
 
@@ -626,17 +625,17 @@ private:
 
     QString m_currentPkgName = "";
 
-    QStringList m_blackApplicationList = {}; //域管黑名单
+    QStringList m_blackApplicationList = {};  // 域管黑名单
 
-    QList<QVector<QString>> m_orDepends; //存储或依赖关系
+    QList<QVector<QString>> m_orDepends;  // 存储或依赖关系
 
-    QList<QVector<QString>> m_unCheckedOrDepends; //存储还未检测的或依赖关系
+    QList<QVector<QString>> m_unCheckedOrDepends;  // 存储还未检测的或依赖关系
 
-    QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus; //存储检测完成的或依赖包及其依赖状态
+    QMap<QString, PackageDependsStatus> m_checkedOrDependsStatus;  // 存储检测完成的或依赖包及其依赖状态
 
-    QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
+    QMap<QString, DependencyInfo> m_dependsInfo;  // 所有依赖的信息
 
-    DependGraph m_dependGraph; //依赖关系图计算器
+    DependGraph m_dependGraph;  // 依赖关系图计算器
 };
 
 #endif  // PACKAGESMANAGER_H

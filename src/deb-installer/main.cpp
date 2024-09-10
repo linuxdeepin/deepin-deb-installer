@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-deb-installer");
-    app.setApplicationVersion(VERSION);                 //qmake 转cmake 解决版本不对的问题
+    app.setApplicationVersion(VERSION);  // qmake 转cmake 解决版本不对的问题
     app.setApplicationAcknowledgementPage("https://www.deepin.org/acknowledgments/deepin-package-manager/");
     app.setProductIcon(QIcon::fromTheme("deepin-deb-installer"));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -48,8 +48,7 @@ int main(int argc, char *argv[])
     app.setProductName(QApplication::translate("main", "Package Installer"));
     app.setApplicationDisplayName(QApplication::translate("main", "Package Installer"));
     app.setApplicationDescription(QApplication::translate(
-                                      "main",
-                                      "Package Installer helps users install and remove local packages, and supports bulk installation."));
+        "main", "Package Installer helps users install and remove local packages, and supports bulk installation."));
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
 
@@ -61,14 +60,14 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
-    QAccessible::installFactory(accessibleFactory);//自动化测试
+    QAccessible::installFactory(accessibleFactory);  // 自动化测试
 
     qInfo() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     if (app.parseCmdLine()) {
         app.activateWindow();
-        //埋点记录启动数据
+        // 埋点记录启动数据
         QJsonObject objStartEvent{
             {"tid", Eventlogutils::StartUp},
             {"vsersion", VERSION},
@@ -79,11 +78,8 @@ int main(int argc, char *argv[])
         return app.exec();
     } else {
         qDebug() << "argument_parser.parseArguments()";
-        //解析参数失败，１００ｍｓ退出进程
-        QTimer::singleShot(100, [&]() {
-            app.quit();
-        });
+        // 解析参数失败，１００ｍｓ退出进程
+        QTimer::singleShot(100, [&]() { app.quit(); });
         return app.exec();
     }
-
 }

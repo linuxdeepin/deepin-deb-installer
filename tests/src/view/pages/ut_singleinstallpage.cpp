@@ -86,12 +86,12 @@ int stud_failedtoInt(bool *ok = nullptr)
     Q_UNUSED(ok);
     return 3;
 }
-bool stud_recheckPackagePath(QString )
+bool stud_recheckPackagePath(QString)
 {
     return true;
 }
 
-PackageDependsStatus stud_getPackageDependsStatus(const int )
+PackageDependsStatus stud_getPackageDependsStatus(const int)
 {
     return PackageDependsStatus::_break("package");
 }
@@ -99,20 +99,14 @@ PackageDependsStatus stud_getPackageDependsStatus(const int )
 class UT_SingleInstallpage : public UT_HEAD
 {
 public:
-    //添加日志
-    static void SetUpTestCase()
-    {
-        qDebug() << "SetUpTestCase" << endl;
-    }
-    static void TearDownTestCase()
-    {
-        qDebug() << "TearDownTestCase" << endl;
-    }
-    void SetUp() //TEST跑之前会执行SetUp
+    // 添加日志
+    static void SetUpTestCase() { qDebug() << "SetUpTestCase" << endl; }
+    static void TearDownTestCase() { qDebug() << "TearDownTestCase" << endl; }
+    void SetUp()  // TEST跑之前会执行SetUp
     {
         qDebug() << "SetUp" << endl;
     }
-    void TearDown() //TEST跑完之后会执行TearDown
+    void TearDown()  // TEST跑完之后会执行TearDown
     {
         delete page;
         delete model;

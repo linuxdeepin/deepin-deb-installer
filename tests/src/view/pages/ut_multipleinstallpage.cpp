@@ -32,16 +32,10 @@ int stud_getInstallFileSize()
 class UT_MultipleInstallPage : public UT_HEAD
 {
 public:
-    //添加日志
-    static void SetUpTestCase()
-    {
-        qDebug() << "SetUpTestCase" << endl;
-    }
-    static void TearDownTestCase()
-    {
-        qDebug() << "TearDownTestCase" << endl;
-    }
-    void SetUp() //TEST跑之前会执行SetUp
+    // 添加日志
+    static void SetUpTestCase() { qDebug() << "SetUpTestCase" << endl; }
+    static void TearDownTestCase() { qDebug() << "TearDownTestCase" << endl; }
+    void SetUp()  // TEST跑之前会执行SetUp
     {
         Stub stub;
         stub.set(ADDR(Backend, init), stud_init);
@@ -51,7 +45,7 @@ public:
         usleep(100 * 1000);
         qDebug() << "SetUp" << endl;
     }
-    void TearDown() //TEST跑完之后会执行TearDown
+    void TearDown()  // TEST跑完之后会执行TearDown
     {
         delete multiplepage;
         delete debListModel;

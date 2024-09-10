@@ -27,11 +27,15 @@ PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
 }
 
 PackageDependsStatus::PackageDependsStatus()
-    : PackageDependsStatus(DebListModel::DependsOk, QString()) {}
+    : PackageDependsStatus(DebListModel::DependsOk, QString())
+{
+}
 
 PackageDependsStatus::PackageDependsStatus(const int status, const QString &package)
     : status(status)
-    , package(package) {}
+    , package(package)
+{
+}
 
 PackageDependsStatus &PackageDependsStatus::operator=(const PackageDependsStatus &other)
 {
@@ -43,28 +47,32 @@ PackageDependsStatus &PackageDependsStatus::operator=(const PackageDependsStatus
 
 PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other)
 {
-    if (other.status > status) *this = other;
+    if (other.status > status)
+        *this = other;
 
     return *this;
 }
 
 PackageDependsStatus PackageDependsStatus::maxEq(const PackageDependsStatus &other)
 {
-    if (other.status >= status) *this = other;
+    if (other.status >= status)
+        *this = other;
 
     return *this;
 }
 
 PackageDependsStatus PackageDependsStatus::min(const PackageDependsStatus &other)
 {
-    if (other.status < status) *this = other;
+    if (other.status < status)
+        *this = other;
 
     return *this;
 }
 
 PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &other)
 {
-    if (other.status <= status) *this = other;
+    if (other.status <= status)
+        *this = other;
 
     return *this;
 }
@@ -88,4 +96,3 @@ bool PackageDependsStatus::isProhibit() const
 {
     return status == DebListModel::Prohibit;
 }
-

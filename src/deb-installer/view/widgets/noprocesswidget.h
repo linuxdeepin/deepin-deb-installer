@@ -9,10 +9,10 @@
 
 namespace Dtk {
 namespace Widget {
-class DSpinner;
-class DLabel;
-}
-}
+    class DSpinner;
+    class DLabel;
+}  // namespace Widget
+}  // namespace Dtk
 
 class NoProcessWidget : public QWidget
 {
@@ -32,4 +32,4 @@ private:
     Dtk::Widget::DLabel *actionTextLabel;
 };
 
-#endif // NOPROCESSWIDGET_H
+#endif  // NOPROCESSWIDGET_H

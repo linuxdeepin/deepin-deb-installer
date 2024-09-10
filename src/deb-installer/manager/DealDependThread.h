@@ -56,23 +56,24 @@ public slots:
      * @brief on_readoutput 依赖下载过程中的输出函数
      */
     void slotReadOutput();
+
 private:
-    //执行下载的进程指针
-    QProcess *proc              = nullptr;
+    // 执行下载的进程指针
+    QProcess *proc = nullptr;
 
-    //出现问题依赖的下标
-    int m_index                 = -1;
+    // 出现问题依赖的下标
+    int m_index = -1;
 
-    //需要安装的依赖列表
-    QStringList m_dependsList   = {nullptr};
+    // 需要安装的依赖列表
+    QStringList m_dependsList = {nullptr};
 
-    //依赖安装状态是否错误的标识
-    bool bDependsStatusErr      = false;
+    // 依赖安装状态是否错误的标识
+    bool bDependsStatusErr = false;
     // 分级管控验签失败的标识
-    bool bVerifyStatusErr       = false;
+    bool bVerifyStatusErr = false;
 
-    //下载失败的依赖的名称
-    QString m_brokenDepend      ="";
+    // 下载失败的依赖的名称
+    QString m_brokenDepend = "";
 };
 
-#endif // DEALDEPENDTHREAD_H
+#endif  // DEALDEPENDTHREAD_H

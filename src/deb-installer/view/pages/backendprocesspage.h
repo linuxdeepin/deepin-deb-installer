@@ -16,9 +16,9 @@ class BackendProcessPage : public QWidget
     Q_OBJECT
 public:
     enum DisplayMode {
-        APT_INIT,   //apt初始化
-        READ_PKG,   //读取包数据
-        PROCESS_FIN //处理结束
+        APT_INIT,    // apt初始化
+        READ_PKG,    // 读取包数据
+        PROCESS_FIN  // 处理结束
     };
 
     explicit BackendProcessPage(QWidget *parent = nullptr);
@@ -36,4 +36,4 @@ private:
     QStackedLayout *allLayout;
 };
 
-#endif // BACKENDPROCESSPAGE_H
+#endif  // BACKENDPROCESSPAGE_H

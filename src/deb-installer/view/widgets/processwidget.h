@@ -10,10 +10,10 @@
 
 namespace Dtk {
 namespace Widget {
-class DLabel;
-class DProgressBar;
-}
-}
+    class DLabel;
+    class DProgressBar;
+}  // namespace Widget
+}  // namespace Dtk
 
 class ProcessWidget : public QWidget
 {
@@ -35,4 +35,4 @@ private:
     QString processText;
 };
 
-#endif // PROCESSWIDGET_H
+#endif  // PROCESSWIDGET_H

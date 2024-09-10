@@ -11,18 +11,16 @@
 #define deb_verify_tool "/usr/bin/deepin-deb-verify"
 
 enum SigntureStatus {
-    SigntureUnknown = -1,     //其他错误
-    SigntureVerifySuccess,       //验证成功
-    SigntureInexistence,  //解压deb文件用的临时目录不存在
-    SigntureExtractFail,      //提取deb包内容时出错
-    SigntureVerifyFail        //deb包验证失败
+    SigntureUnknown = -1,   // 其他错误
+    SigntureVerifySuccess,  // 验证成功
+    SigntureInexistence,    // 解压deb文件用的临时目录不存在
+    SigntureExtractFail,    // 提取deb包内容时出错
+    SigntureVerifyFail      // deb包验证失败
 };
 
 class PackageSigntureStatus
 {
-
 public:
-
     PackageSigntureStatus();
 
     ~PackageSigntureStatus();
@@ -35,7 +33,6 @@ public:
     SigntureStatus checkPackageSignture(QString packagePath);
 
 private:
-
     /**
      * @brief checkDigitalVerifyTools 检查当前系统中是否存在验证工具
      * @return true: 存在签名验证工具   false:签名验证工具不存在
@@ -52,7 +49,7 @@ private:
     QProcess *m_pCheckSignProc = nullptr;
 
     PackageSigntureStatus(const PackageSigntureStatus &rhs) = delete;
-    PackageSigntureStatus& operator=(const PackageSigntureStatus &rhs) = delete;
+    PackageSigntureStatus &operator=(const PackageSigntureStatus &rhs) = delete;
 };
 
-#endif // PackageSigntureStatus_H
+#endif  // PackageSigntureStatus_H

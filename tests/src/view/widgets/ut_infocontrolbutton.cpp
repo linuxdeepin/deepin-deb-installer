@@ -15,14 +15,8 @@
 class InfoControlButton_Test : public UT_HEAD
 {
 public:
-    virtual void SetUp()
-    {
-        m_infoControlBtn = new InfoControlButton("", "");
-    }
-    void TearDown()
-    {
-        delete m_infoControlBtn;
-    }
+    virtual void SetUp() { m_infoControlBtn = new InfoControlButton("", ""); }
+    void TearDown() { delete m_infoControlBtn; }
     InfoControlButton *m_infoControlBtn;
 };
 

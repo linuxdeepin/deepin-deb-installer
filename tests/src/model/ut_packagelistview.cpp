@@ -16,14 +16,8 @@ class ut_packagelistview_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_listview = new PackagesListView;
-    }
-    void TearDown()
-    {
-        delete m_listview;
-    }
+    void SetUp() { m_listview = new PackagesListView; }
+    void TearDown() { delete m_listview; }
 
     PackagesListView *m_listview = nullptr;
 };

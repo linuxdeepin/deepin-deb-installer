@@ -5,7 +5,7 @@
 #ifndef INSTALLDEBTHREAD_H
 #define INSTALLDEBTHREAD_H
 
-//#include <QObject>
+// #include <QObject>
 #include <QThread>
 #include <QProcess>
 #include <QFile>
@@ -36,13 +36,11 @@ private:
     QList<QString> m_listDescribeData;
 
 private:
-
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
-    //使用软连接方式解决文件路径中存在空格的问题。
+    // 使用软连接方式解决文件路径中存在空格的问题。
     QString SymbolicLink(const QString &previousName, const QString &packageName);
     QString link(const QString &linkPath, const QString &packageName);
     bool mkTempDir();
     bool rmTempDir();
-
 };
-#endif // INSTALLDEBTHREAD_H
+#endif  // INSTALLDEBTHREAD_H

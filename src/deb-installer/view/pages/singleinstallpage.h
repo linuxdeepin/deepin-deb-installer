@@ -81,19 +81,17 @@ signals:
     void signalRequestUninstallConfirm() const;
 
 private:
-
     /**
      * @brief The Operate enum 当前进行的操作
      */
     enum Operate {
         Unknown,
-        Install,        //安装
-        Uninstall,      //卸载
-        Reinstall       //重新安装
+        Install,    // 安装
+        Uninstall,  // 卸载
+        Reinstall   // 重新安装
     };
 
 private:
-
     /**
      * @brief initUI 初始化UI
      */
@@ -248,51 +246,51 @@ private slots:
     void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
 
 private:
-    Operate m_operate = Unknown; //当前的操作
-    bool m_workerStarted = false; //安装是否开始
-    bool m_upDown = false; //当前是详细信息是展开还是收缩
+    Operate m_operate = Unknown;   // 当前的操作
+    bool m_workerStarted = false;  // 安装是否开始
+    bool m_upDown = false;         // 当前是详细信息是展开还是收缩
 
-    DebListModel *m_packagesModel = nullptr; //model类
+    DebListModel *m_packagesModel = nullptr;  // model类
 
-    QWidget *m_contentFrame = nullptr; //主布局
-    QWidget *m_itemInfoFrame = nullptr; //包信息框架
-    QWidget *m_progressFrame = nullptr; //安装进度框架
-    QWidget *m_btnsFrame = nullptr; //按键框架
+    QWidget *m_contentFrame = nullptr;   // 主布局
+    QWidget *m_itemInfoFrame = nullptr;  // 包信息框架
+    QWidget *m_progressFrame = nullptr;  // 安装进度框架
+    QWidget *m_btnsFrame = nullptr;      // 按键框架
 
-    DLabel *m_packageIcon = nullptr; //包的图标
-    DebInfoLabel *m_packageName = nullptr; //包名
-    DebInfoLabel *m_packageVersion = nullptr; //包的版本
-    DLabel *m_packageDescription = nullptr; //包的描述
-    DebInfoLabel *m_tipsLabel = nullptr; //包的状态提示label
+    DLabel *m_packageIcon = nullptr;           // 包的图标
+    DebInfoLabel *m_packageName = nullptr;     // 包名
+    DebInfoLabel *m_packageVersion = nullptr;  // 包的版本
+    DLabel *m_packageDescription = nullptr;    // 包的描述
+    DebInfoLabel *m_tipsLabel = nullptr;       // 包的状态提示label
 
-    WorkerProgress *m_progress = nullptr; //安装进度条
-    InstallProcessInfoView *m_installProcessView = nullptr; //安装进度的详细信息
-    InstallProcessInfoView *m_showDependsView = nullptr; //依赖关系显示
+    WorkerProgress *m_progress = nullptr;                    // 安装进度条
+    InstallProcessInfoView *m_installProcessView = nullptr;  // 安装进度的详细信息
+    InstallProcessInfoView *m_showDependsView = nullptr;     // 依赖关系显示
 
-    InfoControlButton *m_infoControlButton = nullptr; //安装信息显示/隐藏控制按钮
-    InfoControlButton *m_showDependsButton = nullptr; //显示依赖关系按钮
-    DPushButton *m_installButton = nullptr; //安装按钮
-    DPushButton *m_uninstallButton = nullptr; //卸载按钮
-    DPushButton *m_reinstallButton = nullptr; //重新安装按钮
-    DPushButton *m_confirmButton = nullptr; //确认按钮
-    DPushButton *m_backButton = nullptr; //返回按钮
-    DPushButton *m_doneButton = nullptr; //完成按钮
+    InfoControlButton *m_infoControlButton = nullptr;  // 安装信息显示/隐藏控制按钮
+    InfoControlButton *m_showDependsButton = nullptr;  // 显示依赖关系按钮
+    DPushButton *m_installButton = nullptr;            // 安装按钮
+    DPushButton *m_uninstallButton = nullptr;          // 卸载按钮
+    DPushButton *m_reinstallButton = nullptr;          // 重新安装按钮
+    DPushButton *m_confirmButton = nullptr;            // 确认按钮
+    DPushButton *m_backButton = nullptr;               // 返回按钮
+    DPushButton *m_doneButton = nullptr;               // 完成按钮
 
 private:
     QVBoxLayout *m_contentLayout = nullptr;
-    QVBoxLayout *m_centralLayout = nullptr; //主布局
+    QVBoxLayout *m_centralLayout = nullptr;  // 主布局
 
-    QString m_description = ""; //包的描述文本
-    QString m_pkgNameDescription = ""; //包名的文本
-    QString m_versionDescription = ""; //包版本的文本
+    QString m_description = "";         // 包的描述文本
+    QString m_pkgNameDescription = "";  // 包名的文本
+    QString m_versionDescription = "";  // 包版本的文本
 
-    DSpinner *m_pDSpinner = nullptr; //依赖安装加载动画
+    DSpinner *m_pDSpinner = nullptr;  // 依赖安装加载动画
 
     // fix bug:33999 change DebInfoLabel to DCommandLinkButton for Activity color
-    DCommandLinkButton *m_pLoadingLabel = nullptr; //依赖安装提示信息
-    int dependAuthStatu = -1; //存储依赖授权状态
+    DCommandLinkButton *m_pLoadingLabel = nullptr;  // 依赖安装提示信息
+    int dependAuthStatu = -1;                       // 存储依赖授权状态
 
-    bool resetButtonFocus = true; // 展示包信息前，复位焦点状态，切换后第一次显示有效
+    bool resetButtonFocus = true;  // 展示包信息前，复位焦点状态，切换后第一次显示有效
 };
 
 #endif  // SINGLEINSTALLPAGE_H

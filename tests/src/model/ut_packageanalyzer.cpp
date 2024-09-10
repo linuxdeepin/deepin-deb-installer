@@ -14,12 +14,8 @@ class ut_packageanalyzer_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-    }
-    void TearDown()
-    {
-    }
+    void SetUp() {}
+    void TearDown() {}
 
 private:
     PackageAnalyzer *w;

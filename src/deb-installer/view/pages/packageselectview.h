@@ -45,4 +45,4 @@ private:
     bool haveMustInstallDeb = false;
 };
 
-#endif // PACKAGESELECTVIEW_H
+#endif  // PACKAGESELECTVIEW_H

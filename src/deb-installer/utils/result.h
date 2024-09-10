@@ -14,14 +14,8 @@ public:
 
     Result(const bool stat, const T &value);
 
-    bool is_ok() const
-    {
-        return m_ok;
-    }
-    T unwrap() const
-    {
-        return m_value;
-    }
+    bool is_ok() const { return m_ok; }
+    T unwrap() const { return m_value; }
 
 private:
     bool m_ok;
@@ -43,6 +37,8 @@ Result<T> Result<T>::err(const T &value)
 template <typename T>
 Result<T>::Result(const bool stat, const T &value)
     : m_ok(stat)
-    , m_value(value) {}
+    , m_value(value)
+{
+}
 
 #endif  // RESULT_H

@@ -12,8 +12,6 @@
 PackageSigntureStatus::PackageSigntureStatus()
     : m_pCheckSignProc(new QProcess)
 {
-
-
 }
 
 bool PackageSigntureStatus::checkDigitalVerifyTools()
@@ -25,7 +23,7 @@ bool PackageSigntureStatus::checkDigitalVerifyTools()
 bool PackageSigntureStatus::checkDeviceLock()
 {
     QDBusInterface Installer("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
-    return Installer.property("DeviceUnlocked").toBool();                            // 判断当前是否处于开发者模式
+    return Installer.property("DeviceUnlocked").toBool();  // 判断当前是否处于开发者模式
 }
 
 SigntureStatus PackageSigntureStatus::checkPackageSignture(QString packagePath)

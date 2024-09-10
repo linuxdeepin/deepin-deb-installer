@@ -33,4 +33,4 @@ private:
     QCheckBox *checkBox;
 };
 
-#endif // PACKAGESELECTITEM_H
+#endif  // PACKAGESELECTITEM_H

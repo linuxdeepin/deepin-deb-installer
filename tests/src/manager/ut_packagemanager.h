@@ -13,4 +13,4 @@ public:
     ut_packagemanager_test();
 };
 
-#endif // UT_PACKAGEMANAGER_TEST_H
+#endif  // UT_PACKAGEMANAGER_TEST_H

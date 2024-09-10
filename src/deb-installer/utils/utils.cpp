@@ -56,46 +56,36 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, 
 
     DFontSizeManager::SizeType sizeType = DFontSizeManager::T6;
     switch (fontSize) {
-    case 10: {
-        sizeType = DFontSizeManager::T10;
-    }
-    break;
-    case 11: {
-        sizeType = DFontSizeManager::T9;
-    }
-    break;
-    case 12: {
-        sizeType = DFontSizeManager::T8;
-    }
-    break;
-    case 13: {
-        sizeType = DFontSizeManager::T7;
-    }
-    break;
-    case 14: {
-        sizeType = DFontSizeManager::T6;
-    }
-    break;
-    case 17: {
-        sizeType = DFontSizeManager::T5;
-    }
-    break;
-    case 20: {
-        sizeType = DFontSizeManager::T4;
-    }
-    break;
-    case 24: {
-        sizeType = DFontSizeManager::T3;
-    }
-    break;
-    case 30: {
-        sizeType = DFontSizeManager::T2;
-    }
-    break;
-    case 40: {
-        sizeType = DFontSizeManager::T1;
-    }
-    break;
+        case 10: {
+            sizeType = DFontSizeManager::T10;
+        } break;
+        case 11: {
+            sizeType = DFontSizeManager::T9;
+        } break;
+        case 12: {
+            sizeType = DFontSizeManager::T8;
+        } break;
+        case 13: {
+            sizeType = DFontSizeManager::T7;
+        } break;
+        case 14: {
+            sizeType = DFontSizeManager::T6;
+        } break;
+        case 17: {
+            sizeType = DFontSizeManager::T5;
+        } break;
+        case 20: {
+            sizeType = DFontSizeManager::T4;
+        } break;
+        case 24: {
+            sizeType = DFontSizeManager::T3;
+        } break;
+        case 30: {
+            sizeType = DFontSizeManager::T2;
+        } break;
+        case 40: {
+            sizeType = DFontSizeManager::T1;
+        } break;
     }
 
     DFontSizeManager *fontManager = DFontSizeManager::instance();
@@ -111,7 +101,7 @@ QString Utils::fromSpecialEncoding(const QString &inputStr)
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     if (codec) {
-        QString unicodeStr =  codec->toUnicode(inputStr.toLatin1());
+        QString unicodeStr = codec->toUnicode(inputStr.toLatin1());
         return unicodeStr;
     } else {
         return inputStr;
@@ -135,7 +125,8 @@ bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &str
     for (int i = 0; i < list.count(); i++) {
         QFileInfo file_info = list.at(i);
         if (file_info.fileName() == strfilename) {
-            qDebug() << "文件路径：  " << file_info.path() << "           " << "文件名：  " << file_info.fileName();
+            qDebug() << "文件路径：  " << file_info.path() << "           "
+                     << "文件名：  " << file_info.fileName();
             return true;
         }
     }
@@ -240,7 +231,6 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const Q
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const int &width)
 {
-
     bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
 
     QString text;
@@ -255,7 +245,6 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
     for (int charIndex = 0; charIndex < srcText.size(); ++charIndex) {
         int fmWidth = fm.horizontalAdvance(tempText);
         if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
-
             if (!bContainsChinese) {
                 QChar currChar = tempText.at(tempText.length() - 1);
                 QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
@@ -296,7 +285,7 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
     同时判断文件是否有权限安装，无权限则抛出异常。
   @param[in] packagePath 软件包路径
   @note 只能安装本地的软件包，samba/ftp等远程目录不允许。
- 
+
   @todo 增加对可移除设备的判断!
 */
 bool Utils::checkPackageReadable(const QString &packagePath)
@@ -304,7 +293,7 @@ bool Utils::checkPackageReadable(const QString &packagePath)
     // 获取路径信息
     QStorageInfo info(packagePath);
     // 判断路径信息是不是本地路径
-    QString device = info.device();    
+    QString device = info.device();
     // 黑名单识别 gvfs/cifs 为当前管理远程目录的文件系统
     if (device.startsWith("gvfs") || device.startsWith("cifs")) {
         qWarning() << "Disable open remote file, the devices is" << device;
@@ -316,14 +305,14 @@ bool Utils::checkPackageReadable(const QString &packagePath)
     QFile outfile(packagePath.toUtf8());
     outfile.open(QFile::ReadOnly);
 
-    if (!outfile.isOpen()) { // 打不开，文件不在本地或无安装权限
+    if (!outfile.isOpen()) {  // 打不开，文件不在本地或无安装权限
         QFile::FileError error = outfile.error();
         if (error == QFile::FileError::NoError) {
             // 文件不存在或路径错误
             qWarning() << "Package has permission but cannot open!";
             return false;
         } else {
-            //无安装权限
+            // 无安装权限
             qWarning() << "Package has no read permission!";
             return false;
         }
@@ -342,74 +331,74 @@ DebApplicationHelper *DebApplicationHelper::instance()
 
 #define CAST_INT static_cast<int>
 
-static QColor light_qpalette[QPalette::NColorRoles] {
-    QColor("#414d68"),                              //WindowText
-    QColor("#e5e5e5"),                              //Button
-    QColor("#e6e6e6"),                              //Light
-    QColor("#e5e5e5"),                              //Midlight
-    QColor("#001A2E"),                              //Dark  -- changed origin is #e3e3e3
-    QColor("#e4e4e4"),                              //Mid
-    QColor("#414d68"),                              //Text
-    Qt::black,                                      //BrightText
-    QColor("#414d68"),                              //ButtonText
-    Qt::white,                                      //Base
-    QColor("#f8f8f8"),                              //Window
-    QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //Shadow
-    QColor("#0081ff"),                              //Highlight
-    QColor(0, 45, 255, CAST_INT(0.5 * 255)),        //HighlightedText   //old Qt::white
-    QColor("#0082fa"),                              //Link
-    QColor("#ad4579"),                              //LinkVisited
-    QColor(0, 0, 0, CAST_INT(0.03 * 255)),          //AlternateBase
-    Qt::white,                                      //NoRole
-    QColor(255, 255, 255, CAST_INT(0.8 * 255)),     //ToolTipBase
-    QColor("#526A7F")                               //ToolTipText -- changed origin is Qt::black
+static QColor light_qpalette[QPalette::NColorRoles]{
+    QColor("#414d68"),                           // WindowText
+    QColor("#e5e5e5"),                           // Button
+    QColor("#e6e6e6"),                           // Light
+    QColor("#e5e5e5"),                           // Midlight
+    QColor("#001A2E"),                           // Dark  -- changed origin is #e3e3e3
+    QColor("#e4e4e4"),                           // Mid
+    QColor("#414d68"),                           // Text
+    Qt::black,                                   // BrightText
+    QColor("#414d68"),                           // ButtonText
+    Qt::white,                                   // Base
+    QColor("#f8f8f8"),                           // Window
+    QColor(0, 0, 0, CAST_INT(0.05 * 255)),       // Shadow
+    QColor("#0081ff"),                           // Highlight
+    QColor(0, 45, 255, CAST_INT(0.5 * 255)),     // HighlightedText   //old Qt::white
+    QColor("#0082fa"),                           // Link
+    QColor("#ad4579"),                           // LinkVisited
+    QColor(0, 0, 0, CAST_INT(0.03 * 255)),       // AlternateBase
+    Qt::white,                                   // NoRole
+    QColor(255, 255, 255, CAST_INT(0.8 * 255)),  // ToolTipBase
+    QColor("#526A7F")                            // ToolTipText -- changed origin is Qt::black
 };
 
-static QColor dark_qpalette[QPalette::NColorRoles] {
-    QColor("#c0c6d4"),                              //WindowText
-    QColor("#444444"),                              //Button
-    QColor("#484848"),                              //Light
-    QColor("#474747"),                              //Midlight
-    QColor("#C0C6D4"),                              //Dark      -- changed origin is #414141
-    QColor("#434343"),                              //Mid
-    QColor("#c0c6d4"),                              //Text
-    Qt::white,                                      //BrightText
-    QColor("#c0c6d4"),                              //ButtonText
-    QColor(255, 255, 255, CAST_INT(0.05 * 255)),    //Base --- changed origin is #282828
-    QColor("#252525"),                              //Window
-    QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //Shadow
-    QColor("#095EFF"),                              //Highlight         //old : #0081ff
-    QColor("#0059D2"),                              //HighlightedText   //old: b8d3ff
-    QColor("#0082fa"),                              //Link
-    QColor("#ad4579"),                              //LinkVisited
-    QColor(0, 0, 0, CAST_INT(0.05 * 255)),          //AlternateBase
-    Qt::black,                                      //NoRole
-    QColor(45, 45, 45, CAST_INT(0.8 * 255)),        //ToolTipBase
-    QColor("#6D7C88")                               //ToolTipText -- changed origin is #c0c6d4
+static QColor dark_qpalette[QPalette::NColorRoles]{
+    QColor("#c0c6d4"),                            // WindowText
+    QColor("#444444"),                            // Button
+    QColor("#484848"),                            // Light
+    QColor("#474747"),                            // Midlight
+    QColor("#C0C6D4"),                            // Dark      -- changed origin is #414141
+    QColor("#434343"),                            // Mid
+    QColor("#c0c6d4"),                            // Text
+    Qt::white,                                    // BrightText
+    QColor("#c0c6d4"),                            // ButtonText
+    QColor(255, 255, 255, CAST_INT(0.05 * 255)),  // Base --- changed origin is #282828
+    QColor("#252525"),                            // Window
+    QColor(0, 0, 0, CAST_INT(0.05 * 255)),        // Shadow
+    QColor("#095EFF"),                            // Highlight         //old : #0081ff
+    QColor("#0059D2"),                            // HighlightedText   //old: b8d3ff
+    QColor("#0082fa"),                            // Link
+    QColor("#ad4579"),                            // LinkVisited
+    QColor(0, 0, 0, CAST_INT(0.05 * 255)),        // AlternateBase
+    Qt::black,                                    // NoRole
+    QColor(45, 45, 45, CAST_INT(0.8 * 255)),      // ToolTipBase
+    QColor("#6D7C88")                             // ToolTipText -- changed origin is #c0c6d4
 };
 
-static QColor light_dpalette[DPalette::NColorTypes] {
-    QColor(),                                   //NoType
-    QColor(0, 0, 0, CAST_INT(255 * 0.03)),      //ItemBackground
-    QColor("#414d68"),                          //TextTitle
-    QColor("#609DC8"),                          //TextTips --- changed origin is #526A7F
-    QColor("#FF5A5A"),                          //TextWarning -- changed origin is #FF5736
-    QColor("#7C7C7C"),                          //TextLively  -- changed origin is #0082FA
-    QColor("#417505"),                          //LightLively -- changed origin is #25b7ff
-    QColor("#47790C"),                          //DarkLively -- changed origin is #0098ff
-    QColor(0, 0, 0, CAST_INT(0.03 * 255))       //FrameBorder
+static QColor light_dpalette[DPalette::NColorTypes]{
+    QColor(),                               // NoType
+    QColor(0, 0, 0, CAST_INT(255 * 0.03)),  // ItemBackground
+    QColor("#414d68"),                      // TextTitle
+    QColor("#609DC8"),                      // TextTips --- changed origin is #526A7F
+    QColor("#FF5A5A"),                      // TextWarning -- changed origin is #FF5736
+    QColor("#7C7C7C"),                      // TextLively  -- changed origin is #0082FA
+    QColor("#417505"),                      // LightLively -- changed origin is #25b7ff
+    QColor("#47790C"),                      // DarkLively -- changed origin is #0098ff
+    QColor(0, 0, 0, CAST_INT(0.03 * 255))   // FrameBorder
 };
 
-static QColor dark_dpalette[DPalette::NColorTypes] {
-    QColor(),                                       //NoType
-    QColor(255, 255, 255, CAST_INT(255 * 0.05)),    //ItemBackground
-    QColor("#c0c6d4"),                              //TextTitle
-    QColor("#6D7C88"),                              //TextTips
-    QColor("#9A2F2F"),                              //TextWarning -- changed origin is #FF5736
-    QColor("#7C7C7C"),                              //TextLively -- changed origin is #0082FA
-    QColor("#417505"),                              //LightLively -- changed origin is #0056c1
-    QColor("#47790C"),                              //DarkLively  -- changed origin is #004c9c
-    QColor(0, 0, 0, CAST_INT(0.08 * 255))           //FrameBorder
+static QColor dark_dpalette[DPalette::NColorTypes]{
+    QColor(),                                     // NoType
+    QColor(255, 255, 255, CAST_INT(255 * 0.05)),  // ItemBackground
+    QColor("#c0c6d4"),                            // TextTitle
+    QColor("#6D7C88"),                            // TextTips
+    QColor("#9A2F2F"),                            // TextWarning -- changed origin is #FF5736
+    QColor("#7C7C7C"),                            // TextLively -- changed origin is #0082FA
+    QColor("#417505"),                            // LightLively -- changed origin is #0056c1
+    QColor("#47790C"),                            // DarkLively  -- changed origin is #004c9c
+    QColor(0, 0, 0, CAST_INT(0.08 * 255))         // FrameBorder
 };
 
 DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType type) const

@@ -13,14 +13,8 @@ class ut_ddimErrorPage_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new DdimErrorPage;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new DdimErrorPage; }
+    void TearDown() { delete w; }
 
 private:
     DdimErrorPage *w;

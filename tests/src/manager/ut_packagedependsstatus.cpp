@@ -6,7 +6,6 @@
 
 #include "../deb-installer/manager/PackageDependsStatus.h"
 
-
 #include "../deb-installer/model/deblistmodel.h"
 #include <stub.h>
 
@@ -14,10 +13,7 @@ class ut_packageDependsStatus_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName");
-    }
+    void SetUp() { big = new PackageDependsStatus(DebListModel::DependsBreak, "packageName"); }
     void TearDown()
     {
         delete m_pds;

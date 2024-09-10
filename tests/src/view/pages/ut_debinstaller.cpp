@@ -32,9 +32,7 @@ void stud_removePackage(const int idx)
     Q_UNUSED(idx);
 }
 
-void stud_installDebs()
-{
-}
+void stud_installDebs() {}
 
 bool stud_checkSuffix(QString filePath)
 {
@@ -47,13 +45,9 @@ void stud_appendPackage(QStringList package)
     Q_UNUSED(package);
 }
 
-void stud_refreshModel()
-{
-}
+void stud_refreshModel() {}
 
-void stud_uninstallCurrentPackage()
-{
-}
+void stud_uninstallCurrentPackage() {}
 
 QString stud_packageName()
 {
@@ -72,12 +66,10 @@ QString stud_longDescription()
 
 const QList<QString> stud_preparedPackages()
 {
-    return QList<QString> {"test.deb"};
+    return QList<QString>{"test.deb"};
 }
 
-void stud_afterGetAutherFalse()
-{
-}
+void stud_afterGetAutherFalse() {}
 
 void stud_setEnableButton(bool bEnable)
 {
@@ -105,10 +97,7 @@ bool stud_reloadCache()
     return true;
 }
 
-void stud_reset()
-{
-}
-
+void stud_reset() {}
 
 void stud_appendNoThread(QStringList packages, int allPackageSize)
 {
@@ -119,16 +108,10 @@ void stud_appendNoThread(QStringList packages, int allPackageSize)
 class UT_Debinstaller : public UT_HEAD
 {
 public:
-    //添加日志
-    static void SetUpTestCase()
-    {
-        qDebug() << "SetUpTestCase" << endl;
-    }
-    static void TearDownTestCase()
-    {
-        qDebug() << "TearDownTestCase" << endl;
-    }
-    void SetUp() //TEST跑之前会执行SetUp
+    // 添加日志
+    static void SetUpTestCase() { qDebug() << "SetUpTestCase" << endl; }
+    static void TearDownTestCase() { qDebug() << "TearDownTestCase" << endl; }
+    void SetUp()  // TEST跑之前会执行SetUp
     {
         Stub stub;
         stub.set(ADDR(Backend, init), stud_run);
@@ -136,15 +119,12 @@ public:
         deb = new DebInstaller();
         usleep(1000 * 1000);
         qDebug() << "SetUp" << endl;
-
     }
-    void TearDown() //TEST跑完之后会执行TearDown
+    void TearDown()  // TEST跑完之后会执行TearDown
     {
-
         delete deb;
     }
     DebInstaller *deb;
-
 };
 void stub_enableCloseAndExit()
 {
@@ -325,18 +305,18 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_dragEnterEvent)
 {
     QMimeData *mimeData = new QMimeData;
     Stub stub;
-    stub.set(ADDR(QMimeData,hasUrls),ut_hasUrls);
+    stub.set(ADDR(QMimeData, hasUrls), ut_hasUrls);
     QDragEnterEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &enterEvent);
     EXPECT_TRUE(deb->m_fileChooseWidget->acceptDrops());
-    delete  mimeData;
+    delete mimeData;
 }
 TEST_F(UT_Debinstaller, UT_Debinstaller_dragMoveEvent)
 {
     QMimeData *mimeData = new QMimeData;
     QDragMoveEvent enterEvent(QPoint(0, 0), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
     QCoreApplication::sendEvent(deb, &enterEvent);
-    delete  mimeData;
+    delete mimeData;
 }
 
 TEST_F(UT_Debinstaller, UT_Debinstaller_dropEvent)
@@ -358,4 +338,3 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_closeEvent)
     QCoreApplication::sendEvent(deb, &closeEvent);
     delete mimeData;
 }
-

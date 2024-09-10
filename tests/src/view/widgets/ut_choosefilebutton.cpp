@@ -13,14 +13,8 @@ class ut_chooseFileButton_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_choosFileBtn = new ChooseFileButton("");
-    }
-    void TearDown()
-    {
-        delete m_choosFileBtn;
-    }
+    void SetUp() { m_choosFileBtn = new ChooseFileButton(""); }
+    void TearDown() { delete m_choosFileBtn; }
 
     ChooseFileButton *m_choosFileBtn = nullptr;
 };

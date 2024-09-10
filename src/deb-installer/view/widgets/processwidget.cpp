@@ -32,7 +32,7 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     allLayer->addWidget(mainIcon, 0, Qt::AlignCenter);
     allLayer->addWidget(mainLabel, 0, Qt::AlignCenter);
     allLayer->addWidget(processBar, 0, Qt::AlignCenter);
-    //allLayer->addWidget(processTextLabel);
+    // allLayer->addWidget(processTextLabel);
     allLayer->addStretch();
 
     setLayout(allLayer);
