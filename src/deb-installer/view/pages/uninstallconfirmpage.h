@@ -62,15 +62,15 @@ private slots:
     void slotHideDetail();
 
 private:
-    DLabel                  *m_icon                = nullptr;
-    DLabel                  *m_tips                = nullptr;
-    QWidget                 *m_infoWrapperWidget   = nullptr;
-    InfoControlButton       *m_infoControl         = nullptr;
-    InstallProcessInfoView  *m_dependsInfomation   = nullptr;
-    DPushButton             *m_cancelBtn           = nullptr;
-    DPushButton             *m_confirmBtn          = nullptr;
+    DLabel *m_icon = nullptr;
+    DLabel *m_tips = nullptr;
+    QWidget *m_infoWrapperWidget = nullptr;
+    InfoControlButton *m_infoControl = nullptr;
+    InstallProcessInfoView *m_dependsInfomation = nullptr;
+    DPushButton *m_cancelBtn = nullptr;
+    DPushButton *m_confirmBtn = nullptr;
 
-    QStringList             m_requiredList         = {};
-    QString                 m_description          = "";
+    QStringList m_requiredList = {};
+    QString m_description = "";
 };
 #endif  // UNINSTALLCONFIRMPAGE_H

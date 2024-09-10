@@ -12,14 +12,8 @@ class UT_DebInfoLabel_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_label = new DebInfoLabel;
-    }
-    void TearDown()
-    {
-        delete m_label;
-    }
+    void SetUp() { m_label = new DebInfoLabel; }
+    void TearDown() { delete m_label; }
 
     DebInfoLabel *m_label = nullptr;
 };

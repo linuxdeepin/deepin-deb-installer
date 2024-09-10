@@ -29,20 +29,20 @@ PackageSelectView::PackageSelectView(QWidget *parent)
 
     selectAllBox->setMinimumHeight(s_MinimumBoxHeight);
 
-    //全选+安装
+    // 全选+安装
     auto bottomLayout = new QHBoxLayout;
     bottomLayout->addWidget(selectAllBox);
     bottomLayout->addWidget(installButton);
-    bottomLayout->addWidget(new QWidget);  //占位用
+    bottomLayout->addWidget(new QWidget);  // 占位用
     bottomLayout->setContentsMargins(8, 0, 0, 20);
     bottomLayout->setSpacing(0);
     installButton->setFixedSize(120, 36);
 
-    //设置列表控件
+    // 设置列表控件
     packageListWidget->setFrameStyle(QFrame::NoFrame);
     packageListWidget->setFixedSize(460, 186);
 
-    //最终组装
+    // 最终组装
     auto allLayout = new QVBoxLayout;
     allLayout->addWidget(packageListWidget, 0, Qt::AlignTop);
     allLayout->addStretch();
@@ -116,7 +116,7 @@ void PackageSelectView::setHaveMustInstallDeb(bool have)
 
 void PackageSelectView::flushDebList(const QList<DebIr> &selectInfos)
 {
-    clearDebList(); //刷新之前做一下清理
+    clearDebList();  // 刷新之前做一下清理
     for (auto &eachInfo : selectInfos) {
         auto selectItem = new PackageSelectItem;
         selectItem->setDebIR(eachInfo);

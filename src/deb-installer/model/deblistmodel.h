@@ -72,21 +72,21 @@ public:
      * 包的各种数据角色
      */
     enum PackageRole {
-        PackageNameRole = Qt::DisplayRole,   //包名
-        UnusedRole = Qt::UserRole,           //
-        WorkerIsPrepareRole,                //当前工作是否处于准备状态
-        ItemIsCurrentRole,                  //获取当前下标
-        PackageVersionRole,                 //包的版本
-        PackagePathRole,                    //包的路径
-        PackageInstalledVersionRole,        //包已经安装的版本
-        PackageShortDescriptionRole,        //包的短描述
-        PackageLongDescriptionRole,         //包的长描述
-        PackageVersionStatusRole,           //包的安装状态
-        PackageDependsStatusRole,           //包的依赖状态
-        PackageAvailableDependsListRole,    //包可用的依赖
-        PackageFailReasonRole,              //包安装失败的原因
-        PackageOperateStatusRole,           //包的操作状态
-        PackageReverseDependsListRole,      //依赖于此包的程序
+        PackageNameRole = Qt::DisplayRole,  // 包名
+        UnusedRole = Qt::UserRole,          //
+        WorkerIsPrepareRole,                // 当前工作是否处于准备状态
+        ItemIsCurrentRole,                  // 获取当前下标
+        PackageVersionRole,                 // 包的版本
+        PackagePathRole,                    // 包的路径
+        PackageInstalledVersionRole,        // 包已经安装的版本
+        PackageShortDescriptionRole,        // 包的短描述
+        PackageLongDescriptionRole,         // 包的长描述
+        PackageVersionStatusRole,           // 包的安装状态
+        PackageDependsStatusRole,           // 包的依赖状态
+        PackageAvailableDependsListRole,    // 包可用的依赖
+        PackageFailReasonRole,              // 包安装失败的原因
+        PackageOperateStatusRole,           // 包的操作状态
+        PackageReverseDependsListRole,      // 依赖于此包的程序
     };
 
     /**
@@ -94,10 +94,10 @@ public:
      * 安装器的工作状态
      */
     enum WorkerStatus {
-        WorkerPrepare,                          //准备，可以进行安装或卸载
-        WorkerProcessing,                       //正在安装
-        WorkerFinished,                         //安装结束
-        WorkerUnInstall                         //正在卸载
+        WorkerPrepare,     // 准备，可以进行安装或卸载
+        WorkerProcessing,  // 正在安装
+        WorkerFinished,    // 安装结束
+        WorkerUnInstall    // 正在卸载
     };
 
     /**
@@ -105,10 +105,10 @@ public:
      * 包的安装状态
      */
     enum PackageInstallStatus {
-        NotInstalled,                           //当前包没有被安装
-        InstalledSameVersion,                   //当前已经安装过相同的版本
-        InstalledEarlierVersion,                //当前已经安装过较早的版本
-        InstalledLaterVersion,                  //当前已经安装过更新的版本
+        NotInstalled,             // 当前包没有被安装
+        InstalledSameVersion,     // 当前已经安装过相同的版本
+        InstalledEarlierVersion,  // 当前已经安装过较早的版本
+        InstalledLaterVersion,    // 当前已经安装过更新的版本
     };
 
     /**
@@ -116,13 +116,13 @@ public:
      * 当前包的依赖状态
      */
     enum DependsStatus {
-        DependsOk,              //依赖满足
-        DependsAvailable,       //依赖可用但是需要下载
-        DependsBreak,           //依赖不满足
-        DependsVerifyFailed,    //签名验证失败
-        DependsAuthCancel,      //依赖授权失败（wine依赖）
-        ArchBreak,              //架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
-        Prohibit,               //应用被域管限制，无法安装
+        DependsOk,            // 依赖满足
+        DependsAvailable,     // 依赖可用但是需要下载
+        DependsBreak,         // 依赖不满足
+        DependsVerifyFailed,  // 签名验证失败
+        DependsAuthCancel,    // 依赖授权失败（wine依赖）
+        ArchBreak,  // 架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
+        Prohibit,  // 应用被域管限制，无法安装
     };
 
     /**
@@ -130,12 +130,12 @@ public:
      * 包的当前操作状态
      */
     enum PackageOperationStatus {
-        Prepare,                                //准备安装
-        Operating,                              //正在安装
-        Success,                                //安装成功
-        Failed,                                 //安装失败
-        Waiting,                                //等待安装
-        VerifyFailed,                           //签名验证失败
+        Prepare,       // 准备安装
+        Operating,     // 正在安装
+        Success,       // 安装成功
+        Failed,        // 安装失败
+        Waiting,       // 等待安装
+        VerifyFailed,  // 签名验证失败
     };
 
     /**
@@ -143,21 +143,21 @@ public:
      * wine 依赖安装时的状态
      */
     enum DependsAuthStatus {
-        AuthBefore,         //鉴权框弹出之前
-        AuthPop,            //鉴权框弹出
-        CancelAuth,         //鉴权取消
-        AuthConfirm,        //鉴权确认后
-        AuthDependsSuccess, //安装成功
-        AuthDependsErr,     //安装失败
-        AnalysisErr,        //解析错误
-        VerifyDependsErr,   //验证签名失败(分级管控)
+        AuthBefore,          // 鉴权框弹出之前
+        AuthPop,             // 鉴权框弹出
+        CancelAuth,          // 鉴权取消
+        AuthConfirm,         // 鉴权确认后
+        AuthDependsSuccess,  // 安装成功
+        AuthDependsErr,      // 安装失败
+        AnalysisErr,         // 解析错误
+        VerifyDependsErr,    // 验证签名失败(分级管控)
     };
 
     enum ErrorCode {
-        NoDigitalSignature      = 101, //无有效的数字签名
-        DigitalSignatureError,         //数字签名校验失败
-        ConfigAuthCancel        = 127, //配置安装授权被取消
-        ApplocationProhibit     = 404, //当前包在黑名单中禁止安装
+        NoDigitalSignature = 101,   // 无有效的数字签名
+        DigitalSignatureError,      // 数字签名校验失败
+        ConfigAuthCancel = 127,     // 配置安装授权被取消
+        ApplocationProhibit = 404,  // 当前包在黑名单中禁止安装
     };
 
     /**
@@ -390,13 +390,11 @@ signals:
      */
     void signalNotInstallablePackage();
 
-
     /**
      * @brief signalPackageCannotFind 包已经被移动的信号 通知前端发送浮动消息
      * @param packageName 被移动的文件名
      */
     void signalPackageCannotFind(QString packageName) const;
-
 
     /**
      * @brief signalPackageAlreadyExists 包已添加的信号
@@ -573,7 +571,6 @@ private slots:
     void slotShowProhibitWindow();
 
 private:
-
     /**
      * @brief setEndEnable  授权框取消，按钮启用
      */
@@ -683,7 +680,6 @@ private:
     void digitalVerifyFailed(ErrorCode errorCode);
 
 private:
-
     /**
      * @brief checkTemplate 检查是否需要配置
      * @param debPath   包的路径
@@ -715,7 +711,6 @@ private:
      */
     void enableTitleBarFocus();
 
-
     /**
      * @brief Get the Package Md5 object
      *
@@ -723,7 +718,7 @@ private:
      */
     void getPackageMd5(const QList<QByteArray> &packagesMD5);
 
-//// 文件移动、删除、修改检查
+    //// 文件移动、删除、修改检查
 private:
     /**
      * @brief recheckPackagePath 重新检查文件路径
@@ -761,35 +756,34 @@ private:
     void printDependsChanges();
 
 private:
-    //当前工作状态
-    int m_workerStatus                  = 0;
+    // 当前工作状态
+    int m_workerStatus = 0;
 
-    //当前正在操作的index
-    int m_operatingIndex                = 0;
+    // 当前正在操作的index
+    int m_operatingIndex = 0;
 
-    //当前正在操作的状态的index
-    int m_operatingStatusIndex          = 0;
+    // 当前正在操作的状态的index
+    int m_operatingStatusIndex = 0;
 
-    //当前正在处理的包的md5
-    QByteArray m_operatingPackageMd5    = nullptr;
+    // 当前正在处理的包的md5
+    QByteArray m_operatingPackageMd5 = nullptr;
 
-
-    //当前的index
+    // 当前的index
     QModelIndex m_currentIdx;
 
-    //后端类
+    // 后端类
     PackagesManager *m_packagesManager = nullptr;
 
-    //当前正在运行的Trans
+    // 当前正在运行的Trans
     QPointer<QApt::Transaction> m_currentTransaction;
 
-    //所有包的操作状态Map
+    // 所有包的操作状态Map
     QMap<QByteArray, int> m_packageOperateStatus = {};
 
-    //FailCode 错误代码 ，trans返回的错误代码
+    // FailCode 错误代码 ，trans返回的错误代码
     QMap<QByteArray, int> m_packageFailCode = {};
 
-    //FailReason , trans返回的详细错误信息
+    // FailReason , trans返回的详细错误信息
     QMap<QByteArray, QString> m_packageFailReason = {};
 
     // 配置安装进程
@@ -801,7 +795,7 @@ private:
     QString m_brokenDepend = "";
 
     // 开发者模式的标志变量
-    //部分系统版本无需签名验证，默认开发者模式
+    // 部分系统版本无需签名验证，默认开发者模式
     bool m_isDevelopMode = true;
     bool m_isDigitalVerify = false;
 

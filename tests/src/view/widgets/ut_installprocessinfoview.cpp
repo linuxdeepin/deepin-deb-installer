@@ -15,14 +15,8 @@ class ut_installProcessInfoView_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_infoView = new InstallProcessInfoView(100, 50);
-    }
-    void TearDown()
-    {
-        delete m_infoView;
-    }
+    void SetUp() { m_infoView = new InstallProcessInfoView(100, 50); }
+    void TearDown() { delete m_infoView; }
 
     InstallProcessInfoView *m_infoView = nullptr;
 };
@@ -73,7 +67,7 @@ TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent)
 TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent_01)
 {
     Stub stub;
-    stub.set(ADDR(DGuiApplicationHelper,themeType),ut_view_themeType);
+    stub.set(ADDR(DGuiApplicationHelper, themeType), ut_view_themeType);
     QPaintEvent paint1(QRect(m_infoView->rect()));
     m_infoView->paintEvent(&paint1);
     ASSERT_EQ(QColor(109, 124, 136), m_infoView->m_editor->palette().text().color());
@@ -82,7 +76,7 @@ TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent_01)
 TEST_F(ut_installProcessInfoView_Test, InstallProcessInfoView_UT_paintEvent_02)
 {
     Stub stub1;
-    stub1.set(ADDR(DGuiApplicationHelper,themeType),ut_view_themeType1);
+    stub1.set(ADDR(DGuiApplicationHelper, themeType), ut_view_themeType1);
     QPaintEvent paint2(QRect(m_infoView->rect()));
     m_infoView->paintEvent(&paint2);
     ASSERT_EQ(QColor(96, 157, 200), m_infoView->m_editor->palette().text().color());

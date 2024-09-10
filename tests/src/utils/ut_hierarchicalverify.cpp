@@ -77,7 +77,7 @@ TEST_F(ut_HierarchicalVerify_TEST, checkTransactionError_TestRegExp_True)
                                                "执行钩子 if test -x /usr/sbin/deepin-pkg-install-hook;then /usr/sbin/deepin-pkg "
                                                "install-hook -e hc-verifysign;fi 出错，退出状态为 256"));
 
-    QSet<QString> pkgSet { "pkg", "pkg2" };
+    QSet<QString> pkgSet{"pkg", "pkg2"};
     ASSERT_EQ(hVerify->invalidPackages, pkgSet);
 }
 
@@ -94,11 +94,11 @@ TEST_F(ut_HierarchicalVerify_TEST, checkTransactionError_TestRegExp_False)
     ASSERT_FALSE(hVerify->checkTransactionError("pkg2", "deepinhookhook25"));
     ASSERT_FALSE(hVerify->checkTransactionError("pkg2", "Error:deepin hook exit code 255"));
     ASSERT_FALSE(hVerify->checkTransactionError("pkg2",
-                                               "执行钩子 if test -x /usr/sbin/deepin-pkg-install-hook;then /usr/sbin/deepin-pkg "
-                                               "install-hook -e hc-verifysign;fi 出错，退出状态为 \n测试代码"));
+                                                "执行钩子 if test -x /usr/sbin/deepin-pkg-install-hook;then /usr/sbin/deepin-pkg "
+                                                "install-hook -e hc-verifysign;fi 出错，退出状态为 \n测试代码"));
     ASSERT_FALSE(hVerify->checkTransactionError("pkg2",
-                                               "执行钩子 if test -x /usr/sbin/deepin-pkg-install-hook;then /usr/sbin/deepin-pkg "
-                                               "install-hook -e hc-verifysign;fi 出错，退出状态为 xxx"));
+                                                "执行钩子 if test -x /usr/sbin/deepin-pkg-install-hook;then /usr/sbin/deepin-pkg "
+                                                "install-hook -e hc-verifysign;fi 出错，退出状态为 xxx"));
 
     ASSERT_TRUE(hVerify->invalidPackages.isEmpty());
 }

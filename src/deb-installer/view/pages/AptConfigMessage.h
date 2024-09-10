@@ -41,6 +41,7 @@ public:
         }
         return aptConfig;
     }
+
 public:
     /**
      * @brief appendTextEdit 获取安装进程返回的信息
@@ -70,10 +71,9 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
-
-    DLineEdit *m_inputEdit              = nullptr;              //输入框
-    DSuggestButton *m_pushbutton        = nullptr;              //确定输入按钮
-    DLabel *m_pQuestionLabel            = nullptr;              //提示信息
+    DLineEdit *m_inputEdit = nullptr;        // 输入框
+    DSuggestButton *m_pushbutton = nullptr;  // 确定输入按钮
+    DLabel *m_pQuestionLabel = nullptr;      // 提示信息
     static AptConfigMessage *aptConfig;
 
 private:
@@ -103,4 +103,4 @@ private:
     void initAccessibleName();
 };
 
-#endif // APTCONFIGMESSAGE_H
+#endif  // APTCONFIGMESSAGE_H

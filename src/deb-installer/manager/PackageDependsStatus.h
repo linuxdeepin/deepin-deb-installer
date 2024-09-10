@@ -9,7 +9,6 @@
 class PackageDependsStatus
 {
 public:
-
     /**
      * @brief ok 组装依赖的状态，将传入的包的依赖状态设置为ok
      * @return 某个包的依赖状态为ok
@@ -60,14 +59,14 @@ public:
      */
     PackageDependsStatus maxEq(const PackageDependsStatus &other);
 
-        /**
+    /**
      * @brief min   比较当前状态并返回状态值更小的那一个
      * @param other 与当前状态比较的另一个依赖状态
      * @return 两个状态中更小的一个
      */
     PackageDependsStatus min(const PackageDependsStatus &other);
 
-        /**
+    /**
      * @brief minEq   比较当前状态并返回状态值更小的那一个
      * @param other 与当前状态比较的另一个依赖状态
      * @return 两个状态中更小的一个
@@ -76,7 +75,7 @@ public:
 
     /**
      * @brief 当前依赖状态是否为break
-     * 
+     *
      * @return true 当前依赖状态为break
      * @return false 当前依赖状态不是break
      */
@@ -84,7 +83,7 @@ public:
 
     /**
      * @brief 当前依赖状态是否为AuthCancel
-     * 
+     *
      * @return true 当前依赖状态是AuthCancle
      * @return false 当前依赖状态不是AuthCancle
      */
@@ -92,7 +91,7 @@ public:
 
     /**
      * @brief 当前依赖状态是否为Available
-     * 
+     *
      * @return true 当前依赖状态是Available
      * @return false 当前依赖状态不是Available
      */
@@ -105,9 +104,8 @@ public:
      */
     bool isProhibit() const;
 
-
 public:
     int status;
     QString package;
 };
-#endif // PACKAGEDEPENDSSTATUS_H
+#endif  // PACKAGEDEPENDSSTATUS_H

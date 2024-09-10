@@ -18,11 +18,15 @@ public:
     DependGraph() = default;
     ~DependGraph();
 
-    void addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends);
+    void addNode(const QString &packagePath,
+                 const QByteArray &md5,
+                 const QString &packageName,
+                 const QList<QApt::DependencyItem> &depends);
     std::pair<QList<QString>, QList<QByteArray>> getBestInstallQueue() const;
 
     void reset();
     void remove(const QByteArray &md5);
+
 protected:
     void removeInGraph(const DependGraphNode *dependnode);
 

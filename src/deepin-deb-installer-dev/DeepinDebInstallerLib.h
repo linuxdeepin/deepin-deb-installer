@@ -13,10 +13,8 @@
 class PackagesManager;
 class DEEPINDEBINSTALLERLIBSHARED_EXPORT DeepinDebInstallerLib : public QObject
 {
-
     Q_OBJECT
 public:
-
     DeepinDebInstallerLib();
 
     virtual ~DeepinDebInstallerLib();
@@ -65,7 +63,7 @@ public:
      *          3：当前安装了较早的版本
      *          4：当前已经安装了更新的版本
      */
-    int  checkInstallStatus(int index = 0);
+    int checkInstallStatus(int index = 0);
 
     /**
      * @brief install 开始安装已经添加的包
@@ -173,18 +171,16 @@ signals:
     void signal_packageNotInstalled(int);
 
 private:
-
     /**
      * @brief m_pPackageManager 后端包管理对象
      */
     PackagesManager *m_pPackageManager;
 
 private:
-
     /**
      * @brief initConnections 连接信号与槽
      */
     void initConnections();
 };
 
-#endif // DEEPINDEBINSTALLERLIB_H
+#endif  // DEEPINDEBINSTALLERLIB_H

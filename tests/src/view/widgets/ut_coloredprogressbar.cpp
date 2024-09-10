@@ -23,14 +23,8 @@ class ut_coloredProgressBar_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_colorProcessBar = new ColoredProgressBar;
-    }
-    void TearDown()
-    {
-        delete m_colorProcessBar;
-    }
+    void SetUp() { m_colorProcessBar = new ColoredProgressBar; }
+    void TearDown() { delete m_colorProcessBar; }
 
     ColoredProgressBar *m_colorProcessBar = nullptr;
 };
@@ -57,7 +51,7 @@ TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged)
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged_01)
 {
     Stub stub;
-    stub.set(ADDR(DApplicationHelper,themeType),ut_themeType);
+    stub.set(ADDR(DApplicationHelper, themeType), ut_themeType);
     m_colorProcessBar->themeChanged();
     ASSERT_EQ(DGuiApplicationHelper::DarkType, m_colorProcessBar->m_themeType);
 }

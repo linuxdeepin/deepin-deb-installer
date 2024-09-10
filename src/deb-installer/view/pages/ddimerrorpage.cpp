@@ -23,7 +23,7 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     allLayout->addWidget(confimButton, 0, Qt::AlignCenter | Qt::AlignBottom);
     setLayout(allLayout);
 
-    errorPicLabel->setScaledContents(true); //消除屏幕缩放锯齿
+    errorPicLabel->setScaledContents(true);  // 消除屏幕缩放锯齿
     errorPicLabel->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/di_fail_96px.png"));
     auto picContentsMargins = errorPicLabel->contentsMargins();
     picContentsMargins.setBottom(10);

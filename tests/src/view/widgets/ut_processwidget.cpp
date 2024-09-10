@@ -13,14 +13,8 @@ class ut_processwidget_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new ProcessWidget;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new ProcessWidget; }
+    void TearDown() { delete w; }
 
 private:
     ProcessWidget *w;

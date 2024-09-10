@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <QDebug>
 
-struct DependGraphNode {
+struct DependGraphNode
+{
     QString packageName;
     QString packagePath;
     QByteArray md5;
@@ -19,7 +20,10 @@ DependGraph::~DependGraph()
     reset();
 }
 
-void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends)
+void DependGraph::addNode(const QString &packagePath,
+                          const QByteArray &md5,
+                          const QString &packageName,
+                          const QList<QApt::DependencyItem> &depends)
 {
     auto node = new DependGraphNode;
     node->packagePath = packagePath;
@@ -27,23 +31,22 @@ void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, con
     node->depends = depends;
     node->md5 = md5;
 
-    //建立依赖关系图
+    // 建立依赖关系图
     std::vector<DependGraphNode *> dependsInGraph;
 
-    //1.搜索当前节点的潜在依赖关系
+    // 1.搜索当前节点的潜在依赖关系
     for (auto &eachDepend : depends) {
         for (auto &eachOrDepend : eachDepend) {
             auto pkgName = eachOrDepend.packageName();
-            auto iter = std::find_if(nodes.begin(), nodes.end(), [pkgName](const auto & eachNode) {
-                return eachNode->packageName == pkgName;
-            });
+            auto iter = std::find_if(
+                nodes.begin(), nodes.end(), [pkgName](const auto &eachNode) { return eachNode->packageName == pkgName; });
             if (iter != nodes.end()) {
                 dependsInGraph.push_back(*iter);
             }
         }
     }
 
-    //2.为其他节点添加潜在依赖关系
+    // 2.为其他节点添加潜在依赖关系
     for (auto &eachNode : nodes) {
         bool finded = false;
         for (auto &eachDepends : eachNode->depends) {
@@ -65,9 +68,9 @@ void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, con
 
 bool isCircularDepend(DependGraphNode *currentNode, DependGraphNode *dependNode)
 {
-    auto iter = std::find_if(dependNode->dependsInGraph.begin(), dependNode->dependsInGraph.end(), [currentNode](DependGraphNode * node) {
-        return currentNode->packageName == node->packageName;
-    });
+    auto iter = std::find_if(dependNode->dependsInGraph.begin(),
+                             dependNode->dependsInGraph.end(),
+                             [currentNode](DependGraphNode *node) { return currentNode->packageName == node->packageName; });
     return iter != dependNode->dependsInGraph.end();
 }
 
@@ -86,7 +89,7 @@ void addDepend(QList<QString> &paths, QList<QByteArray> &md5s, QStringList &resu
             paths.push_back(eachDependNode->packagePath);
             md5s.push_back(eachDependNode->md5);
         } else {
-            if (isCircularDepend(node, eachDependNode)) { //检查循环依赖
+            if (isCircularDepend(node, eachDependNode)) {  // 检查循环依赖
                 qWarning() << "Detect circular depend: lhs:" << node->packageName << "rhs:" << eachDependNode->packageName;
                 continue;
             }
@@ -110,9 +113,9 @@ std::pair<QList<QString>, QList<QByteArray>> DependGraph::getBestInstallQueue() 
         if (result.contains(nodes[i]->packageName)) {
             continue;
         }
-        //添加前置依赖
+        // 添加前置依赖
         addDepend(paths, md5s, result, nodes[i]);
-        //添加本体
+        // 添加本体
         if (result.contains(nodes[i]->packageName)) {
             continue;
         }
@@ -135,7 +138,7 @@ void DependGraph::remove(const QByteArray &md5)
 {
     for (size_t i = 0; i != nodes.size(); ++i) {
         if (nodes[i]->md5 == md5) {
-            //删除包需要更新依赖图(bug 179891)
+            // 删除包需要更新依赖图(bug 179891)
             removeInGraph(nodes[i]);
             delete nodes[i];
             nodes.erase(nodes.begin() + static_cast<int>(i));
@@ -146,7 +149,7 @@ void DependGraph::remove(const QByteArray &md5)
 
 void DependGraph::removeInGraph(const DependGraphNode *dependnode)
 {
-    //清除当前节点潜在依赖
+    // 清除当前节点潜在依赖
     for (auto eachNode : nodes) {
         for (size_t i = 0; i != eachNode->dependsInGraph.size(); ++i) {
             if (eachNode->dependsInGraph[i] == dependnode) {

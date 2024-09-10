@@ -48,10 +48,10 @@ signals:
     void runOldProcess(const QStringList &paths);
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;    //拖入事件
-    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;              //拖入放下事件
-    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;      //拖进事件
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;        //关闭事件
+    void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;  // 拖入事件
+    void dropEvent(QDropEvent *e) Q_DECL_OVERRIDE;            // 拖入放下事件
+    void dragMoveEvent(QDragMoveEvent *e) Q_DECL_OVERRIDE;    // 拖进事件
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;      // 关闭事件
 
 private slots:
     /**
@@ -123,7 +123,6 @@ private slots:
      * 取消卸载后返回 singleInstallPage
      */
     void slotUninstallCancel();
-
 
     /**
      * @brief slotSetEnableButton
@@ -258,7 +257,6 @@ private:
      */
     void initConnections();
 
-
     /**
      * @brief refreshSingle 刷新单包安装界面
      */
@@ -289,7 +287,7 @@ private:
      */
     void MulRefreshPage();
 
-    //Disable/enable close button and exit in menu
+    // Disable/enable close button and exit in menu
     /**
      * @brief disableCloseAndExit
      * 设置退出和关闭按钮为不可用
@@ -322,30 +320,30 @@ private:
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
 
 private:
-    DebListModel        *m_fileListModel      = nullptr;                  //model 类
-    FileChooseWidget    *m_fileChooseWidget   = nullptr;           //文件选择的widget
-    UninstallConfirmPage *m_uninstallPage     = nullptr;
+    DebListModel *m_fileListModel = nullptr;         // model 类
+    FileChooseWidget *m_fileChooseWidget = nullptr;  // 文件选择的widget
+    UninstallConfirmPage *m_uninstallPage = nullptr;
 
-    QPointer<QWidget>   m_lastPage;                   //存放上一个页面的指针
-    QStackedLayout      *m_centralLayout      = nullptr;                //单包、批量、卸载的widget
+    QPointer<QWidget> m_lastPage;               // 存放上一个页面的指针
+    QStackedLayout *m_centralLayout = nullptr;  // 单包、批量、卸载的widget
     SettingDialog *m_settingDialog = nullptr;
 
-    PackageSelectModel *m_ddimModel = nullptr; //ddim处理model
-    PackageSelectView  *m_ddimView = nullptr;  //ddim处理view
-    DdimErrorPage      *m_ddimErrorPage = nullptr; //ddim错误提示界面
-    SelectInstallPage  *m_ddimInstallPage = nullptr; //ddim安装界面
-    BackendProcessPage *m_backendProcessPage = nullptr; //后台处理阻塞界面
+    PackageSelectModel *m_ddimModel = nullptr;           // ddim处理model
+    PackageSelectView *m_ddimView = nullptr;             // ddim处理view
+    DdimErrorPage *m_ddimErrorPage = nullptr;            // ddim错误提示界面
+    SelectInstallPage *m_ddimInstallPage = nullptr;      // ddim安装界面
+    BackendProcessPage *m_backendProcessPage = nullptr;  // 后台处理阻塞界面
     QString lastTitle;
 
-    int m_dragflag          = -1;                            //当前是否允许拖入的标志位
+    int m_dragflag = -1;  // 当前是否允许拖入的标志位
 
-    int m_iOptionWindowFlag = 0;                    //判断菜单栏是否手动弹出
-    bool bTabFlag           = false;                          //Control focus is re-identified from titlebar
-    bool bActiveWindowFlag  = true;                  //Window activation id
-    int m_Filterflag        = -1;                          //Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+    int m_iOptionWindowFlag = 0;    // 判断菜单栏是否手动弹出
+    bool bTabFlag = false;          // Control focus is re-identified from titlebar
+    bool bActiveWindowFlag = true;  // Window activation id
+    int m_Filterflag = -1;          // Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     bool m_packageAppending = false;
-    int m_wineAuthStatus = -1; //记录依赖配置授权状态
+    int m_wineAuthStatus = -1;  // 记录依赖配置授权状态
 };
 
 #endif  // DEBINSTALLER_H

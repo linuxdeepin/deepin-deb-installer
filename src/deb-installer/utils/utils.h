@@ -40,33 +40,30 @@ class Utils : public QObject
 public:
     Utils(QObject *parent = nullptr);
 
-    enum FontType {
-        SourceHanSansMedium,
-        SourceHanSansNormal,
-        DefautFont
-    };
+    enum FontType { SourceHanSansMedium, SourceHanSansNormal, DefautFont };
 
     enum VerifyResultCode {
-        OtherError = -1,     //其他错误
-        VerifySuccess,       //验证成功
-        DebfileInexistence,  //解压deb文件用的临时目录不存在
-        ExtractDebFail,      //提取deb包内容时出错
-        DebVerifyFail        //deb包验证失败
+        OtherError = -1,     // 其他错误
+        VerifySuccess,       // 验证成功
+        DebfileInexistence,  // 解压deb文件用的临时目录不存在
+        ExtractDebFail,      // 提取deb包内容时出错
+        DebVerifyFail        // deb包验证失败
     };
 
     static QHash<QString, QPixmap> m_imgCacheHash;
     static QHash<QString, QString> m_fontNameCache;
 
-    static QString loadFontFamilyByType(FontType fontType);//加载字体类型
-    static QFont loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, int fontWeight);//设置字体大小等
-    static void bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, int fontSize, int fontWeight);//绑定字体大小等
-    static QString fromSpecialEncoding(const QString &inputStr);//字体编码处理
-    static QString holdTextInRect(const QFont &font, const QString &srcText, const QSize &size);//针对字体截断处理函数
-    static QString holdTextInRect(const QFont &font, const QString &srcText, const int &width);//针对配置界面字体截断处理函数
-    static int returnfileIsempty(QString strfilepath, QString strfilename); //返回文件是否存在
-    static VerifyResultCode Digital_Verify(const QString &filepath_name); //验证deb数字签名
-    static bool Return_Digital_Verify(const QString &strfilepath, const QString &strfilename); //返回验证工具是否存在
-    static bool checkPackageReadable(const QString &packagePath); // 返回软件包是否允许读取
+    static QString loadFontFamilyByType(FontType fontType);                                         // 加载字体类型
+    static QFont loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, int fontWeight);  // 设置字体大小等
+    static void
+    bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, int fontSize, int fontWeight);  // 绑定字体大小等
+    static QString fromSpecialEncoding(const QString &inputStr);                                        // 字体编码处理
+    static QString holdTextInRect(const QFont &font, const QString &srcText, const QSize &size);  // 针对字体截断处理函数
+    static QString holdTextInRect(const QFont &font, const QString &srcText, const int &width);  // 针对配置界面字体截断处理函数
+    static int returnfileIsempty(QString strfilepath, QString strfilename);                      // 返回文件是否存在
+    static VerifyResultCode Digital_Verify(const QString &filepath_name);                        // 验证deb数字签名
+    static bool Return_Digital_Verify(const QString &strfilepath, const QString &strfilename);  // 返回验证工具是否存在
+    static bool checkPackageReadable(const QString &packagePath);  // 返回软件包是否允许读取
 };
 
 #endif

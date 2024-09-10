@@ -11,14 +11,14 @@
 
 GetStatusThread::GetStatusThread(PackageStatus *packageStatus)
 {
-    qRegisterMetaType<DependsStatus>("DependsStatus");//注册PortConfig类型
+    qRegisterMetaType<DependsStatus>("DependsStatus");  // 注册PortConfig类型
     qRegisterMetaType<InstallStatus>("InstallStatus");
     m_pPackageStatus = packageStatus;
 }
 
 void GetStatusThread::setPackage(int index, const QString &packagePath)
 {
-    m_index  = index;
+    m_index = index;
     m_packagePath = packagePath;
 }
 
@@ -27,7 +27,10 @@ void GetStatusThread::run()
     QFile debFile(m_packagePath);
 
     if (!debFile.exists()) {
-        qWarning() << "GetStatusThread" << "run" << "getPackageDeoebdsStatus" << "文件不存在";
+        qWarning() << "GetStatusThread"
+                   << "run"
+                   << "getPackageDeoebdsStatus"
+                   << "文件不存在";
     }
     DependsStatus DependsStatus = m_pPackageStatus->getPackageDependsStatus(m_packagePath);
 

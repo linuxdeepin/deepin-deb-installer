@@ -94,11 +94,10 @@ void InstallDebThread::run()
             }
 
             system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-            m_proc->setProgram("sudo", QStringList() << "apt-get"
-                               << "install"
-                               << depends
-                               << "--fix-missing"
-                               << "-y");
+            m_proc->setProgram("sudo",
+                               QStringList() << "apt-get"
+                                             << "install" << depends << "--fix-missing"
+                                             << "-y");
             m_proc->start();
             m_proc->waitForFinished(-1);
             m_proc->close();
@@ -108,22 +107,22 @@ void InstallDebThread::run()
             const QFileInfo info(m_listParam[1]);
             const QFile debFile(m_listParam[1]);
             QString debPath = m_listParam[1];
-            if (debPath.contains(" ")
-                    || debPath.contains("&")
-                    || debPath.contains(";")
-                    || debPath.contains("|")
-                    || debPath.contains("`")) {  //过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
+            if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
+                debPath.contains("`")) {  // 过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
                 debPath = SymbolicLink(debPath, "installPackage");
             }
 
-            if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
+            if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {  // 大小写不敏感的判断是否为deb后缀
                 qInfo() << "StartInstallAptConfig";
 
                 getDescription(debPath);
 
-                //m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-//                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
-                m_proc->setProgram("sudo", QStringList() <<  "-S" <<  "dpkg" << "-i" << debPath);
+                // m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
+                //                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+                m_proc->setProgram("sudo",
+                                   QStringList() << "-S"
+                                                 << "dpkg"
+                                                 << "-i" << debPath);
                 m_proc->start();
                 m_proc->waitForFinished(-1);
 
@@ -134,11 +133,9 @@ void InstallDebThread::run()
 
                 m_proc->close();
             }
-
         }
     }
 }
-
 
 /**
  * @brief PackagesManager::SymbolicLink 创建软连接
@@ -149,7 +146,8 @@ void InstallDebThread::run()
 QString InstallDebThread::SymbolicLink(const QString &previousName, const QString &packageName)
 {
     if (!mkTempDir()) {
-        qWarning() << "InstallDebThread:" << "Failed to create temporary folder";
+        qWarning() << "InstallDebThread:"
+                   << "Failed to create temporary folder";
         return previousName;
     }
     return link(previousName, packageName);
@@ -194,16 +192,17 @@ QString InstallDebThread::link(const QString &linkPath, const QString &packageNa
     qDebug() << "InstallDebThread: Create soft link for" << packageName;
     QFile linkDeb(linkPath);
 
-    //创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
-    //删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
+    // 创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_1
+    // 删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
     int count = 1;
     QString tempName = packageName;
     while (true) {
         QFile tempLinkPath(m_tempLinkDir + tempName);
         if (tempLinkPath.exists()) {
             tempName = packageName + "_" + QString::number(count);
-            qWarning() << "InstallDebThread:" << "A file with the same name exists in the current temporary directory,"
-                       "and the current file name is changed to"
+            qWarning() << "InstallDebThread:"
+                       << "A file with the same name exists in the current temporary directory,"
+                          "and the current file name is changed to"
                        << tempName;
             count++;
         } else {
@@ -213,7 +212,8 @@ QString InstallDebThread::link(const QString &linkPath, const QString &packageNa
     if (linkDeb.link(linkPath, m_tempLinkDir + tempName))
         return m_tempLinkDir + tempName;
     else {
-        qWarning() << "InstallDebThread:" << "Failed to create Symbolick link error.";
+        qWarning() << "InstallDebThread:"
+                   << "Failed to create Symbolick link error.";
         return linkPath;
     }
 }

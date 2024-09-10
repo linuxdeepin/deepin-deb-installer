@@ -33,7 +33,7 @@ void BackendProcessPage::setDisplayPage(DisplayMode mode)
     } else if (mode == READ_PKG) {
         allLayout->setCurrentWidget(processWidget);
         noProcessWidget->stop();
-    } else { //PROCESS_FIN
+    } else {  // PROCESS_FIN
         noProcessWidget->stop();
     }
 }

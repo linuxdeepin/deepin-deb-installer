@@ -17,14 +17,8 @@ class ut_backendProcessPage_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new BackendProcessPage;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new BackendProcessPage; }
+    void TearDown() { delete w; }
 
 private:
     BackendProcessPage *w;

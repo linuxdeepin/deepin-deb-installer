@@ -16,10 +16,7 @@ class SingleInstallerApplication : public DApplication
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.DebInstaller")
 public:
-    enum AppWorkChannel {
-        NormalChannel,
-        DdimChannel
-    };
+    enum AppWorkChannel { NormalChannel, DdimChannel };
 
     explicit SingleInstallerApplication(int &argc, char **argv);
     /**
@@ -36,7 +33,7 @@ public:
      */
     bool parseCmdLine();
 
-    static AppWorkChannel mode; //当前运行的工作模式,用于判断二次启动的时候走哪个通道
+    static AppWorkChannel mode;  // 当前运行的工作模式,用于判断二次启动的时候走哪个通道
     static std::atomic_bool BackendIsRunningInit;
 
 public slots:
@@ -114,4 +111,4 @@ private:
     bool bIsDbus = false;
 };
 
-#endif // SINGLEFONTAPPLICATION_H
+#endif  // SINGLEFONTAPPLICATION_H

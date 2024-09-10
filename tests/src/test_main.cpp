@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 #include <limits.h>

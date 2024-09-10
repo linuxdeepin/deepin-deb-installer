@@ -15,7 +15,7 @@
 #include <QFrame>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
-    : QWidget (parent)
+    : QWidget(parent)
     , nameLabel(new Dtk::Widget::DLabel)
     , versionLabel(new Dtk::Widget::DLabel)
     , descriptionLabel(new Dtk::Widget::DLabel)
@@ -68,26 +68,26 @@ void PackageSelectItem::setDebIR(const DebIr &ir)
     if (ir.archMatched) {
         descriptionLabel->setForegroundRole(Dtk::Gui::DPalette::TextTips);
 
-        //item显示策略
+        // item显示策略
         QString displayText;
         auto installInfo = PackageAnalyzer::instance().packageInstallStatus(ir);
         auto installStatus = installInfo.first;
         auto installedVersion = installInfo.second;
         switch (installStatus) {
-        case PackageAnalyzer::NotInstalled: //未安装
-            displayText = ir.shortDescription;
-            checkBox->setChecked(true);
-            break;
-        case PackageAnalyzer::InstalledSameVersion: //已安装相同版本
-            displayText = tr("Same version installed");
-            break;
-        case PackageAnalyzer::InstalledEarlierVersion: //已安装较早版本
-            displayText = tr("Earlier version installed: %1").arg(installedVersion);
-            checkBox->setChecked(true);
-            break;
-        case PackageAnalyzer::InstalledLaterVersion: //已安装较新版本
-            displayText = tr("Later version installed: %1").arg(installedVersion);
-            break;
+            case PackageAnalyzer::NotInstalled:  // 未安装
+                displayText = ir.shortDescription;
+                checkBox->setChecked(true);
+                break;
+            case PackageAnalyzer::InstalledSameVersion:  // 已安装相同版本
+                displayText = tr("Same version installed");
+                break;
+            case PackageAnalyzer::InstalledEarlierVersion:  // 已安装较早版本
+                displayText = tr("Earlier version installed: %1").arg(installedVersion);
+                checkBox->setChecked(true);
+                break;
+            case PackageAnalyzer::InstalledLaterVersion:  // 已安装较新版本
+                displayText = tr("Later version installed: %1").arg(installedVersion);
+                break;
         }
         descriptionLabel->setText(displayText);
     } else {

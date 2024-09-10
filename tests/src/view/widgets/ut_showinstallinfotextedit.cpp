@@ -20,14 +20,8 @@ class ut_showInstallInfoTextEdit_Test : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        m_infoTextEdit = new ShowInstallInfoTextEdit;
-    }
-    void TearDown()
-    {
-        delete m_infoTextEdit;
-    }
+    void SetUp() { m_infoTextEdit = new ShowInstallInfoTextEdit; }
+    void TearDown() { delete m_infoTextEdit; }
 
     ShowInstallInfoTextEdit *m_infoTextEdit = nullptr;
 };
@@ -48,7 +42,7 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_onSelectionAr
 {
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_tap;
     Stub stub;
-    stub.set(ADDR(QTextCursor,selectedText),ut_selectedText);
+    stub.set(ADDR(QTextCursor, selectedText), ut_selectedText);
     m_infoTextEdit->onSelectionArea();
     EXPECT_EQ(ShowInstallInfoTextEdit::GA_tap, m_infoTextEdit->m_gestureAction);
     EXPECT_EQ("//", m_infoTextEdit->textCursor().selectedText());
@@ -96,14 +90,21 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
 {
     QGesture *gesture = new QGesture();
 
-    QGestureEvent gestureEvent(QList<QGesture *> {gesture, gesture});
+    QGestureEvent gestureEvent(QList<QGesture *>{gesture, gesture});
     EXPECT_TRUE(m_infoTextEdit->gestureEvent(&gestureEvent));
     delete gesture;
 }
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
 {
-    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPoint(0, 0), QPoint(0, 0),QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,Qt::MouseEventSynthesizedByQt);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
+                             QPoint(0, 0),
+                             QPoint(0, 0),
+                             QPoint(0, 0),
+                             Qt::LeftButton,
+                             Qt::LeftButton,
+                             Qt::NoModifier,
+                             Qt::MouseEventSynthesizedByQt);
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     m_infoTextEdit->mouseReleaseEvent(&releaseEvent);
     EXPECT_EQ(ShowInstallInfoTextEdit::GA_null, m_infoTextEdit->m_gestureAction);

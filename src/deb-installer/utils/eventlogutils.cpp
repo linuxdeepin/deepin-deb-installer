@@ -12,7 +12,7 @@ Eventlogutils *Eventlogutils::m_pInstance = nullptr;
 Eventlogutils *Eventlogutils::GetInstance()
 {
     if (m_pInstance == nullptr) {
-        m_pInstance  = new Eventlogutils();
+        m_pInstance = new Eventlogutils();
     }
     return m_pInstance;
 }

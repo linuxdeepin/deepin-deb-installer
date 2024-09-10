@@ -21,11 +21,11 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     this->setAcceptDrops(false);
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
-    //set Icon size and location
+    // set Icon size and location
     m_icon->setFixedSize(64, 64);
     m_icon->setPixmap(icon.pixmap(64, 64));
 
-    //自动化测试
+    // 自动化测试
     m_icon->setObjectName("UninstallPageIcon");
     m_icon->setAccessibleName("UninstallPageIcon");
 
@@ -43,7 +43,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_confirmBtn->setFocusPolicy(Qt::TabFocus);
     m_cancelBtn->setFocusPolicy(Qt::TabFocus);
 
-    //添加确认和返回按钮的enter触发
+    // 添加确认和返回按钮的enter触发
     m_confirmBtn->setAutoDefault(true);
     m_cancelBtn->setAutoDefault(true);
 
@@ -52,7 +52,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_dependsInfomation->setAcceptDrops(false);
     m_dependsInfomation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    //layout of buttons
+    // layout of buttons
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->setSpacing(0);
     btnsLayout->setContentsMargins(0, 0, 0, 0);
@@ -62,7 +62,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
 
-    //Layout of icons and tips
+    // Layout of icons and tips
     QVBoxLayout *contentLayout = new QVBoxLayout(this);
     contentLayout->setSpacing(0);
     contentLayout->setContentsMargins(0, 0, 0, 0);
@@ -75,7 +75,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     m_infoWrapperWidget->setLayout(contentLayout);
 
-    //The details of the uninstall process and the layout of the dependent information.
+    // The details of the uninstall process and the layout of the dependent information.
     QVBoxLayout *centralLayout = new QVBoxLayout(this);
     centralLayout->addWidget(m_infoWrapperWidget);
     centralLayout->addWidget(m_infoControl);
@@ -84,11 +84,10 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     centralLayout->addWidget(m_dependsInfomation);
     centralLayout->addLayout(btnsLayout);
     centralLayout->setSpacing(0);
-    //卸载页面上边距增加15px  底边距变为20,适应大字体
+    // 卸载页面上边距增加15px  底边距变为20,适应大字体
     centralLayout->setContentsMargins(20, 15, 20, 20);
 
-
-    //Set font and size
+    // Set font and size
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
 
     Utils::bindFontBySizeAndWeight(m_tips, normalFontFamily, 14, QFont::Normal);
@@ -108,18 +107,20 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
-    //add tips
+    // add tips
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
     }
     const QSize boundingSize = QSize(m_tips->width(), 340);
-    m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));//2020.0210修改中英文状态下描述输出自动换行
+    m_tips->setText(
+        Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));  // 2020.0210修改中英文状态下描述输出自动换行
 }
 
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
-    //According to the dependency status, it is determined whether there is a package that depends on the current package, and if so, it is prompted.
+    // According to the dependency status, it is determined whether there is a package that depends on the current package, and if
+    // so, it is prompted.
     m_requiredList = requiredList;
     if (!requiredList.isEmpty()) {
         m_infoControl->setVisible(true);
@@ -147,7 +148,7 @@ void UninstallConfirmPage::slotShowDetail()
 
 void UninstallConfirmPage::slotHideDetail()
 {
-    //Hide dependency information
+    // Hide dependency information
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);
 }

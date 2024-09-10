@@ -9,9 +9,9 @@
 
 namespace Dtk {
 namespace Widget {
-class DLabel;
+    class DLabel;
 }
-}
+}  // namespace Dtk
 
 class QPushButton;
 
@@ -34,4 +34,4 @@ private:
     QPushButton *confimButton;
 };
 
-#endif // DDIMERRORPAGE_H
+#endif  // DDIMERRORPAGE_H

@@ -17,73 +17,69 @@
 
 DWIDGET_USE_NAMESPACE
 
-//delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
+// delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
 PackagesListDelegate::PackagesListDelegate(DebListModel *m_model, QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
-    , m_fileListModel(m_model)//从新new一个对象修改为获取传入的对象
+    , m_fileListModel(m_model)  // 从新new一个对象修改为获取传入的对象
     , m_parentView(parent)
 {
-    qGuiApp->installEventFilter(this); //事件筛选
+    qGuiApp->installEventFilter(this);  // 事件筛选
 
     m_itemHeight = 50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font()));
-    if (DFontSizeManager::fontPixelSize(qGuiApp->font()) > 13) { //当前字体大小是否小于13
+    if (DFontSizeManager::fontPixelSize(qGuiApp->font()) > 13) {  // 当前字体大小是否小于13
         m_itemHeight += 2;
     }
 }
 
-void PackagesListDelegate::refreshDebItemStatus(const int operate_stat,
-                                                QRect install_status_rect,
-                                                QPainter *painter,
-                                                bool isSelect, bool isEnable) const
+void PackagesListDelegate::refreshDebItemStatus(
+    const int operate_stat, QRect install_status_rect, QPainter *painter, bool isSelect, bool isEnable) const
 {
-
     DPalette parentViewPattle = DebApplicationHelper::instance()->palette(m_parentView);
 
     DApplicationHelper *dAppHelper = DApplicationHelper::instance();
     DPalette appPalette = dAppHelper->applicationPalette();
-    QPen forground;                         //前景色
+    QPen forground;  // 前景色
 
-    QColor color;                           //画笔颜色
-    QString showText;                       //要显示的文本信息（安装状态）
+    QColor color;      // 画笔颜色
+    QString showText;  // 要显示的文本信息（安装状态）
 
     DPalette::ColorGroup colorGroup;
-    if (DApplication::activeWindow()) {     //当前处于激活状态
-        colorGroup = DPalette::Active;              //设置Palette为激活状态
+    if (DApplication::activeWindow()) {  // 当前处于激活状态
+        colorGroup = DPalette::Active;   // 设置Palette为激活状态
     } else {
-        colorGroup = DPalette::Inactive;            //设置Palette为非激活状态
+        colorGroup = DPalette::Inactive;  // 设置Palette为非激活状态
     }
 
-    //根据操作的状态显示提示语
+    // 根据操作的状态显示提示语
     switch (operate_stat) {
-    case DebListModel::Operating:                                   //正在安装
-        painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
-        showText = tr("Installing");
-        break;
-    case DebListModel::Success:                                     //安装成功
-        painter->setPen(QPen(parentViewPattle.color(DPalette::LightLively)));
-        showText = tr("Installed");
-        break;
-    case DebListModel::Waiting:                                     //等待安装
-        painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
-        showText = tr("Waiting");
-        break;
-    default:                                                        //安装失败
-        painter->setPen(QPen(parentViewPattle.color(DPalette::TextWarning)));
-        showText = tr("Failed");
-        break;
+        case DebListModel::Operating:  // 正在安装
+            painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
+            showText = tr("Installing");
+            break;
+        case DebListModel::Success:  // 安装成功
+            painter->setPen(QPen(parentViewPattle.color(DPalette::LightLively)));
+            showText = tr("Installed");
+            break;
+        case DebListModel::Waiting:  // 等待安装
+            painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
+            showText = tr("Waiting");
+            break;
+        default:  // 安装失败
+            painter->setPen(QPen(parentViewPattle.color(DPalette::TextWarning)));
+            showText = tr("Failed");
+            break;
     }
 
-    if (isSelect && isEnable) {                                     //当前被选中 未被选中使用默认颜色
+    if (isSelect && isEnable) {  // 当前被选中 未被选中使用默认颜色
         forground.setColor(appPalette.color(colorGroup, DPalette::HighlightedText));
         painter->setPen(forground);
     }
-    painter->drawText(install_status_rect, showText, Qt::AlignVCenter | Qt::AlignRight);    //在item上添加安装提示
+    painter->drawText(install_status_rect, showText, Qt::AlignVCenter | Qt::AlignRight);  // 在item上添加安装提示
 }
 
-void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                                 const QModelIndex &index) const
+void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (!index.isValid()) { //判断传入的index是否有效
+    if (!index.isValid()) {  // 判断传入的index是否有效
         DStyledItemDelegate::paint(painter, option, index);
         return;
     }
@@ -105,18 +101,18 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QBrush background;
     QPen forground;
     DPalette::ColorGroup colorGroup;
-    if (!(option.state & DStyle::State_Enabled)) {                      //当前appListView not enable
+    if (!(option.state & DStyle::State_Enabled)) {  // 当前appListView not enable
         colorGroup = DPalette::Disabled;
     } else {
-        if (!DApplication::activeWindow()) {                            //当前窗口未被激活
+        if (!DApplication::activeWindow()) {  // 当前窗口未被激活
             colorGroup = DPalette::Inactive;
         } else {
-            colorGroup = DPalette::Active;                                      //当前窗口被激活
+            colorGroup = DPalette::Active;  // 当前窗口被激活
         }
     }
-    background.setColor(QColor(0, 0, 0, 0)); //未选中时直接背景透明
+    background.setColor(QColor(0, 0, 0, 0));  // 未选中时直接背景透明
 
-    //被选中时设置颜色高亮
+    // 被选中时设置颜色高亮
     forground.setColor(palette.color(colorGroup, DPalette::Text));
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {
@@ -126,10 +122,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setPen(forground);
     painter->fillPath(bgPath, background);
 
-    //设置包名和版本号的字体颜色 fix bug: 59390
+    // 设置包名和版本号的字体颜色 fix bug: 59390
     forground.setColor(palette.color(colorGroup, DPalette::ToolTipText));
 
-    //绘制分割线
+    // 绘制分割线
     QRect lineRect;
     lineRect.setX(content_x);
     int itemHeight = m_itemHeight;
@@ -194,7 +190,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->drawText(version_rect, version_str, Qt::AlignLeft | Qt::AlignVCenter);
 
     // install status
-    const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();        //获取包的状态
+    const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();  // 获取包的状态
     if (operate_stat != DebListModel::Prepare) {
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 20);
@@ -203,8 +199,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QFont stat_font = Utils::loadFontBySizeAndWeight(mediumFontFamily, 11, QFont::Medium);
         stat_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9));
         painter->setFont(stat_font);
-        //刷新添加包状态的提示
-        refreshDebItemStatus(operate_stat, install_status_rect, painter, (option.state & DStyle::State_Selected), (option.state & DStyle::State_Enabled));
+        // 刷新添加包状态的提示
+        refreshDebItemStatus(operate_stat,
+                             install_status_rect,
+                             painter,
+                             (option.state & DStyle::State_Selected),
+                             (option.state & DStyle::State_Enabled));
     }
 
     // draw package info
@@ -214,53 +214,48 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     info_rect.setLeft(content_x);
     info_rect.setTop(name_rect.bottom() + 2);
 
-    //获取包的版本
+    // 获取包的版本
     const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
 
-    //获取包的依赖状态
+    // 获取包的依赖状态
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     DPalette pa = DebApplicationHelper::instance()->palette(m_parentView);
 
-    //未被选中，设置正常的颜色
+    // 未被选中，设置正常的颜色
     forground.setColor(palette.color(colorGroup, DPalette::ToolTipText));
 
-    //安装状态
+    // 安装状态
     if (install_stat != DebListModel::NotInstalled) {
-        //获取安装版本
-        if (install_stat == DebListModel::InstalledSameVersion) {       //安装了相同版本
+        // 获取安装版本
+        if (install_stat == DebListModel::InstalledSameVersion) {  // 安装了相同版本
             info_str = tr("Same version installed");
-        } else if (install_stat == DebListModel::InstalledLaterVersion) {//安装了更新的版本
-            info_str =
-                tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
-        } else {                                                        //安装了较早的版本
-            info_str =
-                tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+        } else if (install_stat == DebListModel::InstalledLaterVersion) {  // 安装了更新的版本
+            info_str = tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
+        } else {  // 安装了较早的版本
+            info_str = tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
         }
-        //fix bug: 43139
+        // fix bug: 43139
         forground.setColor(palette.color(colorGroup, DPalette::TextTips));
-    } else {//当前没有安装过
-        //获取包的短描述（model增加长描述接口，批量安装显示的是短描述）
+    } else {  // 当前没有安装过
+        // 获取包的短描述（model增加长描述接口，批量安装显示的是短描述）
         info_str = index.data(DebListModel::PackageShortDescriptionRole).toString();
-        //fix bug: 43139
+        // fix bug: 43139
         forground.setColor(palette.color(colorGroup, DPalette::TextTips));
     }
 
     if (operate_stat == DebListModel::Failed) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-        forground.setColor(palette.color(colorGroup, DPalette::TextWarning));       //安装失败或依赖错误
+        forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
-    if (dependsStat == DebListModel::DependsBreak
-            || dependsStat == DebListModel::DependsAuthCancel
-            || dependsStat == DebListModel::DependsVerifyFailed
-            || dependsStat == DebListModel::ArchBreak   // 添加对架构不匹配的处理
-//                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
-       ) {
-
+    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel ||
+        dependsStat == DebListModel::DependsVerifyFailed || dependsStat == DebListModel::ArchBreak  // 添加对架构不匹配的处理
+        //                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
+    ) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
-        forground.setColor(palette.color(colorGroup, DPalette::TextWarning));       //安装失败或依赖错误
+        forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
 
-    //当前选中 设置高亮
+    // 当前选中 设置高亮
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {
             forground.setColor(palette.color(colorGroup, DPalette::HighlightedText));
@@ -272,7 +267,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     info_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
     painter->setFont(info_font);
     info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
-    painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);       //将提示绘制到item上
+    painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);  // 将提示绘制到item上
 
     painter->restore();
 }
@@ -282,7 +277,7 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(index);
     Q_UNUSED(option);
 
-    QSize itemSize = QSize(0, m_itemHeight); //设置Item的高度
+    QSize itemSize = QSize(0, m_itemHeight);  // 设置Item的高度
     return itemSize;
 }
 

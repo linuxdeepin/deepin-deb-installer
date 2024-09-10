@@ -16,11 +16,11 @@
  */
 enum DependsStatus {
     DependsUnknown,
-    DependsOk,              //依赖满足
-    DependsAvailable,       //依赖可用但是需要下载
-    DependsBreak,           //依赖不满足
-    DependsAuthCancel,      //依赖授权失败（wine依赖）
-    ArchBreak,              //架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
+    DependsOk,          // 依赖满足
+    DependsAvailable,   // 依赖可用但是需要下载
+    DependsBreak,       // 依赖不满足
+    DependsAuthCancel,  // 依赖授权失败（wine依赖）
+    ArchBreak,  // 架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
 };
 
 /**
@@ -29,10 +29,10 @@ enum DependsStatus {
  */
 enum InstallStatus {
     InstallStatusUnknown,
-    NotInstalled,                           //当前包没有被安装
-    InstalledSameVersion,                   //当前已经安装过相同的版本
-    InstalledEarlierVersion,                //当前已经安装过较早的版本
-    InstalledLaterVersion,                  //当前已经安装过更新的版本
+    NotInstalled,             // 当前包没有被安装
+    InstalledSameVersion,     // 当前已经安装过相同的版本
+    InstalledEarlierVersion,  // 当前已经安装过较早的版本
+    InstalledLaterVersion,    // 当前已经安装过更新的版本
 };
 
 QApt::Backend *init_backend();
@@ -78,7 +78,6 @@ public:
      */
     InstallStatus getPackageInstallStatus(const QString &packagePath);
 
-
     /**
      * @brief packageAvailableDepends 获取指定包的可用的依赖
      * @param index 下标
@@ -95,11 +94,10 @@ public:
     const QStringList getPackageReverseDependsList(const QString &packageName, const QString &sysArch);
 
 private:
+    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
 
-    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch,
-                                   const QString &annotation = QString());
-
-    QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch,
+    QString resolvMultiArchAnnotation(const QString &annotation,
+                                      const QString &debArch,
                                       const int multiArchType = QApt::InvalidMultiArchType);
 
     /**
@@ -136,8 +134,8 @@ private:
      * @param packageArch         包的架构
      * @return
      */
-    const ConflictResult isInstalledConflict(const QString &packageName, const QString &packageVersion,
-                                             const QString &packageArch);
+    const ConflictResult
+    isInstalledConflict(const QString &packageName, const QString &packageVersion, const QString &packageArch);
 
     /**
      * @brief isConflictSatisfy 是否冲突满足
@@ -146,8 +144,9 @@ private:
      * @return     冲突的结果
      */
     const ConflictResult isConflictSatisfy(const QString &arch, QApt::Package *package);
-    const ConflictResult isConflictSatisfy(const QString &arch, const QList<QApt::DependencyItem> &conflicts, const QList<QApt::DependencyItem> &replaces = {});
-
+    const ConflictResult isConflictSatisfy(const QString &arch,
+                                           const QList<QApt::DependencyItem> &conflicts,
+                                           const QList<QApt::DependencyItem> &replaces = {});
 
     /**
      * @brief checkDependsPackageStatus 检查依赖包的状态
@@ -156,11 +155,13 @@ private:
      * @param depends       包的依赖列表
      * @return
      */
-    DependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
+    DependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,
+                                            const QString &architecture,
                                             const QList<QApt::DependencyItem> &depends);
-    DependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
-                                            const QApt::DependencyItem &candicate);
-    DependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture,
+    DependsStatus
+    checkDependsPackageStatus(QSet<QString> &choosed_set, const QString &architecture, const QApt::DependencyItem &candicate);
+    DependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,
+                                            const QString &architecture,
                                             const QApt::DependencyInfo &dependencyInfo);
 
 private:
@@ -170,11 +171,9 @@ private:
      * @param debArch       包的架构
      * @param dependsList   依赖列表
      */
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QList<QApt::DependencyItem> &dependsList);
-    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch,
-                                const QApt::DependencyItem &candidateItem);
-
+    void
+    packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QList<QApt::DependencyItem> &dependsList);
+    void packageCandidateChoose(QSet<QString> &choosed_set, const QString &debArch, const QApt::DependencyItem &candidateItem);
 
 private:
     // fix bug:https://pms.uniontech.com/zentao/bug-view-37220.html
@@ -182,11 +181,10 @@ private:
     QMap<QString, QString> specialPackage();
 
 public:
-    DependsStatus   m_status  = DependsUnknown;
-    QString         m_package = "";
+    DependsStatus m_status = DependsUnknown;
+    QString m_package = "";
 
 private:
     QFuture<QApt::Backend *> m_backendFuture;
-
 };
-#endif // PACKAGEDEPENDSSTATUS_H
+#endif  // PACKAGEDEPENDSSTATUS_H

@@ -41,14 +41,8 @@ class ut_packageselectitem_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new PackageSelectItem;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new PackageSelectItem; }
+    void TearDown() { delete w; }
 
 private:
     PackageSelectItem *w;

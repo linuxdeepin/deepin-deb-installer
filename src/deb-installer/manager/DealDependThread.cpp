@@ -40,7 +40,7 @@ void DealDependThread::slotReadOutput()
     }
     if (tmp.contains("Not authorized")) {
         bDependsStatusErr = true;
-        qWarning()<< qPrintable("install Wine dependency Not authorized");
+        qWarning() << qPrintable("install Wine dependency Not authorized");
         emit signalDependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
     }
 
@@ -61,7 +61,9 @@ void DealDependThread::run()
     bVerifyStatusErr = false;
 
     emit signalDependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
-    proc->start("pkexec", QStringList() << "deepin-deb-installer-dependsInstall"  << "InstallDeepinWine" << m_dependsList);
+    proc->start("pkexec",
+                QStringList() << "deepin-deb-installer-dependsInstall"
+                              << "InstallDeepinWine" << m_dependsList);
     emit signalEnableCloseButton(false);
 }
 

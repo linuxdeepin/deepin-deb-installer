@@ -13,7 +13,7 @@
 class PackagesManager;
 class Package;
 
-class PackageInstaller: public QObject
+class PackageInstaller : public QObject
 {
     Q_OBJECT
 public:
@@ -53,12 +53,11 @@ private:
 
     void installAvailableDepends();
 
-
 private:
-    Package *m_packages         = nullptr;
+    Package *m_packages = nullptr;
 
-    QApt::Backend *m_backend    = nullptr;
+    QApt::Backend *m_backend = nullptr;
     QApt::Transaction *m_pTrans = nullptr;
 };
 
-#endif // INSTALLER_H
+#endif  // INSTALLER_H

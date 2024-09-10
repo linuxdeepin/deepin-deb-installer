@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QFuture>
 
-
 class PackageSigntureStatus;
 class Package;
 class PackageInstaller;
@@ -28,14 +27,13 @@ public:
     virtual ~PackagesManager();
 
 public:
-
     bool checkPackageValid(int index = 0);
 
     bool checkPackageSignture(int index = 0);
 
     bool checkPackageDependsStatus(int index = 0);
 
-    int  checkInstallStatus(int index = 0);
+    int checkInstallStatus(int index = 0);
 
 public:
     void appendPackages(QStringList packages);
@@ -87,28 +85,27 @@ private slots:
     void slot_getDependsStatus(int, DependsStatus);
 
     void slot_getInstallStatus(int, InstallStatus);
-private:
-    QList<Package *> m_packages             = {};
-
-    QSet<QByteArray> m_packagesMd5          = {};
-
-    PackageStatus      *m_pPackageStatus    = nullptr;
-
-    PackageInstaller   *m_pPackageInstaller = nullptr;
-
-    GetStatusThread    *m_pGetStatusThread  = nullptr;
-
-    bool                m_appendFinished    = false;
 
 private:
+    QList<Package *> m_packages = {};
 
+    QSet<QByteArray> m_packagesMd5 = {};
+
+    PackageStatus *m_pPackageStatus = nullptr;
+
+    PackageInstaller *m_pPackageInstaller = nullptr;
+
+    GetStatusThread *m_pGetStatusThread = nullptr;
+
+    bool m_appendFinished = false;
+
+private:
     Package *searchByIndex(int index = 0);
     void getPackageInfo(QString pkg, int index = 0);
 
     bool checkPackageSuffix(QString packagePath);
 
     void initConnection();
-
 };
 
-#endif // PackagesManager_H
+#endif  // PackagesManager_H

@@ -21,7 +21,7 @@ bool isValidInvoker()
 {
     bool valid = false;
 
-    //判断是否存在执行路径
+    // 判断是否存在执行路径
     pid_t pid = getppid();
     QFileInfo f(QString("/proc/%1/exe").arg(pid));
     if (!f.exists()) {
@@ -30,10 +30,10 @@ bool isValidInvoker()
         valid = true;
     }
 
-    //是否存在于可调用者名单中
+    // 是否存在于可调用者名单中
     QStringList ValidInvokerExePathList;
     QString invokerPath = f.canonicalFilePath();
-    QStringList findPaths;//合法调用者查找目录列表
+    QStringList findPaths;  // 合法调用者查找目录列表
     findPaths << "/usr/bin";
     ValidInvokerExePathList << QStandardPaths::findExecutable("deepin-deb-installer", findPaths);
 
@@ -41,7 +41,7 @@ bool isValidInvoker()
         valid = ValidInvokerExePathList.contains(invokerPath);
     }
 
-    //非法调用
+    // 非法调用
     if (!valid) {
         qWarning() << QString("(pid: %1)[%2] is not allowed to configrate firewall").arg(pid).arg((invokerPath));
         return false;

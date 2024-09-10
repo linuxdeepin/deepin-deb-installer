@@ -1,19 +1,6 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// SPDX-FileCopyrightText: 2019 - 2024 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef INFOCONTROLBUTTON_H
 #define INFOCONTROLBUTTON_H
@@ -24,8 +11,8 @@
 #include <QAbstractButton>
 
 DWIDGET_USE_NAMESPACE
-#define THEME_DARK 2//"dark"
-#define THEME_LIGHT 1//"light"
+#define THEME_DARK 2   //"dark"
+#define THEME_LIGHT 1  //"light"
 
 class InfoCommandLinkButton;
 class InfoControlButton : public QWidget
@@ -66,7 +53,6 @@ signals:
     void shrink();
 
 protected:
-
     /**
      * @brief mouseReleaseEvent     重写鼠标事件
      */
@@ -91,15 +77,15 @@ private slots:
     void themeChanged();
 
 private:
-    bool        m_expand        = false;                      // 当前是需要扩展还是收缩的标志位
-    QString     m_expandTips    = "";               // 展开的提示语
-    QString     m_shrinkTips    = "";               // 收缩的提示语
+    bool m_expand = false;      // 当前是需要扩展还是收缩的标志位
+    QString m_expandTips = "";  // 展开的提示语
+    QString m_shrinkTips = "";  // 收缩的提示语
 
-    DLabel      *m_arrowIcon    = nullptr;                // 展开或收缩的图标
-    QVBoxLayout *centralLayout  = nullptr;         // 布局
+    DLabel *m_arrowIcon = nullptr;         // 展开或收缩的图标
+    QVBoxLayout *centralLayout = nullptr;  // 布局
 
-    //DCommandLinkButton for Activity color
-    InfoCommandLinkButton *m_tipsText   = nullptr;  //
+    // DCommandLinkButton for Activity color
+    InfoCommandLinkButton *m_tipsText = nullptr;  //
 };
 
-#endif // INFOCONTROLBUTTON_H
+#endif  // INFOCONTROLBUTTON_H

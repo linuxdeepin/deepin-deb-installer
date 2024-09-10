@@ -11,15 +11,16 @@ class Eventlogutils
 {
 public:
     enum EventTID {
-        OpenTime     = 1000000000,
-        CloseTime     = 1000000001,
-        StartUp           = 1000000003,
-        Quit            = 1000000004,
+        OpenTime = 1000000000,
+        CloseTime = 1000000001,
+        StartUp = 1000000003,
+        Quit = 1000000004,
     };
 
     static Eventlogutils *GetInstance();
     void writeLogs(QJsonObject &data);
-private :
+
+private:
     static Eventlogutils *m_pInstance;
     Eventlogutils();
 
@@ -27,4 +28,4 @@ private :
     void (*writeEventLogFunc)(const std::string &eventdata) = nullptr;
 };
 
-#endif // EVENTLOGUTILS_H
+#endif  // EVENTLOGUTILS_H

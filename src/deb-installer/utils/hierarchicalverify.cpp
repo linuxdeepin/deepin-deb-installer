@@ -44,9 +44,9 @@ enum HierarchicalError {
        安装器接收输出信息并判断是否为验签错误。
  */
 
-HierarchicalVerify::HierarchicalVerify() { }
+HierarchicalVerify::HierarchicalVerify() {}
 
-HierarchicalVerify::~HierarchicalVerify() { }
+HierarchicalVerify::~HierarchicalVerify() {}
 
 /**
    @return 返回分级管控签名校验辅助类实例

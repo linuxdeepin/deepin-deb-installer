@@ -16,10 +16,10 @@ PackagesListView::PackagesListView(QWidget *parent)
     , m_bLeftMouse(false)
     , m_rightMenu(nullptr)
 {
-    initUI();                   //初始化界面参数
-    initConnections();          //初始化链接
-    initRightContextMenu();     //初始化右键菜单
-    initShortcuts();            //添加快捷删除键
+    initUI();                // 初始化界面参数
+    initConnections();       // 初始化链接
+    initRightContextMenu();  // 初始化右键菜单
+    initShortcuts();         // 添加快捷删除键
 }
 
 /**
@@ -27,13 +27,13 @@ PackagesListView::PackagesListView(QWidget *parent)
  */
 void PackagesListView::initUI()
 {
-    QScroller::grabGesture(this, QScroller::TouchGesture);              //添加触控屏触控
+    QScroller::grabGesture(this, QScroller::TouchGesture);  // 添加触控屏触控
 
-    setVerticalScrollMode(ScrollPerPixel);                              //设置垂直滚动的模式
-    setSelectionMode(QListView::SingleSelection);                       //只允许单选
-    setAutoScroll(true);                                                //允许自动滚动
-    setMouseTracking(true);                                             //设置鼠标跟踪
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
+    setVerticalScrollMode(ScrollPerPixel);              // 设置垂直滚动的模式
+    setSelectionMode(QListView::SingleSelection);       // 只允许单选
+    setAutoScroll(true);                                // 允许自动滚动
+    setMouseTracking(true);                             // 设置鼠标跟踪
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);  // 滚动条一直存在
 }
 
 /**
@@ -55,9 +55,9 @@ void PackagesListView::initConnections()
 void PackagesListView::initShortcuts()
 {
     if (SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) {
-        QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);              //初始化快捷键
-        deleteShortcut->setContext(Qt::ApplicationShortcut);                                //设置快捷键的显示提示
-        connect(deleteShortcut, &QShortcut::activated, this, &PackagesListView::slotShortcutDeleteAction); //链接快捷键
+        QShortcut *deleteShortcut = new QShortcut(QKeySequence::Delete, this);  // 初始化快捷键
+        deleteShortcut->setContext(Qt::ApplicationShortcut);                    // 设置快捷键的显示提示
+        connect(deleteShortcut, &QShortcut::activated, this, &PackagesListView::slotShortcutDeleteAction);  // 链接快捷键
     }
 }
 
@@ -69,10 +69,10 @@ void PackagesListView::initShortcuts()
  */
 void PackagesListView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {                    //当前检测到鼠标左键按下
+    if (event->button() == Qt::LeftButton) {  // 当前检测到鼠标左键按下
         m_bLeftMouse = true;
     } else {
-        m_bLeftMouse = false;                                   //当前按下的不是左键
+        m_bLeftMouse = false;  // 当前按下的不是左键
     }
     DListView::mousePressEvent(event);
 }
@@ -84,8 +84,8 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
  */
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());   //获取debListModel
-    if (!debListModel->isWorkerPrepare()) {                                     //当前model未就绪
+    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
+    if (!debListModel->isWorkerPrepare()) {                                    // 当前model未就绪
         return;
     }
     emit signalCurrentIndexRow(m_currentIndex);
@@ -99,7 +99,7 @@ void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
  */
 void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
 {
-    DListView::setSelection(rect, command);             //转发消息
+    DListView::setSelection(rect, command);  // 转发消息
 
     QPoint clickPoint(rect.x(), rect.y());
     QModelIndex modelIndex = indexAt(clickPoint);
@@ -107,8 +107,8 @@ void PackagesListView::setSelection(const QRect &rect, QItemSelectionModel::Sele
     m_highlightIndex = modelIndex;
     m_currModelIndex = m_highlightIndex;
     if (!m_bLeftMouse) {
-        m_bShortcutDelete = false;                      //不允许删除
-        emit signalShowContextMenu(modelIndex);             //显示右键菜单
+        m_bShortcutDelete = false;               // 不允许删除
+        emit signalShowContextMenu(modelIndex);  // 显示右键菜单
     } else {
         m_bShortcutDelete = true;
     }
@@ -125,21 +125,21 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
     if ((event->modifiers() == Qt::AltModifier) && (event->key() == Qt::Key_M)) {
         if (this->selectionModel()->currentIndex().row() > -1) {
             m_bShortcutDelete = false;
-            //增加右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
+            // 增加右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
             if (this->hasFocus() && m_bIsRightMenuShow) {
                 // 右键菜单的触发位置为当前item的位置。此前为鼠标的位置。
                 m_rightMenu->exec(mapToGlobal(m_rightMenuPos));
             }
         }
     }
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model()); //获取debListModel
+    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
     if (debListModel) {
-        if (debListModel->isWorkerPrepare()) { //当前model未就绪
-            if (event->key() == Qt::Key_Down) { //默认tab键获取焦点行是第一行，按down键行号+1，但不超过listview的最大行数
+        if (debListModel->isWorkerPrepare()) {  // 当前model未就绪
+            if (event->key() == Qt::Key_Down) {  // 默认tab键获取焦点行是第一行，按down键行号+1，但不超过listview的最大行数
                 m_currentIndex = qMin(m_currentIndex + 1, this->model()->rowCount() - 1);
                 emit signalCurrentIndexRow(m_currentIndex);
             }
-            if (event->key() == Qt::Key_Up) { //按up键行号-1，但不小于0
+            if (event->key() == Qt::Key_Up) {  // 按up键行号-1，但不小于0
                 m_currentIndex = qMax(m_currentIndex - 1, 0);
                 emit signalCurrentIndexRow(m_currentIndex);
             }
@@ -153,14 +153,15 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
  */
 void PackagesListView::initRightContextMenu()
 {
-    if (nullptr == m_rightMenu && SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) { //当前右键菜单未初始化
-        m_rightMenu = new DMenu(this);                          //初始化右键菜单
+    if (nullptr == m_rightMenu &&
+        SingleInstallerApplication::mode == SingleInstallerApplication::NormalChannel) {  // 当前右键菜单未初始化
+        m_rightMenu = new DMenu(this);                                                    // 初始化右键菜单
 
-        //给右键菜单添加快捷键Delete
+        // 给右键菜单添加快捷键Delete
         QAction *deleteAction = new QAction(tr("Delete"), this);
 
-        m_rightMenu->addAction(deleteAction);                   //右键菜单添加action
-        connect(deleteAction, &QAction::triggered, this, &PackagesListView::slotRightMenuDeleteAction);      //action 添加链接事件
+        m_rightMenu->addAction(deleteAction);  // 右键菜单添加action
+        connect(deleteAction, &QAction::triggered, this, &PackagesListView::slotRightMenuDeleteAction);  // action 添加链接事件
     }
 }
 
@@ -171,17 +172,17 @@ void PackagesListView::initRightContextMenu()
 void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model()); //获取debListModel
+    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
     if (debListModel) {
-        if (debListModel->isWorkerPrepare()) //当前model未就绪
+        if (debListModel->isWorkerPrepare())  // 当前model未就绪
             emit signalCurrentIndexRow(index.row());
     }
 
-    m_bShortcutDelete = false;                          //右键菜单显示时不允许使用快捷键删除
+    m_bShortcutDelete = false;  // 右键菜单显示时不允许使用快捷键删除
     m_currModelIndex = index;
-    //修改右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
+    // 修改右键菜单的调出判断，当前有焦点且状态为允许右键菜单出现
     if (m_bIsRightMenuShow && m_rightMenu != nullptr) {
-        //在当前鼠标位置显示右键菜单
+        // 在当前鼠标位置显示右键菜单
         m_rightMenu->exec(QCursor::pos());
     }
 }
@@ -191,14 +192,14 @@ void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
  */
 void PackagesListView::slotShortcutDeleteAction()
 {
-    //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
+    // fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
     if (-1 == m_currModelIndex.row() || m_rightMenu->isVisible() || this->count() == 1) {
         return;
     }
 
-    //fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
-    //fix bug: 44901 https://pms.uniontech.com/zentao/bug-view-44901.htm
-    // 只删除当前选中的项
+    // fix bug: 42602 添加多个deb包到软件包安装器，选择列表中任一应用，连续多次点击delete崩溃
+    // fix bug: 44901 https://pms.uniontech.com/zentao/bug-view-44901.htm
+    //  只删除当前选中的项
     if (m_currModelIndex.row() < this->count() && this->selectionModel()->selectedIndexes().contains(m_currModelIndex))
         emit signalRemoveItemClicked(m_currModelIndex);
 }
@@ -222,7 +223,7 @@ void PackagesListView::slotRightMenuDeleteAction()
  */
 void PackagesListView::paintEvent(QPaintEvent *event)
 {
-    //获取currentIndex并保存，用于右键菜单的定位。
+    // 获取currentIndex并保存，用于右键菜单的定位。
     m_currentIndex = this->currentIndex().row();
     DListView::paintEvent(event);
 }
@@ -236,7 +237,7 @@ void PackagesListView::paintEvent(QPaintEvent *event)
  */
 void PackagesListView::slotGetPos(QRect rect, int index)
 {
-    if (index == m_currentIndex) {                              //获取当前项右键菜单出现的位置
+    if (index == m_currentIndex) {  // 获取当前项右键菜单出现的位置
         m_rightMenuPos.setX(rect.x() + rect.width() - 162);
         m_rightMenuPos.setY(rect.y() + rect.height() / 2);
     }
@@ -248,7 +249,7 @@ void PackagesListView::slotGetPos(QRect rect, int index)
  */
 void PackagesListView::setRightMenuShowStatus(bool isShow)
 {
-    m_bIsRightMenuShow = isShow;        //设置右键菜单是否显示的标识位
+    m_bIsRightMenuShow = isShow;  // 设置右键菜单是否显示的标识位
 }
 
 /**
@@ -258,14 +259,14 @@ void PackagesListView::setRightMenuShowStatus(bool isShow)
  */
 void PackagesListView::focusInEvent(QFocusEvent *event)
 {
-    if (event->reason() == Qt::TabFocusReason) {        //tab焦点
+    if (event->reason() == Qt::TabFocusReason) {  // tab焦点
         if (this->count() > 0) {
             m_currModelIndex = this->model()->index(0, 0);
-            this->setCurrentIndex(m_currModelIndex);        //存在焦点时，默认选入第一项
+            this->setCurrentIndex(m_currModelIndex);  // 存在焦点时，默认选入第一项
             m_currentIndex = 0;
-            DebListModel *debListModel = qobject_cast<DebListModel *>(this->model()); //获取debListModel
+            DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
             if (debListModel) {
-                if (debListModel->isWorkerPrepare()) //当前model未就绪
+                if (debListModel->isWorkerPrepare())  // 当前model未就绪
                     emit signalCurrentIndexRow(0);
             }
         }
@@ -277,17 +278,17 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
  */
 bool PackagesListView::event(QEvent *event)
 {
-    //字体变化事件
+    // 字体变化事件
     if (event->type() == QEvent::FontChange) {
         qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
-        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) { //当前字体大小是否小于13
+        if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) {  // 当前字体大小是否小于13
             emit signalChangeItemHeight(50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font())));
         } else {
             emit signalChangeItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
         }
     }
 
-    //焦点切出事件
+    // 焦点切出事件
     if (event->type() == QEvent::FocusOut) {
         this->clearSelection();
         m_currentIndex = -1;

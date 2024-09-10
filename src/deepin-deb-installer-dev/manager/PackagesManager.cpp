@@ -25,7 +25,8 @@ void PackagesManager::initConnection()
 
     connect(m_pPackageInstaller, &PackageInstaller::signal_installProgress, this, &PackagesManager::signal_installProgress);
 
-    connect(m_pPackageInstaller, &PackageInstaller::signal_installDetailStatus, this, &PackagesManager::signal_installDetailStatus);
+    connect(
+        m_pPackageInstaller, &PackageInstaller::signal_installDetailStatus, this, &PackagesManager::signal_installDetailStatus);
 
     connect(m_pPackageInstaller, &PackageInstaller::signal_installError, this, &PackagesManager::signal_installErrorOccured);
 
@@ -44,27 +45,28 @@ void PackagesManager::slot_getDependsStatus(int index, DependsStatus dependsStat
     if (pkg) {
         pkg->setPackageDependStatus(dependsStatus);
 
-        //根据获取的依赖结果，发送信号
+        // 根据获取的依赖结果，发送信号
         switch (dependsStatus) {
-        case DependsOk:
-        case DependsAvailable:  //依赖满足，不发送信号
-            break;
-        case DependsBreak:          //依赖不满足
-            emit signal_dependStatusError(index, DependsBreak);
-            break;
-        case DependsAuthCancel:     //依赖下载授权被取消
-            emit signal_dependStatusError(index, DependsAuthCancel);
-            break;
-        case DependsUnknown:        //依赖未知（下载依赖失败）
-            emit signal_dependStatusError(index, DependsUnknown);
-            break;
-        case ArchBreak:             //依赖架构错误
-            emit signal_dependStatusError(index, ArchBreak);
-            break;
+            case DependsOk:
+            case DependsAvailable:  // 依赖满足，不发送信号
+                break;
+            case DependsBreak:  // 依赖不满足
+                emit signal_dependStatusError(index, DependsBreak);
+                break;
+            case DependsAuthCancel:  // 依赖下载授权被取消
+                emit signal_dependStatusError(index, DependsAuthCancel);
+                break;
+            case DependsUnknown:  // 依赖未知（下载依赖失败）
+                emit signal_dependStatusError(index, DependsUnknown);
+                break;
+            case ArchBreak:  // 依赖架构错误
+                emit signal_dependStatusError(index, ArchBreak);
+                break;
         }
     } else {
-        //未获取到 当前包的下标
-        qWarning() << "[PackagesManager]<< slot_getDependsStatus" << "Package not found";
+        // 未获取到 当前包的下标
+        qWarning() << "[PackagesManager]<< slot_getDependsStatus"
+                   << "Package not found";
     }
 }
 
@@ -103,7 +105,8 @@ int PackagesManager::checkInstallStatus(int index)
     if (pkg) {
         return pkg->getInstallStatus();
     } else {
-        qWarning() << "[PackagesManager]<< checkInstallStatus" << "Package not found";
+        qWarning() << "[PackagesManager]<< checkInstallStatus"
+                   << "Package not found";
         return InstallStatusUnknown;
     }
 }
@@ -114,7 +117,8 @@ bool PackagesManager::checkPackageValid(int index)
     if (package) {
         return package->getValid();
     } else {
-        qWarning() << "[PackagesManager]<< checkPackageValid" << "Package not found";
+        qWarning() << "[PackagesManager]<< checkPackageValid"
+                   << "Package not found";
         return false;
     }
 }
@@ -123,15 +127,16 @@ bool PackagesManager::checkPackageSignture(int index)
 {
     Package *package = searchByIndex(index);
     if (package) {
-
-        if (SigntureVerifySuccess ==  package->getSigntureStatus()) {
+        if (SigntureVerifySuccess == package->getSigntureStatus()) {
             return true;
         } else {
-            qWarning() << "[PackagesManager]<< checkPackageSignture" << "package verify signture" << package->getSigntureStatus();
+            qWarning() << "[PackagesManager]<< checkPackageSignture"
+                       << "package verify signture" << package->getSigntureStatus();
             return false;
         }
     } else {
-        qWarning() << "[PackagesManager]<< checkPackageSignture" << "Package not found";
+        qWarning() << "[PackagesManager]<< checkPackageSignture"
+                   << "Package not found";
         return false;
     }
 }
@@ -143,7 +148,8 @@ bool PackagesManager::checkPackageDependsStatus(int index)
         return (package->getDependStatus() == DependsOk || package->getDependStatus() == DependsAvailable);
 
     } else {
-        qWarning() << "[PackagesManager]<< checkPackageDependsStatus" << "Package not found";
+        qWarning() << "[PackagesManager]<< checkPackageDependsStatus"
+                   << "Package not found";
         return false;
     }
 }
@@ -152,17 +158,19 @@ bool PackagesManager::checkPackageSuffix(QString packagePath)
 {
     const QFileInfo info(packagePath);
 
-    if (info.exists() && info.isFile() && info.suffix().toLower() == "deb") {        //大小写不敏感的判断是否为deb后缀
+    if (info.exists() && info.isFile() && info.suffix().toLower() == "deb") {  // 大小写不敏感的判断是否为deb后缀
         return true;
     }
-    qWarning() << "[PackagesManager]" << "checkPackageSuffix" << "Suffix error";
+    qWarning() << "[PackagesManager]"
+               << "checkPackageSuffix"
+               << "Suffix error";
     return false;
 }
 
 void PackagesManager::getPackageInfo(QString packagePath, int index)
 {
     m_appendFinished = false;
-   if (!checkPackageSuffix(packagePath)) {
+    if (!checkPackageSuffix(packagePath)) {
         emit signal_packageInvalid(index);
         return;
     }
@@ -172,14 +180,18 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
     Package *packageFile = new Package(index, packagePath);
 
     if (!packageFile->getValid()) {
-        qWarning() << "[PackagesManager]" << "getPackageInfo" << "packageFile->getValid()" << packageFile->getValid();
+        qWarning() << "[PackagesManager]"
+                   << "getPackageInfo"
+                   << "packageFile->getValid()" << packageFile->getValid();
         emit signal_packageInvalid(index);
         return;
     }
 
     auto md5 = packageFile->getMd5();
     if (m_packagesMd5.contains(md5)) {
-        qWarning() << "[PackagesManager]" << "getPackageInfo" <<  "md5 already exists";
+        qWarning() << "[PackagesManager]"
+                   << "getPackageInfo"
+                   << "md5 already exists";
         emit signal_packageAlreadyExits(index);
         return;
     }
@@ -202,11 +214,12 @@ void PackagesManager::getPackageInfo(QString packagePath, int index)
 void PackagesManager::install()
 {
     if (m_packages.size() > 0) {
-
         m_pPackageInstaller->appendPackage(m_packages[0]);
         m_pPackageInstaller->installPackage();
     } else {
-        qWarning() << "PackagesManager" << "install" << "index invalid";
+        qWarning() << "PackagesManager"
+                   << "install"
+                   << "index invalid";
         emit signal_invalidIndex(0);
     }
 }
@@ -219,7 +232,8 @@ void PackagesManager::uninstall(int index)
             emit signal_packageNotInstalled(index);
             return;
         }
-        QStringList reverseDepends = m_pPackageStatus->getPackageReverseDependsList(package->getName(), package->getArchitecture());
+        QStringList reverseDepends =
+            m_pPackageStatus->getPackageReverseDependsList(package->getName(), package->getArchitecture());
 
         if (!reverseDepends.isEmpty()) {
             package->setPackageReverseDependsList(reverseDepends);
@@ -228,26 +242,27 @@ void PackagesManager::uninstall(int index)
         m_pPackageInstaller->appendPackage(package);
         m_pPackageInstaller->uninstallPackage();
     } else {
-        qWarning() << "PackagesManager" << "uninstall" << "index invalid";
+        qWarning() << "PackagesManager"
+                   << "uninstall"
+                   << "index invalid";
     }
 }
 
 Package *PackagesManager::searchByIndex(int index)
 {
-    auto iter = std::find_if(m_packages.begin(), m_packages.end(), [index](const auto &package) {
-        return package->getIndex() == index;
-    });
-    if(iter != m_packages.end()) {
+    auto iter =
+        std::find_if(m_packages.begin(), m_packages.end(), [index](const auto &package) { return package->getIndex() == index; });
+    if (iter != m_packages.end()) {
         return *iter;
     }
     emit signal_invalidIndex(index);
-    qWarning() << "[PackagesManager]<< searchByIndex" << "Package not found";
+    qWarning() << "[PackagesManager]<< searchByIndex"
+               << "Package not found";
     return nullptr;
 }
 
 void PackagesManager::slot_installFinished(QApt::ExitStatus exitStatus)
 {
-
     if (QApt::ExitSuccess == exitStatus) {
         m_packagesMd5.remove(m_packages[0]->getMd5());
         m_packages.removeAt(0);

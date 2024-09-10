@@ -1,19 +1,6 @@
-/*
-* Copyright (C) 2019 ~ 2020 Uniontech Software Technology Co.,Ltd.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// SPDX-FileCopyrightText: 2019 - 2024 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef SHOWINSTALLINFOTEXTEDIT_H
 #define SHOWINSTALLINFOTEXTEDIT_H
@@ -23,10 +10,10 @@
 #include <QTimer>
 #include <math.h>
 
-#define CELL_TIME   15
+#define CELL_TIME 15
 #define TAP_MOVE_DELAY 300
 // Tween算法(模拟惯性)
-typedef std::function<void (qreal)> FunSlideInertial;
+typedef std::function<void(qreal)> FunSlideInertial;
 class FlashTween : public QObject
 {
     Q_OBJECT
@@ -36,30 +23,23 @@ public:
 
 public:
     void start(qreal t, qreal b, qreal c, qreal d, FunSlideInertial fSlideGesture);
-    void stop()
-    {
-        m_timer->stop();
-    }
-    bool active()
-    {
-        return m_timer->isActive();
-    }
+    void stop() { m_timer->stop(); }
+    bool active() { return m_timer->isActive(); }
 
 private slots:
     void __run();
 
 private:
-    QTimer              *m_timer        = nullptr;
-    FunSlideInertial    m_fSlideGesture = nullptr;
+    QTimer *m_timer = nullptr;
+    FunSlideInertial m_fSlideGesture = nullptr;
 
-    //纵向单指惯性滑动
-    qreal               m_currentTime   = 0;
-    qreal               m_beginValue    = 0;
-    qreal               m_changeValue   = 0;
-    qreal               m_durationTime  = 0;
-    qreal               m_direction     = 1;
-    qreal               m_lastValue     = 0;
-
+    // 纵向单指惯性滑动
+    qreal m_currentTime = 0;
+    qreal m_beginValue = 0;
+    qreal m_changeValue = 0;
+    qreal m_durationTime = 0;
+    qreal m_direction = 1;
+    qreal m_lastValue = 0;
 
 private:
     /**
@@ -89,35 +69,17 @@ private:
     */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsequence-point"
-    static qreal quadraticEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return -c * (t /= d) * (t - 2) + b;
-    }
+    static qreal quadraticEaseOut(qreal t, qreal b, qreal c, qreal d) { return -c * (t /= d) * (t - 2) + b; }
 
-    static qreal cubicEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return c * ((t = t / d - 1) * t * t + 1) + b;
-    }
+    static qreal cubicEaseOut(qreal t, qreal b, qreal c, qreal d) { return c * ((t = t / d - 1) * t * t + 1) + b; }
 
-    static qreal quarticEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-    }
+    static qreal quarticEaseOut(qreal t, qreal b, qreal c, qreal d) { return -c * ((t = t / d - 1) * t * t * t - 1) + b; }
 
-    static qreal quinticEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-    }
+    static qreal quinticEaseOut(qreal t, qreal b, qreal c, qreal d) { return c * ((t = t / d - 1) * t * t * t * t + 1) + b; }
 
-    static qreal sinusoidalEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return c * sin(t / d * (3.14 / 2)) + b;
-    }
+    static qreal sinusoidalEaseOut(qreal t, qreal b, qreal c, qreal d) { return c * sin(t / d * (3.14 / 2)) + b; }
 
-    static qreal circularEaseOut(qreal t, qreal b, qreal c, qreal d)
-    {
-        return c * sqrt(1 - (t = t / d - 1) * t) + b;
-    }
+    static qreal circularEaseOut(qreal t, qreal b, qreal c, qreal d) { return c * sqrt(1 - (t = t / d - 1) * t) + b; }
 
     static qreal bounceEaseOut(qreal t, qreal b, qreal c, qreal d)
     {
@@ -133,7 +95,6 @@ private:
     }
 #pragma GCC diagnostic pop
 };
-
 
 /**
  * @brief The ShowInstallInfoTextEdit class
@@ -175,7 +136,6 @@ private:
      */
     void tapAndHoldGestureTriggered(QTapAndHoldGesture *);
 
-
     /**
      * @brief slideGesture 单指滑动手势(通过原生触摸屏事件进行抽象模拟)
      * @param diff
@@ -189,39 +149,38 @@ private:
     void onSelectionArea();
 
 private:
-    //触摸屏手势动作
+    // 触摸屏手势动作
     enum GestureAction {
-        GA_null,        //无动作
-        GA_tap,         //点击
-        GA_slide,       //滑动
-        GA_hold,        //长按
+        GA_null,   // 无动作
+        GA_tap,    // 点击
+        GA_slide,  // 滑动
+        GA_hold,   // 长按
     };
 
-    GestureAction   m_gestureAction = GA_null;    //手势动作 默认误动作
+    GestureAction m_gestureAction = GA_null;  // 手势动作 默认误动作
 
-    qint64          m_tapBeginTime  = 0;          //开始点击的时间
+    qint64 m_tapBeginTime = 0;  // 开始点击的时间
 
-    bool            m_slideContinue = false;      //是否持续滑动
+    bool m_slideContinue = false;  // 是否持续滑动
 
-    //add for single refers to the sliding
-    FlashTween      tween;                        //滑动惯性
+    // add for single refers to the sliding
+    FlashTween tween;  // 滑动惯性
 
-    qreal           change          = {0.0};      //滑动变化量
-    qreal           duration        = {0.0};      //滑动方向
+    qreal change = {0.0};    // 滑动变化量
+    qreal duration = {0.0};  // 滑动方向
 
-    //鼠标事件的位置
-    int             m_start         = 0;          //开始时鼠标的位置
-    int             m_end           = 0;          //结束时鼠标的位置
-    qreal           m_stepSpeed     = 0;          //移动的速度
+    // 鼠标事件的位置
+    int m_start = 0;        // 开始时鼠标的位置
+    int m_end = 0;          // 结束时鼠标的位置
+    qreal m_stepSpeed = 0;  // 移动的速度
 
-    int             m_lastMousepos  = 0;         //上次移动后鼠标的位置
+    int m_lastMousepos = 0;  // 上次移动后鼠标的位置
 
-    ulong           m_lastMouseTime = 0;          //上次移动鼠标的时间
+    ulong m_lastMouseTime = 0;  // 上次移动鼠标的时间
 
-    int             m_nSelectEndLine= 0;          //< 选择结束时后鼠标所在行
-    int             m_nSelectStart  = 0;          //< 选择开始时的鼠标位置
-    int             m_nSelectEnd    = 0;          //< 选择结束时的鼠标位置
-
+    int m_nSelectEndLine = 0;  //< 选择结束时后鼠标所在行
+    int m_nSelectStart = 0;    //< 选择开始时的鼠标位置
+    int m_nSelectEnd = 0;      //< 选择结束时的鼠标位置
 };
 
-#endif // SHOWINSTALLINFOTEXTEDIT_H
+#endif  // SHOWINSTALLINFOTEXTEDIT_H

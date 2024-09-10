@@ -17,18 +17,19 @@ Package::Package(const QString &packagePath)
 {
     QApt::DebFile *pDebInfo = new QApt::DebFile(packagePath);
     if (!pDebInfo || !pDebInfo->isValid()) {
-        qWarning() << "Package" << "Package" << "获取包文件失败";
+        qWarning() << "Package"
+                   << "Package"
+                   << "获取包文件失败";
         m_valid = false;
         return;
     }
 
     m_signtureStatus = m_pSigntureStatus->checkPackageSignture(packagePath);
-    m_valid                 = pDebInfo->isValid();
-    m_name                  = pDebInfo->packageName();
-    m_version               = pDebInfo->version();
-    m_architecture          = pDebInfo->architecture();
-    m_md5                   = pDebInfo->md5Sum();
-
+    m_valid = pDebInfo->isValid();
+    m_name = pDebInfo->packageName();
+    m_version = pDebInfo->version();
+    m_architecture = pDebInfo->architecture();
+    m_md5 = pDebInfo->md5Sum();
 
     delete pDebInfo;
 }
@@ -41,18 +42,20 @@ Package::Package(int index, const QString &packagePath)
     QApt::DebFile *pDebInfo = new QApt::DebFile(packagePath);
 
     if (!pDebInfo || !pDebInfo->isValid()) {
-        qWarning() << "Package" << "Package" << "获取包文件失败";
-        m_valid   = false;
+        qWarning() << "Package"
+                   << "Package"
+                   << "获取包文件失败";
+        m_valid = false;
         return;
     }
 
-    m_valid                 = pDebInfo->isValid();
-    m_name                  = pDebInfo->packageName();
-    m_version               = pDebInfo->version();
-    m_architecture          = pDebInfo->architecture();
-    m_md5                   = pDebInfo->md5Sum();
+    m_valid = pDebInfo->isValid();
+    m_name = pDebInfo->packageName();
+    m_version = pDebInfo->version();
+    m_architecture = pDebInfo->architecture();
+    m_md5 = pDebInfo->md5Sum();
 
-    m_signtureStatus        = m_pSigntureStatus->checkPackageSignture(packagePath);
+    m_signtureStatus = m_pSigntureStatus->checkPackageSignture(packagePath);
 }
 
 void Package::setPackageReverseDependsList(const QStringList &reverseDepends)

@@ -6,6 +6,6 @@
 
 void GenerateSettingTranslate()
 {
-    auto basic = QObject::tr("Basic"); //基础设置
-    auto text = QObject::tr("Check digital signatures if the developer mode is enabled"); //弹窗提示
+    auto basic = QObject::tr("Basic");                                                     // 基础设置
+    auto text = QObject::tr("Check digital signatures if the developer mode is enabled");  // 弹窗提示
 }

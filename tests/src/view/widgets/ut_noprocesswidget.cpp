@@ -13,14 +13,8 @@ class ut_noprocesswidget_TEST : public ::testing::Test
 {
     // Test interface
 protected:
-    void SetUp()
-    {
-        w = new NoProcessWidget;
-    }
-    void TearDown()
-    {
-        delete w;
-    }
+    void SetUp() { w = new NoProcessWidget; }
+    void TearDown() { delete w; }
 
 private:
     NoProcessWidget *w;

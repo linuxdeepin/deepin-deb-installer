@@ -10,7 +10,6 @@
 
 #include <QObject>
 
-
 class Package
 {
 public:
@@ -60,98 +59,97 @@ public:
      * @brief getIndex 获取包的下标
      * @return 包的下标
      */
-    int             getIndex();
+    int getIndex();
 
     /**
      * @brief getValid 获取包的有效性
      * @return 包的有效性
      */
-    bool            getValid();
+    bool getValid();
 
     /**
      * @brief getName 获取包的名称
      * @return 包的名字
      */
-    QString         getName();
+    QString getName();
 
     /**
      * @brief getPath 获取包的路径
      * @return 包的路径
      */
-    QString         getPath();
+    QString getPath();
 
     /**
      * @brief getVersion 获取包的版本
      * @return 包的版本
      */
-    QString         getVersion();
+    QString getVersion();
 
     /**
      * @brief getArchitecture 获取包的架构
      * @return 包的架构
      */
-    QString         getArchitecture();
+    QString getArchitecture();
 
     /**
      * @brief getMd5 获取包的MD5值
      * @return 包的md5值
      */
-    QByteArray      getMd5();
+    QByteArray getMd5();
 
     /**
      * @brief getDependStatus 获取包的依赖状态
      * @return  包的依赖状态
      */
-    DependsStatus   getDependStatus();
+    DependsStatus getDependStatus();
 
     /**
      * @brief getSigntureStatus 获取包的签名状态
      * @return 包的签名状态
      */
-    SigntureStatus  getSigntureStatus();
+    SigntureStatus getSigntureStatus();
 
     /**
      * @brief getInstallStatus 获取包的安装状态
      * @return 包的安装状态
      */
-    InstallStatus   getInstallStatus();
+    InstallStatus getInstallStatus();
 
     /**
      * @brief getPackageAvailableDepends 获取包的可用依赖列表
      * @return 包的可用依赖列表
      */
-    QStringList     getPackageAvailableDepends();
+    QStringList getPackageAvailableDepends();
 
     /**
      * @brief getPackageReverseDependList 获取依赖于此应用的 应用列表
      * @return 应用列表
      */
-    QStringList     getPackageReverseDependList();
+    QStringList getPackageReverseDependList();
 
 private:
-    int             m_index                     = -1;
-    bool            m_valid                     = false;
-    QString         m_name                      = "";
-    QString         m_version                   = "";
-    QString         m_architecture              = "";
-    QByteArray      m_md5                       = "";
-    DependsStatus   m_dependsStatus             = DependsUnknown;
-    SigntureStatus  m_signtureStatus            = SigntureUnknown;
-    InstallStatus   m_installStatus             = InstallStatusUnknown;
+    int m_index = -1;
+    bool m_valid = false;
+    QString m_name = "";
+    QString m_version = "";
+    QString m_architecture = "";
+    QByteArray m_md5 = "";
+    DependsStatus m_dependsStatus = DependsUnknown;
+    SigntureStatus m_signtureStatus = SigntureUnknown;
+    InstallStatus m_installStatus = InstallStatusUnknown;
 
-    QString         m_packagePath                = "";
-    QStringList     m_packageAvailableDependList = {};
-    QStringList     m_packageReverseDepends      = {};
+    QString m_packagePath = "";
+    QStringList m_packageAvailableDependList = {};
+    QStringList m_packageReverseDepends = {};
 
 private:
-
     /**
      * @brief m_pSigntureStatus 签名状态类
      */
-    PackageSigntureStatus *m_pSigntureStatus    = nullptr;
+    PackageSigntureStatus *m_pSigntureStatus = nullptr;
 
     Package(const Package &rhs) = delete;
-    Package& operator=(const Package &rhs) = delete;
+    Package &operator=(const Package &rhs) = delete;
 };
 
-#endif // PACKAGE_H
+#endif  // PACKAGE_H

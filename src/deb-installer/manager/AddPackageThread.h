@@ -103,11 +103,11 @@ signals:
     void signalSingleToMultiPage();
 
 private:
-    //要添加的软件包列表
-    QStringList m_packages                  = {};
+    // 要添加的软件包列表
+    QStringList m_packages = {};
 
-    //已经添加的deb包的MD5值的集合
-    QSet<QByteArray> m_appendedPackagesMd5  = {};
+    // 已经添加的deb包的MD5值的集合
+    QSet<QByteArray> m_appendedPackagesMd5 = {};
 
     QMap<QString, QByteArray> m_allPackages = {};
 
@@ -135,7 +135,6 @@ private:
     bool mkTempDir();
 
 private:
-
     /**
      * @brief dealInvalidPackage 查看包是否有效
      * @param packagePath 包的路径
@@ -160,9 +159,8 @@ private:
     const QString m_tempLinkDir = "/tmp/LinkTemp/";
 
 private:
-
-    //有效文件的数量
+    // 有效文件的数量
     int m_validPackageCount = 0;
 };
 
-#endif // ADDPACKAGETHREAD_H
+#endif  // ADDPACKAGETHREAD_H
