@@ -30,7 +30,7 @@ enum AppendFailReason {
     PackageNotDdim,
 };
 
-}
+}  // namespace Pkg
 
 Q_DECLARE_METATYPE(Pkg::DependsPair)
 

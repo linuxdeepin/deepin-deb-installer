@@ -27,6 +27,8 @@
 
 #include <DSysInfo>
 
+#include <QApt/Package>
+
 QHash<QString, QPixmap> Utils::m_imgCacheHash;
 QHash<QString, QString> Utils::m_fontNameCache;
 
@@ -325,6 +327,11 @@ bool Utils::checkPackageReadable(const QString &packagePath)
         outfile.close();
         return true;
     }
+}
+
+int Utils::compareVersion(const QString &v1, const QString &v2)
+{
+    return QApt::Package::compareVersion(v1, v2);
 }
 
 /**

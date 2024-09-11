@@ -137,6 +137,7 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/process/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/widgets/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/uab/*.cpp
     )
 FILE(GLOB allTestSource
   src/*.cpp
@@ -145,6 +146,7 @@ FILE(GLOB allTestSource
   src/utils/*.cpp
   src/view/pages/*.cpp
   src/view/widgets/*.cpp
+  src/uab/*.cpp
 )
 include_directories(src)
 include_directories( ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/)

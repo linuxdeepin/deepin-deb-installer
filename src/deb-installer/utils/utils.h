@@ -65,6 +65,8 @@ public:
     static bool Return_Digital_Verify(const QString &strfilepath, const QString &strfilename);  // 返回验证工具是否存在
     static bool checkPackageReadable(const QString &packagePath);  // 返回软件包是否允许读取
 
+    static int compareVersion(const QString &v1, const QString &v2);
+
     static bool isDevelopMode();  // Check if develop mode (root)
 };
 
