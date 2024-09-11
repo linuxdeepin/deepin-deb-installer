@@ -44,6 +44,7 @@ public:
 
     // 当前APT支持的架构
     bool supportArch(const QString &arch) const { return archs.contains(arch); }
+    inline QStringList supportArchList() const { return archs; }
 
     // 软件包安装状态，first:安装状态，secend:已安装版本（当状态不为NotInstalled时有效）
     QPair<PackageInstallStatus, QString> packageInstallStatus(const DebIr &ir) const;
