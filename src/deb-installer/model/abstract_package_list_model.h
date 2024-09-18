@@ -43,35 +43,6 @@ public:
         WorkerUnInstall    // 正在卸载
     };
 
-    // 包的安装状态
-    enum PackageInstallStatus {
-        NotInstalled,             // 当前包没有被安装
-        InstalledSameVersion,     // 当前已经安装过相同的版本
-        InstalledEarlierVersion,  // 当前已经安装过较早的版本
-        InstalledLaterVersion,    // 当前已经安装过更新的版本
-    };
-
-    // 当前包的依赖状态
-    enum DependsStatus {
-        DependsOk,            // 依赖满足
-        DependsAvailable,     // 依赖可用但是需要下载
-        DependsBreak,         // 依赖不满足
-        DependsVerifyFailed,  // 签名验证失败
-        DependsAuthCancel,    // 依赖授权失败（wine依赖）
-        ArchBreak,  // 架构不满足（此前架构不满足在前端验证，此后会优化到后端）//2020-11-19 暂时未优化
-        Prohibit,  // 应用被域管限制，无法安装
-    };
-
-    // 包的当前操作状态
-    enum PackageOperationStatus {
-        Prepare,       // 准备安装
-        Operating,     // 正在安装
-        Success,       // 安装成功
-        Failed,        // 安装失败
-        Waiting,       // 等待安装
-        VerifyFailed,  // 签名验证失败
-    };
-
     // wine 依赖安装时的状态
     enum DependsAuthStatus {
         AuthBefore,          // 鉴权框弹出之前
@@ -130,8 +101,8 @@ Q_SIGNALS:
     // package removed or rename
     void signalPackageCannotFind(QString packageName) const;
 
-    // install flow status, start and finish
-    void signalStartInstall();
+    // install/uninstall flow status, start and finish
+    void signalWorkerStart();
     void signalWorkerFinished();
 
     // These interfaces are used by authorization and wine dependencies, no changes for compatibility.
@@ -147,7 +118,7 @@ Q_SIGNALS:
     void signalEnableCloseButton(bool);
 
 protected:
-    WorkerStatus m_workerStatus { WorkerPrepare };  // current worker status
+    WorkerStatus m_workerStatus{WorkerPrepare};  // current worker status
 
 private:
     Q_DISABLE_COPY(AbstractPackageListModel)

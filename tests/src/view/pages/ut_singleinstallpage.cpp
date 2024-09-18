@@ -117,12 +117,12 @@ public:
 
 QVariant stu_data()
 {
-    return DebListModel::DependsOk;
+    return Pkg::DependsStatus::DependsOk;
 }
 
 QVariant stu_data1()
 {
-    return DebListModel::Success;
+    return Pkg::PackageOperationStatus::Success;
 }
 
 TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_total)

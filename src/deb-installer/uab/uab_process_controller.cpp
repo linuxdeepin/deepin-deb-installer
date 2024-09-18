@@ -13,13 +13,15 @@ namespace Uab {
 const QString kLinglongBin = "ll-cli";
 const QString kLinglongUninstall = "uninstall";
 
+const int kInitedIndex = -1;
+
 enum UabExitCode {
     InstallError = -1,
     InstallSuccess = 0,
 };
 
 UabProcessController::UabProcessController(QObject *parent)
-    : QObject { parent }
+    : QObject{parent}
 {
 }
 
@@ -30,22 +32,64 @@ UabProcessController::ProcFlags UabProcessController::procFlag() const
 
 bool UabProcessController::isRunning() const
 {
-    return m_procFlag & (Uninstalling | Installing | Upgrading);
+    if (m_procFlag & (Uninstalling | Installing | Processing)) {
+        return true;
+    }
+
+    if (m_process && QProcess::NotRunning != m_process->state()) {
+        return true;
+    }
+
+    return false;
 }
 
-bool Uab::UabProcessController::install(const UabPkgInfo::Ptr &installPtr)
+bool UabProcessController::reset()
 {
-    return commitChange(installPtr, {});
+    if (isRunning() || !ensureProcess()) {
+        return false;
+    }
+
+    m_currentIndex = kInitedIndex;
+    m_procList.clear();
+
+    return true;
 }
 
-bool Uab::UabProcessController::uninstall(const UabPkgInfo::Ptr &uninstallPtr)
+bool Uab::UabProcessController::markInstall(const UabPkgInfo::Ptr &installPtr)
 {
-    return commitChange({}, uninstallPtr);
+    if (isRunning() || !ensureProcess()) {
+        return false;
+    }
+
+    m_procList.append(qMakePair(Installing, installPtr));
+    return true;
 }
 
-bool Uab::UabProcessController::upgradge(const UabPkgInfo::Ptr &installPtr, const UabPkgInfo::Ptr &uninstallPtr)
+bool Uab::UabProcessController::markUninstall(const UabPkgInfo::Ptr &uninstallPtr)
 {
-    return commitChange(installPtr, uninstallPtr);
+    if (isRunning() || !ensureProcess()) {
+        return false;
+    }
+
+    m_procList.append(qMakePair(Uninstalling, uninstallPtr));
+    return true;
+}
+
+bool UabProcessController::commitChanges()
+{
+    if (isRunning() || !ensureProcess() || m_procList.isEmpty()) {
+        return false;
+    }
+
+    m_procFlag = Processing;
+    m_currentIndex = kInitedIndex;
+    if (!nextProcess()) {
+        m_procFlag = Error;
+        return false;
+    }
+
+    Q_EMIT processStart();
+    return true;
 }
 
 bool Uab::UabProcessController::ensureProcess()
@@ -79,8 +123,10 @@ void UabProcessController::onReadOutput()
     if (match.hasMatch()) {
         // get (\\d+) capture
         float progress = match.captured(match.lastCapturedIndex()).toFloat();
-        if (m_procFlag.testFlag(Upgrading)) {
-            progress = m_procFlag.testFlag(Uninstalling) ? progress / 2 : (100 + progress) / 2;
+
+        int count = m_procList.size();
+        if (count > 1) {
+            progress = (m_currentIndex * 100.0f + progress) / count;
         }
 
         Q_EMIT progressChanged(progress);
@@ -93,65 +139,80 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
 
     const bool exitSuccess = InstallSuccess == exitCode;
 
-    // Upgrade: continue unisntall previous package.
-    if (m_procFlag.testFlag(Upgrading) && m_procFlag.testFlag(Installing) && exitSuccess) {
-        m_procFlag.setFlag(Installing, false);
-        uninstallImpl();
+    // continue next process
+    if (exitSuccess && nextProcess()) {
         return;
     }
 
-    m_procFlag = exitSuccess ? Finish : Error;
-    Q_EMIT processFinished(exitSuccess);
+    m_procFlag = Error;
+    Q_EMIT processFinished(false);
 }
 
-bool UabProcessController::commitChange(const UabPkgInfo::Ptr &installPtr, const UabPkgInfo::Ptr &uninstallPtr)
+bool UabProcessController::nextProcess()
 {
-    if (isRunning() || !ensureProcess()) {
+    m_procFlag.setFlag(Installing, false);
+    m_procFlag.setFlag(Uninstalling, false);
+
+    // check process finish
+    m_currentIndex++;
+    if (m_currentIndex > m_process->size()) {
+        m_procFlag = Finish;
+        Q_EMIT processFinished(true);
+        return true;
+    }
+
+    if (!checkIndexValid()) {
+        qWarning() << qPrintable("Invalid process index") << m_currentIndex;
         return false;
     }
 
-    m_installPkg = installPtr;
-    m_uninstallPkg = uninstallPtr;
+    auto currentProc = m_procList.value(m_currentIndex);
+    switch (currentProc.first) {
+        case Installing:
+            return installImpl(currentProc.second);
+        case Uninstalling:
+            return uninstallImpl(currentProc.second);
+        default:
+            break;
+    }
 
-    if (m_installPkg && m_uninstallPkg) {
-        upgradgeImpl();
-    } else if (m_installPkg) {
-        installImpl();
-    } else if (m_uninstallPkg) {
-        uninstallImpl();
-    } else {
+    qWarning() << qPrintable("Invalid process type") << currentProc.first;
+    return false;
+}
+
+bool Uab::UabProcessController::installImpl(const Uab::UabPkgInfo::Ptr &installPtr)
+{
+    if (!installPtr || installPtr->filePath.isEmpty()) {
         return false;
     }
 
-    Q_EMIT processStart();
+    m_procFlag.setFlag(Installing);
+
+    m_process->setProgram(installPtr->filePath);
+    m_process->start();
 
     return true;
 }
 
-void Uab::UabProcessController::installImpl()
+bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninstallPtr)
 {
-    m_procFlag.setFlag(Installing);
+    if (!uninstallPtr || uninstallPtr->id.isEmpty() || uninstallPtr->version.isEmpty()) {
+        return false;
+    }
 
-    m_process->setProgram(m_installPkg->filePath);
-    m_process->start();
-}
-
-void Uab::UabProcessController::uninstallImpl()
-{
     m_procFlag.setFlag(Uninstalling);
 
     // e.g.: ll-cli uninstall org.deepin.package/1.0.0
     m_process->setProgram(kLinglongBin);
-    m_process->setArguments({ kLinglongUninstall, QString("%1/%2").arg(m_uninstallPkg->id).arg(m_uninstallPkg->version) });
+    m_process->setArguments({kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->id).arg(uninstallPtr->version)});
     m_process->start();
+
+    return true;
 }
 
-void Uab::UabProcessController::upgradgeImpl()
+bool UabProcessController::checkIndexValid()
 {
-    m_procFlag.setFlag(Upgrading);
-
-    // Linglong support diff version packge same time.
-    installImpl();
+    return 0 <= m_currentIndex && m_currentIndex < m_procList.size();
 }
 
 }  // namespace Uab

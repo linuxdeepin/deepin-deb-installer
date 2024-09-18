@@ -352,7 +352,7 @@ private:
      * @brief refreshOperatingPackageStatus 刷新当前操作的包的操作状态
      * @param oprationStatus  要修改的操作状态
      */
-    void refreshOperatingPackageStatus(PackageOperationStatus oprationStatus);
+    void refreshOperatingPackageStatus(Pkg::PackageOperationStatus oprationStatus);
 
     /**
      * @brief packageFailedReason  获取包安装失败的原因

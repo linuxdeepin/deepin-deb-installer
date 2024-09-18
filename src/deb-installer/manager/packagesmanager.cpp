@@ -108,34 +108,34 @@ int PackagesManager::checkInstallStatus(const QString &package_path)
 {
     DebFile debFile(package_path);
     if (!debFile.isValid())
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
     }
     Package *package = packageWithArch(packageName, packageArch);
 
     if (!package)
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
 
     const QString installedVersion = package->installedVersion();
     package = nullptr;
     if (installedVersion.isEmpty())
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
 
     const QString packageVersion = debFile.version();
     const int result = Package::compareVersion(packageVersion, installedVersion);
 
     int ret;
     if (result == 0)
-        ret = DebListModel::InstalledSameVersion;
+        ret = Pkg::PackageInstallStatus::InstalledSameVersion;
     else if (result < 0)
-        ret = DebListModel::InstalledLaterVersion;
+        ret = Pkg::PackageInstallStatus::InstalledLaterVersion;
     else
-        ret = DebListModel::InstalledEarlierVersion;
+        ret = Pkg::PackageInstallStatus::InstalledEarlierVersion;
 
     return ret;
 }
@@ -159,14 +159,14 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
 
     if (isBlackApplication(debFile.packageName())) {
-        dependsStatus.status = DebListModel::Prohibit;
+        dependsStatus.status = Pkg::DependsStatus::Prohibit;
         dependsStatus.package = debFile.packageName();
         qWarning() << debFile.packageName() << "In the blacklist";
         return dependsStatus;
     }
 
     if (isArchErrorQstring(package_path)) {
-        dependsStatus.status = DebListModel::ArchBreak;  // 添加ArchBreak错误。
+        dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
         dependsStatus.package = debFile.packageName();
         QString packageName = debFile.packageName();
         return PackageDependsStatus::_break(packageName);
@@ -179,14 +179,14 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
         qWarning() << "PackagesManager:"
                    << "depends break because conflict" << debFile.packageName();
         dependsStatus.package = debConflitsResult.unwrap();
-        dependsStatus.status = DebListModel::DependsBreak;
+        dependsStatus.status = Pkg::DependsStatus::DependsBreak;
     } else {
         const ConflictResult localConflictsResult = isInstalledConflict(debFile.packageName(), debFile.version(), architecture);
         if (!localConflictsResult.is_ok()) {
             qWarning() << "PackagesManager:"
                        << "depends break because conflict with local package" << debFile.packageName();
             dependsStatus.package = localConflictsResult.unwrap();
-            dependsStatus.status = DebListModel::DependsBreak;
+            dependsStatus.status = Pkg::DependsStatus::DependsBreak;
         } else {
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
@@ -225,14 +225,14 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
             // 由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
             // wine应用+非wine依赖不满足即可导致出问题
             do {
-                if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {  // 增加是否是wine应用的判断
+                if (isWineApplication && dependsStatus.status != Pkg::DependsStatus::DependsOk) {  // 增加是否是wine应用的判断
                     // 额外判断wine依赖是否已安装，同时剔除非wine依赖
                     filterNeedInstallWinePackage(dependList, debFile, dependInfoMap);
 
                     if (dependList.isEmpty()) {  // 所有的wine依赖均已安装
                         break;
                     }
-                    dependsStatus.status = DebListModel::DependsBreak;  // 只要是下载，默认当前wine应用依赖为break
+                    dependsStatus.status = Pkg::DependsStatus::DependsBreak;  // 只要是下载，默认当前wine应用依赖为break
                 }
             } while (0);
         }
@@ -626,34 +626,34 @@ int PackagesManager::packageInstallStatus(const int index)
 
     DebFile debFile(m_preparedPackages[index]);
     if (!debFile.isValid())
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
     const QString packageName = debFile.packageName();
     const QString packageArch = debFile.architecture();
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qWarning() << "Failed to load libqapt backend";
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
     }
     Package *package = packageWithArch(packageName, packageArch);
 
     if (!package)
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
 
     const QString installedVersion = package->installedVersion();
     package = nullptr;
     if (installedVersion.isEmpty())
-        return DebListModel::NotInstalled;
+        return Pkg::PackageInstallStatus::NotInstalled;
 
     const QString packageVersion = debFile.version();
     const int result = Package::compareVersion(packageVersion, installedVersion);
 
     int ret;
     if (result == 0)
-        ret = DebListModel::InstalledSameVersion;
+        ret = Pkg::PackageInstallStatus::InstalledSameVersion;
     else if (result < 0)
-        ret = DebListModel::InstalledLaterVersion;
+        ret = Pkg::PackageInstallStatus::InstalledLaterVersion;
     else
-        ret = DebListModel::InstalledEarlierVersion;
+        ret = Pkg::PackageInstallStatus::InstalledEarlierVersion;
 
     // 存储包的安装状态
     // 2020-11-19 修改安装状态的存储绑定方式
@@ -667,22 +667,22 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
         return;
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;  // 更换依赖的存储结构
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsOk;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsOk;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsOk;  // 更换依赖的存储结构
         }
         m_errorIndex.clear();
     }
     if (iAuthRes == DebListModel::CancelAuth || iAuthRes == DebListModel::AnalysisErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status =
-                DebListModel::DependsAuthCancel;  // 更换依赖的存储结构
+                Pkg::DependsStatus::DependsAuthCancel;  // 更换依赖的存储结构
         }
         emit signalEnableCloseButton(true);
     }
     if (iAuthRes == DebListModel::AuthDependsErr || iAuthRes == DebListModel::AnalysisErr ||
         iAuthRes == DebListModel::VerifyDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = DebListModel::DependsBreak;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsBreak;  // 更换依赖的存储结构
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.insert(m_dependInstallMark[num], iAuthRes);
         }
@@ -752,7 +752,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     PackageDependsStatus dependsStatus = PackageDependsStatus::ok();
 
     if (isBlackApplication(debFile.packageName())) {
-        dependsStatus.status = DebListModel::Prohibit;
+        dependsStatus.status = Pkg::DependsStatus::Prohibit;
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
         qWarning() << debFile.packageName() << "In the blacklist";
@@ -760,7 +760,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     }
 
     if (isArchError(index)) {
-        dependsStatus.status = DebListModel::ArchBreak;  // 添加ArchBreak错误。
+        dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);  // 更换依赖的存储方式
         return dependsStatus;
@@ -773,14 +773,14 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         qWarning() << "PackagesManager:"
                    << "depends break because conflict" << debFile.packageName();
         dependsStatus.package = debConflitsResult.unwrap();
-        dependsStatus.status = DebListModel::DependsBreak;
+        dependsStatus.status = Pkg::DependsStatus::DependsBreak;
     } else {
         const ConflictResult localConflictsResult = isInstalledConflict(debFile.packageName(), debFile.version(), architecture);
         if (!localConflictsResult.is_ok()) {
             qWarning() << "PackagesManager:"
                        << "depends break because conflict with local package" << debFile.packageName();
             dependsStatus.package = localConflictsResult.unwrap();
-            dependsStatus.status = DebListModel::DependsBreak;
+            dependsStatus.status = Pkg::DependsStatus::DependsBreak;
         } else {
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
@@ -821,7 +821,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             // 由于卸载p7zip会导致wine依赖被卸载，再次安装会造成应用闪退，因此判断的标准改为依赖不满足即调用pkexec
             // wine应用+非wine依赖不满足即可导致出问题
             do {
-                if (isWineApplication && dependsStatus.status != DebListModel::DependsOk) {  // 增加是否是wine应用的判断
+                if (isWineApplication && dependsStatus.status != Pkg::DependsStatus::DependsOk) {  // 增加是否是wine应用的判断
                     // 额外判断wine依赖是否已安装，同时剔除非wine依赖
                     filterNeedInstallWinePackage(dependList, debFile, dependInfoMap);
 
@@ -842,7 +842,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                             m_installWineThread->run();
                         }
                     }
-                    dependsStatus.status = DebListModel::DependsBreak;  // 只要是下载，默认当前wine应用依赖为break
+                    dependsStatus.status = Pkg::DependsStatus::DependsBreak;  // 只要是下载，默认当前wine应用依赖为break
                 }
             } while (0);
         }
@@ -1288,7 +1288,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     } else {
         // 针对wine依赖做一个特殊处理，如果wine依赖break,则直接返回。
         if ((m_packageMd5DependsStatus[currentPackageMd5].package == "deepin-wine") &&
-            m_packageMd5DependsStatus[currentPackageMd5].status != DebListModel::DependsOk)
+            m_packageMd5DependsStatus[currentPackageMd5].status != Pkg::DependsStatus::DependsOk)
             return;
     }
     // reload backend cache
@@ -1691,7 +1691,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         }
 
         // 安装包存在或依赖关系且当前依赖状态不能直接满足，筛选依赖关系最优的选项
-        if (!m_unCheckedOrDepends.isEmpty() && DebListModel::DependsOk != r.status) {
+        if (!m_unCheckedOrDepends.isEmpty() && Pkg::DependsStatus::DependsOk != r.status) {
             for (auto orDepends : m_unCheckedOrDepends) {  // 遍历或依赖组，检测当前依赖是否存在或依赖关系
                 if (orDepends.contains(info.packageName())) {
                     m_unCheckedOrDepends.removeOne(orDepends);
@@ -1732,7 +1732,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                             continue;
                         dependsStatus.minEq(status);
 
-                        if (DebListModel::DependsOk == dependsStatus.status) {
+                        if (Pkg::DependsStatus::DependsOk == dependsStatus.status) {
                             qDebug() << QString("Select or package %1 for %2.").arg(otherDepend).arg(info.packageName());
                             break;
                         }
@@ -1742,7 +1742,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
             }
         }
 
-        if (dependsStatus.status == DebListModel::DependsOk) {
+        if (dependsStatus.status == Pkg::DependsStatus::DependsOk) {
             break;
         }
     }

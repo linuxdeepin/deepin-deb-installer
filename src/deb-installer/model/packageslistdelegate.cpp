@@ -52,15 +52,15 @@ void PackagesListDelegate::refreshDebItemStatus(
 
     // 根据操作的状态显示提示语
     switch (operate_stat) {
-        case DebListModel::Operating:  // 正在安装
+        case Pkg::PackageOperationStatus::Operating:  // 正在安装
             painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
             showText = tr("Installing");
             break;
-        case DebListModel::Success:  // 安装成功
+        case Pkg::PackageOperationStatus::Success:  // 安装成功
             painter->setPen(QPen(parentViewPattle.color(DPalette::LightLively)));
             showText = tr("Installed");
             break;
-        case DebListModel::Waiting:  // 等待安装
+        case Pkg::PackageOperationStatus::Waiting:  // 等待安装
             painter->setPen(QPen(parentViewPattle.color(DPalette::TextLively)));
             showText = tr("Waiting");
             break;
@@ -191,7 +191,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // install status
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();  // 获取包的状态
-    if (operate_stat != DebListModel::Prepare) {
+    if (operate_stat != Pkg::PackageOperationStatus::Prepare) {
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 20);
         install_status_rect.setTop(version_y - 4);
@@ -225,11 +225,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     forground.setColor(palette.color(colorGroup, DPalette::ToolTipText));
 
     // 安装状态
-    if (install_stat != DebListModel::NotInstalled) {
+    if (install_stat != Pkg::PackageInstallStatus::NotInstalled) {
         // 获取安装版本
-        if (install_stat == DebListModel::InstalledSameVersion) {  // 安装了相同版本
+        if (install_stat == Pkg::PackageInstallStatus::InstalledSameVersion) {  // 安装了相同版本
             info_str = tr("Same version installed");
-        } else if (install_stat == DebListModel::InstalledLaterVersion) {  // 安装了更新的版本
+        } else if (install_stat == Pkg::PackageInstallStatus::InstalledLaterVersion) {  // 安装了更新的版本
             info_str = tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
         } else {  // 安装了较早的版本
             info_str = tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString());
@@ -243,13 +243,13 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         forground.setColor(palette.color(colorGroup, DPalette::TextTips));
     }
 
-    if (operate_stat == DebListModel::Failed) {
+    if (operate_stat == Pkg::PackageOperationStatus::Failed) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel ||
-        dependsStat == DebListModel::DependsVerifyFailed || dependsStat == DebListModel::ArchBreak  // 添加对架构不匹配的处理
-        //                || dependsStat == DebListModel::Prohibit  //增加应用黑名单
+    if (dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
+        dependsStat == Pkg::DependsStatus::DependsVerifyFailed || dependsStat == Pkg::DependsStatus::ArchBreak  // 添加对架构不匹配的处理
+        //                || dependsStat == Pkg::DependsStatus::Prohibit  //增加应用黑名单
     ) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误

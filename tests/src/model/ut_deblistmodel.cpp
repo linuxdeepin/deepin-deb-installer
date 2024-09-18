@@ -186,7 +186,7 @@ void model_backend_markPackageForRemoval(const QString &)
     return;
 }
 
-void model_refreshOperatingPackageStatus(const DebListModel::PackageOperationStatus)
+void model_refreshOperatingPackageStatus(const Pkg::PackageOperationStatus)
 {
     return;
 }
@@ -543,7 +543,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initPrepareStatus)
     m_debListModel->slotAppendPackage(list);
 
     m_debListModel->initPrepareStatus();
-    ASSERT_EQ(m_debListModel->m_packageOperateStatus[0], DebListModel::Prepare);
+    ASSERT_EQ(m_debListModel->m_packageOperateStatus[0], Pkg::PackageOperationStatus::Prepare);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_index)
@@ -552,7 +552,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_index)
     list << "/";
     m_debListModel->slotAppendPackage(list);
 
-    ASSERT_EQ(m_debListModel->index(0).data(DebListModel::PackageDependsStatusRole).toInt(), DebListModel::DependsOk);
+    ASSERT_EQ(m_debListModel->index(0).data(DebListModel::PackageDependsStatusRole).toInt(), Pkg::DependsStatus::DependsOk);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_getInstallFileSize)
@@ -672,7 +672,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
 
     m_debListModel->initRowStatus();
 
-    ASSERT_EQ(m_debListModel->m_packageOperateStatus.find("deb").value(), DebListModel::Waiting);
+    ASSERT_EQ(m_debListModel->m_packageOperateStatus.find("deb").value(), Pkg::PackageOperationStatus::Waiting);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
@@ -834,7 +834,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionErrorOccurred)
 
     m_debListModel->slotTransactionErrorOccurred();
     EXPECT_EQ(QApt::AuthError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
-    EXPECT_EQ(DebListModel::Failed, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Failed, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
     delete ut_sender();
 }
 
@@ -846,11 +846,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult)
 
     m_debListModel->slotDealDependResult(1, 0, "");
     m_debListModel->slotDealDependResult(2, 0, "");
-    EXPECT_EQ(DebListModel::Prepare, m_debListModel->m_packageOperateStatus["1"]);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Prepare, m_debListModel->m_packageOperateStatus["1"]);
     m_debListModel->slotDealDependResult(3, 0, "");
     m_debListModel->slotDealDependResult(4, 0, "");
-    EXPECT_EQ(DebListModel::Prepare, m_debListModel->m_packageOperateStatus["1"]);
-    EXPECT_EQ(DebListModel::Prepare, m_debListModel->m_workerStatus);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Prepare, m_debListModel->m_packageOperateStatus["1"]);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Prepare, m_debListModel->m_workerStatus);
     m_debListModel->slotDealDependResult(5, 0, "");
     EXPECT_EQ("", m_debListModel->m_brokenDepend);
 }
@@ -941,7 +941,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
     int length = sizeof(buffer);
     bool isCommandExec = false;
     m_debListModel->slotConfigReadOutput(buffer.toStdString().c_str(), length, isCommandExec);
-    EXPECT_EQ(DebListModel::PackageOperationStatus::Operating,
+    EXPECT_EQ(Pkg::PackageOperationStatus::Operating,
               m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
 }
 
@@ -1055,9 +1055,8 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_refreshOperatingPackageStatus)
 {
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->m_packageOperateStatus.insert("deb", QApt::CommitError);
-    m_debListModel->refreshOperatingPackageStatus(DebListModel::PackageOperationStatus::Failed);
-    EXPECT_EQ(DebListModel::PackageOperationStatus::Failed,
-              m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
+    m_debListModel->refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Failed, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
 }
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_slotDependsInstallTransactionFinished)
@@ -1092,8 +1091,8 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_slotUpWrongStatusRow)
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
     stub.set(ADDR(DebListModel, bumpInstallIndex), model_installNextDeb);
     stub.set(ADDR(Transaction, error), model_transaction_error);
-    m_debListModel->m_packageOperateStatus.insert("key", DebListModel::Failed);
-    m_debListModel->m_packageOperateStatus.insert("key1", DebListModel::Success);
+    m_debListModel->m_packageOperateStatus.insert("key", Pkg::PackageOperationStatus::Failed);
+    m_debListModel->m_packageOperateStatus.insert("key1", Pkg::PackageOperationStatus::Success);
     m_debListModel->slotUpWrongStatusRow();
     EXPECT_EQ(2, m_debListModel->m_packagesManager->m_packageMd5.size());
     EXPECT_EQ(2, m_debListModel->m_packagesManager->m_preparedPackages.size());
@@ -1111,10 +1110,11 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_onTransactionOutput)
 {
     Stub stub1;
     stub1.set(ADDR(QObject, sender), ut_sender);
-    m_debListModel->m_packageOperateStatus.insert("deb", DebListModel::Prepare);
+    m_debListModel->m_packageOperateStatus.insert("deb", Pkg::PackageOperationStatus::Prepare);
     m_debListModel->m_operatingPackageMd5 = "deb";
     m_debListModel->slotTransactionOutput();
-    EXPECT_EQ(DebListModel::Operating, m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_EQ(Pkg::PackageOperationStatus::Operating,
+              m_debListModel->m_packageOperateStatus[m_debListModel->m_operatingPackageMd5]);
     delete ut_sender();
 }
 

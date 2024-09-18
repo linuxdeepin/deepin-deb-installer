@@ -326,7 +326,7 @@ void MultipleInstallPage::initConnections()
     connect(m_debListModel, &DebListModel::signalAppendOutputInfo, this, &MultipleInstallPage::slotOutputAvailable);
 
     // 开始安装时，显示安装进度条
-    connect(m_debListModel, &DebListModel::signalStartInstall, this, [=] { m_processFrame->setVisible(true); });
+    connect(m_debListModel, &DebListModel::signalWorkerStart, this, [=] { m_processFrame->setVisible(true); });
 
     // 一个包安装结束后 listView滚动到其在listview中的位置
     connect(

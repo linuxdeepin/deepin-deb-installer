@@ -19,13 +19,13 @@ class UabProcessController : public QObject
 
 public:
     explicit UabProcessController(QObject *parent = nullptr);
-    ~UabProcessController() = default;
+    ~UabProcessController() override = default;
 
     enum ProcFlag {
         Prepare = 1 << 0,
         Uninstalling = 1 << 1,
         Installing = 1 << 2,
-        Upgrading = 1 << 3,
+        Processing = 1 << 3,
         Finish = 1 << 4,
         Error = 1 << 5,
     };
@@ -34,9 +34,10 @@ public:
     ProcFlags procFlag() const;
     bool isRunning() const;
 
-    bool install(const UabPkgInfo::Ptr &installPtr);
-    bool uninstall(const UabPkgInfo::Ptr &unisntallPtr);
-    bool upgradge(const UabPkgInfo::Ptr &installPtr, const UabPkgInfo::Ptr &uninstallPtr);
+    bool reset();
+    bool markInstall(const UabPkgInfo::Ptr &installPtr);
+    bool markUninstall(const UabPkgInfo::Ptr &unisntallPtr);
+    bool commitChanges();
 
     QString lastError() const;
 
@@ -50,18 +51,19 @@ private:
     Q_SLOT void onReadOutput();
     Q_SLOT void onFinished(int exitCode, int exitStatus);
 
-    bool commitChange(const UabPkgInfo::Ptr &installPtr, const UabPkgInfo::Ptr &uninstallPtr);
+    bool nextProcess();
 
-    void installImpl();
-    void uninstallImpl();
-    void upgradgeImpl();
+    bool installImpl(const UabPkgInfo::Ptr &installPtr);
+    bool uninstallImpl(const UabPkgInfo::Ptr &uninstallPtr);
+
+    bool checkIndexValid();
 
 private:
-    ProcFlags m_procFlag { Prepare };
-    QProcess *m_process { nullptr };
-
-    UabPkgInfo::Ptr m_uninstallPkg;
-    UabPkgInfo::Ptr m_installPkg;
+    QProcess *m_process{nullptr};
+    
+    ProcFlags m_procFlag{Prepare};
+    int m_currentIndex{-1};
+    QList<QPair<ProcFlag, UabPkgInfo::Ptr>> m_procList;  // install/uninstall package list
 
     Q_DISABLE_COPY(UabProcessController);
 };

@@ -127,7 +127,7 @@ TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_refreshDebItemStatu
 
 QVariant stud_data(int role)
 {
-    return DebListModel::Waiting;
+    return Pkg::PackageOperationStatus::Waiting;
 }
 
 TEST_F(ut_packageslistdelegate_Test, packageslistdelegate_UT_paint)

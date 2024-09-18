@@ -38,7 +38,9 @@ TEST_F(utDebProcessController, installExecSuccess)
     Uab::UabProcessController uabController;
     auto uabPtr = Uab::UabPkgInfo::Ptr::create();
     uabPtr->filePath = "localtest";
-    uabController.install(uabPtr);
+    uabController.reset();
+    uabController.markInstall(uabPtr);
+    uabController.commitChanges();
 
     EXPECT_EQ(uabController.m_process->program(), uabPtr->filePath);
     EXPECT_TRUE(uabController.m_procFlag.testFlag(Uab::UabProcessController::Installing));

@@ -875,7 +875,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_01)
 
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
-    ASSERT_EQ(DebListModel::NotInstalled, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
+    ASSERT_EQ(Pkg::PackageInstallStatus::NotInstalled, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_02)
@@ -890,7 +890,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_02)
     m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 3);
-    ASSERT_EQ(DebListModel::InstalledLaterVersion,
+    ASSERT_EQ(Pkg::PackageInstallStatus::InstalledLaterVersion,
               m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
@@ -906,7 +906,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_03)
     m_packageManager->m_packageMd5.insert(0, "deb");
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 2);
-    ASSERT_EQ(DebListModel::InstalledEarlierVersion,
+    ASSERT_EQ(Pkg::PackageInstallStatus::InstalledEarlierVersion,
               m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
@@ -924,7 +924,7 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_04)
     m_packageManager->m_packageInstallStatus.insert("0", 1);
 
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 1);
-    ASSERT_EQ(DebListModel::InstalledSameVersion,
+    ASSERT_EQ(Pkg::PackageInstallStatus::InstalledSameVersion,
               m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
@@ -978,23 +978,23 @@ TEST_F(UT_packagesManager, PackageManager_UT_DealDependResult)
 
     m_packageManager->m_dependInstallMark.append("test success");
     m_packageManager->slotDealDependResult(4, 0, "");
-    EXPECT_EQ(DebListModel::DependsOk,
+    EXPECT_EQ(Pkg::DependsStatus::DependsOk,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     EXPECT_TRUE(m_packageManager->m_errorIndex.isEmpty());
     m_packageManager->slotDealDependResult(2, 0, "");
-    EXPECT_EQ(DebListModel::DependsAuthCancel,
+    EXPECT_EQ(Pkg::DependsStatus::DependsAuthCancel,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->slotDealDependResult(5, 0, "");
-    EXPECT_EQ(DebListModel::DependsBreak,
+    EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->installWineDepends = true;
     m_packageManager->slotDealDependResult(5, 0, "");
-    EXPECT_EQ(DebListModel::DependsBreak,
+    EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->m_preparedPackages.append({"1", "2"});
     m_packageManager->slotDealDependResult(5, 0, "");
     EXPECT_FALSE(m_packageManager->installWineDepends);
-    EXPECT_EQ(DebListModel::DependsBreak,
+    EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
 }
 
