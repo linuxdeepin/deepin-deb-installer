@@ -11,6 +11,24 @@
 
 namespace Uab {
 
+enum class UabStatus {
+    Uninstall,
+    Installed,
+    Removed,
+
+    UabArchError,
+    UabInstallError,  // Unknown
+
+    LessVer,
+    EqualVer,
+    GreaterVer,
+
+    PrepareUninstall,
+    PrepareInstall,
+
+    PreDependsError,
+};
+
 struct UabPkgInfo
 {
     using Ptr = QSharedPointer<UabPkgInfo>;

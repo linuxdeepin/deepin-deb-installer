@@ -40,12 +40,12 @@ static const QString kUabChannel = "channel";
 static const QString kUabDescription = "description";
 
 UabBackend::UabBackend(QObject *parent)
-    : QObject { parent }
+    : QObject{parent}
 {
     qRegisterMetaType<QList<UabPkgInfo::Ptr>>("QList<UabPkgInfo::Ptr>");
 }
 
-UabBackend::~UabBackend() { }
+UabBackend::~UabBackend() {}
 
 UabBackend *UabBackend::instance()
 {
@@ -53,17 +53,19 @@ UabBackend *UabBackend::instance()
     return &ins;
 }
 
-UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath)
+UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString *errorString)
 {
     const QFileInfo info(uabPath);
     if (!info.exists()) {
-        m_lastError = QString("uab file not exists");
+        if (errorString)
+            *errorString = QString("uab file not exists");
         return {};
     }
 
     // check uab package executable
     if (!info.isExecutable()) {
-        m_lastError = QString("uab file not execuatable");
+        if (errorString)
+            *errorString = QString("uab file not execuatable");
         return {};
     }
 
@@ -80,11 +82,11 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath)
 }
 
 /**
-   @brief Find package named \a packageName , the return package is
+   @brief Find package named \a packageId , the return package is
         the latest version of the installed packages.
    @return Uab package pointer, or null if not found.
  */
-UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageName)
+UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId)
 {
     if (!backendInited()) {
         m_lastError = QString("uab backend not init");
@@ -97,10 +99,10 @@ UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageName)
 
     auto itr = std::upper_bound(m_packageList.begin(),
                                 m_packageList.end(),
-                                packageName,
+                                packageId,
                                 [](const QString &findPkg, const UabPkgInfo::Ptr &uabPtr) { return findPkg <= uabPtr->id; });
 
-    if (m_packageList.end() != itr) {
+    if ((m_packageList.end() != itr) && ((*itr)->id == packageId)) {
         return *itr;
     }
 
@@ -141,14 +143,14 @@ void UabBackend::backendInitData(const QList<UabPkgInfo::Ptr> &packageList, cons
 
 /**
    @brief Get Linglong package list from `ll-cli list`
-        The packages are sorted by package name and package version.
+        The packages are sorted by package id and package version.
 
    @note This function will be run in QtConcurrent::run()
 */
 void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
 {
     QProcess process;
-    process.start(kUabCliBin, { kUabCliList });
+    process.start(kUabCliBin, {kUabCliList});
     process.waitForFinished();
 
     QByteArray output = process.readAllStandardOutput();
@@ -221,18 +223,20 @@ void UabBackend::sortPackages(QList<UabPkgInfo::Ptr> &packageList)
     });
 }
 
-UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json)
+UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString *errorString)
 {
     QJsonParseError error;
     const QJsonDocument doc = QJsonDocument::fromJson(json, &error);
     if (QJsonParseError::NoError != error.error) {
-        m_lastError = QString("uab json parse erorr: %1, offset: %2").arg(error.errorString()).arg(error.offset);
+        if (errorString)
+            *errorString = QString("uab json parse erorr: %1, offset: %2").arg(error.errorString()).arg(error.offset);
         return {};
     }
 
     const QJsonArray layers = doc.object().value(kUabLayers).toArray();
     if (layers.isEmpty()) {
-        m_lastError = QString("uab json not contains 'layers'");
+        if (errorString)
+            *errorString = QString("uab json not contains 'layers'");
         return {};
     }
 
@@ -266,20 +270,23 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json)
         return uabPtr;
     }
 
-    m_lastError = QString("uab json not contains app info node");
+    if (errorString)
+        *errorString = QString("uab json not contains app info node");
     return {};
 }
 
-QByteArray UabBackend::uabExecuteOutput(const QString &uabPath)
+QByteArray UabBackend::uabExecuteOutput(const QString &uabPath, QString *errorString)
 {
     QProcess proc;
     proc.setProgram(uabPath);
-    proc.setArguments({ kUabPkgCmdPrintMeta });
+    proc.setArguments({kUabPkgCmdPrintMeta});
     proc.start();
     proc.waitForFinished();
 
     if (0 != proc.exitCode() || QProcess::NormalExit != proc.exitStatus()) {
-        m_lastError = QString("exec uab package failed: %1").arg(proc.errorString());
+        if (errorString) {
+            *errorString = QString("exec uab package failed: %1").arg(proc.errorString());
+        }
         return {};
     }
 

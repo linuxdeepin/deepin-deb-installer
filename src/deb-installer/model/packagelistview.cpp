@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "packagelistview.h"
-#include "model/deblistmodel.h"
+#include "model/abstract_package_list_model.h"
 #include "utils/utils.h"
 #include "singleInstallerApplication.h"
 
@@ -84,8 +84,8 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
  */
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
-    if (!debListModel->isWorkerPrepare()) {                                    // 当前model未就绪
+    AbstractPackageListModel *listModel = qobject_cast<AbstractPackageListModel *>(this->model());  // 获取debListModel
+    if (!listModel->isWorkerPrepare()) {                                                            // 当前model未就绪
         return;
     }
     emit signalCurrentIndexRow(m_currentIndex);
@@ -132,9 +132,9 @@ void PackagesListView::keyPressEvent(QKeyEvent *event)
             }
         }
     }
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
-    if (debListModel) {
-        if (debListModel->isWorkerPrepare()) {  // 当前model未就绪
+    AbstractPackageListModel *listModel = qobject_cast<AbstractPackageListModel *>(this->model());  // 获取debListModel
+    if (listModel) {
+        if (listModel->isWorkerPrepare()) {  // 当前model未就绪
             if (event->key() == Qt::Key_Down) {  // 默认tab键获取焦点行是第一行，按down键行号+1，但不超过listview的最大行数
                 m_currentIndex = qMin(m_currentIndex + 1, this->model()->rowCount() - 1);
                 emit signalCurrentIndexRow(m_currentIndex);
@@ -172,9 +172,9 @@ void PackagesListView::initRightContextMenu()
 void PackagesListView::slotListViewShowContextMenu(QModelIndex index)
 {
     Q_UNUSED(index)
-    DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
-    if (debListModel) {
-        if (debListModel->isWorkerPrepare())  // 当前model未就绪
+    AbstractPackageListModel *listModel = qobject_cast<AbstractPackageListModel *>(this->model());  // 获取debListModel
+    if (listModel) {
+        if (listModel->isWorkerPrepare())  // 当前model未就绪
             emit signalCurrentIndexRow(index.row());
     }
 
@@ -264,9 +264,9 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
             m_currModelIndex = this->model()->index(0, 0);
             this->setCurrentIndex(m_currModelIndex);  // 存在焦点时，默认选入第一项
             m_currentIndex = 0;
-            DebListModel *debListModel = qobject_cast<DebListModel *>(this->model());  // 获取debListModel
-            if (debListModel) {
-                if (debListModel->isWorkerPrepare())  // 当前model未就绪
+            AbstractPackageListModel *listModel = qobject_cast<AbstractPackageListModel *>(this->model());  // 获取debListModel
+            if (listModel) {
+                if (listModel->isWorkerPrepare())  // 当前model未就绪
                     emit signalCurrentIndexRow(0);
             }
         }

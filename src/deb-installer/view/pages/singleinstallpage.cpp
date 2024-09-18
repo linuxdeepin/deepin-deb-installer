@@ -695,7 +695,7 @@ void SingleInstallPage::slotWorkerFinished()
     QModelIndex index = m_packagesModel->index(0);
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
-    if (stat == DebListModel::Success) {  // 操作成功
+    if (stat == Pkg::PackageOperationStatus::Success) {  // 操作成功
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
         if (m_operate == Install || m_operate == Reinstall) {  // 安装成功
@@ -711,7 +711,7 @@ void SingleInstallPage::slotWorkerFinished()
             m_tipsLabel->setText(tr("Uninstalled successfully"));  // 添加提示
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         }
-    } else if (stat == DebListModel::Failed) {  // 安装/卸载失败
+    } else if (stat == Pkg::PackageOperationStatus::Failed) {  // 安装/卸载失败
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -809,9 +809,9 @@ void SingleInstallPage::showPackageInfo()
         // 否则会导致安装不同版本的包（依赖不同）时安装依赖出现问题（包括界面混乱、无法下载依赖等）
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
-        if ((dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel ||
-             dependsStat == DebListModel::ArchBreak
-             //                || dependsStat == DebListModel::Prohibit
+        if ((dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
+             dependsStat == Pkg::DependsStatus::ArchBreak
+             //                || dependsStat == Pkg::DependsStatus::Prohibit
              ) &&
             dependAuthStatu != DebListModel::AuthConfirm) {  // 添加架构不匹配的处理
             m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
@@ -831,7 +831,7 @@ void SingleInstallPage::showPackageInfo()
         }
 
         // 根据安装状态调整显示效果
-        const bool installed = installStat != DebListModel::NotInstalled;
+        const bool installed = installStat != Pkg::PackageInstallStatus::NotInstalled;
         if (dependAuthStatu == DebListModel::AuthConfirm) {  // 安装wine依赖时，所有的按钮都不显示
             m_installButton->setVisible(false);
             m_uninstallButton->setVisible(false);
@@ -857,11 +857,11 @@ void SingleInstallPage::showPackageInfo()
 
         // 根据安装状态设置提示文字
         if (installed) {
-            if (installStat == DebListModel::InstalledSameVersion) {
+            if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
-            } else if (installStat == DebListModel::InstalledLaterVersion) {
+            } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
@@ -969,9 +969,9 @@ void SingleInstallPage::setAuthBefore()
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
     // 依赖不满足或依赖授权被取消
-    if (dependsStat == DebListModel::DependsBreak || dependsStat == DebListModel::DependsAuthCancel ||
-        dependsStat == DebListModel::ArchBreak  // 添加架构不匹配的处理
-        //            || dependsStat == DebListModel::Prohibit    //添加应用黑名单处理
+    if (dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
+        dependsStat == Pkg::DependsStatus::ArchBreak  // 添加架构不匹配的处理
+        //            || dependsStat == Pkg::DependsStatus::Prohibit    //添加应用黑名单处理
     ) {
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         m_confirmButton->setVisible(true);
@@ -1012,9 +1012,9 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     QModelIndex index = m_packagesModel->index(0);
     const int dependsStatus = index.data(DebListModel::PackageDependsStatusRole).toInt();
     // 根据依赖状态 调整界面显示
-    if (dependsStatus == DebListModel::DependsBreak || dependsStatus == DebListModel::DependsAuthCancel ||
-        dependsStatus == DebListModel::ArchBreak    // 添加架构不匹配的处理
-        || dependsStatus == DebListModel::Prohibit  // 增加域管黑名单处理
+    if (dependsStatus == Pkg::DependsStatus::DependsBreak || dependsStatus == Pkg::DependsStatus::DependsAuthCancel ||
+        dependsStatus == Pkg::DependsStatus::ArchBreak    // 添加架构不匹配的处理
+        || dependsStatus == Pkg::DependsStatus::Prohibit  // 增加域管黑名单处理
     ) {
         // 依赖不满足或依赖授权取消
         m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());  // 修复授权取消后无提示的问题
@@ -1036,7 +1036,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
         m_confirmButton->setVisible(false);
         m_backButton->setVisible(false);
         const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
-        if (installStat == DebListModel::NotInstalled) {  // 没有安装过其他版本
+        if (installStat == Pkg::PackageInstallStatus::NotInstalled) {  // 没有安装过其他版本
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
@@ -1044,11 +1044,11 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             m_installButton->setFocus();
         } else {  // 已经安装过其他版本
             // 增加提示 依赖安装完成后的提示
-            if (installStat == DebListModel::InstalledSameVersion) {
+            if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
-            } else if (installStat == DebListModel::InstalledLaterVersion) {
+            } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setText(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));

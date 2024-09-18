@@ -16,6 +16,7 @@
 #include "model/packageselectmodel.h"
 #include "settingdialog.h"
 #include "utils/utils.h"
+#include "uab/uab_backend.h"
 
 #include <DInputDialog>
 #include <DRecentManager>
@@ -66,10 +67,14 @@ DebInstaller::DebInstaller(QWidget *parent)
     initUI();
     initConnections();
 
-    QtConcurrent::run([]() { PackageAnalyzer::instance().initBackend(); });
+    QtConcurrent::run([]() {
+        PackageAnalyzer::instance().initBackend();
+        // TODO(renbin): init only required
+        Uab::UabBackend::instance()->initBackend();
+    });
 }
 
-DebInstaller::~DebInstaller() { }
+DebInstaller::~DebInstaller() {}
 
 void DebInstaller::initUI()
 {
@@ -141,6 +146,7 @@ void DebInstaller::initConnections()
                 if (MultiPage != m_Filterflag) {
                     single2Multi();
                 } else {
+                    // will reset view/model data every count change
                     refreshMulti();
                 }
                 break;
@@ -167,7 +173,7 @@ void DebInstaller::initConnections()
     connect(m_fileListModel, &DebListModel::signalEnableCloseButton, this, &DebInstaller::slotEnableCloseButton);
 
     // During installing/uninstalling, drag is not allowed
-    connect(m_fileListModel, &DebListModel::signalStartInstall, this, &DebInstaller::disableCloseAndExit);
+    connect(m_fileListModel, &DebListModel::signalWorkerStart, this, &DebInstaller::disableCloseAndExit);
     connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotChangeDragFlag);
     connect(m_fileListModel, &DebListModel::signalPackageCannotFind, this, &DebInstaller::slotShowPkgRemovedMessage);
 

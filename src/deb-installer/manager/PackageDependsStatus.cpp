@@ -3,31 +3,31 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "PackageDependsStatus.h"
-#include "model/deblistmodel.h"
+#include "utils/package_defines.h"
 
 PackageDependsStatus PackageDependsStatus::ok()
 {
-    return {DebListModel::DependsOk, QString()};
+    return { Pkg::DependsStatus::DependsOk, QString() };
 }
 
 PackageDependsStatus PackageDependsStatus::available(const QString &package)
 {
     // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
-    return {DebListModel::DependsAvailable, package};
+    return { Pkg::DependsStatus::DependsAvailable, package };
 }
 
 PackageDependsStatus PackageDependsStatus::_break(const QString &package)
 {
-    return {DebListModel::DependsBreak, package};
+    return { Pkg::DependsStatus::DependsBreak, package };
 }
 
 PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
 {
-    return {DebListModel::DependsBreak, package};
+    return { Pkg::DependsStatus::DependsBreak, package };
 }
 
 PackageDependsStatus::PackageDependsStatus()
-    : PackageDependsStatus(DebListModel::DependsOk, QString())
+    : PackageDependsStatus(Pkg::DependsStatus::DependsOk, QString())
 {
 }
 
@@ -79,20 +79,20 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
 
 bool PackageDependsStatus::isBreak() const
 {
-    return status == DebListModel::DependsBreak;
+    return status == Pkg::DependsStatus::DependsBreak;
 }
 
 bool PackageDependsStatus::isAuthCancel() const
 {
-    return status == DebListModel::DependsAuthCancel;
+    return status == Pkg::DependsStatus::DependsAuthCancel;
 }
 
 bool PackageDependsStatus::isAvailable() const
 {
-    return status == DebListModel::DependsAvailable;
+    return status == Pkg::DependsStatus::DependsAvailable;
 }
 
 bool PackageDependsStatus::isProhibit() const
 {
-    return status == DebListModel::Prohibit;
+    return status == Pkg::DependsStatus::Prohibit;
 }

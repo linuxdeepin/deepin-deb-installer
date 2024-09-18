@@ -17,10 +17,10 @@ namespace Pkg {
 
 struct DependInfo
 {
-    QString packageName;  // 依赖的包名称
-    QString version;      // 依赖的包的版本
+    QString packageName;  // depends package name
+    QString version;      // depends pacakge version
 };
-typedef QPair<QList<DependInfo>, QList<DependInfo>> DependsPair;
+using DependsPair = QPair<QList<DependInfo>, QList<DependInfo>>;
 
 enum AppendFailReason {
     PackageInvalid,
@@ -28,6 +28,32 @@ enum AppendFailReason {
     PackageNotInstallable,  // can not install, wrong arch or no permission etc.
     PackageAlreadyExists,   // same name and version package intalled
     PackageNotDdim,
+};
+
+enum PackageInstallStatus {
+    NotInstalled,
+    InstalledSameVersion,     // current version installed
+    InstalledEarlierVersion,  // earlier version installed
+    InstalledLaterVersion,    // later version installed
+};
+
+enum DependsStatus {
+    DependsOk,            // ready to install
+    DependsAvailable,     // alailable but need download depends
+    DependsBreak,         // depends are unavaliable, confilcit, or no depends packge etc.
+    DependsVerifyFailed,  // signature verify failed
+    DependsAuthCancel,    // pre depends (wine, linglong) auth check failed
+    ArchBreak,            // arch check failed, e.g.: amd64 package cannot install in arm system
+    Prohibit,             // The application is restricted by the domain management and cannot be installed
+};
+
+enum PackageOperationStatus {
+    Prepare,    // prepare install/uninstall
+    Operating,  // installing/uninstalling
+    Success,
+    Failed,
+    Waiting,       // waitng for next intall/uninstall
+    VerifyFailed,  // runtime signature verfiy failed (hierarchical verify)
 };
 
 }  // namespace Pkg
