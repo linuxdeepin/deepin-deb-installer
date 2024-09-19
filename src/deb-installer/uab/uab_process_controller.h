@@ -58,9 +58,11 @@ private:
 
     bool checkIndexValid();
 
+    void commitCurrentChangeToBackend();
+
 private:
     QProcess *m_process{nullptr};
-    
+
     ProcFlags m_procFlag{Prepare};
     int m_currentIndex{-1};
     QList<QPair<ProcFlag, UabPkgInfo::Ptr>> m_procList;  // install/uninstall package list

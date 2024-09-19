@@ -8,6 +8,8 @@
 #include <QProcess>
 #include <QDebug>
 
+#include "uab_backend.h"
+
 namespace Uab {
 
 const QString kLinglongBin = "ll-cli";
@@ -141,8 +143,14 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
     const bool exitSuccess = InstallSuccess == exitCode;
 
     // continue next process
-    if (exitSuccess && nextProcess()) {
-        return;
+    if (exitSuccess) {
+        // update uab backend
+        commitCurrentChangeToBackend();
+
+        // continue next process, if error occurred, terminate current install/uninstall.
+        if (nextProcess()) {
+            return;
+        }
     }
 
     m_procFlag = Error;
@@ -156,7 +164,7 @@ bool UabProcessController::nextProcess()
 
     // check process finish
     m_currentIndex++;
-    if (m_currentIndex > m_process->size()) {
+    if (m_currentIndex >= m_procList.size()) {
         m_procFlag = Finish;
         Q_EMIT processFinished(true);
         return true;
@@ -167,7 +175,7 @@ bool UabProcessController::nextProcess()
         return false;
     }
 
-    auto currentProc = m_procList.value(m_currentIndex);
+    const auto &currentProc = m_procList.at(m_currentIndex);
     switch (currentProc.first) {
         case Installing:
             return installImpl(currentProc.second);
@@ -230,6 +238,25 @@ bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninst
 bool UabProcessController::checkIndexValid()
 {
     return 0 <= m_currentIndex && m_currentIndex < m_procList.size();
+}
+
+void UabProcessController::commitCurrentChangeToBackend()
+{
+    if (!checkIndexValid()) {
+        return;
+    }
+
+    const auto &currentProc = m_procList.at(m_currentIndex);
+    switch (currentProc.first) {
+        case Installing:
+            Uab::UabBackend::instance()->packageInstalled(currentProc.second);
+            break;
+        case Uninstalling:
+            Uab::UabBackend::instance()->packageRemoved(currentProc.second);
+            break;
+        default:
+            break;
+    }
 }
 
 }  // namespace Uab

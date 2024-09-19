@@ -16,7 +16,7 @@ public:
 
     explicit ProxyPackageListModel(QObject *parent = nullptr);
 
-    virtual QVariant data(const QModelIndex &index, int role) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     Q_SLOT void slotAppendPackage(const QStringList &packageList) override;
@@ -47,7 +47,7 @@ private:
     Q_SLOT void onSourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
 private:
-    int m_procModelIndex;  // current processing model index
+    int m_procModelIndex{-1};  // current processing model index
 
     struct ModelInfo
     {
@@ -55,7 +55,7 @@ private:
         int count{0};       // cached model item count
         int rightCount{0};  // index counts for current and previous models
     };
-    QList<ModelInfo> m_packageModels;   // all package list models (deb/uab)
+    QList<ModelInfo> m_packageModels;  // all package list models (deb/uab)
 };
 
 #endif  // PROXY_PACKAGE_LIST_MODEL_H

@@ -141,13 +141,15 @@ QString UabPackageListModel::checkPackageValid(const QString &packagePath)
 void UabPackageListModel::slotInstallPackages()
 {
     if (!isWorkerPrepare() || rowCount() <= 0) {
-        setWorkerStatus(WorkerPrepare);
-        Q_EMIT signalWorkerFinished();
         return;
     }
 
-    // reset
+    // reset, mark package waiting install
     resetInstallStatus();
+    for (auto uabPtr : m_uabPkgList) {
+        uabPtr->m_operationStatus = Pkg::Waiting;
+        Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+    }
 
     setWorkerStatus(WorkerProcessing);
     installNextUab();
@@ -239,7 +241,7 @@ void UabPackageListModel::installNextUab()
         return;
     }
 
-    setCurrentOperation(Pkg::Waiting);
+    setCurrentOperation(Pkg::Operating);
 
     m_processor->reset();
     switch (uabPtr->installStatus()) {
@@ -249,7 +251,7 @@ void UabPackageListModel::installNextUab()
         case Pkg::InstalledSameVersion: {
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
             m_processor->markUninstall(oldInfoPtr);
-            m_processor->markInstall(oldInfoPtr);
+            m_processor->markInstall(uabPtr->info());
         } break;
         default: {
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
@@ -306,7 +308,7 @@ void UabPackageListModel::setCurrentOperation(Pkg::PackageOperationStatus s)
         return;
     }
 
-    auto uabPtr = m_uabPkgList.value(m_operatingIndex);
+    auto &uabPtr = m_uabPkgList[m_operatingIndex];
     uabPtr->m_operationStatus = s;
 
     Q_EMIT dataChanged(index(m_operatingIndex), index(m_operatingIndex), {PackageOperateStatusRole});
