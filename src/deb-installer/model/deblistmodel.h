@@ -173,7 +173,7 @@ public:
      * @brief checkPackageValid 查找指定包信息
      * @param package_path 路径
      */
-    QString checkPackageValid(const QString &package_path);
+    QString checkPackageValid(const QString &package_path) override;
 
 signals:
     /**
@@ -207,13 +207,13 @@ public slots:
      * @brief slotUninstallPackage     卸载某一个包
      * @param index   包的index
      */
-    void slotUninstallPackage(const int index);
+    void slotUninstallPackage(int index) override;
 
     /**
      * @brief slotAppendPackage 添加包
      * @param package 添加的包的路径
      */
-    void slotAppendPackage(const QStringList &packages);
+    void slotAppendPackage(const QStringList &packages) override;
 
     /**
      * @brief slotTransactionErrorOccurred 安装过程中出现错误

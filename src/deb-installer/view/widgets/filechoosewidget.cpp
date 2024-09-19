@@ -163,7 +163,7 @@ void FileChooseWidget::chooseFiles()
     emit packagesSelected(selected_files);                      // 发送信号
 
     // 判断路径信息是否为本地路径
-    if (!selected_files.isEmpty() && Utils::checkPackageReadable(selected_files.first())) {
+    if (!selected_files.isEmpty() && Pkg::PkgReadable == Utils::checkPackageReadable(selected_files.first())) {
         // 本地路径，保存当前文件路径
         m_settings.setValue("history_dir", currentPackageDir);
     }

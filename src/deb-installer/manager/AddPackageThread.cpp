@@ -42,25 +42,18 @@ void AddPackageThread::setSamePackageMd5(const QMap<QString, QByteArray> &packag
 
 bool AddPackageThread::dealInvalidPackage(const QString &packagePath)
 {
-    if (!Utils::checkPackageReadable(packagePath)) {
-        QFileInfo debFileIfo(packagePath);
-        // 查看包是否能够打开，无法打开说明包不在本地或无权限。
-        QFile outfile(packagePath.toUtf8());
-        outfile.open(QFile::ReadOnly);
-
-        if (!outfile.isOpen()) {  // 打不开，文件不在本地或无安装权限
-            QFile::FileError error = outfile.error();
-            if (error == QFile::FileError::NoError) {
-                // 文件不存在或路径错误
-                emit signalAppendFailMessage(Pkg::PackageNotLocal);
-                return false;
-            } else {
-                //无安装权限
-                emit signalAppendFailMessage(Pkg::PackageNotInstallable);
-                return false;
-            }
-        }
+    auto readablilty = Utils::checkPackageReadable(packagePath);
+    switch (readablilty) {
+        case Pkg::PkgNotInLocal:
+            emit signalAppendFailMessage(Pkg::PackageNotLocal);
+            return false;
+        case Pkg::PkgNoPermission:
+            emit signalAppendFailMessage(Pkg::PackageNotInstallable);
+            return false;
+        default:
+            break;
     }
+
     return true;
 }
 
@@ -116,7 +109,7 @@ void AddPackageThread::run()
 
         // 如果当前已经存在此md5的包,则说明此包已经添加到程序中
         if (m_appendedPackagesMd5.contains(md5)) {
-            //处理重复文件
+            // 处理重复文件
             Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
             continue;
         }

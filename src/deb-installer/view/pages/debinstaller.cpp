@@ -5,6 +5,7 @@
 #include "debinstaller.h"
 #include "model/deblistmodel.h"
 #include "model/packageanalyzer.h"
+#include "model/proxy_package_list_model.h"
 #include "view/widgets/filechoosewidget.h"
 #include "view/pages/multipleinstallpage.h"
 #include "view/pages/singleinstallpage.h"
@@ -16,7 +17,6 @@
 #include "model/packageselectmodel.h"
 #include "settingdialog.h"
 #include "utils/utils.h"
-#include "uab/uab_backend.h"
 
 #include <DInputDialog>
 #include <DRecentManager>
@@ -58,7 +58,7 @@ enum PackageCountType {
 
 DebInstaller::DebInstaller(QWidget *parent)
     : DMainWindow(parent)
-    , m_fileListModel(new DebListModel(this))
+    , m_fileListModel(new ProxyPackageListModel(this))
     , m_fileChooseWidget(new FileChooseWidget(this))
     , m_centralLayout(new QStackedLayout())
     , m_settingDialog(new SettingDialog(this))
@@ -67,11 +67,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     initUI();
     initConnections();
 
-    QtConcurrent::run([]() {
-        PackageAnalyzer::instance().initBackend();
-        // TODO(renbin): init only required
-        Uab::UabBackend::instance()->initBackend();
-    });
+    QtConcurrent::run([]() { PackageAnalyzer::instance().initBackend(); });
 }
 
 DebInstaller::~DebInstaller() {}
@@ -401,9 +397,10 @@ void DebInstaller::enableCloseAndExit()
 
 void DebInstaller::dragEnterEvent(QDragEnterEvent *dragEnterEvent)
 {
-    this->activateWindow();                                                      // 拖入时，激活窗口
-    if (m_fileListModel->getWorkerStatus() == DebListModel::WorkerProcessing) {  // 如果当前正在安装，不允许拖入包
-        this->setAcceptDrops(false);                                             // 不允许拖入
+    this->activateWindow();  // 拖入时，激活窗口
+    if (m_fileListModel->getWorkerStatus() == AbstractPackageListModel::WorkerProcessing ||
+        m_fileListModel->getWorkerStatus() == AbstractPackageListModel::WorkerUnInstall) {  // 如果当前正在安装，不允许拖入包
+        this->setAcceptDrops(false);                                                        // 不允许拖入
     } else {
         m_fileChooseWidget->setAcceptDrops(true);  // 允许包被拖入
         if (m_dragflag == 0)                       // 如果当前不允许拖入，则直接返回
@@ -417,7 +414,7 @@ void DebInstaller::dragEnterEvent(QDragEnterEvent *dragEnterEvent)
             const QFileInfo info(item.path());
             if (info.isDir())
                 return dragEnterEvent->accept();
-            if (checkSuffix(item.path()))
+            if (Pkg::UnknownPackage != Utils::detectPackage(item.path()))
                 return dragEnterEvent->accept();  // 检查拖入包的后缀
         }
         dragEnterEvent->ignore();
@@ -440,10 +437,10 @@ void DebInstaller::dropEvent(QDropEvent *dropEvent)
         const QString local_path = url.toLocalFile();
         const QFileInfo info(local_path);
 
-        if (checkSuffix(local_path))  // 检查拖入包的后缀
+        if (Pkg::UnknownPackage != Utils::detectPackage(local_path))  // 检查拖入包的后缀
             file_list << local_path;
         else if (info.isDir()) {
-            for (auto deb : QDir(local_path).entryInfoList(QStringList() << "*.deb", QDir::Files))
+            for (auto deb : QDir(local_path).entryInfoList({"*.deb", "*.uab"}, QDir::Files))
                 file_list << deb.absoluteFilePath();  // 获取文件的绝对路径
         }
     }
@@ -735,8 +732,6 @@ void DebInstaller::slotShowDdimFloatingMessage(const QString &message)
 
 void DebInstaller::slotShowUninstallConfirmPage()
 {
-    m_fileListModel->setWorkerStatus(DebListModel::WorkerUnInstall);  // 刷新当前安装器的工作状态
-
     this->setAcceptDrops(false);  // 卸载页面不允许添加/拖入包
 
     const QModelIndex index = m_fileListModel->index(0);  // 只有单包才有卸载界面

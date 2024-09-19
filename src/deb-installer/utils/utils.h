@@ -16,6 +16,9 @@
 #include <DDialog>
 #include <QPushButton>
 #include <DPushButton>
+
+#include "package_defines.h"
+
 #define dApp (static_cast<DApplication *>(QCoreApplication::instance()))
 
 DWIDGET_USE_NAMESPACE
@@ -63,9 +66,11 @@ public:
     static int returnfileIsempty(QString strfilepath, QString strfilename);                      // 返回文件是否存在
     static VerifyResultCode Digital_Verify(const QString &filepath_name);                        // 验证deb数字签名
     static bool Return_Digital_Verify(const QString &strfilepath, const QString &strfilename);  // 返回验证工具是否存在
-    static bool checkPackageReadable(const QString &packagePath);  // 返回软件包是否允许读取
 
+    // return enable read package or not
+    static Pkg::PackageReadability checkPackageReadable(const QString &packagePath);
     static int compareVersion(const QString &v1, const QString &v2);
+    static Pkg::PackageType detectPackage(const QString &filePath);
 
     static bool isDevelopMode();  // Check if develop mode (root)
 };

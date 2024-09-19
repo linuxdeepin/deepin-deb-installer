@@ -22,6 +22,20 @@ struct DependInfo
 };
 using DependsPair = QPair<QList<DependInfo>, QList<DependInfo>>;
 
+enum PackageType {
+    UnknownPackage,
+    Uab,  // ensure uab priority
+    Deb,
+    Ddim,
+    Proxy,  // both deb and uab
+};
+
+enum PackageReadability {
+    PkgReadable,
+    PkgNotInLocal,
+    PkgNoPermission,
+};
+
 enum AppendFailReason {
     PackageInvalid,
     PackageNotLocal,
