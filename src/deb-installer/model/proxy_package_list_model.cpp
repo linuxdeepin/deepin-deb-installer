@@ -51,6 +51,7 @@ void ProxyPackageListModel::slotAppendPackage(const QStringList &packageList)
     for (auto itr = filterList.begin(); itr != filterList.end(); ++itr) {
         switch (itr.key()) {
             case Pkg::Uab:
+                Q_FALLTHROUGH();
             case Pkg::Deb: {
                 ModelPtr model = modelFromType(itr.key());
                 if (!model) {
@@ -124,6 +125,7 @@ void ProxyPackageListModel::reset()
         info.count = 0;
         info.rightCount = 0;
     }
+    setWorkerStatus(WorkerPrepare);
 }
 
 void ProxyPackageListModel::resetInstallStatus()
@@ -144,6 +146,7 @@ void ProxyPackageListModel::nextModelInstall()
 
     // check if all package finished
     if (m_procModelIndex >= m_packageModels.count()) {
+        setWorkerStatus(WorkerFinished);
         Q_EMIT signalWholeProgressChanged(100);
         setWorkerStatus(WorkerFinished);
         return;

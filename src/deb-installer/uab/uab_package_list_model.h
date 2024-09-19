@@ -19,7 +19,7 @@ class UabPackageListModel : public AbstractPackageListModel
 public:
     explicit UabPackageListModel(QObject *parent = nullptr);
 
-    virtual QVariant data(const QModelIndex &index, int role) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     Q_SLOT void slotAppendPackage(const QStringList &packageList) override;

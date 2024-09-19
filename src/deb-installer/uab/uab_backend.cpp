@@ -62,8 +62,9 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
 {
     const QFileInfo info(uabPath);
     if (!info.exists()) {
-        if (errorString)
+        if (errorString) {
             *errorString = QString("uab file not exists");
+        }
         return {};
     }
 
@@ -225,20 +226,45 @@ void UabBackend::sortPackages(QList<UabPkgInfo::Ptr> &packageList)
     });
 }
 
+void UabBackend::packageInstalled(const UabPkgInfo::Ptr &appendPtr)
+{
+    m_packageList.append(appendPtr);
+    sortPackages(m_packageList);
+
+    qInfo() << QString("Uab package: %1/%2 installed.").arg(appendPtr->id).arg(appendPtr->version);
+}
+
+void UabBackend::packageRemoved(const UabPkgInfo::Ptr &removePtr)
+{
+    auto findItr = std::find_if(m_packageList.begin(), m_packageList.end(), [&](const UabPkgInfo::Ptr &package) {
+        return (removePtr->id == package->id) && (removePtr->version == package->version) &&
+               (removePtr->architecture == package->architecture);
+    });
+
+    if (findItr != m_packageList.end()) {
+        m_packageList.erase(findItr);
+
+        qInfo() << QString("Uab package: %1/%2 removed.").arg(removePtr->id).arg(removePtr->version);
+    }
+    // remove package dose not require sort.
+}
+
 UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString *errorString)
 {
     QJsonParseError error;
     const QJsonDocument doc = QJsonDocument::fromJson(json, &error);
     if (QJsonParseError::NoError != error.error) {
-        if (errorString)
+        if (errorString) {
             *errorString = QString("uab json parse erorr: %1, offset: %2").arg(error.errorString()).arg(error.offset);
+        }
         return {};
     }
 
     const QJsonArray layers = doc.object().value(kUabLayers).toArray();
     if (layers.isEmpty()) {
-        if (errorString)
+        if (errorString) {
             *errorString = QString("uab json not contains 'layers'");
+        }
         return {};
     }
 
@@ -272,8 +298,9 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString 
         return uabPtr;
     }
 
-    if (errorString)
+    if (errorString) {
         *errorString = QString("uab json not contains app info node");
+    }
     return {};
 }
 

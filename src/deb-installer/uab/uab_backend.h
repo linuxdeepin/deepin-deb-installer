@@ -38,6 +38,10 @@ public:
     static void backendProcess(const QPointer<Uab::UabBackend> &notifyPtr);
     static void sortPackages(QList<UabPkgInfo::Ptr> &packageList);
 
+    // update backend database after controller process finished.
+    void packageInstalled(const UabPkgInfo::Ptr &appendPtr);
+    void packageRemoved(const UabPkgInfo::Ptr &removePtr);
+
 private:
     explicit UabBackend(QObject *parent = nullptr);
     ~UabBackend() override;
