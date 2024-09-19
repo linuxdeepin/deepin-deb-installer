@@ -151,7 +151,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Pakiet nie posiada prawidłowej sygnatury i został zablokowany przed uruchomieniem/instalacją. Przejdź do Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji, aby zmienić ustawienia.</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
@@ -409,12 +409,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Aby instalować niepodpisane aplikacje, przejdź do Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji i zmień ustawienia.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji</translation>
     </message>
 </context>
 <context>
