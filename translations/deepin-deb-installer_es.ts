@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="83"/>
         <source>Enter the number to configure: </source>
-        <translation>Ingrese el número para configurar:</translation>
+        <translation>Para configurar ingrese su respuesta:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="88"/>
@@ -151,11 +151,11 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Este paquete no tiene una firma digital válida y se bloqueó su instalación/ejecución. Vaya a Centro de seguridad &gt; Herramientas &gt; Seguridad de aplicaciones para cambiar la configuración.</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="vanished">Fallo al instalar %1: no hay firma digital válida</translation>
+        <translation type="vanished">Fallo al instalar %1: no hay una firma digital válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
@@ -192,7 +192,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>Error al instalar %1: no hay firma digital válida</translation>
+        <translation>Error al instalar %1: no hay una firma digital válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
@@ -264,7 +264,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="33"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Colapsar</translation>
+        <translation>Contraer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="171"/>
@@ -391,7 +391,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="46"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Colapsar</translation>
+        <translation>Contraer</translation>
     </message>
 </context>
 <context>
@@ -409,12 +409,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Para instalar aplicaciones sin firmar, vaya a Centro de seguridad &gt; Herramientas &gt; Seguridad de aplicaciones y seleccione los tipos de aplicaciones que se pueden instalar.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Centro de seguridad &gt; Herramientas &gt; Seguridad de la aplicación</translation>
     </message>
 </context>
 <context>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="707"/>
         <source>Collapse</source>
-        <translation>Colapsar</translation>
+        <translation>Contraer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="333"/>
@@ -580,7 +580,7 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Colapsar</translation>
+        <translation>Contraer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="37"/>
