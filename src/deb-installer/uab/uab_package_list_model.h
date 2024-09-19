@@ -23,11 +23,11 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     Q_SLOT void slotAppendPackage(const QStringList &packageList) override;
-    void removePackage(const int index) override;
+    void removePackage(int index) override;
     QString checkPackageValid(const QString &packagePath) override;
 
     Q_SLOT void slotInstallPackages() override;
-    Q_SLOT void slotUninstallPackage(const int index) override;
+    Q_SLOT void slotUninstallPackage(int index) override;
 
     void reset() override;
     void resetInstallStatus() override;
@@ -40,11 +40,15 @@ private:
 
     void setCurrentOperation(Pkg::PackageOperationStatus s);
     bool checkIndexValid(int index) const;
+    UabPackage::Ptr preCheckPackage(const QString &packagePath);
+    bool packageExists(const UabPackage::Ptr &uabPtr);
 
 private:
     int m_operatingIndex{-1};
     QList<UabPackage::Ptr> m_uabPkgList;
     UabProcessController *m_processor{nullptr};
+
+    QStringList m_delayAppendPackages;  // wait for backend inited.
 };
 
 }  // namespace Uab

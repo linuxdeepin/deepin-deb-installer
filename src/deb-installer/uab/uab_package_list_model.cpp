@@ -13,16 +13,27 @@
 
 namespace Uab {
 
-static const float kCompleteProgress = 100.0f;
+static const float kCompleteProgress = 100.0;
 static const int kPkgInitedIndex = -1;
 
 UabPackageListModel::UabPackageListModel(QObject *parent)
     : AbstractPackageListModel{parent}
     , m_processor(new UabProcessController(this))
 {
+    m_supportPackageType = Pkg::Uab;
+
     connect(m_processor, &UabProcessController::processOutput, this, &UabPackageListModel::signalAppendOutputInfo);
     connect(m_processor, &UabProcessController::progressChanged, this, &UabPackageListModel::slotBackendProgressChanged);
     connect(m_processor, &UabProcessController::processFinished, this, &UabPackageListModel::slotBackendProcessFinished);
+
+    // call init uab backend while uab package list model create
+    connect(Uab::UabBackend::instance(), &Uab::UabBackend::backendInitFinsihed, this, [this]() {
+        if (!m_delayAppendPackages.isEmpty()) {
+            slotAppendPackage(m_delayAppendPackages);
+        }
+        m_delayAppendPackages.clear();
+    });
+    Uab::UabBackend::instance()->initBackend();
 }
 
 QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
@@ -76,9 +87,16 @@ void UabPackageListModel::slotAppendPackage(const QStringList &packageList)
         return;
     }
 
+    // delay append when uab backend not ready. sa backendInitFinsihed()
+    if (!Uab::UabBackend::instance()->backendInited()) {
+        m_delayAppendPackages.append(packageList);
+        return;
+    }
+
     const int oldRowCount = rowCount();
     for (const QString &path : packageList) {
-        auto uabPtr = Uab::UabPackage::fromFilePath(path);
+        auto uabPtr = preCheckPackage(path);
+
         if (uabPtr && uabPtr->isValid()) {
             m_uabPkgList.append(uabPtr);
         }
@@ -89,7 +107,7 @@ void UabPackageListModel::slotAppendPackage(const QStringList &packageList)
     }
 }
 
-void UabPackageListModel::removePackage(const int index)
+void UabPackageListModel::removePackage(int index)
 {
     if (!isWorkerPrepare()) {
         return;
@@ -104,7 +122,7 @@ void UabPackageListModel::removePackage(const int index)
 
 QString UabPackageListModel::checkPackageValid(const QString &packagePath)
 {
-    if (!Utils::checkPackageReadable(packagePath)) {
+    if (Pkg::PkgReadable != Utils::checkPackageReadable(packagePath)) {
         return "You can only install local ueb packages";
     }
 
@@ -113,21 +131,8 @@ QString UabPackageListModel::checkPackageValid(const QString &packagePath)
         return "The uab package may be broken";
     }
 
-    // check alreay added
-    auto findItr = std::find_if(m_uabPkgList.begin(), m_uabPkgList.end(), [&uabPtr](const UabPackage::Ptr &cmpUabPtr) {
-        if (uabPtr->info()->filePath == cmpUabPtr->info()->filePath) {
-            return true;
-        }
-
-        if (uabPtr->info()->appName == cmpUabPtr->info()->appName) {
-            return true;
-        }
-
-        return false;
-    });
-
-    if (findItr != m_uabPkgList.end()) {
-        return "The uab package Already Added";
+    if (packageExists(uabPtr)) {
+        return "The uab package already added";
     }
 
     return "";
@@ -145,8 +150,6 @@ void UabPackageListModel::slotInstallPackages()
     resetInstallStatus();
 
     setWorkerStatus(WorkerProcessing);
-    Q_EMIT signalWorkerStart();
-
     installNextUab();
 }
 
@@ -155,7 +158,7 @@ void UabPackageListModel::slotUninstallPackage(const int i)
     bool callRet = false;
 
     do {
-        if (WorkerUnInstall != m_workerStatus || rowCount() <= 0) {
+        if (!isWorkerPrepare() || rowCount() <= 0) {
             break;
         }
 
@@ -163,11 +166,9 @@ void UabPackageListModel::slotUninstallPackage(const int i)
             break;
         }
 
-        // reset
-        m_operatingIndex = i;
-
         // only single page show uninstall flow
-        Q_EMIT signalWorkerStart();
+        m_operatingIndex = i;
+        setWorkerStatus(WorkerUnInstall);
 
         auto uabPtr = m_uabPkgList.value(m_operatingIndex);
         if (!uabPtr || !uabPtr->isValid()) {
@@ -187,8 +188,7 @@ void UabPackageListModel::slotUninstallPackage(const int i)
 
     if (!callRet) {
         setCurrentOperation(Pkg::Failed);
-        setWorkerStatus(WorkerPrepare);
-        Q_EMIT signalWorkerFinished();
+        setWorkerStatus(WorkerFinished);
     }
 }
 
@@ -216,20 +216,21 @@ void UabPackageListModel::installNextUab()
     m_operatingIndex++;
     Q_ASSERT_X(m_operatingIndex >= 0, "install uab", "operating index invalid");
     if (m_operatingIndex < 0) {
-        setWorkerStatus(WorkerPrepare);
-        Q_EMIT signalWorkerFinished();
+        setWorkerStatus(WorkerFinished);
         return;
     }
 
     // check finish
     if (m_operatingIndex >= rowCount()) {
-        setWorkerStatus(WorkerPrepare);
-
         Q_EMIT signalCurrentPacakgeProgressChanged(kCompleteProgress);
         Q_EMIT signalWholeProgressChanged(kCompleteProgress);
-        Q_EMIT signalWorkerFinished();
+
+        setWorkerStatus(WorkerFinished);
         return;
     }
+
+    // notify list view scroll to current package
+    Q_EMIT signalCurrentProcessPackageIndex(m_operatingIndex);
 
     auto uabPtr = m_uabPkgList.value(m_operatingIndex);
     if (!uabPtr || Pkg::DependsOk != uabPtr->m_dependsStatus) {
@@ -292,8 +293,7 @@ void UabPackageListModel::slotBackendProcessFinished(bool success)
             installNextUab();
             break;
         case WorkerUnInstall:
-            setWorkerStatus(WorkerPrepare);
-            Q_EMIT signalWorkerFinished();
+            setWorkerStatus(WorkerFinished);
             break;
         default:
             break;
@@ -315,6 +315,56 @@ void UabPackageListModel::setCurrentOperation(Pkg::PackageOperationStatus s)
 bool UabPackageListModel::checkIndexValid(int index) const
 {
     return 0 <= index && index < rowCount();
+}
+
+UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
+{
+    auto readablilty = Utils::checkPackageReadable(packagePath);
+    switch (readablilty) {
+        case Pkg::PkgNotInLocal:
+            emit signalAppendFailMessage(Pkg::PackageNotLocal);
+            return {};
+        case Pkg::PkgNoPermission:
+            emit signalAppendFailMessage(Pkg::PackageNotInstallable);
+            return {};
+        default:
+            break;
+    }
+
+    auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
+    if (!uabPtr || !uabPtr->isValid()) {
+        Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid);
+        return {};
+    }
+
+    if (packageExists(uabPtr)) {
+        Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
+        return {};
+    }
+
+    return uabPtr;
+}
+
+bool UabPackageListModel::packageExists(const UabPackage::Ptr &uabPtr)
+{
+    if (!uabPtr) {
+        return false;
+    }
+
+    // check already added
+    auto findItr = std::find_if(m_uabPkgList.begin(), m_uabPkgList.end(), [&uabPtr](const UabPackage::Ptr &cmpUabPtr) {
+        if (uabPtr->info()->filePath == cmpUabPtr->info()->filePath) {
+            return true;
+        }
+
+        if (uabPtr->info()->appName == cmpUabPtr->info()->appName) {
+            return true;
+        }
+
+        return false;
+    });
+
+    return findItr != m_uabPkgList.end();
 }
 
 }  // namespace Uab

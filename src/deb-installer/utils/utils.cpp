@@ -149,7 +149,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify";
-        proc.start(program, { filepath_name });
+        proc.start(program, {filepath_name});
         proc.waitForFinished(-1);
         const QString output1 = proc.readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
@@ -287,51 +287,67 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
 }
 
 /*!
-  @brief 检测软件包 `packagePath` 是否可读，首先判断路径指向的挂载设备信息，
-    若为 gvfs 或 cifs 文件系统(文管当前及V6后的远程挂载系统)，抛出false。
-    同时判断文件是否有权限安装，无权限则抛出异常。
-  @param[in] packagePath 软件包路径
-  @note 只能安装本地的软件包，samba/ftp等远程目录不允许。
+  @brief check `packagePath` is readable, firstly check the mount device information,
+    if it is a gvfs or cifs file system(the remote mount system after V6), throw false.
+    At the same time, check if the file has permission to install, if not, throw an exception.
 
-  @todo 增加对可移除设备的判断!
+  @param[in] packagePath pacakge's path.
+  @note only local package can be installed, remote package (samba/ftp) can not be installed.
+
+  @todo Add the check for removable devices.
 */
-bool Utils::checkPackageReadable(const QString &packagePath)
+Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
 {
-    // 获取路径信息
+    // Determine whether the route information is a local path
     QStorageInfo info(packagePath);
-    // 判断路径信息是不是本地路径
     QString device = info.device();
-    // 黑名单识别 gvfs/cifs 为当前管理远程目录的文件系统
+    // Blacklist identifies, gvfs/cifs as the file system 
+    // that currently manages the remote directory
     if (device.startsWith("gvfs") || device.startsWith("cifs")) {
         qWarning() << "Disable open remote file, the devices is" << device;
-        return false;
+        return Pkg::PkgNotInLocal;
     }
 
     QFileInfo debFileIfo(packagePath);
-    // 查看包是否能够打开，无法打开说明包不在本地或无权限。
+    // check package file readable
     QFile outfile(packagePath.toUtf8());
     outfile.open(QFile::ReadOnly);
 
-    if (!outfile.isOpen()) {  // 打不开，文件不在本地或无安装权限
+    // error occurs
+    if (!outfile.isOpen()) {
         QFile::FileError error = outfile.error();
         if (error == QFile::FileError::NoError) {
-            // 文件不存在或路径错误
             qWarning() << "Package has permission but cannot open!";
-            return false;
-        } else {
-            // 无安装权限
-            qWarning() << "Package has no read permission!";
-            return false;
+            return Pkg::PkgNotInLocal;
         }
-    } else {  // 文件能打开，说明文件在本地且有权限
-        outfile.close();
-        return true;
+
+        qWarning() << "Package has no read permission!";
+        return Pkg::PkgNoPermission;
     }
+
+    // file can open, has permission, in local
+    outfile.close();
+    return Pkg::PkgReadable;
 }
 
 int Utils::compareVersion(const QString &v1, const QString &v2)
 {
     return QApt::Package::compareVersion(v1, v2);
+}
+
+Pkg::PackageType Utils::detectPackage(const QString &filePath)
+{
+    const QMimeDatabase db;
+    const QMimeType mime = db.mimeTypeForFile(filePath);
+    const QFileInfo info(filePath);
+
+    if (info.suffix().toLower() == "deb" || mime.name().startsWith("application/vnd.debian.binary-package")) {
+        return Pkg::Deb;
+    } else if (info.suffix().toLower() == "uab") {
+        return Pkg::Uab;
+    }
+
+    return Pkg::UnknownPackage;
 }
 
 /**

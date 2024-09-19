@@ -243,7 +243,7 @@ public:
      * @param index 要删除的包的下标
      * @param listDependInstallMark 因wine依赖被标记的下标
      */
-    void removePackage(const int index);
+    void removePackage(int index);
 
     //// 重置状态相关函数
 public:

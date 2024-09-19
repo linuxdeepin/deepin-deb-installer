@@ -263,7 +263,7 @@ QString PackagesManager::checkPackageValid(const QStringList &package_path)
 {
     for (QString debPackage : package_path) {  // 通过循环添加所有的包
         // 处理包不在本地的情况。
-        if (!Utils::checkPackageReadable(debPackage)) {  // 判断路径信息是不是本地路径
+        if (Pkg::PkgReadable != Utils::checkPackageReadable(debPackage)) {  // 判断路径信息是不是本地路径
             return "You can only install local deb packages";
         }
 
@@ -682,7 +682,8 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
     if (iAuthRes == DebListModel::AuthDependsErr || iAuthRes == DebListModel::AnalysisErr ||
         iAuthRes == DebListModel::VerifyDependsErr) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsBreak;  // 更换依赖的存储结构
+            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status =
+                Pkg::DependsStatus::DependsBreak;  // 更换依赖的存储结构
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.insert(m_dependInstallMark[num], iAuthRes);
         }
@@ -691,9 +692,7 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
             getPackageDependsStatus(iIndex);
             if (!m_dependsPackages.isEmpty()) {
                 qInfo() << m_dependsPackages.size() << m_dependsPackages.value(m_currentPkgMd5).second.size();
-                if (1 == m_preparedPackages.size()) {}
-                    // Q_EMIT signalDependPackages(m_dependsPackages.value(m_currentPkgMd5), false);
-                else if (m_preparedPackages.size() > 1)
+                if (m_preparedPackages.size() > 1)
                     installWineDepends = false;
             }
         }
@@ -1165,7 +1164,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     package = nullptr;
 
     // 确定和当前包存在直接或间接反向依赖的包的集合
-    QSet<QString> reverseDependSet { packageName };
+    QSet<QString> reverseDependSet{packageName};
 
     // 存放当前需要验证反向依赖的包
     QQueue<QString> reverseQueue;
@@ -1301,7 +1300,7 @@ void PackagesManager::resetPackageDependsStatus(const int index)
  * @brief PackagesManager::removePackage 删除指定下标的包
  * @param index 指定的下标
  */
-void PackagesManager::removePackage(const int index)
+void PackagesManager::removePackage(int index)
 {
     if (index < 0 || index >= m_preparedPackages.size()) {
         qWarning() << "[PackagesManager]"
@@ -1416,26 +1415,18 @@ void PackagesManager::checkInvalid(const QStringList &packages)
  */
 bool PackagesManager::dealInvalidPackage(const QString &packagePath)
 {
-    // 判断路径信息是不是本地路径
-    if (!Utils::checkPackageReadable(packagePath)) {
-        QFileInfo debFileIfo(packagePath);
-        // 查看包是否能够打开，无法打开说明包不在本地或无权限。
-        QFile outfile(packagePath.toUtf8());
-        outfile.open(QFile::ReadOnly);
-
-        if (!outfile.isOpen()) {  // 打不开，文件不在本地或无安装权限
-            QFile::FileError error = outfile.error();
-            if (error == QFile::FileError::NoError) {
-                // 文件不存在或路径错误
-                Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal);
-                return false;
-            } else {
-                // 无安装权限
-                Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable);
-                return false;
-            }
-        }
+    auto readablilty = Utils::checkPackageReadable(packagePath);
+    switch (readablilty) {
+        case Pkg::PkgNotInLocal:
+            emit signalAppendFailMessage(Pkg::PackageNotLocal);
+            return false;
+        case Pkg::PkgNoPermission:
+            emit signalAppendFailMessage(Pkg::PackageNotInstallable);
+            return false;
+        default:
+            break;
     }
+
     return true;
 }
 

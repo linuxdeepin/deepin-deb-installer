@@ -269,7 +269,7 @@ TEST(Utils_Test, checkPackageReadable_deviceError_fail)
     Stub stub;
     stub.set(ADDR(QStorageInfo, device), stub_storageinfo_device_gvfs);
 
-    EXPECT_FALSE(Utils::checkPackageReadable("/tmp"));
+    EXPECT_FALSE(Pkg::PkgReadable == Utils::checkPackageReadable("/tmp"));
 }
 
 bool stub_file_isOpen_failed()
@@ -288,7 +288,7 @@ TEST(Utils_Test, checkPackageReadable_readError_fail)
     // This string is null before the QTemporaryFile is opened
     QString tmpFilePath = tempFile.fileName();
 
-    EXPECT_FALSE(Utils::checkPackageReadable(tmpFilePath));
+    EXPECT_FALSE(Pkg::PkgReadable == Utils::checkPackageReadable(tmpFilePath));
 }
 
 TEST(Utils_Test, checkPackageReadable_normal_success)
@@ -299,5 +299,5 @@ TEST(Utils_Test, checkPackageReadable_normal_success)
     // This string is null before the QTemporaryFile is opened
     QString tmpFilePath = tempFile.fileName();
 
-    EXPECT_TRUE(Utils::checkPackageReadable(tmpFilePath));
+    EXPECT_TRUE(Pkg::PkgReadable == Utils::checkPackageReadable(tmpFilePath));
 }

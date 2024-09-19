@@ -37,6 +37,8 @@ DebListModel::DebListModel(QObject *parent)
     : AbstractPackageListModel(parent)
     , m_packagesManager(new PackagesManager(this))
 {
+    m_supportPackageType = Pkg::Deb;
+
     // 配置包安装的进程
     m_procInstallConfig = new Konsole::Pty;
     configWindow = new AptConfigMessage;
@@ -331,7 +333,7 @@ void DebListModel::slotInstallPackages()
     installNextDeb();  // 开始安装
 }
 
-void DebListModel::slotUninstallPackage(const int index)
+void DebListModel::slotUninstallPackage(int index)
 {
     m_workerStatus = WorkerProcessing;  // 刷新当前包安装器的工作状态
     m_operatingIndex = index;           // 获取卸载的包的indx

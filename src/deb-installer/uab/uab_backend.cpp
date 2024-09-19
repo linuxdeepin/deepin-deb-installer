@@ -53,19 +53,17 @@ UabBackend *UabBackend::instance()
     return &ins;
 }
 
+/**
+ * @brief Check uab package exist and executable.
+ *        If executable, execute `uabPath --print-meta` to get package meta data.
+ * @return UabPkgInfo::Ptr uab package info, or null if error.
+ */
 UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString *errorString)
 {
     const QFileInfo info(uabPath);
     if (!info.exists()) {
         if (errorString)
             *errorString = QString("uab file not exists");
-        return {};
-    }
-
-    // check uab package executable
-    if (!info.isExecutable()) {
-        if (errorString)
-            *errorString = QString("uab file not execuatable");
         return {};
     }
 
@@ -109,6 +107,10 @@ UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId)
     return {};
 }
 
+/**
+   @brief Read Linglong's package information, arch, etc.
+        When the package needs to be installed, the Uab backend will be initialized.
+ */
 void UabBackend::initBackend()
 {
     static std::once_flag kUabBackendFlag;

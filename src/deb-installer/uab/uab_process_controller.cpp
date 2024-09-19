@@ -11,6 +11,7 @@
 namespace Uab {
 
 const QString kLinglongBin = "ll-cli";
+const QString kLinglongInstall = "install";
 const QString kLinglongUninstall = "uninstall";
 
 const int kInitedIndex = -1;
@@ -188,8 +189,17 @@ bool Uab::UabProcessController::installImpl(const Uab::UabPkgInfo::Ptr &installP
 
     m_procFlag.setFlag(Installing);
 
-    m_process->setProgram(installPtr->filePath);
+    // e.g.: ll-cli install ./path/to/file/uab_package.uab
+    m_process->setProgram(kLinglongBin);
+    m_process->setArguments({kLinglongInstall, installPtr->filePath});
     m_process->start();
+
+    const QString recordCommand = QString("command: %1 %2 %3/%4[uab package]")
+                                      .arg(kLinglongBin)
+                                      .arg(kLinglongInstall)
+                                      .arg(installPtr->id)
+                                      .arg(installPtr->version);
+    Q_EMIT processOutput(recordCommand);
 
     return true;
 }
@@ -206,6 +216,13 @@ bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninst
     m_process->setProgram(kLinglongBin);
     m_process->setArguments({kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->id).arg(uninstallPtr->version)});
     m_process->start();
+
+    const QString recordCommand = QString("command: %1 %2 %3/%4")
+                                      .arg(kLinglongBin)
+                                      .arg(kLinglongUninstall)
+                                      .arg(uninstallPtr->id)
+                                      .arg(uninstallPtr->version);
+    Q_EMIT processOutput(recordCommand);
 
     return true;
 }

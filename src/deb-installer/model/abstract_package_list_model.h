@@ -14,68 +14,71 @@ class AbstractPackageListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    // 包的各种数据角色
+    // package role for list model
     enum PackageRole {
-        PackageNameRole = Qt::DisplayRole,  // 包名
-        UnusedRole = Qt::UserRole,          //
-        WorkerIsPrepareRole,                // 当前工作是否处于准备状态
-        ItemIsCurrentRole,                  // 获取当前下标
-        PackageVersionRole,                 // 包的版本
-        PackagePathRole,                    // 包的路径
-        PackageInstalledVersionRole,        // 包已经安装的版本
-        PackageShortDescriptionRole,        // 包的短描述
-        PackageLongDescriptionRole,         // 包的长描述
-        PackageVersionStatusRole,           // 包的安装状态
-        PackageDependsStatusRole,           // 包的依赖状态
-        PackageAvailableDependsListRole,    // 包可用的依赖
-        PackageFailReasonRole,              // 包安装失败的原因
-        PackageOperateStatusRole,           // 包的操作状态
-        PackageReverseDependsListRole,      // 依赖于此包的程序
+        PackageNameRole = Qt::DisplayRole,
+        UnusedRole = Qt::UserRole,
+        WorkerIsPrepareRole,  // ready to work (install/uninstall) sa WorkerStatus
+        ItemIsCurrentRole,
+        PackageVersionRole,
+        PackagePathRole,
+        PackageInstalledVersionRole,  // installed version
+        PackageShortDescriptionRole,
+        PackageLongDescriptionRole,
+        PackageVersionStatusRole,         // sa Pkg::PackageInstallStatus
+        PackageDependsStatusRole,         // sa Pkg::DependsStatus
+        PackageAvailableDependsListRole,  // available dependencies for the package
+        PackageFailReasonRole,            // fail reason for install / uninstall failed
+        PackageOperateStatusRole,         // sa Pkg::PackageOperationStatus
+        PackageReverseDependsListRole,    // list of packages that reversely depend on the current package
 
+        PackageTypeRole,           // is uab or deb package, sa Pkg::PackageType
         PackageDependsDetailRole,  // details for unfinished depends, empty if no errors occur, sa Pkg::DependsPair
     };
 
-    // 安装器的工作状态
+    // the list model backend installer status
     enum WorkerStatus {
-        WorkerPrepare,     // 准备，可以进行安装或卸载
-        WorkerProcessing,  // 正在安装
-        WorkerFinished,    // 安装结束
-        WorkerUnInstall    // 正在卸载
+        WorkerPrepare,     // ready to work
+        WorkerProcessing,  // installing / upgrading
+        WorkerFinished,    // install / uninstall finished
+        WorkerUnInstall
     };
 
-    // wine 依赖安装时的状态
+    // wine or other predepends install status
     enum DependsAuthStatus {
-        AuthBefore,          // 鉴权框弹出之前
-        AuthPop,             // 鉴权框弹出
-        CancelAuth,          // 鉴权取消
-        AuthConfirm,         // 鉴权确认后
-        AuthDependsSuccess,  // 安装成功
-        AuthDependsErr,      // 安装失败
-        AnalysisErr,         // 解析错误
-        VerifyDependsErr,    // 验证签名失败(分级管控)
+        AuthBefore,          // before the authentication dialog pops up
+        AuthPop,             // the authentication dialog pops up
+        CancelAuth,          // authentication cancellation
+        AuthConfirm,         // after authentication confirmation
+        AuthDependsSuccess,  // install success
+        AuthDependsErr,      // install failed
+        AnalysisErr,         // pacakge analysis erorr
+        VerifyDependsErr,    // signature verification failed (hierarchical verify)
     };
 
     // Signature fail error code
     enum ErrorCode {
-        NoDigitalSignature = 101,   // 无有效的数字签名
-        DigitalSignatureError,      // 数字签名校验失败
-        ConfigAuthCancel = 127,     // 配置安装授权被取消
-        ApplocationProhibit = 404,  // 当前包在黑名单中禁止安装
+        NoDigitalSignature = 101,
+        DigitalSignatureError,
+        ConfigAuthCancel = 127,     // Authentication failed
+        ApplocationProhibit = 404,  // the current package is in the blacklist and is prohibited from installation
     };
 
     explicit AbstractPackageListModel(QObject *parent = nullptr);
 
-    WorkerStatus getWorkerStatus() const;
+    [[nodiscard]] inline Pkg::PackageType supportPackage() const { return m_supportPackageType; }
+
+    [[nodiscard]] WorkerStatus getWorkerStatus() const;
     void setWorkerStatus(WorkerStatus status);
-    inline bool isWorkerPrepare() const { return WorkerPrepare == getWorkerStatus(); }
+    [[nodiscard]] inline bool isWorkerPrepare() const { return WorkerPrepare == getWorkerStatus(); }
 
     Q_SLOT virtual void slotAppendPackage(const QStringList &packageList) = 0;
-    virtual void removePackage(const int index) = 0;
+    virtual void removePackage(int index) = 0;
     virtual QString checkPackageValid(const QString &packagePath) = 0;
 
     // trigger install / uninstall
     Q_SLOT virtual void slotInstallPackages() = 0;
-    Q_SLOT virtual void slotUninstallPackage(const int index) = 0;
+    Q_SLOT virtual void slotUninstallPackage(int index) = 0;
 
     virtual void reset() = 0;
     virtual void resetInstallStatus() = 0;
@@ -118,6 +121,7 @@ Q_SIGNALS:
     void signalEnableCloseButton(bool);
 
 protected:
+    Pkg::PackageType m_supportPackageType{Pkg::UnknownPackage};
     WorkerStatus m_workerStatus{WorkerPrepare};  // current worker status
 
 private:
