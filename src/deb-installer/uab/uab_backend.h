@@ -26,6 +26,9 @@ public:
     bool backendInited() const;
     Q_SIGNAL void backendInitFinsihed();
 
+    bool linglongExists() const;
+    bool recheckLinglongExists();
+
     QString lastError() const;
     void dumpPackageList() const;
 
@@ -36,6 +39,8 @@ public:
     // internal
     Q_SLOT void backendInitData(const QList<UabPkgInfo::Ptr> &packageList, const QSet<QString> &archs);
     static void backendProcess(const QPointer<Uab::UabBackend> &notifyPtr);
+    static bool parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabPkgInfo::Ptr> &packageList);
+    static bool parsePackagesFromRawOutput(const QByteArray &output, QList<UabPkgInfo::Ptr> &packageList);
     static void sortPackages(QList<UabPkgInfo::Ptr> &packageList);
 
     // update backend database after controller process finished.
@@ -48,6 +53,7 @@ private:
 
 private:
     bool m_init{false};
+    bool m_linglongExists{false};  // check Linglong executable (ll-cli) exists.
     QList<UabPkgInfo::Ptr> m_packageList;
     QSet<QString> m_supportArchSet;
     QString m_lastError;

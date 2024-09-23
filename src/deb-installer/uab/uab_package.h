@@ -21,6 +21,8 @@ public:
 
     bool isValid() const;
 
+    void setDependsStatus(Pkg::DependsStatus status);
+
     Pkg::DependsStatus dependsStatus();
     Pkg::PackageInstallStatus installStatus();
     Pkg::PackageOperationStatus operationStatus();

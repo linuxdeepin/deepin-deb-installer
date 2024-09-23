@@ -192,7 +192,7 @@ ProxyPackageListModel::ModelPtr ProxyPackageListModel::addModel(Pkg::PackageType
         newInfo.model = newModel;
         m_packageModels.append(newInfo);
 
-        // sort, ensure uab package model first.
+        // sort, ensure deb package model first.
         std::sort(m_packageModels.begin(), m_packageModels.end(), [](const ModelInfo &info1, const ModelInfo &info2) {
             return info1.model->supportPackage() < info2.model->supportPackage();
         });

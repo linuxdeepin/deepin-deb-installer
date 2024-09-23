@@ -24,8 +24,8 @@ using DependsPair = QPair<QList<DependInfo>, QList<DependInfo>>;
 
 enum PackageType {
     UnknownPackage,
-    Uab,  // ensure uab priority
-    Deb,
+    Deb,  // ensure deb priority
+    Uab,
     Ddim,
     Proxy,  // both deb and uab
 };

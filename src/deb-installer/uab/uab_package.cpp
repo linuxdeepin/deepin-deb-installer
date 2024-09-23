@@ -32,6 +32,18 @@ bool UabPackage::isValid() const
     return true;
 }
 
+void UabPackage::setDependsStatus(Pkg::DependsStatus status)
+{
+    m_dependsStatus = status;
+    switch (m_dependsStatus) {
+        case Pkg::DependsBreak:
+            m_failReason = QObject::tr("The system has not installed Linglong environment, please install it first");
+            break;
+        default:
+            break;
+    }
+}
+
 Pkg::DependsStatus UabPackage::dependsStatus()
 {
     return m_dependsStatus;
@@ -62,7 +74,10 @@ UabPackage::Ptr UabPackage::fromFilePath(const QString &filePath)
     QString error;
     auto infoPtr = Uab::UabBackend::packageFromMetaData(filePath, &error);
     auto uabPtr = Uab::UabPackage::Ptr::create(infoPtr);
-    uabPtr->m_failReason = error;
+
+    if (!error.isEmpty()) {
+        qWarning() << qPrintable("Uab from path:") << error;
+    }
     return uabPtr;
 }
 
@@ -76,6 +91,12 @@ void UabPackage::reset()
 
     m_installedVersion.clear();
     m_installStatus = Pkg::NotInstalled;
+
+    if (!Uab::UabBackend::instance()->linglongExists()) {
+        setDependsStatus(Pkg::DependsBreak);
+    } else {
+        setDependsStatus(Pkg::DependsOk);
+    }
 
     if (Uab::UabBackend::instance()->backendInited()) {
         auto uabInfoPtr = Uab::UabBackend::instance()->findPackage(m_metaPtr->id);

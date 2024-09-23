@@ -6,21 +6,32 @@
 
 #include <QRegularExpression>
 #include <QProcess>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QDebug>
 
 #include "uab_backend.h"
 
 namespace Uab {
 
+// linglong cli command
 const QString kLinglongBin = "ll-cli";
+const QString kLinglongJson = "--json";
 const QString kLinglongInstall = "install";
 const QString kLinglongUninstall = "uninstall";
 
+// ll-cli output json tag
+const QString kJsonPercentage = "percentage";
+const QString kJsonState = "state";
+const QString kJsonCode = "code";
+const QString kJsonMessage = "messsage";
+
 const int kInitedIndex = -1;
 
-enum UabExitCode {
-    InstallError = -1,
-    InstallSuccess = 0,
+enum UabCode {
+    UabError = -1,
+    UabSuccess = 0,
 };
 
 UabProcessController::UabProcessController(QObject *parent)
@@ -111,11 +122,60 @@ bool Uab::UabProcessController::ensureProcess()
     return true;
 }
 
-void UabProcessController::onReadOutput()
-{
-    QByteArray output = m_process->readAllStandardOutput();
-    Q_EMIT processOutput(output);
+/**
+   @brief Parse json data from `ll-cli --json install/uninstall [path]` output.
+    Here are output example (linglong-bin 1.6.2).
+   @code
+    // progress
+    [
+        {
+            "message": "prepare for installing uab",
+            "percentage": "0",
+            "state": "preInstall"
+        }
+    ]
 
+    // successed
+    {
+        "message": "install uab successfully",
+        "percentage": "100",
+        "state": "Success"
+    }
+
+    // failed
+    {"code":-1,"message":"./libs/linglong/src/linglong/cli/cli.cpp:125 download status:
+   \n./libs/linglong/src/linglong/repo/ostree_repo.cpp:915 import layer dir: main:org.deepin.editor/6.5.2.1/x86_64 exists."}
+
+   @endcode
+ */
+void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
+{
+    const QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+
+    if (doc.isArray()) {
+        // maybe percentage info
+        const QJsonObject obj = doc.array().first().toObject();
+        if (obj.contains(kJsonPercentage)) {
+            double progress = obj.value(kJsonPercentage).toDouble();
+            const int count = m_procList.size();
+            if (count > 1) {
+                progress = (m_currentIndex * 100.0f + progress) / count;
+            }
+
+            Q_EMIT progressChanged(static_cast<float>(progress));
+        }
+
+    } else if (doc.isObject()) {
+        // maybe code info
+        const QJsonObject obj = doc.object();
+        if (UabError == obj.value(kJsonCode).toInt()) {
+            qWarning() << qPrintable("Uab process error:") << obj.value(kJsonMessage);
+        }
+    }
+}
+
+void UabProcessController::parseProgressFromRawOutput(const QByteArray &output)
+{
     // Detect progress change, filter ANSI code, receive data such as:
     // "\r\x1B[K\x1B[?25l0% prepare for installing uab\x1B[?25h"
     // "\r\x1B[K\x1B[?25l100% install uab successfully\x1B[?25h\n"
@@ -136,11 +196,20 @@ void UabProcessController::onReadOutput()
     }
 }
 
+void UabProcessController::onReadOutput()
+{
+    QByteArray output = m_process->readAllStandardOutput();
+    Q_EMIT processOutput(output);
+
+    // e.g: ll-cli --json install /path/to/file
+    parseProgressFromJson(output);
+}
+
 void UabProcessController::onFinished(int exitCode, int exitStatus)
 {
     Q_UNUSED(exitStatus)
 
-    const bool exitSuccess = InstallSuccess == exitCode;
+    const bool exitSuccess = UabSuccess == exitCode;
 
     // continue next process
     if (exitSuccess) {
@@ -197,13 +266,14 @@ bool Uab::UabProcessController::installImpl(const Uab::UabPkgInfo::Ptr &installP
 
     m_procFlag.setFlag(Installing);
 
-    // e.g.: ll-cli install ./path/to/file/uab_package.uab
+    // e.g.: ll-cli --json install ./path/to/file/uab_package.uab
     m_process->setProgram(kLinglongBin);
-    m_process->setArguments({kLinglongInstall, installPtr->filePath});
+    m_process->setArguments({kLinglongJson, kLinglongInstall, installPtr->filePath});
     m_process->start();
 
-    const QString recordCommand = QString("command: %1 %2 %3/%4[uab package]")
+    const QString recordCommand = QString("command: %1 %2 %3 %4/%5[uab package]")
                                       .arg(kLinglongBin)
+                                      .arg(kLinglongJson)
                                       .arg(kLinglongInstall)
                                       .arg(installPtr->id)
                                       .arg(installPtr->version);
@@ -220,13 +290,15 @@ bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninst
 
     m_procFlag.setFlag(Uninstalling);
 
-    // e.g.: ll-cli uninstall org.deepin.package/1.0.0
+    // e.g.: ll-cli --json uninstall org.deepin.package/1.0.0
     m_process->setProgram(kLinglongBin);
-    m_process->setArguments({kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->id).arg(uninstallPtr->version)});
+    m_process->setArguments(
+        {kLinglongJson, kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->id).arg(uninstallPtr->version)});
     m_process->start();
 
-    const QString recordCommand = QString("command: %1 %2 %3/%4")
+    const QString recordCommand = QString("command: %1 %2 %3 %4/%5")
                                       .arg(kLinglongBin)
+                                      .arg(kLinglongJson)
                                       .arg(kLinglongUninstall)
                                       .arg(uninstallPtr->id)
                                       .arg(uninstallPtr->version);

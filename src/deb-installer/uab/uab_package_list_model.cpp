@@ -59,7 +59,7 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
         case PackageShortDescriptionRole:
             Q_FALLTHROUGH();
         case PackageLongDescriptionRole:
-            return uabPtr->info()->shortDescription;
+            return uabPtr->info()->description;
         case PackageVersionStatusRole:
             return uabPtr->installStatus();
         case PackageDependsStatusRole:
@@ -144,6 +144,15 @@ void UabPackageListModel::slotInstallPackages()
         return;
     }
 
+    if (!Uab::UabBackend::instance()->recheckLinglongExists()) {
+        // todo reset status;
+        for (const auto &uabPtr : m_uabPkgList) {
+            uabPtr->setDependsStatus(Pkg::DependsBreak);
+            Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+        }
+        return;
+    }
+
     // reset, mark package waiting install
     resetInstallStatus();
     for (auto uabPtr : m_uabPkgList) {
@@ -157,6 +166,10 @@ void UabPackageListModel::slotInstallPackages()
 
 void UabPackageListModel::slotUninstallPackage(const int i)
 {
+    if (!Uab::UabBackend::instance()->recheckLinglongExists()) {
+        // todo reset status;
+    }
+
     bool callRet = false;
 
     do {

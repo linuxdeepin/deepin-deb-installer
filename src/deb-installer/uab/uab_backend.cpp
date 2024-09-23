@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QPointer>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include "utils/utils.h"
@@ -23,6 +24,7 @@ namespace Uab {
 
 // bin command
 static const QString kUabCliBin = "ll-cli";
+static const QString kUabJson = "--json";
 static const QString kUabCliList = "list";
 // e.g.: [path to package] --print-meta
 static const QString kUabPkgCmdPrintMeta = "--print-meta";
@@ -123,6 +125,20 @@ bool UabBackend::backendInited() const
     return m_init;
 }
 
+bool UabBackend::linglongExists() const
+{
+    return m_linglongExists;
+}
+
+bool UabBackend::recheckLinglongExists()
+{
+    // find ll-cli in $PATH
+    const QString execPath = QStandardPaths::findExecutable(kUabCliBin);
+    m_linglongExists = !execPath.isEmpty();
+
+    return m_linglongExists;
+}
+
 QString UabBackend::lastError() const
 {
     return m_lastError;
@@ -138,33 +154,59 @@ void UabBackend::dumpPackageList() const
 
 void UabBackend::backendInitData(const QList<UabPkgInfo::Ptr> &packageList, const QSet<QString> &archs)
 {
+    recheckLinglongExists();
+
     m_packageList = packageList;
     m_supportArchSet = archs;
     m_init = true;
     Q_EMIT backendInitFinsihed();
 }
 
-/**
-   @brief Get Linglong package list from `ll-cli list`
-        The packages are sorted by package id and package version.
-
-   @note This function will be run in QtConcurrent::run()
-*/
-void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
+bool UabBackend::parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabPkgInfo::Ptr> &packageList)
 {
-    QProcess process;
-    process.start(kUabCliBin, {kUabCliList});
-    process.waitForFinished();
+    QJsonParseError jsonError;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &jsonError);
+    if (QJsonParseError::NoError != jsonError.error) {
+        qWarning() << qPrintable("Parse ll-cli list json data failed:") << jsonError.errorString();
+        return false;
+    }
 
-    QByteArray output = process.readAllStandardOutput();
-    QTextStream stream(&output, QIODevice::ReadOnly);
+    packageList.clear();
+    QJsonArray rootArray = doc.array();
+    for (const auto &value : rootArray) {
+        if (!value.isObject()) {
+            continue;
+        }
+
+        QJsonObject item = value.toObject();
+        auto uabPtr = UabPkgInfo::Ptr::create();
+
+        uabPtr->id = item.value(kUabId).toString();
+        uabPtr->appName = item.value(kUabName).toString();
+        uabPtr->version = item.value(kUabVersion).toString();
+        uabPtr->channel = item.value(kUabChannel).toString();
+        uabPtr->description = item.value(kUabDescription).toString();
+
+        QJsonArray archArray = item.value(kUabArch).toArray();
+        for (const auto &archItem : archArray) {
+            uabPtr->architecture.append(archItem.toString());
+        }
+
+        packageList.append(uabPtr);
+    }
+
+    return true;
+}
+
+bool UabBackend::parsePackagesFromRawOutput(const QByteArray &output, QList<UabPkgInfo::Ptr> &packageList)
+{
+    QTextStream stream(output, QIODevice::ReadOnly);
 
     // remove title
     stream.readLine();
 
     QString arch;
     QString deprecated;
-    QList<UabPkgInfo::Ptr> packageList;
 
     while (!stream.atEnd()) {
         auto uabPtr = UabPkgInfo::Ptr::create();
@@ -179,11 +221,29 @@ void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
 
         uabPtr->architecture.append(arch);
         // to the end of the line
-        uabPtr->shortDescription = stream.readLine().simplified();
+        uabPtr->description = stream.readLine().simplified();
 
         packageList.append(uabPtr);
     }
 
+    return true;
+}
+
+/**
+   @brief Get Linglong package list from `ll-cli list`
+        The packages are sorted by package id and package version.
+
+   @note This function will be run in QtConcurrent::run()
+*/
+void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
+{
+    QProcess process;
+    process.start(kUabCliBin, {kUabJson, kUabCliList});
+    process.waitForFinished();
+
+    QByteArray output = process.readAllStandardOutput();
+    QList<UabPkgInfo::Ptr> packageList;
+    parsePackagesFromRawJson(output, packageList);
     sortPackages(packageList);
 
     // detect deb package init
@@ -286,7 +346,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString 
         uabPtr->id = info[kUabId].toString();
         uabPtr->appName = info[kUabName].toString();
         uabPtr->version = info[kUabVersion].toString();
-        uabPtr->shortDescription = info[kUabDescription].toString();
+        uabPtr->description = info[kUabDescription].toString();
         uabPtr->channel = info[kUabChannel].toString();
 
         const QJsonArray archArray = info[kUabArch].toArray();
@@ -334,7 +394,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug out, const Uab::UabPkgInfo &uabPkg)
     out << Uab::kUabVersion << ":" << uabPkg.version << ";";
     out << Uab::kUabArch << ":" << uabPkg.architecture << ";";
     out << Uab::kUabChannel << ":" << uabPkg.channel << ";";
-    out << Uab::kUabDescription << ":" << uabPkg.shortDescription << ";";
+    out << Uab::kUabDescription << ":" << uabPkg.description << ";";
     out << "filePath:" << uabPkg.filePath << ";";
 
     return out;
