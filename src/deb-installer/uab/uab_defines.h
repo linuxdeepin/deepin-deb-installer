@@ -38,7 +38,7 @@ struct UabPkgInfo
     QString appName;   // display name
     QString version;
     QStringList architecture;  // uab package may support multiple arch
-    QString shortDescription;
+    QString description;
     QString channel;
 };
 

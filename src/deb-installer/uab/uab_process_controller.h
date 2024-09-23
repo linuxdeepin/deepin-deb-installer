@@ -48,6 +48,8 @@ public:
 
 private:
     bool ensureProcess();
+    void parseProgressFromJson(const QByteArray &jsonData);
+    void parseProgressFromRawOutput(const QByteArray &output);
     Q_SLOT void onReadOutput();
     Q_SLOT void onFinished(int exitCode, int exitStatus);
 
