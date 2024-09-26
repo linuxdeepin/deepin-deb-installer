@@ -338,8 +338,7 @@ void MultipleInstallPage::initConnections()
         QVariant data = m_debListModel->data(index, AbstractPackageListModel::PackageDependsDetailRole);
         auto depends = data.value<Pkg::DependsPair>();
 
-        // TODO: implement later
-        slotDependPackages(depends, false);
+        slotDependPackages(depends, GlobalStatus::winePreDependsInstalling());
     });
 }
 

@@ -550,8 +550,6 @@ private:
 private:
     AddPackageThread *m_pAddPackageThread = nullptr;  // 添加包的线程
 
-    bool installWineDepends = false;
-
     bool isDependsExists = false;
 
     int m_validPackageCount = 0;

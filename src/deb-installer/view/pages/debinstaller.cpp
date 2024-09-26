@@ -7,6 +7,7 @@
 #include "model/packageanalyzer.h"
 #include "model/proxy_package_list_model.h"
 #include "view/widgets/filechoosewidget.h"
+#include "view/widgets/error_notify_dialog_helper.h"
 #include "view/pages/multipleinstallpage.h"
 #include "view/pages/singleinstallpage.h"
 #include "view/pages/uninstallconfirmpage.h"
@@ -170,7 +171,7 @@ void DebInstaller::initConnections()
 
     // During installing/uninstalling, drag is not allowed
     connect(m_fileListModel, &DebListModel::signalWorkerStart, this, &DebInstaller::disableCloseAndExit);
-    connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotChangeDragFlag);
+    connect(m_fileListModel, &DebListModel::signalWorkerFinished, this, &DebInstaller::slotWorkerFinished);
     connect(m_fileListModel, &DebListModel::signalPackageCannotFind, this, &DebInstaller::slotShowPkgRemovedMessage);
 
     // 选择安装页面
@@ -324,7 +325,7 @@ int DebInstaller::checkDigitalSignature(const QString &debPath)
     if (auto *proxyModel = qobject_cast<ProxyPackageListModel *>(m_fileListModel)) {
         auto *model = qobject_cast<DebListModel *>(proxyModel->modelFromType(Pkg::Deb));
         if (model) {
-            model->checkDigitalSignature(debPath);
+            return model->checkDigitalSignature(debPath);
         }
     }
 
@@ -419,6 +420,15 @@ void DebInstaller::slotShowPkgProcessBlockPage(BackendProcessPage::DisplayMode m
             m_centralLayout->setCurrentWidget(m_backendProcessPage);
         }
     }
+}
+
+void DebInstaller::slotWorkerFinished()
+{
+    if (m_fileListModel->containsSignatureFailed()) {
+        ErrorNotifyDialogHelper::showHierarchicalVerifyWindow();
+    }
+
+    slotChangeDragFlag();
 }
 
 void DebInstaller::disableCloseAndExit()

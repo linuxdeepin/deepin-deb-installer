@@ -5,26 +5,35 @@
 #include "uab_package_list_model.h"
 
 #include <QAbstractListModel>
+#include <QFileSystemWatcher>
+#include <QTimer>
+#include <QDebug>
 
 #include "uab_backend.h"
 #include "utils/utils.h"
-
-#include <QDebug>
 
 namespace Uab {
 
 static const float kCompleteProgress = 100.0;
 static const int kPkgInitedIndex = -1;
 
+/**
+ * @class UabPackageListModel
+ * @brief Manage the list model of UAB packages, and handle the install and uninstall of multiple UAB packages.
+ *        Emit execution status and error messages.
+ */
 UabPackageListModel::UabPackageListModel(QObject *parent)
     : AbstractPackageListModel{parent}
     , m_processor(new UabProcessController(this))
+    , m_fileWatcher(new QFileSystemWatcher(this))
 {
     m_supportPackageType = Pkg::Uab;
 
     connect(m_processor, &UabProcessController::processOutput, this, &UabPackageListModel::signalAppendOutputInfo);
     connect(m_processor, &UabProcessController::progressChanged, this, &UabPackageListModel::slotBackendProgressChanged);
     connect(m_processor, &UabProcessController::processFinished, this, &UabPackageListModel::slotBackendProcessFinished);
+
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, &UabPackageListModel::slotFileChanged);
 
     // call init uab backend while uab package list model create
     connect(Uab::UabBackend::instance(), &Uab::UabBackend::backendInitFinsihed, this, [this]() {
@@ -42,10 +51,8 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
         return {};
     }
 
-    // check file exists
-
     const UabPackage::Ptr &uabPtr = m_uabPkgList.at(index.row());
-    if (!uabPtr) {
+    if (!uabPtr || !uabPtr->isValid()) {
         return {};
     }
 
@@ -104,6 +111,8 @@ void UabPackageListModel::slotAppendPackage(const QStringList &packageList)
 
         if (uabPtr && uabPtr->isValid()) {
             m_uabPkgList.append(uabPtr);
+
+            m_fileWatcher->addPath(path);
         }
     }
 
@@ -119,7 +128,10 @@ void UabPackageListModel::removePackage(int index)
     }
 
     if (0 <= index && index < rowCount()) {
-        m_uabPkgList.removeAt(index);
+        auto uabPtr = m_uabPkgList.takeAt(index);
+        if (uabPtr && uabPtr->info()) {
+            m_fileWatcher->removePath(uabPtr->info()->filePath);
+        }
 
         Q_EMIT signalPackageCountChanged(rowCount());
     }
@@ -198,6 +210,16 @@ QString UabPackageListModel::lastProcessError()
     return {};
 }
 
+bool UabPackageListModel::containsSignatureFailed() const
+{
+    // check if a pacakge signature verify failed.
+    auto findItr = std::find_if(m_uabPkgList.begin(), m_uabPkgList.end(), [](const UabPackage::Ptr &uabPtr) {
+        return Pkg::DigitalSignatureError == uabPtr->m_errorCode;
+    });
+
+    return findItr != m_uabPkgList.end();
+}
+
 bool UabPackageListModel::slotInstallPackages()
 {
     if (!isWorkerPrepare() || rowCount() <= 0) {
@@ -269,6 +291,12 @@ void UabPackageListModel::reset()
 {
     setWorkerStatus(WorkerPrepare);
     m_operatingIndex = kPkgInitedIndex;
+
+    QStringList files = m_fileWatcher->files();
+    if (!files.isEmpty()) {
+        m_fileWatcher->removePaths(files);
+    }
+
     m_uabPkgList.clear();
 }
 
@@ -293,10 +321,10 @@ bool UabPackageListModel::installNextUab()
         return false;
     }
 
-    // check finish
+    // check install finish
     if (m_operatingIndex >= rowCount()) {
-        Q_EMIT signalCurrentPacakgeProgressChanged(kCompleteProgress);
-        Q_EMIT signalWholeProgressChanged(kCompleteProgress);
+        Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(kCompleteProgress));
+        Q_EMIT signalWholeProgressChanged(static_cast<int>(kCompleteProgress));
 
         setWorkerStatus(WorkerFinished);
         return true;
@@ -344,11 +372,11 @@ void UabPackageListModel::slotBackendProgressChanged(float progress)
 {
     Q_ASSERT_X(rowCount() > 0, "check count", "row count invalid");
 
-    float base = kCompleteProgress / rowCount();
-    float wholeProgress = (m_operatingIndex + (progress / kCompleteProgress)) * base;
+    const float base = kCompleteProgress / rowCount();
+    const float wholeProgress = (m_operatingIndex + (progress / kCompleteProgress)) * base;
 
-    Q_EMIT signalCurrentPacakgeProgressChanged(progress);
-    Q_EMIT signalWholeProgressChanged(wholeProgress);
+    Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
+    Q_EMIT signalWholeProgressChanged(static_cast<int>(wholeProgress));
 }
 
 void UabPackageListModel::slotBackendProcessFinished(bool success)
@@ -357,11 +385,13 @@ void UabPackageListModel::slotBackendProcessFinished(bool success)
 
     // update installed status
     setCurrentOperation(success ? Pkg::Success : Pkg::Failed);
+    // update all data
+    Q_EMIT dataChanged(index(m_operatingIndex), index(m_operatingIndex));
 
     // update progress
-    float base = kCompleteProgress / rowCount();
-    Q_EMIT signalCurrentPacakgeProgressChanged(kCompleteProgress);
-    Q_EMIT signalWholeProgressChanged(base * (m_operatingIndex + 1));
+    const float base = kCompleteProgress / rowCount();
+    Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(kCompleteProgress));
+    Q_EMIT signalWholeProgressChanged(static_cast<int>(base * (m_operatingIndex + 1)));
 
     switch (m_workerStatus) {
         case WorkerProcessing:
@@ -455,6 +485,27 @@ bool UabPackageListModel::linglongExists()
     }
 
     return true;
+}
+
+void UabPackageListModel::slotFileChanged(const QString &filePath)
+{
+    auto findItr = std::find_if(m_uabPkgList.begin(), m_uabPkgList.end(), [&](const UabPackage::Ptr &uabPtr) {
+        if (uabPtr && uabPtr->isValid()) {
+            return uabPtr->info()->filePath == filePath;
+        }
+        return false;
+    });
+
+    if (findItr != m_uabPkgList.end()) {
+        const QFileInfo info((*findItr)->info()->filePath);
+        if (!info.exists()) {
+            (*findItr)->markNotExists();
+            removePackage(static_cast<int>(std::distance(findItr, m_uabPkgList.begin())));
+            m_fileWatcher->removePath(filePath);
+
+            Q_EMIT signalPackageCannotFind(info.fileName());
+        }
+    }
 }
 
 }  // namespace Uab

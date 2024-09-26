@@ -21,6 +21,8 @@ public:
     bool isValid() const;
     void setDependsStatus(Pkg::DependsStatus status);
     void setProcessError(Pkg::ErrorCode err, const QString &errorString);
+    bool fileExists() const;
+    void markNotExists();
 
     Pkg::DependsStatus dependsStatus() const;
     Pkg::PackageInstallStatus installStatus() const;
@@ -39,6 +41,8 @@ private:
 
 private:
     Uab::UabPkgInfo::Ptr m_metaPtr;
+
+    bool m_exists{true};
 
     Pkg::DependsStatus m_dependsStatus{Pkg::DependsOk};            // package's depends info
     Pkg::PackageInstallStatus m_installStatus{Pkg::NotInstalled};  // version check

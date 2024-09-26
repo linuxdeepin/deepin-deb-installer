@@ -11,6 +11,8 @@
 #include "uab_process_controller.h"
 #include "model/abstract_package_list_model.h"
 
+class QFileSystemWatcher;
+
 namespace Uab {
 
 class UabPackageListModel : public AbstractPackageListModel
@@ -30,6 +32,7 @@ public:
     Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
     QStringList getPackageInfo(const QString &packagePath) override;
     QString lastProcessError() override;
+    bool containsSignatureFailed() const override;
 
     Q_SLOT bool slotInstallPackages() override;
     Q_SLOT bool slotUninstallPackage(int index) override;
@@ -49,12 +52,16 @@ private:
     bool packageExists(const UabPackage::Ptr &uabPtr) const;
     bool linglongExists();
 
+    Q_SLOT void slotFileChanged(const QString &filePath);
+
 private:
     int m_operatingIndex{-1};
     QList<UabPackage::Ptr> m_uabPkgList;
     UabProcessController *m_processor{nullptr};
 
     QStringList m_delayAppendPackages;  // wait for backend inited.
+
+    QFileSystemWatcher *m_fileWatcher{nullptr};
 };
 
 }  // namespace Uab

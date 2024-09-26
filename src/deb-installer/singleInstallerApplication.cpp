@@ -167,7 +167,6 @@ bool SingleInstallerApplication::parseCmdLine()
                 bIsDbus = true;
             }
         } else {
-            QStringList paraList = parser.positionalArguments();
             for (auto it : paraList) {
                 if (it.endsWith("ddim")) {
                     m_ddimFiles.append(it);

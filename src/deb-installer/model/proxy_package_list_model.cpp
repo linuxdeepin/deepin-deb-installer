@@ -128,6 +128,14 @@ QString ProxyPackageListModel::lastProcessError()
     return errorMessage;
 }
 
+bool ProxyPackageListModel::containsSignatureFailed() const
+{
+    auto findItr = std::find_if(m_packageModels.begin(), m_packageModels.end(), [](const ModelInfo &info) {
+        return info.model->containsSignatureFailed();
+    });
+    return findItr != m_packageModels.end();
+}
+
 bool ProxyPackageListModel::slotInstallPackages()
 {
     if (!isWorkerPrepare()) {
@@ -329,7 +337,7 @@ QPair<ProxyPackageListModel::ModelPtr, int> ProxyPackageListModel::findFromProxy
     return qMakePair(nullptr, -1);
 }
 
-int ProxyPackageListModel::proxyIndexFormModel(ModelPtr findModel, int index)
+int ProxyPackageListModel::proxyIndexFromModel(ModelPtr findModel, int index)
 {
     if (m_packageModels.isEmpty()) {
         return -1;
@@ -409,7 +417,7 @@ void ProxyPackageListModel::onSourceCurrentProcessPackageIndex(int index)
             return;
         }
 
-        const int proxyIndex = proxyIndexFormModel(sendModel, index);
+        const int proxyIndex = proxyIndexFromModel(sendModel, index);
         Q_EMIT signalCurrentProcessPackageIndex(proxyIndex);
 
     } else {

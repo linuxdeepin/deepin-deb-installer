@@ -213,10 +213,10 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
                     }
                 }
             }
-            installWineDepends = false;  // 标记wine依赖下载线程开启
-            isDependsExists = false;     // 标记多架构依赖冲突
-            m_pair.first.clear();        // 清空available依赖
-            m_pair.second.clear();       // 清空broken依赖
+            GlobalStatus::setWinePreDependsInstalling(false);  // mark wine dependent download thread start
+            isDependsExists = false;                           // mark multi-schema dependency conflicts
+            m_pair.first.clear();                              // clear available dependencies
+            m_pair.second.clear();                             // clear the broken dependency
             if (m_dependsPackages.contains(m_currentPkgMd5))
                 m_dependsPackages.remove(m_currentPkgMd5);
 
@@ -687,13 +687,16 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
             if (!m_errorIndex.contains(m_dependInstallMark[num]))
                 m_errorIndex.insert(m_dependInstallMark[num], iAuthRes);
         }
-        if (installWineDepends) {  // 下载wine依赖失败时，考虑出现依赖缺失的情况
+
+        // If the download of a wine dependency fails, might be the dependency is missing
+        if (GlobalStatus::winePreDependsInstalling()) {
             qInfo() << "check wine depends again !" << iIndex;
             getPackageDependsStatus(iIndex);
             if (!m_dependsPackages.isEmpty()) {
                 qInfo() << m_dependsPackages.size() << m_dependsPackages.value(m_currentPkgMd5).second.size();
-                if (m_preparedPackages.size() > 1)
-                    installWineDepends = false;
+                if (m_preparedPackages.size() > 1) {
+                    GlobalStatus::setWinePreDependsInstalling(false);
+                }
             }
         }
         emit signalEnableCloseButton(true);
@@ -808,10 +811,11 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                 }
             }
-            installWineDepends = false;  // 标记wine依赖下载线程开启
-            isDependsExists = false;     // 标记多架构依赖冲突
-            m_pair.first.clear();        // 清空available依赖
-            m_pair.second.clear();       // 清空broken依赖
+
+            GlobalStatus::setWinePreDependsInstalling(false);  // mark wine dependent download thread start
+            isDependsExists = false;                           // mark multi-schema dependency conflicts
+            m_pair.first.clear();                              // clear available dependencies
+            m_pair.second.clear();                             // clear the broken dependency
             if (m_dependsPackages.contains(m_currentPkgMd5))
                 m_dependsPackages.remove(m_currentPkgMd5);
 
@@ -828,8 +832,10 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         break;
                     }
 
-                    if (!m_dependInstallMark.contains(currentPackageMd5)) {  // 更换判断依赖错误的标记
-                        installWineDepends = true;
+                    if (!m_dependInstallMark.contains(currentPackageMd5)) { 
+                        // replace the marker that the depends error
+                        GlobalStatus::setWinePreDependsInstalling(true);
+
                         if (!m_installWineThread->isRunning()) {
                             m_dependInstallMark.append(currentPackageMd5);  // 依赖错误的软件包的标记 更改为md5取代验证下标
                             qInfo() << "PackagesManager:"

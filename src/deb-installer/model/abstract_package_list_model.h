@@ -75,6 +75,8 @@ public:
 
     // raw output of install/uninstall failures
     virtual QString lastProcessError() = 0;
+    // a package signature verification fails
+    virtual bool containsSignatureFailed() const = 0;
 
     // trigger install / uninstall
     Q_SLOT virtual bool slotInstallPackages() = 0;

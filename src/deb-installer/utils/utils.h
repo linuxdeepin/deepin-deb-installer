@@ -75,4 +75,12 @@ public:
     static bool isDevelopMode();  // Check if develop mode (root)
 };
 
+class GlobalStatus
+{
+public:
+    // wine depends installing flag
+    static bool winePreDependsInstalling();
+    static void setWinePreDependsInstalling(bool b);
+};
+
 #endif
