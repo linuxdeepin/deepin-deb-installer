@@ -243,6 +243,9 @@ private slots:
      */
     void slotShowPkgProcessBlockPage(BackendProcessPage::DisplayMode mode, int currentRate, int pkgCount);
 
+    // install / unisntall finished
+    void slotWorkerFinished();
+
 private:
     /**
      * @brief initUI

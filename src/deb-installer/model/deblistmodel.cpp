@@ -11,6 +11,7 @@
 #include "utils/utils.h"
 #include "utils/hierarchicalverify.h"
 #include "singleInstallerApplication.h"
+#include "view/widgets/error_notify_dialog_helper.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -211,7 +212,7 @@ void DebListModel::slotDealDependResult(int authType, int dependIndex, const QSt
         case DebListModel::AuthDependsErr:  // 安装失败后，状态的修改由debinstaller进行处理
             break;
         case DebListModel::VerifyDependsErr:  // 依赖包分级管控验证签名失败，弹出分级设置提示框
-            showHierarchicalVerifyWindow();
+            ErrorNotifyDialogHelper::showHierarchicalVerifyWindow();
             break;
         default:
             break;
@@ -322,6 +323,7 @@ bool DebListModel::slotInstallPackages()
     m_operatingIndex = 0;               // 初始化当前操作的index
     m_operatingStatusIndex = 0;
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
+    m_hierarchicalVerifyError = false;
 
     // start first
     initRowStatus();  // 初始化包的操作状态
@@ -342,6 +344,7 @@ bool DebListModel::slotUninstallPackage(int index)
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = index;  // 刷新操作状态的index
+    m_hierarchicalVerifyError = false;
 
     DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
     if (!debFile.isValid())
@@ -455,6 +458,11 @@ QString DebListModel::lastProcessError()
     return "failed";
 }
 
+bool DebListModel::containsSignatureFailed() const
+{
+    return m_hierarchicalVerifyError;
+}
+
 QString DebListModel::checkPackageValid(const QString &package_path)
 {
     return m_packagesManager->checkPackageValid(QStringList(package_path));
@@ -528,12 +536,6 @@ void DebListModel::bumpInstallIndex()
         emit signalWorkerFinished();           // 发送安装完成信号
         emit signalWholeProgressChanged(100);  // 修改安装进度
         emit signalCurrentPacakgeProgressChanged(100);
-
-        // 安装结束，弹出分级管控信息提示框
-        if (m_hierarchicalVerifyError) {
-            showHierarchicalVerifyWindow();
-            m_hierarchicalVerifyError = false;
-        }
         return;
     }
     ++m_operatingStatusIndex;
@@ -1556,58 +1558,6 @@ void DebListModel::showProhibitWindow()
 
     // ESC
     connect(Ddialog, &DDialog::rejected, exitOperate);
-}
-
-/**
-   @brief 弹出分级管控安全等级设置引导提示窗口
- */
-void DebListModel::showHierarchicalVerifyWindow()
-{
-    if (!HierarchicalVerify::instance()->isValid()) {
-        return;
-    }
-
-    DDialog *dialog = new DDialog();
-    // 限制显示宽度
-    dialog->setFixedWidth(380);
-    dialog->setFocusPolicy(Qt::TabFocus);
-    dialog->setModal(true);
-    dialog->setWindowFlag(Qt::WindowStaysOnTopHint);
-
-    // 设置弹出窗口显示的信息
-    dialog->setTitle(tr("Unable to install"));
-    dialog->setMessage(tr("This package does not have a valid digital signature and has been blocked from installing/running. "
-                          "Go to Security Center > Tools > App Security to change the settings."));
-    dialog->setIcon(QIcon::fromTheme("di_popwarning"));
-    dialog->addButton(QString(tr("Cancel", "button")), false, DDialog::ButtonNormal);
-    dialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);
-    dialog->show();
-
-    // 拷贝自 ddialog.cpp 用于设置默认对话框高度，避免在大字号/高缩放比下显示不全，在 show() 之后调用。
-    QLabel *msgLabel = dialog->findChild<QLabel *>("MessageLabel");
-    if (msgLabel) {
-        auto dialogStyle = dialog->style();
-        if (dialogStyle) {
-            QSize sz =
-                dialogStyle->itemTextRect(msgLabel->fontMetrics(), msgLabel->rect(), Qt::TextWordWrap, false, msgLabel->text())
-                    .size();
-            msgLabel->setMinimumHeight(qMax(sz.height(), msgLabel->sizeHint().height()));
-        }
-    }
-
-    QPushButton *btnPorceed = qobject_cast<QPushButton *>(dialog->getButton(1));
-    btnPorceed->setFocusPolicy(Qt::TabFocus);
-    btnPorceed->setFocus();
-
-    // 窗口退出操作，包括所有可以退出此窗口的操作
-    std::function<void(void)> exitOperate = [dialog]() { dialog->deleteLater(); };
-
-    connect(dialog, &DDialog::finished, [dialog](int result) {
-        if (QDialog::Accepted == result) {
-            HierarchicalVerify::instance()->proceedDefenderSafetyPage();
-        }
-        dialog->deleteLater();
-    });
 }
 
 bool DebListModel::checkBlackListApplication()

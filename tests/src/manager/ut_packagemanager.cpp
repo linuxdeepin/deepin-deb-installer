@@ -10,6 +10,7 @@
 #include "../deb-installer/manager/AddPackageThread.h"
 #include "../deb-installer/model/deblistmodel.h"
 #include "../deb-installer/model/packageanalyzer.h"
+#include "../deb-installer/utils/utils.h"
 
 #include <stub.h>
 #include <QFuture>
@@ -875,7 +876,8 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_01)
 
     m_packageManager->appendPackage({"/1"});
     ASSERT_EQ(m_packageManager->packageInstallStatus(0), 0);
-    ASSERT_EQ(Pkg::PackageInstallStatus::NotInstalled, m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
+    ASSERT_EQ(Pkg::PackageInstallStatus::NotInstalled,
+              m_packageManager->m_packageInstallStatus[m_packageManager->m_packageMd5.value(0)]);
 }
 
 TEST_F(UT_packagesManager, PackageManager_UT_packageInstallStatus_02)
@@ -987,13 +989,13 @@ TEST_F(UT_packagesManager, PackageManager_UT_DealDependResult)
     m_packageManager->slotDealDependResult(5, 0, "");
     EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
-    m_packageManager->installWineDepends = true;
+    GlobalStatus::setWinePreDependsInstalling(true);
     m_packageManager->slotDealDependResult(5, 0, "");
     EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
     m_packageManager->m_preparedPackages.append({"1", "2"});
     m_packageManager->slotDealDependResult(5, 0, "");
-    EXPECT_FALSE(m_packageManager->installWineDepends);
+    EXPECT_FALSE(GlobalStatus::winePreDependsInstalling());
     EXPECT_EQ(Pkg::DependsStatus::DependsBreak,
               m_packageManager->m_packageMd5DependsStatus[m_packageManager->m_dependInstallMark[0]].status);
 }

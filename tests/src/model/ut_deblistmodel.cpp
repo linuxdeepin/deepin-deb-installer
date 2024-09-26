@@ -10,6 +10,7 @@
 #include "../deb-installer/utils/utils.h"
 #include "../deb-installer/utils/result.h"
 #include "../deb-installer/utils/hierarchicalverify.h"
+#include "../deb-installer/view/widgets/error_notify_dialog_helper.h"
 
 #include <stub.h>
 
@@ -858,7 +859,8 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult)
 TEST_F(ut_DebListModel_test, deblistmodel_UT_DealDependResult_VerifyDependsErr)
 {
     Stub tmpStub;
-    tmpStub.set(ADDR(DebListModel, showHierarchicalVerifyWindow), stub_DebListModel_showHierarchicalVerifyWindow_DoNothing);
+    tmpStub.set(ADDR(ErrorNotifyDialogHelper, showHierarchicalVerifyWindow),
+                stub_DebListModel_showHierarchicalVerifyWindow_DoNothing);
 
     g_VerifyDeependErrCount = 0;
     m_debListModel->slotDealDependResult(DebListModel::VerifyDependsErr, 0, "");
@@ -895,7 +897,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex)
     EXPECT_EQ("", m_debListModel->m_operatingPackageMd5);
 }
 
-TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex_showHierarchicalVerifyWindow)
+TEST_F(ut_DebListModel_test, deblistmodel_UT_slotInstallPackages_resetHierarchicalVerify)
 {
     stub.set(ADDR(DebListModel, installNextDeb), model_installNextDeb);
     m_debListModel->m_operatingIndex = 0;
@@ -903,12 +905,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_bumpInstallIndex_showHierarchicalVe
     m_debListModel->m_packageMd5.append("1");
     m_debListModel->m_hierarchicalVerifyError = true;
 
-    Stub tmpStub;
-    tmpStub.set(ADDR(DebListModel, showHierarchicalVerifyWindow), stub_DebListModel_showHierarchicalVerifyWindow_DoNothing);
-
-    g_VerifyDeependErrCount = 0;
-    m_debListModel->bumpInstallIndex();
-    EXPECT_EQ(g_VerifyDeependErrCount, 1);
+    m_debListModel->slotInstallPackages();
     EXPECT_FALSE(m_debListModel->m_hierarchicalVerifyError);
 }
 

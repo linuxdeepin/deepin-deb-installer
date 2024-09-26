@@ -27,6 +27,7 @@ public:
     Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
     QStringList getPackageInfo(const QString &packagePath) override;
     QString lastProcessError() override;
+    bool containsSignatureFailed() const override;
 
     Q_SLOT bool slotInstallPackages() override;
     Q_SLOT bool slotUninstallPackage(int index) override;
@@ -44,7 +45,7 @@ private:
     void connectModel(ModelPtr model);
 
     QPair<ModelPtr, int> findFromProxyIndex(int proxyIndex) const;
-    int proxyIndexFormModel(ModelPtr findModel, int index);
+    int proxyIndexFromModel(ModelPtr findModel, int index);
 
     // signals forwarded through
     Q_SLOT void onSourcePacakgeCountChanged(int count);

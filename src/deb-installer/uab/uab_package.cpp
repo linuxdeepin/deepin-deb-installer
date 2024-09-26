@@ -8,6 +8,11 @@
 
 namespace Uab {
 
+/**
+ * @class UabPackage
+ * @brief Uab package, contains package information and runtime status.
+ *        Store version, install status, operation status, error code, and error message.
+ */
 UabPackage::UabPackage(const UabPkgInfo::Ptr &metaPtr)
     : m_metaPtr(metaPtr)
 {
@@ -21,7 +26,7 @@ const UabPkgInfo::Ptr &UabPackage::info() const
 
 bool UabPackage::isValid() const
 {
-    if (!m_metaPtr) {
+    if (!m_metaPtr || !fileExists()) {
         return false;
     }
 
@@ -48,6 +53,16 @@ void UabPackage::setProcessError(Pkg::ErrorCode err, const QString &errorString)
 {
     m_errorCode = err;
     m_processError = errorString;
+}
+
+bool UabPackage::fileExists() const
+{
+    return m_exists;
+}
+
+void UabPackage::markNotExists()
+{
+    m_exists = false;
 }
 
 Pkg::DependsStatus UabPackage::dependsStatus() const
@@ -112,6 +127,9 @@ void UabPackage::reset()
 
     m_installedVersion.clear();
     m_installStatus = Pkg::NotInstalled;
+
+    m_errorCode = Pkg::NoError;
+    m_processError.clear();
 
     if (!Uab::UabBackend::instance()->linglongExists()) {
         setDependsStatus(Pkg::DependsBreak);

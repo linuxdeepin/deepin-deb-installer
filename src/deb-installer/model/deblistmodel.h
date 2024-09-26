@@ -167,6 +167,7 @@ public:
     QStringList getPackageInfo(const QString &package_path) override;
 
     QString lastProcessError() override;
+    bool containsSignatureFailed() const override;
 
     /**
      * @brief checkPackageValid 查找指定包信息
@@ -398,11 +399,6 @@ private:
      * @brief showProhibitWindow 弹出数字签名校验错误的错误弹窗
      */
     void showProhibitWindow();
-
-    /**
-     * @brief showHierarchicalVerifyWindow 弹出分级管控安全等级设置引导提示窗口
-     */
-    void showHierarchicalVerifyWindow();
 
     /**
      * @brief 检查当前将要安装的包是否在黑名单中。

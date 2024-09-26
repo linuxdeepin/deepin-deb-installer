@@ -337,7 +337,7 @@ int Utils::compareVersion(const QString &v1, const QString &v2)
 
 Pkg::PackageType Utils::detectPackage(const QString &filePath)
 {
-    const QMimeDatabase db;
+    QMimeDatabase db;
     const QMimeType mime = db.mimeTypeForFile(filePath);
     const QFileInfo info(filePath);
 
@@ -414,6 +414,22 @@ bool Utils::isDevelopMode()
     });
 
     return kIsDevelopMode;
+}
+
+/**
+ * @brief Mark whether the wine pre-dependency is being installed.
+ *        Not thread-safe.
+ */
+static bool kWinePreDependsStatus = false;
+
+bool GlobalStatus::winePreDependsInstalling()
+{
+    return kWinePreDependsStatus;
+}
+
+void GlobalStatus::setWinePreDependsInstalling(bool b)
+{
+    kWinePreDependsStatus = b;
 }
 
 DebApplicationHelper *DebApplicationHelper::instance()

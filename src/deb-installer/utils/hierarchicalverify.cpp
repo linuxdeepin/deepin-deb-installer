@@ -3,7 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "hierarchicalverify.h"
-#include "hierarchicalverify.h"
+
+#include <mutex>
 
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -44,9 +45,9 @@ enum HierarchicalError {
        安装器接收输出信息并判断是否为验签错误。
  */
 
-HierarchicalVerify::HierarchicalVerify() { }
+HierarchicalVerify::HierarchicalVerify() {}
 
-HierarchicalVerify::~HierarchicalVerify() { }
+HierarchicalVerify::~HierarchicalVerify() {}
 
 /**
    @return 返回分级管控签名校验辅助类实例
@@ -66,17 +67,20 @@ bool HierarchicalVerify::isValid()
         return false;
     }
 
-    bool availabled = checkHierarchicalInterface();
-    if (valid != availabled) {
-        valid = availabled;
+    static std::once_flag checkFlag;
+    std::call_once(checkFlag, [this]() {
+        const bool availabled = checkHierarchicalInterface();
+        if (valid != availabled) {
+            valid = availabled;
 
-        // 分级验签不可用时，清理当前缓存数据
-        if (!valid) {
-            clearVerifyResult();
+            // if the hierarchical signature verification is not available, clear cache.
+            if (!valid) {
+                clearVerifyResult();
+            }
+
+            Q_EMIT validChanged(valid);
         }
-
-        Q_EMIT validChanged(valid);
-    }
+    });
 
     return valid;
 }
