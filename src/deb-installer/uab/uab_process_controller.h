@@ -5,9 +5,9 @@
 #ifndef UABPROCESSCONTROLLER_H
 #define UABPROCESSCONTROLLER_H
 
-#include "uab_defines.h"
-
 #include <QObject>
+
+#include "uab_package.h"
 
 class QProcess;
 
@@ -35,11 +35,9 @@ public:
     bool isRunning() const;
 
     bool reset();
-    bool markInstall(const UabPkgInfo::Ptr &installPtr);
-    bool markUninstall(const UabPkgInfo::Ptr &unisntallPtr);
+    bool markInstall(const UabPackage::Ptr &installPtr);
+    bool markUninstall(const UabPackage::Ptr &unisntallPtr);
     bool commitChanges();
-
-    QString lastError() const;
 
     Q_SIGNAL void processStart();
     Q_SIGNAL void processFinished(bool success);
@@ -55,10 +53,11 @@ private:
 
     bool nextProcess();
 
-    bool installImpl(const UabPkgInfo::Ptr &installPtr);
-    bool uninstallImpl(const UabPkgInfo::Ptr &uninstallPtr);
+    bool installImpl(const UabPackage::Ptr &installPtr);
+    bool uninstallImpl(const UabPackage::Ptr &uninstallPtr);
 
     bool checkIndexValid();
+    UabPackage::Ptr currentPackagePtr();
 
     void commitCurrentChangeToBackend();
 
@@ -67,7 +66,7 @@ private:
 
     ProcFlags m_procFlag{Prepare};
     int m_currentIndex{-1};
-    QList<QPair<ProcFlag, UabPkgInfo::Ptr>> m_procList;  // install/uninstall package list
+    QList<QPair<ProcFlag, UabPackage::Ptr>> m_procList;  // install/uninstall package list
 
     Q_DISABLE_COPY(UabProcessController);
 };

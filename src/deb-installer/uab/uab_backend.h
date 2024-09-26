@@ -22,7 +22,7 @@ public:
 
     UabPkgInfo::Ptr findPackage(const QString &packageId);
 
-    void initBackend();
+    void initBackend(bool async = true);
     bool backendInited() const;
     Q_SIGNAL void backendInitFinsihed();
 

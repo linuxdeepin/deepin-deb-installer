@@ -75,7 +75,7 @@ public:
      * @brief searchPackageInstallInfo 查找指定包安装状态
      * @param package_path 路径
      */
-    int checkInstallStatus(const QString &package_path);
+    Pkg::PackageInstallStatus checkInstallStatus(const QString &package_path);
     /**
      * @brief searchPackageInstallInfo 查找指定包依赖
      * @param package_path 包名字

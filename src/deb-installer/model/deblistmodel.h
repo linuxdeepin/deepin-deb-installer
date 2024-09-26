@@ -149,12 +149,12 @@ public:
      * @brief checkPackageDigitalSignature 查找指定包安装状态
      * @param package_path 路径
      */
-    int checkInstallStatus(const QString &package_path);
+    Pkg::PackageInstallStatus checkInstallStatus(const QString &package_path) override;
     /**
      * @brief searchPackageInstallInfo 查找指定包依赖
      * @param package_path 路径
      */
-    int checkDependsStatus(const QString &package_path);
+    Pkg::DependsStatus checkDependsStatus(const QString &package_path) override;
     /**
      * @brief searchPackageInstallInfo 查找指定包数字签名
      * @param package_path 路径
@@ -164,11 +164,10 @@ public:
      * @brief searchPackageInstallInfo 查找指定包信息
      * @param package_path 路径
      */
-    QStringList getPackageInfo(const QString &package_path);
-    /**
-     * @brief getInstallErrorMessage 安装错误信息
-     */
-    QString getInstallErrorMessage();
+    QStringList getPackageInfo(const QString &package_path) override;
+
+    QString lastProcessError() override;
+
     /**
      * @brief checkPackageValid 查找指定包信息
      * @param package_path 路径
@@ -201,13 +200,13 @@ public slots:
     /**
      * @brief slotInstallPackages 开始安装所有的包
      */
-    void slotInstallPackages() override;
+    bool slotInstallPackages() override;
 
     /**
      * @brief slotUninstallPackage     卸载某一个包
      * @param index   包的index
      */
-    void slotUninstallPackage(int index) override;
+    bool slotUninstallPackage(int index) override;
 
     /**
      * @brief slotAppendPackage 添加包
@@ -388,7 +387,7 @@ private:
     /**
      * @brief showDevelopDigitalErrWindow 开发者模式下弹出数字签名无效的弹窗
      */
-    void showDevelopDigitalErrWindow(ErrorCode code);
+    void showDevelopDigitalErrWindow(Pkg::ErrorCode code);
 
     /**
      * @brief showNoDigitalErrWindowInDdimProcess DDIM流程下的签名错误弹窗
@@ -418,7 +417,7 @@ private:
      *
      * @param errorCode 错误原因代码
      */
-    void digitalVerifyFailed(ErrorCode errorCode);
+    void digitalVerifyFailed(Pkg::ErrorCode errorCode);
 
 private:
     /**

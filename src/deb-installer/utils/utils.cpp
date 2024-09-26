@@ -301,7 +301,7 @@ Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
     // Determine whether the route information is a local path
     QStorageInfo info(packagePath);
     QString device = info.device();
-    // Blacklist identifies, gvfs/cifs as the file system 
+    // Blacklist identifies, gvfs/cifs as the file system
     // that currently manages the remote directory
     if (device.startsWith("gvfs") || device.startsWith("cifs")) {
         qWarning() << "Disable open remote file, the devices is" << device;

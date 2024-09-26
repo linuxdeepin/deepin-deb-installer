@@ -26,14 +26,19 @@ public:
     void removePackage(int index) override;
     QString checkPackageValid(const QString &packagePath) override;
 
-    Q_SLOT void slotInstallPackages() override;
-    Q_SLOT void slotUninstallPackage(int index) override;
+    Pkg::PackageInstallStatus checkInstallStatus(const QString &packagePath) override;
+    Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
+    QStringList getPackageInfo(const QString &packagePath) override;
+    QString lastProcessError() override;
+
+    Q_SLOT bool slotInstallPackages() override;
+    Q_SLOT bool slotUninstallPackage(int index) override;
 
     void reset() override;
     void resetInstallStatus() override;
 
 private:
-    void installNextUab();
+    bool installNextUab();
 
     Q_SLOT void slotBackendProgressChanged(float progress);
     Q_SLOT void slotBackendProcessFinished(bool success);
@@ -41,7 +46,8 @@ private:
     void setCurrentOperation(Pkg::PackageOperationStatus s);
     bool checkIndexValid(int index) const;
     UabPackage::Ptr preCheckPackage(const QString &packagePath);
-    bool packageExists(const UabPackage::Ptr &uabPtr);
+    bool packageExists(const UabPackage::Ptr &uabPtr) const;
+    bool linglongExists();
 
 private:
     int m_operatingIndex{-1};

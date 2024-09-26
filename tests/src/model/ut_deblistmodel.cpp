@@ -762,7 +762,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_checkDigitalSignature_03)
     m_debListModel->m_isDigitalVerify = true;
     stub.set((Utils::VerifyResultCode(*)(QString))ADDR(Utils, Digital_Verify), model_Digital_Verify2);
     ASSERT_TRUE(m_debListModel->checkDigitalSignature());
-    m_debListModel->showDevelopDigitalErrWindow(DebListModel::NoDigitalSignature);
+    m_debListModel->showDevelopDigitalErrWindow(Pkg::NoDigitalSignature);
     EXPECT_EQ(1, m_debListModel->preparedPackages().size());
 }
 
@@ -1008,7 +1008,7 @@ TEST_F(ut_DebListModel_test, onTransactionFinished_HierarchicalVerify_Failed)
 
     m_debListModel->slotTransactionFinished();
     EXPECT_EQ(nullptr, m_debListModel->m_currentTransaction);
-    EXPECT_EQ(DebListModel::DigitalSignatureError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
+    EXPECT_EQ(Pkg::DigitalSignatureError, m_debListModel->m_packageFailCode[m_debListModel->m_operatingPackageMd5]);
     EXPECT_TRUE(m_debListModel->m_hierarchicalVerifyError);
 
     delete g_transaction;
@@ -1239,12 +1239,12 @@ const QList<QString> ut_preparedPackages()
 TEST_F(ut_DebListModel_test, deblistmodel_UT_digitalVerifyFailed)
 {
     //    stub.set(ADDR(DebListModel,preparedPackages),ut_preparedPackages);
-    m_debListModel->digitalVerifyFailed(DebListModel::ErrorCode::DigitalSignatureError);
+    m_debListModel->digitalVerifyFailed(Pkg::ErrorCode::DigitalSignatureError);
     QStringList list;
     list << "/";
     m_debListModel->slotAppendPackage(list);
     m_debListModel->m_isDevelopMode = true;
-    m_debListModel->digitalVerifyFailed(DebListModel::ErrorCode::DigitalSignatureError);
+    m_debListModel->digitalVerifyFailed(Pkg::ErrorCode::DigitalSignatureError);
     EXPECT_EQ(1, m_debListModel->m_packageFailCode.size());
 }
 

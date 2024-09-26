@@ -215,7 +215,6 @@ void DebInstaller::slotSettingDialogVisiable()
     m_settingDialog->show();
 }
 
-#if 0
 void DebInstaller::PackagesSelected(const QStringList &debPathList)
 {
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
@@ -233,34 +232,72 @@ void DebInstaller::PackagesSelected(const QStringList &debPathList)
 QString DebInstaller::startInstallPackge(const QString &debPath)
 {
     QString message;
-    // 判断包有效性
     message = m_fileListModel->checkPackageValid(debPath);
     if (!message.isEmpty())
         return message;
-    // 添加包
+
+    if (!m_fileListModel->isWorkerPrepare()) {
+        return "installer is busy";
+    }
+
+    // add single pacakge and install
+    m_fileListModel->reset();
     PackagesSelected(QStringList(debPath));
-    // 安装包
-    m_fileListModel->slotInstallPackages();
-    // 获取安装结果
-    message = m_fileListModel->getInstallErrorMessage();
-    if (message.isEmpty())
-        message = "install succeeded";
+    bool ret = m_fileListModel->slotInstallPackages();
+
+    if (!ret || AbstractPackageListModel::WorkerProcessing != m_fileListModel->getWorkerStatus()) {
+        // failed or finished.
+        message = m_fileListModel->lastProcessError();
+        if (message.isEmpty())
+            message = "unknown error";
+
+    } else {
+        // wait install finished;
+        QEventLoop loop;
+        connect(m_fileListModel, &AbstractPackageListModel::signalWorkerFinished, &loop, &QEventLoop::quit);
+        loop.exec();
+
+        message = m_fileListModel->lastProcessError();
+        if (message.isEmpty())
+            message = "install succeeded";
+    }
+
     return message;
 }
 
 QString DebInstaller::startUnInstallPackge(const QString &debPath)
 {
-    // 查询的当前包是否安装,避免重复卸载
-    if (DebListModel::PackageInstallStatus::NotInstalled == checkInstallStatus(debPath))
+    // check duplicate install
+    if (Pkg::PackageInstallStatus::NotInstalled == checkInstallStatus(debPath))
         return "currentdeb not install, uninstall package faild";
-    // 添加包
+
+    if (!m_fileListModel->isWorkerPrepare()) {
+        return "uninstaller is busy";
+    }
+
+    // add single pacakge and uninstall
+    m_fileListModel->reset();
     PackagesSelected(QStringList(debPath));
-    // 开始卸载
-    m_fileListModel->slotUninstallPackage(0);
-    // 获取卸载结果
-    QString message = m_fileListModel->getInstallErrorMessage();
-    if (message.isEmpty())
-        message = "Uninstall succeeded";
+    bool ret = m_fileListModel->slotUninstallPackage(0);
+
+    QString message;
+    if (!ret || AbstractPackageListModel::WorkerProcessing != m_fileListModel->getWorkerStatus()) {
+        // failed or finished.
+        message = m_fileListModel->lastProcessError();
+        if (message.isEmpty())
+            message = "unknown error";
+
+    } else {
+        // wait install finished;
+        QEventLoop loop;
+        connect(m_fileListModel, &AbstractPackageListModel::signalWorkerFinished, &loop, &QEventLoop::quit);
+        loop.exec();
+
+        message = m_fileListModel->lastProcessError();
+        if (message.isEmpty())
+            message = "uninstall succeeded";
+    }
+
     return message;
 }
 
@@ -282,7 +319,16 @@ int DebInstaller::checkDigitalSignature(const QString &debPath)
 {
     if (debPath.isEmpty())
         return -1;
-    return m_fileListModel->checkDigitalSignature(debPath);
+
+    // only deb package support.
+    if (auto *proxyModel = qobject_cast<ProxyPackageListModel *>(m_fileListModel)) {
+        auto *model = qobject_cast<DebListModel *>(proxyModel->modelFromType(Pkg::Deb));
+        if (model) {
+            model->checkDigitalSignature(debPath);
+        }
+    }
+
+    return -1;
 }
 
 QString DebInstaller::getPackageInfo(const QString &debPath)
@@ -291,7 +337,6 @@ QString DebInstaller::getPackageInfo(const QString &debPath)
         return "";
     return m_fileListModel->getPackageInfo(debPath).join(";");
 }
-#endif
 
 void DebInstaller::slotShowSelectInstallPage(const QList<int> &selectIndexes)
 {
