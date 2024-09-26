@@ -42,6 +42,8 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
         return {};
     }
 
+    // check file exists
+
     const UabPackage::Ptr &uabPtr = m_uabPkgList.at(index.row());
     if (!uabPtr) {
         return {};
@@ -68,6 +70,9 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
             return uabPtr->failedReason();
         case PackageOperateStatusRole:
             return uabPtr->operationStatus();
+
+        case Qt::SizeHintRole:
+            return QSize(0, 48);
         default:
             break;
     }
@@ -138,19 +143,69 @@ QString UabPackageListModel::checkPackageValid(const QString &packagePath)
     return "";
 }
 
-void UabPackageListModel::slotInstallPackages()
+Pkg::PackageInstallStatus UabPackageListModel::checkInstallStatus(const QString &packagePath)
 {
-    if (!isWorkerPrepare() || rowCount() <= 0) {
-        return;
+    auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
+    if (!uabPtr || !uabPtr->isValid()) {
+        return Pkg::NotInstalled;
     }
 
-    if (!Uab::UabBackend::instance()->recheckLinglongExists()) {
-        // todo reset status;
-        for (const auto &uabPtr : m_uabPkgList) {
-            uabPtr->setDependsStatus(Pkg::DependsBreak);
-            Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
-        }
-        return;
+    return uabPtr->installStatus();
+}
+
+Pkg::DependsStatus UabPackageListModel::checkDependsStatus(const QString &packagePath)
+{
+    if (!Uab::UabBackend::instance()->linglongExists()) {
+        return Pkg::DependsBreak;
+    }
+
+    auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
+    if (!uabPtr || !uabPtr->isValid()) {
+        return Pkg::DependsBreak;
+    }
+    return Pkg::DependsOk;
+}
+
+QStringList UabPackageListModel::getPackageInfo(const QString &packagePath)
+{
+    auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
+    if (!uabPtr || !uabPtr->isValid()) {
+        return {};
+    }
+
+    // adapt deb package info interface
+    auto infoPtr = uabPtr->info();
+    QStringList infoList;
+    infoList << infoPtr->appName;
+    infoList << infoPtr->filePath;
+    infoList << infoPtr->version;
+    infoList << infoPtr->architecture;
+    infoList << infoPtr->description;
+    infoList << infoPtr->description;
+
+    return infoList;
+}
+
+QString UabPackageListModel::lastProcessError()
+{
+    auto findItr = std::find_if(m_uabPkgList.rbegin(), m_uabPkgList.rend(), [](const UabPackage::Ptr &uabPtr) {
+        return Pkg::Failed == uabPtr->operationStatus();
+    });
+
+    if (findItr != m_uabPkgList.rend()) {
+        return (*findItr)->processError();
+    }
+    return {};
+}
+
+bool UabPackageListModel::slotInstallPackages()
+{
+    if (!isWorkerPrepare() || rowCount() <= 0) {
+        return false;
+    }
+
+    if (!linglongExists()) {
+        return false;
     }
 
     // reset, mark package waiting install
@@ -161,19 +216,19 @@ void UabPackageListModel::slotInstallPackages()
     }
 
     setWorkerStatus(WorkerProcessing);
-    installNextUab();
+    return installNextUab();
 }
 
-void UabPackageListModel::slotUninstallPackage(const int i)
+bool UabPackageListModel::slotUninstallPackage(const int i)
 {
-    if (!Uab::UabBackend::instance()->recheckLinglongExists()) {
-        // todo reset status;
-    }
-
     bool callRet = false;
 
     do {
         if (!isWorkerPrepare() || rowCount() <= 0) {
+            break;
+        }
+
+        if (!linglongExists()) {
             break;
         }
 
@@ -197,14 +252,17 @@ void UabPackageListModel::slotUninstallPackage(const int i)
         setCurrentOperation(Pkg::Waiting);
 
         m_processor->reset();
-        m_processor->markUninstall(removeInfoPtr);
+        m_processor->markUninstall(Uab::UabPackage::fromInfo(removeInfoPtr));
         callRet = m_processor->commitChanges();
     } while (false);
 
     if (!callRet) {
         setCurrentOperation(Pkg::Failed);
         setWorkerStatus(WorkerFinished);
+        return false;
     }
+
+    return true;
 }
 
 void UabPackageListModel::reset()
@@ -226,13 +284,13 @@ void UabPackageListModel::resetInstallStatus()
     Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
 }
 
-void UabPackageListModel::installNextUab()
+bool UabPackageListModel::installNextUab()
 {
     m_operatingIndex++;
     Q_ASSERT_X(m_operatingIndex >= 0, "install uab", "operating index invalid");
     if (m_operatingIndex < 0) {
         setWorkerStatus(WorkerFinished);
-        return;
+        return false;
     }
 
     // check finish
@@ -241,7 +299,7 @@ void UabPackageListModel::installNextUab()
         Q_EMIT signalWholeProgressChanged(kCompleteProgress);
 
         setWorkerStatus(WorkerFinished);
-        return;
+        return true;
     }
 
     // notify list view scroll to current package
@@ -251,7 +309,7 @@ void UabPackageListModel::installNextUab()
     if (!uabPtr || Pkg::DependsOk != uabPtr->m_dependsStatus) {
         setCurrentOperation(Pkg::Failed);
         installNextUab();
-        return;
+        return false;
     }
 
     setCurrentOperation(Pkg::Operating);
@@ -259,25 +317,27 @@ void UabPackageListModel::installNextUab()
     m_processor->reset();
     switch (uabPtr->installStatus()) {
         case Pkg::NotInstalled:
-            m_processor->markInstall(uabPtr->info());
+            m_processor->markInstall(uabPtr);
             break;
         case Pkg::InstalledSameVersion: {
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
-            m_processor->markUninstall(oldInfoPtr);
-            m_processor->markInstall(uabPtr->info());
+            m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
+            m_processor->markInstall(uabPtr);
         } break;
         default: {
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
-            m_processor->markInstall(uabPtr->info());
-            m_processor->markUninstall(oldInfoPtr);
+            m_processor->markInstall(uabPtr);
+            m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
         } break;
     }
 
     if (!m_processor->commitChanges()) {
         setCurrentOperation(Pkg::Failed);
         installNextUab();
-        return;
+        return false;
     }
+
+    return true;
 }
 
 void UabPackageListModel::slotBackendProgressChanged(float progress)
@@ -337,10 +397,10 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
     auto readablilty = Utils::checkPackageReadable(packagePath);
     switch (readablilty) {
         case Pkg::PkgNotInLocal:
-            emit signalAppendFailMessage(Pkg::PackageNotLocal);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal);
             return {};
         case Pkg::PkgNoPermission:
-            emit signalAppendFailMessage(Pkg::PackageNotInstallable);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable);
             return {};
         default:
             break;
@@ -360,7 +420,7 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
     return uabPtr;
 }
 
-bool UabPackageListModel::packageExists(const UabPackage::Ptr &uabPtr)
+bool UabPackageListModel::packageExists(const UabPackage::Ptr &uabPtr) const
 {
     if (!uabPtr) {
         return false;
@@ -380,6 +440,21 @@ bool UabPackageListModel::packageExists(const UabPackage::Ptr &uabPtr)
     });
 
     return findItr != m_uabPkgList.end();
+}
+
+bool UabPackageListModel::linglongExists()
+{
+    // check if linglong execuatable exits
+    if (!Uab::UabBackend::instance()->recheckLinglongExists()) {
+        for (const auto &uabPtr : m_uabPkgList) {
+            uabPtr->setDependsStatus(Pkg::DependsBreak);
+        }
+
+        Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageDependsStatusRole});
+        return false;
+    }
+
+    return true;
 }
 
 }  // namespace Uab

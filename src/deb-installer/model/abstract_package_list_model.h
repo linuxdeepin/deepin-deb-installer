@@ -56,14 +56,6 @@ public:
         VerifyDependsErr,    // signature verification failed (hierarchical verify)
     };
 
-    // Signature fail error code
-    enum ErrorCode {
-        NoDigitalSignature = 101,
-        DigitalSignatureError,
-        ConfigAuthCancel = 127,     // Authentication failed
-        ApplocationProhibit = 404,  // the current package is in the blacklist and is prohibited from installation
-    };
-
     explicit AbstractPackageListModel(QObject *parent = nullptr);
 
     [[nodiscard]] inline Pkg::PackageType supportPackage() const { return m_supportPackageType; }
@@ -76,9 +68,17 @@ public:
     virtual void removePackage(int index) = 0;
     virtual QString checkPackageValid(const QString &packagePath) = 0;
 
+    // package base info
+    virtual Pkg::PackageInstallStatus checkInstallStatus(const QString &packagePath) = 0;
+    virtual Pkg::DependsStatus checkDependsStatus(const QString &packagePath) = 0;
+    virtual QStringList getPackageInfo(const QString &packagePath) = 0;
+
+    // raw output of install/uninstall failures
+    virtual QString lastProcessError() = 0;
+
     // trigger install / uninstall
-    Q_SLOT virtual void slotInstallPackages() = 0;
-    Q_SLOT virtual void slotUninstallPackage(int index) = 0;
+    Q_SLOT virtual bool slotInstallPackages() = 0;
+    Q_SLOT virtual bool slotUninstallPackage(int index) = 0;
 
     virtual void reset() = 0;
     virtual void resetInstallStatus() = 0;

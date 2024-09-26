@@ -18,18 +18,20 @@ public:
     explicit UabPackage(const Uab::UabPkgInfo::Ptr &metaPtr);
 
     const Uab::UabPkgInfo::Ptr &info() const;
-
     bool isValid() const;
-
     void setDependsStatus(Pkg::DependsStatus status);
+    void setProcessError(Pkg::ErrorCode err, const QString &errorString);
 
-    Pkg::DependsStatus dependsStatus();
-    Pkg::PackageInstallStatus installStatus();
-    Pkg::PackageOperationStatus operationStatus();
+    Pkg::DependsStatus dependsStatus() const;
+    Pkg::PackageInstallStatus installStatus() const;
+    Pkg::PackageOperationStatus operationStatus() const;
+    Pkg::ErrorCode errorCode() const;
 
-    QString installedVersion();
+    QString installedVersion() const;
     QString failedReason() const;
+    QString processError() const;
 
+    static UabPackage::Ptr fromInfo(const Uab::UabPkgInfo::Ptr &infoPtr);
     static UabPackage::Ptr fromFilePath(const QString &filePath);
 
 private:
@@ -41,9 +43,11 @@ private:
     Pkg::DependsStatus m_dependsStatus{Pkg::DependsOk};            // package's depends info
     Pkg::PackageInstallStatus m_installStatus{Pkg::NotInstalled};  // version check
     Pkg::PackageOperationStatus m_operationStatus{Pkg::Prepare};   // status for operation flow
+    Pkg::ErrorCode m_errorCode{Pkg::NoError};
 
     QString m_installedVersion;
     QString m_failReason;
+    QString m_processError;  // runtime install/uninstall error raw output
 
     friend class UabPackageListModel;
 

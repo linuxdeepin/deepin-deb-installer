@@ -69,7 +69,7 @@ bool UabProcessController::reset()
     return true;
 }
 
-bool Uab::UabProcessController::markInstall(const UabPkgInfo::Ptr &installPtr)
+bool Uab::UabProcessController::markInstall(const UabPackage::Ptr &installPtr)
 {
     if (isRunning() || !ensureProcess()) {
         return false;
@@ -79,7 +79,7 @@ bool Uab::UabProcessController::markInstall(const UabPkgInfo::Ptr &installPtr)
     return true;
 }
 
-bool Uab::UabProcessController::markUninstall(const UabPkgInfo::Ptr &uninstallPtr)
+bool Uab::UabProcessController::markUninstall(const UabPackage::Ptr &uninstallPtr)
 {
     if (isRunning() || !ensureProcess()) {
         return false;
@@ -169,8 +169,16 @@ void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
         // maybe code info
         const QJsonObject obj = doc.object();
         if (UabError == obj.value(kJsonCode).toInt()) {
-            qWarning() << qPrintable("Uab process error:") << obj.value(kJsonMessage);
+            const QString errorString = obj.value(kJsonMessage).toString();
+            auto currUabPtr = currentPackagePtr();
+            if (currUabPtr) {
+                currUabPtr->setProcessError(Pkg::UnknownError, errorString);
+            }
+
+            qWarning() << qPrintable("Uab process error:") << errorString;
         }
+
+        // TODO(renbin): signature verify error, etc.
     }
 }
 
@@ -258,9 +266,9 @@ bool UabProcessController::nextProcess()
     return false;
 }
 
-bool Uab::UabProcessController::installImpl(const Uab::UabPkgInfo::Ptr &installPtr)
+bool Uab::UabProcessController::installImpl(const Uab::UabPackage::Ptr &installPtr)
 {
-    if (!installPtr || installPtr->filePath.isEmpty()) {
+    if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
         return false;
     }
 
@@ -268,23 +276,23 @@ bool Uab::UabProcessController::installImpl(const Uab::UabPkgInfo::Ptr &installP
 
     // e.g.: ll-cli --json install ./path/to/file/uab_package.uab
     m_process->setProgram(kLinglongBin);
-    m_process->setArguments({kLinglongJson, kLinglongInstall, installPtr->filePath});
+    m_process->setArguments({kLinglongJson, kLinglongInstall, installPtr->info()->filePath});
     m_process->start();
 
     const QString recordCommand = QString("command: %1 %2 %3 %4/%5[uab package]")
                                       .arg(kLinglongBin)
                                       .arg(kLinglongJson)
                                       .arg(kLinglongInstall)
-                                      .arg(installPtr->id)
-                                      .arg(installPtr->version);
+                                      .arg(installPtr->info()->id)
+                                      .arg(installPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
 
     return true;
 }
 
-bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninstallPtr)
+bool Uab::UabProcessController::uninstallImpl(const Uab::UabPackage::Ptr &uninstallPtr)
 {
-    if (!uninstallPtr || uninstallPtr->id.isEmpty() || uninstallPtr->version.isEmpty()) {
+    if (!uninstallPtr || !uninstallPtr->isValid()) {
         return false;
     }
 
@@ -293,15 +301,15 @@ bool Uab::UabProcessController::uninstallImpl(const Uab::UabPkgInfo::Ptr &uninst
     // e.g.: ll-cli --json uninstall org.deepin.package/1.0.0
     m_process->setProgram(kLinglongBin);
     m_process->setArguments(
-        {kLinglongJson, kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->id).arg(uninstallPtr->version)});
+        {kLinglongJson, kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->info()->id).arg(uninstallPtr->info()->version)});
     m_process->start();
 
     const QString recordCommand = QString("command: %1 %2 %3 %4/%5")
                                       .arg(kLinglongBin)
                                       .arg(kLinglongJson)
                                       .arg(kLinglongUninstall)
-                                      .arg(uninstallPtr->id)
-                                      .arg(uninstallPtr->version);
+                                      .arg(uninstallPtr->info()->id)
+                                      .arg(uninstallPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
 
     return true;
@@ -312,6 +320,15 @@ bool UabProcessController::checkIndexValid()
     return 0 <= m_currentIndex && m_currentIndex < m_procList.size();
 }
 
+UabPackage::Ptr UabProcessController::currentPackagePtr()
+{
+    if (!checkIndexValid()) {
+        return {};
+    }
+
+    return m_procList[m_currentIndex].second;
+}
+
 void UabProcessController::commitCurrentChangeToBackend()
 {
     if (!checkIndexValid()) {
@@ -319,12 +336,18 @@ void UabProcessController::commitCurrentChangeToBackend()
     }
 
     const auto &currentProc = m_procList.at(m_currentIndex);
+    UabPkgInfo::Ptr infoPtr;
+    if (!currentProc.second || !currentProc.second->isValid()) {
+        return;
+    }
+    infoPtr = currentProc.second->info();
+
     switch (currentProc.first) {
         case Installing:
-            Uab::UabBackend::instance()->packageInstalled(currentProc.second);
+            Uab::UabBackend::instance()->packageInstalled(infoPtr);
             break;
         case Uninstalling:
-            Uab::UabBackend::instance()->packageRemoved(currentProc.second);
+            Uab::UabBackend::instance()->packageRemoved(infoPtr);
             break;
         default:
             break;

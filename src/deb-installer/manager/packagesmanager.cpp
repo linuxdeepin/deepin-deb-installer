@@ -104,7 +104,7 @@ bool PackagesManager::dependencyVersionMatch(const int result, const RelationTyp
     }
 }
 
-int PackagesManager::checkInstallStatus(const QString &package_path)
+Pkg::PackageInstallStatus PackagesManager::checkInstallStatus(const QString &package_path)
 {
     DebFile debFile(package_path);
     if (!debFile.isValid())
@@ -129,7 +129,7 @@ int PackagesManager::checkInstallStatus(const QString &package_path)
     const QString packageVersion = debFile.version();
     const int result = Package::compareVersion(packageVersion, installedVersion);
 
-    int ret;
+    Pkg::PackageInstallStatus ret;
     if (result == 0)
         ret = Pkg::PackageInstallStatus::InstalledSameVersion;
     else if (result < 0)

@@ -54,10 +54,9 @@ void ProxyPackageListModel::slotAppendPackage(const QStringList &packageList)
                 Q_FALLTHROUGH();
             case Pkg::Deb: {
                 ModelPtr model = modelFromType(itr.key());
-                if (!model) {
-                    model = addModel(itr.key());
+                if (model) {
+                    model->slotAppendPackage(itr.value());
                 }
-                model->slotAppendPackage(itr.value());
             } break;
             default:
                 return;
@@ -88,34 +87,75 @@ QString ProxyPackageListModel::checkPackageValid(const QString &packagePath)
     return model->checkPackageValid(packagePath);
 }
 
-void ProxyPackageListModel::slotInstallPackages()
+Pkg::PackageInstallStatus ProxyPackageListModel::checkInstallStatus(const QString &packagePath)
+{
+    ModelPtr model = addModelFromFile(packagePath);
+    if (model) {
+        return model->checkInstallStatus(packagePath);
+    }
+
+    return Pkg::NotInstalled;
+}
+
+Pkg::DependsStatus ProxyPackageListModel::checkDependsStatus(const QString &packagePath)
+{
+    ModelPtr model = addModelFromFile(packagePath);
+    if (model) {
+        return model->checkDependsStatus(packagePath);
+    }
+
+    return Pkg::DependsOk;
+}
+
+QStringList ProxyPackageListModel::getPackageInfo(const QString &packagePath)
+{
+    ModelPtr model = addModelFromFile(packagePath);
+    if (model) {
+        return model->getPackageInfo(packagePath);
+    }
+
+    return {};
+}
+
+QString ProxyPackageListModel::lastProcessError()
+{
+    QString errorMessage;
+    (void)std::find_if(m_packageModels.rbegin(), m_packageModels.rend(), [&errorMessage](const ModelInfo &info) {
+        errorMessage = info.model->lastProcessError();
+        return !errorMessage.isEmpty();
+    });
+
+    return errorMessage;
+}
+
+bool ProxyPackageListModel::slotInstallPackages()
 {
     if (!isWorkerPrepare()) {
-        return;
+        return false;
     }
 
     if (m_packageModels.isEmpty() || m_packageModels.last().rightCount <= 0) {
-        return;
+        return false;
     }
 
     setWorkerStatus(WorkerProcessing);
     m_procModelIndex = -1;
-    nextModelInstall();
+    return nextModelInstall();
 }
 
-void ProxyPackageListModel::slotUninstallPackage(int index)
+bool ProxyPackageListModel::slotUninstallPackage(int index)
 {
     if (!isWorkerPrepare()) {
-        return;
+        return false;
     }
 
     auto modelWithIndex = findFromProxyIndex(index);
     if (!modelWithIndex.first) {
-        return;
+        return false;
     }
 
     setWorkerStatus(WorkerUnInstall);
-    modelWithIndex.first->slotUninstallPackage(modelWithIndex.second);
+    return modelWithIndex.first->slotUninstallPackage(modelWithIndex.second);
 }
 
 void ProxyPackageListModel::reset()
@@ -136,12 +176,12 @@ void ProxyPackageListModel::resetInstallStatus()
     setWorkerStatus(WorkerPrepare);
 }
 
-void ProxyPackageListModel::nextModelInstall()
+bool ProxyPackageListModel::nextModelInstall()
 {
     ++m_procModelIndex;
     if (m_procModelIndex < 0) {
         setWorkerStatus(WorkerFinished);
-        return;
+        return false;
     }
 
     // check if all package finished
@@ -149,17 +189,21 @@ void ProxyPackageListModel::nextModelInstall()
         setWorkerStatus(WorkerFinished);
         Q_EMIT signalWholeProgressChanged(100);
         setWorkerStatus(WorkerFinished);
-        return;
+        return true;
     }
 
     const ModelInfo &info = m_packageModels.at(m_procModelIndex);
     if (info.count > 0) {
-        info.model->slotInstallPackages();
+        return info.model->slotInstallPackages();
     } else {
-        nextModelInstall();
+        return nextModelInstall();
     }
 }
 
+/**
+   @return Pointer to an Abstract Package ListModel of a specific type,
+        or null if cannot create model.
+ */
 ProxyPackageListModel::ModelPtr ProxyPackageListModel::modelFromType(Pkg::PackageType type)
 {
     for (const ModelInfo &info : m_packageModels) {
@@ -168,7 +212,13 @@ ProxyPackageListModel::ModelPtr ProxyPackageListModel::modelFromType(Pkg::Packag
         }
     }
 
-    return nullptr;
+    return addModel(type);
+}
+
+ProxyPackageListModel::ModelPtr ProxyPackageListModel::addModelFromFile(const QString &packagePath)
+{
+    Pkg::PackageType type = Utils::detectPackage(packagePath);
+    return modelFromType(type);
 }
 
 ProxyPackageListModel::ModelPtr ProxyPackageListModel::addModel(Pkg::PackageType type)

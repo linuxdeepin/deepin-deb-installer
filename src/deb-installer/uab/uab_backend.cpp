@@ -44,6 +44,7 @@ static const QString kUabDescription = "description";
 UabBackend::UabBackend(QObject *parent)
     : QObject{parent}
 {
+    recheckLinglongExists();
     qRegisterMetaType<QList<UabPkgInfo::Ptr>>("QList<UabPkgInfo::Ptr>");
 }
 
@@ -113,11 +114,18 @@ UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId)
 /**
    @brief Read Linglong's package information, arch, etc.
         When the package needs to be installed, the Uab backend will be initialized.
+        If 'async' is true (default), will be initialized on the child thread.
  */
-void UabBackend::initBackend()
+void UabBackend::initBackend(bool async)
 {
     static std::once_flag kUabBackendFlag;
-    std::call_once(kUabBackendFlag, [this]() { QtConcurrent::run(UabBackend::backendProcess, this); });
+    std::call_once(kUabBackendFlag, [async, this]() {
+        if (async) {
+            QtConcurrent::run(UabBackend::backendProcess, this);
+        } else {
+            UabBackend::backendProcess(this);
+        }
+    });
 }
 
 bool UabBackend::backendInited() const
@@ -154,8 +162,6 @@ void UabBackend::dumpPackageList() const
 
 void UabBackend::backendInitData(const QList<UabPkgInfo::Ptr> &packageList, const QSet<QString> &archs)
 {
-    recheckLinglongExists();
-
     m_packageList = packageList;
     m_supportArchSet = archs;
     m_init = true;
@@ -241,7 +247,7 @@ void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
     process.start(kUabCliBin, {kUabJson, kUabCliList});
     process.waitForFinished();
 
-    QByteArray output = process.readAllStandardOutput();
+    const QByteArray output = process.readAllStandardOutput();
     QList<UabPkgInfo::Ptr> packageList;
     parsePackagesFromRawJson(output, packageList);
     sortPackages(packageList);

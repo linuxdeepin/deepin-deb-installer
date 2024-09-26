@@ -4,6 +4,7 @@
 
 #include "singleInstallerApplication.h"
 #include "view/pages/debinstaller.h"
+#include "uab/uab_backend.h"
 
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
@@ -41,6 +42,10 @@ void SingleInstallerApplication::activateWindow()
     }
 
     if (bIsDbus) {
+        // init uab backend synchronous on bus mode, but must be initialized after deb backend.
+        // sa PackageAnalyzer::instance()
+        Uab::UabBackend::instance()->initBackend(false);
+
         m_qspMainWnd->hide();
     }
 
@@ -157,7 +162,7 @@ bool SingleInstallerApplication::parseCmdLine()
         qDebug() << "Register dbus service successfully";
         const QStringList paraList = parser.positionalArguments();
         if (paraList.isEmpty()) {
-            // dbus打开不显示界面
+            // hide main window on dbus
             if (parser.isSet("dbus")) {
                 bIsDbus = true;
             }

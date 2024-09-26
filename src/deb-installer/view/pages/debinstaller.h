@@ -182,8 +182,6 @@ private slots:
      */
     void slotSettingDialogVisiable();
 
-    // TODO(renbin): DBus interface, refactor later
-#if 0
     /**
      * @brief PackagesSelected
      * 添加包，但是不显示主窗口
@@ -221,7 +219,6 @@ private slots:
      * 查找包信息,返回(包名，包的路径，包的版本，包可用的架构，包的短描述，包的长描述)
      */
     QString getPackageInfo(const QString &debPath);
-#endif
 
     /**
      * @brief slotShowSelectPage
@@ -328,8 +325,8 @@ private:
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
 
 private:
-    AbstractPackageListModel *m_fileListModel = nullptr;         // model 类
-    FileChooseWidget *m_fileChooseWidget = nullptr;  // 文件选择的widget
+    AbstractPackageListModel *m_fileListModel = nullptr;  // model 类
+    FileChooseWidget *m_fileChooseWidget = nullptr;       // 文件选择的widget
     UninstallConfirmPage *m_uninstallPage = nullptr;
 
     QPointer<QWidget> m_lastPage;               // 存放上一个页面的指针
@@ -356,7 +353,7 @@ private:
         SinglePage = 2,
         UninstallPage = 3,
     };
-    CurrentPage m_Filterflag { ChoosePage };  // Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
+    CurrentPage m_Filterflag{ChoosePage};  // Determine the current page      choose:-1;multiple:1;single:2;uninstall:3
 
     bool m_packageAppending = false;
     int m_wineAuthStatus = -1;  // 记录依赖配置授权状态

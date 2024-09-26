@@ -44,22 +44,33 @@ void UabPackage::setDependsStatus(Pkg::DependsStatus status)
     }
 }
 
-Pkg::DependsStatus UabPackage::dependsStatus()
+void UabPackage::setProcessError(Pkg::ErrorCode err, const QString &errorString)
+{
+    m_errorCode = err;
+    m_processError = errorString;
+}
+
+Pkg::DependsStatus UabPackage::dependsStatus() const
 {
     return m_dependsStatus;
 }
 
-Pkg::PackageInstallStatus UabPackage::installStatus()
+Pkg::PackageInstallStatus UabPackage::installStatus() const
 {
     return m_installStatus;
 }
 
-Pkg::PackageOperationStatus UabPackage::operationStatus()
+Pkg::PackageOperationStatus UabPackage::operationStatus() const
 {
     return m_operationStatus;
 }
 
-QString UabPackage::installedVersion()
+Pkg::ErrorCode UabPackage::errorCode() const
+{
+    return m_errorCode;
+}
+
+QString UabPackage::installedVersion() const
 {
     return m_installedVersion;
 }
@@ -67,6 +78,16 @@ QString UabPackage::installedVersion()
 QString UabPackage::failedReason() const
 {
     return m_failReason;
+}
+
+QString UabPackage::processError() const
+{
+    return m_processError;
+}
+
+UabPackage::Ptr UabPackage::fromInfo(const UabPkgInfo::Ptr &infoPtr)
+{
+    return Uab::UabPackage::Ptr::create(infoPtr);
 }
 
 UabPackage::Ptr UabPackage::fromFilePath(const QString &filePath)

@@ -23,16 +23,23 @@ public:
     void removePackage(int index) override;
     QString checkPackageValid(const QString &packagePath) override;
 
-    Q_SLOT void slotInstallPackages() override;
-    Q_SLOT void slotUninstallPackage(int index) override;
+    Pkg::PackageInstallStatus checkInstallStatus(const QString &packagePath) override;
+    Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
+    QStringList getPackageInfo(const QString &packagePath) override;
+    QString lastProcessError() override;
+
+    Q_SLOT bool slotInstallPackages() override;
+    Q_SLOT bool slotUninstallPackage(int index) override;
 
     void reset() override;
     void resetInstallStatus() override;
 
-private:
-    void nextModelInstall();
-
     ModelPtr modelFromType(Pkg::PackageType type);
+    ModelPtr addModelFromFile(const QString &packagePath);
+
+private:
+    bool nextModelInstall();
+
     ModelPtr addModel(Pkg::PackageType type);
     void connectModel(ModelPtr model);
 

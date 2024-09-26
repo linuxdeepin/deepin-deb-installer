@@ -110,17 +110,17 @@ const QString DebListModel::workerErrorString(const int errorCode, const QString
             }
             break;
         // 无数字签名的错误
-        case DebListModel::NoDigitalSignature:
+        case Pkg::NoDigitalSignature:
             return QApplication::translate("DebListModel", "No digital signature");
 
         // 无有效的数字签名
-        case DebListModel::DigitalSignatureError:
+        case Pkg::DigitalSignatureError:
             return QApplication::translate("DebListModel", "Invalid digital signature");
 
         // 安装配置包时，没有得到授权
-        case DebListModel::ConfigAuthCancel:
+        case Pkg::ConfigAuthCancel:
             return QApplication::translate("DebListModel", "Authentication failed");
-        case DebListModel::ErrorCode::ApplocationProhibit:
+        case Pkg::ApplocationProhibit:
             return QApplication::translate("DebListModel",
                                            "The administrator has set policies to prevent installation of this package");
         default:
@@ -313,10 +313,10 @@ bool DebListModel::isDevelopMode()
     return m_isDevelopMode;
 }
 
-void DebListModel::slotInstallPackages()
+bool DebListModel::slotInstallPackages()
 {
     if (m_workerStatus != WorkerPrepare)
-        return;
+        return false;
 
     m_workerStatus = WorkerProcessing;  // 刷新包安装器的工作状态
     m_operatingIndex = 0;               // 初始化当前操作的index
@@ -329,11 +329,13 @@ void DebListModel::slotInstallPackages()
     // 检查当前应用是否在黑名单中
     // 非开发者模式且数字签名验证失败
     if (checkBlackListApplication() || !checkDigitalSignature())
-        return;
+        return false;
     installNextDeb();  // 开始安装
+
+    return true;
 }
 
-void DebListModel::slotUninstallPackage(int index)
+bool DebListModel::slotUninstallPackage(int index)
 {
     m_workerStatus = WorkerProcessing;  // 刷新当前包安装器的工作状态
     m_operatingIndex = index;           // 获取卸载的包的indx
@@ -343,7 +345,7 @@ void DebListModel::slotUninstallPackage(int index)
 
     DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
     if (!debFile.isValid())
-        return;
+        return false;
     const QStringList rdepends =
         m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture());  // 检查是否有应用依赖到该包
     qInfo() << QString("Will remove reverse depends before remove %1 , Lists:").arg(debFile.packageName()) << rdepends;
@@ -363,7 +365,7 @@ void DebListModel::slotUninstallPackage(int index)
     // 未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
     if (!uninstalledPackage) {
         refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
-        return;
+        return false;
     }
     uninstalledPackage->setPurge();
 
@@ -391,6 +393,8 @@ void DebListModel::slotUninstallPackage(int index)
     m_currentTransaction = transsaction;  // 保存trans指针
 
     transsaction->run();  // 开始卸载
+
+    return true;
 }
 
 void DebListModel::removePackage(const int idx)
@@ -407,14 +411,14 @@ void DebListModel::removePackage(const int idx)
     m_packagesManager->removePackage(idx);  // 在packageManager中删除标记的下标
 }
 
-int DebListModel::checkInstallStatus(const QString &package_path)
+Pkg::PackageInstallStatus DebListModel::checkInstallStatus(const QString &package_path)
 {
     return m_packagesManager->checkInstallStatus(package_path);
 }
 
-int DebListModel::checkDependsStatus(const QString &package_path)
+Pkg::DependsStatus DebListModel::checkDependsStatus(const QString &package_path)
 {
-    return m_packagesManager->checkDependsStatus(package_path).status;
+    return static_cast<Pkg::DependsStatus>(m_packagesManager->checkDependsStatus(package_path).status);
 }
 
 int DebListModel::checkDigitalSignature(const QString &package_path)
@@ -444,11 +448,11 @@ QStringList DebListModel::getPackageInfo(const QString &package_path)
     return m_packagesManager->getPackageInfo(package_path);
 }
 
-QString DebListModel::getInstallErrorMessage()
+QString DebListModel::lastProcessError()
 {
     if (m_currentTransaction)
         return m_currentTransaction->errorString();
-    return "faild";
+    return "failed";
 }
 
 QString DebListModel::checkPackageValid(const QString &package_path)
@@ -673,7 +677,7 @@ void DebListModel::slotTransactionFinished()
         // 保存错误原因和错误代码
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
         m_packageFailCode[m_operatingPackageMd5] =
-            verifyError ? static_cast<int>(DebListModel::DigitalSignatureError) : static_cast<int>(transaction->error());
+            verifyError ? static_cast<int>(Pkg::DigitalSignatureError) : static_cast<int>(transaction->error());
         m_packageFailReason[m_operatingPackageMd5] = transaction->errorString();
 
         // 刷新操作状态
@@ -882,7 +886,7 @@ void DebListModel::installDebs()
     m_currentTransaction->run();
 }
 
-void DebListModel::digitalVerifyFailed(ErrorCode errorCode)
+void DebListModel::digitalVerifyFailed(Pkg::ErrorCode errorCode)
 {
     if (preparedPackages().size() > 1) {                                     // 批量安装
         refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新操作状态
@@ -946,7 +950,7 @@ void DebListModel::showNoDigitalErrWindow()
 
     // 批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
-        digitalVerifyFailed(NoDigitalSignature);  // 刷新安装错误，并记录错误原因
+        digitalVerifyFailed(Pkg::NoDigitalSignature);  // 刷新安装错误，并记录错误原因
         return;
     }
     DDialog *Ddialog = new DDialog();  // 弹出窗口
@@ -994,7 +998,7 @@ void DebListModel::showDigitalErrWindow(bool recordError)
     // 批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         if (recordError) {
-            digitalVerifyFailed(DigitalSignatureError);  // 刷新安装错误，并记录错误原因
+            digitalVerifyFailed(Pkg::DigitalSignatureError);  // 刷新安装错误，并记录错误原因
         }
         return;
     }
@@ -1036,7 +1040,7 @@ void DebListModel::showDigitalErrWindow(bool recordError)
     connect(Ddialog, &DDialog::rejected, exitOperate);
 }
 
-void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
+void DebListModel::showDevelopDigitalErrWindow(Pkg::ErrorCode code)
 {
     Dialog *Ddialog = new Dialog();
     // 设置窗口焦点
@@ -1081,12 +1085,12 @@ void DebListModel::showDevelopDigitalErrWindow(ErrorCode code)
 
 void DebListModel::slotDigitalSignatureError()
 {
-    digitalVerifyFailed(DigitalSignatureError);
+    digitalVerifyFailed(Pkg::DigitalSignatureError);
 }
 
 void DebListModel::slotNoDigitalSignature()
 {
-    digitalVerifyFailed(NoDigitalSignature);
+    digitalVerifyFailed(Pkg::NoDigitalSignature);
 }
 
 void DebListModel::slotShowDevelopModeWindow()
@@ -1163,11 +1167,11 @@ bool DebListModel::checkDigitalSignature()
         if (digitalSigntual == Utils::VerifySuccess) {
             return true;
         } else {
-            ErrorCode code;
+            Pkg::ErrorCode code;
             if (digitalSigntual == Utils::DebfileInexistence)
-                code = NoDigitalSignature;
+                code = Pkg::NoDigitalSignature;
             else
-                code = DigitalSignatureError;
+                code = Pkg::DigitalSignatureError;
             showDevelopDigitalErrWindow(code);  // 弹出提示框
             return false;
         }
@@ -1508,13 +1512,13 @@ void DebListModel::getPackageMd5(const QList<QByteArray> &packagesMD5)
 
 void DebListModel::slotShowProhibitWindow()
 {
-    digitalVerifyFailed(ApplocationProhibit);
+    digitalVerifyFailed(Pkg::ApplocationProhibit);
 }
 void DebListModel::showProhibitWindow()
 {
     // 批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
-        digitalVerifyFailed(ApplocationProhibit);  // 刷新安装错误，并记录错误原因
+        digitalVerifyFailed(Pkg::ApplocationProhibit);  // 刷新安装错误，并记录错误原因
         return;
     }
     DDialog *Ddialog = new DDialog();

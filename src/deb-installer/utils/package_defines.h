@@ -70,6 +70,16 @@ enum PackageOperationStatus {
     VerifyFailed,  // runtime signature verfiy failed (hierarchical verify)
 };
 
+// Signature fail error code
+enum ErrorCode {
+    NoError,
+    UnknownError,
+    NoDigitalSignature = 101,
+    DigitalSignatureError,
+    ConfigAuthCancel = 127,     // Authentication failed
+    ApplocationProhibit = 404,  // the current package is in the blacklist and is prohibited from installation
+};
+
 }  // namespace Pkg
 
 Q_DECLARE_METATYPE(Pkg::DependsPair)

@@ -31,7 +31,7 @@ void utDebProcessController::SetUp()
     utStub.set((void(QProcess::*)(QProcess::OpenMode))ADDR(QProcess, start), stub_QProcess_start);
 }
 
-void utDebProcessController::TearDown() { }
+void utDebProcessController::TearDown() {}
 
 TEST_F(utDebProcessController, installExecSuccess)
 {
@@ -39,7 +39,7 @@ TEST_F(utDebProcessController, installExecSuccess)
     auto uabPtr = Uab::UabPkgInfo::Ptr::create();
     uabPtr->filePath = "localtest";
     uabController.reset();
-    uabController.markInstall(uabPtr);
+    uabController.markInstall(Uab::UabPackage::fromInfo(uabPtr));
     uabController.commitChanges();
 
     EXPECT_EQ(uabController.m_process->program(), uabPtr->filePath);
