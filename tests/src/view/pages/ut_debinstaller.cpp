@@ -136,9 +136,9 @@ void stub_enableCloseAndExit()
 
 TEST_F(UT_Debinstaller, UT_Debinstaller_total)
 {
-    deb->slotShowInvalidePackageMessage();
+    deb->slotShowInvalidePackageMessage(Pkg::Deb);
     deb->slotShowPkgExistMessage();
-    deb->slotShowNotLocalPackageMessage();
+    deb->slotShowNotLocalPackageMessage(Pkg::Deb);
     deb->slotShowPkgRemovedMessage("00");
     EXPECT_EQ(deb->backToSinglePage(), nullptr);
 }

@@ -447,10 +447,10 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
     auto readablilty = Utils::checkPackageReadable(packagePath);
     switch (readablilty) {
         case Pkg::PkgNotInLocal:
-            Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal, Pkg::Uab);
             return {};
         case Pkg::PkgNoPermission:
-            Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable, Pkg::Uab);
             return {};
         default:
             break;
@@ -458,12 +458,12 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
 
     auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
     if (!uabPtr || !uabPtr->isValid()) {
-        Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid);
+        Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid, Pkg::Uab);
         return {};
     }
 
     if (packageExists(uabPtr)) {
-        Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
+        Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists, Pkg::Uab);
         return {};
     }
 
