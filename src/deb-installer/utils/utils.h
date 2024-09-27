@@ -71,6 +71,7 @@ public:
     static Pkg::PackageReadability checkPackageReadable(const QString &packagePath);
     static int compareVersion(const QString &v1, const QString &v2);
     static Pkg::PackageType detectPackage(const QString &filePath);
+    static QIcon packageIcon(Pkg::PackageType type);
 
     static bool isDevelopMode();  // Check if develop mode (root)
 };

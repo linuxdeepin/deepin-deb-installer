@@ -83,5 +83,6 @@ enum ErrorCode {
 }  // namespace Pkg
 
 Q_DECLARE_METATYPE(Pkg::DependsPair)
+Q_DECLARE_METATYPE(Pkg::PackageType)
 
 #endif  // PACKAGE_DEFINES_H

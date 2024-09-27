@@ -7,6 +7,7 @@
 
 #include "view/widgets/infocontrolbutton.h"
 #include "view/widgets/installprocessinfoview.h"
+#include "utils/package_defines.h"
 
 #include <DLabel>
 #include <DPushButton>
@@ -30,6 +31,8 @@ public:
      * @param requiredList 依赖列表
      */
     void setRequiredList(const QStringList &requiredList);
+
+    void setPackageType(Pkg::PackageType type);
 
 signals:
 
