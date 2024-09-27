@@ -17,7 +17,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-//delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
+// delegate 直接传入 model 解决多次创建model packagemanager导致崩溃的问题
 PackagesListDelegate::PackagesListDelegate(AbstractPackageListModel *m_model, QAbstractItemView *parent)
     : DStyledItemDelegate(parent)
     , m_fileListModel(m_model)  // 从新new一个对象修改为获取传入的对象
@@ -137,7 +137,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     QRect bg_rect = option.rect;
 
-    QIcon icon = QIcon::fromTheme("application-x-deb");
+    Pkg::PackageType type = index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>();
+    QIcon icon = Utils::packageIcon(type);
 
     // draw package icon
     const int x = 6;
@@ -248,7 +249,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
     if (dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
-        dependsStat == Pkg::DependsStatus::DependsVerifyFailed || dependsStat == Pkg::DependsStatus::ArchBreak  // 添加对架构不匹配的处理
+        dependsStat == Pkg::DependsStatus::DependsVerifyFailed ||
+        dependsStat == Pkg::DependsStatus::ArchBreak  // 添加对架构不匹配的处理
         //                || dependsStat == Pkg::DependsStatus::Prohibit  //增加应用黑名单
     ) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();

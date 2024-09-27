@@ -351,6 +351,24 @@ Pkg::PackageType Utils::detectPackage(const QString &filePath)
 }
 
 /**
+ * @brief Get the icon based on the package \a type .
+ */
+QIcon Utils::packageIcon(Pkg::PackageType type)
+{
+    // TODO: check icon name
+    if (Pkg::Uab == type) {
+        // linglong uab package
+        const QIcon icon = QIcon::fromTheme("application-x-uab");
+        if (icon.isNull()) {
+            return QIcon::fromTheme("application-default-icon");
+        }
+    } else {
+        // default, deb package
+        return QIcon::fromTheme("application-x-deb");
+    }
+}
+
+/**
    @return Check if the current mode is development mode, the status will be called once and stored.
  */
 bool Utils::isDevelopMode()

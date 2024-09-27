@@ -792,6 +792,7 @@ void DebInstaller::slotShowUninstallConfirmPage()
     const QModelIndex index = m_fileListModel->index(0);  // 只有单包才有卸载界面
 
     m_uninstallPage = new UninstallConfirmPage(this);  // 初始化卸载页面
+    m_uninstallPage->setPackageType(index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>());
     m_uninstallPage->setRequiredList(
         index.data(DebListModel::PackageReverseDependsListRole).toStringList());  // 查看是否有包依赖于当前要卸载的包，病获取列表
     m_uninstallPage->setPackage(index.data().toString());                         // 添加卸载提示语

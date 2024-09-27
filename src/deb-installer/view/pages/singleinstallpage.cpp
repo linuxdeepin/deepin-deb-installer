@@ -793,6 +793,10 @@ void SingleInstallPage::showPackageInfo()
     int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);
     if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
+        Pkg::PackageType type = index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>();
+        QIcon icon = Utils::packageIcon(type);
+        m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
+
         m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
         m_pkgNameDescription = index.data(DebListModel::PackageNameRole).toString();
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();

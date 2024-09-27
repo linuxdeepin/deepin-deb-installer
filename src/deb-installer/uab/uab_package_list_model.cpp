@@ -77,6 +77,8 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
             return uabPtr->failedReason();
         case PackageOperateStatusRole:
             return uabPtr->operationStatus();
+        case PackageTypeRole:
+            return Pkg::Uab;
 
         case Qt::SizeHintRole:
             return QSize(0, 48);

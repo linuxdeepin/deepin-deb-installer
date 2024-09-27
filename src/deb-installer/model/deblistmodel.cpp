@@ -297,6 +297,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             else
                 return Pkg::PackageOperationStatus::Prepare;
         }
+        case PackageTypeRole:
+            return Pkg::Deb;
         case PackageDependsDetailRole:
             return QVariant::fromValue(m_packagesManager->getPackageDependsDetail(currentRow));
         case Qt::SizeHintRole:  // 设置当前index的大小
