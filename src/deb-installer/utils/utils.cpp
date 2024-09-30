@@ -343,7 +343,8 @@ Pkg::PackageType Utils::detectPackage(const QString &filePath)
 
     if (info.suffix().toLower() == "deb" || mime.name().startsWith("application/vnd.debian.binary-package")) {
         return Pkg::Deb;
-    } else if (info.suffix().toLower() == "uab") {
+    }
+    if (info.suffix().toLower() == "uab") {
         return Pkg::Uab;
     }
 
