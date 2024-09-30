@@ -21,18 +21,18 @@ class UabPackageListModel : public AbstractPackageListModel
 public:
     explicit UabPackageListModel(QObject *parent = nullptr);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+    [[nodiscard]] int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     Q_SLOT void slotAppendPackage(const QStringList &packageList) override;
     void removePackage(int index) override;
-    QString checkPackageValid(const QString &packagePath) override;
+    [[nodiscard]] QString checkPackageValid(const QString &packagePath) override;
 
-    Pkg::PackageInstallStatus checkInstallStatus(const QString &packagePath) override;
-    Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
-    QStringList getPackageInfo(const QString &packagePath) override;
-    QString lastProcessError() override;
-    bool containsSignatureFailed() const override;
+    [[nodiscard]] Pkg::PackageInstallStatus checkInstallStatus(const QString &packagePath) override;
+    [[nodiscard]] Pkg::DependsStatus checkDependsStatus(const QString &packagePath) override;
+    [[nodiscard]] QStringList getPackageInfo(const QString &packagePath) override;
+    [[nodiscard]] QString lastProcessError() override;
+    [[nodiscard]] bool containsSignatureFailed() const override;
 
     Q_SLOT bool slotInstallPackages() override;
     Q_SLOT bool slotUninstallPackage(int index) override;

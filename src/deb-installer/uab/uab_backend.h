@@ -20,21 +20,21 @@ class UabBackend : public QObject
 public:
     static UabBackend *instance();
 
-    UabPkgInfo::Ptr findPackage(const QString &packageId);
+    [[nodiscard]] UabPkgInfo::Ptr findPackage(const QString &packageId, const QString &version = {});
 
     void initBackend(bool async = true);
-    bool backendInited() const;
+    [[nodiscard]] bool backendInited() const;
     Q_SIGNAL void backendInitFinsihed();
 
-    bool linglongExists() const;
+    [[nodiscard]] bool linglongExists() const;
     bool recheckLinglongExists();
 
-    QString lastError() const;
+    [[nodiscard]] QString lastError() const;
     void dumpPackageList() const;
 
-    static UabPkgInfo::Ptr packageFromMetaData(const QString &uabPath, QString *errorString = nullptr);
-    static UabPkgInfo::Ptr packageFromMetaJson(const QByteArray &json, QString *errorString = nullptr);
-    static QByteArray uabExecuteOutput(const QString &uabPath, QString *errorString = nullptr);
+    [[nodiscard]] static UabPkgInfo::Ptr packageFromMetaData(const QString &uabPath, QString *errorString = nullptr);
+    [[nodiscard]] static UabPkgInfo::Ptr packageFromMetaJson(const QByteArray &json, QString *errorString = nullptr);
+    [[nodiscard]] static QByteArray uabExecuteOutput(const QString &uabPath, QString *errorString = nullptr);
 
     // internal
     Q_SLOT void backendInitData(const QList<UabPkgInfo::Ptr> &packageList, const QSet<QString> &archs);
