@@ -343,12 +343,30 @@ bool UabPackageListModel::installNextUab()
     setCurrentOperation(Pkg::Operating);
 
     m_processor->reset();
-    switch (uabPtr->installStatus()) {
+
+    // Note: Current Linglong environment supports multi version package same time,
+    //       check if install same version package.
+    Pkg::PackageInstallStatus installStatus = uabPtr->installStatus();
+    if (Pkg::InstalledLaterVersion == installStatus) {
+        if (auto sameInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version)) {
+            const int ret = Utils::compareVersion(uabPtr->info()->version, sameInfoPtr->version);
+
+            if (ret == 0) {
+                installStatus = Pkg::InstalledSameVersion;
+            } else if (ret < 0) {
+                installStatus = Pkg::InstalledLaterVersion;
+            } else {
+                installStatus = Pkg::InstalledEarlierVersion;
+            }
+        }
+    }
+
+    switch (installStatus) {
         case Pkg::NotInstalled:
             m_processor->markInstall(uabPtr);
             break;
         case Pkg::InstalledSameVersion: {
-            auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
+            auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version);
             m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
             m_processor->markInstall(uabPtr);
         } break;

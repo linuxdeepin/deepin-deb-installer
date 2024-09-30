@@ -21,6 +21,14 @@ public:
     explicit UabProcessController(QObject *parent = nullptr);
     ~UabProcessController() override = default;
 
+    enum ProcessType {
+        Unknown,
+        DBus,  // call Linglong package manager DBus interface
+        Cli,   // means qprocess execute, command line interface
+    };
+    void setProcessType(ProcessType type);
+    [[nodiscard]] ProcessType processType() const;
+
     enum ProcFlag {
         Prepare = 1 << 0,
         Uninstalling = 1 << 1,
@@ -31,13 +39,13 @@ public:
     };
     Q_DECLARE_FLAGS(ProcFlags, ProcFlag)
     Q_FLAG(ProcFlags)
-    ProcFlags procFlag() const;
-    bool isRunning() const;
+    [[nodiscard]] ProcFlags procFlag() const;
+    [[nodiscard]] bool isRunning() const;
 
     bool reset();
     bool markInstall(const UabPackage::Ptr &installPtr);
     bool markUninstall(const UabPackage::Ptr &unisntallPtr);
-    bool commitChanges();
+    [[nodiscard]] bool commitChanges();
 
     Q_SIGNAL void processStart();
     Q_SIGNAL void processFinished(bool success);
@@ -45,24 +53,29 @@ public:
     Q_SIGNAL void progressChanged(float progress);
 
 private:
-    bool ensureProcess();
+    [[nodiscard]] bool ensureProcess();
     void parseProgressFromJson(const QByteArray &jsonData);
     void parseProgressFromRawOutput(const QByteArray &output);
+    void updateWholeProgress(float currentTaskProgress);
     Q_SLOT void onReadOutput();
     Q_SLOT void onFinished(int exitCode, int exitStatus);
+    Q_SLOT void onDBusProgressChanged(int progress, const QString &message);
 
     bool nextProcess();
 
-    bool installImpl(const UabPackage::Ptr &installPtr);
-    bool uninstallImpl(const UabPackage::Ptr &uninstallPtr);
+    bool installDBusImpl(const UabPackage::Ptr &installPtr);
+    bool uninstallDBusImpl(const UabPackage::Ptr &uninstallPtr);
+    bool installCliImpl(const UabPackage::Ptr &installPtr);
+    bool uninstallCliImpl(const UabPackage::Ptr &uninstallPtr);
 
-    bool checkIndexValid();
-    UabPackage::Ptr currentPackagePtr();
+    [[nodiscard]] bool checkIndexValid();
+    [[nodiscard]] UabPackage::Ptr currentPackagePtr();
 
     void commitCurrentChangeToBackend();
 
 private:
     QProcess *m_process{nullptr};
+    ProcessType m_type{Unknown};
 
     ProcFlags m_procFlag{Prepare};
     int m_currentIndex{-1};
