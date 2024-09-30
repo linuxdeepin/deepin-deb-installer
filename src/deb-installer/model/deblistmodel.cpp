@@ -1372,7 +1372,7 @@ void DebListModel::slotUpWrongStatusRow()
             installErrorPackages.append(iteratorpackageOperateStatus.key());                      // 保存下标
         }
         // 保存安装失败的包
-        if (iteratorpackageOperateStatus.value() == Success) {
+        if (iteratorpackageOperateStatus.value() == Pkg::PackageOperationStatus::Success) {
             installSuccessPackages.append(iteratorpackageOperateStatus.key());
         }
     }

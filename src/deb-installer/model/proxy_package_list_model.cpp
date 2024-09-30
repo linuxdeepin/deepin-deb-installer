@@ -456,11 +456,11 @@ void ProxyPackageListModel::onSourceDataChanged(const QModelIndex &topLeft,
 
             const int leftCount = info.rightCount - info.count;
             const int proxyTopIndex = leftCount + topLeft.row();
-            const int proxyBottonIndex = leftCount + bottomRight.row();
+            const int proxyBottomIndex = leftCount + bottomRight.row();
 
             // check index valid interal
             const QModelIndex proxyTopLeft = this->index(proxyTopIndex);
-            const QModelIndex proxyBottomRight = this->index(proxyBottonIndex);
+            const QModelIndex proxyBottomRight = this->index(proxyBottomIndex);
 
             if (proxyTopLeft.isValid() && proxyBottomRight.isValid()) {
                 Q_EMIT dataChanged(proxyTopLeft, proxyBottomRight, roles);
