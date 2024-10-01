@@ -55,17 +55,17 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="130"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="537"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Instalacja innych pakietów w trakcie... Otwórz później.</translation>
+        <translation>Trwa instalacja innych pakietów... Otwórz później.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="541"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>Parsowanie nie powiodło się: W pliku manifest znaleziono nieprawidłową strukturę!</translation>
+        <translation>Wystąpił błąd parsowania: W pliku manifest znaleziono nieprawidłową strukturę!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="543"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>Parsowanie nie powiodło się: W pliku manifest znaleziono nieprawidłowy numer wersji!</translation>
+        <translation>Wystąpił błąd parsowania: W pliku manifest znaleziono nieprawidłowy numer wersji!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="545"/>
@@ -80,7 +80,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="639"/>
         <source>You can only install local deb packages</source>
-        <translation>Możesz zainstalować tylko pakiety deb przechowywane lokalnie</translation>
+        <translation>Możesz instalować tylko lokalne pakiety deb</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="653"/>
@@ -598,7 +598,7 @@
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
         <translation>Czy na pewno chcesz odinstalować %1? 
-Wszystkie zależności zostaną również usunięte</translation>
+Wszystkie zależności również zostaną usunięte</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="114"/>
