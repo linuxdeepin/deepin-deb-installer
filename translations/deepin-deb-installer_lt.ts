@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>Įkeliami paketai...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>Įkelta %1/%2</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>Inicijuojama...</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="109"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nustatymai</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="130"/>
@@ -123,13 +123,13 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="113"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Nėra skaitmeninio parašo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="632"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Neteisingas skaitmeninis parašas</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="634"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko įdiegti %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
@@ -179,7 +179,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1621"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tęsti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="919"/>
@@ -208,7 +208,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1062"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tęsti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
@@ -457,7 +457,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1011"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko įdiegti %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="178"/>
@@ -529,7 +529,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1016"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Neteisingas skaitmeninis parašas</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="166"/>
