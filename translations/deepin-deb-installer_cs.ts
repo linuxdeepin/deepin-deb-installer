@@ -18,7 +18,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation>Načítání balíčků...</translation>
+        <translation>Načítání balíčků…</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation>Spouštění...</translation>
+        <translation>Inicializace…</translation>
     </message>
 </context>
 <context>
@@ -55,22 +55,22 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="130"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="537"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Probíhá instalace jiných balíčků, prosím počkejte</translation>
+        <translation>Probíhá instalace jiných balíčků… Prosím počkejte s otevřením na později.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="541"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>Rozbor se nezdařil: V souboru manifestu byla nalezena nesprávná struktura souboru!</translation>
+        <translation>Zpracování se nezdařilo: V souboru manifestu byla nalezena neplatná struktura souboru!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="543"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>Rozbor se nezdařil: V souboru manifestu bylo nalezeno nesprávné číslo verze!</translation>
+        <translation>Zpracování se nezdařilo: V souboru manifestu bylo nalezeno nesprávné číslo verze!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="545"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>Žádné balíčky .deb nebyly nalezeny. Prosím zknotrolujte složku</translation>
+        <translation>Nenalezeny žádné .deb balíčky – zkontrolujte složku.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
@@ -151,7 +151,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Tento balíček nemá platný elektronický podpis a jeho instalace/spuštění proto bylo zablokováno. Pokud chcete toto nastavení změnit, jděte do Centrum zabezpečení &gt; Nástroje &gt; Zabezpečení aplikací.</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
@@ -409,12 +409,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Pokud chcete instalovat nepodepsané aplikace, jděte do Centrum zabezpečení &gt; Nástroje &gt; Zabezpečení aplikací a vyberte typy aplikací, které mohou být instalovány.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Centrum zabezpečení &gt; Nástroje &gt; Zabezpečení aplikací</translation>
     </message>
 </context>
 <context>

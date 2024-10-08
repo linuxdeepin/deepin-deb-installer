@@ -127,14 +127,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="621"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="632"/>
         <source>Invalid digital signature</source>
         <translation>Signature numérique non valide</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="614"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1564"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="625"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1576"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>L&apos;administrateur a défini des politiques pour empêcher l&apos;installation de ce paquet</translation>
     </message>
@@ -144,76 +144,88 @@
         <translation>Échec de l&apos;installation</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="634"/>
         <source>Failed to install %1</source>
         <translation>Échec de l&apos;installation de %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="911"/>
-        <source>Failed to install %1: no valid digital singature</source>
-        <translation>Échec de l&apos;installation de %1 : pas de signature digitale valide</translation>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Ce package n&apos;a pas de signature numérique valide et son installation/exécution a été bloquée. Accédez à Centre de sécurité &gt; Outils &gt; Sécurité des applications pour modifier les paramètres.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="949"/>
+        <source>Failed to install %1: no valid digital singature</source>
+        <translation type="vanished">Échec de l&apos;installation de %1 : pas de signature digitale valide</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
         <source>Unable to install - no digital signature</source>
         <translation>Impossible d&apos;installer - pas de signature numérique</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Veuillez accéder au centre de contrôle pour activer le mode développeur et réessayer. Procéder ?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="953"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1620"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="966"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1621"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>Procéder</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="907"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1009"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1566"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="919"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1021"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1578"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1047"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
+        <source>Failed to install %1: no valid digital signature</source>
+        <translation>Échec de l&apos;installation de %1 : aucune signature numérique valide</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Ce paquet n&apos;a pas de signature numérique valide. Continuer l&apos;installation ?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1049"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1061"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1050"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1062"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Continuer</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="905"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1006"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1563"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1018"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1575"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1616"/>
         <source>Unable to install</source>
         <translation>Impossible d&apos;installer</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1007"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1019"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Ce paquet n&apos;a pas de signature numérique valide</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="626"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="631"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="637"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="642"/>
         <source>Broken dependencies: %1</source>
         <translation>Dépendances cassée : %1</translation>
     </message>
@@ -223,7 +235,7 @@
         <translation>Authentification échouée</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="612"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
         <translation>Architecture de paquet différente</translation>
     </message>
@@ -393,6 +405,16 @@
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
         <translation>Vérifier les signatures numériques si le mode développeur est activé</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>Pour installer des applications non signées, accédez à Centre de sécurité &gt; Outils &gt; Sécurité des applications et sélectionnez les types d&apos;applications pouvant être installées.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Centre de sécurité &gt; Outils &gt; Sécurité des applications</translation>
     </message>
 </context>
 <context>
@@ -597,7 +619,7 @@ Le système ou d&apos;autres applications peuvent ne pas fonctionner correctemen
     <message>
         <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>L&apos;installateur de paquets aide les utilisateurs à installer et à supprimer des paquets locaux, prend aussi en charge l&apos;installation multiple.</translation>
+        <translation>Installateur de paquets aide les utilisateurs à installer et supprimer des paquets locaux et prend en charge l&apos;installation en bloc.</translation>
     </message>
 </context>
 </TS>

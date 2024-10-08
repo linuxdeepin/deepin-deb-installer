@@ -127,14 +127,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="621"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="632"/>
         <source>Invalid digital signature</source>
         <translation>Ungültige digitale Signatur</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="614"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1564"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="625"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1576"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Der Administrator hat Richtlinien festgelegt, um die Installation dieses Pakets zu verhindern</translation>
     </message>
@@ -144,76 +144,88 @@
         <translation>Installation fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="634"/>
         <source>Failed to install %1</source>
         <translation>Konnte %1 nicht installieren</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="911"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1617"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Failed to install %1: no valid digital singature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="949"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
         <source>Unable to install - no digital signature</source>
         <translation>Kann nicht installiert werden - keine digitale Signatur</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Bitte aktivieren Sie im Kontrollzentrum den Entwicklermodus und versuchen Sie es erneut. Fortfahren?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="953"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1620"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="966"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1621"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>Fortfahren</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="907"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1009"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1566"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="919"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1021"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1578"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1047"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
+        <source>Failed to install %1: no valid digital signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Dieses Paket verfügt nicht über eine gültige digitale Signatur. Mit der Installation fortfahren?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1049"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1061"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1050"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1062"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Weiter</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="905"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1006"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1563"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1018"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1575"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1616"/>
         <source>Unable to install</source>
         <translation>Kann nicht installiert werden</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1007"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1019"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Dieses Paket verfügt nicht über eine gültige digitale Signatur</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="626"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="631"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="637"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="642"/>
         <source>Broken dependencies: %1</source>
         <translation>Kaputte Abhängigkeiten: %1</translation>
     </message>
@@ -223,7 +235,7 @@
         <translation>Authentifizierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="612"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="623"/>
         <source>Unmatched package architecture</source>
         <translation>Unpassende Paket-Architektur</translation>
     </message>
@@ -393,6 +405,16 @@
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
         <translation>Digitale Signaturen überprüfen, wenn der Entwicklermodus aktiviert ist</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="77"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="79"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
