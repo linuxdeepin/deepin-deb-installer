@@ -273,6 +273,19 @@ void PackagesListView::focusInEvent(QFocusEvent *event)
     }
 }
 
+void PackagesListView::focusOutEvent(QFocusEvent *event)
+{
+    // not change focus index when the right menu pop-up.
+    if (event->reason() != Qt::PopupFocusReason) {
+        this->clearSelection();
+        m_currentIndex = -1;
+        m_currModelIndex = this->model()->index(-1, -1);
+        emit signalCurrentIndexRow(-1);
+    }
+
+    DListView::focusOutEvent(event);
+}
+
 /**
  * @brief event 事件
  */
@@ -286,14 +299,6 @@ bool PackagesListView::event(QEvent *event)
         } else {
             emit signalChangeItemHeight(52 + 2 * (DFontSizeManager::fontPixelSize(qGuiApp->font()) - 13));
         }
-    }
-
-    // 焦点切出事件
-    if (event->type() == QEvent::FocusOut) {
-        this->clearSelection();
-        m_currentIndex = -1;
-        m_currModelIndex = this->model()->index(-1, -1);
-        emit signalCurrentIndexRow(-1);
     }
 
     return DListView::event(event);

@@ -343,11 +343,30 @@ Pkg::PackageType Utils::detectPackage(const QString &filePath)
 
     if (info.suffix().toLower() == "deb" || mime.name().startsWith("application/vnd.debian.binary-package")) {
         return Pkg::Deb;
-    } else if (info.suffix().toLower() == "uab") {
+    }
+    if (info.suffix().toLower() == "uab") {
         return Pkg::Uab;
     }
 
     return Pkg::UnknownPackage;
+}
+
+/**
+ * @brief Get the icon based on the package \a type .
+ */
+QIcon Utils::packageIcon(Pkg::PackageType type)
+{
+    // TODO: check icon name
+    if (Pkg::Uab == type) {
+        // linglong uab package
+        const QIcon icon = QIcon::fromTheme("application-x-uab");
+        if (icon.isNull()) {
+            return QIcon::fromTheme("application-default-icon");
+        }
+    } else {
+        // default, deb package
+        return QIcon::fromTheme("application-x-deb");
+    }
 }
 
 /**

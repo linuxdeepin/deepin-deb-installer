@@ -12,6 +12,7 @@
 #include <QDebug>
 
 #include "uab_backend.h"
+#include "uab_dbus_package_manager.h"
 
 namespace Uab {
 
@@ -29,14 +30,41 @@ const QString kJsonMessage = "messsage";
 
 const int kInitedIndex = -1;
 
-enum UabCode {
-    UabError = -1,
-    UabSuccess = 0,
-};
-
 UabProcessController::UabProcessController(QObject *parent)
     : QObject{parent}
 {
+    if (UabDBusPackageManager::instance()->isValid()) {
+        setProcessType(DBus);
+    } else {
+        setProcessType(Cli);
+    }
+}
+
+void UabProcessController::setProcessType(ProcessType type)
+{
+    if (type == m_type) {
+        return;
+    }
+    m_type = type;
+
+    if (DBus == type) {
+        QObject::connect(UabDBusPackageManager::instance(),
+                         &UabDBusPackageManager::progressChanged,
+                         this,
+                         &UabProcessController::onDBusProgressChanged);
+        QObject::connect(UabDBusPackageManager::instance(), &UabDBusPackageManager::packageFinished, this, [this](bool success) {
+            const int ret = success ? UabSuccess : UabError;
+            onFinished(ret, ret);
+        });
+
+    } else {
+        QObject::disconnect(UabDBusPackageManager::instance(), nullptr, this, nullptr);
+    }
+}
+
+UabProcessController::ProcessType UabProcessController::processType() const
+{
+    return m_type;
 }
 
 UabProcessController::ProcFlags UabProcessController::procFlag() const
@@ -71,7 +99,7 @@ bool UabProcessController::reset()
 
 bool Uab::UabProcessController::markInstall(const UabPackage::Ptr &installPtr)
 {
-    if (isRunning() || !ensureProcess()) {
+    if (isRunning() || !ensureProcess() || !installPtr || !installPtr->isValid()) {
         return false;
     }
 
@@ -81,7 +109,7 @@ bool Uab::UabProcessController::markInstall(const UabPackage::Ptr &installPtr)
 
 bool Uab::UabProcessController::markUninstall(const UabPackage::Ptr &uninstallPtr)
 {
-    if (isRunning() || !ensureProcess()) {
+    if (isRunning() || !ensureProcess() || !uninstallPtr || !uninstallPtr->isValid()) {
         return false;
     }
 
@@ -156,13 +184,8 @@ void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
         // maybe percentage info
         const QJsonObject obj = doc.array().first().toObject();
         if (obj.contains(kJsonPercentage)) {
-            double progress = obj.value(kJsonPercentage).toDouble();
-            const int count = m_procList.size();
-            if (count > 1) {
-                progress = (m_currentIndex * 100.0f + progress) / count;
-            }
-
-            Q_EMIT progressChanged(static_cast<float>(progress));
+            float progress = obj.value(kJsonPercentage).toDouble();
+            updateWholeProgress(progress);
         }
 
     } else if (doc.isObject()) {
@@ -194,14 +217,18 @@ void UabProcessController::parseProgressFromRawOutput(const QByteArray &output)
     if (match.hasMatch()) {
         // get (\\d+) capture
         float progress = match.captured(match.lastCapturedIndex()).toFloat();
-
-        int count = m_procList.size();
-        if (count > 1) {
-            progress = (m_currentIndex * 100.0f + progress) / count;
-        }
-
-        Q_EMIT progressChanged(progress);
+        updateWholeProgress(progress);
     }
+}
+
+void UabProcessController::updateWholeProgress(float currentTaskProgress)
+{
+    const int count = m_procList.size();
+    if (count > 1) {
+        currentTaskProgress = (m_currentIndex * 100.0f + currentTaskProgress) / static_cast<float>(count);
+    }
+
+    Q_EMIT progressChanged(currentTaskProgress);
 }
 
 void UabProcessController::onReadOutput()
@@ -234,6 +261,12 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
     Q_EMIT processFinished(false);
 }
 
+void UabProcessController::onDBusProgressChanged(int progress, const QString &message)
+{
+    updateWholeProgress(static_cast<float>(progress));
+    Q_EMIT processOutput(message);
+}
+
 bool UabProcessController::nextProcess()
 {
     m_procFlag.setFlag(Installing, false);
@@ -255,9 +288,9 @@ bool UabProcessController::nextProcess()
     const auto &currentProc = m_procList.at(m_currentIndex);
     switch (currentProc.first) {
         case Installing:
-            return installImpl(currentProc.second);
+            return (DBus == m_type) ? installDBusImpl(currentProc.second) : installCliImpl(currentProc.second);
         case Uninstalling:
-            return uninstallImpl(currentProc.second);
+            return (DBus == m_type) ? uninstallDBusImpl(currentProc.second) : uninstallCliImpl(currentProc.second);
         default:
             break;
     }
@@ -266,7 +299,27 @@ bool UabProcessController::nextProcess()
     return false;
 }
 
-bool Uab::UabProcessController::installImpl(const Uab::UabPackage::Ptr &installPtr)
+bool UabProcessController::installDBusImpl(const UabPackage::Ptr &installPtr)
+{
+    if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
+        return false;
+    }
+
+    m_procFlag.setFlag(Installing);
+    return UabDBusPackageManager::instance()->installFormFile(installPtr);
+}
+
+bool UabProcessController::uninstallDBusImpl(const UabPackage::Ptr &uninstallPtr)
+{
+    if (!uninstallPtr || !uninstallPtr->isValid()) {
+        return false;
+    }
+
+    m_procFlag.setFlag(Uninstalling);
+    return UabDBusPackageManager::instance()->uninstall(uninstallPtr);
+}
+
+bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &installPtr)
 {
     if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
         return false;
@@ -290,7 +343,7 @@ bool Uab::UabProcessController::installImpl(const Uab::UabPackage::Ptr &installP
     return true;
 }
 
-bool Uab::UabProcessController::uninstallImpl(const Uab::UabPackage::Ptr &uninstallPtr)
+bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uninstallPtr)
 {
     if (!uninstallPtr || !uninstallPtr->isValid()) {
         return false;

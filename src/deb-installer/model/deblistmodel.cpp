@@ -297,6 +297,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             else
                 return Pkg::PackageOperationStatus::Prepare;
         }
+        case PackageTypeRole:
+            return Pkg::Deb;
         case PackageDependsDetailRole:
             return QVariant::fromValue(m_packagesManager->getPackageDependsDetail(currentRow));
         case Qt::SizeHintRole:  // 设置当前index的大小
@@ -1370,7 +1372,7 @@ void DebListModel::slotUpWrongStatusRow()
             installErrorPackages.append(iteratorpackageOperateStatus.key());                      // 保存下标
         }
         // 保存安装失败的包
-        if (iteratorpackageOperateStatus.value() == Success) {
+        if (iteratorpackageOperateStatus.value() == Pkg::PackageOperationStatus::Success) {
             installSuccessPackages.append(iteratorpackageOperateStatus.key());
         }
     }

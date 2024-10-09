@@ -132,6 +132,12 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
     m_dependsInfomation->appendText(requiredList.join(", "));
 }
 
+void UninstallConfirmPage::setPackageType(Pkg::PackageType type)
+{
+    QIcon icon = Utils::packageIcon(type);
+    m_icon->setPixmap(icon.pixmap(m_icon->size()));
+}
+
 void UninstallConfirmPage::showEvent(QShowEvent *e)
 {
     // 每次展示时设置默认焦点

@@ -90,7 +90,7 @@ Q_SIGNALS:
     void signalAppendStart();
     void signalAppendFinished();
     // manange package insert failed reason
-    void signalAppendFailMessage(Pkg::AppendFailReason reason);
+    void signalAppendFailMessage(Pkg::AppendFailReason reason, Pkg::PackageType type = Pkg::Deb);
     // manage package appended and remove
     void signalPackageCountChanged(int count);
 

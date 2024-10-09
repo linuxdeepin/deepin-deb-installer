@@ -148,7 +148,7 @@ void FileChooseWidget::chooseFiles()
     // 为DFileDialog指定父对象
     DFileDialog dialog(this);  // 获取文件
     dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setNameFilter("Debian Package Files (*.deb)");
+    dialog.setNameFilter("Debian / Linglong Package Files (*.deb *.uab)");
     dialog.setDirectory(historyDir);  // 设置打开的路径为保存的路径
     auto mode = dialog.exec();        // 打开文件选择窗口
 

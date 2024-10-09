@@ -17,24 +17,24 @@ public:
 
     explicit UabPackage(const Uab::UabPkgInfo::Ptr &metaPtr);
 
-    const Uab::UabPkgInfo::Ptr &info() const;
-    bool isValid() const;
+    [[nodiscard]] const Uab::UabPkgInfo::Ptr &info() const;
+    [[nodiscard]] bool isValid() const;
     void setDependsStatus(Pkg::DependsStatus status);
     void setProcessError(Pkg::ErrorCode err, const QString &errorString);
-    bool fileExists() const;
+    [[nodiscard]] bool fileExists() const;
     void markNotExists();
 
-    Pkg::DependsStatus dependsStatus() const;
-    Pkg::PackageInstallStatus installStatus() const;
-    Pkg::PackageOperationStatus operationStatus() const;
-    Pkg::ErrorCode errorCode() const;
+    [[nodiscard]] Pkg::DependsStatus dependsStatus() const;
+    [[nodiscard]] Pkg::PackageInstallStatus installStatus() const;
+    [[nodiscard]] Pkg::PackageOperationStatus operationStatus() const;
+    [[nodiscard]] Pkg::ErrorCode errorCode() const;
 
-    QString installedVersion() const;
-    QString failedReason() const;
-    QString processError() const;
+    [[nodiscard]] QString installedVersion() const;
+    [[nodiscard]] QString failedReason() const;
+    [[nodiscard]] QString processError() const;
 
-    static UabPackage::Ptr fromInfo(const Uab::UabPkgInfo::Ptr &infoPtr);
-    static UabPackage::Ptr fromFilePath(const QString &filePath);
+    [[nodiscard]] static UabPackage::Ptr fromInfo(const Uab::UabPkgInfo::Ptr &infoPtr);
+    [[nodiscard]] static UabPackage::Ptr fromFilePath(const QString &filePath);
 
 private:
     void reset();

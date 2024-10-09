@@ -39,6 +39,7 @@ static const QString kUabName = "name";
 static const QString kUabVersion = "version";
 static const QString kUabArch = "arch";
 static const QString kUabChannel = "channel";
+static const QString kUabModule = "module";
 static const QString kUabDescription = "description";
 
 UabBackend::UabBackend(QObject *parent)
@@ -84,11 +85,11 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
 }
 
 /**
-   @brief Find package named \a packageId , the return package is
-        the latest version of the installed packages.
+   @brief Find package named \a packageId , and version equal \a version
+        If \a version is empty, the return package is the latest version of the installed packages.
    @return Uab package pointer, or null if not found.
  */
-UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId)
+UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId, const QString &version)
 {
     if (!backendInited()) {
         m_lastError = QString("uab backend not init");
@@ -104,8 +105,13 @@ UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId)
                                 packageId,
                                 [](const QString &findPkg, const UabPkgInfo::Ptr &uabPtr) { return findPkg <= uabPtr->id; });
 
-    if ((m_packageList.end() != itr) && ((*itr)->id == packageId)) {
-        return *itr;
+    // versions with the same ID are listed in descending order
+    while ((m_packageList.end() != itr) && ((*itr)->id == packageId)) {
+        if (version.isEmpty() || ((*itr)->version == version)) {
+            return *itr;
+        }
+
+        itr++;
     }
 
     return {};
@@ -191,6 +197,7 @@ bool UabBackend::parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabP
         uabPtr->appName = item.value(kUabName).toString();
         uabPtr->version = item.value(kUabVersion).toString();
         uabPtr->channel = item.value(kUabChannel).toString();
+        uabPtr->module = item.value(kUabModule).toString();
         uabPtr->description = item.value(kUabDescription).toString();
 
         QJsonArray archArray = item.value(kUabArch).toArray();
@@ -212,7 +219,6 @@ bool UabBackend::parsePackagesFromRawOutput(const QByteArray &output, QList<UabP
     stream.readLine();
 
     QString arch;
-    QString deprecated;
 
     while (!stream.atEnd()) {
         auto uabPtr = UabPkgInfo::Ptr::create();
@@ -223,7 +229,7 @@ bool UabBackend::parsePackagesFromRawOutput(const QByteArray &output, QList<UabP
         stream >> uabPtr->version;
         stream >> arch;
         stream >> uabPtr->channel;
-        stream >> deprecated;
+        stream >> uabPtr->module;
 
         uabPtr->architecture.append(arch);
         // to the end of the line
@@ -354,6 +360,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString 
         uabPtr->version = info[kUabVersion].toString();
         uabPtr->description = info[kUabDescription].toString();
         uabPtr->channel = info[kUabChannel].toString();
+        uabPtr->module = info[kUabModule].toString();
 
         const QJsonArray archArray = info[kUabArch].toArray();
         for (const QJsonValue &archValue : archArray) {
@@ -400,6 +407,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug out, const Uab::UabPkgInfo &uabPkg)
     out << Uab::kUabVersion << ":" << uabPkg.version << ";";
     out << Uab::kUabArch << ":" << uabPkg.architecture << ";";
     out << Uab::kUabChannel << ":" << uabPkg.channel << ";";
+    out << Uab::kUabModule << ":" << uabPkg.module << ";";
     out << Uab::kUabDescription << ":" << uabPkg.description << ";";
     out << "filePath:" << uabPkg.filePath << ";";
 

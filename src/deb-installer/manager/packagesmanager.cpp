@@ -832,7 +832,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                         break;
                     }
 
-                    if (!m_dependInstallMark.contains(currentPackageMd5)) { 
+                    if (!m_dependInstallMark.contains(currentPackageMd5)) {
                         // replace the marker that the depends error
                         GlobalStatus::setWinePreDependsInstalling(true);
 
@@ -1537,25 +1537,7 @@ void PackagesManager::appendNoThread(const QStringList &packages, int allPackage
 void PackagesManager::refreshPage(int validPkgCount)
 {
     // 获取当前已经添加到程序中的包的数量
-    int packageCount = m_preparedPackages.size();
-    // if (1 == packageCount) { //当前程序中只添加了一个包
-    //     if (1 == validPkgCount) { //此次只有一个包将会被添加的程序中
-    //         emit signalRefreshSinglePage();   //刷新单包安装界面
-
-    //     } else if (validPkgCount > 1) { //当前程序中值添加了一个包，但是这次有不止一个包将会被添加到程序中
-    //         emit signalSingle2MultiPage();     //刷新批量安装界面
-    //         emit signalAppendStart();          //开始批量添加
-    //     }
-    // } else if (2 == packageCount) {
-    //     //当前程序中已经添加了两个包
-    //     //1.第一次是添加了一个包，第二次又添加了多于一个包
-    //     emit signalSingle2MultiPage();        //刷新批量安装界面
-    //     emit signalAppendStart();             //发送批量添加信号
-    // } else {
-    //     //此时批量安装界面已经刷新过。如果再添加，就只刷新model
-    //     emit signalRefreshMultiPage();
-    //     emit signalAppendStart();
-    // }
+    const int packageCount = m_preparedPackages.size();
 
     Q_EMIT signalPackageCountChanged(packageCount);
     // If current first append and only one package, will append directly.

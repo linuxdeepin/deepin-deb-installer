@@ -59,7 +59,7 @@ Q_SIGNALS:
     void signalAppendFinished();
 
     // Manange package insert failed reason.
-    void signalAppendFailMessage(Pkg::AppendFailReason reason);
+    void signalAppendFailMessage(Pkg::AppendFailReason reason, Pkg::PackageType type = Pkg::Deb);
 
 private:
     // 要添加的软件包列表

@@ -77,6 +77,8 @@ QVariant UabPackageListModel::data(const QModelIndex &index, int role) const
             return uabPtr->failedReason();
         case PackageOperateStatusRole:
             return uabPtr->operationStatus();
+        case PackageTypeRole:
+            return Pkg::Uab;
 
         case Qt::SizeHintRole:
             return QSize(0, 48);
@@ -343,12 +345,30 @@ bool UabPackageListModel::installNextUab()
     setCurrentOperation(Pkg::Operating);
 
     m_processor->reset();
-    switch (uabPtr->installStatus()) {
+
+    // Note: Current Linglong environment supports multi version package same time,
+    //       check if install same version package.
+    Pkg::PackageInstallStatus installStatus = uabPtr->installStatus();
+    if (Pkg::InstalledLaterVersion == installStatus) {
+        if (auto sameInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version)) {
+            const int ret = Utils::compareVersion(uabPtr->info()->version, sameInfoPtr->version);
+
+            if (ret == 0) {
+                installStatus = Pkg::InstalledSameVersion;
+            } else if (ret < 0) {
+                installStatus = Pkg::InstalledLaterVersion;
+            } else {
+                installStatus = Pkg::InstalledEarlierVersion;
+            }
+        }
+    }
+
+    switch (installStatus) {
         case Pkg::NotInstalled:
             m_processor->markInstall(uabPtr);
             break;
         case Pkg::InstalledSameVersion: {
-            auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
+            auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version);
             m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
             m_processor->markInstall(uabPtr);
         } break;
@@ -427,10 +447,10 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
     auto readablilty = Utils::checkPackageReadable(packagePath);
     switch (readablilty) {
         case Pkg::PkgNotInLocal:
-            Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotLocal, Pkg::Uab);
             return {};
         case Pkg::PkgNoPermission:
-            Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable);
+            Q_EMIT signalAppendFailMessage(Pkg::PackageNotInstallable, Pkg::Uab);
             return {};
         default:
             break;
@@ -438,12 +458,12 @@ UabPackage::Ptr UabPackageListModel::preCheckPackage(const QString &packagePath)
 
     auto uabPtr = Uab::UabPackage::fromFilePath(packagePath);
     if (!uabPtr || !uabPtr->isValid()) {
-        Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid);
+        Q_EMIT signalAppendFailMessage(Pkg::PackageInvalid, Pkg::Uab);
         return {};
     }
 
     if (packageExists(uabPtr)) {
-        Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists);
+        Q_EMIT signalAppendFailMessage(Pkg::PackageAlreadyExists, Pkg::Uab);
         return {};
     }
 

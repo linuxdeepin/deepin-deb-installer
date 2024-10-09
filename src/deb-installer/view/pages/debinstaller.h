@@ -71,17 +71,17 @@ private slots:
     void slotDdimSelected(const QStringList &ddimFiles);
 
     // Append package failed, show floating message based on diff error.
-    void slotReceiveAppendFailed(Pkg::AppendFailReason reason);
+    void slotReceiveAppendFailed(Pkg::AppendFailReason reason, Pkg::PackageType type);
 
     /**
      * @brief slotShowInvalidePackageMessage 弹出无效包的消息通知
      */
-    void slotShowInvalidePackageMessage();
+    void slotShowInvalidePackageMessage(Pkg::PackageType type);
 
     /**
      * @brief slotShowNotLocalPackageMessage 弹出不是本地包的消息通知
      */
-    void slotShowNotLocalPackageMessage();
+    void slotShowNotLocalPackageMessage(Pkg::PackageType type);
 
     /**
      * @brief slotShowNotInstallablePackageMessage 弹出无安装权限的消息通知

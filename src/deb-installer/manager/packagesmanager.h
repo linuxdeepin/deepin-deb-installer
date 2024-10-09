@@ -115,7 +115,7 @@ signals:
     ////添加包相关信号
 signals:
     // Manange package insert failed reason.
-    void signalAppendFailMessage(Pkg::AppendFailReason reason);
+    void signalAppendFailMessage(Pkg::AppendFailReason reason, Pkg::PackageType type = Pkg::Deb);
 
     /**
      * @brief appendStart 批量安装开始添加包的信号

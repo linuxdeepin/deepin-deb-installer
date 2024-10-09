@@ -11,22 +11,10 @@
 
 namespace Uab {
 
-enum class UabStatus {
-    Uninstall,
-    Installed,
-    Removed,
-
-    UabArchError,
-    UabInstallError,  // Unknown
-
-    LessVer,
-    EqualVer,
-    GreaterVer,
-
-    PrepareUninstall,
-    PrepareInstall,
-
-    PreDependsError,
+// return code from CLI or DBus interface
+enum UabCode {
+    UabError = -1,
+    UabSuccess = 0,
 };
 
 struct UabPkgInfo
@@ -40,6 +28,7 @@ struct UabPkgInfo
     QStringList architecture;  // uab package may support multiple arch
     QString description;
     QString channel;
+    QString module;
 };
 
 };  // namespace Uab

@@ -691,17 +691,17 @@ void DebInstaller::refreshMulti()
     MulRefreshPage();
 }
 
-void DebInstaller::slotReceiveAppendFailed(Pkg::AppendFailReason reason)
+void DebInstaller::slotReceiveAppendFailed(Pkg::AppendFailReason reason, Pkg::PackageType type)
 {
     switch (reason) {
         case Pkg::PackageInvalid:
-            slotShowInvalidePackageMessage();
+            slotShowInvalidePackageMessage(type);
             break;
         case Pkg::PackageNotDdim:
             slotShowDdimFloatingMessage(tr("Installing other packages... Please open it later."));
             break;
         case Pkg::PackageNotLocal:
-            slotShowNotLocalPackageMessage();
+            slotShowNotLocalPackageMessage(type);
             break;
         case Pkg::PackageNotInstallable:
             slotShowNotInstallablePackageMessage();
@@ -714,20 +714,20 @@ void DebInstaller::slotReceiveAppendFailed(Pkg::AppendFailReason reason)
     }
 }
 
-void DebInstaller::slotShowInvalidePackageMessage()
+void DebInstaller::slotShowInvalidePackageMessage(Pkg::PackageType type)
 {
     DFloatingMessage *floatingMsg = new DFloatingMessage;
-    floatingMsg->setMessage(tr("The deb package may be broken"));
+    floatingMsg->setMessage(tr("The %1 package may be broken").arg(Pkg::Uab == type ? "uab" : "deb"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
-    DMessageManager::instance()->sendMessage(this, floatingMsg);  // 如果损坏，提示
+    DMessageManager::instance()->sendMessage(this, floatingMsg);
 }
 
-void DebInstaller::slotShowNotLocalPackageMessage()
+void DebInstaller::slotShowNotLocalPackageMessage(Pkg::PackageType type)
 {
     DFloatingMessage *floatingMsg = new DFloatingMessage;
-    floatingMsg->setMessage(tr("You can only install local deb packages"));
+    floatingMsg->setMessage(tr("You can only install local %1 packages").arg(Pkg::Uab == type ? "uab" : "deb"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
-    DMessageManager::instance()->sendMessage(this, floatingMsg);  // 如果损坏，提示
+    DMessageManager::instance()->sendMessage(this, floatingMsg);
 }
 
 void DebInstaller::slotShowNotInstallablePackageMessage()
@@ -735,7 +735,7 @@ void DebInstaller::slotShowNotInstallablePackageMessage()
     DFloatingMessage *floatingMsg = new DFloatingMessage;
     floatingMsg->setMessage(tr("No permission to access this folder"));
     floatingMsg->setIcon(QIcon::fromTheme("di_warning"));
-    DMessageManager::instance()->sendMessage(this, floatingMsg);  // 如果损坏，提示
+    DMessageManager::instance()->sendMessage(this, floatingMsg);
 }
 
 void DebInstaller::slotShowPkgExistMessage()
@@ -792,6 +792,7 @@ void DebInstaller::slotShowUninstallConfirmPage()
     const QModelIndex index = m_fileListModel->index(0);  // 只有单包才有卸载界面
 
     m_uninstallPage = new UninstallConfirmPage(this);  // 初始化卸载页面
+    m_uninstallPage->setPackageType(index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>());
     m_uninstallPage->setRequiredList(
         index.data(DebListModel::PackageReverseDependsListRole).toStringList());  // 查看是否有包依赖于当前要卸载的包，病获取列表
     m_uninstallPage->setPackage(index.data().toString());                         // 添加卸载提示语
