@@ -80,7 +80,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="728"/>
         <source>You can only install local %1 packages</source>
-        <translation>Sólo puedes instalar %1 paquetes locales</translation>
+        <translation>Sólo puede instalar %1 paquetes locales</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
         <source>Unable to install</source>
-        <translation>Incapaz de instalar</translation>
+        <translation>No se puede instalar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
