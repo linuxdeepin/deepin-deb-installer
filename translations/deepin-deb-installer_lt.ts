@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="963"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko įdiegti – nėra skaitmeninio parašo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="964"/>
@@ -237,7 +237,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="123"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko nustatyti tapatybės</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="619"/>
@@ -589,7 +589,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="47"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti priklausomybes</translation>
     </message>
 </context>
 <context>
