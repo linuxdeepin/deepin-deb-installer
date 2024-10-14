@@ -8,7 +8,7 @@
 #include <QDBusUnixFileDescriptor>
 #include <QFile>
 #include <QFileInfo>
-#include <QTimer>
+#include <QtConcurrent/QtConcurrentRun>
 #include <QDebug>
 
 namespace Uab {
@@ -153,6 +153,12 @@ bool UabDBusPackageManager::installFormFile(const UabPackage::Ptr &installPtr)
     return true;
 }
 
+/**
+   @brief Uninstall \a uninstallPtr package.
+    This function will return immediately, and the uninstall process will run in the thread-pool,
+    avoid the dbus interface blocks threads.
+   @return True if uninstall start, false if \a uninstallPtr invalid or is running
+ */
 bool UabDBusPackageManager::uninstall(const UabPackage::Ptr &uninstallPtr)
 {
     if (!uninstallPtr || !uninstallPtr->isValid() || isRunning()) {
@@ -160,40 +166,57 @@ bool UabDBusPackageManager::uninstall(const UabPackage::Ptr &uninstallPtr)
     }
     ensureInterface();
 
-    QVariantMap pkgParams;
-    pkgParams[kllParamId] = uninstallPtr->info()->id;
-    pkgParams[kllParamVersion] = uninstallPtr->info()->version;
-    pkgParams[kllParamChannel] = uninstallPtr->info()->channel;
-    pkgParams[kllParamModule] = uninstallPtr->info()->module;
-    QVariantMap params;
-    params[kllParamPackage] = pkgParams;
+    m_currentTask.taskId = "mark uninstall";
 
-    QDBusReply<QVariantMap> reply = m_interface->call(kllDBusUninstall, params);
-    if (reply.error().isValid()) {
-        qWarning() << qPrintable("call LinglongPM dbus fails:") << reply.error().message();
-        return false;
-    }
+    QtConcurrent::run([this, uninstallPtr]() {
+        bool callRet{false};
+        QString message;
 
-    const QVariantMap data = reply.value();
-    const int code = data.value(kllRetCode).toInt();
-    if (Uab::UabSuccess != code) {
-        qWarning() << QString("LinglingPM return error: [%1] %2").arg(code).arg(data.value(kllRetMessage).toString());
-        return false;
-    }
+        do {
+            QVariantMap pkgParams;
+            pkgParams[kllParamId] = uninstallPtr->info()->id;
+            pkgParams[kllParamVersion] = uninstallPtr->info()->version;
+            pkgParams[kllParamChannel] = uninstallPtr->info()->channel;
+            pkgParams[kllParamModule] = uninstallPtr->info()->module;
+            QVariantMap params;
+            params[kllParamPackage] = pkgParams;
 
-    m_currentTask.taskId = data.value(kllRetTaskId).toString();
-    m_currentTask.code = code;
-    m_currentTask.message = data.value(kllRetMessage).toString();
+            QDBusReply<QVariantMap> reply = m_interface->call(kllDBusUninstall, params);
+            if (reply.error().isValid()) {
+                qWarning() << qPrintable("call LinglongPM dbus fails:") << reply.error().message();
+                break;
+            }
 
-    qInfo() << QString("Requset LinglingPM uninstall: %1/%2 [message]: %3")
-                   .arg(uninstallPtr->info()->id)
-                   .arg(uninstallPtr->info()->version)
-                   .arg(m_currentTask.message);
+            const QVariantMap data = reply.value();
+            const int code = data.value(kllRetCode).toInt();
+            if (Uab::UabSuccess != code) {
+                message = data.value(kllRetMessage).toString();
+                qWarning() << QString("LinglingPM return error: [%1] %2").arg(code).arg(message);
+                break;
+            }
 
-    QTimer::singleShot(0, this, [this]() {
-        Q_EMIT progressChanged(100, m_currentTask.message);
-        Q_EMIT packageFinished(true);
+            const QString taskId = data.value(kllRetTaskId).toString();
+            message = data.value(kllRetMessage).toString();
+
+            qInfo() << QString("Requset LinglingPM uninstall: %1/%2 [message]: %3")
+                           .arg(uninstallPtr->info()->id)
+                           .arg(uninstallPtr->info()->version)
+                           .arg(message);
+
+            callRet = true;
+        } while (false);
+
+        // notify on package manager thread
+        QMetaObject::invokeMethod(
+            this,
+            [this, message, callRet]() {
+                m_currentTask.taskId.clear();
+                Q_EMIT progressChanged(callRet ? 100 : 0, message);
+                Q_EMIT packageFinished(callRet);
+            },
+            Qt::QueuedConnection);
     });
+
     // uninstall not need receive task info, remove imdealtly and fast
     return true;
 }
