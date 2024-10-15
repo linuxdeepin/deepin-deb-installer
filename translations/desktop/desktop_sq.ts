@@ -11,7 +11,7 @@
 <message>
     <location filename="Desktop Entry]Comment" line="0"/>
     <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-    <translation>Instaluesi i Paketave i ndihmon përdoruesit të instalojnë dhe heqin paketa vendore, dhe mbulon instalime në masë.</translation>
+    <translation>Instaluesi i Paketave i ndihmon përdoruesit të instalojnë dhe heqin paketa vendore dhe mbulon instalime në masë.</translation>
 </message>
 </context>
 </TS>
