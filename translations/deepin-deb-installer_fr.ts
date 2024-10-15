@@ -75,17 +75,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="720"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Le paquet %1 est peut-être cassé</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="728"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Vous ne pouvez installer que %1 paquets locaux</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Vous n&apos;avez pas la permission d&apos;accéder à ce dossier</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;environnement Linglong n&apos;est pas installé sur ce système, veuillez d&apos;abord l&apos;installer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
