@@ -376,7 +376,11 @@ private:
     //带replaces的检查，如果判定待安装包可以替换冲突包，则认为不构成冲突
     const ConflictResult isConflictSatisfy(const QString &arch,
                                            const QList<DependencyItem> &conflicts,
-                                           const QList<DependencyItem> &replaces);
+                                           const QList<DependencyItem> &replaces,
+                                           QApt::Package *targetPackage = nullptr);
+
+    // detect if targetPackage can replace installedPackage
+    bool targetPackageCanReplace(QApt::Package *targetPackage, QApt::Package *installedPackage);
 
 //// 依赖查找 获取查找包是否为消极的反向依赖
 private:
