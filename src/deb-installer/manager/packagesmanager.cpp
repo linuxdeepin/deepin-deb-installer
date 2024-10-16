@@ -395,7 +395,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Pac
         return ret_installed;
     }
 
-    const auto conflictStatus = isConflictSatisfy(arch, package->conflicts(), package->replaces());
+    const auto conflictStatus = isConflictSatisfy(arch, package->conflicts(), package->replaces(), package);
 
     return conflictStatus;
 }
@@ -470,7 +470,8 @@ PackagesManager::isInstalledConflict(const QString &packageName, const QString &
 
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
                                                         const QList<DependencyItem> &conflicts,
-                                                        const QList<DependencyItem> &replaces)
+                                                        const QList<DependencyItem> &replaces,
+                                                        QApt::Package *targetPackage)
 {
     for (const auto &conflict_list : conflicts) {
         for (const auto &conflict : conflict_list) {
@@ -537,6 +538,11 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
                     }
                 }
 
+                // check current package and conflict package provides same package, can be replaced
+                if (conflict_yes && targetPackage) {
+                    conflict_yes = !targetPackageCanReplace(targetPackage, package);
+                }
+
                 if (!conflict_yes) {
                     package = nullptr;
                     continue;
@@ -550,6 +556,110 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
         }
     }
     return ConflictResult::ok(QString());
+}
+
+/**
+   @brief Check if \a targetPackage can replace conflict package \a installedPackage.
+    If \a targetPackage provides \a installedPackage 's reverse depends package dependencies,
+   @return True if \a targetPackage meets provides depends or or depends, otherwise false.
+ */
+bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt::Package *installedPackage)
+{
+    if (!targetPackage || !installedPackage) {
+        return false;
+    }
+
+    Backend *backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        return false;
+    }
+
+    auto rdepends = installedPackage->requiredByList().toSet();
+    // itself package
+    rdepends.remove(targetPackage->name());
+    // conflict package
+    rdepends.remove(installedPackage->name());
+
+    // provides package
+    auto targetProvides = targetPackage->providesListEnhance();
+    auto installedProvides = installedPackage->providesListEnhance();
+    QMap<QString, QString> canReplaceProvides;
+    for (auto itr = installedProvides.begin(); itr != installedProvides.end(); ++itr) {
+        if (targetProvides.contains(itr.key())) {
+            canReplaceProvides.insert(itr.key(), targetProvides.value(itr.key()));
+        }
+    }
+
+    bool replaceable = false;
+    bool containsInstalledProvides = false;
+
+    // requiredByList contains depends, conflicts, recommends, etc.
+    // we focus on depends, so only check provides depends and or depends.
+    for (const QString &rdependName: rdepends) {
+        QApt::Package *rdependPackage = backend->package(rdependName);
+        if (!rdependPackage || !rdependPackage->isInstalled()) {
+            continue;
+        }
+
+        QList<DependencyItem> rdependsDep = rdependPackage->depends();
+        for (const DependencyItem &item : rdependsDep) {
+            replaceable = false;
+
+            // or depends
+            for (const DependencyInfo &info : item) {
+                // support provides
+                if (canReplaceProvides.contains(info.packageName())) {
+                    containsInstalledProvides = true;
+
+                    // check version match
+                    QString version = canReplaceProvides.value(info.packageName());
+                    if (!version.isEmpty()) {
+                        const auto type = info.relationType();
+                        const auto result = Package::compareVersion(version, info.packageVersion());
+                        if (!dependencyVersionMatch(result, type)) {
+                            replaceable = false;
+                            break;
+                        }
+                    }
+
+                    replaceable = true;
+                    break;
+                }
+
+                // support depends
+                if (info.packageName() == targetPackage->name()) {
+                    const auto type = info.relationType();
+                    const auto result = Package::compareVersion(targetPackage->version(), info.packageVersion());
+                    if (!dependencyVersionMatch(result, type)) {
+                        replaceable = false;
+                    }
+
+                    replaceable = true;
+                    break;
+                }
+
+                if (info.packageName() == installedPackage->name()) {
+                    containsInstalledProvides = true;
+                }
+            }
+
+            // current or depends contains installedPackage but not contains targetPackage.
+            if (!replaceable && containsInstalledProvides) {
+                qWarning() << QString("Package (%1) can't replace (%2), not support (%3)")
+                            .arg(targetPackage->name())
+                            .arg(installedPackage->name())
+                            .arg(rdependPackage->name());
+                return false;
+            }
+
+            // the current package satisfies the constraint
+            if (replaceable) {
+                break;
+            }
+        }
+    }
+
+    return true;
 }
 
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, const QList<DependencyItem> &conflicts)
@@ -1844,6 +1954,7 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
                 }
             }
         }
+
         // let's check conflicts
         if (!isConflictSatisfy(realArch, package).is_ok()) {
             Backend *backend = PackageAnalyzer::instance().backendPtr();
