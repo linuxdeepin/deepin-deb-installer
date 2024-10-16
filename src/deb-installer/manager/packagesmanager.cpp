@@ -604,6 +604,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
         QList<DependencyItem> rdependsDep = rdependPackage->depends();
         for (const DependencyItem &item : rdependsDep) {
             replaceable = false;
+            containsInstalledProvides = false;
 
             // or depends
             for (const DependencyInfo &info : item) {
@@ -617,7 +618,6 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                         const auto type = info.relationType();
                         const auto result = Package::compareVersion(version, info.packageVersion());
                         if (!dependencyVersionMatch(result, type)) {
-                            replaceable = false;
                             break;
                         }
                     }
@@ -631,7 +631,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                     const auto type = info.relationType();
                     const auto result = Package::compareVersion(targetPackage->version(), info.packageVersion());
                     if (!dependencyVersionMatch(result, type)) {
-                        replaceable = false;
+                        break;
                     }
 
                     replaceable = true;
