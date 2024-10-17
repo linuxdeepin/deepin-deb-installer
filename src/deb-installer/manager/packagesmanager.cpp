@@ -595,6 +595,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
     rdepends.remove(installedPackage->name());
 
     // provides package
+#ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
     auto targetProvides = targetPackage->providesListEnhance();
     auto installedProvides = installedPackage->providesListEnhance();
     QMap<QString, QString> canReplaceProvides;
@@ -603,6 +604,11 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
             canReplaceProvides.insert(itr.key(), targetProvides.value(itr.key()));
         }
     }
+#else
+    auto targetProvides = targetPackage->providesList().toSet();
+    auto installedProvides = installedPackage->providesList().toSet();
+    QSet<QString> canReplaceProvides = targetProvides.unite(installedProvides);
+#endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
     bool replaceable = false;
     bool containsInstalledProvides = false;
@@ -626,6 +632,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                 if (canReplaceProvides.contains(info.packageName())) {
                     containsInstalledProvides = true;
 
+#ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
                     // check version match
                     QString version = canReplaceProvides.value(info.packageName());
                     if (!version.isEmpty()) {
@@ -635,6 +642,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                             break;
                         }
                     }
+#endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
                     replaceable = true;
                     break;
