@@ -75,17 +75,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="720"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>O pacote %1 pode estar corrompido</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="728"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Você só pode instalar %1 pacotes locais</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Nenhuma permissão para acessar esta pasta</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -163,7 +163,7 @@
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Falha ao instalar %1: Nenhuma assinatura digital válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="963"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>O sistema não instalou o ambiente Linglong, instale-o primeiro</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
