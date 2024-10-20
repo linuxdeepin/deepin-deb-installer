@@ -454,7 +454,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="738"/>
         <source>Collapse</source>
-        <translation>收起</translation>
+        <translation>收 起</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="347"/>
