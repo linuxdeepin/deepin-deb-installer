@@ -61,7 +61,7 @@ private:
 
     QScopedPointer<QDBusInterface> m_interface;
 
-    Q_DISABLE_COPY_MOVE(UabDBusPackageManager)
+    Q_DISABLE_COPY(UabDBusPackageManager)
 };
 
 }  // namespace Uab

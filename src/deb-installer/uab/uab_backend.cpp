@@ -262,7 +262,11 @@ void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
     QSet<QString> archs;
     if (PackageAnalyzer::instance().isBackendReady()) {
         QStringList archList = PackageAnalyzer::instance().supportArchList();
+#if QT_VERSION_CHECK(5, 14, 0) <= QT_VERSION
         archs = QSet<QString>(archList.begin(), archList.end());
+#else
+        archs = archList.toSet();
+#endif
 
         // adapt arch name for uab
         if (archs.contains("amd64")) {

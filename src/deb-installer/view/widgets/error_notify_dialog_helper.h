@@ -18,7 +18,7 @@ public:
     static void showHierarchicalVerifyWindow();
 
 private:
-    Q_DISABLE_COPY_MOVE(ErrorNotifyDialogHelper);
+    Q_DISABLE_COPY(ErrorNotifyDialogHelper)
 };
 
 #endif  // ERROR_NOTIFY_DIALOG_HELPER_H
