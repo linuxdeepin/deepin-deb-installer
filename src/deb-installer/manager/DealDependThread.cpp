@@ -63,7 +63,7 @@ void DealDependThread::run()
     emit signalDependResult(DebListModel::AuthBefore, m_index, m_brokenDepend);
     proc->start("pkexec",
                 QStringList() << "deepin-deb-installer-dependsInstall"
-                              << "InstallDeepinWine" << m_dependsList);
+                              << "--install_wine" << m_dependsList);
     emit signalEnableCloseButton(false);
 }
 

@@ -29,7 +29,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
 string(REGEX REPLACE "(.*)/(.*)" "\\1" PROJECT_INIT_PATH  ${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_INIT_PATH}/deb-installer/process)
 
-file(GLOB_RECURSE AUTH_CPP_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp ${PROJECT_INIT_PATH}/deb-installer/process/*.cpp)
+file(GLOB_RECURSE AUTH_CPP_FILES ${CMAKE_CURRENT_LIST_DIR}/*.h ${CMAKE_CURRENT_LIST_DIR}/*.cpp ${PROJECT_INIT_PATH}/deb-installer/process/*.cpp)
 add_executable (${EXE_NAME}
     ${AUTH_CPP_FILES}
 )
