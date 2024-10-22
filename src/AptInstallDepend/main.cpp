@@ -1,21 +1,20 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2024 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QString>
 #include <QStringList>
 #include <QThread>
-#include <QStandardPaths>
-#include <iostream>
-#include "installDebThread.h"
 
 #include <sys/types.h>
 #include <unistd.h>
+
+#include "installDebThread.h"
 
 bool isValidInvoker()
 {
@@ -57,13 +56,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    QCommandLineParser parser;
-    parser.process(app);
-    const QStringList tParamList = parser.positionalArguments();
-
     InstallDebThread mThread;
-    mThread.setParam(tParamList);
+    mThread.setParam(app.arguments());
     mThread.run();
     mThread.wait();
-    return mThread.m_resultFlag;
+    return mThread.retFlag();
 }
