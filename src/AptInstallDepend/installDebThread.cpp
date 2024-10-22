@@ -1,9 +1,20 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2024 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "installDebThread.h"
 #include <QDebug>
+
+#include "installDebThread.h"
+
+static const QString kParamInstallWine = "install_wine";
+static const QString kParamInstallConfig = "install_config";
+static const QString kParamInstallComaptible = "install_compatible";
+
+static const QString kCompatibleBin = "deepin-compatible-ctl";
+static const QString kCompApp = "app";
+static const QString kCompInstall = "install";
+static const QString kCompRemove = "remove";
+static const QString kCompRootfs = "rootfs";
 
 InstallDebThread::InstallDebThread()
 {
@@ -14,18 +25,47 @@ InstallDebThread::InstallDebThread()
     // 修改输入模式为响应主进程输入，而不是手动管理。
     m_proc->setInputChannelMode(QProcess::ForwardedInputChannel);
 
-    connect(m_proc, SIGNAL(finished(int)), this, SLOT(onFinished(int)));
-    connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readoutput()));
+    connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onFinished(int, QProcess::ExitStatus)));
+    connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(onReadoutput()));
 }
+
 InstallDebThread::~InstallDebThread()
 {
     if (m_proc)
         delete m_proc;
 }
 
-void InstallDebThread::setParam(const QStringList &tParam)
+void InstallDebThread::setParam(const QStringList &arguments)
 {
-    m_listParam = tParam;
+    if (!m_listParam.isEmpty()) {
+        return;
+    }
+
+    // normal command;
+    static QMap<QString, Command> kParamMap{{kParamInstallWine, InstallWine},
+                                            {kParamInstallConfig, InstallConfig},
+                                            {kParamInstallComaptible, Compatible},
+                                            {kCompInstall, Install},
+                                            {kCompRemove, Remove}};
+
+    for (auto itr = kParamMap.begin(); itr != kParamMap.end(); ++itr) {
+        m_parser.addOption(QCommandLineOption(itr.key()));
+    }
+    QCommandLineOption rootfsOpt(kCompRootfs, "", "rootfsname");
+    m_parser.addOption(rootfsOpt);
+
+    m_parser.process(arguments);
+
+    for (auto itr = kParamMap.begin(); itr != kParamMap.end(); ++itr) {
+        if (m_parser.isSet(itr.key())) {
+            m_cmds.setFlag(itr.value());
+        }
+    }
+    if (m_parser.isSet(rootfsOpt)) {
+        m_rootfs = m_parser.value(rootfsOpt);
+    }
+
+    m_listParam = m_parser.positionalArguments();
 }
 
 void InstallDebThread::getDescription(const QString &debPath)
@@ -54,7 +94,7 @@ void InstallDebThread::getDescription(const QString &debPath)
     }
 }
 
-void InstallDebThread::on_readoutput()
+void InstallDebThread::onReadoutput()
 {
     QString tmp = m_proc->readAllStandardOutput().data();
     qDebug() << tmp;
@@ -77,63 +117,136 @@ void InstallDebThread::on_readoutput()
     }
 }
 
-void InstallDebThread::onFinished(int num)
+void InstallDebThread::onFinished(int num, QProcess::ExitStatus exitStatus)
 {
     m_resultFlag = num;
 }
 
 void InstallDebThread::run()
 {
-    if (m_listParam.size() > 0) {
-        if (m_listParam[0] == "InstallDeepinWine") {
-            qDebug() << "StartInstallDeepinwine";
-            QStringList depends;
+    if (m_listParam.isEmpty()) {
+        return;
+    }
 
-            for (int i = 1; i < m_listParam.size(); i++) {
-                depends << m_listParam[i];
-            }
+    if (m_cmds.testFlag(InstallWine)) {
+        installWine();
+    } else if (m_cmds.testFlag(Compatible)) {
+        compatibleProcess();
+    } else if (m_cmds.testFlag(InstallConfig)) {
+        installConfig();
+    }
+}
 
-            system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-            m_proc->setProgram("sudo",
-                               QStringList() << "apt-get"
-                                             << "install" << depends << "--fix-missing"
-                                             << "-y");
-            m_proc->start();
-            m_proc->waitForFinished(-1);
-            m_proc->close();
-        } else if (m_listParam[0] == "InstallConfig") {
-            if (m_listParam.size() <= 1)
-                return;
-            const QFileInfo info(m_listParam[1]);
-            const QFile debFile(m_listParam[1]);
-            QString debPath = m_listParam[1];
-            if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
-                debPath.contains("`")) {  // 过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
-                debPath = SymbolicLink(debPath, "installPackage");
-            }
+/**
+ * @brief Install the Wine dependency package, the incoming param is the wine package name.
+ */
+void InstallDebThread::installWine()
+{
+    if (m_listParam.isEmpty()) {
+        return;
+    }
 
-            if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {  // 大小写不敏感的判断是否为deb后缀
-                qInfo() << "StartInstallAptConfig";
+    system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
+    m_proc->setProgram("sudo",
+                       QStringList() << "apt-get"
+                                     << "install" << m_listParam << "--fix-missing"
+                                     << "-y");
+    m_proc->start();
+    m_proc->waitForFinished(-1);
+    m_proc->close();
+}
 
-                getDescription(debPath);
+/**
+   @brief Install the package that contains DebConf.
+       Work with deepin-deb-installer to handle the configuration process of Deb packages.
+ */
+void InstallDebThread::installConfig()
+{
+    if (m_listParam.isEmpty()) {
+        return;
+    }
 
-                // m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-                //                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
-                m_proc->setProgram("sudo",
-                                   QStringList() << "-S"
-                                                 << "dpkg"
-                                                 << "-i" << debPath);
-                m_proc->start();
-                m_proc->waitForFinished(-1);
+    QString debPath = m_listParam.first();
+    const QFileInfo info(debPath);
+    const QFile debFile(debPath);
 
-                QDir filePath(TEMPLATE_DIR);
-                if (filePath.exists()) {
-                    filePath.removeRecursively();
-                }
+    if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
+        debPath.contains("`")) {  // 过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
+        debPath = SymbolicLink(debPath, "installPackage");
+    }
 
-                m_proc->close();
-            }
+    if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {  // 大小写不敏感的判断是否为deb后缀
+        qInfo() << "StartInstallAptConfig";
+
+        getDescription(debPath);
+
+        // m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
+        //                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
+        m_proc->setProgram("sudo",
+                           QStringList() << "-S"
+                                         << "dpkg"
+                                         << "-i" << debPath);
+        m_proc->start();
+        m_proc->waitForFinished(-1);
+
+        QDir filePath(TEMPLATE_DIR);
+        if (filePath.exists()) {
+            filePath.removeRecursively();
         }
+
+        m_proc->close();
+    }
+}
+
+/**
+   @brief Install / remove package in compatible mode.
+ */
+void InstallDebThread::compatibleProcess()
+{
+    if (m_listParam.isEmpty()) {
+        return;
+    }
+
+    QStringList params;
+
+    if (m_cmds.testFlag(Install)) {
+        // e.g.: deepin-compatible app install [deb file]
+        // only one package support
+        QString debPath = m_listParam.first();
+
+        if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
+            debPath.contains("`")) {
+            debPath = SymbolicLink(debPath, "installPackage");
+        }
+
+        if (m_cmds.testFlag(InstallConfig)) {
+            getDescription(debPath);
+        }
+
+        params << kCompApp << kCompInstall << debPath;
+
+    } else if (m_cmds.testFlag(Remove)) {
+        // e.g.: deepin-compatible app remove [package/name]
+        params << kCompApp << kCompRemove << m_listParam.first();
+
+    } else {
+        return;
+    }
+
+    if (!m_rootfs.isEmpty()) {
+        params << QString("--%1").arg(kCompRootfs) << m_rootfs;
+    }
+
+    m_proc->setProgram(kCompatibleBin, params);
+    qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
+
+    m_proc->start();
+    m_proc->waitForFinished(-1);
+    m_proc->close();
+
+    QDir filePath(TEMPLATE_DIR);
+    if (filePath.exists()) {
+        filePath.removeRecursively();
     }
 }
 

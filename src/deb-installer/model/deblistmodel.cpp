@@ -1224,7 +1224,7 @@ void DebListModel::installNextDeb()
             m_procInstallConfig->start("pkexec",
                                        QStringList() << "pkexec"
                                                      << "deepin-deb-installer-dependsInstall"
-                                                     << "InstallConfig" << sPackageName,
+                                                     << "--install_config" << sPackageName,
                                        {},
                                        0,
                                        false);  // 配置安装流程
