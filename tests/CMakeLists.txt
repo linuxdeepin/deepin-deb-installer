@@ -138,6 +138,7 @@ file(GLOB_RECURSE APP_SRCS
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/pages/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/view/widgets/*.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/uab/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/compatible/*.cpp
     )
 FILE(GLOB allTestSource
   src/*.cpp

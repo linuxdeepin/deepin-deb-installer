@@ -73,6 +73,9 @@ public:
     static Pkg::PackageType detectPackage(const QString &filePath);
     static QIcon packageIcon(Pkg::PackageType type);
 
+    // check package contains DebConf templates config file
+    static bool checkPackageContainsDebConf(const QString &filePath);
+
     static bool isDevelopMode();  // Check if develop mode (root)
 };
 
