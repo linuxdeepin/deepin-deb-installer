@@ -59,6 +59,10 @@ SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *p
 {
     initUI();                     // 初始化界面
     initControlAccessibleName();  // 自动化测试
+
+    // update show info
+    showPackageInfo();
+    connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
 }
 
 void SingleInstallPage::initUI()
@@ -71,10 +75,11 @@ void SingleInstallPage::initUI()
     initPkgInstallProcessView(fontsize);    // 初始化包安装过程进度显示布局
     initConnections();                      // 链接信号和槽
 
-    const QIcon icon = QIcon::fromTheme("application-x-deb");  // 获取icon
-    QPixmap iconPix = icon.pixmap(m_packageIcon->size());      // 将Icon 转化为Pixmap
+    const QModelIndex index = m_packagesModel->index(0);
+    Pkg::PackageType type = index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>();
+    QIcon icon = Utils::packageIcon(type);
+    m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
     m_itemInfoFrame->setVisible(true);
-    m_packageIcon->setPixmap(iconPix);
     m_upDown = true;  // 当前是收缩的
 
     // refresh depends at init.
@@ -793,10 +798,6 @@ void SingleInstallPage::showPackageInfo()
     int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);
     if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
-        Pkg::PackageType type = index.data(AbstractPackageListModel::PackageTypeRole).value<Pkg::PackageType>();
-        QIcon icon = Utils::packageIcon(type);
-        m_packageIcon->setPixmap(icon.pixmap(m_packageIcon->size()));
-
         m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
         m_pkgNameDescription = index.data(DebListModel::PackageNameRole).toString();
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
@@ -932,8 +933,6 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
     DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
-
-    showPackageInfo();
 }
 
 void SingleInstallPage::setAuthConfirm(QString dependName)

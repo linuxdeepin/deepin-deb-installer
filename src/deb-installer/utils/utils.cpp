@@ -26,6 +26,7 @@
 #include <QDBusInterface>
 
 #include <DSysInfo>
+#include <DDciIcon>
 
 #include <QApt/Package>
 
@@ -353,19 +354,27 @@ Pkg::PackageType Utils::detectPackage(const QString &filePath)
 
 /**
  * @brief Get the icon based on the package \a type .
+ *  not threadsafe.
  */
 QIcon Utils::packageIcon(Pkg::PackageType type)
 {
-    // TODO: check icon name
     if (Pkg::Uab == type) {
         // linglong uab package
-        const QIcon icon = QIcon::fromTheme("application-x-uab");
-        if (icon.isNull()) {
-            return QIcon::fromTheme("application-default-icon");
+        static QIcon kUabIcon = QIcon::fromTheme("application-x-uab");
+        if (kUabIcon.isNull()) {
+            // using DDciIcon to support new svg version (dsvg use librsvg backend)
+            Dtk::Gui::DDciIcon dciIcon(QString(":/icons/deepin/uab/uos-application-bundle.dci"));
+            QList<int> availibleSizes = dciIcon.availableSizes(DDciIcon::Light);
+            if (!availibleSizes.isEmpty()) {
+                kUabIcon = QIcon(dciIcon.pixmap(qApp->devicePixelRatio(), availibleSizes.first(), DDciIcon::Light));
+            }
         }
+        return kUabIcon;
+
     } else {
         // default, deb package
-        return QIcon::fromTheme("application-x-deb");
+        static const QIcon kDebIcon = QIcon::fromTheme("application-x-deb");
+        return kDebIcon;
     }
 }
 
