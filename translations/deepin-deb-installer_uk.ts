@@ -75,17 +75,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="720"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Ймовірно, пакунок %1 пошкоджено</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="728"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Ви можете встановлювати лише локальні пакунки %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Немає прав доступу до цієї теки</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>У системі не встановлено середовища Linglong. Будь ласка, спочатку встановіть його</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
