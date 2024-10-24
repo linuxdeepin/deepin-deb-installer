@@ -24,6 +24,7 @@
 #include <QProcess>
 #include <QStorageInfo>
 #include <QDBusInterface>
+#include <QTemporaryDir>
 
 #include <DSysInfo>
 #include <DDciIcon>
@@ -376,6 +377,30 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
         static const QIcon kDebIcon = QIcon::fromTheme("application-x-deb");
         return kDebIcon;
     }
+}
+
+/**
+   @brief Check if debian package contains DebConf templates config file
+ */
+bool Utils::checkPackageContainsDebConf(const QString &filePath)
+{
+    // create template dir
+    QTemporaryDir templateDir;
+    if (!templateDir.isValid()) {
+        qWarning() << "check error mkdir failed, error:" << templateDir.errorString();
+        return false;
+    }
+
+    QProcess dpkgProcess;
+    dpkgProcess.start("dpkg", {"-e", filePath, templateDir.path()});
+    dpkgProcess.waitForFinished();
+    const QByteArray errorOutput = dpkgProcess.readAllStandardError();
+    if (!errorOutput.isEmpty()) {
+        qWarning() << "DebListModel:"
+                   << "Failed to decompress the main control file" << errorOutput;
+    }
+
+    return QFile::exists(templateDir.filePath("templates"));
 }
 
 /**

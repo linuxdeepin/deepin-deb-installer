@@ -59,6 +59,9 @@ enum DependsStatus {
     DependsAuthCancel,    // pre depends (wine, linglong) auth check failed
     ArchBreak,            // arch check failed, e.g.: amd64 package cannot install in arm system
     Prohibit,             // The application is restricted by the domain management and cannot be installed
+
+    CompatibleNotInstalled,  // Package depends break, but can install to compatible rootfs
+    CompatibleIntalled,      // Package depends ok, but installed in (compatible mode / current system)
 };
 
 enum PackageOperationStatus {
