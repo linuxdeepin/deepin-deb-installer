@@ -36,15 +36,15 @@ TEST_F(ut_packageanalyzer_TEST, PackageAnalyzer_UT_packageInstallStatus)
 
     ir.version = "1.0";
     auto data = PackageAnalyzer::instance().packageInstallStatus(ir);
-    ASSERT_EQ(data.first, PackageAnalyzer::NotInstalled);
+    ASSERT_EQ(data.first, Pkg::NotInstalled);
 
     ir.packageName = "libc6";
     data = PackageAnalyzer::instance().packageInstallStatus(ir);
-    ASSERT_EQ(data.first, PackageAnalyzer::InstalledLaterVersion);
+    ASSERT_EQ(data.first, Pkg::InstalledLaterVersion);
 
     ir.version = "999.999";
     data = PackageAnalyzer::instance().packageInstallStatus(ir);
-    ASSERT_EQ(data.first, PackageAnalyzer::InstalledEarlierVersion);
+    ASSERT_EQ(data.first, Pkg::InstalledEarlierVersion);
 }
 
 TEST_F(ut_packageanalyzer_TEST, PackageAnalyzer_UT_packageWithArch)

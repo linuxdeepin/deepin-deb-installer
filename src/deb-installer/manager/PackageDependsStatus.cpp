@@ -7,23 +7,23 @@
 
 PackageDependsStatus PackageDependsStatus::ok()
 {
-    return { Pkg::DependsStatus::DependsOk, QString() };
+    return {Pkg::DependsStatus::DependsOk, QString()};
 }
 
 PackageDependsStatus PackageDependsStatus::available(const QString &package)
 {
     // 修复卸载p7zip导致deepin-wine-helper被卸载的问题，Available 添加packageName
-    return { Pkg::DependsStatus::DependsAvailable, package };
+    return {Pkg::DependsStatus::DependsAvailable, package};
 }
 
 PackageDependsStatus PackageDependsStatus::_break(const QString &package)
 {
-    return { Pkg::DependsStatus::DependsBreak, package };
+    return {Pkg::DependsStatus::DependsBreak, package};
 }
 
 PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
 {
-    return { Pkg::DependsStatus::DependsBreak, package };
+    return {Pkg::DependsStatus::DependsBreak, package};
 }
 
 PackageDependsStatus::PackageDependsStatus()
@@ -95,4 +95,14 @@ bool PackageDependsStatus::isAvailable() const
 bool PackageDependsStatus::isProhibit() const
 {
     return status == Pkg::DependsStatus::Prohibit;
+}
+
+bool PackageDependsStatus::canInstall() const
+{
+    return status == Pkg::DependsAvailable || status == Pkg::DependsOk;
+}
+
+bool PackageDependsStatus::canInstallCompatible() const
+{
+    return status == Pkg::CompatibleNotInstalled;
 }

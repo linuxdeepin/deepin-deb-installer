@@ -4,6 +4,7 @@
 
 #include "packageanalyzer.h"
 #include "singleInstallerApplication.h"
+#include "compatible/compatible_backend.h"
 
 #include <QtDebug>
 #include <QThread>
@@ -53,6 +54,11 @@ void PackageAnalyzer::initBackend()
 
     SingleInstallerApplication::BackendIsRunningInit = true;
 
+    // init compatible backend with deb backend asynchronous
+    if (CompBackend::instance()->compatibleExists()) {
+        CompBackend::instance()->initBackend();
+    }
+
     backend = new QApt::Backend;
     bool initSuccess = backend->init();
 
@@ -80,37 +86,37 @@ QApt::Backend *PackageAnalyzer::backendPtr()
     return backend;
 }
 
-QPair<PackageAnalyzer::PackageInstallStatus, QString> PackageAnalyzer::packageInstallStatus(const DebIr &ir) const
+QPair<Pkg::PackageInstallStatus, QString> PackageAnalyzer::packageInstallStatus(const DebIr &ir) const
 {
-    PackageAnalyzer::PackageInstallStatus status;
+    Pkg::PackageInstallStatus status;
     QString installedVersion;
 
     do {
         if (!ir.isValid) {
-            status = PackageAnalyzer::NotInstalled;
+            status = Pkg::NotInstalled;
             break;
         }
 
         QApt::Package *package = packageWithArch(ir.packageName, ir.architecture, "");
 
         if (package == nullptr) {
-            status = PackageAnalyzer::NotInstalled;
+            status = Pkg::NotInstalled;
             break;
         }
 
         installedVersion = package->installedVersion();
         if (installedVersion.isEmpty()) {
-            status = PackageAnalyzer::NotInstalled;
+            status = Pkg::NotInstalled;
             break;
         }
 
         int result = QApt::Package::compareVersion(ir.version, installedVersion);
         if (result == 0) {
-            status = PackageAnalyzer::InstalledSameVersion;
+            status = Pkg::InstalledSameVersion;
         } else if (result < 0) {
-            status = PackageAnalyzer::InstalledLaterVersion;
+            status = Pkg::InstalledLaterVersion;
         } else {
-            status = PackageAnalyzer::InstalledEarlierVersion;
+            status = Pkg::InstalledEarlierVersion;
         }
     } while (0);
 

@@ -28,6 +28,21 @@ QVariant ProxyPackageListModel::data(const QModelIndex &index, int role) const
     return model->data(model->index(modelWithIndex.second), role);
 }
 
+bool ProxyPackageListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (m_packageModels.empty()) {
+        return false;
+    }
+
+    auto modelWithIndex = findFromProxyIndex(index.row());
+    ModelPtr model = modelWithIndex.first;
+    if (!model) {
+        return false;
+    }
+
+    return model->setData(model->index(modelWithIndex.second), value, role);
+}
+
 int ProxyPackageListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -283,7 +298,6 @@ void ProxyPackageListModel::connectModel(ModelPtr model)
     QObject::connect(
         model, &AbstractPackageListModel::signalPackageCannotFind, this, &ProxyPackageListModel::signalPackageCannotFind);
 
-    // TODO: might be move to singleton
     QObject::connect(model, &AbstractPackageListModel::signalLockForAuth, this, &ProxyPackageListModel::signalLockForAuth);
     QObject::connect(model, &AbstractPackageListModel::signalAuthCancel, this, &ProxyPackageListModel::signalAuthCancel);
     QObject::connect(

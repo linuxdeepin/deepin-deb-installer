@@ -11,6 +11,7 @@
 #include "model/dependgraph.h"
 #include "model/packageanalyzer.h"
 #include "singleInstallerApplication.h"
+#include "compatible/compatible_backend.h"
 
 #include <DRecentManager>
 
@@ -140,6 +141,13 @@ Pkg::PackageInstallStatus PackagesManager::checkInstallStatus(const QString &pac
     return ret;
 }
 
+/**
+ * @brief Detect the dependency status of the incoming package \a package_path .
+ *  This interface is provided for the DBus interface. There will be no runtime processing,
+ *  for example, to install the Wine dependency, compatibility mode check, etc.
+ *
+ * @sa getPackageDependsStatus()
+ */
 PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_path)
 {
     DebFile debFile(package_path);
@@ -594,14 +602,14 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
     auto targetProvides = targetPackage->providesList().toSet();
     auto installedProvides = installedPackage->providesList().toSet();
     QSet<QString> canReplaceProvides = targetProvides.unite(installedProvides);
-#endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
+#endif  // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
     bool replaceable = false;
     bool containsInstalledProvides = false;
 
     // requiredByList contains depends, conflicts, recommends, etc.
     // we focus on depends, so only check provides depends and or depends.
-    for (const QString &rdependName: rdepends) {
+    for (const QString &rdependName : rdepends) {
         QApt::Package *rdependPackage = backend->package(rdependName);
         if (!rdependPackage || !rdependPackage->isInstalled()) {
             continue;
@@ -628,7 +636,7 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                             break;
                         }
                     }
-#endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
+#endif  // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
                     replaceable = true;
                     break;
@@ -654,9 +662,9 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
             // current or depends contains installedPackage but not contains targetPackage.
             if (!replaceable && containsInstalledProvides) {
                 qWarning() << QString("Package (%1) can't replace (%2), not support (%3)")
-                            .arg(targetPackage->name())
-                            .arg(installedPackage->name())
-                            .arg(rdependPackage->name());
+                                  .arg(targetPackage->name())
+                                  .arg(installedPackage->name())
+                                  .arg(rdependPackage->name());
                 return false;
             }
 
@@ -786,7 +794,6 @@ void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QStri
     if (iAuthRes == DebListModel::AuthDependsSuccess) {
         for (int num = 0; num < m_dependInstallMark.size(); num++) {
             m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsOk;  // 更换依赖的存储结构
-            m_packageMd5DependsStatus[m_dependInstallMark.at(num)].status = Pkg::DependsStatus::DependsOk;  // 更换依赖的存储结构
         }
         m_errorIndex.clear();
     }
@@ -838,9 +845,9 @@ QByteArray PackagesManager::getPackageMd5(const int index)
 }
 
 /**
- * @brief PackagesManager::getPackageDependsStatus 获取某个包的依赖状态
- * @param index 包的下标
- * @return 包的依赖状态
+ * @brief Detect the dependency status of the \a index package .
+ *  If there is a wine dependency, the wine package dependency will be automatically pre-installed.
+ *  Compatibility mode processing is also detected.
  */
 PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 {
@@ -888,6 +895,8 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
 
     // conflicts
     const ConflictResult debConflitsResult = isConflictSatisfy(architecture, debFile.conflicts(), debFile.replaces());
+    // Check whether it is a wine application
+    bool isWineApplication = false;
 
     if (!debConflitsResult.is_ok()) {
         qWarning() << "PackagesManager:"
@@ -906,7 +915,6 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             choose_set << debFile.packageName();
             QStringList dependList;
             QHash<QString, DependencyInfo> dependInfoMap;
-            bool isWineApplication = false;         // 判断是否是wine应用
             for (auto ditem : debFile.depends()) {  // 每一个list中的关系是或的关系
                 for (auto dinfo : ditem) {
                     // Note: 此处使用依赖包的架构查找软件包版本，某些场景下deb包架构和依赖包架构不一定一致。
@@ -967,11 +975,33 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
                     }
                     dependsStatus.status = Pkg::DependsStatus::DependsBreak;  // 只要是下载，默认当前wine应用依赖为break
                 }
-            } while (0);
+            } while (false);
         }
     }
-    if (dependsStatus.isBreak())
+
+    if (dependsStatus.isBreak()) {
         Q_ASSERT(!dependsStatus.package.isEmpty());
+    }
+
+    // Wine or DDIM package not support compatible mode
+    if (CompBackend::instance()->compatibleValid()) {
+        if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
+            auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
+
+            if (compPkgPtr) {
+                dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+            } else if (dependsStatus.isBreak()) {
+                // check if current system install the package.
+                Package *pkg = packageWithArch(debFile.packageName(), debFile.architecture());
+                if (pkg && pkg->isInstalled()) {
+                    dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+                } else {
+                    dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+                }
+            }
+            // If depends ok and not installed in compatible, not need install to compatible rootfs
+        }
+    }
 
     m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
     return dependsStatus;

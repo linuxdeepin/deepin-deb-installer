@@ -13,28 +13,28 @@
 #define private public
 #include "../deb-installer/view/widgets/packageselectitem.h"
 
-QPair<PackageAnalyzer::PackageInstallStatus, QString> packageInstallStatus_earilier(const DebIr &ir)
+QPair<Pkg::PackageInstallStatus, QString> packageInstallStatus_earilier(const DebIr &ir)
 {
     Q_UNUSED(ir)
-    return {PackageAnalyzer::InstalledEarlierVersion, "123"};
+    return {Pkg::InstalledEarlierVersion, "123"};
 }
 
-QPair<PackageAnalyzer::PackageInstallStatus, QString> packageInstallStatus_same(const DebIr &ir)
+QPair<Pkg::PackageInstallStatus, QString> packageInstallStatus_same(const DebIr &ir)
 {
     Q_UNUSED(ir)
-    return {PackageAnalyzer::InstalledSameVersion, "321"};
+    return {Pkg::InstalledSameVersion, "321"};
 }
 
-QPair<PackageAnalyzer::PackageInstallStatus, QString> packageInstallStatus_later(const DebIr &ir)
+QPair<Pkg::PackageInstallStatus, QString> packageInstallStatus_later(const DebIr &ir)
 {
     Q_UNUSED(ir)
-    return {PackageAnalyzer::InstalledLaterVersion, "123321"};
+    return {Pkg::InstalledLaterVersion, "123321"};
 }
 
-QPair<PackageAnalyzer::PackageInstallStatus, QString> packageInstallStatus_none(const DebIr &ir)
+QPair<Pkg::PackageInstallStatus, QString> packageInstallStatus_none(const DebIr &ir)
 {
     Q_UNUSED(ir)
-    return {PackageAnalyzer::NotInstalled, "1234567"};
+    return {Pkg::NotInstalled, "1234567"};
 }
 
 class ut_packageselectitem_TEST : public ::testing::Test

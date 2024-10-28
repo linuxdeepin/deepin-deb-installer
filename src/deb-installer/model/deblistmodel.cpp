@@ -12,6 +12,8 @@
 #include "utils/hierarchicalverify.h"
 #include "singleInstallerApplication.h"
 #include "view/widgets/error_notify_dialog_helper.h"
+#include "compatible/compatible_backend.h"
+#include "compatible/compatible_process_controller.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -254,15 +256,18 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         m_packagesManager->removePackage(currentRow);
         return QVariant();
     }
+
     const DebFile deb(m_packagesManager->package(currentRow));
     if (!deb.isValid())
         return QVariant();
+
     QString packageName = deb.packageName();            // 包名
     QString filePath = deb.filePath();                  // 包的路径
     QString version = deb.version();                    // 包的版本
     QString architecture = deb.architecture();          // 包可用的架构
     QString shortDescription = deb.shortDescription();  // 包的短描述
     QString longDescription = deb.longDescription();    // 包的长描述 //删除该指针，以免内存泄露
+
     switch (role) {
         case WorkerIsPrepareRole:
             return isWorkerPrepare();  // 获取当前工作状态是否准备九局
@@ -301,14 +306,47 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             return Pkg::Deb;
         case PackageDependsDetailRole:
             return QVariant::fromValue(m_packagesManager->getPackageDependsDetail(currentRow));
+        case CompatibleRootfsRole:
+            if (auto pkgPtr = const_cast<DebListModel *>(this)->packagePtr(currentRow)) {
+                return pkgPtr->compatible()->rootfs;
+            }
+            break;
+        case CompatibleTargetRootfsRole:
+            if (auto pkgPtr = const_cast<DebListModel *>(this)->packagePtr(currentRow)) {
+                return pkgPtr->compatible()->targetRootfs;
+            }
+            break;
+
         case Qt::SizeHintRole:  // 设置当前index的大小
             return QSize(0, 48);
-
         default:
             break;
     }
 
     return QVariant();
+}
+
+bool DebListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    const int currentRow = index.row();
+    // 判断当前下标是否越界
+    if (currentRow < 0 || currentRow >= m_packagesManager->m_preparedPackages.size()) {
+        return false;
+    }
+
+    switch (role) {
+        case CompatibleTargetRootfsRole: {
+            if (auto pkgPtr = packagePtr(currentRow)) {
+                pkgPtr->compatible()->targetRootfs = value.toString();
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+    return false;
 }
 
 bool DebListModel::isDevelopMode()
@@ -347,6 +385,24 @@ bool DebListModel::slotUninstallPackage(int index)
     // fix bug : 卸载失败时不提示卸载失败。
     m_operatingStatusIndex = index;  // 刷新操作状态的index
     m_hierarchicalVerifyError = false;
+    auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+
+    // for comaptible mode
+    if (Pkg::CompatibleIntalled == dependStatus.status && supportCompatible() && 0 == index) {
+        auto ptr = packagePtr(index);
+        // check pacakge installed in compatible rootfs
+        if (ptr && ptr->compatible()->installed()) {
+            if (uninstallCompatiblePackage()) {
+                refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Operating);
+                return true;
+            } else {
+                refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
+                return false;
+            }
+        }
+
+        // otherwise uninstall from current system
+    }
 
     DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
     if (!debFile.isValid())
@@ -413,6 +469,11 @@ void DebListModel::removePackage(const int idx)
     for (int i = 0; i < packageOperateStatusCount; i++) {
         m_packageOperateStatus[m_packagesManager->getPackageMd5(i)] = Pkg::PackageOperationStatus::Prepare;
     }
+
+    if (0 <= idx && idx < m_packagesManager->m_packageMd5.size()) {
+        m_packagePtrMap.remove(m_packagesManager->m_packageMd5[idx]);
+    }
+
     m_packagesManager->removePackage(idx);  // 在packageManager中删除标记的下标
 }
 
@@ -498,6 +559,8 @@ void DebListModel::reset()
     m_operatingIndex = 0;            // 当前操作的index置为0
     m_operatingPackageMd5 = nullptr;
     m_operatingStatusIndex = 0;  // 当前操作状态的index置为0
+
+    m_packagePtrMap.clear();
 
     m_packageOperateStatus.clear();  // 清空操作状态列表
     m_packageFailCode.clear();       // 清空错误原因列表
@@ -617,25 +680,51 @@ QString DebListModel::packageFailedReason(const int idx) const
     const auto md5 = m_packagesManager->getPackageMd5(idx);                     // 获取包的md5值
     if (m_packagesManager->isArchError(idx))
         return tr("Unmatched package architecture");  // 判断是否架构冲突
-    if (dependStatus.isProhibit())
-        return tr("The administrator has set policies to prevent installation of this package");
-    if (dependStatus.isBreak() || dependStatus.isAuthCancel()) {  // 依赖状态错误
-        if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
-            if (m_packagesManager->m_errorIndex.contains(md5)) {  // 修改wine依赖的标记方式
-                auto ret = static_cast<DebListModel::DependsAuthStatus>(m_packagesManager->m_errorIndex.value(md5));
-                switch (ret) {
-                    case DebListModel::VerifyDependsErr:
-                        return m_brokenDepend + tr("Invalid digital signature");
-                    default:
-                        return tr("Failed to install %1").arg(m_brokenDepend);  // wine依赖安装失败
-                }
-            }
-            return tr("Broken dependencies: %1").arg(dependStatus.package);  // 依赖不满足
-        }
 
-        const auto conflictStatus = m_packagesManager->packageConflictStat(idx);  // 获取冲突情况
-        if (!conflictStatus.is_ok())
-            return tr("Broken dependencies: %1").arg(conflictStatus.unwrap());  // 依赖冲突
+    switch (dependStatus.status) {
+        case Pkg::CompatibleIntalled:
+            if (auto ptr = const_cast<DebListModel *>(this)->packagePtr(idx)) {
+                QString system = ptr->compatible()->rootfs;
+                if (system.isEmpty()) {
+                    system = tr("current system");
+                }
+
+                return tr("%2 has been installed in %1, please uninstall this package before installing it")
+                    .arg(system)
+                    .arg(ptr->compatible()->name);
+            }
+            break;
+        case Pkg::CompatibleNotInstalled:
+            return tr("Broken dependencies, try installing the app in compatibility mode");
+
+        case Pkg::Prohibit:
+            return tr("The administrator has set policies to prevent installation of this package");
+
+        case Pkg::DependsBreak:
+            Q_FALLTHROUGH();
+        case Pkg::DependsAuthCancel: {  // 依赖状态错误
+            if (!dependStatus.package.isEmpty() || !m_brokenDepend.isEmpty()) {
+                if (m_packagesManager->m_errorIndex.contains(md5)) {  // 修改wine依赖的标记方式
+                    auto ret = static_cast<DebListModel::DependsAuthStatus>(m_packagesManager->m_errorIndex.value(md5));
+                    switch (ret) {
+                        case DebListModel::VerifyDependsErr:
+                            return m_brokenDepend + tr("Invalid digital signature");
+                        default:
+                            return tr("Failed to install %1").arg(m_brokenDepend);  // wine依赖安装失败
+                    }
+                }
+                return tr("Broken dependencies: %1").arg(dependStatus.package);  // 依赖不满足
+            }
+
+            const auto conflictStatus = m_packagesManager->packageConflictStat(idx);  // 获取冲突情况
+            if (!conflictStatus.is_ok()) {
+                return tr("Broken dependencies: %1").arg(conflictStatus.unwrap());  // 依赖冲突
+            }
+
+            break;
+        }
+        default:
+            break;
     }
 
     // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
@@ -802,8 +891,20 @@ void DebListModel::installDebs()
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if (dependsStat.isBreak() || dependsStat.isAuthCancel() ||
-        dependsStat.status == Pkg::DependsStatus::ArchBreak) {  // 依赖不满足或者下载wine依赖时授权被取消
+
+    // for compatbile install
+    if (dependsStat.canInstallCompatible() && supportCompatible()) {
+        if (installCompatiblePackage()) {
+            refreshOperatingPackageStatus(Pkg::Operating);
+        } else {
+            refreshOperatingPackageStatus(Pkg::Failed);
+        }
+
+        return;
+    }
+
+    if (!dependsStat.canInstall()) {
+        // 依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新错误状态
 
         // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
@@ -1211,7 +1312,10 @@ void DebListModel::installNextDeb()
 {
     m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);  // 刷新软件包依赖状态
     auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-    if (dependStatus.isAvailable()) {  // 存在没有安装的依赖包，则进入普通安装流程执行依赖安装
+
+    if (dependStatus.canInstallCompatible() && supportCompatible()) {
+        installDebs();
+    } else if (dependStatus.isAvailable()) {  // 存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
     } else if (dependStatus.status >= Pkg::DependsStatus::DependsBreak) {  // 安装前置条件不满足，无法处理
         refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
@@ -1219,8 +1323,7 @@ void DebListModel::installNextDeb()
         return;
     } else {  // 如果当前包的依赖全部安装完毕，则进入配置判断流程
         QString sPackageName = m_packagesManager->m_preparedPackages[m_operatingIndex];
-        if (checkTemplate(sPackageName)) {  // 检查当前包是否需要配置
-            rmdir();                        // 删除临时路径
+        if (Utils::checkPackageContainsDebConf(sPackageName)) {  // 检查当前包是否需要配置
             m_procInstallConfig->start("pkexec",
                                        QStringList() << "pkexec"
                                                      << "deepin-deb-installer-dependsInstall"
@@ -1232,57 +1335,6 @@ void DebListModel::installNextDeb()
             installDebs();  // 普通安装流程
         }
     }
-}
-
-void DebListModel::rmdir()
-{
-    QDir filePath(tempPath);
-    if (filePath.exists()) {
-        if (!filePath.removeRecursively()) {
-            qWarning() << "DebListModel:"
-                       << "remove temporary path failed";
-        }
-    }
-}
-
-bool DebListModel::checkTemplate(const QString &debPath)
-{
-    rmdir();
-    getDebian(debPath);
-    QFile templates(tempPath + "/templates");
-    if (templates.exists()) {
-        qInfo() << "DebListModel:"
-                << "Check that the template file exists";
-        return true;
-    }
-    return false;
-}
-
-bool DebListModel::mkdir()
-{
-    QDir filePath(tempPath);  // 获取配置包的临时路径
-
-    if (!filePath.exists()) {             // 当前临时路径不存在
-        return filePath.mkdir(tempPath);  // 删除临时路径，并返回删除结果
-    }
-    return true;
-}
-
-void DebListModel::getDebian(const QString &debPath)
-{
-    if (!mkdir()) {                                                 // 创建临时路径
-        qWarning() << "check error mkdir" << tempPath << "failed";  // 创建失败
-        return;
-    }
-    QProcess *m_pDpkg = new QProcess(this);
-    m_pDpkg->start("dpkg", QStringList() << "-e" << debPath << tempPath);  // 获取DEBIAN文件，查看当前包是否需要配置
-    m_pDpkg->waitForFinished();
-    QString getDebianProcessErrInfo = m_pDpkg->readAllStandardError();
-    if (!getDebianProcessErrInfo.isEmpty()) {
-        qWarning() << "DebListModel:"
-                   << "Failed to decompress the main control file" << getDebianProcessErrInfo;
-    }
-    delete m_pDpkg;
 }
 
 void DebListModel::slotTransactionOutput()
@@ -1613,6 +1665,80 @@ void DebListModel::printDependsChanges()
     for (auto info = changeInfo.begin(); info != changeInfo.end(); info++) {
         qInfo() << tagTable[info.key()] << info.value();
     }
+}
+
+void DebListModel::ensureCompatibleProcessor()
+{
+    if (!m_compProcessor) {
+        m_compProcessor.reset(new Compatible::CompatibleProcessController);
+
+        connect(m_compProcessor.data(),
+                &Compatible::CompatibleProcessController::processOutput,
+                this,
+                &DebListModel::signalAppendOutputInfo);
+        connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::progressChanged, this, [this](float progress) {
+            const int whileProgress =
+                static_cast<int>((100. / m_packagesManager->m_preparedPackages.size()) * (m_operatingIndex + progress / 100.));
+
+            Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
+            Q_EMIT signalWholeProgressChanged(whileProgress);
+        });
+        connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::processFinished, this, [this](bool success) {
+            if (success) {
+                refreshOperatingPackageStatus(Pkg::Success);
+            } else {
+                refreshOperatingPackageStatus(Pkg::Failed);
+
+                auto pkgPtr = m_compProcessor->currentPackage();
+                if (pkgPtr) {
+                    m_packageFailCode.insert(m_operatingPackageMd5, pkgPtr->errorCode());
+                    m_packageFailReason.insert(m_operatingPackageMd5, pkgPtr->errorString());
+
+                    if (Pkg::DigitalSignatureError == pkgPtr->errorCode()) {
+                        m_hierarchicalVerifyError = true;
+                    }
+                }
+            }
+
+            bumpInstallIndex();
+        });
+    }
+}
+
+bool DebListModel::installCompatiblePackage()
+{
+    ensureCompatibleProcessor();
+
+    m_currentPackage = packagePtr(m_operatingIndex);
+
+    return m_compProcessor->install(m_currentPackage);
+}
+
+bool DebListModel::uninstallCompatiblePackage()
+{
+    ensureCompatibleProcessor();
+
+    m_currentPackage = packagePtr(m_operatingIndex);
+
+    return m_compProcessor->uninstall(m_currentPackage);
+}
+
+Deb::DebPackage::Ptr DebListModel::packagePtr(int index)
+{
+    Deb::DebPackage::Ptr pkgPtr;
+
+    if (0 <= index && index < m_packagesManager->m_packageMd5.size()) {
+        const QByteArray md5 = m_packagesManager->m_packageMd5[index];
+        if (!m_packagePtrMap.contains(md5)) {
+            const QString packagePath = m_packagesManager->m_preparedPackages[m_operatingIndex];
+            pkgPtr = Deb::DebPackage::Ptr::create(packagePath);
+            m_packagePtrMap.insert(md5, pkgPtr);
+        } else {
+            pkgPtr = m_packagePtrMap.value(md5);
+        }
+    }
+
+    return pkgPtr;
 }
 
 Dialog::Dialog() {}
