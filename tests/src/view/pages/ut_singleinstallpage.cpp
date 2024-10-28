@@ -137,8 +137,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_total)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set(decltype (&stud_installPackages)(&DebListModel::slotInstallPackages), stud_installPackages);
+    stub.set(decltype (&stud_singleuninstallPackage)(&DebListModel::slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
@@ -289,8 +289,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_onWorkFinishedFailed)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set((decltype(&stud_installPackages))ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set((decltype(&stud_singleuninstallPackage))ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
 
     model = new DebListModel();
@@ -325,8 +325,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_onWorkFinishedSuccees)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set((decltype(&stud_installPackages))ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set((decltype(&stud_singleuninstallPackage))ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();
@@ -376,8 +376,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_initTabOrder)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set((decltype(&stud_installPackages))ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set((decltype(&stud_singleuninstallPackage))ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();
@@ -415,8 +415,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_paintEvent)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set((decltype(&stud_installPackages))ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set((decltype(&stud_singleuninstallPackage))ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();
@@ -441,8 +441,8 @@ TEST_F(UT_SingleInstallpage, UT_SingleInstallpage_slotDependPackages)
     stub.set(ADDR(DebFile, shortDescription), stud_singleshortDescription);
     stub.set(ADDR(PackagesManager, getPackageDependsStatus), stud_singlegetPackageDependsStatus);
     stub.set(ADDR(PackagesManager, packageInstallStatus), stud_singlepackageInstallStatus);
-    stub.set(ADDR(DebListModel, slotInstallPackages), stud_installPackages);
-    stub.set(ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
+    stub.set((decltype(&stud_installPackages))ADDR(DebListModel, slotInstallPackages), stud_installPackages);
+    stub.set((decltype(&stud_singleuninstallPackage))ADDR(DebListModel, slotUninstallPackage), stud_singleuninstallPackage);
     stub.set(ADDR(QModelIndex, data), stu_data);
     stub.set(ADDR(DebListModel, recheckPackagePath), stud_recheckPackagePath);
     model = new DebListModel();

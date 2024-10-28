@@ -4,6 +4,7 @@
 
 #include "../deb-installer/view/pages/debinstaller.h"
 #include "../deb-installer/model/deblistmodel.h"
+#include "../deb-installer/model/proxy_package_list_model.h"
 #include "../deb-installer/view/pages/multipleinstallpage.h"
 #include "../deb-installer/view/pages/singleinstallpage.h"
 #include "../deb-installer/view/widgets/filechoosewidget.h"
@@ -27,7 +28,7 @@
 
 using namespace QApt;
 
-void stud_removePackage(const int idx)
+void stud_removePackage(DebListModel *, int idx)
 {
     Q_UNUSED(idx);
 }
@@ -40,7 +41,7 @@ bool stud_checkSuffix(QString filePath)
     return true;
 }
 
-void stud_appendPackage(QStringList package)
+void stud_appendPackage(DebListModel *, const QStringList &package)
 {
     Q_UNUSED(package);
 }
@@ -97,7 +98,7 @@ bool stud_reloadCache()
     return true;
 }
 
-void stud_reset() {}
+void stud_reset(DebListModel *) {}
 
 void stud_appendNoThread(QStringList packages, int allPackageSize)
 {
@@ -117,7 +118,8 @@ public:
         stub.set(ADDR(Backend, init), stud_run);
         stub.set(ADDR(PackagesManager, appendNoThread), stud_appendNoThread);
         deb = new DebInstaller();
-        debListModel = qobject_cast<DebListModel *>(deb->m_fileListModel);
+        proxyModel = qobject_cast<ProxyPackageListModel *>(deb->m_fileListModel);
+        debListModel = qobject_cast<DebListModel *>(proxyModel->modelFromType(Pkg::Deb));
 
         usleep(1000 * 1000);
         qDebug() << "SetUp" << endl;
@@ -126,8 +128,9 @@ public:
     {
         delete deb;
     }
-    DebInstaller *deb;
-    DebListModel *debListModel;
+    DebInstaller *deb{nullptr};
+    ProxyPackageListModel *proxyModel{nullptr};
+    DebListModel *debListModel{nullptr};
 };
 void stub_enableCloseAndExit()
 {
@@ -259,10 +262,10 @@ TEST_F(UT_Debinstaller, UT_Debinstaller_slotReset)
 {
     Stub stub;
     stub.set(ADDR(DebInstaller, checkSuffix), stud_checkSuffix);
-    stub.set(ADDR(DebListModel, slotAppendPackage), stud_appendPackage);
+    stub.set((void (*)(DebListModel *, const QStringList &))(&DebListModel::slotAppendPackage), stud_appendPackage);
     stub.set(ADDR(DebListModel, preparedPackages), stud_preparedPackages);
-    stub.set(ADDR(DebListModel, removePackage), stud_removePackage);
-    stub.set(ADDR(DebListModel, reset), stud_reset);
+    stub.set((void (*)(DebListModel *, int))(&DebListModel::removePackage), stud_removePackage);
+    stub.set((void (*)(DebListModel *))(&DebListModel::reset), stud_reset);
     stub.set(ADDR(DebListModel, initPrepareStatus), stud_reset);
     stub.set(ADDR(DebListModel, installDebs), stud_installDebs);
     stub.set(ADDR(MultipleInstallPage, refreshModel), stud_refreshModel);

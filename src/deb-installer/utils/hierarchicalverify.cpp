@@ -68,19 +68,7 @@ bool HierarchicalVerify::isValid()
     }
 
     static std::once_flag checkFlag;
-    std::call_once(checkFlag, [this]() {
-        const bool availabled = checkHierarchicalInterface();
-        if (valid != availabled) {
-            valid = availabled;
-
-            // if the hierarchical signature verification is not available, clear cache.
-            if (!valid) {
-                clearVerifyResult();
-            }
-
-            Q_EMIT validChanged(valid);
-        }
-    });
+    std::call_once(checkFlag, [this]() { checkValidImpl(); });
 
     return valid;
 }
@@ -184,6 +172,23 @@ bool HierarchicalVerify::checkHierarchicalInterface()
                        .arg(DBUS_HIERARCHICAL_INTERFACE)
                        .arg(interface.lastError().name())
                        .arg(interface.lastError().message());
+    }
+
+    return availabled;
+}
+
+bool HierarchicalVerify::checkValidImpl()
+{
+    const bool availabled = checkHierarchicalInterface();
+    if (valid != availabled) {
+        valid = availabled;
+
+        // if the hierarchical signature verification is not available, clear cache.
+        if (!valid) {
+            clearVerifyResult();
+        }
+
+        Q_EMIT validChanged(valid);
     }
 
     return availabled;

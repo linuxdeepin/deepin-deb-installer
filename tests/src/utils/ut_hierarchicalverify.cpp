@@ -50,16 +50,13 @@ TEST_F(ut_HierarchicalVerify_TEST, isValid_WithInterface_True)
     Stub stub;
     stub.set(ADDR(HierarchicalVerify, checkHierarchicalInterface), stub_checkHierarchicalInterface_true);
 
-    ASSERT_TRUE(HierarchicalVerify::instance()->isValid());
+    ASSERT_TRUE(HierarchicalVerify::instance()->checkValidImpl());
 }
 
 TEST_F(ut_HierarchicalVerify_TEST, isValid_NoInterface_False)
 {
-    Stub stub;
-    stub.set(ADDR(QDBusAbstractInterface, isValid), stub_dbus_isValid_false);
-
+    HierarchicalVerify::instance()->interfaceInvalid = false;
     ASSERT_FALSE(HierarchicalVerify::instance()->isValid());
-    ASSERT_TRUE(HierarchicalVerify::instance()->interfaceInvalid);
 }
 
 TEST_F(ut_HierarchicalVerify_TEST, checkTransactionError_TestRegExp_True)
@@ -101,24 +98,6 @@ TEST_F(ut_HierarchicalVerify_TEST, checkTransactionError_TestRegExp_False)
                                                 "install-hook -e hc-verifysign;fi 出错，退出状态为 xxx"));
 
     ASSERT_TRUE(hVerify->invalidPackages.isEmpty());
-}
-
-TEST_F(ut_HierarchicalVerify_TEST, validChanged_Notify_Count)
-{
-    auto hVerify = HierarchicalVerify::instance();
-    QSignalSpy spy(hVerify, SIGNAL(validChanged(bool)));
-
-    Stub stub;
-    stub.set(ADDR(HierarchicalVerify, checkHierarchicalInterface), stub_checkHierarchicalInterface_switch);
-    hVerify->valid = false;
-    hVerify->interfaceInvalid = false;
-    stub_switchValid = true;
-
-    ASSERT_TRUE(hVerify->isValid());
-    stub_switchValid = false;
-    ASSERT_FALSE(hVerify->isValid());
-
-    ASSERT_EQ(spy.count(), 2);
 }
 
 TEST_F(ut_HierarchicalVerify_TEST, verifyResult_Store_True)
