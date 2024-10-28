@@ -21,6 +21,8 @@
 
 #define dApp (static_cast<DApplication *>(QCoreApplication::instance()))
 
+class QTextDocumnet;
+
 DWIDGET_USE_NAMESPACE
 
 class DebApplicationHelper : public DGuiApplicationHelper
@@ -77,6 +79,8 @@ public:
     static bool checkPackageContainsDebConf(const QString &filePath);
 
     static bool isDevelopMode();  // Check if develop mode (root)
+
+    static QString formatWrapText(const QString &text, int textWidth);
 };
 
 class GlobalStatus

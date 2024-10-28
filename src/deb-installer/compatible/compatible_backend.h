@@ -28,7 +28,8 @@ public:
     [[nodiscard]] bool compatibleExists() const;
     bool recheckCompatibleExists();
 
-    [[nodiscard]] QList<QPair<QString, QString>> osNameList() const;
+    [[nodiscard]] QList<RootfsInfo::Ptr> rootfsList() const;
+    [[nodiscard]] QString osName(const QString &rootfsName) const;
     [[nodiscard]] CompPkgInfo::Ptr containsPackage(const QString &packageName);
 
     // update backend database after controller process finished.
