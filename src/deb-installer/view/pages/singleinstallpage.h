@@ -17,6 +17,7 @@
 #include <DSpinner>
 #include <DDialog>
 #include <DCommandLinkButton>
+#include <DComboBox>
 
 #include <QWidget>
 #include <QProcess>
@@ -107,6 +108,8 @@ private:
      */
     void initInstallWineLoadingLayout();
 
+    void initCompatibleSelectLayout();
+
     /**
      * @brief initPkgInfoView 初始化 包信息视图布局
      * @param fontinfosize  字体大小
@@ -184,6 +187,8 @@ private:
      */
     void setAuthDependsSuccess();
 
+    bool dependsError(int status) const;
+
 private slots:
 
     /**
@@ -253,7 +258,7 @@ private:
     bool m_workerStarted = false;  // 安装是否开始
     bool m_upDown = false;         // 当前是详细信息是展开还是收缩
 
-    AbstractPackageListModel *m_packagesModel = nullptr; //model类
+    AbstractPackageListModel *m_packagesModel = nullptr;  // model类
 
     QWidget *m_contentFrame = nullptr;   // 主布局
     QWidget *m_itemInfoFrame = nullptr;  // 包信息框架
@@ -294,6 +299,14 @@ private:
     int dependAuthStatu = -1;                       // 存储依赖授权状态
 
     bool resetButtonFocus = true;  // 展示包信息前，复位焦点状态，切换后第一次显示有效
+
+    // for comaptible mode
+    bool m_inCompatibleMode = false;  // current pacakge in comaptbile mode;
+    QString m_rootfs;                 // current package rootfs (empty if not installed)
+    QString m_targetRootfs;
+    DLabel *m_compatibleLabel = nullptr;
+    DComboBox *m_compatibleBox = nullptr;  // compatible rootfs selector
+    QHBoxLayout *m_compatibleLayout = nullptr;
 };
 
 #endif  // SINGLEINSTALLPAGE_H

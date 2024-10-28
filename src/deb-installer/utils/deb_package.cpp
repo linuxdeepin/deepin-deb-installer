@@ -10,8 +10,8 @@
 namespace Deb {
 
 DebPackage::DebPackage(const QString &debFilePath)
+    : m_debFilePtr(QSharedPointer<QApt::DebFile>::create(debFilePath))
 {
-    m_debFilePtr = QSharedPointer<QApt::DebFile>::create(debFilePath);
 }
 
 bool DebPackage::isValid() const

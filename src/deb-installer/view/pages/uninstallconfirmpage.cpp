@@ -123,6 +123,8 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
 void UninstallConfirmPage::setPackage(const QString &name)
 {
+    m_packageName = name;
+
     // add tips
     QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
     if (!m_requiredList.isEmpty()) {
@@ -150,8 +152,21 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 
 void UninstallConfirmPage::setPackageType(Pkg::PackageType type)
 {
-    QIcon icon = Utils::packageIcon(type);
+    const QIcon icon = Utils::packageIcon(type);
     m_icon->setPixmap(icon.pixmap(m_icon->size()));
+}
+
+void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
+{
+    m_rootfs = rootfs;
+    if (rootfs.isEmpty()) {
+        return;
+    }
+
+    m_infoWrapperWidget->layout()->setContentsMargins(0, 60, 0, 60);
+    m_icon->setFixedSize(85, 85);
+    m_icon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(m_icon->size()));
+    m_tips->setText(tr("Are you sure you want to uninstall %2 \nfrom %1 compatibility mode?").arg(m_rootfs).arg(m_packageName));
 }
 
 void UninstallConfirmPage::showEvent(QShowEvent *e)
