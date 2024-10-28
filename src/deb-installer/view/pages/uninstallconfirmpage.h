@@ -34,6 +34,8 @@ public:
 
     void setPackageType(Pkg::PackageType type);
 
+    void setCompatibleInfo(const QString &rootfs);
+
 signals:
 
     /**
@@ -75,5 +77,8 @@ private:
 
     QStringList m_requiredList = {};
     QString m_description = "";
+
+    QString m_packageName;
+    QString m_rootfs;
 };
 #endif  // UNINSTALLCONFIRMPAGE_H

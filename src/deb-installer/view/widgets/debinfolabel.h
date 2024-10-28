@@ -44,6 +44,9 @@ public:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    [[nodiscard]] QString paintText() const;
+
+private:
     QPalette::ColorRole m_colorRole;  // 当前label的字体颜色角色（QPalette）
     DPalette::ColorType m_colorType;  // 当前Label的字体颜色类型（DPalette）
 

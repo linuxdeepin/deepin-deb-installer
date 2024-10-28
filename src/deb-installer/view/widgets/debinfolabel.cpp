@@ -71,14 +71,14 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
             DPalette palette = DebApplicationHelper::instance()->palette(&tmpWidget);
             QPainter painter(this);
             painter.setPen(QColor(00, 130, 252));
-            painter.drawText(contentsRect(), static_cast<int>(alignment()), text());
+            painter.drawText(contentsRect(), static_cast<int>(alignment()), paintText());
             QWidget::paintEvent(event);
         } else {
             // 当前使用的是自定义颜色
             DPalette palette = DebApplicationHelper::instance()->palette(&tmpWidget);
             QPainter painter(this);
             painter.setPen(QColor(palette.color(m_colorType)));
-            painter.drawText(contentsRect(), static_cast<int>(alignment()), text());
+            painter.drawText(contentsRect(), static_cast<int>(alignment()), paintText());
             QWidget::paintEvent(event);
         }
     } else {
@@ -89,8 +89,18 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
             DPalette palette = DebApplicationHelper::instance()->palette(&tmpWidget);
             QPainter painter(this);
             painter.setPen(QColor(palette.color(m_colorRole)));
-            painter.drawText(contentsRect(), static_cast<int>(alignment()), text());
+            painter.drawText(contentsRect(), static_cast<int>(alignment()), paintText());
             QWidget::paintEvent(event);
         }
     }
+}
+
+QString DebInfoLabel::paintText() const
+{
+    QString paintString = text();
+    if (Qt::ElideNone != elideMode()) {
+        return fontMetrics().elidedText(paintString, elideMode(), width());
+    }
+
+    return paintString;
 }

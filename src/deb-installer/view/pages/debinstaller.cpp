@@ -161,7 +161,6 @@ void DebInstaller::initConnections()
 
     // Select the focus of the page
 
-    // TODO: remove to instance later.
     // Determine the status of the current application based on the status of the authorization box.
     connect(m_fileListModel, &DebListModel::signalLockForAuth, this, &DebInstaller::slotSetAuthingStatus);
     connect(m_fileListModel, &DebListModel::signalAuthCancel, this, &DebInstaller::slotShowHiddenButton);
@@ -796,6 +795,12 @@ void DebInstaller::slotShowUninstallConfirmPage()
     m_uninstallPage->setRequiredList(
         index.data(DebListModel::PackageReverseDependsListRole).toStringList());  // 查看是否有包依赖于当前要卸载的包，病获取列表
     m_uninstallPage->setPackage(index.data().toString());                         // 添加卸载提示语
+
+    // compatible mode, if rootfs is empty, fallback normal debian package uninstall flow
+    QString rootfs = index.data(AbstractPackageListModel::CompatibleRootfsRole).toString();
+    if (!rootfs.isEmpty()) {
+        m_uninstallPage->setCompatibleInfo(rootfs);
+    }
 
     m_Filterflag = UninstallPage;
     m_centralLayout->addWidget(m_uninstallPage);  // 添加卸载页面到主界面中
