@@ -25,6 +25,10 @@
 #include <QStorageInfo>
 #include <QDBusInterface>
 #include <QTemporaryDir>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QThread>
 
 #include <DSysInfo>
 #include <DDciIcon>
@@ -467,6 +471,48 @@ bool Utils::isDevelopMode()
     });
 
     return kIsDevelopMode;
+}
+
+/**
+ * @return word wrap \a text acording to \a textWidth, this function not threadsafe
+ */
+QString Utils::formatWrapText(const QString &text, int textWidth)
+{
+    // GUI thread only
+    if (QThread::currentThread() != qApp->thread()) {
+        return text;
+    }
+
+    if (text.isEmpty() || !textWidth) {
+        return text;
+    }
+
+    QString tipsText;
+
+    static QTextDocument kFormatDoc;
+    kFormatDoc.setTextWidth(textWidth);
+    kFormatDoc.setPlainText(text);
+    // call size trigger internal layout
+    kFormatDoc.size();
+
+    QTextBlock block = kFormatDoc.firstBlock();
+    while (block.isValid()) {
+        if (QTextLayout *textLay = block.layout()) {
+            for (int i = 0; i < textLay->lineCount(); ++i) {
+                QTextLine line = textLay->lineAt(i);
+                line.textStart();
+
+                if (!tipsText.isEmpty()) {
+                    tipsText.append('\n');
+                }
+                tipsText.append(text.mid(line.textStart(), line.textLength()));
+            }
+        }
+
+        block = block.next();
+    }
+
+    return tipsText;
 }
 
 /**

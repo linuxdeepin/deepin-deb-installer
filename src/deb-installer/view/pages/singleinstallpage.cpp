@@ -63,7 +63,8 @@ SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *p
     const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
     if (Pkg::CompatibleNotInstalled == dependsStat || Pkg::CompatibleIntalled == dependsStat) {
         m_inCompatibleMode = true;
-        m_rootfs = index.data(AbstractPackageListModel::CompatibleRootfsRole).toString();
+        const QString rootfsName = index.data(AbstractPackageListModel::CompatibleRootfsRole).toString();
+        m_rootfsOsName = CompBackend::instance()->osName(rootfsName);
     }
 
     initUI();                     // 初始化界面
@@ -179,11 +180,11 @@ void SingleInstallPage::initCompatibleSelectLayout()
     m_compatibleBox = new DComboBox(this);
     m_compatibleBox->setObjectName("SinglePageCompatibleBox");
     m_compatibleBox->setFixedWidth(226);
-    auto osNameList = CompBackend::instance()->osNameList();
-    for (const auto &osNamePair : osNameList) {
-        m_compatibleBox->addItem(osNamePair.first, osNamePair.second);
+    auto rootfsList = CompBackend::instance()->rootfsList();
+    for (const auto &rootfs : rootfsList) {
+        m_compatibleBox->addItem(rootfs->osName, rootfs->name);
     }
-    if (!osNameList.isEmpty()) {
+    if (!rootfsList.isEmpty()) {
         m_compatibleBox->setCurrentIndex(0);
     }
 
@@ -557,8 +558,9 @@ void SingleInstallPage::initConnections()
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
         if (Pkg::CompatibleNotInstalled == dependsStat) {
             // requset install package to compatible.
-            m_targetRootfs = m_compatibleBox->currentData().toString();
-            m_packagesModel->setData(index, m_targetRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
+            m_targetRootfsOsName = m_compatibleBox->currentText();
+            const QString targetRootfs = m_compatibleBox->currentData().toString();
+            m_packagesModel->setData(index, targetRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
             slotInstall();
         } else {
             qApp->quit();
@@ -628,6 +630,7 @@ void SingleInstallPage::slotReinstall()
     // 安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_progress->setValue(0);
     m_progressFrame->setVisible(true);
     m_btnsFrame->setVisible(false);
 
@@ -636,7 +639,8 @@ void SingleInstallPage::slotReinstall()
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
-        m_tipsLabel->setText(tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfs).arg(m_pkgNameDescription));
+        m_tipsLabel->setTextAndTips(
+            tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -664,6 +668,7 @@ void SingleInstallPage::slotInstall()
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
     m_showDependsButton->setVisible(false);
+    m_progress->setValue(0);
     m_progressFrame->setVisible(true);
     m_btnsFrame->setVisible(false);
 
@@ -672,7 +677,8 @@ void SingleInstallPage::slotInstall()
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
-        m_tipsLabel->setText(tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfs).arg(m_pkgNameDescription));
+        m_tipsLabel->setTextAndTips(
+            tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -698,6 +704,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
     // 卸载开始 显示进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_progress->setValue(0);
     m_progressFrame->setVisible(true);
     m_showDependsButton->setVisible(false);
     m_btnsFrame->setVisible(false);
@@ -707,7 +714,8 @@ void SingleInstallPage::slotUninstallCurrentPackage()
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
-        m_tipsLabel->setText(tr("Uninstalling %2 from %1 compatibility mode").arg(m_targetRootfs).arg(m_pkgNameDescription));
+        m_tipsLabel->setTextAndTips(
+            tr("Uninstalling %2 from %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -761,8 +769,12 @@ void SingleInstallPage::slotShowInfo()
     m_progressFrame->setVisible(true);
     m_btnsFrame->setVisible(false);
 
-    // 清空提示  此处可优化 m_tipsLabel->setVisiable(true);
-    m_tipsLabel->clear();
+    /* Clear tips in normal mode, but not in compatible mode,
+     * keep layout with visible on.
+     */
+    if (!m_inCompatibleMode) {
+        m_tipsLabel->clear();
+    }
 
     // 隐藏按钮
     m_installButton->setVisible(false);
@@ -823,10 +835,11 @@ void SingleInstallPage::slotWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
 
             if (m_inCompatibleMode) {
-                m_tipsLabel->setText(
-                    tr("%2 was successfully installed to %1 compatibility mode").arg(m_targetRootfs).arg(m_pkgNameDescription));
+                m_tipsLabel->setTextAndTips(tr("%2 was successfully installed to %1 compatibility mode")
+                                                .arg(m_targetRootfsOsName)
+                                                .arg(m_pkgNameDescription));
             } else {
-                m_tipsLabel->setText(tr("Installed successfully"));
+                m_tipsLabel->setTextAndTips(tr("Installed successfully"));
             }
 
             m_tipsLabel->setCustomDPalette(DPalette::DarkLively);
@@ -835,11 +848,11 @@ void SingleInstallPage::slotWorkerFinished()
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Uninstall", "Show details"));
 
             if (m_inCompatibleMode) {
-                m_tipsLabel->setText(tr("%2 has been successfully uninstalled from %1 compatibility mode")
-                                         .arg(m_rootfs)
-                                         .arg(m_pkgNameDescription));
+                m_tipsLabel->setTextAndTips(tr("%2 has been successfully uninstalled from %1 compatibility mode")
+                                                .arg(m_rootfsOsName)
+                                                .arg(m_pkgNameDescription));
             } else {
-                m_tipsLabel->setText(tr("Uninstalled successfully"));
+                m_tipsLabel->setTextAndTips(tr("Uninstalled successfully"));
             }
 
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -853,12 +866,12 @@ void SingleInstallPage::slotWorkerFinished()
             // 添加安装失败原因的提示
             QFont font;
             QFontMetrics elideFont(font);
-            m_tipsLabel->setText(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(),
-                                                      Qt::ElideRight,
-                                                      m_tipsLabel->width() - 100));  // 修复授权取消后无提示的问题
+            m_tipsLabel->setTextAndTips(elideFont.elidedText(index.data(DebListModel::PackageFailReasonRole).toString(),
+                                                             Qt::ElideRight,
+                                                             m_tipsLabel->width() - 100));  // 修复授权取消后无提示的问题
             m_tipsLabel->setToolTip(index.data(DebListModel::PackageFailReasonRole).toString());
         } else {
-            m_tipsLabel->setText(tr("Uninstall Failed"));  // 卸载只显示卸载失败
+            m_tipsLabel->setTextAndTips(tr("Uninstall Failed"));  // 卸载只显示卸载失败
         }
     } else {
         // 正常情况不会进入此分支，如果进入此分支表明状态错误。
@@ -948,7 +961,7 @@ void SingleInstallPage::showPackageInfo()
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
         if (dependsError(dependsStat) && dependAuthStatu != DebListModel::AuthConfirm) {  // 添加架构不匹配的处理
-            m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());
+            m_tipsLabel->setTextAndTips(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
             m_installButton->setVisible(false);
@@ -965,7 +978,6 @@ void SingleInstallPage::showPackageInfo()
                         break;
                     case Pkg::CompatibleIntalled:
                         // uninstall or quit
-                        m_rootfs = index.data(AbstractPackageListModel::CompatibleRootfsRole).toString();
                         m_compatibleLabel->setVisible(false);
                         m_compatibleBox->setVisible(false);
                         m_uninstallButton->setVisible(true);
@@ -1013,16 +1025,16 @@ void SingleInstallPage::showPackageInfo()
         if (installed) {
             if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(tr("Same version installed"));
+                m_tipsLabel->setTextAndTips(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(
+                m_tipsLabel->setTextAndTips(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Downgrade"));
             } else {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(
+                m_tipsLabel->setTextAndTips(
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Update", "button"));
             }
@@ -1165,7 +1177,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     // 根据依赖状态 调整界面显示
     if (dependsError(dependsStatus)) {
         // 依赖不满足或依赖授权取消
-        m_tipsLabel->setText(index.data(DebListModel::PackageFailReasonRole).toString());  // 修复授权取消后无提示的问题
+        m_tipsLabel->setTextAndTips(index.data(DebListModel::PackageFailReasonRole).toString());  // 修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         qWarning() << "SingleInstallPage:"
                    << "depends Break or Revoke installation authorization";
@@ -1194,16 +1206,16 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
             // 增加提示 依赖安装完成后的提示
             if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(tr("Same version installed"));
+                m_tipsLabel->setTextAndTips(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(
+                m_tipsLabel->setTextAndTips(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Downgrade"));
             } else {
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
-                m_tipsLabel->setText(
+                m_tipsLabel->setTextAndTips(
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Update", "button"));
             }
@@ -1247,12 +1259,12 @@ void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
         case DebListModel::CancelAuth:  // 授权取消和授权失败的提示语公用，修复授权取消后无提示的问题
         case DebListModel::AuthDependsErr:
             setCancelAuthOrAuthDependsErr();
-            m_tipsLabel->setText(tr("Failed to install %1").arg(dependName));
+            m_tipsLabel->setTextAndTips(tr("Failed to install %1").arg(dependName));
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             break;
         case DebListModel::VerifyDependsErr:
             setCancelAuthOrAuthDependsErr();
-            m_tipsLabel->setText(dependName + tr("Invalid digital signature"));
+            m_tipsLabel->setTextAndTips(dependName + tr("Invalid digital signature"));
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             break;
         default:

@@ -302,8 +302,8 @@ private:
 
     // for comaptible mode
     bool m_inCompatibleMode = false;  // current pacakge in comaptbile mode;
-    QString m_rootfs;                 // current package rootfs (empty if not installed)
-    QString m_targetRootfs;
+    QString m_rootfsOsName;           // current package rootfs (empty if not installed)
+    QString m_targetRootfsOsName;
     DLabel *m_compatibleLabel = nullptr;
     DComboBox *m_compatibleBox = nullptr;  // compatible rootfs selector
     QHBoxLayout *m_compatibleLayout = nullptr;

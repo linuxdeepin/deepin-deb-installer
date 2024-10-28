@@ -60,6 +60,13 @@ void DebInfoLabel::setCustomDPalette()
     this->setPalette(palette);
 }
 
+void DebInfoLabel::setTextAndTips(const QString &text)
+{
+    setText(text);
+    m_toolTip = text;
+    updateTipText();
+}
+
 void DebInfoLabel::paintEvent(QPaintEvent *event)
 {
     QWidget tmpWidget;
@@ -95,12 +102,29 @@ void DebInfoLabel::paintEvent(QPaintEvent *event)
     }
 }
 
-QString DebInfoLabel::paintText() const
+QString DebInfoLabel::paintText()
 {
+    // update tips while repaint
+    updateTipText();
+
     QString paintString = text();
     if (Qt::ElideNone != elideMode()) {
         return fontMetrics().elidedText(paintString, elideMode(), width());
     }
 
     return paintString;
+}
+
+/**
+ * @brief Default tooltip not provides wordwrap, use QTextDocument layout instead.
+ */
+void DebInfoLabel::updateTipText()
+{
+    if (m_toolTip.isEmpty()) {
+        setToolTip(m_toolTip);
+        return;
+    }
+
+    QString tipsText = Utils::formatWrapText(m_toolTip, width());
+    setToolTip(tipsText);
 }

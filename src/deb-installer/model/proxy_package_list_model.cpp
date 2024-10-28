@@ -299,7 +299,11 @@ void ProxyPackageListModel::connectModel(ModelPtr model)
         model, &AbstractPackageListModel::signalPackageCannotFind, this, &ProxyPackageListModel::signalPackageCannotFind);
 
     QObject::connect(model, &AbstractPackageListModel::signalLockForAuth, this, &ProxyPackageListModel::signalLockForAuth);
-    QObject::connect(model, &AbstractPackageListModel::signalAuthCancel, this, &ProxyPackageListModel::signalAuthCancel);
+    QObject::connect(model, &AbstractPackageListModel::signalAuthCancel, this, [this]() {
+        // if auth canceled, reset to prepare state.
+        setWorkerStatus(WorkerPrepare);
+        Q_EMIT signalAuthCancel();
+    });
     QObject::connect(
         model, &AbstractPackageListModel::signalEnableReCancelBtn, this, &ProxyPackageListModel::signalEnableReCancelBtn);
     QObject::connect(model, &AbstractPackageListModel::signalDependResult, this, &ProxyPackageListModel::signalDependResult);

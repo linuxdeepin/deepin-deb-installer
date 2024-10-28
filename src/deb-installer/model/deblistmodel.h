@@ -472,6 +472,8 @@ private:
      */
     void printDependsChanges();
 
+    QString itemToolTips(int index) const;
+
     // Compatbile interface
     // compatible mode only support single package install/uninstall.
     [[nodiscard]] inline bool supportCompatible() const { return 1 == m_packagesManager->m_preparedPackages.size(); }
@@ -480,7 +482,7 @@ private:
     [[nodiscard]] bool installCompatiblePackage();
     [[nodiscard]] bool uninstallCompatiblePackage();
 
-    Deb::DebPackage::Ptr packagePtr(int index);
+    Deb::DebPackage::Ptr packagePtr(int index) const;
 
 private:
     // 当前正在操作的index

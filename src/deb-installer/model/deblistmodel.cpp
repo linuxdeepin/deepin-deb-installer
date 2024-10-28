@@ -307,18 +307,20 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         case PackageDependsDetailRole:
             return QVariant::fromValue(m_packagesManager->getPackageDependsDetail(currentRow));
         case CompatibleRootfsRole:
-            if (auto pkgPtr = const_cast<DebListModel *>(this)->packagePtr(currentRow)) {
+            if (auto pkgPtr = packagePtr(currentRow)) {
                 return pkgPtr->compatible()->rootfs;
             }
             break;
         case CompatibleTargetRootfsRole:
-            if (auto pkgPtr = const_cast<DebListModel *>(this)->packagePtr(currentRow)) {
+            if (auto pkgPtr = packagePtr(currentRow)) {
                 return pkgPtr->compatible()->targetRootfs;
             }
             break;
 
         case Qt::SizeHintRole:  // 设置当前index的大小
             return QSize(0, 48);
+        case Qt::ToolTipRole:
+            return itemToolTips(currentRow);
         default:
             break;
     }
@@ -683,8 +685,9 @@ QString DebListModel::packageFailedReason(const int idx) const
 
     switch (dependStatus.status) {
         case Pkg::CompatibleIntalled:
-            if (auto ptr = const_cast<DebListModel *>(this)->packagePtr(idx)) {
+            if (auto ptr = packagePtr(idx)) {
                 QString system = ptr->compatible()->rootfs;
+                system = CompBackend::instance()->osName(system);
                 if (system.isEmpty()) {
                     system = tr("current system");
                 }
@@ -1667,6 +1670,17 @@ void DebListModel::printDependsChanges()
     }
 }
 
+QString DebListModel::itemToolTips(int index) const
+{
+    const auto dependStatus = m_packagesManager->getPackageDependsStatus(index);
+    if (!dependStatus.canInstall()) {
+        static const int kTipsWidth = 440;
+        return Utils::formatWrapText(packageFailedReason(index), kTipsWidth);
+    }
+
+    return {};
+}
+
 void DebListModel::ensureCompatibleProcessor()
 {
     if (!m_compProcessor) {
@@ -1677,18 +1691,16 @@ void DebListModel::ensureCompatibleProcessor()
                 this,
                 &DebListModel::signalAppendOutputInfo);
         connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::progressChanged, this, [this](float progress) {
-            const int whileProgress =
+            const int progressValue =
                 static_cast<int>((100. / m_packagesManager->m_preparedPackages.size()) * (m_operatingIndex + progress / 100.));
+            Q_EMIT signalWholeProgressChanged(progressValue);
 
-            Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
-            Q_EMIT signalWholeProgressChanged(whileProgress);
+            Q_EMIT signalCurrentPacakgeProgressChanged(progress);
         });
         connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::processFinished, this, [this](bool success) {
             if (success) {
                 refreshOperatingPackageStatus(Pkg::Success);
             } else {
-                refreshOperatingPackageStatus(Pkg::Failed);
-
                 auto pkgPtr = m_compProcessor->currentPackage();
                 if (pkgPtr) {
                     m_packageFailCode.insert(m_operatingPackageMd5, pkgPtr->errorCode());
@@ -1697,7 +1709,17 @@ void DebListModel::ensureCompatibleProcessor()
                     if (Pkg::DigitalSignatureError == pkgPtr->errorCode()) {
                         m_hierarchicalVerifyError = true;
                     }
+
+                    if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
+                        // notify UI reset, cancel current flow
+                        setWorkerStatus(WorkerPrepare);
+                        Q_EMIT signalAuthCancel();
+                        refreshOperatingPackageStatus(Pkg::Failed);
+                        return;
+                    }
                 }
+
+                refreshOperatingPackageStatus(Pkg::Failed);
             }
 
             bumpInstallIndex();
@@ -1723,16 +1745,18 @@ bool DebListModel::uninstallCompatiblePackage()
     return m_compProcessor->uninstall(m_currentPackage);
 }
 
-Deb::DebPackage::Ptr DebListModel::packagePtr(int index)
+Deb::DebPackage::Ptr DebListModel::packagePtr(int index) const
 {
     Deb::DebPackage::Ptr pkgPtr;
 
     if (0 <= index && index < m_packagesManager->m_packageMd5.size()) {
         const QByteArray md5 = m_packagesManager->m_packageMd5[index];
         if (!m_packagePtrMap.contains(md5)) {
-            const QString packagePath = m_packagesManager->m_preparedPackages[m_operatingIndex];
+            const QString packagePath = m_packagesManager->m_preparedPackages[index];
             pkgPtr = Deb::DebPackage::Ptr::create(packagePath);
-            m_packagePtrMap.insert(md5, pkgPtr);
+
+            // temporary code: wait for use DebPackage replace scattered package data
+            const_cast<DebListModel *>(this)->m_packagePtrMap.insert(md5, pkgPtr);
         } else {
             pkgPtr = m_packagePtrMap.value(md5);
         }

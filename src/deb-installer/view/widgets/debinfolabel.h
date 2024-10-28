@@ -6,8 +6,11 @@
 #define DEBINFOLABEL_H
 
 #include <DLabel>
+#include <QScopedPointer>
 
 DWIDGET_USE_NAMESPACE
+
+class QTextDocument;
 
 /**
  * @brief The DebInfoLabel class
@@ -41,10 +44,13 @@ public:
      */
     void setCustomDPalette();
 
+    void setTextAndTips(const QString &text);
+
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    [[nodiscard]] QString paintText() const;
+    [[nodiscard]] QString paintText();
+    void updateTipText();
 
 private:
     QPalette::ColorRole m_colorRole;  // 当前label的字体颜色角色（QPalette）
@@ -52,6 +58,8 @@ private:
 
     bool m_bUserColorType = false;  // 是否是使用的DPalette
     bool m_bMultiIns = false;       // 是否是使用的自定义DPalette风格
+
+    QString m_toolTip;
 };
 
 #endif  // DEBINFOLABEL_H
