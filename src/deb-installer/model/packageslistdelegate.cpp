@@ -248,11 +248,10 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
+    // not contains prohibit error
     if (dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
-        dependsStat == Pkg::DependsStatus::DependsVerifyFailed ||
-        dependsStat == Pkg::DependsStatus::ArchBreak  // 添加对架构不匹配的处理
-        //                || dependsStat == Pkg::DependsStatus::Prohibit  //增加应用黑名单
-    ) {
+        dependsStat == Pkg::DependsStatus::DependsVerifyFailed || dependsStat == Pkg::DependsStatus::ArchBreak ||
+        dependsStat == Pkg::CompatibleIntalled || dependsStat == Pkg::CompatibleNotInstalled) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }

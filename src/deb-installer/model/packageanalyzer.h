@@ -5,10 +5,12 @@
 #ifndef PACKAGEANALYZER_H
 #define PACKAGEANALYZER_H
 
-#include "model/packageselectmodel.h"
-
 #include <QObject>
+
 #include <atomic>
+
+#include "model/packageselectmodel.h"
+#include "utils/package_defines.h"
 
 namespace QApt {
 class Backend;
@@ -18,15 +20,8 @@ class Package;
 class PackageAnalyzer : public QObject
 {
     Q_OBJECT
-public:
-    // 包安装状态
-    enum PackageInstallStatus {
-        NotInstalled,             // 当前包没有被安装
-        InstalledSameVersion,     // 当前已经安装过相同的版本
-        InstalledEarlierVersion,  // 当前已经安装过较早的版本
-        InstalledLaterVersion     // 当前已经安装过更新的版本
-    };
 
+public:
     static PackageAnalyzer &instance();
 
     // 异步信号
@@ -47,7 +42,7 @@ public:
     inline QStringList supportArchList() const { return archs; }
 
     // 软件包安装状态，first:安装状态，secend:已安装版本（当状态不为NotInstalled时有效）
-    QPair<PackageInstallStatus, QString> packageInstallStatus(const DebIr &ir) const;
+    QPair<Pkg::PackageInstallStatus, QString> packageInstallStatus(const DebIr &ir) const;
 
     // 分析包结构
 

@@ -8,6 +8,7 @@
 #include "manager/packagesmanager.h"
 #include "process/Pty.h"
 #include "abstract_package_list_model.h"
+#include "utils/deb_package.h"
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -28,6 +29,9 @@
 DWIDGET_USE_NAMESPACE
 
 class AptConfigMessage;
+namespace Compatible {
+class CompatibleProcessController;
+}
 
 class Dialog : public DDialog
 {
@@ -118,6 +122,8 @@ public:
      * @return
      */
     QVariant data(const QModelIndex &index, int role) const override;
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     /**
      * @brief isDevelopMode 是否是开发者模式
@@ -417,31 +423,6 @@ private:
 
 private:
     /**
-     * @brief checkTemplate 检查是否需要配置
-     * @param debPath   包的路径
-     * @return  是否需要配置
-     */
-    bool checkTemplate(const QString &debPath);
-
-    /**
-     * @brief getDebian    获取包的DEBIAN文件
-     * @param debPath      包的路径
-     */
-    void getDebian(const QString &debPath);
-
-    /**
-     * @brief mkdir     创建临时目录 ，存放DEBIAN文件
-     * @return  是否创建成功
-     */
-    bool mkdir();
-
-    /**
-     * @brief rmdir     删除临时目录
-     *
-     */
-    void rmdir();
-
-    /**
      * @brief enableTitleBarFocus
      * 启用TitleBar焦点切换策略
      */
@@ -491,6 +472,16 @@ private:
      */
     void printDependsChanges();
 
+    // Compatbile interface
+    // compatible mode only support single package install/uninstall.
+    [[nodiscard]] inline bool supportCompatible() const { return 1 == m_packagesManager->m_preparedPackages.size(); }
+
+    void ensureCompatibleProcessor();
+    [[nodiscard]] bool installCompatiblePackage();
+    [[nodiscard]] bool uninstallCompatiblePackage();
+
+    Deb::DebPackage::Ptr packagePtr(int index);
+
 private:
     // 当前正在操作的index
     int m_operatingIndex = 0;
@@ -512,18 +503,15 @@ private:
 
     // 所有包的操作状态Map
     QMap<QByteArray, int> m_packageOperateStatus = {};
-
     // FailCode 错误代码 ，trans返回的错误代码
     QMap<QByteArray, int> m_packageFailCode = {};
-
     // FailReason , trans返回的详细错误信息
     QMap<QByteArray, QString> m_packageFailReason = {};
 
+    QList<QByteArray> m_packageMd5 = {};
+
     // 配置安装进程
     Konsole::Pty *m_procInstallConfig = {};
-
-    // 配置的临时目录
-    const QString tempPath = "/tmp/DEBIAN";
 
     QString m_brokenDepend = "";
 
@@ -532,12 +520,15 @@ private:
     bool m_isDevelopMode = true;
     bool m_isDigitalVerify = false;
 
-    QList<QByteArray> m_packageMd5 = {};
-
     AptConfigMessage *configWindow = nullptr;
 
     // 当前安装是否存在分级管控签名验证失败
     bool m_hierarchicalVerifyError = false;
+
+    // Compatible
+    Deb::DebPackage::Ptr m_currentPackage;
+    QMap<QByteArray, Deb::DebPackage::Ptr> m_packagePtrMap;
+    QScopedPointer<Compatible::CompatibleProcessController> m_compProcessor;
 };
 
 #endif  // DEBLISTMODEL_H

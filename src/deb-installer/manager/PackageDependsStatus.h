@@ -104,6 +104,9 @@ public:
      */
     bool isProhibit() const;
 
+    bool canInstall() const;
+    bool canInstallCompatible() const;
+
 public:
     int status;
     QString package;

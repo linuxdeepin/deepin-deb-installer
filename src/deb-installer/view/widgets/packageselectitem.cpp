@@ -74,18 +74,18 @@ void PackageSelectItem::setDebIR(const DebIr &ir)
         auto installStatus = installInfo.first;
         auto installedVersion = installInfo.second;
         switch (installStatus) {
-            case PackageAnalyzer::NotInstalled:  // 未安装
+            case Pkg::NotInstalled:  // 未安装
                 displayText = ir.shortDescription;
                 checkBox->setChecked(true);
                 break;
-            case PackageAnalyzer::InstalledSameVersion:  // 已安装相同版本
+            case Pkg::InstalledSameVersion:  // 已安装相同版本
                 displayText = tr("Same version installed");
                 break;
-            case PackageAnalyzer::InstalledEarlierVersion:  // 已安装较早版本
+            case Pkg::InstalledEarlierVersion:  // 已安装较早版本
                 displayText = tr("Earlier version installed: %1").arg(installedVersion);
                 checkBox->setChecked(true);
                 break;
-            case PackageAnalyzer::InstalledLaterVersion:  // 已安装较新版本
+            case Pkg::InstalledLaterVersion:  // 已安装较新版本
                 displayText = tr("Later version installed: %1").arg(installedVersion);
                 break;
         }

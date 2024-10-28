@@ -34,6 +34,9 @@ public:
 
         PackageTypeRole,           // is uab or deb package, sa Pkg::PackageType
         PackageDependsDetailRole,  // details for unfinished depends, empty if no errors occur, sa Pkg::DependsPair
+
+        CompatibleRootfsRole,        // compatible mode only, provides current compatible rootfs name
+        CompatibleTargetRootfsRole,  // target rootfs name
     };
 
     // the list model backend installer status
