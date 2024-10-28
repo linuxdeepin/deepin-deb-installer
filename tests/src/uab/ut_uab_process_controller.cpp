@@ -33,15 +33,31 @@ void utDebProcessController::SetUp()
 
 void utDebProcessController::TearDown() {}
 
+bool stub_isValid_true()
+{
+    return true;
+}
+
+bool stub_installDBusImpl_true(const Uab::UabPackage::Ptr &)
+{
+    return true;
+}
+
 TEST_F(utDebProcessController, installExecSuccess)
 {
+    Stub s;
+    s.set(ADDR(Uab::UabPackage, isValid), stub_isValid_true);
+    s.set(ADDR(Uab::UabProcessController, installDBusImpl), stub_installDBusImpl_true);
+
     Uab::UabProcessController uabController;
     auto uabPtr = Uab::UabPkgInfo::Ptr::create();
     uabPtr->filePath = "localtest";
     uabController.reset();
     uabController.markInstall(Uab::UabPackage::fromInfo(uabPtr));
-    uabController.commitChanges();
+    EXPECT_TRUE(uabController.commitChanges());
 
-    EXPECT_EQ(uabController.m_process->program(), uabPtr->filePath);
-    EXPECT_TRUE(uabController.m_procFlag.testFlag(Uab::UabProcessController::Installing));
+    if (Uab::UabProcessController::Cli == uabController.processType()) {
+        EXPECT_EQ(uabController.m_process->program(), uabPtr->filePath);
+    }
+    EXPECT_TRUE(uabController.m_procFlag.testFlag(Uab::UabProcessController::Processing));
 }

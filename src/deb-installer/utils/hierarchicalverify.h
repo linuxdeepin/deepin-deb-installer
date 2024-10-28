@@ -27,6 +27,7 @@ public:
 
 private:
     bool checkHierarchicalInterface();
+    bool checkValidImpl();
 
 private:
     bool valid = false;             ///< 分级管控是否开启

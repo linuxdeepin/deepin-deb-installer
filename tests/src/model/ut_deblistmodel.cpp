@@ -648,6 +648,11 @@ ConflictResult ut_packageConflictStat()
     return ConflictResult::err("");
 }
 
+PackageDependsStatus getPackageDependsStatus(const int)
+{
+    return PackageDependsStatus::_break("");
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
 {
     QStringList list;
@@ -659,6 +664,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_packageFailedReason)
     stub.set(ADDR(PackagesManager, isArchError), model_package_isArchError1);
     stub.set(ADDR(PackageDependsStatus, isBreak), ut_model_isBreak);
     stub.set(ADDR(PackagesManager, packageConflictStat), ut_packageConflictStat);
+    stub.set(ADDR(PackagesManager, getPackageDependsStatus), getPackageDependsStatus);
     m_debListModel->packageFailedReason(0);
     EXPECT_TRUE(m_debListModel->packageFailedReason(0).contains("Broken dependencies"));
 }
