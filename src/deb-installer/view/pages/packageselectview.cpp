@@ -36,7 +36,7 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     bottomLayout->addWidget(new QWidget);  // 占位用
     bottomLayout->setContentsMargins(8, 0, 0, 20);
     bottomLayout->setSpacing(0);
-    installButton->setFixedSize(120, 36);
+    installButton->setFixedWidth(120);
 
     // 设置列表控件
     packageListWidget->setFrameStyle(QFrame::NoFrame);
