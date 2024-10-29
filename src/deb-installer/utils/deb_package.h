@@ -68,6 +68,13 @@ private:
 
     QSharedPointer<Compatible::CompPkgInfo> m_compInfoPtr;
 
+    enum TemplatesState {
+        UnknownTemplates,
+        ContainTemplates,
+        NoTemplates,
+    };
+    TemplatesState m_templatesState{UnknownTemplates};
+
     Q_DISABLE_COPY(DebPackage)
 };
 

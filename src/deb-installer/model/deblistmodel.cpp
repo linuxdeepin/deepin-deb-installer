@@ -1519,6 +1519,11 @@ void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isC
 
 void DebListModel::slotConfigInputWrite(const QString &str)
 {
+    if (supportCompatible() && m_compProcessor && m_compProcessor->isRunning()) {
+        m_compProcessor->writeConfigData(str);
+        return;
+    }
+
     m_procInstallConfig->pty()->write(str.toUtf8());  // 将用户输入的配置项写入到配置安装进程中。
     m_procInstallConfig->pty()->write("\n");          // 写入换行，配置生效
 }
@@ -1686,18 +1691,29 @@ void DebListModel::ensureCompatibleProcessor()
     if (!m_compProcessor) {
         m_compProcessor.reset(new Compatible::CompatibleProcessController);
 
-        connect(m_compProcessor.data(),
-                &Compatible::CompatibleProcessController::processOutput,
-                this,
-                &DebListModel::signalAppendOutputInfo);
+        connect(
+            m_compProcessor.data(), &Compatible::CompatibleProcessController::processOutput, this, [this](const QString &output) {
+                Q_EMIT signalAppendOutputInfo(output);
+                if (m_compProcessor->containTemplates()) {
+                    configWindow->appendTextEdit(output);
+                    configWindow->show();
+                }
+            });
+
         connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::progressChanged, this, [this](float progress) {
             const int progressValue =
                 static_cast<int>((100. / m_packagesManager->m_preparedPackages.size()) * (m_operatingIndex + progress / 100.));
             Q_EMIT signalWholeProgressChanged(progressValue);
 
-            Q_EMIT signalCurrentPacakgeProgressChanged(progress);
+            Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
         });
+
         connect(m_compProcessor.data(), &Compatible::CompatibleProcessController::processFinished, this, [this](bool success) {
+            if (configWindow->isVisible()) {
+                configWindow->hide();
+                configWindow->clearTexts();
+            }
+
             if (success) {
                 refreshOperatingPackageStatus(Pkg::Success);
             } else {
@@ -1712,7 +1728,7 @@ void DebListModel::ensureCompatibleProcessor()
 
                     if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
                         // notify UI reset, cancel current flow
-                        setWorkerStatus(WorkerPrepare);
+                        m_workerStatus = WorkerPrepare;
                         Q_EMIT signalAuthCancel();
                         refreshOperatingPackageStatus(Pkg::Failed);
                         return;

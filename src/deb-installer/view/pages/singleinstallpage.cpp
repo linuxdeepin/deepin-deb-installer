@@ -556,7 +556,7 @@ void SingleInstallPage::initConnections()
     connect(m_confirmButton, &DPushButton::clicked, this, [this]() {
         QModelIndex index = m_packagesModel->index(0);
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-        if (Pkg::CompatibleNotInstalled == dependsStat) {
+        if (Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
             // requset install package to compatible.
             m_targetRootfsOsName = m_compatibleBox->currentText();
             const QString targetRootfs = m_compatibleBox->currentData().toString();
@@ -882,6 +882,9 @@ void SingleInstallPage::slotWorkerFinished()
     }
     if (!m_upDown)
         m_infoControlButton->setShrinkTips(tr("Collapse"));
+
+    // mark down
+    m_operate = Finished;
 }
 
 void SingleInstallPage::slotWorkerProgressChanged(const int progress)
