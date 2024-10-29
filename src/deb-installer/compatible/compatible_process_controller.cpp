@@ -57,6 +57,9 @@ bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
     m_outputList.clear();
     m_currentPackage = package;
 
+    // reset state
+    m_currentPackage->setError(Pkg::NoError, {});
+
     // For historical reasons, the first argument in programArguments is the
     // name of the program to execute, so create a list consisting of all
     // but the first argument to pass to setProgram()
@@ -94,6 +97,9 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
     m_outputList.clear();
     m_currentPackage = package;
 
+    // reset state
+    m_currentPackage->setError(Pkg::NoError, {});
+
     // For historical reasons, the first argument in programArguments is the
     // name of the program to execute, so create a list consisting of all
     // but the first argument to pass to setProgram()
@@ -113,6 +119,19 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
     qInfo() << "Comaptible uninstall:" << m_process->program();
     Q_EMIT processStart();
     return true;
+}
+
+bool CompatibleProcessController::containTemplates() const
+{
+    return m_currentPackage && m_currentPackage->containsTemplates();
+}
+
+void CompatibleProcessController::writeConfigData(const QString &configData)
+{
+    if (m_process) {
+        m_process->pty()->write(configData.toUtf8());
+        m_process->pty()->write("\n");
+    }
 }
 
 bool CompatibleProcessController::ensureProcess()

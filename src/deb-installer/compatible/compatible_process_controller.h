@@ -29,6 +29,9 @@ public:
     [[nodiscard]] bool install(const Deb::DebPackage::Ptr &package);
     [[nodiscard]] bool uninstall(const Deb::DebPackage::Ptr &package);
 
+    [[nodiscard]] bool containTemplates() const;
+    void writeConfigData(const QString &configData);
+
     Q_SIGNAL void processStart();
     Q_SIGNAL void processFinished(bool success);
     Q_SIGNAL void processOutput(const QString &output);

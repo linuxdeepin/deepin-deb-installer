@@ -83,13 +83,14 @@ signals:
 
 private:
     /**
-     * @brief The Operate enum 当前进行的操作
+     * @brief The current operate
      */
     enum Operate {
         Unknown,
-        Install,    // 安装
-        Uninstall,  // 卸载
-        Reinstall   // 重新安装
+        Install,
+        Uninstall,
+        Reinstall,
+        Finished,  // install/uninstall finished
     };
 
 private:

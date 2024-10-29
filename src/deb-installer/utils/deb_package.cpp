@@ -70,7 +70,11 @@ PackageDependsStatus &DebPackage::dependsStatus()
 
 bool DebPackage::containsTemplates()
 {
-    return Utils::checkPackageContainsDebConf(m_debFilePtr->filePath());
+    if (UnknownTemplates == m_templatesState) {
+        m_templatesState = Utils::checkPackageContainsDebConf(m_debFilePtr->filePath()) ? ContainTemplates : NoTemplates;
+    }
+
+    return m_templatesState == ContainTemplates;
 }
 
 void DebPackage::setError(int code, const QString &string)

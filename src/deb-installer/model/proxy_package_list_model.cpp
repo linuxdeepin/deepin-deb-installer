@@ -211,7 +211,6 @@ bool ProxyPackageListModel::nextModelInstall()
     if (m_procModelIndex >= m_packageModels.count()) {
         setWorkerStatus(WorkerFinished);
         Q_EMIT signalWholeProgressChanged(100);
-        setWorkerStatus(WorkerFinished);
         return true;
     }
 
