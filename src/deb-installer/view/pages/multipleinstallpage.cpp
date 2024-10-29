@@ -161,9 +161,9 @@ void MultipleInstallPage::initUI()
     appsViewLayout->addWidget(m_appsListView);
     appsViewLayout->addSpacing(10);
 
-    m_installButton->setMinimumSize(120, 36);     //设置安装按钮的大小
-    m_acceptButton->setMinimumSize(120, 36);      //设置确认按钮的大小
-    m_backButton->setMinimumSize(120, 36);        //设置返回按钮的大小
+    m_installButton->setMinimumWidth(120);  // 设置安装按钮的大小
+    m_acceptButton->setMinimumWidth(120);   // 设置确认按钮的大小
+    m_backButton->setMinimumWidth(120);     // 设置返回按钮的大小
 
     m_installButton->setText(tr("Install", "button"));    //设置安装按钮的提示语
     m_acceptButton->setText(tr("Done", "button"));        //设置完成按钮的提示
@@ -230,7 +230,23 @@ void MultipleInstallPage::initUI()
     btnsLayout->addWidget(m_acceptButton);                                                      //添加完成按钮
     btnsLayout->setSpacing(20);                                                                 //设置按钮间的间距为20px
     btnsLayout->addStretch();
-    btnsLayout->setContentsMargins(0, 0, 0, 0);                                                //底部间距30
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // adapt compact mode
+    auto setBtnSizeMode = [btnsLayout]() {
+        if (DGuiApplicationHelper::instance()->isCompactMode()) {
+            btnsLayout->setContentsMargins(0, 0, 0, 4);
+        } else {
+            btnsLayout->setContentsMargins(0, 0, 0, 0);
+        }
+    };
+    setBtnSizeMode();
+    // setBtnSizeMode moved
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, setBtnSizeMode);
+
+#else
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
+#endif  // DTKWIDGET_CLASS_DSizeMode
 
     QWidget *btnsFrame = new QWidget(this);
     btnsFrameLayout->addWidget(m_processFrame);                                                 //进度布局添加到btn布局中（二者互斥，一定不能同时出现）

@@ -41,7 +41,7 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     allLayout->setSpacing(0);
 
     confimButton->setFocusPolicy(Qt::StrongFocus);
-    confimButton->setFixedSize(120, 36);
+    confimButton->setFixedWidth(120);
     confimButton->setDefault(true);
     connect(confimButton, &QPushButton::clicked, this, &DdimErrorPage::comfimPressed);
 }
