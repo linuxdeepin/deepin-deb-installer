@@ -35,9 +35,9 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
 
     // cancel button settings
     m_cancelBtn->setText(tr("Cancel", "button"));
-    m_cancelBtn->setMinimumSize(120, 36);
+    m_cancelBtn->setMinimumWidth(120);
     m_confirmBtn->setText(tr("Confirm"));
-    m_confirmBtn->setMinimumSize(120, 36);
+    m_confirmBtn->setMinimumWidth(120);
 
     // 添加确认和返回按钮的焦点策略
     m_confirmBtn->setFocusPolicy(Qt::TabFocus);
@@ -55,12 +55,28 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     // layout of buttons
     QHBoxLayout *btnsLayout = new QHBoxLayout();
     btnsLayout->setSpacing(0);
-    btnsLayout->setContentsMargins(0, 0, 0, 0);
     btnsLayout->addStretch();
     btnsLayout->addWidget(m_cancelBtn);
     btnsLayout->addSpacing(20);
     btnsLayout->addWidget(m_confirmBtn);
     btnsLayout->addStretch();
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // adapt compact mode
+    auto setBtnSizeMode = [btnsLayout]() {
+        if (DGuiApplicationHelper::instance()->isCompactMode()) {
+            btnsLayout->setContentsMargins(0, 0, 0, 4);
+        } else {
+            btnsLayout->setContentsMargins(0, 0, 0, 0);
+        }
+    };
+    setBtnSizeMode();
+    // setBtnSizeMode moved
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, setBtnSizeMode);
+
+#else
+    btnsLayout->setContentsMargins(0, 0, 0, 0);
+#endif  // DTKWIDGET_CLASS_DSizeMode
 
     // Layout of icons and tips
     QVBoxLayout *contentLayout = new QVBoxLayout(this);
