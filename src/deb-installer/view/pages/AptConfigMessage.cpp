@@ -72,14 +72,8 @@ void AptConfigMessage::initControl()
 
     // 初始化输入框
     m_inputEdit = new DLineEdit();
-    m_inputEdit->setMinimumSize(220, 36);
+    m_inputEdit->setMinimumWidth(220);
 
-    //设置输入框只接受两个数字，配置的选项在99个以内（1-99）
-    //兼容有些包（mysql-community-server）配置时需要输入密码，取消对输入框的限制
-    //    QRegExp regExp("[0-9]{1,2}");
-    //    m_inputEdit->setValidator(new QRegExpValidator(regExp, this));
-
-    // 初始化提示信息lable
     m_pQuestionLabel = new DLabel(tr("Enter the number to configure: "));
     m_pQuestionLabel->setMaximumWidth(360);
     m_pQuestionLabel->setFocusPolicy(Qt::NoFocus);
@@ -87,7 +81,7 @@ void AptConfigMessage::initControl()
     //初始化提交信息按钮
     m_pushbutton = new DSuggestButton(tr("OK", "button"));
     m_pushbutton->setDefault(true);
-    m_pushbutton->setMinimumSize(130, 36);
+    m_pushbutton->setMinimumWidth(130);
 
     //焦点在信息输入框时，按回车触发提交信息。
     connect(m_inputEdit, &DLineEdit::returnPressed, m_pushbutton, &DPushButton::click);

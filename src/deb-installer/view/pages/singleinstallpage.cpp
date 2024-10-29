@@ -356,12 +356,12 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setWordWrap(true);        //允许内容自动换行
 
     // 设置各个按钮的大小
-    m_installButton->setMinimumSize(120, 36);
-    m_uninstallButton->setMinimumSize(120, 36);
-    m_reinstallButton->setMinimumSize(120, 36);
-    m_confirmButton->setMinimumSize(120, 36);
-    m_backButton->setMinimumSize(120, 36);
-    m_doneButton->setMinimumSize(120, 36);
+    m_installButton->setMinimumWidth(120);
+    m_uninstallButton->setMinimumWidth(120);
+    m_reinstallButton->setMinimumWidth(120);
+    m_confirmButton->setMinimumWidth(120);
+    m_backButton->setMinimumWidth(120);
+    m_doneButton->setMinimumWidth(120);
 
     //启用焦点切换。
     initButtonFocusPolicy();
@@ -390,7 +390,23 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     btnsLayout->addWidget(m_doneButton, 0, Qt::AlignBottom);
     btnsLayout->addStretch();
     btnsLayout->setSpacing(20);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // adapt compact mode
+    auto setBtnSizeMode = [btnsLayout]() {
+        if (DGuiApplicationHelper::instance()->isCompactMode()) {
+            btnsLayout->setContentsMargins(0, 0, 0, 4);
+        } else {
+            btnsLayout->setContentsMargins(0, 0, 0, 0);
+        }
+    };
+    setBtnSizeMode();
+    // setBtnSizeMode moved
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, setBtnSizeMode);
+
+#else
     btnsLayout->setContentsMargins(0, 0, 0, 0);
+#endif  // DTKWIDGET_CLASS_DSizeMode
 
     //进度条 布局
     QVBoxLayout *progressLayout = new QVBoxLayout();
