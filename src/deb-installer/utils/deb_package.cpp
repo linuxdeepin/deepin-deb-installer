@@ -3,6 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deb_package.h"
+
+#include <QApt/Backend>
+#include <QApt/Package>
+
+#include "model/packageanalyzer.h"
 #include "compatible/compatible_backend.h"
 #include "compatible/compatible_defines.h"
 #include "utils/utils.h"
@@ -75,6 +80,66 @@ bool DebPackage::containsTemplates()
     }
 
     return m_templatesState == ContainTemplates;
+}
+
+bool DebPackage::containRemovePackages() const
+{
+    return !m_removePackages.isEmpty();
+}
+
+void DebPackage::setMarkedPackages(const QStringList &installDepends)
+{
+    m_removePackages.clear();
+    if (!m_debFilePtr->isValid()) {
+        return;
+    }
+
+    QApt::Backend *backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        return;
+    }
+
+    backend->saveCacheState();
+
+    for (const QString &depends : installDepends) {
+        // annother error
+        if (depends.contains(" not found")) {
+            backend->undo();
+            return;
+        }
+        backend->markPackageForInstall(depends);
+    }
+
+    QApt::PackageList markedPackages = backend->markedPackages();
+
+    for (const QApt::Package *package : markedPackages) {
+        if (package->state() & QApt::Package::ToRemove) {
+            m_removePackages << package->name();
+        }
+    }
+
+    // must restore changes, not install now
+    backend->undo();
+
+    /* In the dependency check of the PacakgesManager, the dependency satisfaction of
+       the breaks/conflicts package has been detected, but only the packages that
+       will be installed have been marked.
+       Mark the breaks/conflicts package for uninstalling.
+    */
+    const QList<QApt::DependencyItem> selfRemovePackages = m_debFilePtr->breaks() + m_debFilePtr->conflicts();
+    for (const QApt::DependencyItem &item : selfRemovePackages) {
+        for (const QApt::DependencyInfo &info : item) {
+            QApt::Package *package = backend->package(info.packageName());
+            if (package && package->isInstalled()) {
+                m_removePackages << package->name();
+            }
+        }
+    }
+}
+
+QStringList DebPackage::removePackages() const
+{
+    return m_removePackages;
 }
 
 void DebPackage::setError(int code, const QString &string)

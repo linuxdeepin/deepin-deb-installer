@@ -137,6 +137,13 @@ void InfoControlButton::setExpandTips(const QString text)
     m_tipsText->setText(m_expandTips);  // 设置提示语
 }
 
+void InfoControlButton::shrinkContent()
+{
+    if (m_expand) {
+        onMouseRelease();
+    }
+}
+
 void InfoControlButton::setShrinkTips(const QString text)
 {
     m_shrinkTips = text;                // 保存提示语

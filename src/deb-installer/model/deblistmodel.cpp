@@ -316,7 +316,10 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
                 return pkgPtr->compatible()->targetRootfs;
             }
             break;
-
+        case PackageRemoveDependsRole: {
+            const QByteArray md5 = m_packagesManager->getPackageMd5(currentRow);
+            return m_packagesManager->removePackages(md5);
+        }
         case Qt::SizeHintRole:  // 设置当前index的大小
             return QSize(0, 48);
         case Qt::ToolTipRole:

@@ -299,7 +299,8 @@ private:
     DCommandLinkButton *m_pLoadingLabel = nullptr;  // 依赖安装提示信息
     int dependAuthStatu = -1;                       // 存储依赖授权状态
 
-    bool resetButtonFocus = true;  // 展示包信息前，复位焦点状态，切换后第一次显示有效
+    bool resetButtonFocus = true;       // 展示包信息前，复位焦点状态，切换后第一次显示有效
+    bool m_showRemovePackages = false;  // current package need show remove packages
 
     // for comaptible mode
     bool m_inCompatibleMode = false;  // current pacakge in comaptbile mode;

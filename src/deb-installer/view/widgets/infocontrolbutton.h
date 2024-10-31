@@ -34,6 +34,8 @@ public:
      */
     void setExpandTips(const QString text);
 
+    void shrinkContent();
+
 public:
     /**
      * @brief linkButton 返回当前使用的CommandLinkButton

@@ -44,6 +44,11 @@ public:
 
     bool containsTemplates();
 
+    // depends info
+    bool containRemovePackages() const;
+    void setMarkedPackages(const QStringList &installDepends);
+    QStringList removePackages() const;
+
     // error
     void setError(int code, const QString &string);
     [[nodiscard]] int errorCode() const;
@@ -62,6 +67,8 @@ private:
     Pkg::PackageInstallStatus m_installStatus{Pkg::NotInstalled};
 
     PackageDependsStatus m_dependsStatus;
+
+    QStringList m_removePackages;
 
     int m_errorCode{Pkg::NoError};  // sa Pkg::ErrorCode and QApt::ErrorCode
     QString m_errorString;
