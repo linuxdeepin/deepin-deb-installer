@@ -449,6 +449,8 @@ void MultipleInstallPage::slotHiddenCancelButton()
     m_appsListView->setRightMenuShowStatus(false);      //安装开始时，不允许调用右键菜单
     m_backButton->setVisible(false);                    //隐藏返回按钮
     m_installButton->setVisible(false);                 //隐藏安装按钮
+
+    m_showDependsButton->shrinkContent();
     m_showDependsButton->setVisible(false);
 }
 
@@ -482,10 +484,30 @@ void MultipleInstallPage::slotDependPackages(DependsPair dependPackages, bool in
 {
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();
-    if (!(dependPackages.second.size() > 0 && !installWineDepends)) {
-        m_showDependsButton->setVisible(false);
+    m_showDependsButton->setVisible(false);
+
+    if (installWineDepends) {
         return;
     }
+    if (dependPackages.second.isEmpty()) {
+        // depends ok or available, show package that will be remove after install
+        QModelIndex index = m_appsListView->currentIndex();
+        const QStringList removePackages = index.data(DebListModel::PackageRemoveDependsRole).toStringList();
+        if (!removePackages.isEmpty()) {
+            QString removeInfo = tr("Install %1 will remove: ").arg(index.data(DebListModel::PackageNameRole).toString());
+            removeInfo.append('\n');
+            removeInfo.append(removePackages.join('\n'));
+            removeInfo.append('\n');
+
+            m_showDependsView->appendText(removeInfo);
+            m_showDependsButton->setVisible(true);
+
+            m_tipsLabel->setText(removeInfo.simplified());
+        }
+
+        return;
+    }
+
     m_showDependsButton->setVisible(true);
     if (dependPackages.first.size() > 0) {
         m_showDependsView->appendText(tr("Dependencies in the repository"));

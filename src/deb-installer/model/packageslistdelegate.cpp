@@ -260,6 +260,13 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));       //安装失败或依赖错误
     }
 
+    // No other error, show will remove packages
+    QStringList removePackages = index.data(DebListModel::PackageRemoveDependsRole).toStringList();
+    if (!removePackages.isEmpty()) {
+        forground.setColor(palette.color(colorGroup, DPalette::TextWarning));
+        info_str = QObject::tr("Will remove: ") + removePackages.join(' ');
+    }
+
     //当前选中 设置高亮
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {

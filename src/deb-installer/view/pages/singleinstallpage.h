@@ -293,6 +293,7 @@ private:
     int dependAuthStatu = -1; //存储依赖授权状态
 
     bool resetButtonFocus = true; // 展示包信息前，复位焦点状态，切换后第一次显示有效
+    bool m_showRemovePackages = false;  // current package need show remove packages
 };
 
 #endif  // SINGLEINSTALLPAGE_H

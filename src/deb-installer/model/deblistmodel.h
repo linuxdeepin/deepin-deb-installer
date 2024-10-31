@@ -87,6 +87,8 @@ public:
         PackageFailReasonRole,              //包安装失败的原因
         PackageOperateStatusRole,           //包的操作状态
         PackageReverseDependsListRole,      //依赖于此包的程序
+
+        PackageRemoveDependsRole,           // Package will be remove if current install
     };
 
     /**
