@@ -263,7 +263,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
         <source>Show details</source>
-        <translation>显示详细信息</translation>
+        <translation>显示卸载进程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="738"/>
         <source>Collapse</source>
-        <translation>收起</translation>
+        <translation>收 起</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="347"/>
@@ -583,7 +583,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="565"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
         <source>Show details</source>
-        <translation>显示详细信息</translation>
+        <translation>显示卸载进程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
