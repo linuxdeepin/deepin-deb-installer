@@ -28,6 +28,10 @@ class DebListModel;
 class DealDependThread;
 class AddPackageThread;
 
+namespace Deb {
+class DebPackage;
+}; // namespace Deb
+
 /**
  * @brief init_backend 初始化后端
  * @return 初始化完成的后端指针
@@ -91,6 +95,9 @@ public:
      * @param package_path 包名字
      */
     QString checkPackageValid(const QStringList &package_path);
+
+    QStringList removePackages(const QByteArray &md5) const;
+
 public slots:
     /**
      * @brief DealDependResult 处理wine依赖下载结果的槽函数
@@ -199,6 +206,8 @@ public:
      * @return  指定包所有的需要下载的依赖
      */
     const QStringList packageAvailableDepends(const int index);
+
+    QStringList debFileAvailableDepends(const QString &filePath);
 
     /**
      * @brief getPackageDependsStatus 获取指定包的依赖的状态
@@ -477,6 +486,8 @@ private:
                                       const DebFile &debFile,
                                       const QHash<QString, DependencyInfo> &dependInfoMap);
 
+    void refreshPackageMarkedInfo(const QByteArray &md5, const QString &filePath);
+
 private:
     QMap<QByteArray, int> m_errorIndex;  // wine依赖错误的包的下标 QMap<MD5, DebListModel::DependsAuthStatus>
 
@@ -503,6 +514,13 @@ private:
      * 2.使用之前的方式会导致所有包的依赖状态错乱
      */
     QMap<QByteArray, PackageDependsStatus> m_packageMd5DependsStatus;
+
+    /**
+       @brief The key is md5, the value is the dependent info of the package,
+            marked packages NewInstall/ToUpgrade/ToRemove...
+            If the status of other packages is not changed, the value is nullptr.
+     */
+    QMap<QByteArray, QSharedPointer<Deb::DebPackage>> m_markedDepends;
 
     /**
      * @brief m_packageInstallStatus 包安装状态的Map

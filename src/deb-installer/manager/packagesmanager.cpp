@@ -7,6 +7,7 @@
 #include "PackageDependsStatus.h"
 #include "AddPackageThread.h"
 #include "utils/utils.h"
+#include "utils/deb_package.h"
 #include "model/deblistmodel.h"
 #include "model/dependgraph.h"
 #include "model/packageanalyzer.h"
@@ -787,6 +788,18 @@ int PackagesManager::packageInstallStatus(const int index)
     return ret;
 }
 
+/**
+   @return The package list that \a md5 will install/upgrade/remove...
+ */
+QStringList PackagesManager::removePackages(const QByteArray &md5) const
+{
+    if (auto markedPtr = m_markedDepends.value(md5)) {
+        return markedPtr->removePackages();
+    }
+
+    return {};
+}
+
 void PackagesManager::slotDealDependResult(int iAuthRes, int iIndex, const QString &dependName)
 {
     if (iIndex < 0 || iIndex > m_preparedPackages.size())
@@ -1003,6 +1016,11 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         }
     }
 
+    // If depends need install
+    if (Pkg::DependsOk == dependsStatus.status || Pkg::DependsAvailable == dependsStatus.status) {
+        refreshPackageMarkedInfo(currentPackageMd5, debFile.filePath());
+    }
+
     m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
     return dependsStatus;
 }
@@ -1149,7 +1167,12 @@ const QString PackagesManager::packageInstalledVersion(const int index)
 
 const QStringList PackagesManager::packageAvailableDepends(const int index)
 {
-    DebFile debFile(m_preparedPackages[index]);
+    return debFileAvailableDepends(m_preparedPackages[index]);
+}
+
+QStringList PackagesManager::debFileAvailableDepends(const QString &filePath)
+{
+    DebFile debFile(filePath);
     if (!debFile.isValid())
         return QStringList();
     QSet<QString> choose_set;
@@ -1422,6 +1445,7 @@ void PackagesManager::reset()
     m_preparedPackages.clear();
     m_packageInstallStatus.clear();
     m_packageMd5DependsStatus.clear();  // 修改依赖状态的存储结构，此处清空存储的依赖状态数据
+    m_markedDepends.clear();
     m_appendedPackagesMd5.clear();
     m_packageMd5.clear();
     m_dependGraph.reset();
@@ -1448,6 +1472,8 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     // reloadCache必须要加
     PackageAnalyzer::instance().backendPtr()->reloadCache();
     m_packageMd5DependsStatus.remove(currentPackageMd5);  // 删除当前包的依赖状态（之后会重新获取此包的依赖状态）
+
+    // we don't need reset m_markedDepends on installing
 }
 
 /**
@@ -1470,10 +1496,10 @@ void PackagesManager::removePackage(int index)
     if (m_dependInstallMark.contains(md5))  // 如果这个包是wine包，则在wine标记list中删除
         m_dependInstallMark.removeOne(md5);
 
-    m_appendedPackagesMd5.remove(md5);
     m_preparedPackages.removeAt(index);
 
-    m_appendedPackagesMd5.remove(md5);      // 在判断是否重复的md5的集合中删除掉当前包的md5
+    m_appendedPackagesMd5.remove(md5);  // 在判断是否重复的md5的集合中删除掉当前包的md5
+    m_markedDepends.remove(md5);
     m_packageMd5DependsStatus.remove(md5);  // 删除指定包的依赖状态
     m_packageMd5.removeAt(index);           // 在索引map中删除指定的项
     m_dependsPackages.remove(md5);          // 删除指定包的依赖关系
@@ -2370,6 +2396,19 @@ void PackagesManager::filterNeedInstallWinePackage(QStringList &dependList,
         });
 
     dependList.erase(removedIter, dependList.end());
+}
+
+void PackagesManager::refreshPackageMarkedInfo(const QByteArray &md5, const QString &filePath)
+{
+    if (m_markedDepends.contains(md5)) {
+        return;
+    }
+
+    const QStringList availableDepends = debFileAvailableDepends(filePath);
+    auto markedPtr = Deb::DebPackage::Ptr::create(filePath);
+    markedPtr->setMarkedPackages(availableDepends);
+
+    m_markedDepends.insert(md5, markedPtr);
 }
 
 bool PackagesManager::isBlackApplication(const QString &applicationName)

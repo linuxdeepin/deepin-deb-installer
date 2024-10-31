@@ -34,6 +34,7 @@ public:
 
         PackageTypeRole,           // is uab or deb package, sa Pkg::PackageType
         PackageDependsDetailRole,  // details for unfinished depends, empty if no errors occur, sa Pkg::DependsPair
+        PackageRemoveDependsRole,  // package will be remove if current install
 
         CompatibleRootfsRole,        // compatible mode only, provides current compatible rootfs name
         CompatibleTargetRootfsRole,  // target rootfs name

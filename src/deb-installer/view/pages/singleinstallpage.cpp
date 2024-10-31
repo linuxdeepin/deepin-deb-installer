@@ -69,10 +69,6 @@ SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *p
 
     initUI();                     // 初始化界面
     initControlAccessibleName();  // 自动化测试
-
-    // update show info
-    showPackageInfo();
-    connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
 }
 
 void SingleInstallPage::initUI()
@@ -92,8 +88,9 @@ void SingleInstallPage::initUI()
     m_itemInfoFrame->setVisible(true);
     m_upDown = true;  // 当前是收缩的
 
-    // refresh depends at init.
-    slotRefreshSinglePackageDepends();
+    // update show info, must call before refresh depends
+    showPackageInfo();
+    connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
 }
 
 void SingleInstallPage::initControlAccessibleName()
@@ -630,6 +627,8 @@ void SingleInstallPage::slotReinstall()
     // 安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->shrinkContent();
+    m_showDependsButton->setVisible(false);
     m_progress->setValue(0);
     m_progressFrame->setVisible(true);
     m_btnsFrame->setVisible(false);
@@ -667,6 +666,7 @@ void SingleInstallPage::slotInstall()
     // 安装开始 显示安装进度
     m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
     m_infoControlButton->setVisible(true);
+    m_showDependsButton->shrinkContent();
     m_showDependsButton->setVisible(false);
     m_progress->setValue(0);
     m_progressFrame->setVisible(true);
@@ -706,6 +706,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
     m_infoControlButton->setVisible(true);
     m_progress->setValue(0);
     m_progressFrame->setVisible(true);
+    m_showDependsButton->shrinkContent();
     m_showDependsButton->setVisible(false);
     m_btnsFrame->setVisible(false);
 
@@ -900,13 +901,35 @@ void SingleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool
 {
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();
-    if (!(dependPackages.second.size() > 0 && !installWineDepends))
-        return;
+    m_showRemovePackages = false;
 
-    // if compatible valid, disable infoextend
-    if (!m_inCompatibleMode) {
-        m_showDependsButton->setVisible(true);
+    // if compatible valid, disable extend info
+    if (installWineDepends || m_inCompatibleMode) {
+        return;
     }
+
+    if (dependPackages.second.isEmpty()) {
+        // depends ok or available, show package that will be remove after install
+        const QStringList removePackages = m_packagesModel->index(0).data(DebListModel::PackageRemoveDependsRole).toStringList();
+        if (!removePackages.isEmpty()) {
+            QString removeInfo = tr("Install %1 will remove: ").arg(m_pkgNameDescription);
+            removeInfo.append('\n');
+            removeInfo.append(removePackages.join('\n'));
+            removeInfo.append('\n');
+
+            m_showDependsView->appendText(removeInfo);
+            m_showDependsButton->setVisible(true);
+
+            m_tipsLabel->setTextAndTips(removeInfo.simplified());
+            m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
+
+            m_showRemovePackages = true;
+        }
+
+        return;
+    }
+
+    m_showDependsButton->setVisible(true);
 
     if (dependPackages.first.size() > 0) {
         m_showDependsView->appendText(tr("Dependencies in the repository"));
@@ -1041,8 +1064,10 @@ void SingleInstallPage::showPackageInfo()
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Update", "button"));
             }
-            return;
         }
+
+        // refresh depends at init.
+        slotRefreshSinglePackageDepends();
     }
 }
 
@@ -1081,6 +1106,10 @@ void SingleInstallPage::afterGetAutherFalse()
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
         m_reinstallButton->setFocus();
+    }
+
+    if (m_showRemovePackages) {
+        m_showDependsButton->setVisible(true);
     }
 }
 
