@@ -1,3 +1,52 @@
+deepin-deb-installer (6.5.0) unstable; urgency=medium
+
+  * chore: Add comment details.
+  * fix: Error message during installation(Bug: 258605)
+  * chore(CI): add debian check workflow
+  * fix: Set default focus widget on each page(Bug: 247435)(Influence: FocusWidget)
+  * fix: UI init wrong when load large package(Bug: 247435)(Influence: FocusWidget)
+  * fix: Change default focus widget(Bug: 247435, 248153, 248161)(Influence: FocusWidget)
+  * fix: Remove clear focus code(Bug: 247435)(Influence: FocusWidget)
+  * fix: Button focus not work in wayland(Bug: 247435)
+  * fix: The effect of checkbox is not fully displayed(Bug: 248145)(Influence: UI)
+  * docs: update readme.md
+  * fix: update hierarchical verify code(Bug: 269341)
+  * feat: deepin-elf-verify or depends(Influence: debian/control)
+  * style: apply clang format
+  * refactor: abstract package model interface
+  * feat: uab package backend(Influence: uab-backend)
+  * feat: uab package process controller(Influence: uab-package)
+  * feat: [translation]add transifex config(Task: 361363)
+  * feat: uab package list model(Influence: uab-package)
+  * feat: mixed deb/uab pacakge installation.(Influence: uab-package)
+  * feat: commit changes to uab backend(Influence: uab-package)
+  * feat: check linglong env and json parser(Influence: uab-package)
+  * refactor: update the installer dbus interface(Influence: uab-package)
+  * fix: tip for installation process
+  * feat: support dbus package manager interface(Influence: uab-package)
+  * feat: add uab icon(Influence: uab-package)
+  * refactor: update uab append fails tips(Influence: uab-package)
+  * feat: support select uab file
+  * chore: update chinese translations
+  * fix: update uab mimetype and uninstall process
+  * fix: compatible fixes
+  * fix: failed to detect replaceable packages(Bug: 275221)
+  * fix: init flag before check 'or depends'(Bug: 275221)
+  * fix: disable providesEnhance in the community edition
+  * feat: add uab icon and fix loop call(Influence: uab-package)
+  * fix: adapt compact mode(Bug: 279783)(Influence: compact-mode)
+  * test: fix some outdated unit tests.
+  * feat: adapt compatible install(Influence: compatible)
+  * feat: add compatible backend(Influence: compatible)
+  * feat: adapt package model with compatibility mode(Influence: compatible)
+  * feat: adapt compatibility mode ui(Influence: compatible)
+  * fix: update the prompt info(Influence: compatible)
+  * feat: compatibility mode support debconf and verify.(Influence: compatible)
+  * fix: add display of packages to be removed(Bug: 275401)
+  * chore: update translation(Influence: translation)
+
+ -- renbin <renbin@uniontech.com>  Thu, 31 Oct 2024 16:03:40 +0800
+
 deepin-deb-installer (6.0.19) unstable; urgency=medium
 
   * fix: Update qapt version check.
