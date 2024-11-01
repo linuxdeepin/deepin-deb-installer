@@ -159,7 +159,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="695"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>sistema actual</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="698"/>
@@ -169,7 +169,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="704"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias rotas, intenta instalar la aplicación en modo de compatibilidad</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="719"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="499"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>La instalación %1 se eliminará:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="515"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Se eliminará:</translation>
     </message>
 </context>
 <context>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="178"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Seleccione un modo de compatibilidad:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="390"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="913"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>La instalación %1 eliminará:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="931"/>
