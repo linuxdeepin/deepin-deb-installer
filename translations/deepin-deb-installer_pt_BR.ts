@@ -164,7 +164,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="698"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2 foi instalado em %1, desinstale este pacote antes de instalá-lo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="704"/>
