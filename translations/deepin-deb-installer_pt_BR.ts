@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="499"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>A instalação de %1 removerá:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="515"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Removerá:</translation>
     </message>
 </context>
 <context>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="913"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>A instalação de %1 removerá:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="931"/>
