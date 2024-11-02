@@ -169,7 +169,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="704"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>As dependências estão quebradas. Tente instalar o aplicativo no modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="719"/>
