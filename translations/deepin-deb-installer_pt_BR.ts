@@ -159,7 +159,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="695"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>sistema atual</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="698"/>
