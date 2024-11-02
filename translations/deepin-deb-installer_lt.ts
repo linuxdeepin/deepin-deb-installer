@@ -317,7 +317,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="521"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Trūksta priklausomybių</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="573"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="178"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite suderinamumo veikseną:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="390"/>
@@ -605,7 +605,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="937"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Trūksta priklausomybių</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1061"/>
