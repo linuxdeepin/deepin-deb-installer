@@ -699,7 +699,8 @@ O sistema e/ou outros aplicativos podem não funcionar corretamente</translation
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Desinstalar %2
+de %1 pelo modo de compatibilidade?</translation>
     </message>
 </context>
 <context>
