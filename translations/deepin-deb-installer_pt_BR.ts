@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="178"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Selecione um modo de compatibilidade:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="390"/>
@@ -560,12 +560,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="643"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="681"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Tentando instalar %2 em %1 pelo modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="718"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Desinstalando %2 de %1 pelo modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="838"/>
