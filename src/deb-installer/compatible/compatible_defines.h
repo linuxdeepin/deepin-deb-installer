@@ -10,12 +10,6 @@
 
 namespace Compatible {
 
-enum CompCode {
-    CompError = -1,
-    CompSuccess = 0,
-    AuthError = 126,  // pkexec auth cancel or error
-};
-
 struct CompPkgInfo
 {
     using Ptr = QSharedPointer<CompPkgInfo>;

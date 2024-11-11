@@ -14,6 +14,8 @@
 #include "view/widgets/error_notify_dialog_helper.h"
 #include "compatible/compatible_backend.h"
 #include "compatible/compatible_process_controller.h"
+#include "immutable/immutable_backend.h"
+#include "immutable/immutable_process_controller.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -407,6 +409,22 @@ bool DebListModel::slotUninstallPackage(int index)
         }
 
         // otherwise uninstall from current system
+    }
+
+    if (ImmBackend::instance()->immutableEnabled()) {
+        auto ptr = packagePtr(index);
+        if (ptr) {
+            if (uninstallImmutablePackage()) {
+                refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Operating);
+                return true;
+            } else {
+                refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
+                return false;
+            }
+        }
+
+        qWarning() << qPrintable("Trigger uninstall non-installed pacakge");
+        return false;
     }
 
     DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
@@ -905,7 +923,16 @@ void DebListModel::installDebs()
         } else {
             refreshOperatingPackageStatus(Pkg::Failed);
         }
+        return;
+    }
 
+    // for immutable system, if immutable is enabled, the normal installation process will not be entered
+    if (ImmBackend::instance()->immutableEnabled()) {
+        if (installImmutablePackage()) {
+            refreshOperatingPackageStatus(Pkg::Operating);
+        } else {
+            refreshOperatingPackageStatus(Pkg::Failed);
+        }
         return;
     }
 
@@ -1321,6 +1348,8 @@ void DebListModel::installNextDeb()
 
     if (dependStatus.canInstallCompatible() && supportCompatible()) {
         installDebs();
+    } else if (ImmBackend::instance()->immutableEnabled()) {
+        installDebs();
     } else if (dependStatus.isAvailable()) {  // 存在没有安装的依赖包，则进入普通安装流程执行依赖安装
         installDebs();
     } else if (dependStatus.status >= Pkg::DependsStatus::DependsBreak) {  // 安装前置条件不满足，无法处理
@@ -1527,6 +1556,11 @@ void DebListModel::slotConfigInputWrite(const QString &str)
         return;
     }
 
+    if (m_immProcessor && m_immProcessor->isRunning()) {
+        m_immProcessor->writeConfigData(str);
+        return;
+    }
+
     m_procInstallConfig->pty()->write(str.toUtf8());  // 将用户输入的配置项写入到配置安装进程中。
     m_procInstallConfig->pty()->write("\n");          // 写入换行，配置生效
 }
@@ -1697,7 +1731,7 @@ void DebListModel::ensureCompatibleProcessor()
         connect(
             m_compProcessor.data(), &Compatible::CompatibleProcessController::processOutput, this, [this](const QString &output) {
                 Q_EMIT signalAppendOutputInfo(output);
-                if (m_compProcessor->containTemplates()) {
+                if (m_compProcessor->needTemplates()) {
                     configWindow->appendTextEdit(output);
                     configWindow->show();
                 }
@@ -1762,6 +1796,81 @@ bool DebListModel::uninstallCompatiblePackage()
     m_currentPackage = packagePtr(m_operatingIndex);
 
     return m_compProcessor->uninstall(m_currentPackage);
+}
+
+void DebListModel::ensureImmutableProcessor()
+{
+    if (!m_immProcessor) {
+        m_immProcessor.reset(new Immutable::ImmutableProcessController);
+
+        connect(
+            m_immProcessor.data(), &Immutable::ImmutableProcessController::processOutput, this, [this](const QString &output) {
+                Q_EMIT signalAppendOutputInfo(output);
+                if (m_immProcessor->needTemplates()) {
+                    configWindow->appendTextEdit(output);
+                    configWindow->show();
+                }
+            });
+
+        connect(m_immProcessor.data(), &Immutable::ImmutableProcessController::progressChanged, this, [this](float progress) {
+            const int progressValue =
+                static_cast<int>((100. / m_packagesManager->m_preparedPackages.size()) * (m_operatingIndex + progress / 100.));
+            Q_EMIT signalWholeProgressChanged(progressValue);
+
+            Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
+        });
+
+        connect(m_immProcessor.data(), &Immutable::ImmutableProcessController::processFinished, this, [this](bool success) {
+            if (configWindow->isVisible()) {
+                configWindow->hide();
+                configWindow->clearTexts();
+            }
+
+            if (success) {
+                refreshOperatingPackageStatus(Pkg::Success);
+            } else {
+                auto pkgPtr = m_immProcessor->currentPackage();
+                if (pkgPtr) {
+                    m_packageFailCode.insert(m_operatingPackageMd5, pkgPtr->errorCode());
+                    m_packageFailReason.insert(m_operatingPackageMd5, pkgPtr->errorString());
+
+                    if (Pkg::DigitalSignatureError == pkgPtr->errorCode()) {
+                        m_hierarchicalVerifyError = true;
+                    }
+
+                    if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
+                        // notify UI reset, cancel current flow
+                        m_workerStatus = WorkerPrepare;
+                        Q_EMIT signalAuthCancel();
+                        refreshOperatingPackageStatus(Pkg::Failed);
+                        return;
+                    }
+                }
+
+                refreshOperatingPackageStatus(Pkg::Failed);
+            }
+
+            bumpInstallIndex();
+        });
+    }
+}
+
+bool DebListModel::installImmutablePackage()
+{
+    ensureImmutableProcessor();
+
+    m_currentPackage = packagePtr(m_operatingIndex);
+
+    return m_immProcessor->install(m_currentPackage);
+}
+
+bool DebListModel::uninstallImmutablePackage()
+{
+    ensureImmutableProcessor();
+
+    m_currentPackage = packagePtr(m_operatingIndex);
+
+    return m_immProcessor->uninstall(m_currentPackage);
 }
 
 Deb::DebPackage::Ptr DebListModel::packagePtr(int index) const

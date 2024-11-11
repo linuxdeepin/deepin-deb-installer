@@ -133,7 +133,6 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
     // 保证焦点在输入框上
     m_inputEdit->lineEdit()->setFocus();
     // 如果添加的数据是空的或者只有换行，则不添加
-    qInfo() << processInfo;
     if (processInfo.isEmpty() || processInfo == "\\r\\n")
         return;
 

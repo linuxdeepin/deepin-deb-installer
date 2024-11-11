@@ -83,6 +83,13 @@ enum ErrorCode {
     ApplocationProhibit = 404,  // the current package is in the blacklist and is prohibited from installation
 };
 
+// Install / Uninstall process return code
+enum ExitCode {
+    ExitNoError = 0,      // success
+    ExitAuthError = 126,  // authentication check cancel or failed
+    ExitUnknownError = -1,
+};
+
 }  // namespace Pkg
 
 Q_DECLARE_METATYPE(Pkg::DependsPair)

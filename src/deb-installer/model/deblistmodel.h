@@ -32,6 +32,9 @@ class AptConfigMessage;
 namespace Compatible {
 class CompatibleProcessController;
 }
+namespace Immutable {
+class ImmutableProcessController;
+}
 
 class Dialog : public DDialog
 {
@@ -482,6 +485,11 @@ private:
     [[nodiscard]] bool installCompatiblePackage();
     [[nodiscard]] bool uninstallCompatiblePackage();
 
+    // Immutable interface
+    void ensureImmutableProcessor();
+    [[nodiscard]] bool installImmutablePackage();
+    [[nodiscard]] bool uninstallImmutablePackage();
+
     Deb::DebPackage::Ptr packagePtr(int index) const;
 
 private:
@@ -531,6 +539,9 @@ private:
     Deb::DebPackage::Ptr m_currentPackage;
     QMap<QByteArray, Deb::DebPackage::Ptr> m_packagePtrMap;
     QScopedPointer<Compatible::CompatibleProcessController> m_compProcessor;
+
+    // immutable
+    QScopedPointer<Immutable::ImmutableProcessController> m_immProcessor;
 };
 
 #endif  // DEBLISTMODEL_H

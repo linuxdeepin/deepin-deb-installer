@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef COMPATIBLEPROCESSCONTROLLER_H
-#define COMPATIBLEPROCESSCONTROLLER_H
+#ifndef IMMUTABLEPROCESSCONTROLLER_H
+#define IMMUTABLEPROCESSCONTROLLER_H
 
 #include <QObject>
 
@@ -13,15 +13,15 @@ namespace Konsole {
 class Pty;
 };  // namespace Konsole
 
-namespace Compatible {
+namespace Immutable {
 
-class CompatibleProcessController : public QObject
+class ImmutableProcessController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit CompatibleProcessController(QObject *parent = nullptr);
-    ~CompatibleProcessController() override = default;
+    explicit ImmutableProcessController(QObject *parent = nullptr);
+    ~ImmutableProcessController() override = default;
 
     [[nodiscard]] const Deb::DebPackage::Ptr &currentPackage() const;
 
@@ -45,7 +45,7 @@ private:
 
     enum ProcessType {
         Install,
-        Uninstall,
+        Unintsall,
     };
     ProcessType m_type{Install};
     QStringList m_outputList;  // for simunalte progress
@@ -53,9 +53,9 @@ private:
     Konsole::Pty *m_process{nullptr};
     Deb::DebPackage::Ptr m_currentPackage;
 
-    Q_DISABLE_COPY(CompatibleProcessController)
+    Q_DISABLE_COPY(ImmutableProcessController)
 };
 
-};  // namespace Compatible
+};  // namespace Immutable
 
-#endif  // COMPATIBLEPROCESSCONTROLLER_H
+#endif  // IMMUTABLEPROCESSCONTROLLER_H

@@ -2,37 +2,34 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "compatible_process_controller.h"
+#include "immutable_process_controller.h"
 
 #include <QDebug>
 
-#include "compatible_backend.h"
 #include "process/Pty.h"
-#include "utils/package_defines.h"
 #include "utils/hierarchicalverify.h"
+#include "utils/package_defines.h"
 
-namespace Compatible {
+namespace Immutable {
 
-// transport install/remove task to higher level permission process.
 static const QString kPkexecBin = "pkexec";
 static const QString kInstallProcessorBin = "deepin-deb-installer-dependsInstall";
-static const QString kParamCompatible = "--install_compatible";
+static const QString kParamImmutable = "--install_immutable";
 static const QString kParamInstallConfig = "--install_config";
 static const QString kParamInstall = "--install";
 static const QString kParamRemove = "--remove";
-static const QString kParamRootfs = "--rootfs";
 
-CompatibleProcessController::CompatibleProcessController(QObject *parent)
+ImmutableProcessController::ImmutableProcessController(QObject *parent)
     : QObject{parent}
 {
 }
 
-const Deb::DebPackage::Ptr &CompatibleProcessController::currentPackage() const
+const Deb::DebPackage::Ptr &ImmutableProcessController::currentPackage() const
 {
     return m_currentPackage;
 }
 
-bool CompatibleProcessController::isRunning() const
+bool ImmutableProcessController::isRunning() const
 {
     if (m_process && QProcess::NotRunning != m_process->state()) {
         return true;
@@ -41,7 +38,7 @@ bool CompatibleProcessController::isRunning() const
     return false;
 }
 
-bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
+bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package)
 {
     if (!package || !package->isValid() || isRunning()) {
         return false;
@@ -63,13 +60,7 @@ bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
     // name of the program to execute, so create a list consisting of all
     // but the first argument to pass to setProgram()
     // sa: Pty::start()
-    QStringList params{kPkexecBin,
-                       kInstallProcessorBin,
-                       kParamCompatible,
-                       kParamInstall,
-                       kParamRootfs,
-                       m_currentPackage->compatible()->targetRootfs,
-                       m_currentPackage->filePath()};
+    QStringList params{kPkexecBin, kInstallProcessorBin, kParamImmutable, kParamInstall, m_currentPackage->filePath()};
     if (m_currentPackage->containsTemplates()) {
         params << kParamInstallConfig;
     }
@@ -81,7 +72,7 @@ bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
     return true;
 }
 
-bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
+bool ImmutableProcessController::uninstall(const Deb::DebPackage::Ptr &package)
 {
     if (!package || !package->isValid() || isRunning()) {
         return false;
@@ -92,7 +83,7 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
 
     // e.g.: pkexec deepin-deb-installer-dependsInstall Compatible
     //       remove --rootfs [rootfs name] [package name]
-    m_type = Uninstall;
+    m_type = Unintsall;
     m_outputList.clear();
     m_currentPackage = package;
 
@@ -103,29 +94,25 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
     // name of the program to execute, so create a list consisting of all
     // but the first argument to pass to setProgram()
     // sa: Pty::start()
-    m_process->start(kPkexecBin,
-                     {kPkexecBin,
-                      kInstallProcessorBin,
-                      kParamCompatible,
-                      kParamRemove,
-                      kParamRootfs,
-                      m_currentPackage->compatible()->rootfs,
-                      m_currentPackage->debInfo()->packageName()},
-                     {},
-                     0,
-                     false);
+    m_process->start(
+        kPkexecBin,
+        {kPkexecBin, kInstallProcessorBin, kParamImmutable, kParamRemove, m_currentPackage->debInfo()->packageName()},
+        {},
+        0,
+        false);
 
     qInfo() << "Comaptible uninstall:" << m_process->program();
     Q_EMIT processStart();
     return true;
 }
 
-bool CompatibleProcessController::needTemplates() const
+bool ImmutableProcessController::needTemplates() const
 {
-    return (Uninstall == m_type) && m_currentPackage && m_currentPackage->containsTemplates();
+    // Unisntallation not need config templates.
+    return (Unintsall != m_type) && m_currentPackage && m_currentPackage->containsTemplates();
 }
 
-void CompatibleProcessController::writeConfigData(const QString &configData)
+void ImmutableProcessController::writeConfigData(const QString &configData)
 {
     if (m_process) {
         m_process->pty()->write(configData.toUtf8());
@@ -133,16 +120,16 @@ void CompatibleProcessController::writeConfigData(const QString &configData)
     }
 }
 
-bool CompatibleProcessController::ensureProcess()
+bool ImmutableProcessController::ensureProcess()
 {
     if (!m_process) {
         m_process = new Konsole::Pty(this);
 
-        connect(m_process, &Konsole::Pty::receivedData, this, &CompatibleProcessController::onReadOutput);
+        connect(m_process, &Konsole::Pty::receivedData, this, &ImmutableProcessController::onReadOutput);
         connect(m_process,
                 QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                 this,
-                &CompatibleProcessController::onFinished);
+                &ImmutableProcessController::onFinished);
     } else if (QProcess::NotRunning != m_process->state()) {
         qWarning() << "Unable to restart compatible process is still running";
         return false;
@@ -151,7 +138,7 @@ bool CompatibleProcessController::ensureProcess()
     return true;
 }
 
-void CompatibleProcessController::onReadOutput(const char *buffer, int length, bool isCommandExec)
+void ImmutableProcessController::onReadOutput(const char *buffer, int length, bool isCommandExec)
 {
     Q_UNUSED(isCommandExec);
 
@@ -172,7 +159,7 @@ void CompatibleProcessController::onReadOutput(const char *buffer, int length, b
     Q_EMIT progressChanged(progress);
 }
 
-void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
+void ImmutableProcessController::onFinished(int exitCode, int exitStatus)
 {
     const bool success = (Pkg::ExitNoError == exitCode && QProcess::NormalExit == exitStatus);
     if (!success) {
@@ -195,21 +182,8 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
 
     Q_EMIT processFinished(success);
 
-    if (success) {
-        switch (m_type) {
-            case Install:
-                CompatibleBackend::instance()->packageInstalled(m_currentPackage->compatible());
-                break;
-            case Uninstall:
-                CompatibleBackend::instance()->packageRemoved(m_currentPackage->compatible());
-                break;
-            default:
-                break;
-        }
-    }
-
     // release temp data
     m_outputList.clear();
 }
 
-};  // namespace Compatible
+};  // namespace Immutable
