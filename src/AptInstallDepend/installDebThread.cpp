@@ -9,12 +9,23 @@
 static const QString kParamInstallWine = "install_wine";
 static const QString kParamInstallConfig = "install_config";
 static const QString kParamInstallComaptible = "install_compatible";
+static const QString kParamInstallImmutable = "install_immutable";
 
+static const QString kInstall = "install";
+static const QString kRemove = "remove";
+
+// for compatible mode
 static const QString kCompatibleBin = "deepin-compatible-ctl";
 static const QString kCompApp = "app";
-static const QString kCompInstall = "install";
-static const QString kCompRemove = "remove";
 static const QString kCompRootfs = "rootfs";
+
+// for immutable system
+static const QString kImmutableBin = "deepin-immutable-ctl";
+static const QString kImmuExt = "ext";
+
+// for disable DebConf
+static const QString kDebConfEnv = "DEBIAN_FRONTEND";
+static const QString kDebConfDisable = "noninteractive";
 
 InstallDebThread::InstallDebThread()
 {
@@ -45,8 +56,9 @@ void InstallDebThread::setParam(const QStringList &arguments)
     static QMap<QString, Command> kParamMap{{kParamInstallWine, InstallWine},
                                             {kParamInstallConfig, InstallConfig},
                                             {kParamInstallComaptible, Compatible},
-                                            {kCompInstall, Install},
-                                            {kCompRemove, Remove}};
+                                            {kParamInstallImmutable, Immutable},
+                                            {kInstall, Install},
+                                            {kRemove, Remove}};
 
     for (auto itr = kParamMap.begin(); itr != kParamMap.end(); ++itr) {
         m_parser.addOption(QCommandLineOption(itr.key()));
@@ -132,7 +144,10 @@ void InstallDebThread::run()
         installWine();
     } else if (m_cmds.testFlag(Compatible)) {
         compatibleProcess();
+    } else if (m_cmds.testFlag(Immutable)) {
+        immutableProcess();
     } else if (m_cmds.testFlag(InstallConfig)) {
+        // InstallConfig must last, Compatible and Immutable maybe set InstallConfig too.
         installConfig();
     }
 }
@@ -146,11 +161,15 @@ void InstallDebThread::installWine()
         return;
     }
 
+    // Note: Notify the front-end installation to start, don't remove it.
+    qInfo() << "StartInstallDeepinwine";
+
+    // On immutable system: --fix-missing not support, apt command will transport to deepin-immutable-ctl
+    system("echo 'libpam-runtime libpam-runtime/override boolean false' | debconf-set-selections");
     system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
     m_proc->setProgram("sudo",
                        QStringList() << "apt-get"
-                                     << "install" << m_listParam << "--fix-missing"
-                                     << "-y");
+                                     << "install" << m_listParam << "-y");
     m_proc->start();
     m_proc->waitForFinished(-1);
     m_proc->close();
@@ -180,8 +199,6 @@ void InstallDebThread::installConfig()
 
         getDescription(debPath);
 
-        // m_proc->start("sudo", QStringList() << "-S" <<  "dpkg-preconfigure" << "-f" << "Teletype" << m_listParam[1]);
-        //                m_proc->start("sudo", QStringList() << "-S" <<  "dpkg" << "-i" << debPath);
         m_proc->setProgram("sudo",
                            QStringList() << "-S"
                                          << "dpkg"
@@ -223,11 +240,12 @@ void InstallDebThread::compatibleProcess()
             getDescription(debPath);
         }
 
-        params << kCompApp << kCompInstall << debPath;
+        // e.g.: deepin-comptabile-ctl ext install [deb file]
+        params << kCompApp << kInstall << debPath;
 
     } else if (m_cmds.testFlag(Remove)) {
-        // e.g.: deepin-compatible app remove [package/name]
-        params << kCompApp << kCompRemove << m_listParam.first();
+        // e.g.: deepin-compatible-ctl app remove [package name]
+        params << kCompApp << kRemove << m_listParam.first();
 
     } else {
         return;
@@ -238,6 +256,60 @@ void InstallDebThread::compatibleProcess()
     }
 
     m_proc->setProgram(kCompatibleBin, params);
+    qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
+
+    m_proc->start();
+    m_proc->waitForFinished(-1);
+    m_proc->close();
+
+    QDir filePath(TEMPLATE_DIR);
+    if (filePath.exists()) {
+        filePath.removeRecursively();
+    }
+}
+
+/**
+   @brief Install / remove package in immutable system.
+ */
+void InstallDebThread::immutableProcess()
+{
+    if (m_listParam.isEmpty()) {
+        return;
+    }
+
+    QStringList params;
+
+    if (m_cmds.testFlag(Install)) {
+        // e.g.: deepin-compatible app install [deb file]
+        // only one package support
+        QString debPath = m_listParam.first();
+
+        if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
+            debPath.contains("`")) {
+            debPath = SymbolicLink(debPath, "installPackage");
+        }
+
+        if (m_cmds.testFlag(InstallConfig)) {
+            getDescription(debPath);
+        } else {
+            // If current pacakge no DebConf config, disable DebConf
+            m_proc->setEnv(kDebConfEnv, kDebConfDisable);
+        }
+
+        // e.g.: deepin-immutable-ctl ext install [deb file]
+        params << kImmuExt << kInstall << debPath;
+
+    } else if (m_cmds.testFlag(Remove)) {
+        // e.g.: deepin-immutable-ctl ext remove [package name]
+        params << kImmuExt << kRemove << m_listParam.first();
+
+        // Disable DebConf while remove package
+        m_proc->setEnv(kDebConfEnv, kDebConfDisable);
+    } else {
+        return;
+    }
+
+    m_proc->setProgram(kImmutableBin, params);
     qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
 
     m_proc->start();
