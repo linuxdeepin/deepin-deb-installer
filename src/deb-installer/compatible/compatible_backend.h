@@ -13,8 +13,19 @@ class QProcess;
 
 namespace Compatible {
 
+/*
+    Warning: Compatibility mode is temporary deprecated, this class is invalid forever. see macro DISABLE_COMPATIBLE.
+             However, there is still a high probability that this module will be enabled later, so the code is retained.
+             To restore it, remove the DISABLE_COMPATIBLE macro.
+ */
+#define DISABLE_COMPATIBLE
+
 // Backend for comaptible mode package manage.
+#ifdef DISABLE_COMPATIBLE
+class QT_DEPRECATED_X("Temporary disable compatibility mode!") CompatibleBackend : public QObject
+#else
 class CompatibleBackend : public QObject
+#endif
 {
     Q_OBJECT
 
@@ -22,11 +33,17 @@ public:
     static CompatibleBackend *instance();
 
     void initBackend(bool async = true);
-    [[nodiscard]] bool compatibleValid() const;
     Q_SIGNAL void compatibleInitFinished();
 
+#ifdef DISABLE_COMPATIBLE
+    [[nodiscard]] bool compatibleValid() const { return false; }
+    [[nodiscard]] bool compatibleExists() const { return false; }
+    bool recheckCompatibleExists() { return false; }
+#else
+    [[nodiscard]] bool compatibleValid() const;
     [[nodiscard]] bool compatibleExists() const;
     bool recheckCompatibleExists();
+#endif
 
     [[nodiscard]] QList<RootfsInfo::Ptr> rootfsList() const;
     [[nodiscard]] QString osName(const QString &rootfsName) const;
