@@ -36,6 +36,7 @@ CompatibleBackend *CompatibleBackend::instance()
     return &ins;
 }
 
+#ifndef DISABLE_COMPATIBLE
 bool CompatibleBackend::compatibleValid() const
 {
     return m_init && !m_rootfsList.isEmpty();
@@ -54,6 +55,7 @@ bool CompatibleBackend::recheckCompatibleExists()
 
     return m_compatibleExists;
 }
+#endif
 
 QList<RootfsInfo::Ptr> CompatibleBackend::rootfsList() const
 {
@@ -164,6 +166,10 @@ QHash<QString, CompPkgInfo::Ptr> CompatibleBackend::parseAppListFromRawOutput(co
 
 void CompatibleBackend::initBackend(bool async)
 {
+    if (!compatibleExists()) {
+        return;
+    }
+
     static std::once_flag kCompInitFlag;
     std::call_once(kCompInitFlag, [this, async]() {
         if (async) {
