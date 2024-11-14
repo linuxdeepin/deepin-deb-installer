@@ -927,7 +927,7 @@ void DebListModel::installDebs()
     }
 
     // for immutable system, if immutable is enabled, the normal installation process will not be entered
-    if (ImmBackend::instance()->immutableEnabled()) {
+    if (dependsStat.canInstall() && ImmBackend::instance()->immutableEnabled()) {
         if (installImmutablePackage()) {
             refreshOperatingPackageStatus(Pkg::Operating);
         } else {
@@ -1731,7 +1731,10 @@ void DebListModel::ensureCompatibleProcessor()
         connect(
             m_compProcessor.data(), &Compatible::CompatibleProcessController::processOutput, this, [this](const QString &output) {
                 Q_EMIT signalAppendOutputInfo(output);
-                if (m_compProcessor->needTemplates()) {
+
+                if (configWindow->isVisible()) {
+                    configWindow->appendTextEdit(output);
+                } else if (m_compProcessor->needTemplates()) {
                     configWindow->appendTextEdit(output);
                     configWindow->show();
                 }
@@ -1806,7 +1809,10 @@ void DebListModel::ensureImmutableProcessor()
         connect(
             m_immProcessor.data(), &Immutable::ImmutableProcessController::processOutput, this, [this](const QString &output) {
                 Q_EMIT signalAppendOutputInfo(output);
-                if (m_immProcessor->needTemplates()) {
+
+                if (configWindow->isVisible()) {
+                    configWindow->appendTextEdit(output);
+                } else if (m_immProcessor->needTemplates()) {
                     configWindow->appendTextEdit(output);
                     configWindow->show();
                 }
