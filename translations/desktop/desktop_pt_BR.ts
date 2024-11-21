@@ -2,7 +2,7 @@
 <name>desktop</name>
 <message>
     <location filename="Desktop Entry]Name" line="0"/>
-    <source>Deepin Package Installer</source><translation>deepin Instalador de Pacotes</translation>
+    <source>Deepin Package Installer</source><translation>Instalador de Pacotes</translation>
 </message>
 <message>
     <location filename="Desktop Entry]GenericName" line="0"/>
