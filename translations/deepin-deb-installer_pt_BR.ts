@@ -23,7 +23,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 carregado</translation>
+        <translation>%1 / %2 carregado</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="89"/>
         <source>Select File</source>
-        <translation>Selecionar Arquivo</translation>
+        <translation>Selecionar arquivo</translation>
     </message>
 </context>
 <context>
@@ -382,7 +382,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="65"/>
         <source>Waiting</source>
-        <translation>Aguardando...</translation>
+        <translation>Aguardando</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="232"/>
