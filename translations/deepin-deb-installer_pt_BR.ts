@@ -284,7 +284,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="169"/>
@@ -416,7 +416,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="49"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
 </context>
 <context>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="884"/>
         <source>Collapse</source>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
@@ -668,7 +668,7 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="37"/>
