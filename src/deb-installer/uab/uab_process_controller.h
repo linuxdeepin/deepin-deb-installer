@@ -9,7 +9,9 @@
 
 #include "uab_package.h"
 
-class QProcess;
+namespace Konsole {
+class Pty;
+}  // namespace Konsole
 
 namespace Uab {
 
@@ -23,8 +25,8 @@ public:
 
     enum ProcessType {
         Unknown,
-        DBus,  // call Linglong package manager DBus interface
-        Cli,   // means qprocess execute, command line interface
+        BackendCli,  // transport to deepin-deb-installer-dependsInstall, use ll-cli interface
+        DirectCli,   // means direct qprocess execute, command line interface
     };
     void setProcessType(ProcessType type);
     [[nodiscard]] ProcessType processType() const;
@@ -57,14 +59,14 @@ private:
     void parseProgressFromJson(const QByteArray &jsonData);
     void parseProgressFromRawOutput(const QByteArray &output);
     void updateWholeProgress(float currentTaskProgress);
-    Q_SLOT void onReadOutput();
+    Q_SLOT void onReadOutput(const char *buffer, int length, bool isCommandExec);
     Q_SLOT void onFinished(int exitCode, int exitStatus);
     Q_SLOT void onDBusProgressChanged(int progress, const QString &message);
 
     bool nextProcess();
 
-    bool installDBusImpl(const UabPackage::Ptr &installPtr);
-    bool uninstallDBusImpl(const UabPackage::Ptr &uninstallPtr);
+    bool installBackendCliImpl(const UabPackage::Ptr &installPtr);
+    bool uninstallBackendCliImpl(const UabPackage::Ptr &uninstallPtr);
     bool installCliImpl(const UabPackage::Ptr &installPtr);
     bool uninstallCliImpl(const UabPackage::Ptr &uninstallPtr);
 
@@ -74,14 +76,14 @@ private:
     void commitCurrentChangeToBackend();
 
 private:
-    QProcess *m_process{nullptr};
+    Konsole::Pty *m_process{nullptr};
     ProcessType m_type{Unknown};
 
     ProcFlags m_procFlag{Prepare};
     int m_currentIndex{-1};
     QList<QPair<ProcFlag, UabPackage::Ptr>> m_procList;  // install/uninstall package list
 
-    Q_DISABLE_COPY(UabProcessController);
+    Q_DISABLE_COPY(UabProcessController)
 };
 
 }  // namespace Uab

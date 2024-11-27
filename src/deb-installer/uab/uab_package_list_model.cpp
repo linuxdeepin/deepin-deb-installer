@@ -434,6 +434,11 @@ void UabPackageListModel::setCurrentOperation(Pkg::PackageOperationStatus s)
     auto &uabPtr = m_uabPkgList[m_operatingIndex];
     uabPtr->m_operationStatus = s;
 
+    // mark error info
+    if (Pkg::Failed == s) {
+        uabPtr->setProcessError(Pkg::UnknownError, tr("Installation Failed"));
+    }
+
     Q_EMIT dataChanged(index(m_operatingIndex), index(m_operatingIndex), {PackageOperateStatusRole});
 }
 

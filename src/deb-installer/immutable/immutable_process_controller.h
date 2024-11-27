@@ -11,7 +11,7 @@
 
 namespace Konsole {
 class Pty;
-};  // namespace Konsole
+}  // namespace Konsole
 
 namespace Immutable {
 

@@ -28,11 +28,12 @@ public:
         InstallWine = 1 << 3,
         InstallConfig = 1 << 4,  // DebConf install
 
-        Compatible = 1 << 5,  // compatible mode
-        Immutable = 1 << 6,   // immutable system
+        Compatible = 1 << 5,   // compatible mode
+        Immutable = 1 << 6,    // immutable system
+        LinglongUab = 1 << 7,  // linglong app(lingyaps)
     };
     Q_DECLARE_FLAGS(Commands, Command)
-    Q_FLAG(Commands);
+    Q_FLAG(Commands)
 
     InstallDebThread();
     virtual ~InstallDebThread();
@@ -53,6 +54,7 @@ private:
     void installConfig();
     void compatibleProcess();
     void immutableProcess();
+    void uabProcessCli();
 
     // 使用软连接方式解决文件路径中存在空格的问题。
     QString SymbolicLink(const QString &previousName, const QString &packageName);

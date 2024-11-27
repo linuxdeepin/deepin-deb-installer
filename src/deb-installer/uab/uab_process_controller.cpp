@@ -12,7 +12,7 @@
 #include <QDebug>
 
 #include "uab_backend.h"
-#include "uab_dbus_package_manager.h"
+#include "process/Pty.h"
 
 namespace Uab {
 
@@ -28,16 +28,19 @@ const QString kJsonState = "state";
 const QString kJsonCode = "code";
 const QString kJsonMessage = "messsage";
 
+// transport install/uninstall task to higher level permission process.
+static const QString kPkexecBin = "pkexec";
+static const QString kInstallProcessorBin = "deepin-deb-installer-dependsInstall";
+static const QString kParamUab = "--uab";
+static const QString kParamInstall = "--install";
+static const QString kParamRemove = "--remove";
+
 const int kInitedIndex = -1;
 
 UabProcessController::UabProcessController(QObject *parent)
     : QObject{parent}
 {
-    if (UabDBusPackageManager::instance()->isValid()) {
-        setProcessType(DBus);
-    } else {
-        setProcessType(Cli);
-    }
+    setProcessType(BackendCli);
 }
 
 void UabProcessController::setProcessType(ProcessType type)
@@ -46,20 +49,6 @@ void UabProcessController::setProcessType(ProcessType type)
         return;
     }
     m_type = type;
-
-    if (DBus == type) {
-        QObject::connect(UabDBusPackageManager::instance(),
-                         &UabDBusPackageManager::progressChanged,
-                         this,
-                         &UabProcessController::onDBusProgressChanged);
-        QObject::connect(UabDBusPackageManager::instance(), &UabDBusPackageManager::packageFinished, this, [this](bool success) {
-            const int ret = success ? UabSuccess : UabError;
-            onFinished(ret, ret);
-        });
-
-    } else {
-        QObject::disconnect(UabDBusPackageManager::instance(), nullptr, this, nullptr);
-    }
 }
 
 UabProcessController::ProcessType UabProcessController::processType() const
@@ -137,9 +126,9 @@ bool UabProcessController::commitChanges()
 bool Uab::UabProcessController::ensureProcess()
 {
     if (!m_process) {
-        m_process = new QProcess(this);
+        m_process = new Konsole::Pty(this);
 
-        connect(m_process, &QProcess::readyRead, this, &UabProcessController::onReadOutput);
+        connect(m_process, &Konsole::Pty::receivedData, this, &UabProcessController::onReadOutput);
         connect(
             m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &UabProcessController::onFinished);
     } else if (QProcess::NotRunning != m_process->state()) {
@@ -189,9 +178,14 @@ void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
         }
 
     } else if (doc.isObject()) {
-        // maybe code info
+        // maybe percentage / code info
         const QJsonObject obj = doc.object();
-        if (UabError == obj.value(kJsonCode).toInt()) {
+
+        if (obj.contains(kJsonPercentage)) {
+            float progress = obj.value(kJsonPercentage).toDouble();
+            updateWholeProgress(progress);
+
+        } else if (UabError == obj.value(kJsonCode).toInt()) {
             const QString errorString = obj.value(kJsonMessage).toString();
             auto currUabPtr = currentPackagePtr();
             if (currUabPtr) {
@@ -231,9 +225,10 @@ void UabProcessController::updateWholeProgress(float currentTaskProgress)
     Q_EMIT progressChanged(currentTaskProgress);
 }
 
-void UabProcessController::onReadOutput()
+void UabProcessController::onReadOutput(const char *buffer, int length, bool isCommandExec)
 {
-    QByteArray output = m_process->readAllStandardOutput();
+    Q_UNUSED(isCommandExec)
+    QByteArray output = QByteArray::fromRawData(buffer, length);
     Q_EMIT processOutput(output);
 
     // e.g: ll-cli --json install /path/to/file
@@ -288,9 +283,9 @@ bool UabProcessController::nextProcess()
     const auto &currentProc = m_procList.at(m_currentIndex);
     switch (currentProc.first) {
         case Installing:
-            return (DBus == m_type) ? installDBusImpl(currentProc.second) : installCliImpl(currentProc.second);
+            return (BackendCli == m_type) ? installBackendCliImpl(currentProc.second) : installCliImpl(currentProc.second);
         case Uninstalling:
-            return (DBus == m_type) ? uninstallDBusImpl(currentProc.second) : uninstallCliImpl(currentProc.second);
+            return (BackendCli == m_type) ? uninstallBackendCliImpl(currentProc.second) : uninstallCliImpl(currentProc.second);
         default:
             break;
     }
@@ -299,24 +294,47 @@ bool UabProcessController::nextProcess()
     return false;
 }
 
-bool UabProcessController::installDBusImpl(const UabPackage::Ptr &installPtr)
+bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installPtr)
 {
     if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
         return false;
     }
 
     m_procFlag.setFlag(Installing);
-    return UabDBusPackageManager::instance()->installFormFile(installPtr);
+
+    // e.g.: pkexec deepin-deb-installer-dependsInstall --uab --install [file to package].uab
+    m_process->start(
+        kPkexecBin, {kPkexecBin, kInstallProcessorBin, kParamUab, kParamInstall, installPtr->info()->filePath}, {}, 0, false);
+
+    const QString recordCommand = QString("command: %1 %2 %3 %4/%5[uab package]")
+                                      .arg(kInstallProcessorBin)
+                                      .arg(kParamUab)
+                                      .arg(kParamInstall)
+                                      .arg(installPtr->info()->id)
+                                      .arg(installPtr->info()->version);
+    qInfo() << recordCommand;
+
+    return true;
 }
 
-bool UabProcessController::uninstallDBusImpl(const UabPackage::Ptr &uninstallPtr)
+bool UabProcessController::uninstallBackendCliImpl(const UabPackage::Ptr &uninstallPtr)
 {
     if (!uninstallPtr || !uninstallPtr->isValid()) {
         return false;
     }
 
     m_procFlag.setFlag(Uninstalling);
-    return UabDBusPackageManager::instance()->uninstall(uninstallPtr);
+
+    // e.g.: pkexec deepin-deb-installer-dependsInstall --uab --remove [id/version]
+    const QString mergeInfo = QString("%1/%2").arg(uninstallPtr->info()->id).arg(uninstallPtr->info()->version);
+    m_process->start(kPkexecBin, {kPkexecBin, kInstallProcessorBin, kParamUab, kParamRemove, mergeInfo}, {}, 0, false);
+
+    const QString recordCommand =
+        QString("command: %1 %2 %3 %4").arg(kInstallProcessorBin).arg(kParamUab).arg(kParamRemove).arg(mergeInfo);
+    Q_EMIT processOutput(recordCommand);
+    qInfo() << recordCommand;
+
+    return true;
 }
 
 bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &installPtr)
@@ -328,9 +346,7 @@ bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &insta
     m_procFlag.setFlag(Installing);
 
     // e.g.: ll-cli --json install ./path/to/file/uab_package.uab
-    m_process->setProgram(kLinglongBin);
-    m_process->setArguments({kLinglongJson, kLinglongInstall, installPtr->info()->filePath});
-    m_process->start();
+    m_process->start(kLinglongBin, {kLinglongBin, kLinglongJson, kLinglongInstall, installPtr->info()->filePath}, {}, 0, false);
 
     const QString recordCommand = QString("command: %1 %2 %3 %4/%5[uab package]")
                                       .arg(kLinglongBin)
@@ -339,6 +355,7 @@ bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &insta
                                       .arg(installPtr->info()->id)
                                       .arg(installPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
+    qInfo() << recordCommand;
 
     return true;
 }
@@ -352,10 +369,14 @@ bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uni
     m_procFlag.setFlag(Uninstalling);
 
     // e.g.: ll-cli --json uninstall org.deepin.package/1.0.0
-    m_process->setProgram(kLinglongBin);
-    m_process->setArguments(
-        {kLinglongJson, kLinglongUninstall, QString("%1/%2").arg(uninstallPtr->info()->id).arg(uninstallPtr->info()->version)});
-    m_process->start();
+    m_process->start(kLinglongBin,
+                     {kLinglongBin,
+                      kLinglongJson,
+                      kLinglongUninstall,
+                      QString("%1/%2").arg(uninstallPtr->info()->id).arg(uninstallPtr->info()->version)},
+                     {},
+                     0,
+                     false);
 
     const QString recordCommand = QString("command: %1 %2 %3 %4/%5")
                                       .arg(kLinglongBin)
@@ -364,6 +385,7 @@ bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uni
                                       .arg(uninstallPtr->info()->id)
                                       .arg(uninstallPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
+    qInfo() << recordCommand;
 
     return true;
 }
