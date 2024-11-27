@@ -10,6 +10,7 @@
 #include "../stub.h"
 
 #include "../deb-installer/uab/uab_process_controller.h"
+#include "../deb-installer/process/Pty.h"
 
 class utDebProcessController : public ::testing::Test
 {
@@ -38,7 +39,7 @@ bool stub_isValid_true()
     return true;
 }
 
-bool stub_installDBusImpl_true(const Uab::UabPackage::Ptr &)
+bool stub_installBackendCliImpl_true(const Uab::UabPackage::Ptr &)
 {
     return true;
 }
@@ -47,7 +48,7 @@ TEST_F(utDebProcessController, installExecSuccess)
 {
     Stub s;
     s.set(ADDR(Uab::UabPackage, isValid), stub_isValid_true);
-    s.set(ADDR(Uab::UabProcessController, installDBusImpl), stub_installDBusImpl_true);
+    s.set(ADDR(Uab::UabProcessController, installBackendCliImpl), stub_installBackendCliImpl_true);
 
     Uab::UabProcessController uabController;
     auto uabPtr = Uab::UabPkgInfo::Ptr::create();
@@ -56,8 +57,5 @@ TEST_F(utDebProcessController, installExecSuccess)
     uabController.markInstall(Uab::UabPackage::fromInfo(uabPtr));
     EXPECT_TRUE(uabController.commitChanges());
 
-    if (Uab::UabProcessController::Cli == uabController.processType()) {
-        EXPECT_EQ(uabController.m_process->program(), uabPtr->filePath);
-    }
     EXPECT_TRUE(uabController.m_procFlag.testFlag(Uab::UabProcessController::Processing));
 }

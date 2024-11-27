@@ -10,6 +10,7 @@ static const QString kParamInstallWine = "install_wine";
 static const QString kParamInstallConfig = "install_config";
 static const QString kParamInstallComaptible = "install_compatible";
 static const QString kParamInstallImmutable = "install_immutable";
+static const QString kParamInstallUab = "uab";
 
 static const QString kInstall = "install";
 static const QString kRemove = "remove";
@@ -38,6 +39,9 @@ InstallDebThread::InstallDebThread()
 
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onFinished(int, QProcess::ExitStatus)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(onReadoutput()));
+    connect(m_proc, &KProcess::readyReadStandardError, this, [this](){
+        qWarning() << m_proc->readAllStandardError();
+    });
 }
 
 InstallDebThread::~InstallDebThread()
@@ -52,11 +56,12 @@ void InstallDebThread::setParam(const QStringList &arguments)
         return;
     }
 
-    // normal command;
+    // normal command
     static QMap<QString, Command> kParamMap{{kParamInstallWine, InstallWine},
                                             {kParamInstallConfig, InstallConfig},
                                             {kParamInstallComaptible, Compatible},
                                             {kParamInstallImmutable, Immutable},
+                                            {kParamInstallUab, LinglongUab},
                                             {kInstall, Install},
                                             {kRemove, Remove}};
 
@@ -149,6 +154,8 @@ void InstallDebThread::run()
     } else if (m_cmds.testFlag(InstallConfig)) {
         // InstallConfig must last, Compatible and Immutable maybe set InstallConfig too.
         installConfig();
+    } else if (m_cmds.testFlag(LinglongUab)) {
+        uabProcessCli();
     }
 }
 
@@ -167,9 +174,7 @@ void InstallDebThread::installWine()
     // On immutable system: --fix-missing not support, apt command will transport to deepin-immutable-ctl
     system("echo 'libpam-runtime libpam-runtime/override boolean false' | debconf-set-selections");
     system("echo 'libc6 libraries/restart-without-asking boolean true' | sudo debconf-set-selections\n");
-    m_proc->setProgram("sudo",
-                       QStringList() << "apt-get"
-                                     << "install" << m_listParam << "-y");
+    m_proc->setProgram("apt-get", QStringList() << "install" << m_listParam << "-y");
     m_proc->start();
     m_proc->waitForFinished(-1);
     m_proc->close();
@@ -320,6 +325,47 @@ void InstallDebThread::immutableProcess()
     if (filePath.exists()) {
         filePath.removeRecursively();
     }
+}
+
+/**
+   @brief Install / unisntall uab package in Linglong.
+
+   @todo Linglong's backend DBus interface is unstable, may change frequently in the near future.
+        We currently choose the cli interface, use the DBus interface in the future.
+ */
+void InstallDebThread::uabProcessCli()
+{
+    if (m_listParam.isEmpty()) {
+        return;
+    }
+    // The Linglong params
+    static const QString kUabBin = "ll-cli";
+    static const QString kUabInstall = "install";
+    static const QString kUabUninstall = "uninstall";
+    static const QString kUabJson = "--json";
+    static const QString kUabForce = "--force";  // Force install the application
+    static const QString kUabPass = "-y";        // Automatically answer yes to all questions
+
+    QStringList params;
+
+    if (m_cmds.testFlag(Install)) {
+        // e.g.: ll-cli install --json --force -y [uab file]
+        params << kUabInstall << kUabJson << kUabForce << kUabPass << m_listParam.first();
+
+    } else if (m_cmds.testFlag(Remove)) {
+        // e.g.: ll-cli uninstall --json [id/version]
+        params << kUabUninstall << kUabJson << m_listParam.first();
+
+    } else {
+        return;
+    }
+
+    m_proc->setProgram(kUabBin, params);
+    qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
+
+    m_proc->start();
+    m_proc->waitForFinished(-1);
+    m_proc->close();
 }
 
 /**

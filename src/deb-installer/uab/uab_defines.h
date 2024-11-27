@@ -31,7 +31,7 @@ struct UabPkgInfo
     QString module;
 };
 
-};  // namespace Uab
+}  // namespace Uab
 
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_DEBUG_STREAM

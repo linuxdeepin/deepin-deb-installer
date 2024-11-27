@@ -92,6 +92,10 @@ QString UabPackage::installedVersion() const
 
 QString UabPackage::failedReason() const
 {
+    if (m_failReason.isEmpty()) {
+        return m_processError;
+    }
+
     return m_failReason;
 }
 
