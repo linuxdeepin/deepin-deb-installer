@@ -79,7 +79,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
 
     auto uabPtr = UabBackend::packageFromMetaJson(output);
     if (uabPtr) {
-        uabPtr->filePath = uabPath;
+        uabPtr->filePath = info.absoluteFilePath();
     }
     return uabPtr;
 }
