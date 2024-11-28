@@ -4,11 +4,11 @@
 
 cmake_minimum_required(VERSION 3.13)
 
-if (NOT DEFINED VERSION)
+if(NOT DEFINED VERSION)
     set(VERSION 5.3.9)
-endif ()
+endif()
 
-#安全测试的开关
+# 安全测试的开关
 set(CMAKE_SAFETYTEST OFF)
 
 project(deepin_deb_installer)
@@ -18,10 +18,12 @@ find_package(Qt5LinguistTools REQUIRED)
 set(POLICY_FILE com.deepin.pkexec.aptInstallDepend.policy)
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb-installer)
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(tests)
 endif()
+
 add_subdirectory(src/deepin-deb-installer-dev)
 add_subdirectory(translations)
-#add_subdirectory(tests/FuzzyTest)
 
+# add_subdirectory(tests/FuzzyTest)
