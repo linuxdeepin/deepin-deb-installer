@@ -37,6 +37,12 @@ static const QString kParamRemove = "--remove";
 
 const int kInitedIndex = -1;
 
+/**
+ * @class UabProcessController
+ * @brief Uab process controller. It manages the process of installing/uninstalling uab packages.
+ *        Its uses `deepin-deb-installer-dependsInstall` command to install/uninstall uab packages
+ *        with higher level permission.
+ */
 UabProcessController::UabProcessController(QObject *parent)
     : QObject{parent}
 {
