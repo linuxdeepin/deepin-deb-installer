@@ -178,4 +178,9 @@ void FileChooseWidget::themeChanged()
     // 更新 分割线
     QIcon icon_split_line = QIcon::fromTheme("di_split_line");
     split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
+
+    // change tips color when theme changed
+    auto palette = DApplicationHelper::instance()->palette(m_dndTips);
+    palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
+    m_dndTips->setPalette(palette);
 }
