@@ -14,15 +14,10 @@ static const QString kParamInstallUab = "uab";
 
 static const QString kInstall = "install";
 static const QString kRemove = "remove";
-
 // for compatible mode
 static const QString kCompatibleBin = "deepin-compatible-ctl";
 static const QString kCompApp = "app";
 static const QString kCompRootfs = "rootfs";
-
-// for immutable system
-static const QString kImmutableBin = "deepin-immutable-ctl";
-static const QString kImmuExt = "ext";
 
 // for disable DebConf
 static const QString kDebConfEnv = "DEBIAN_FRONTEND";
@@ -39,9 +34,7 @@ InstallDebThread::InstallDebThread()
 
     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onFinished(int, QProcess::ExitStatus)));
     connect(m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(onReadoutput()));
-    connect(m_proc, &KProcess::readyReadStandardError, this, [this](){
-        qWarning() << m_proc->readAllStandardError();
-    });
+    connect(m_proc, &KProcess::readyReadStandardError, this, [this]() { qWarning() << m_proc->readAllStandardError(); });
 }
 
 InstallDebThread::~InstallDebThread()
@@ -281,6 +274,10 @@ void InstallDebThread::immutableProcess()
     if (m_listParam.isEmpty()) {
         return;
     }
+    // for immutable system
+    static const QString kImmutableBin = "deepin-immutable-ctl";
+    static const QString kImmuExt = "ext";
+    static const QString kImmuYes = "-y";
 
     QStringList params;
 
@@ -301,8 +298,8 @@ void InstallDebThread::immutableProcess()
             m_proc->setEnv(kDebConfEnv, kDebConfDisable);
         }
 
-        // e.g.: deepin-immutable-ctl ext install [deb file]
-        params << kImmuExt << kInstall << debPath;
+        // e.g.: deepin-immutable-ctl ext install [deb file] -y
+        params << kImmuExt << kInstall << debPath << kImmuYes;
 
     } else if (m_cmds.testFlag(Remove)) {
         // e.g.: deepin-immutable-ctl ext remove [package name]
