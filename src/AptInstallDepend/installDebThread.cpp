@@ -12,8 +12,10 @@ static const QString kParamInstallComaptible = "install_compatible";
 static const QString kParamInstallImmutable = "install_immutable";
 static const QString kParamInstallUab = "uab";
 
+static const QString kAptBin = "apt";
 static const QString kInstall = "install";
 static const QString kRemove = "remove";
+
 // for compatible mode
 static const QString kCompatibleBin = "deepin-compatible-ctl";
 static const QString kCompApp = "app";
@@ -275,8 +277,6 @@ void InstallDebThread::immutableProcess()
         return;
     }
     // for immutable system
-    static const QString kImmutableBin = "deepin-immutable-ctl";
-    static const QString kImmuExt = "ext";
     static const QString kImmuYes = "-y";
 
     QStringList params;
@@ -298,20 +298,22 @@ void InstallDebThread::immutableProcess()
             m_proc->setEnv(kDebConfEnv, kDebConfDisable);
         }
 
-        // e.g.: deepin-immutable-ctl ext install [deb file] -y
-        params << kImmuExt << kInstall << debPath << kImmuYes;
+        // Note: deepin-immutable-ctl actually use apt to install/uninstall. (params transport to deepin-immutable-ctl)
+        // e.g.: apt install [deb file] -y
+        params << kInstall << debPath << kImmuYes;
 
     } else if (m_cmds.testFlag(Remove)) {
-        // e.g.: deepin-immutable-ctl ext remove [package name]
-        params << kImmuExt << kRemove << m_listParam.first();
+        // e.g.: apt remove [package name] -y
+        params << kRemove << m_listParam.first() << kImmuYes;
 
         // Disable DebConf while remove package
         m_proc->setEnv(kDebConfEnv, kDebConfDisable);
+
     } else {
         return;
     }
 
-    m_proc->setProgram(kImmutableBin, params);
+    m_proc->setProgram(kAptBin, params);
     qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
 
     m_proc->start();
