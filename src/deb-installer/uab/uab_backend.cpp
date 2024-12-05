@@ -72,7 +72,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
         return {};
     }
 
-    const QByteArray output = uabExecuteOutput(uabPath);
+    const QByteArray output = uabExecuteOutput(uabPath, errorString);
     if (output.isEmpty()) {
         return {};
     }
@@ -383,11 +383,31 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString 
 
 QByteArray UabBackend::uabExecuteOutput(const QString &uabPath, QString *errorString)
 {
+    QFile uabFile(uabPath);
+    if (!uabFile.exists()) {
+        return {};
+    }
+
+    // temporarily set uab file executable to get meta info.
+    static const QFile::Permissions kExecutable = QFile::ExeOwner | QFile::ExeUser | QFile::ExeGroup;
+    QFile::Permissions savePermission = uabFile.permissions();
+    bool needExecutable = !(savePermission & kExecutable);
+    if (needExecutable && (!uabFile.setPermissions(savePermission | kExecutable))) {
+        if (errorString) {
+            *errorString = QString("set uab file executable failed: %1").arg(uabFile.errorString());
+        }
+        return {};
+    }
+
     QProcess proc;
     proc.setProgram(uabPath);
     proc.setArguments({kUabPkgCmdPrintMeta});
     proc.start();
     proc.waitForFinished();
+
+    if (needExecutable) {
+        uabFile.setPermissions(savePermission);
+    }
 
     if (0 != proc.exitCode() || QProcess::NormalExit != proc.exitStatus()) {
         if (errorString) {
