@@ -10,7 +10,8 @@ namespace Immutable {
 
 static const QString kImmutableBin = "deepin-immutable-ctl";
 static const QString kImmutableStatus = "-s";
-static const QByteArray kImmutableEnable = "immutable-mode:true";
+// return e.g. : "immutable mode:[true|false]"
+static const QByteArray kImmutableEnable = "true";
 
 ImmutableBackend::ImmutableBackend(QObject *parent)
     : QObject{parent}

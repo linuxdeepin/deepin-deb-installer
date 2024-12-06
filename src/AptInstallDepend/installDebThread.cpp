@@ -277,6 +277,7 @@ void InstallDebThread::immutableProcess()
         return;
     }
     // for immutable system
+    static const QString kImmuEnvEnableWait = "DEEPIN_IMMUTABLE_CTL_WAIT_LOCK";
     static const QString kImmuYes = "-y";
 
     QStringList params;
@@ -313,6 +314,8 @@ void InstallDebThread::immutableProcess()
         return;
     }
 
+    // enable wait another process release dpkg lock
+    m_proc->setEnv(kImmuEnvEnableWait, "1");
     m_proc->setProgram(kAptBin, params);
     qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
 
