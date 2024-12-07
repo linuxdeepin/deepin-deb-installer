@@ -1,3 +1,13 @@
+deepin-deb-installer (6.5.3) unstable; urgency=medium
+
+  * fix: assume yes in immutable install(Bug: 291783)(Influence: immutable)
+  * fix: get uab meta info failed(Bug: 292129)(Influence: uab-package)
+  * fix: blocked when uninstall(Bug: 291783)
+  * fix: change tips color when theme changed(Bug: 292139)(Influence: UI)
+  * feat: update immutable config
+
+ -- renbin <renbin@uniontech.com>  Sat, 07 Dec 2024 11:56:09 +0800
+
 deepin-deb-installer (6.5.2) unstable; urgency=medium
 
   * feat: uab installation add authentication(Task: 36033)(Influence: uab-package)
