@@ -161,10 +161,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to install %1: no valid digital singature</source>
-        <translation type="vanished">Failed to install %1: no valid digital singature</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="972"/>
         <source>Unable to install - no digital signature</source>
         <translation>Unable to install - no digital signature</translation>
@@ -292,22 +288,22 @@
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="495"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="497"/>
         <source>Install %1 will remove: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="511"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="513"/>
         <source>Dependencies in the repository</source>
         <translation>Dependencies in the repository</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="519"/>
         <source>Missing dependencies</source>
         <translation>Missing dependencies</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="569"/>
+        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="571"/>
         <source>Installing dependencies: %1</source>
         <translation>Installing dependencies: %1</translation>
     </message>
@@ -437,42 +433,42 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="754"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="758"/>
         <source>Collapse</source>
         <translation>Collapse</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="346"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="886"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1072"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="893"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1083"/>
         <source>Reinstall</source>
         <translation>Reinstall</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="889"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1075"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="896"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1086"/>
         <source>Later version installed: %1</source>
         <translation>Later version installed: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="891"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1077"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="898"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1088"/>
         <source>Downgrade</source>
         <translation>Downgrade</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="894"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1080"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="901"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Earlier version installed: %1</source>
         <translation>Earlier version installed: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="982"/>
         <source>Installing dependencies: %1</source>
         <translation>Installing dependencies: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1119"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1130"/>
         <source>Failed to install %1</source>
         <translation>Failed to install %1</translation>
     </message>
@@ -512,44 +508,44 @@
         <translation>Done</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="728"/>
         <source>Installed successfully</source>
         <translation>Installed successfully</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="729"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="733"/>
         <source>Uninstalled successfully</source>
         <translation>Uninstalled successfully</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="748"/>
         <source>Uninstall Failed</source>
         <translation>Uninstall Failed</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="778"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="783"/>
         <source>Install %1 will remove: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="796"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="803"/>
         <source>Dependencies in the repository</source>
         <translation>Dependencies in the repository</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="802"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="809"/>
         <source>Missing dependencies</source>
         <translation>Missing dependencies</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="896"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1082"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="903"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1093"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1124"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1135"/>
         <source>Invalid digital signature</source>
         <translation type="unfinished">Invalid digital signature</translation>
     </message>
@@ -559,8 +555,8 @@
         <translation>Name: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="885"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1071"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="892"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1082"/>
         <source>Same version installed</source>
         <translation>Same version installed</translation>
     </message>
@@ -570,8 +566,8 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="45"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="557"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="583"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="723"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="585"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="727"/>
         <source>Show details</source>
         <translation>Show details</translation>
     </message>
@@ -585,8 +581,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="609"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="728"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="612"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="732"/>
         <source>Show details</source>
         <translation>Show details</translation>
     </message>
