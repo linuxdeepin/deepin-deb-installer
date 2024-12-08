@@ -60,27 +60,27 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="603"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Parsing fehlgeschlagen: In der Manifest-Datei wurde eine ungültige Dateistruktur gefunden!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="605"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Parsing fehlgeschlagen: In der Manifest-Datei wurde eine ungültige Versionsnummer gefunden!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="607"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>Keine deb Packete gefunden. Bitte schau in den Ordner.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="719"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Das %1 Packet könnte beschädigt sein</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Du kannst nur lokale %1 Pakete installieren</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="735"/>
