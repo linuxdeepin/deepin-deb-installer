@@ -454,7 +454,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Das Paket hat keine gültige digitale Signatur und wurde vom installieren/ausführen blockiert. Gehe zu Sicherheitscenter &gt; Tools &gt; App-Sicherheit um dies zu ändern</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>wird folgendes entfernen:</translation>
     </message>
 </context>
 <context>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Wähle einen Kompatilitätsmodus:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="387"/>
@@ -560,17 +560,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="642"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="681"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Versuche %2 im %1-Kompatibilitätsmodus zu installieren.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="719"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Deinstalliere %2 aus dem %1-Kompatibilitätsmodus</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="839"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 wurde erfolgreich im %1-Kompatibilitätsmodus installiert</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="843"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="852"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 wurde erfolgreich aus dem %1-Kompatilitätsmodus entfernt</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="856"/>
@@ -707,7 +707,7 @@ Das System oder andere Anwendungen funktionieren dann möglicherweise nicht rich
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Bist du sicher dass %2 aus %1-Kompatilitätsmodus entfernt werden soll?</translation>
     </message>
 </context>
 <context>
