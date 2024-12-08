@@ -85,7 +85,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="735"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Keine Berechtigung um den Ordner zu öffnen</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="vanished">Sie können nur lokale deb-Pakete installieren</translation>
+        <translation type="vanished">Du kannst nur lokale deb-Pakete installieren</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="751"/>
@@ -159,26 +159,26 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="713"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>momentanes System</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="716"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2 wurde in %1 installiert. Bitte deinstalliere das Paket, bevor du es installierst</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="722"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Fehlerhafte Abhängigkeiten, versuche, die App im Kompatibilitätsmodus zu installieren.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="737"/>
         <source>Failed to install %1</source>
-        <translation>Konnte %1 nicht installieren</translation>
+        <translation>%1 konnte nicht installiert werden</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">%1 konnte nicht installiert werden: Keine gültige digitale Signatur</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1097"/>
@@ -213,7 +213,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>%1 konnte nicht installiert werden: Keine gültige digitale Signatur</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1195"/>
