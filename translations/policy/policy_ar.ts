@@ -4,12 +4,12 @@
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!message" line="0"/>
 			<source>Authentication is required to continue the configuration</source>
-			<translation>المصادقة مطلوبة لمتابعة التكوين</translation>
+			<translation>التوثيق مطلوب لمتابعة التكوين</translation>
 		</message>
 		<message>
 			<location filename="com.deepin.pkexec.deepin-deb-installer-dependsInstall!description" line="0"/>
 			<source>authentication</source>
-			<translation>المصادقة</translation>
+			<translation>التوثيق</translation>
 		</message>
 	</context>
 </TS>
