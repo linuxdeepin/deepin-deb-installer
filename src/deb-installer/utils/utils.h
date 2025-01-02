@@ -10,7 +10,7 @@
 #include <QWidget>
 
 #include <DPalette>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFontSizeManager>
 #include <QDir>
 #include <DDialog>
@@ -23,7 +23,7 @@
 
 class QTextDocumnet;
 
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class DebApplicationHelper : public DGuiApplicationHelper
 {

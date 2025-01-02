@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.4) unstable; urgency=medium
+
+  * feat: Enable support Qt6 build.
+
+ -- re2zero <yangwu@uniontech.com>  Fri, 3 Jan 2025 16:27:05 +0800
+
 deepin-deb-installer (6.5.3) unstable; urgency=medium
 
   * fix: assume yes in immutable install(Bug: 291783)(Influence: immutable)

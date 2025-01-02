@@ -40,7 +40,7 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     infoLayout->addWidget(line);
 
     auto allLayout = new QHBoxLayout;
-    allLayout->setMargin(0);
+    allLayout->setContentsMargins(0, 0, 0, 0);
     allLayout->addWidget(checkBox);
     allLayout->addLayout(infoLayout);
 

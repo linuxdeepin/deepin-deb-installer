@@ -20,7 +20,8 @@
 #include <QApt/Transaction>
 
 #include <DStyleHelper>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
 
 using QApt::DebFile;
 using QApt::Transaction;
@@ -1125,7 +1126,7 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
-    DPalette palette = DApplicationHelper::instance()->palette(m_packageDescription);
+    DPalette palette = DPaletteHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
 }

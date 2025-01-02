@@ -10,7 +10,7 @@ DealDependThread::DealDependThread(QObject *parent)
 {
     Q_UNUSED(parent);
     proc = new QProcess(this);
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &DealDependThread::slotInstallFinished);
+    connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &DealDependThread::slotInstallFinished);
     connect(proc, &QProcess::readyReadStandardOutput, this, &DealDependThread::slotReadOutput);
 }
 

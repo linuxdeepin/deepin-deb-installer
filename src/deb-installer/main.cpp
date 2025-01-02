@@ -14,7 +14,6 @@
 #include <QTimer>
 #include <QSharedMemory>
 
-#include <DApplicationSettings>
 #include <DGuiApplicationHelper>
 #include <DApplication>
 #include <DLog>
@@ -54,8 +53,6 @@ int main(int argc, char *argv[])
 
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin"))
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
-
-    DApplicationSettings settings;
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();

@@ -39,7 +39,6 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFileInfo>

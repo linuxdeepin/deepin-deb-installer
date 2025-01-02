@@ -7,7 +7,7 @@
 #include "utils/utils.h"
 
 #include <DStyleHelper>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QVBoxLayout>
 #include <QKeyEvent>

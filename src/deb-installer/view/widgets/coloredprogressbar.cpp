@@ -77,7 +77,11 @@ void ColoredProgressBar::paintEvent(QPaintEvent *event)
         painter.drawControl(QStyle::ControlElement::CE_ProgressBarGroove, styopt);
         painter.drawControl(QStyle::ControlElement::CE_ProgressBarContents, styopt);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (styopt.textVisible && styopt.orientation == Qt::Horizontal) {
+#else
+        if (styopt.textVisible && (styopt.direction == Qt::LeftToRight || styopt.direction == Qt::RightToLeft)) {
+#endif
             painter.drawControl(QStyle::ControlElement::CE_ProgressBarLabel, styopt);
         }
     } else {
