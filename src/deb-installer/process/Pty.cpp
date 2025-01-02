@@ -45,8 +45,15 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QRegExp>
-#include <QRegExpValidator>
 #include <QTextCodec>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#else
+#include <QRegExp>
+#include <QRegExpValidator>
+#endif
 
 
 using namespace Konsole;
@@ -293,9 +300,14 @@ bool isPatternAcceptable(QString strCommand, QString strPattern)
 {
     QString strTrimmedCmd = strCommand.trimmed();
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QRegularExpression cmdRegExp(strPattern);
+    QRegularExpressionValidator cmdREValidator(cmdRegExp, nullptr);
+#else
     QRegExp cmdRegExp;
     cmdRegExp.setPattern(strPattern);
     QRegExpValidator cmdREValidator(cmdRegExp, nullptr);
+#endif
 
     int pos = 0;
     QValidator::State validateState = cmdREValidator.validate(strTrimmedCmd, pos);
@@ -579,6 +591,7 @@ void Pty::setSessionId(int sessionId)
     _sessionId = sessionId;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void Pty::setupChildProcess()
 {
     KPtyProcess::setupChildProcess();
@@ -599,3 +612,4 @@ void Pty::setupChildProcess()
     }
     sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
 }
+#endif

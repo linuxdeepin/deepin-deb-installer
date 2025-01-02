@@ -17,7 +17,8 @@
 #include <QPixmap>
 #include <QUrl>
 #include <QVBoxLayout>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
 #include <DStyleHelper>
 #include <QStorageInfo>
 
@@ -50,7 +51,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     m_dndTips->setObjectName("DNDTips");
 
     // 修改字体颜色
-    palette = DApplicationHelper::instance()->palette(m_dndTips);
+    palette = DPaletteHelper::instance()->palette(m_dndTips);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_dndTips->setPalette(palette);
 
@@ -180,7 +181,7 @@ void FileChooseWidget::themeChanged()
     split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
 
     // change tips color when theme changed
-    auto palette = DApplicationHelper::instance()->palette(m_dndTips);
+    auto palette = DPaletteHelper::instance()->palette(m_dndTips);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_dndTips->setPalette(palette);
 }

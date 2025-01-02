@@ -6,6 +6,7 @@
 #define COMPATIBLEBACKEND_H
 
 #include <QObject>
+#include <QHash>
 
 #include "compatible_defines.h"
 

@@ -129,7 +129,17 @@ bool PackageSelectModel::collectData()
     getDebIrs(&dependInfos, &md5s, ddimIrs, [](const DdimIrPackage &info) { return info.dependInfos; });
 
     // 3.查看是否存在改变
-    bool ret = !(newSelectInfos == selectInfos);
+    bool ret = false;
+    if (newSelectInfos.size() != selectInfos.size()) {
+        ret = true;
+    } else {
+        for (int i = 0; i < newSelectInfos.size(); ++i) {
+            if (!(newSelectInfos[i] == selectInfos[i])) {
+                ret = true;
+                break;
+            }
+        }
+    }
 
     // 4.清理老数据
     selectInfos = newSelectInfos;

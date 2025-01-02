@@ -23,13 +23,13 @@ class UnInstallConfirmPage_UT : public UT_HEAD
 {
 public:
     // 添加日志
-    static void SetUpTestCase() { qDebug() << "SetUpTestCase" << endl; }
-    static void TearDownTestCase() { qDebug() << "TearDownTestCase" << endl; }
+    static void SetUpTestCase() { qDebug() << "SetUpTestCase"; }
+    static void TearDownTestCase() { qDebug() << "TearDownTestCase"; }
     void SetUp()  // TEST跑之前会执行SetUp
     {
         uninstallPage = new UninstallConfirmPage();
         usleep(100 * 1000);
-        qDebug() << "SetUp" << endl;
+        qDebug() << "SetUp";
     }
     void TearDown()  // TEST跑完之后会执行TearDown
     {

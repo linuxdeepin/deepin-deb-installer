@@ -10,9 +10,7 @@ endif()
 
 project(AptInstallDepend)
 set(EXE_NAME deepin-deb-installer-dependsInstall)
-set(LINK_LIBS
-    Qt5::Core
-)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -38,14 +36,28 @@ add_executable(${EXE_NAME}
 )
 
 # Find the library
-find_package(Qt5 REQUIRED Core Gui Widgets)
+set(qt_required_components Core Gui Widgets)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+
+set(LINK_LIBS
+    Qt${QT_DESIRED_VERSION}::Core
+    Qt${QT_DESIRED_VERSION}::Gui
+    Qt${QT_DESIRED_VERSION}::Widgets
+)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+endif()
+
 set(CMAKE_INSTALL_PREFIX /usr)
 
 # Install files
 install(TARGETS ${EXE_NAME} DESTINATION bin)
-target_link_libraries(${EXE_NAME} ${LINK_LIBS})
 target_link_libraries(${EXE_NAME}
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-)
+    PUBLIC
+    ${LINK_LIBS}
+    )

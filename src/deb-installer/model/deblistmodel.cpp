@@ -16,6 +16,7 @@
 #include "compatible/compatible_process_controller.h"
 #include "immutable/immutable_backend.h"
 #include "immutable/immutable_process_controller.h"
+#include "utils/qtcompat.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -158,7 +159,7 @@ void DebListModel::initInstallConnections()
 
     // 配置安装结束
     connect(m_procInstallConfig,
-            static_cast<void (QProcess::*)(int)>(&QProcess::finished),
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this,
             &DebListModel::slotConfigInstallFinish);
 
@@ -1241,10 +1242,17 @@ void DebListModel::slotShowDevelopModeWindow()
     unlock->waitForFinished();
     auto output = unlock->readAllStandardOutput();
     auto str = QString::fromUtf8(output);
-    QRegExp re("\t.+\n");
+    REG_EXP re("\t.+\n");
     QString osVerStr;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (re.indexIn(str) > -1) {
         auto result = re.cap(0);
+#else
+    QRegularExpressionMatch match = re.match(str);
+    if (match.hasMatch()) {
+        auto result = match.captured(0);
+#endif
         osVerStr = result.remove(0, 1).remove(result.size() - 1, 1);
         qInfo() << "lsb_release -r:" << output;
         qInfo() << "OS version:" << osVerStr;

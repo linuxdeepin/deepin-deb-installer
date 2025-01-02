@@ -10,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QScroller>
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     : QWidget(parent)
@@ -63,7 +63,7 @@ void InstallProcessInfoView::initUI(int w, int h)
     // 设置只读，不允许对其进行修改
     m_editor->setReadOnly(true);
     m_editor->setFrameShape(QFrame::NoFrame);                       // 设置frame类型为noframe
-    m_editor->viewport()->setBackgroundRole(QPalette::Background);  // 设置内容的背景色
+    m_editor->viewport()->setBackgroundRole(QPalette::Window);  // 设置内容的背景色
     m_editor->viewport()->setAutoFillBackground(false);
 
     QTextCursor textCursor = m_editor->textCursor();  // 获取游标

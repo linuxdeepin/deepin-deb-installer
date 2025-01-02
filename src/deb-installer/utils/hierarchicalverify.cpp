@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "hierarchicalverify.h"
+#include "utils/qtcompat.h"
 
 #include <mutex>
 
@@ -81,7 +82,7 @@ bool HierarchicalVerify::isValid()
  */
 bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QString &errorString)
 {
-    static QRegExp s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError).arg(VerffyErrorVer2));
+    static REG_EXP s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError).arg(VerffyErrorVer2));
     if (errorString.contains(s_ErrorReg)) {
         invalidPackages.insert(pkgName);
         qWarning() << QString("[Hierarchical] Package %1 detected hierarchical error!").arg(pkgName);
