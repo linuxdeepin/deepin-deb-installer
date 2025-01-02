@@ -13,6 +13,7 @@
 #include "model/packageanalyzer.h"
 #include "singleInstallerApplication.h"
 #include "compatible/compatible_backend.h"
+#include "utils/qtcompat.h"
 
 #include <DRecentManager>
 
@@ -583,7 +584,12 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
         return false;
     }
 
-    auto rdepends = installedPackage->requiredByList().toSet();
+    auto reqList = installedPackage->requiredByList();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto rdepends = reqList.toSet();
+#else
+    QSet<QString> rdepends(reqList.begin(), reqList.end());
+#endif
     // itself package
     rdepends.remove(targetPackage->name());
     // conflict package
@@ -600,8 +606,15 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
         }
     }
 #else
-    auto targetProvides = targetPackage->providesList().toSet();
-    auto installedProvides = installedPackage->providesList().toSet();
+    auto providList = targetPackage->providesList();
+    auto installList = installedPackage->providesList();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    auto targetProvides = providList.toSet();
+    auto installedProvides = installList.toSet();
+#else
+    QSet<QString> targetProvides(providList.begin(), providList.end());
+    QSet<QString> installedProvides(installList.begin(), installList.end());
+#endif
     QSet<QString> canReplaceProvides = targetProvides.unite(installedProvides);
 #endif  // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
@@ -1092,7 +1105,7 @@ void PackagesManager::getPackageOrDepends(const QString &package, const QString 
 
     // 使用二维数组进行存储
     for (QString depend : dependsList) {
-        depend = depend.remove(QRegExp("\\s"));
+        depend = depend.remove(REG_EXP("\\s"));
 
         // 非或包，判断虚包依赖
         if (!depend.contains("|")) {
@@ -1184,7 +1197,7 @@ QStringList PackagesManager::debFileAvailableDepends(const QString &filePath)
     packageCandidateChoose(choose_set, debArch, depends, levelInfo);
 
     // TODO: check upgrade from conflicts
-    return choose_set.toList();
+    return choose_set.values();
 }
 
 void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set,
@@ -1346,7 +1359,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     // 存放当前需要验证反向依赖的包
     QQueue<QString> reverseQueue;
 
-    for (const auto &requiredPackage : requiredList.toSet())
+    for (const auto &requiredPackage : requiredList)
         reverseQueue.append(requiredPackage);
     while (!reverseQueue.isEmpty()) {
         const auto item = reverseQueue.first();
@@ -1413,7 +1426,7 @@ const QStringList PackagesManager::packageReverseDependsList(const QString &pack
     // remove self
     reverseDependSet.remove(packageName);
 
-    return reverseDependSet.toList();
+    return reverseDependSet.values();
 }
 
 bool PackagesManager::isNegativeReverseDepend(const QString &packageName, const QApt::Package *reverseDepend)
@@ -1771,7 +1784,6 @@ QList<QString> PackagesManager::getAllDepends(const QList<DependencyItem> &depen
             m_allDependsList << info.packageName() << dList;  // 存储所有依赖
         }
     }
-    m_allDependsList = m_allDependsList.toSet().values();
 
     return m_allDependsList;
 }
@@ -2151,7 +2163,7 @@ bool PackagesManager::checkPackageArchValid(const QApt::Package *package, const 
         // providesList 列表中含当前包名的则认为满足多架构支持
         // i386 包一般不提供 amd64 架构支持，而 amd64 经常提供 i386
         QString findPackage = packageName;
-        findPackage.remove(QRegExp(":[^:]*$"));
+        findPackage.remove(REG_EXP(":[^:]*$"));
 #endif
 
         // 查找当前软件包支持的包名中是否包含对应架构软件包

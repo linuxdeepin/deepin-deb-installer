@@ -5,7 +5,7 @@
 #include "choosefilebutton.h"
 #include "utils/utils.h"
 
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 
 #include <QKeyEvent>
 

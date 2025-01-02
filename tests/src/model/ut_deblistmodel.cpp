@@ -379,7 +379,9 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(Transaction, isCancellable), model_transaction_isCancellable);
     stub.set(ADDR(Transaction, isCancelled), model_transaction_isCancelled);
     stub.set(ADDR(Transaction, errorDetails), model_transaction_errorDetails);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     stub.set(ADDR(Transaction, setProperty), model_transaction_setProperty);
+#endif
     stub.set(ADDR(Transaction, exitStatus), model_transaction_exitStatus);
 
     stub.set(ADDR(DebFile, architecture), model_deb_arch_i386);
@@ -1185,9 +1187,15 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initInstallConnections)
     m_debListModel->initInstallConnections();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define FILE_LINK readLink
+#else
+#define FILE_LINK symLinkTarget
+#endif
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readRealPathExist)
 {
-    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink_empty);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, FILE_LINK), stub_readLink_empty);
     stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_true);
 
     ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
@@ -1195,7 +1203,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readRealPathExis
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathExist)
 {
-    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, FILE_LINK), stub_readLink);
     stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_true);
 
     ASSERT_TRUE(m_debListModel->recheckPackagePath("/0"));
@@ -1203,7 +1211,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathExis
 
 TEST_F(ut_DebListModel_test, deblistmodel_UT_recheckPackagePath_readLinkPathNotExist)
 {
-    stub.set((QString(QFile::*)(void) const)ADDR(QFile, readLink), stub_readLink);
+    stub.set((QString(QFile::*)(void) const)ADDR(QFile, FILE_LINK), stub_readLink);
     stub.set((bool(QFile::*)(void) const)ADDR(QFile, exists), stub_exists_false);
 
     ASSERT_FALSE(m_debListModel->recheckPackagePath("/0"));

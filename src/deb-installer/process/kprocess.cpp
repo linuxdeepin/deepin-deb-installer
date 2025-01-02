@@ -404,7 +404,11 @@ int KProcess::startDetached(const QStringList &argv)
 int KProcess::pid() const
 {
 #ifdef Q_OS_UNIX
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return (int) QProcess::pid();
+#else
+    return QProcess::processId();
+#endif
 #else
     return QProcess::pid() ? QProcess::pid()->dwProcessId : 0;
 #endif

@@ -284,7 +284,7 @@ private:
     const PackageDependsStatus checkDependsPackageStatus(QSet<QString> &choosed_set,
                                                          const QString &architecture,
                                                          const QApt::DependencyInfo &dependencyInfo,
-                                                         const QString &providesName = QString::null);
+                                                         const QString &providesName = QString());
     /**
      * @brief packageCandidateChoose   查找包的依赖候选
      * @param choosed_set   包的依赖候选的集合

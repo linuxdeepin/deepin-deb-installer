@@ -24,8 +24,13 @@ TEST_F(ut_processwidget_TEST, Processwidget_UT_setIcon)
 {
     QIcon icon;
     w->setIcon(icon);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     ASSERT_EQ(w->mainIcon->pixmap()->width(), 0);
     ASSERT_EQ(w->mainIcon->pixmap()->height(), 0);
+#else
+    ASSERT_EQ(w->mainIcon->pixmap().width(), 0);
+    ASSERT_EQ(w->mainIcon->pixmap().height(), 0);
+#endif
 }
 
 TEST_F(ut_processwidget_TEST, Processwidget_UT_setMainText)

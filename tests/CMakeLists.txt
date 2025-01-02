@@ -15,7 +15,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 # common resource names
 set(APP_RES_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(APP_BIN_NAME_TEST "deepin-deb-installer-test")
-set(APP_TRANS_SCRIPT "${APP_RES_DIR}/translate_generation.sh")
 set(APP_DESKTOP "${APP_RES_DIR}/deepin-deb-installer.desktop")
 set(APP_QRC "${APP_RES_DIR}/resources.qrc")
 
@@ -75,9 +74,6 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fprofile-arcs -ftest-coverage")
 
-# Generate the qm file
-execute_process(COMMAND bash ${APP_TRANS_SCRIPT}
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/")
 
 configure_file(${APP_RES_DIR}/environments.h.in environments.h @ONLY)
 
@@ -85,29 +81,33 @@ add_definitions(-DUSE_POLKIT -DENABLE_INACTIVE_DISPLAY)
 
 # Find the library
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5Core REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkGui REQUIRED)
-find_package(DtkCore REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(Qt5Test REQUIRED)
-find_package(PolkitQt5-1 REQUIRED)
+
+find_package(PolkitQt${QT_DESIRED_VERSION}-1)
+set(qt_required_components Core DBus Gui Widgets Concurrent Test)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+find_package(Dtk${DTK_VERSION_MAJOR} COMPONENTS Core Gui Widget REQUIRED)
 
 set(LINK_LIBS
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::DBus
-    QApt
-    Qt5::Concurrent
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
+    Qt${QT_DESIRED_VERSION}::Core
+    Qt${QT_DESIRED_VERSION}::DBus
+    Qt${QT_DESIRED_VERSION}::Gui
+    Qt${QT_DESIRED_VERSION}::Widgets
+    Qt${QT_DESIRED_VERSION}::Concurrent
+    Qt${QT_DESIRED_VERSION}::Test
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    Dtk${DTK_VERSION_MAJOR}::Core
+    Dtk${DTK_VERSION_MAJOR}::Gui
+    PolkitQt${QT_DESIRED_VERSION}-1::Agent
 )
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+endif()
 
 macro(SUBDIRLIST result curdir)
     file(GLOB children RELATIVE ${curdir} ${curdir}/*)
@@ -154,26 +154,15 @@ FILE(GLOB allTestSource
 )
 include_directories(src)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/)
-include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
 # Tell CMake to create the executable
 add_executable(${APP_BIN_NAME_TEST} ${APP_SRCS} ${APP_QRC} ${TEST_ACCESSIBLE_HEADERS_FILES} ${allTestSource})
 
-target_include_directories(${APP_BIN_NAME_TEST}
-    PUBLIC ${DtkWidget_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
 
 target_link_libraries(${APP_BIN_NAME_TEST}
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Gui
-    Qt5::DBus
+    PUBLIC
+    ${LINK_LIBS}
     QApt
-    PolkitQt5-1::Agent
-    Qt5::Test
-    Qt5::Concurrent
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${DtkGUI_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread

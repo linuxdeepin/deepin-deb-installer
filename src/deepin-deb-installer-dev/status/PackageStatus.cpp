@@ -645,7 +645,7 @@ const QStringList PackageStatus::getPackageReverseDependsList(const QString &pac
     QSet<QString> ret{packageName};
     QQueue<QString> testQueue;
 
-    for (const auto &item : package->requiredByList().toSet())
+    for (const auto &item : package->requiredByList())
         testQueue.append(item);
     while (!testQueue.isEmpty()) {
         const auto item = testQueue.first();
@@ -706,7 +706,7 @@ const QStringList PackageStatus::getPackageReverseDependsList(const QString &pac
     // remove self
     ret.remove(packageName);
 
-    return ret.toList();
+    return ret.values();
 }
 
 PackageStatus::~PackageStatus() {}

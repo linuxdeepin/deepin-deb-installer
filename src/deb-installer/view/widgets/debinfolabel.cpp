@@ -8,6 +8,8 @@
 #include <QPainter>
 #include <QDebug>
 
+#include <DPaletteHelper>
+
 DebInfoLabel::DebInfoLabel(QWidget *parent, Qt::WindowFlags windowFlags)
     : DLabel(parent, windowFlags)
     , m_colorRole(QPalette::NoRole)
@@ -24,10 +26,10 @@ void DebInfoLabel::setCustomQPalette(QPalette::ColorRole colorRole)
     m_colorRole = colorRole;   // 获取当前使用QPalette的字体颜色角色
     m_bUserColorType = false;  // 当前使用的不是DPalette
 
-    // 判断传入的QPalette是否是WindowText 如果是则设置当前Label的Palette的画刷为DApplicationHelper画刷,颜色为WindowText
+    // 判断传入的QPalette是否是WindowText 如果是则设置当前Label的Palette的画刷为DGuiApplicationHelper画刷,颜色为WindowText
     // 否则设置当前的Label的Palette的画刷为DebApplicationHelperr画刷,颜色为传入的颜色
     if (m_colorRole == QPalette::WindowText) {
-        DPalette palette = DApplicationHelper::instance()->palette(this);
+        DPalette palette = DPaletteHelper::instance()->palette(this);
         palette.setBrush(QPalette::Text, palette.color(QPalette::WindowText));
         this->setPalette(palette);
     } else {
@@ -54,8 +56,8 @@ void DebInfoLabel::setCustomDPalette()
     m_bMultiIns = true;       // 当前使用的是默认的颜色
     m_bUserColorType = true;  // 当前是用的是DPalette
 
-    // 设置当前的Label的Palette的画刷为DApplicationHelper画刷,颜色为默认的颜色
-    DPalette palette = DApplicationHelper::instance()->palette(this);
+    // 设置当前的Label的Palette的画刷为DGuiApplicationHelper画刷,颜色为默认的颜色
+    DPalette palette = DPaletteHelper::instance()->palette(this);
     palette.setBrush(DPalette::WindowText, QColor(00, 130, 252));
     this->setPalette(palette);
 }

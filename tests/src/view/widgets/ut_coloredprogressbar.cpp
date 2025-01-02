@@ -29,20 +29,20 @@ protected:
     ColoredProgressBar *m_colorProcessBar = nullptr;
 };
 
-DApplicationHelper::ColorType ut_themeType()
+DGuiApplicationHelper::ColorType ut_themeType()
 {
-    return DApplicationHelper::DarkType;
+    return DGuiApplicationHelper::DarkType;
 }
 
-DApplicationHelper::ColorType ut_themeType01()
+DGuiApplicationHelper::ColorType ut_themeType01()
 {
-    return DApplicationHelper::LightType;
+    return DGuiApplicationHelper::LightType;
 }
 
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged)
 {
     Stub stub;
-    stub.set(ADDR(DApplicationHelper, themeType), ut_themeType01);
+    stub.set(ADDR(DGuiApplicationHelper, themeType), ut_themeType01);
     m_colorProcessBar->themeChanged();
     ASSERT_EQ(DGuiApplicationHelper::LightType, m_colorProcessBar->m_themeType);
     //    m_colorProcessBar->d_d_ptr.get()
@@ -51,7 +51,7 @@ TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged)
 TEST_F(ut_coloredProgressBar_Test, ColoredProgressBar_UT_themeChanged_01)
 {
     Stub stub;
-    stub.set(ADDR(DApplicationHelper, themeType), ut_themeType);
+    stub.set(ADDR(DGuiApplicationHelper, themeType), ut_themeType);
     m_colorProcessBar->themeChanged();
     ASSERT_EQ(DGuiApplicationHelper::DarkType, m_colorProcessBar->m_themeType);
 }

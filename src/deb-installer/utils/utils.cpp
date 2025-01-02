@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "utils.h"
+#include "qtcompat.h"
 
 #include <mutex>
 
@@ -35,6 +36,8 @@
 
 #include <QApt/Package>
 
+DWIDGET_USE_NAMESPACE
+
 QHash<QString, QPixmap> Utils::m_imgCacheHash;
 QHash<QString, QString> Utils::m_fontNameCache;
 
@@ -55,7 +58,7 @@ QFont Utils::loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, in
     Q_UNUSED(fontSize)
 
     QFont font(fontFamily);
-    font.setWeight(fontWeight);
+    font.setWeight((QFont::Weight)fontWeight);
 
     return font;
 }
@@ -107,7 +110,7 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, 
 
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
-    bool bFlag = inputStr.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    bool bFlag = inputStr.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
     if (bFlag) {
         return inputStr;
     }
@@ -179,7 +182,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const QSize &size)
 {
-    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
     QString text;
     QString tempText;
@@ -244,7 +247,7 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const Q
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const int &width)
 {
-    bool bContainsChinese = srcText.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
     QString text;
     QString tempText;

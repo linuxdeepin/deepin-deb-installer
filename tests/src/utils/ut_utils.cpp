@@ -236,7 +236,9 @@ TEST(Utils_Test, Utils_UT_setPalette)
 {
     Stub stub;
     stub.set(ADDR(QWidget, setPalette), util_setPalette);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     stub.set(ADDR(QWidget, setProperty), util_setProperty);
+#endif
     DebApplicationHelper *helper = DebApplicationHelper::instance();
 
     QWidget *w = nullptr;
@@ -250,7 +252,9 @@ void util_setAttribute(Qt::WidgetAttribute, bool)
 TEST(Utils_Test, Utils_UT_resetPalette)
 {
     Stub stub;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     stub.set(ADDR(QWidget, setProperty), util_setProperty);
+#endif
     stub.set(ADDR(QWidget, setAttribute), util_setAttribute);
     DebApplicationHelper *helper = DebApplicationHelper::instance();
 

@@ -10,7 +10,6 @@
 #include <DTitlebar>
 
 #include <QGuiApplication>
-#include <QDesktopWidget>
 #include <QScreen>
 #include <QMessageBox>
 #include <QDebug>

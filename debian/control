@@ -2,15 +2,30 @@ Source: deepin-deb-installer
 Section: utils
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: debhelper (>= 9), pkg-config, cmake, libqt5widgets5, libqt5concurrent5, libqapt-dev, libdtkwidget-dev, qtbase5-dev, qttools5-dev-tools, qttools5-dev, qtchooser, libgtest-dev,  deepin-gettext-tools,  libpolkit-qt5-1-dev
+Build-Depends: 
+ debhelper (>= 9),
+ pkg-config,
+ cmake,
+ qt6-5compat-dev | hello,
+ qt6-base-dev | qtbase5-dev,
+ qt6-tools-dev-tools | qttools5-dev-tools,
+ qt6-tools-dev | qttools5-dev,
+ qt6-svg-dev | libqt5svg5-dev,
+ libdtk6widget-dev | libdtkwidget-dev,
+ libdtk6gui-dev | libdtkgui-dev,
+ libdtk6core-dev | libdtkcore-dev,
+ libqapt-qt6-dev | libqapt-dev,
+ libpolkit-qt6-1-dev | libpolkit-qt5-1-dev,
+ libgtest-dev,
+ deepin-gettext-tools,
 Standards-Version: 4.3.0
 Homepage: https://www.deepin.com/
 
 Package: deepin-deb-installer
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, 
- libqapt3-runtime, 
- libqapt3, 
+ libqapt3-qt6-runtime | libqapt-runtime, 
+ libqapt3-qt6 | libqapt3, 
 # deepin-app-store-runtime is available in the community edition.
  deepin-elf-verify | deepin-app-store-runtime, 
  deepin-elf-sign-tool | deepin-app-store-runtime

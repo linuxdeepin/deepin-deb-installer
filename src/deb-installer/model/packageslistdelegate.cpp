@@ -12,7 +12,7 @@
 #include <DSvgRenderer>
 #include <DPalette>
 #include <DStyleHelper>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DApplication>
 
 DWIDGET_USE_NAMESPACE
@@ -36,7 +36,7 @@ void PackagesListDelegate::refreshDebItemStatus(
 {
     DPalette parentViewPattle = DebApplicationHelper::instance()->palette(m_parentView);
 
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
     DPalette appPalette = dAppHelper->applicationPalette();
     QPen forground;  // 前景色
 
@@ -96,7 +96,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     bgPath.addRect(option.rect);
     // 将当前Item的位置参数 发送给ListView,确定右键菜单的位置。
     emit sigIndexAndRect(option.rect, index.row());
-    DApplicationHelper *dAppHelper = DApplicationHelper::instance();
+    DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
     DPalette palette = dAppHelper->applicationPalette();
     QBrush background;
     QPen forground;
