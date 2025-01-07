@@ -162,7 +162,7 @@ add_executable(${APP_BIN_NAME_TEST} ${APP_SRCS} ${APP_QRC} ${TEST_ACCESSIBLE_HEA
 target_link_libraries(${APP_BIN_NAME_TEST}
     PUBLIC
     ${LINK_LIBS}
-    QApt
+    ${QAPT_LIB}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
     pthread
