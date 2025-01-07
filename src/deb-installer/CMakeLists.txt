@@ -179,11 +179,11 @@ file(GLOB_RECURSE APP_SRCS
 add_executable(${PROJECT_NAME} ${APP_SRCS} ${APP_QRC})
 
 target_include_directories(${APP_BIN_NAME}
-    PUBLIC ${DtkWidget_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
+    PUBLIC ${OBJECT_BINARY_DIR})
 
 target_link_libraries(${APP_BIN_NAME}
     ${LINK_LIBS}
-    QApt
+    ${QAPT_LIB}
 )
 set(CMAKE_INSTALL_PREFIX /usr)
 
