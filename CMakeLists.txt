@@ -30,6 +30,16 @@ else()
 endif()
 message("   >>> Build with DTK: ${DTK_VERSION_MAJOR}")
 
+if (QT_DESIRED_VERSION MATCHES 6)
+    find_package(QApt-qt6 REQUIRED)
+    include_directories(${QApt-qt6_INCLUDE_DIRS})
+    set(QAPT_LIB QApt-qt6)
+else()
+    find_package(QApt REQUIRED)
+    include_directories(${QApt_INCLUDE_DIRS})
+    set(QAPT_LIB QApt)
+endif()
+
 add_subdirectory(src/AptInstallDepend)
 add_subdirectory(src/deb-installer)
 

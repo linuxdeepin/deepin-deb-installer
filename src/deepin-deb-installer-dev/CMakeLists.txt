@@ -31,7 +31,6 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
     Qt${QT_DESIRED_VERSION}::DBus
     Qt${QT_DESIRED_VERSION}::Concurrent
-    QApt
 )
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
@@ -54,7 +53,7 @@ add_library( ${APP_BIN_NAME} SHARED ${APP_SRCS})
 target_link_libraries(${APP_BIN_NAME}
     PRIVATE
     ${LINK_LIBS}
-    QApt
+    ${QAPT_LIB}
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)
