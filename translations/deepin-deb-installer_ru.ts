@@ -55,22 +55,22 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="599"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="700"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>Установка других пакетов... Пожалуйста, откройте его позже.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="603"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Ошибка анализа: в файле манифеста обнаружена недопустимая структура файла!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="605"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Ошибка анализа: в файле манифеста обнаружен недопустимый номер версии!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="607"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>Не найдено deb-пакетов. Проверьте папку.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="719"/>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="735"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Нет разрешения на доступ к этой папке</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -178,7 +178,7 @@
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Не удалось установить %1: нет действительной цифровой подписи</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1097"/>
@@ -213,7 +213,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1059"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Не удалось установить %1: нет действительной цифровой подписи</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1195"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Установка %1 удалит:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
@@ -434,12 +434,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Чтобы установить неподписанные приложения, перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений и выберите типы приложений, которые можно установить.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Центр безопасности &gt; Инструменты &gt; Безопасность приложений</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Этот пакет не имеет действительной цифровой подписи и был заблокирован для установки/запуска. Перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений, чтобы изменить настройки.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="915"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Установка %1 удалит:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="935"/>
