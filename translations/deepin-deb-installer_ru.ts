@@ -75,12 +75,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="719"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Упаковка% 1 может быть повреждена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Вы можете устанавливать только локальные пакеты% 1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="735"/>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="713"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>действующая система</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="716"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>% 2 был установлен в% 1, пожалуйста, удалите этот пакет перед его установкой</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="722"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Нарушенные зависимости, попробуйте установить приложение в режиме совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="737"/>
@@ -444,7 +444,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>В системе не установлена среда Linglong, пожалуйста, сначала установите ее</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Выберите режим совместимости:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="387"/>
@@ -560,17 +560,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="642"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="681"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Пытаюсь установить% 2 в режиме совместимости% 1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="719"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Удаление% 2 из режима совместимости% 1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="839"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>% 2 был успешно установлен в режим совместимости% 1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="843"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="852"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>% 2 был успешно удален из режима совместимости% 1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="856"/>
@@ -707,7 +707,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Вы уверены, что хотите удалить% 2из режима совместимости% 1?</translation>
     </message>
 </context>
 <context>
