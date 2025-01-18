@@ -707,7 +707,8 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation>Вы уверены, что хотите удалить% 2из режима совместимости% 1?</translation>
+        <translation>Вы уверены, что хотите удалить% 2
+из %1 режима совместимости?</translation>
     </message>
 </context>
 <context>
