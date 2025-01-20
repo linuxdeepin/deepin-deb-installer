@@ -1,3 +1,11 @@
+deepin-deb-installer (6.5.5) unstable; urgency=medium
+
+  * chore: v6.5.5 release.
+  * fix: Update qapt version check.
+  * feat: Enable support Qt6 build.
+
+ -- re2zero <yangwu@uniontech.com>  Mon, 20 Jan 2025 16:30:43 +0800
+
 deepin-deb-installer (6.5.4) unstable; urgency=medium
 
   * feat: Enable support Qt6 build.
