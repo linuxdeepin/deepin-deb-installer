@@ -55,7 +55,7 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="599"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="700"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>他のパッケージをインストールしています...後でもう一度お試しください。</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="603"/>
@@ -70,7 +70,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="607"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>debパッケージが見つかりません。フォルダをご確認ください。</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="719"/>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="735"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>このフォルダへのアクセス権限がありません</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="760"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1は存在しません。もう一度お試しください</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="382"/>
