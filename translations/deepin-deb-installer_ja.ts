@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>パッケージを読み込んでいます...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>%1/2 を読み込みました</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>初期化しています...</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="116"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>設定</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="599"/>
@@ -136,13 +136,13 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="119"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>デジタル署名がありません</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="123"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>デジタル署名が不正です</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="129"/>
@@ -200,7 +200,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1102"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>確定</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1055"/>
@@ -229,7 +229,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1198"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>続行</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1053"/>
@@ -353,7 +353,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="22"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>すべて選択</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
@@ -424,12 +424,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>基本</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"/>
+        <translation>開発者モードが有効の場合でもデジタル署名を確認する</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
@@ -466,7 +466,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>確定</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
@@ -498,7 +498,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1060"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1247"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>ダウングレード</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1064"/>
@@ -617,7 +617,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1299"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>デジタル署名が不正です</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="221"/>
