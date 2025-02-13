@@ -593,8 +593,15 @@ void Pty::setSessionId(int sessionId)
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void Pty::setupChildProcess()
+#else
+void Pty::setupChildProcessImpl()
 {
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KPtyProcess::setupChildProcess();
+#else
+    KPtyProcess::setupChildProcessImpl();
+#endif
 
     // reset all signal handlers
     // this ensures that terminal applications respond to
