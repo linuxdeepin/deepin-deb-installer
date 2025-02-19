@@ -1014,7 +1014,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
             auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
 
-            if (compPkgPtr) {
+            if (compPkgPtr && compPkgPtr->installed()) {
                 dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
             } else if (dependsStatus.isBreak()) {
                 // check if current system install the package.

@@ -18,8 +18,13 @@ static const QString kRemove = "remove";
 
 // for compatible mode
 static const QString kCompatibleBin = "deepin-compatible-ctl";
+static const QString kCompCheck = "check";
 static const QString kCompApp = "app";
 static const QString kCompRootfs = "rootfs";
+static const QString kCompRootfsName = "--name";
+static const QString kCompJsonFormat = "--json";
+// current user(non root)
+static const QString kCompUser = "user";
 
 // for disable DebConf
 static const QString kDebConfEnv = "DEBIAN_FRONTEND";
@@ -58,13 +63,16 @@ void InstallDebThread::setParam(const QStringList &arguments)
                                             {kParamInstallImmutable, Immutable},
                                             {kParamInstallUab, LinglongUab},
                                             {kInstall, Install},
-                                            {kRemove, Remove}};
+                                            {kRemove, Remove},
+                                            {kCompCheck, AppCheck}};
 
     for (auto itr = kParamMap.begin(); itr != kParamMap.end(); ++itr) {
         m_parser.addOption(QCommandLineOption(itr.key()));
     }
     QCommandLineOption rootfsOpt(kCompRootfs, "", "rootfsname");
     m_parser.addOption(rootfsOpt);
+    QCommandLineOption userOpt(kCompUser, "", "current user");
+    m_parser.addOption(userOpt);
 
     m_parser.process(arguments);
 
@@ -75,6 +83,9 @@ void InstallDebThread::setParam(const QStringList &arguments)
     }
     if (m_parser.isSet(rootfsOpt)) {
         m_rootfs = m_parser.value(rootfsOpt);
+    }
+    if (m_parser.isSet(userOpt)) {
+        m_user = m_parser.value(userOpt);
     }
 
     m_listParam = m_parser.positionalArguments();
@@ -227,7 +238,6 @@ void InstallDebThread::compatibleProcess()
     QStringList params;
 
     if (m_cmds.testFlag(Install)) {
-        // e.g.: deepin-compatible app install [deb file]
         // only one package support
         QString debPath = m_listParam.first();
 
@@ -240,19 +250,29 @@ void InstallDebThread::compatibleProcess()
             getDescription(debPath);
         }
 
-        // e.g.: deepin-comptabile-ctl ext install [deb file]
-        params << kCompApp << kInstall << debPath;
+        // e.g.: deepin-comptabile-ctl app --json install [deb file] [--name rootfsname]
+        params << kCompApp << kCompJsonFormat << kInstall << debPath;
 
     } else if (m_cmds.testFlag(Remove)) {
-        // e.g.: deepin-compatible-ctl app remove [package name]
-        params << kCompApp << kRemove << m_listParam.first();
+        // e.g.: deepin-compatible-ctl app --json remove [package name]
+        params << kCompApp << kCompJsonFormat << kRemove << m_listParam.first();
+
+    } else if (m_cmds.testFlag(AppCheck)) {
+        // e.g.: deepin-compatible-ctl app --json check [package name]
+        params << kCompApp << kCompJsonFormat << kCompCheck << m_listParam.first();
 
     } else {
         return;
     }
 
     if (!m_rootfs.isEmpty()) {
-        params << QString("--%1").arg(kCompRootfs) << m_rootfs;
+        params << kCompRootfsName << m_rootfs;
+    }
+
+    if (!m_user.isEmpty()) {
+        auto env = QProcessEnvironment::systemEnvironment();
+        env.insert("SUDO_USER", m_user);
+        m_proc->setProcessEnvironment(env);
     }
 
     m_proc->setProgram(kCompatibleBin, params);

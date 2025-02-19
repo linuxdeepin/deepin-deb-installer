@@ -323,6 +323,11 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             const QByteArray md5 = m_packagesManager->getPackageMd5(currentRow);
             return m_packagesManager->removePackages(md5);
         }
+
+        case PackageSharedPointerRole: {
+            return QVariant::fromValue(packagePtr(currentRow));
+        }
+
         case Qt::SizeHintRole:  // 设置当前index的大小
             return QSize(0, 48);
         case Qt::ToolTipRole:
@@ -705,7 +710,20 @@ QString DebListModel::packageFailedReason(const int idx) const
     if (m_packagesManager->isArchError(idx))
         return tr("Unmatched package architecture");  // 判断是否架构冲突
 
-    switch (dependStatus.status) {
+    // need refactor, move to Deb::DebPackage
+    int status = dependStatus.status;
+    if (Pkg::CompatibleNotInstalled == status && CompBackend::instance()->supportAppCheck()) {
+        if (auto ptr = packagePtr(idx)) {
+            if (auto compPtr = ptr->compatible()) {
+                // back to depends break if no support rootfs on compatible mode.
+                if (compPtr->checked && compPtr->supportRootfs.isEmpty()) {
+                    status = Pkg::DependsBreak;
+                }
+            }
+        }
+    }
+
+    switch (status) {
         case Pkg::CompatibleIntalled:
             if (auto ptr = packagePtr(idx)) {
                 QString system = ptr->compatible()->rootfs;

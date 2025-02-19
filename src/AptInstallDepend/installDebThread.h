@@ -31,6 +31,8 @@ public:
         Compatible = 1 << 5,   // compatible mode
         Immutable = 1 << 6,    // immutable system
         LinglongUab = 1 << 7,  // linglong app(lingyaps)
+
+        AppCheck = 1 << 8,  // compatible appcheck
     };
     Q_DECLARE_FLAGS(Commands, Command)
     Q_FLAG(Commands)
@@ -67,6 +69,7 @@ private:
     QCommandLineParser m_parser;
     Commands m_cmds;
     QString m_rootfs;  // for comaptible mode : select rootfs
+    QString m_user;
 
     KProcess *m_proc;
     QStringList m_listParam;
