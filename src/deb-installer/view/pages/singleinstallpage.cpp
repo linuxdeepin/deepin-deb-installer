@@ -6,6 +6,7 @@
 #include "model/deblistmodel.h"
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
+#include "utils/deb_package.h"
 #include "compatible/compatible_backend.h"
 
 #include <QApplication>
@@ -178,13 +179,6 @@ void SingleInstallPage::initCompatibleSelectLayout()
     m_compatibleBox = new DComboBox(this);
     m_compatibleBox->setObjectName("SinglePageCompatibleBox");
     m_compatibleBox->setFixedWidth(226);
-    auto rootfsList = CompBackend::instance()->rootfsList();
-    for (const auto &rootfs : rootfsList) {
-        m_compatibleBox->addItem(rootfs->osName, rootfs->name);
-    }
-    if (!rootfsList.isEmpty()) {
-        m_compatibleBox->setCurrentIndex(0);
-    }
 
     QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
     Utils::bindFontBySizeAndWeight(m_compatibleLabel, normalFontFamily, 12, QFont::Normal);
@@ -328,6 +322,97 @@ void SingleInstallPage::initTabOrder()
 
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);  // 当前场景为重新安装
     QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                     // 重新安装场景
+}
+
+void SingleInstallPage::initCompatibleRootfs()
+{
+    if (!m_inCompatibleMode) {
+        return;
+    }
+
+    // TODO: not support app check now!
+    if (!CompBackend::instance()->supportAppCheck()) {
+        auto rootfsList = CompBackend::instance()->rootfsList();
+        for (const auto &rootfs : rootfsList) {
+            m_compatibleBox->addItem(rootfs->osName, rootfs->name);
+        }
+        if (!rootfsList.isEmpty()) {
+            m_compatibleBox->setCurrentIndex(0);
+        }
+
+    } else {
+        connect(CompBackend::instance(),
+                &CompBackend::packageSupportRootfsChanged,
+                this,
+                [this](const Compatible::CompPkgInfo::Ptr &checkPtr) {
+                    if (!m_inCompatibleMode || !checkPtr || !checkPtr->checked) {
+                        return;
+                    }
+
+                    const QModelIndex index = m_packagesModel->index(0);
+                    auto currentPtr = index.data(DebListModel::PackageSharedPointerRole).value<Deb::DebPackage::Ptr>();
+                    if (currentPtr->compatible() != checkPtr) {
+                        return;
+                    }
+
+                    m_compatibleChekcing = false;
+                    auto rootfsList = checkPtr->supportRootfs;
+
+                    if (!rootfsList.isEmpty()) {
+                        for (const auto &rootfs : rootfsList) {
+                            m_compatibleBox->addItem(rootfs->osName, rootfs->name);
+                        }
+
+                        m_compatibleBox->setCurrentIndex(0);
+
+                        m_compatibleLabel->setVisible(true);
+                        m_compatibleBox->setVisible(true);
+
+                    } else {
+                        // Quit compatible mode if no support rootfs
+                        m_inCompatibleMode = false;
+
+                        m_compatibleLabel->setVisible(false);
+                        m_compatibleBox->setVisible(false);
+
+                        slotRefreshSinglePackageDepends();
+                        showPackageInfo();
+                    }
+
+                    m_pDSpinner->setVisible(false);
+                    m_pDSpinner->stop();
+                });
+
+        const QModelIndex index = m_packagesModel->index(0);
+        auto currentPtr = index.data(DebListModel::PackageSharedPointerRole).value<Deb::DebPackage::Ptr>();
+        auto currentCompPtr = currentPtr->compatible();
+
+        // seems need recheck rootfs in every time
+        // if current package installed in rootfs, need uninstall fisrt
+        if (currentCompPtr->checked || !currentCompPtr->rootfs.isEmpty()) {
+            auto rootfsList = currentCompPtr->supportRootfs;
+            for (const auto &rootfs : rootfsList) {
+                m_compatibleBox->addItem(rootfs->osName, rootfs->name);
+            }
+            if (!rootfsList.isEmpty()) {
+                m_compatibleBox->setCurrentIndex(0);
+            }
+
+        } else {
+            if (CompBackend::instance()->checkPackageSupportRootfs(currentPtr->compatible())) {
+                m_compatibleChekcing = true;
+
+                // show spinner, wait check finished.
+                m_compatibleLabel->setVisible(false);
+                m_compatibleBox->setVisible(false);
+
+                m_pDSpinner->start();
+                m_pDSpinner->setVisible(true);
+            } else {
+                qWarning() << "Can not call compatible app check!";
+            }
+        }
+    }
 }
 
 void SingleInstallPage::initButtonFocusPolicy()
@@ -523,6 +608,8 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     // bug 139875  Tab Order要在布局之后设置才能生效
     initTabOrder();
+
+    initCompatibleRootfs();
 }
 
 void SingleInstallPage::initPkgDependsInfoView()
@@ -554,7 +641,7 @@ void SingleInstallPage::initConnections()
     connect(m_confirmButton, &DPushButton::clicked, this, [this]() {
         QModelIndex index = m_packagesModel->index(0);
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-        if (Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
+        if (m_inCompatibleMode && Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
             // requset install package to compatible.
             m_targetRootfsOsName = m_compatibleBox->currentText();
             const QString targetRootfs = m_compatibleBox->currentData().toString();
@@ -1000,8 +1087,15 @@ void SingleInstallPage::showPackageInfo()
                 switch (dependsStat) {
                     case Pkg::CompatibleNotInstalled:
                         // no back button, select 'compatible rootfs' and install
-                        m_compatibleLabel->setVisible(true);
-                        m_compatibleBox->setVisible(true);
+                        if (m_compatibleChekcing) {
+                            m_compatibleLabel->setVisible(false);
+                            m_compatibleBox->setVisible(false);
+                            m_confirmButton->setVisible(false);
+                        } else {
+                            m_compatibleLabel->setVisible(true);
+                            m_compatibleBox->setVisible(true);
+                            m_confirmButton->setVisible(true);
+                        }
                         break;
                     case Pkg::CompatibleIntalled:
                         // uninstall or quit

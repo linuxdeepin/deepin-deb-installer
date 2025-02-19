@@ -72,6 +72,12 @@ void PackageAnalyzer::initBackend()
     archs.append("all");
     archs.append("any");
 
+    // wait compatible init finished;
+    bool nonGuiThread = qApp->thread() != QThread::currentThread();
+    while (nonGuiThread && CompBackend::instance()->compatibleExists() && !CompBackend::instance()->compatibleInited()) {
+        QThread::msleep(5);
+    }
+
     backendInInit = false;
     emit runBackend(false);
 }

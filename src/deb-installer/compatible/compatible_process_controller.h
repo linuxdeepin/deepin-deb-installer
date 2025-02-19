@@ -43,6 +43,8 @@ private:
     Q_SLOT void onReadOutput(const char *buffer, int length, bool isCommandExec);
     Q_SLOT void onFinished(int exitCode, int exitStatus);
 
+    void appendCurrentUser(QStringList &params);
+
     enum ProcessType {
         Install,
         Uninstall,

@@ -22,6 +22,10 @@ static const QString kParamInstall = "--install";
 static const QString kParamRemove = "--remove";
 static const QString kParamRootfs = "--rootfs";
 
+// select current user (non-root)
+static const QString kEnvUser = "USER";
+static const QString kParamUser = "--user";
+
 CompatibleProcessController::CompatibleProcessController(QObject *parent)
     : QObject{parent}
 {
@@ -74,6 +78,8 @@ bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
         params << kParamInstallConfig;
     }
 
+    appendCurrentUser(params);
+
     m_process->start(kPkexecBin, params, {}, 0, false);
 
     qInfo() << "Comaptible install:" << m_process->program();
@@ -99,21 +105,21 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
     // reset state
     m_currentPackage->setError(Pkg::NoError, {});
 
+    QStringList params{kPkexecBin,
+                       kInstallProcessorBin,
+                       kParamCompatible,
+                       kParamRemove,
+                       kParamRootfs,
+                       m_currentPackage->compatible()->rootfs,
+                       m_currentPackage->debInfo()->packageName()};
+
+    appendCurrentUser(params);
+
     // For historical reasons, the first argument in programArguments is the
     // name of the program to execute, so create a list consisting of all
     // but the first argument to pass to setProgram()
     // sa: Pty::start()
-    m_process->start(kPkexecBin,
-                     {kPkexecBin,
-                      kInstallProcessorBin,
-                      kParamCompatible,
-                      kParamRemove,
-                      kParamRootfs,
-                      m_currentPackage->compatible()->rootfs,
-                      m_currentPackage->debInfo()->packageName()},
-                     {},
-                     0,
-                     false);
+    m_process->start(kPkexecBin, params, {}, 0, false);
 
     qInfo() << "Comaptible uninstall:" << m_process->program();
     Q_EMIT processStart();
@@ -210,6 +216,17 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
 
     // release temp data
     m_outputList.clear();
+}
+
+void CompatibleProcessController::appendCurrentUser(QStringList &params)
+{
+    auto env = QProcessEnvironment::systemEnvironment();
+    QString currentUser = env.value(kEnvUser);
+    if (!currentUser.isEmpty()) {
+        params << kParamUser << currentUser;
+    } else {
+        qWarning() << "Compatible current user is empty";
+    }
 }
 
 };  // namespace Compatible

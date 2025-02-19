@@ -151,6 +151,7 @@ FILE(GLOB allTestSource
     src/view/pages/*.cpp
     src/view/widgets/*.cpp
     src/uab/*.cpp
+    src/compatible/*.cpp
 )
 include_directories(src)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../src/deb-installer/)

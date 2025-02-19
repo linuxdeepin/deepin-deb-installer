@@ -151,6 +151,8 @@ private:
      */
     void initTabOrder();
 
+    void initCompatibleRootfs();
+
     /**
      * @brief initButtonFocusPolicy 设置按钮的焦点策略
      */
@@ -303,8 +305,9 @@ private:
     bool m_showRemovePackages = false;  // current package need show remove packages
 
     // for comaptible mode
-    bool m_inCompatibleMode = false;  // current pacakge in comaptbile mode;
-    QString m_rootfsOsName;           // current package rootfs (empty if not installed)
+    bool m_inCompatibleMode = false;    // current pacakge in comaptbile mode;
+    bool m_compatibleChekcing = false;  // trigger appcheck
+    QString m_rootfsOsName;             // current package rootfs (empty if not installed)
     QString m_targetRootfsOsName;
     DLabel *m_compatibleLabel = nullptr;
     DComboBox *m_compatibleBox = nullptr;  // compatible rootfs selector

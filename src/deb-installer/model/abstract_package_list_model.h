@@ -38,6 +38,8 @@ public:
 
         CompatibleRootfsRole,        // compatible mode only, provides current compatible rootfs name
         CompatibleTargetRootfsRole,  // target rootfs name
+
+        PackageSharedPointerRole,  // return DebPackage::Ptr
     };
 
     // the list model backend installer status

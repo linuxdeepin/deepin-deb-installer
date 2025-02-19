@@ -5,10 +5,25 @@
 #ifndef COMPATIBLE_DEFINES_H
 #define COMPATIBLE_DEFINES_H
 
+#include <QList>
 #include <QString>
 #include <QSharedPointer>
 
 namespace Compatible {
+
+enum CompResultCode {
+    CompSuccess = 0,
+    CompError = -1,
+};
+
+struct RootfsInfo
+{
+    using Ptr = QSharedPointer<RootfsInfo>;
+
+    int prioriy{0};
+    QString name;
+    QString osName;
+};
 
 struct CompPkgInfo
 {
@@ -21,16 +36,10 @@ struct CompPkgInfo
     QString rootfs;        // rootfs name, which installed this package
     QString targetRootfs;  // target rootfs, prepare for install pacakge to specific rootfs
 
+    bool checked{false};                   // mark check current support rootfs
+    QList<RootfsInfo::Ptr> supportRootfs;  // current support rootfs list (use deepin-compatible-ctl app check)
+
     inline bool installed() const { return !rootfs.isEmpty(); }
-};
-
-struct RootfsInfo
-{
-    using Ptr = QSharedPointer<RootfsInfo>;
-
-    int prioriy{0};
-    QString name;
-    QString osName;
 };
 
 }  // namespace Compatible

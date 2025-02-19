@@ -87,4 +87,6 @@ private:
 
 };  // namespace Deb
 
+Q_DECLARE_METATYPE(Deb::DebPackage::Ptr)
+
 #endif  // DEBPACKAGE_H
