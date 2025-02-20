@@ -27,6 +27,7 @@ static const QString kCompApp = "app";
 static const QString kCompInstall = "install";
 static const QString kCompRemove = "remove";
 static const QString kCompCheck = "check";
+static const QString kCompPS = "ps";
 
 CompatibleBackend::CompatibleBackend(QObject *parent)
     : QObject{parent}
@@ -43,7 +44,8 @@ CompatibleBackend *CompatibleBackend::instance()
 #ifndef DISABLE_COMPATIBLE
 bool CompatibleBackend::compatibleValid() const
 {
-    return m_init && !m_rootfsList.isEmpty();
+    // TODO: check rootfs list later, with `app check`
+    return m_init /*&& !m_rootfsList.isEmpty()*/;
 }
 
 bool CompatibleBackend::compatibleInited() const
@@ -111,8 +113,7 @@ void CompatibleBackend::packageRemoved(const CompPkgInfo::Ptr &removePtr)
 
 bool CompatibleBackend::supportAppCheck() const
 {
-    // TODO: not support app check now!
-    return false;
+    return true;
 }
 
 bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkPtr)
@@ -125,6 +126,23 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
     captureFilePath.detach();
     QThreadPool::globalInstance()->start(
         [=]() {
+
+#if 1
+            // This is a temporary change
+            QProcess queryProcess;
+            queryProcess.setProgram(kCompatibleBin);
+
+            // FIXME: we need init rootfs?
+            queryProcess.setArguments({kCompApp, kCompPS});
+            queryProcess.start();
+            queryProcess.waitForFinished();
+
+            queryProcess.setArguments({kCompRootFs, kCompList});
+            queryProcess.start();
+            queryProcess.waitForFinished();
+            QByteArray output = queryProcess.readAllStandardOutput();
+            auto rootfs = parseRootfsFromRawOutputV2(output);
+#else
             // app check require root privileges
             // e.g.: pkexec deepin-deb-installer-dependsInstall --install_compatible --check [file path] --user [current user]
             // And real command in backend: deepin-compatible-ctl app --json check [file path]
@@ -158,11 +176,15 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
                     rootfs = CompatibleJsonParser::parseSupportfsList(ret);
                 }
             }
+#endif
 
             // update data on GUI thread
             QMetaObject::invokeMethod(
                 qApp,
                 [=]() {
+                    // FIXME: we need init rootfs?
+                    CompatibleBackend::instance()->m_rootfsList = rootfs;
+
                     checkPtr->checked = true;
                     checkPtr->supportRootfs = rootfs;
                     Q_EMIT CompatibleBackend::instance()->packageSupportRootfsChanged(checkPtr);
@@ -289,6 +311,7 @@ void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
 {
     QProcess queryProcess;
     queryProcess.setProgram(kCompatibleBin);
+
     queryProcess.setArguments({kCompRootFs, kCompList});
     queryProcess.start();
     queryProcess.waitForFinished();
@@ -337,7 +360,7 @@ void CompatibleBackend::initFinished(const QList<RootfsInfo::Ptr> &rootfsList, c
     m_rootfsList = rootfsList;
     m_packages = packages;
 
-    qInfo() << "Comaptible init finished, rootfs: "<< m_rootfsList << "Package size: " << m_packages.size();
+    qInfo() << "Comaptible init finished, rootfs: " << m_rootfsList << "Package size: " << m_packages.size();
 
     Q_EMIT compatibleInitFinished();
 }
