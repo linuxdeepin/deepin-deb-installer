@@ -330,7 +330,6 @@ void SingleInstallPage::initCompatibleRootfs()
         return;
     }
 
-    // TODO: not support app check now!
     if (!CompBackend::instance()->supportAppCheck()) {
         auto rootfsList = CompBackend::instance()->rootfsList();
         for (const auto &rootfs : rootfsList) {
@@ -367,7 +366,9 @@ void SingleInstallPage::initCompatibleRootfs()
 
                         m_compatibleLabel->setVisible(true);
                         m_compatibleBox->setVisible(true);
+                        m_backButton->setVisible(true);
 
+                        showPackageInfo();
                     } else {
                         // Quit compatible mode if no support rootfs
                         m_inCompatibleMode = false;
