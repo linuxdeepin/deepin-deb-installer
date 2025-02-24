@@ -164,12 +164,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="716"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>已在%1中安裝%2，請先卸載後再安裝此包</translation>
+        <translation>已在%1中安裝%2, 請先卸載後再安裝此包</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="722"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>依賴關係不滿足，請嘗試使用兼容模式安裝該應用</translation>
+        <translation>依賴關係不滿足,請嘗試使用兼容模式安裝該應用</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="737"/>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="885"/>
         <source>Collapse</source>
-        <translation>收起</translation>
+        <translation>收 起</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="395"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="175"/>
         <source>Select a compatibility mode:</source>
-        <translation>選擇兼容模式：</translation>
+        <translation>安裝%1將會卸載：</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="387"/>
@@ -570,7 +570,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="839"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>%2已成功安裝到%1兼容模式</translation>
+        <translation>%2已從%1兼容模式成功卸載</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="843"/>
@@ -707,8 +707,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation>您確定要從%1兼容模式
-卸載%2嗎？</translation>
+        <translation>您確定要從%1兼容模式\n卸載%2嗎？</translation>
     </message>
 </context>
 <context>

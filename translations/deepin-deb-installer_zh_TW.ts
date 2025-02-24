@@ -164,12 +164,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="716"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>已在%1中安裝%2，請先移除後再安裝此包</translation>
+        <translation>已在%1中安裝%2, 請先移除後再安裝此包</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="722"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>依賴關係不滿足，請嘗試使用相容模式安裝該應用</translation>
+        <translation>依賴關係不滿足,請嘗試使用相容模式安裝該應用</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="737"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
         <source>Show details</source>
-        <translation>顯示詳細訊息</translation>
+        <translation>顯示卸載進程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation>安裝%1將會移除：</translation>
+        <translation>Install %1 will remove:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="885"/>
         <source>Collapse</source>
-        <translation>隱藏</translation>
+        <translation>隱 藏</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="395"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="915"/>
         <source>Install %1 will remove: </source>
-        <translation>安裝%1將會移除：</translation>
+        <translation>Install %1 will remove:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="935"/>
@@ -639,7 +639,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="667"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="836"/>
         <source>Show details</source>
-        <translation>顯示詳細訊息</translation>
+        <translation>顯示卸載進程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
@@ -707,8 +707,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation>您確定要從%1相容模式
-移除%2嗎？</translation>
+        <translation>您確定要從%1相容模式\n移除%2嗎？</translation>
     </message>
 </context>
 <context>
