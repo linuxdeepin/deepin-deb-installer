@@ -224,23 +224,40 @@ bool UabPackageListModel::containsSignatureFailed() const
 
 bool UabPackageListModel::slotInstallPackages()
 {
-    if (!isWorkerPrepare() || rowCount() <= 0) {
-        return false;
-    }
+    bool callRet = false;
 
-    if (!linglongExists()) {
-        return false;
-    }
+    do {
+        if (!isWorkerPrepare() || rowCount() <= 0) {
+            break;
+        }
 
-    // reset, mark package waiting install
-    resetInstallStatus();
-    for (auto uabPtr : m_uabPkgList) {
-        uabPtr->m_operationStatus = Pkg::Waiting;
+        if (!linglongExists()) {
+            break;
+        }
+
+        // reset, mark package waiting install
+        resetInstallStatus();
+        for (auto uabPtr : m_uabPkgList) {
+            uabPtr->m_operationStatus = Pkg::Waiting;
+        }
         Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+
+        setWorkerStatus(WorkerProcessing);
+        installNextUab();
+        callRet = true;
+    } while (false);
+
+    if (!callRet) {
+        for (auto uabPtr : m_uabPkgList) {
+            uabPtr->m_operationStatus = Pkg::Failed;
+        }
+        Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+
+        setWorkerStatus(WorkerFinished);
+        return false;
     }
 
-    setWorkerStatus(WorkerProcessing);
-    return installNextUab();
+    return true;
 }
 
 bool UabPackageListModel::slotUninstallPackage(const int i)
