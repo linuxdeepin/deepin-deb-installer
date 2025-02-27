@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.8) unstable; urgency=medium
+
+  * i18n: Updates for project Deepin Package Installer (#298)
+  * fix: app hangs when install uab without linglong(Bug: 292077)
+
+ -- renbin <renbin@uniontech.com>  Thu, 27 Feb 2025 19:13:38 +0800
+
 deepin-deb-installer (6.5.7) unstable; urgency=medium
 
   * fix: init rootfs first
