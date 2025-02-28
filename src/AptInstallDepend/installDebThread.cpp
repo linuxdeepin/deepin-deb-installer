@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <QDebug>
-
 #include "installDebThread.h"
+
+#include <QDebug>
+#include <QVersionNumber>
 
 static const QString kParamInstallWine = "install_wine";
 static const QString kParamInstallConfig = "install_config";
@@ -288,6 +289,17 @@ void InstallDebThread::compatibleProcess()
     }
 }
 
+bool newImmutableVersion() {
+    QProcess process;
+    process.start("dpkg-query", {"-W", "-f='${Version}'", "deepin-immutable-ctl"});
+    process.waitForFinished();
+    QString versionStr = process.readAllStandardOutput();
+
+    QVersionNumber version = QVersionNumber::fromString(versionStr.remove('\''));
+
+    return version >= QVersionNumber(0, 0, 28);
+}
+
 /**
    @brief Install / remove package in immutable system.
  */
@@ -299,6 +311,7 @@ void InstallDebThread::immutableProcess()
     // for immutable system
     static const QString kImmuEnvEnableWait = "DEEPIN_IMMUTABLE_CTL_WAIT_LOCK";
     static const QString kImmuYes = "-y";
+    static const QString kImmuAllowDowngrades = "--allow-downgrades";
 
     QStringList params;
 
@@ -320,8 +333,13 @@ void InstallDebThread::immutableProcess()
         }
 
         // Note: deepin-immutable-ctl actually use apt to install/uninstall. (params transport to deepin-immutable-ctl)
-        // e.g.: apt install [deb file] -y
+        // e.g.: apt install [deb file] -y (--allow-downgrades)
         params << kInstall << debPath << kImmuYes;
+
+        // FIXME: temporary code, check if current Immutable System need --allow-downgrades
+        if (newImmutableVersion()) {
+            params << kImmuAllowDowngrades;
+        }
 
     } else if (m_cmds.testFlag(Remove)) {
         // e.g.: apt remove [package name] -y

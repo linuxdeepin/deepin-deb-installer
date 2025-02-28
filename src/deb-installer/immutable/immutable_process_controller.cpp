@@ -145,7 +145,7 @@ void ImmutableProcessController::onReadOutput(const char *buffer, int length, bo
     const QByteArray output = QByteArray::fromRawData(buffer, length);
     Q_EMIT processOutput(output);
 
-    // simulate porgress, progress = log2(x) * 10
+    // simulate progress, progress = floor(log2(x)) * 10
     m_outputList.append(output);
 
     int bitMax = 0;
