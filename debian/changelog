@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.9) unstable; urgency=medium
+
+  * feat: support uab mimetype
+
+ -- renbin <renbin@uniontech.com>  Fri, 28 Feb 2025 14:26:36 +0800
+
 deepin-deb-installer (6.5.8) unstable; urgency=medium
 
   * i18n: Updates for project Deepin Package Installer (#298)
