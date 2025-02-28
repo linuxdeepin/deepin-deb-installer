@@ -368,7 +368,7 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
 {
     if (Pkg::Uab == type) {
         // linglong uab package
-        static QIcon kUabIcon = QIcon::fromTheme("application-x-uab");
+        static QIcon kUabIcon = QIcon::fromTheme("application/x-executable");
         if (kUabIcon.isNull()) {
             // using DDciIcon to support new svg version (dsvg use librsvg backend)
             Dtk::Gui::DDciIcon dciIcon(QString(":/icons/deepin/uab/uos-application-bundle.dci"));
