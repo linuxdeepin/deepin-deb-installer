@@ -129,19 +129,25 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
 
 #if 1
             // This is a temporary change
+            QList<RootfsInfo::Ptr> rootfs;
             QProcess queryProcess;
             queryProcess.setProgram(kCompatibleBin);
 
             // FIXME: we need init rootfs?
             queryProcess.setArguments({kCompApp, kCompPS});
             queryProcess.start();
-            queryProcess.waitForFinished();
+            // 30s not enough for init, up to 20mins.
+            if (queryProcess.waitForFinished(20 * 60 * 1000)) {
+                queryProcess.setArguments({kCompRootFs, kCompList});
+                queryProcess.start();
+                if (queryProcess.waitForFinished()) {
+                    QByteArray output = queryProcess.readAllStandardOutput();
+                    rootfs = parseRootfsFromRawOutputV2(output);
+                }
+            } else {
+                qWarning() << "Delay get(init) rootfs list failed! " << queryProcess.errorString();
+            }
 
-            queryProcess.setArguments({kCompRootFs, kCompList});
-            queryProcess.start();
-            queryProcess.waitForFinished();
-            QByteArray output = queryProcess.readAllStandardOutput();
-            auto rootfs = parseRootfsFromRawOutputV2(output);
 #else
             // app check require root privileges
             // e.g.: pkexec deepin-deb-installer-dependsInstall --install_compatible --check [file path] --user [current user]
@@ -309,20 +315,30 @@ void CompatibleBackend::initBackend(bool async)
 
 void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
 {
+    QHash<QString, CompPkgInfo::Ptr> packages;
+    QList<RootfsInfo::Ptr> rootfsList;
+    QByteArray output;
+
     QProcess queryProcess;
     queryProcess.setProgram(kCompatibleBin);
 
     queryProcess.setArguments({kCompRootFs, kCompList});
     queryProcess.start();
-    queryProcess.waitForFinished();
-    QByteArray output = queryProcess.readAllStandardOutput();
-    auto rootfsList = parseRootfsFromRawOutputV2(output);
+    if (queryProcess.waitForFinished()) {
+        output = queryProcess.readAllStandardOutput();
+        rootfsList = parseRootfsFromRawOutputV2(output);
+    } else {
+        qWarning() << "Get rootfs list failed! " << queryProcess.errorString();
+    }
 
     queryProcess.setArguments({kCompApp, kCompList, kCompListAll});
     queryProcess.start();
-    queryProcess.waitForFinished();
-    output = queryProcess.readAllStandardOutput();
-    auto packages = parseAppListFromRawOutput(output);
+    if (queryProcess.waitForFinished()) {
+        output = queryProcess.readAllStandardOutput();
+        packages = parseAppListFromRawOutput(output);
+    } else {
+        qWarning() << "Get app list failed! " << queryProcess.errorString();
+    }
 
     // NOTE: ComaptibleBackend might not inited in main thread( no event loop ), so use qApp instaed.
     QMetaObject::invokeMethod(
@@ -331,23 +347,34 @@ void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
 
 void CompatibleBackend::backendProcessWithJson(CompatibleBackend *backend)
 {
+    QHash<QString, CompPkgInfo::Ptr> packages;
+    QList<RootfsInfo::Ptr> rootfsList;
+    QByteArray output;
+    CompatibleRet::Ptr retPtr;
+
     QProcess queryProcess;
     queryProcess.setProcessChannelMode(QProcess::MergedChannels);
     queryProcess.setProgram(kCompatibleBin);
 
     queryProcess.setArguments({kCompApp, kCompJsonFormat, kCompList, kCompListAll});
     queryProcess.start();
-    queryProcess.waitForFinished();
-    QByteArray output = queryProcess.readAll();
-    auto retPtr = CompatibleJsonParser::parseCommonField(output);
-    auto packages = CompatibleJsonParser::parseAppList(retPtr);
+    if (queryProcess.waitForFinished()) {
+        output = queryProcess.readAll();
+        retPtr = CompatibleJsonParser::parseCommonField(output);
+        packages = CompatibleJsonParser::parseAppList(retPtr);
+    } else {
+        qWarning() << "Get app list failed! " << queryProcess.errorString();
+    }
 
     queryProcess.setArguments({kCompRootFs, kCompJsonFormat, kCompList});
     queryProcess.start();
-    queryProcess.waitForFinished();
-    output = queryProcess.readAllStandardOutput();
-    retPtr = CompatibleJsonParser::parseCommonField(output);
-    auto rootfsList = CompatibleJsonParser::parseRootfsList(retPtr);
+    if (queryProcess.waitForFinished()) {
+        output = queryProcess.readAllStandardOutput();
+        retPtr = CompatibleJsonParser::parseCommonField(output);
+        rootfsList = CompatibleJsonParser::parseRootfsList(retPtr);
+    } else {
+        qWarning() << "Get rootfs list failed! " << queryProcess.errorString();
+    }
 
     // NOTE: ComaptibleBackend might not inited in main thread( no event loop ), so use qApp instaed.
     QMetaObject::invokeMethod(
