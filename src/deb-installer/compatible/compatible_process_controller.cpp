@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "compatible_process_controller.h"
+#include "compatible_json_parser.h"
 
 #include <QDebug>
 
@@ -180,7 +181,7 @@ void CompatibleProcessController::onReadOutput(const char *buffer, int length, b
 
 void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
 {
-    const bool success = (Pkg::ExitNoError == exitCode && QProcess::NormalExit == exitStatus);
+    bool success = (Pkg::ExitNoError == exitCode && QProcess::NormalExit == exitStatus);
     if (!success) {
         switch (exitCode) {
             case Pkg::ExitAuthError:
@@ -196,6 +197,16 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
                     }
                 }
             } break;
+        }
+    } else {
+        // New version support json data result.
+        auto lastRetOutput = m_outputList.last().toUtf8();
+        auto retPtr = CompatibleJsonParser::parseCommonField(lastRetOutput);
+        if (retPtr && CompSuccess != retPtr->ext.code) {
+            qWarning() << "Compatible install/uninstall failed" << lastRetOutput;
+
+            m_currentPackage->setError(Pkg::UnknownError, {});
+            success = false;
         }
     }
 
