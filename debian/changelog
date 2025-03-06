@@ -1,3 +1,11 @@
+deepin-deb-installer (6.5.10) unstable; urgency=medium
+
+  * fix: can not downgrades(Bug: 305705)
+  * fix: get rootfs list incorrect(Bug: 306523)
+  * chore: update translations.(Bug: 306531)
+
+ -- renbin <renbin@uniontech.com>  Thu, 06 Mar 2025 19:04:14 +0800
+
 deepin-deb-installer (6.5.9) unstable; urgency=medium
 
   * feat: support uab mimetype
