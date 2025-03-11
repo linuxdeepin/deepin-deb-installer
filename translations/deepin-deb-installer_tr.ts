@@ -75,17 +75,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>%1 paketi bozulmuş olabilir</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Yalnızca yerel %1 paketlerini yükleyebilirsiniz</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Bu klasöre erişim izni yok</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>mevcut sistem</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2, %1&apos; in içinde yüklendi, lütfen yüklemeden önce bu paketi kaldırın</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Bozuk bağımlılıklar, uygulamayı uyumluluk modunda yüklemeyi deneyin</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>%1 kurulumu şunları kaldıracak:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
@@ -444,7 +444,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>Sistem Linglong ortamını kurmadı, lütfen ilk önce onu kurun</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
@@ -460,7 +460,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Şunlar kaldırılacak:</translation>
     </message>
 </context>
 <context>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Bir uyumluluk modu seçin:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -560,17 +560,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;in uyumluluk modunda %2 yüklenmeye çalışılıyor</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;in uyumluluk modundan %2 kaldırılıyor</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2, %1&apos;in uyumluluk moduna başarıyla yüklendi</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2, %1&apos;in uyumluluk modundan başarıyla kaldırıldı</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>%1 kurulumu şunları kaldıracak:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
@@ -707,7 +707,8 @@ Sistem veya diğer uygulamalar düzgün çalışmayabilir</translation>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>%1&apos;in uyumluluk modundan 
+%2&apos;yi kaldırmak istediğinizden emin misiniz?</translation>
     </message>
 </context>
 <context>
