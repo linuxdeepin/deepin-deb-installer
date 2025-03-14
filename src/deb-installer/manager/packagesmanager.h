@@ -215,6 +215,7 @@ public:
      * @return 包的依赖状态
      */
     PackageDependsStatus getPackageDependsStatus(const int index);
+    bool cachedPackageDependStatus(const int index) const;
 
     /**
      * @brief getPackageOrDepends 解析或依赖关系

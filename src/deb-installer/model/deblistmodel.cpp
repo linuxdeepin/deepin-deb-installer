@@ -929,10 +929,7 @@ void DebListModel::installDebs()
 
     Transaction *transaction = nullptr;
 
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
-
-    // check available dependencies
+    // reset package depends status on installNextDeb(), check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
 
     // for compatbile install
@@ -1369,8 +1366,22 @@ bool DebListModel::checkDigitalSignature()
 
 void DebListModel::installNextDeb()
 {
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);  // 刷新软件包依赖状态
-    auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+    PackageDependsStatus dependStatus;
+    bool needReset = true;
+    // If package install to comaptible mode, not need reset status.
+    if (supportCompatible() && m_packagesManager->cachedPackageDependStatus(m_operatingStatusIndex)) {
+        const auto &cachedStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+        if (cachedStatus.canInstallCompatible()) {
+            dependStatus = cachedStatus;
+            needReset = false;
+        }
+    }
+
+    if (needReset) {
+        // The apt backend cache may changed, refresh package status.
+        m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
+        dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+    }
 
     if (dependStatus.canInstallCompatible() && supportCompatible()) {
         installDebs();
