@@ -1038,6 +1038,12 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     return dependsStatus;
 }
 
+bool PackagesManager::cachedPackageDependStatus(const int index) const
+{
+    auto currentPackageMd5 = m_packageMd5[index];
+    return m_packageMd5DependsStatus.contains(currentPackageMd5);
+}
+
 void PackagesManager::getPackageOrDepends(const QString &package, const QString &arch, bool flag)
 {
     /*
