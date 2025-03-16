@@ -131,7 +131,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="103"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="115"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>インストールに失敗しました。ディスクの空き領域が不足しています</translation>
+        <translation>インストールに失敗しました。ディスクの空き領域が足りません</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
         <source>Installation Failed</source>
-        <translation>インストールできませんでした</translation>
+        <translation>インストール失敗</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
@@ -460,7 +460,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>削除されます:</translation>
     </message>
 </context>
 <context>
@@ -721,7 +721,7 @@ from %1 compatibility mode?</source>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>パッケージ インストーラーは、ユーザーがローカル パッケージをインストールおよび削除するのに役立ちます。一括インストールにも対応しています。</translation>
+        <translation>パッケージ インストーラーは、ユーザーがローカル パッケージをインストールしたり削除したりするのに役立ちます。一括インストールにも対応しています。</translation>
     </message>
 </context>
 </TS>
