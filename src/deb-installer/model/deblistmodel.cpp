@@ -1368,10 +1368,10 @@ void DebListModel::installNextDeb()
 {
     PackageDependsStatus dependStatus;
     bool needReset = true;
-    // If package install to comaptible mode, not need reset status.
+    // If package is first package or install to comaptible mode, not need reset status.
     if (supportCompatible() && m_packagesManager->cachedPackageDependStatus(m_operatingStatusIndex)) {
         const auto &cachedStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-        if (cachedStatus.canInstallCompatible()) {
+        if (0 == m_operatingStatusIndex || cachedStatus.canInstallCompatible()) {
             dependStatus = cachedStatus;
             needReset = false;
         }
