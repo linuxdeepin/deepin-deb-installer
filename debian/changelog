@@ -1,3 +1,13 @@
+deepin-deb-installer (6.5.11) unstable; urgency=medium
+
+  * i18n: Updates for project Deepin Package Installer (#306)
+  * fix: remove duplicate package status detections.(Bug: 307921)
+  * [skip CI] Translate deepin-deb-installer.ts in ja
+  * fix: remove unnecessary check(Bug: 307705)
+  * fix: skip first package check if cached.(Bug: 307705)
+
+ -- renbin <renbin@uniontech.com>  Thu, 20 Mar 2025 19:03:46 +0800
+
 deepin-deb-installer (6.5.10) unstable; urgency=medium
 
   * fix: can not downgrades(Bug: 305705)
