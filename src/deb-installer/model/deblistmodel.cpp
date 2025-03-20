@@ -1366,22 +1366,13 @@ bool DebListModel::checkDigitalSignature()
 
 void DebListModel::installNextDeb()
 {
-    PackageDependsStatus dependStatus;
-    bool needReset = true;
-    // If package is first package or install to comaptible mode, not need reset status.
-    if (supportCompatible() && m_packagesManager->cachedPackageDependStatus(m_operatingStatusIndex)) {
-        const auto &cachedStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
-        if (0 == m_operatingStatusIndex || cachedStatus.canInstallCompatible()) {
-            dependStatus = cachedStatus;
-            needReset = false;
-        }
-    }
-
-    if (needReset) {
+    // If package is first package or install to compatible mode, not need reset status.
+    bool isFirstPackageAndCached = (0 == m_operatingStatusIndex) && m_packagesManager->cachedPackageDependStatus(m_operatingStatusIndex);
+    if (!isFirstPackageAndCached) {
         // The apt backend cache may changed, refresh package status.
         m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
-        dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
     }
+    PackageDependsStatus dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
 
     if (dependStatus.canInstallCompatible() && supportCompatible()) {
         installDebs();
