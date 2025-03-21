@@ -1651,7 +1651,7 @@ QString PackagesManager::dealPackagePath(const QString &packagePath)
     if (tempPath.contains(" ")) {
         QApt::DebFile p(tempPath);
         if (p.isValid()) {
-            tempPath = SymbolicLink(tempPath, p.packageName() + ".deb");
+            tempPath = SymbolicLink(tempPath, p.packageName());
             qWarning() << "PackagesManager:"
                        << "There are spaces in the path, add a soft link" << tempPath;
         }
@@ -2280,14 +2280,15 @@ QString PackagesManager::link(const QString &linkPath, const QString &packageNam
     // 创建软链接时，如果当前临时目录中存在同名文件，即同一个名字的应用，考虑到版本可能有变化，将后续添加进入的包重命名为{packageName}_i
     // 删除后再次添加会在临时文件的后面添加_1,此问题不影响安装。如果有问题，后续再行修改。
     int count = 1;
-    QString tempName = packageName;
+    static const QString kDebSuffix = ".deb";
+    QString tempName = packageName + kDebSuffix;
 
     // 命名创建的软链接文件
     while (true) {
         QFile tempLinkPath(m_tempLinkDir + tempName);
         // 对已经存在重名文件的处理
         if (tempLinkPath.exists()) {  // 命名方式为在包名后+"_i" PS:i 为当前重复的数字,无实际意义,只是为了区别不同的包
-            tempName = packageName + "_" + QString::number(count);
+            tempName = packageName + "_" + QString::number(count) + kDebSuffix;
             qWarning() << "PackagesManager:"
                        << "A file with the same name exists in the current temporary directory,"
                           "and the current file name is changed to"
