@@ -1651,7 +1651,7 @@ QString PackagesManager::dealPackagePath(const QString &packagePath)
     if (tempPath.contains(" ")) {
         QApt::DebFile p(tempPath);
         if (p.isValid()) {
-            tempPath = SymbolicLink(tempPath, p.packageName());
+            tempPath = SymbolicLink(tempPath, p.packageName() + ".deb");
             qWarning() << "PackagesManager:"
                        << "There are spaces in the path, add a soft link" << tempPath;
         }
