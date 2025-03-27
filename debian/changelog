@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.12) unstable; urgency=medium
+
+  * fix: wrong linked package name(Bug: 309051)
+  * fix: optimize symbolic link file naming logic(Bug: 309051)
+
+ -- renbin <renbin@uniontech.com>  Thu, 27 Mar 2025 16:56:59 +0800
+
 deepin-deb-installer (6.5.11) unstable; urgency=medium
 
   * i18n: Updates for project Deepin Package Installer (#306)
