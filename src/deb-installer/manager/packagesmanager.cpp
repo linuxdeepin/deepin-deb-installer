@@ -2331,17 +2331,7 @@ QString PackagesManager::package(const int index) const
 
 void PackagesManager::getBlackApplications()
 {
-    QFile blackListFile(BLACKFILE);
-    if (blackListFile.exists()) {
-        blackListFile.open(QFile::ReadOnly);
-        QString blackApplications = blackListFile.readAll();
-        blackApplications.replace(" ", "");
-        blackApplications = blackApplications.replace("\n", "");
-        m_blackApplicationList = blackApplications.split(",");
-        blackListFile.close();
-        return;
-    }
-    qWarning() << "Black File not Found";
+    m_blackApplicationList = Utils::parseBlackList();
 }
 
 /**
