@@ -19,8 +19,6 @@
 
 using namespace QApt;
 
-#define BLACKFILE "/usr/share/udcp/appblacklist.txt"
-
 typedef Result<QString> ConflictResult;
 
 class PackageDependsStatus;

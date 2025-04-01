@@ -519,6 +519,32 @@ QString Utils::formatWrapText(const QString &text, int textWidth)
 }
 
 /**
+ * @return parse app black list from config file.
+ */
+QStringList Utils::parseBlackList()
+{
+    static const QString kBlackFileV20 {"/usr/share/udcp/appblacklist.txt"};
+    static const QString kBlackFileV25 {"/var/lib/udcp/appblacklist.txt"};
+    static const int kV25Version = 25;
+
+    const int sysVersion = Dtk::Core::DSysInfo::majorVersion().toInt();
+    QString blackFile = (sysVersion >= kV25Version) ? kBlackFileV25 : kBlackFileV20;
+    QFile blackListFile(blackFile);
+
+    if (blackListFile.exists()) {
+        blackListFile.open(QFile::ReadOnly);
+        QString blackApplications = blackListFile.readAll();
+        blackApplications.replace(" ", "");
+        blackApplications = blackApplications.replace("\n", "");
+        blackListFile.close();
+        return blackApplications.split(",");
+    }
+
+    qInfo() << "Black File not Found, " << blackFile;
+    return {};
+}
+
+/**
  * @brief Mark whether the wine pre-dependency is being installed.
  *        Not thread-safe.
  */

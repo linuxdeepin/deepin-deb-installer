@@ -81,6 +81,9 @@ public:
     static bool isDevelopMode();  // Check if develop mode (root)
 
     static QString formatWrapText(const QString &text, int textWidth);
+
+    // get current package black list
+    static QStringList parseBlackList();
 };
 
 class GlobalStatus
