@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.13) unstable; urgency=medium
+
+  * chore: update desktop file
+  * feat: adapt new black list config file path(Task: 374685)
+
+ -- renbin <renbin@uniontech.com>  Wed, 02 Apr 2025 15:44:58 +0800
+
 deepin-deb-installer (6.5.12) unstable; urgency=medium
 
   * fix: wrong linked package name(Bug: 309051)
