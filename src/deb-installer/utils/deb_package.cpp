@@ -15,6 +15,35 @@
 
 namespace Deb {
 
+bool needRemoveByVersion(const QString &installed_version, const QString &conflict_version, QApt::RelationType type)
+{
+    // 如果版本条件为空，则需要移除
+    if (conflict_version.isEmpty()) {
+        return true;
+    }
+
+    // 比较版本号
+    const int result = QApt::Package::compareVersion(installed_version, conflict_version);
+
+    // 根据关系类型判断是否需要移除
+    switch (type) {
+    case QApt::LessOrEqual:
+        return result <= 0;
+    case QApt::GreaterOrEqual:
+        return result >= 0;
+    case QApt::LessThan:
+        return result < 0;
+    case QApt::GreaterThan:
+        return result > 0;
+    case QApt::Equals:
+        return result == 0;
+    case QApt::NotEqual:
+        return result != 0;
+    default:
+        return true;
+    }
+}
+
 DebPackage::DebPackage(const QString &debFilePath)
     : m_debFilePtr(QSharedPointer<QApt::DebFile>::create(debFilePath))
 {
@@ -152,7 +181,7 @@ void DebPackage::setMarkedPackages(const QStringList &installDepends)
     for (const QApt::DependencyItem &item : selfRemovePackages) {
         for (const QApt::DependencyInfo &info : item) {
             QApt::Package *package = backend->package(info.packageName());
-            if (package && package->isInstalled()) {
+            if (package && package->isInstalled() && needRemoveByVersion(package->installedVersion(), info.packageVersion(), info.relationType())) {
                 m_removePackages << package->name();
             }
         }
