@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="76"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"/>
+        <translation>Introduce o número para configurar: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="81"/>
@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>Cargando paquetes...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2 cargados</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>Inicializando...</translation>
     </message>
 </context>
 <context>
@@ -49,51 +49,51 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Configuración</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="598"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="699"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>Instalando outros paquetes... Abra esto posteriormente.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="602"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Falló a análise: atopouse unha estrutura de ficheiro ilegal no ficheiro manifest!!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="604"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Falló a análise: atopouse un número de versión ilegal no ficheiro manifest!!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="606"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>Non se atoparon paquetes deb. Comprueba a carpeta.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>O paquete %1 pode estar roto</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Pode instalar só paquetes %1 locais</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Non teña permiso para acceder a esta carpeta</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">O paquete deb pode estar roto</translation>
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Pode instalar só paquetes deb locais</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="750"/>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1 non existe, seleccione de novo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="381"/>
@@ -136,20 +136,20 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Non hai firma digital</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="754"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Firma digital non válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="130"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="744"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1663"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"/>
+        <translation>O administrador estableceu políticas para evitar a instalación deste paquete</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>sistema actual</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2 instalouse en %1, desinstale este paquete antes de instalarlo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias rotas, tente instalar a aplicación no modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
@@ -178,17 +178,17 @@
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Fallou a instalación de %1: non hai firma digital válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1116"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Non se pode instalar - non hai firma digital</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1117"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation>Vá ao Centro de Controlo para activar o modo desenvolvedor e tente de novo. Continuar?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1120"/>
@@ -200,7 +200,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1121"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Continuar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1074"/>
@@ -213,12 +213,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1078"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Fallou instalar %1: non se atopou unha súa firma digital válida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1214"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation type="unfinished"/>
+        <translation>Este paquete non tem unha súa firma digital válida. Continuar con a instalación?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1216"/>
@@ -229,7 +229,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1217"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Continuar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1072"/>
@@ -252,7 +252,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="128"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>A autenticación fallou</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="711"/>
@@ -307,17 +307,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>A instalación de %1 eliminará: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias no repositorio</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="523"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias faltantes</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="575"/>
@@ -353,7 +353,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="22"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Seleccionar todo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
@@ -424,27 +424,27 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Básico</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"/>
+        <translation>Comprobar as firmas digitais se o modo de desenvolvedor está activado</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Para instalar apps sen súa firma, vai á Centro de Seguridade &gt; Ferramentas &gt; Seguridade de Aplicativos e seleccione os tipos de aplicación que se pode instalar.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Centro de Seguridade &gt; Ferramentas &gt; Seguridade de Aplicativos</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>O sistema non instalou o entorno Linglong, instale-o primeiro</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
@@ -454,24 +454,24 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Este paquete non tem unha súa firma digital válida e foi bloqueado para instalación/execución. Vá ao Centro de Seguridade &gt; Ferramentas &gt; Seguridade de Aplicativos para cambiar as configuracións.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Proxigar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Irá eliminar: </translation>
     </message>
 </context>
 <context>
@@ -498,7 +498,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1343"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Desactualizar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Seleccione unha modalidade de compatibilidade:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -560,17 +560,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>A tentar instalar %2 en modalidade de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>A desinstalar %2 de modalidade de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 foi instalado con éxito en modalidade de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 foi desinstalado con éxito de modalidade de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,29 +595,29 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>A instalación de %1 eliminará: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias no repositorio</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1030"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Dependencias ausentes</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1348"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Firma digital inválida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="216"/>
@@ -645,7 +645,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar dependencias</translation>
     </message>
 </context>
 <context>
@@ -707,7 +707,8 @@ O sistema ou outros aplicativos poden non funcionar correctamente</translation>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>¿Estás seguro de que queres desinstalar %2 de modo de compatibilidade %1?
+</translation>
     </message>
 </context>
 <context>

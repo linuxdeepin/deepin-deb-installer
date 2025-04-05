@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>Đang tải gói...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2 đã tải</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>Khởi tạo...</translation>
     </message>
 </context>
 <context>
@@ -49,43 +49,45 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Cài đặt</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="598"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="699"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>Đang cài đặt các gói khác... Mở ứng dụng sau.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="602"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Phân tích thất bại: Có cấu trúc tệp bất hợp pháp được tìm thấy trong tệp manifest!
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="604"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Phân tích thất bại: Số phiên bản bất hợp pháp được tìm thấy trong tệp manifest!
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="606"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>Không tìm thấy các gói deb. Vui lòng kiểm tra thư mục.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Gói %1 có thể bị hỏng</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Bạn chỉ có thể cài đặt các gói %1 cục bộ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Không có quyền truy cập vào thư mục này</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
@@ -93,7 +95,7 @@
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Bạn chỉ có thể cài đặt các gói deb cục bộ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="750"/>
@@ -103,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1 không tồn tại, vui lòng chọn lại</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="381"/>
@@ -136,20 +138,20 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Không có chữ ký số</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="754"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Chữ ký số không hợp lệ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="130"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="744"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1663"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"/>
+        <translation>Quản trị viên đã thiết lập chính sách ngăn chặn việc cài đặt gói này</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
@@ -159,17 +161,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>hệ thống hiện tại</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2 đã được cài đặt tại %1, vui lòng gỡ cài đặt gói này trước khi cài đặt lại</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Yếu tố phụ bị hỏng, hãy thử cài đặt ứng dụng ở chế độ tương thích</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
@@ -178,17 +180,18 @@
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Thất bại trong việc cài đặt %1: không có chữ ký số hợp lệ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1116"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Không thể cài đặt - không có chữ ký số</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1117"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation>Vui lòng chuyển đến Trung tâm Điều khiển để kích hoạt chế độ phát triển và thử lại. Tiếp tục?
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1120"/>
@@ -200,7 +203,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1121"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tiếp tục</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1074"/>
@@ -213,12 +216,13 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1078"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Thất bại trong việc cài đặt %1: không có chữ ký số hợp lệ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1214"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation type="unfinished"/>
+        <translation>Gói này không có chữ ký số hợp lệ. Tiếp tục cài đặt?
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1216"/>
@@ -229,7 +233,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1217"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tiếp tục</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1072"/>
@@ -307,17 +311,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Cài đặt %1 sẽ gỡ cài đặt:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Tùy thuộc trong kho</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="523"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Tùy thuộc thiếu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="575"/>
@@ -353,7 +357,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="22"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tất cả</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
@@ -424,27 +428,27 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Cơ bản</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"/>
+        <translation>Kiểm tra chữ ký số nếu chế độ phát triển được kích hoạt</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Để cài đặt ứng dụng chưa ký số, hãy chuyển đến Trung tâm Bảo mật &gt; Công cụ &gt; Bảo mật ứng dụng, và chọn các loại ứng dụng có thể cài đặt.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Trung tâm Bảo mật &gt; Công cụ &gt; Bảo mật ứng dụng</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>Hệ thống chưa cài đặt môi trường Linglong, vui lòng cài đặt trước</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
@@ -454,24 +458,24 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation> gói cài đặt này không có chữ ký số hợp lệ và đã bị chặn cài đặt/thực thi. Hãy chuyển đến Trung tâm Bảo mật &gt; Công cụ &gt; Bảo mật ứng dụng để thay đổi cài đặt.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Huỷ bỏ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Tiếp tục</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Sẽ gỡ cài đặt:</translation>
     </message>
 </context>
 <context>
@@ -498,7 +502,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1343"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Giảm phiên bản</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
@@ -524,7 +528,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Chọn chế độ tương thích:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -560,17 +564,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Đang cố gắng cài đặt %2 trong chế độ tương thích %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Gỡ cài đặt %2 từ chế độ tương thích %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 đã được cài đặt thành công trong chế độ tương thích %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +584,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 đã được gỡ cài đặt thành công từ chế độ tương thích %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,29 +599,29 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Cài đặt %1 sẽ gỡ cài đặt:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Tùy thuộc trong kho</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1030"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Tùy thuộc thiếu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1348"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Cập nhật</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Chữ ký số không hợp lệ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="216"/>
@@ -645,7 +649,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị phụ thuộc</translation>
     </message>
 </context>
 <context>
@@ -707,7 +711,8 @@ Hệ thống hoặc phần mềm khác có thể không hoạt động</translat
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Bạn có chắc chắn muốn gỡ cài đặt %2 từ chế độ tương thích %1?
+</translation>
     </message>
 </context>
 <context>

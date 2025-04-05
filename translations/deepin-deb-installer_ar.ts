@@ -75,25 +75,25 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>حزمة %1 قد تكون مشكلة</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>يمكنك تثبيت حزم %1 المحلية فقط</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>لا تستطيع الوصول إلى هذا الملف夹</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
-        <translation type="vanished">هذه الحزمة (من نوع DEB) قد تكون تالفة</translation>
+        <translation type="vanished">قد يكون حزمة deb معطوبة.</translation>
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="vanished">مسموح فقط تثبيت حزم (من نوع DEB) الموجودة بالجهاز فقط</translation>
+        <translation type="vanished">يمكنك تركيب حزم deb المحلية فقط.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="750"/>
@@ -159,17 +159,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>النظام الحالية</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>تم تثبيت %2 في %1، يرجى إزالة الحزمة قبل إعادة تثبيتها</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation> 의존يات مكسورة،حاول تثبيت التطبيق في وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
@@ -307,7 +307,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>سيقوم تثبيت %1 بإزالة: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
@@ -444,7 +444,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>لم يتم تثبيت بيئات Linglong في النظام، يرجى تثبيتها أولاً</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
@@ -460,7 +460,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>سيتم إزالة: </translation>
     </message>
 </context>
 <context>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>اختيار وضع التوافق:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -560,17 +560,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>يتم تثبيت %2 في وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>إلغاء تثبيت %2 من وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 تم تثبيته بنجاح في وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 تم إلغاء تثبيته بنجاح من وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>سيقوم تثبيت %1 بإزالة: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
@@ -706,7 +706,9 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>هل أنت متأكد أنك تريد إزالة %2
+من وضع التوافق %1؟
+</translation>
     </message>
 </context>
 <context>
