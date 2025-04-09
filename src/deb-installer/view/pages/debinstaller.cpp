@@ -539,7 +539,13 @@ void DebInstaller::slotDdimSelected(const QStringList &ddimFiles)
     bool jsonError = false;
     bool versionError = false;
     bool haveDeb = false;
-    for (auto eachFile : ddimFiles) {
+    for (auto item : ddimFiles) {
+        QString eachFile = item;
+        QUrl url(item);
+        if (url.isLocalFile()) {
+            eachFile = url.toLocalFile();
+        }
+        
         // 0.打开文件
         if (eachFile.endsWith(".deb")) {  // 直接排除掉deb包
             haveDeb = true;
