@@ -1525,7 +1525,17 @@ void PackagesManager::appendPackage(QStringList packages)
 {
     if (packages.isEmpty())  // 当前放进来的包列表为空（可能拖入的是文件夹）
         return;
+
+    // convert url path (if valid) to local path.
+    for (auto &package : packages) {
+        QUrl url(package);
+        if (url.isLocalFile()) {
+            package = url.toLocalFile();
+        }
+    }
+
     checkInvalid(packages);
+
     if (1 == packages.size()) {
         appendNoThread(packages, packages.size());
     } else {
@@ -1568,7 +1578,7 @@ void PackagesManager::checkInvalid(const QStringList &packages)
         }
         pkgSize << size;
     }
-    // m_validPackageCount==1,可能有效包都是重复包，需要最终根据md5值来判定
+
     QSet<QByteArray> pkgMd5;  // 最后通过md5来区分是否是重复包
     if (1 == m_validPackageCount && validCount > 1) {
         for (auto package : packages) {
