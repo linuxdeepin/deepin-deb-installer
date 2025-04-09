@@ -44,7 +44,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="107"/>
         <source>Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>מונח הלוחות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="115"/>
@@ -142,7 +142,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="754"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>חתת דיגיטלית לא תקינה</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="130"/>
@@ -174,21 +174,21 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>נכשל להתקין %1</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">התקבלה תקלה ביצירת התקנה: אין תחתון דיגיטלי תקף</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1116"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>לא ניתן להתקין - אין תחתון דיגיטלי</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1117"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation> אנא עזוב את המרכז kontrol כדי להפעיל מצב התפתחות ולנסות שוב. המשך?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1120"/>
@@ -200,7 +200,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1121"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>משך</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1074"/>
@@ -213,12 +213,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1078"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>התקבלה תקלה ביצירת התקנה: אין תחתון דיגיטלי תקף</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1214"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation type="unfinished"/>
+        <translation>החבילה הזו אין לה תחתון דיגיטלי תקף. להמשיך עם התקנה?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1216"/>
@@ -229,30 +229,30 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1217"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>המשך</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1072"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1173"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1662"/>
         <source>Unable to install</source>
-        <translation type="unfinished"/>
+        <translation>לא ניתן להתקין</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1174"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>החבילה הזו אין לה תחתון דיגיטלי תקף</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="759"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
         <source>Broken dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>PENDENCIES שבורות: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="128"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>הה洩露被替换为认证失败</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="711"/>
@@ -265,7 +265,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="48"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"/>
+        <translation>גרור חבילות deb פה</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="90"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>הצג פרטים</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
@@ -296,7 +296,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="170"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>סיים</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="172"/>
@@ -307,22 +307,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>התקנה של %1 תמחק: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>PENDENCIES במערכת</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="523"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>PENDENCIES חסרות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="575"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>התקנה של PENDENCIES: %1</translation>
     </message>
 </context>
 <context>
@@ -340,7 +340,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="89"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>התקנת גרסה מאוחרת: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="94"/>
@@ -353,7 +353,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="22"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>בחר הכל</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
@@ -382,7 +382,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="65"/>
         <source>Waiting</source>
-        <translation type="unfinished"/>
+        <translation>מת ждет</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="232"/>
@@ -392,7 +392,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="234"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>התקנת גרסה מאוחרת: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="236"/>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../src/deb-installer/model/packagelistview.cpp" line="161"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>מחק</translation>
     </message>
 </context>
 <context>
@@ -424,54 +424,54 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>בסיס</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"/>
+        <translation>בדוק תחתונות דיגיטליות אם מצב התפתחות נnable</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>ל📥 יישומים לא מותקנים, går למרכז הביטחון &gt;-toolettes&gt; ביטחון יישומים ובחן את סוגים של יישומים שיכולים להתקין.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>מרכז הביטחון &gt;-toolettes&gt; ביטחון יישומים</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>המערכת לא התקנת סביבת Linglong, אנא התקין אותה קודם</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
         <source>Unable to install</source>
-        <translation type="unfinished"/>
+        <translation>לא ניתן להתקין</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation> pakgpkg לא מכילחתת דיגיטלית תקינה וnze מותר להתקין או להריץ. ה转到安全中心 &gt; 工具 &gt; 应用程序安全，更改设置。</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>ביטול</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>המשך</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>ינמח: </translation>
     </message>
 </context>
 <context>
@@ -492,13 +492,13 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>התקנת גרסה מאוחרת: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1343"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>התקנת גרסה נמוכה יותר</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
@@ -509,12 +509,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1243"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>התקנת תחנות תומכות: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1390"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>נכשל להתקין %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="228"/>
@@ -524,7 +524,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>בחר מצב תואמה:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -554,23 +554,23 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="494"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>סימן</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>התקנת %2 במצב תואמה %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>הסרת %2 מהמצב התואמה %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 התקנת בהצלחה למצב התואמה %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 נמחקה בהצלחה מהמצב התואמה %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,29 +595,29 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>התקנת %1 תמחק: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>תתותומכות במאגר</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1030"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>תתותומכות חסרות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1348"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>עדכן</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>חתת דיגיטלית לא תקינה</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="216"/>
@@ -639,13 +639,13 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="756"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>הצג פרטים</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"/>
+        <translation>הצג תחנות תומכות</translation>
     </message>
 </context>
 <context>
@@ -654,7 +654,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>הצג פרטים</translation>
     </message>
 </context>
 <context>
@@ -670,7 +670,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
         <source>Show related packages</source>
-        <translation type="unfinished"/>
+        <translation>הצג חבילות קשורות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
@@ -693,19 +693,22 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="129"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>האם אתה בטוח שברצונך למחוק %1?
+כל התלות גם כן יימחקו</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"/>
+        <translation>האם אתה בטוח שברצונך למחוק %1?
+המערכת או אפליקציות אחרות אולי לא יעבדו בצורה הנכונה</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>האם אתה בטוח שברצונך למחוק %2
+מחסום תאימות של %1?</translation>
     </message>
 </context>
 <context>
@@ -714,12 +717,12 @@ from %1 compatibility mode?</source>
         <location filename="../src/deb-installer/main.cpp" line="47"/>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
         <source>Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>מוניטור חבילות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"/>
+        <translation>מוניטור חבילות עוזר למשתמשים להתקין ולמחוק חבילות מקומיות, ומכיל תמיכה ביצירת חבילות בדבש</translation>
     </message>
 </context>
 </TS>
