@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="76"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"/>
+        <translation>Vnesite število za konfiguracijo: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="81"/>
@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="16"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>Učitvanje paketov...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="17"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2 naloženo</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="20"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>Započetek...</translation>
     </message>
 </context>
 <context>
@@ -44,66 +44,68 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="107"/>
         <source>Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>Instalator paketov</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="115"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavitve</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="598"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="699"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"/>
+        <translation>Nastavljanje drugih paketov... Prosim, odprite ga kasneje.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="602"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Analiziranje je spodletelo: Nalazena je nepravilna struktura datoteke v manifestu!
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="604"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"/>
+        <translation>Analiziranje je spodletelo: Nalazeno je nepravilno številko različice v manifestu!
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="606"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"/>
+        <translation>Ni najdenih deb paketov. Prosim, preverite mapo.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"/>
+        <translation>Paket %1 je možno narejeno zgrešeno</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"/>
+        <translation>Možno je naložiti samo lokalnih paketov %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"/>
+        <translation>Ni dovoljenja za dostop do tej mape</translation>
     </message>
     <message>
         <source>The deb package may be broken</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Deb paket je možno narejeno zgrešeno</translation>
     </message>
     <message>
         <source>You can only install local deb packages</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Možno je naložiti samo lokalnih deb paketov</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="750"/>
         <source>Already Added</source>
-        <translation type="unfinished"/>
+        <translation>Večkrat dodano</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"/>
+        <translation>%1 ne obstaja, prosimo, ponovno izberite</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="381"/>
@@ -124,7 +126,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="97"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"/>
+        <translation>Nastavitev je spodletela, prosimo, preverite v kontrolni vrstici za ažuriranja</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="99"/>
@@ -136,20 +138,20 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
         <source>No digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Ni digitalne potrdnice</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="754"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Neveljavna digitalna potrdnica</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="130"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="744"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1663"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"/>
+        <translation>Administrатор je nastavil politike, ki preprečujejo naložbo tega paketa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
@@ -159,36 +161,37 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="732"/>
         <source>current system</source>
-        <translation type="unfinished"/>
+        <translation>slovar trenutnega sistema</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="735"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"/>
+        <translation>%2 je bil naložen v %1, prosimo, prenastavitev tega paketa pred naložbo
+</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Narobe odvisne pakete, poskusite naložiti aplikacijo v kompatibilnem načinu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>Nastavitev %1 spodletela</translation>
     </message>
     <message>
         <source>Failed to install %1: no valid digital singature</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Naprej prišlo je do napake: neveljavna digitalna potrdilna potovanje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1116"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Nedosijēgo instaliranje - brez digitalnega potrdila</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1117"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"/>
+        <translation>Poskusite, da pridete do kontrole središča in omogočite način razvijalca. Naredi nadaljevanje?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1120"/>
@@ -200,7 +203,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1121"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Naredi nadaljevanje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1074"/>
@@ -213,12 +216,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1078"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Naprej prišlo je do napake: neveljavna digitalna potrdilna potovanje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1214"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation type="unfinished"/>
+        <translation>Ta paket ne vsebuje veljavne digitalne potrdilne potovanja. Nadaljuj z instalacijo?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1216"/>
@@ -229,30 +232,30 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1217"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Nadaljuj</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1072"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1173"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1662"/>
         <source>Unable to install</source>
-        <translation type="unfinished"/>
+        <translation>Nedosijēgo instaliranje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1174"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Ta paket ne vsebuje veljavne digitalne potrdilne potovanja</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="759"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
         <source>Broken dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>Povrečje zavestnih odvisnosti: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="128"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"/>
+        <translation>Overite ni uspela</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="711"/>
@@ -265,7 +268,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="48"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"/>
+        <translation>Pridite tu deb pakete</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="90"/>
@@ -278,7 +281,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>Pokaži podrobnosti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="34"/>
@@ -307,22 +310,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="501"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Instalacija %1 bo odstranila: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="517"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Odvisnosti v zbirki</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="523"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Manjke odvisnosti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="575"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>Instaliranje odvisnosti: %1</translation>
     </message>
 </context>
 <context>
@@ -335,12 +338,12 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="85"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Naravljena je instalirana ranija verzijska vrska: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="89"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Naravljena je instalirana kasnija verzijska vrska: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="94"/>
@@ -353,7 +356,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="22"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Izberi vse</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
@@ -382,7 +385,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="65"/>
         <source>Waiting</source>
-        <translation type="unfinished"/>
+        <translation>Čakaj</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="232"/>
@@ -392,12 +395,12 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="234"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Naravljena je instalirana kasnija verzijska vrska: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="236"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Naravljena je instalirana ranija verzijska vrska: %1</translation>
     </message>
 </context>
 <context>
@@ -405,7 +408,7 @@
     <message>
         <location filename="../src/deb-installer/model/packagelistview.cpp" line="161"/>
         <source>Delete</source>
-        <translation type="unfinished"/>
+        <translation>Izbriši</translation>
     </message>
 </context>
 <context>
@@ -424,54 +427,54 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Osnovno</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"/>
+        <translation>Prever digitalne potrditve, če je vključen razvojni način</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Za namesto nameščenih aplikacij se pojavite v Ohranilnem centru &gt; Alate &gt; Zavarovanje aplikacij in izberite vrste aplikacij, ki jih je mogoče namestiti.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Ohranilni center &gt; Alate &gt; Zavarovanje aplikacij</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="45"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>Sistem Linglong okolje še ni namestil, prosim namestite ga najprej.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="42"/>
         <source>Unable to install</source>
-        <translation type="unfinished"/>
+        <translation>Namestitev ni uspešna</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="44"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Ta paket ni bil nameščen z veljavnim digitalnim potrdilom in je bil zavrnjen za nameščanje/izvajanje. Pojdite v Ohranilni center &gt; Alate &gt; Zavarovanje aplikacij, da spremneste nastavitve.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Nadaljji</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="264"/>
         <source>Will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Boste odstranili: </translation>
     </message>
 </context>
 <context>
@@ -492,29 +495,29 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nameščena je kasnejša različica: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1343"/>
         <source>Downgrade</source>
-        <translation type="unfinished"/>
+        <translation>Opusti različico</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1347"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nameščena je ranjša različica: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1243"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nameščanje ovisnosti: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1390"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"/>
+        <translation>Namestitev %1 je zavržena</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="228"/>
@@ -524,7 +527,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="177"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"/>
+        <translation>Izberite kompatibilnostna načina:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="474"/>
@@ -560,17 +563,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="731"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="770"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Namesto je %2 v kompatibilnostnem načinu %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="808"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Odstranjevanje %2 iz kompatibilnostnega načina %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 je uspešno nameščen v kompatibilnostnem načinu %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
@@ -580,7 +583,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="941"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%2 je uspešno odstranjen iz kompatibilnostnega načina %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
@@ -595,29 +598,29 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"/>
+        <translation>Namestitev %1 bo odstranila:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"/>
+        <translation>Ovisnosti v zbirki</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1030"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Manjkejo ovisnosti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1348"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>Posodobi</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"/>
+        <translation>Neveljaven digitalni potrdil</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="216"/>
@@ -639,13 +642,13 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="756"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>Pokaži podrobnosti</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="31"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Pokaž odvisnosti</translation>
     </message>
 </context>
 <context>
@@ -654,7 +657,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>Pokaž podrobnosti</translation>
     </message>
 </context>
 <context>
@@ -670,7 +673,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
         <source>Show related packages</source>
-        <translation type="unfinished"/>
+        <translation>Pokaž zvezi pakete</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="16"/>
@@ -693,19 +696,23 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="129"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Ali ste prepričani, da želite odinstalirati %1?
+Vsene odvisnosti bodo tudi odstranjeni</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"/>
+        <translation>Ali ste prepričani, da želite odinstalirati %1?
+Sistem ali druge aplikacije ne bodo močno delovale</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="169"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Ali ste prepričani, da želite odinstalirati %2
+z %1 kompatibilnostnega načina?
+</translation>
     </message>
 </context>
 <context>
@@ -714,12 +721,12 @@ from %1 compatibility mode?</source>
         <location filename="../src/deb-installer/main.cpp" line="47"/>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
         <source>Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>Instalator paketov</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"/>
+        <translation>Instalator paketov pomaga uporabnikom pri nameščanju in odstranjanju lokalnih paketov, in podpira zastopno nameščanje.</translation>
     </message>
 </context>
 </TS>
