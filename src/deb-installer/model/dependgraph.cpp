@@ -3,8 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dependgraph.h"
-#include <algorithm>
+
+#include <QSet>
 #include <QDebug>
+
+#include <algorithm>
 
 struct DependGraphNode
 {
@@ -149,13 +152,24 @@ void DependGraph::remove(const QByteArray &md5)
 
 void DependGraph::removeInGraph(const DependGraphNode *dependnode)
 {
-    // 清除当前节点潜在依赖
+    QSet<DependGraphNode*> visited;
+
     for (auto eachNode : nodes) {
-        for (size_t i = 0; i != eachNode->dependsInGraph.size(); ++i) {
-            if (eachNode->dependsInGraph[i] == dependnode) {
-                eachNode->dependsInGraph.erase(eachNode->dependsInGraph.begin() + static_cast<int>(i));
-                break;
-            }
+        std::vector<DependGraphNode*> stack = { eachNode };
+
+        while (!stack.empty()) {
+            auto* node = stack.back();
+            stack.pop_back();
+
+            if (!node || visited.contains(node))
+                continue;
+            visited.insert(node);
+
+            auto& deps = node->dependsInGraph;
+            deps.erase(std::remove(deps.begin(), deps.end(), dependnode), deps.end());
+            
+            // Use std::copy to push all dependent nodes into the stack
+            std::copy(deps.begin(), deps.end(), std::back_inserter(stack));
         }
     }
 }
