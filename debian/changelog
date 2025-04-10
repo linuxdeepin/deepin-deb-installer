@@ -1,3 +1,11 @@
+deepin-deb-installer (6.5.14) unstable; urgency=medium
+
+  * chore: update translations
+  * fix: support url(Bug: 312003)
+  * fix: Fix dependency removal in graph(Bug: 311897)
+
+ -- renbin <renbin@uniontech.com>  Thu, 10 Apr 2025 16:06:15 +0800
+
 deepin-deb-installer (6.5.13) unstable; urgency=medium
 
   * chore: update desktop file
