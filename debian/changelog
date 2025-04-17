@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.15) unstable; urgency=medium
+
+  * chore: update translations.
+
+ -- renbin <renbin@uniontech.com>  Thu, 17 Apr 2025 09:39:21 +0800
+
 deepin-deb-installer (6.5.14) unstable; urgency=medium
 
   * chore: update translations
