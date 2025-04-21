@@ -13,7 +13,7 @@
 
 PackageSelectModel::PackageSelectModel(QObject *parent)
     : QObject(parent)
-    , model(new QStandardItemModel)
+    , model(new QStandardItemModel(this))
 {
 }
 
