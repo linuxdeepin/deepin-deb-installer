@@ -1,3 +1,11 @@
+deepin-deb-installer (6.5.16) unstable; urgency=medium
+
+  * fix: Remove outdated mimetype "application-x-uab"
+  * fix: Add parent to QStandardItemModel
+  * fix: Enhance remote file detection(Bug: 313783)
+
+ -- renbin <renbin@uniontech.com>  Thu, 24 Apr 2025 17:14:11 +0800
+
 deepin-deb-installer (6.5.15) unstable; urgency=medium
 
   * chore: update translations.
