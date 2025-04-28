@@ -59,7 +59,7 @@ void PackageAnalyzer::initBackend()
         CompBackend::instance()->initBackend();
     }
 
-    backend = new QApt::Backend;
+    backend.reset(new QApt::Backend);
     bool initSuccess = backend->init();
 
     SingleInstallerApplication::BackendIsRunningInit = false;
@@ -84,12 +84,12 @@ void PackageAnalyzer::initBackend()
 
 bool PackageAnalyzer::isBackendReady()
 {
-    return backend != nullptr;
+    return backend.get() != nullptr;
 }
 
 QApt::Backend *PackageAnalyzer::backendPtr()
 {
-    return backend;
+    return backend.get();
 }
 
 QPair<Pkg::PackageInstallStatus, QString> PackageAnalyzer::packageInstallStatus(const DebIr &ir) const

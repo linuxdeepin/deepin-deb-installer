@@ -5,6 +5,7 @@
 #ifndef PACKAGEANALYZER_H
 #define PACKAGEANALYZER_H
 
+#include <QSharedPointer>
 #include <QObject>
 
 #include <atomic>
@@ -95,7 +96,7 @@ private:
     PackageAnalyzer operator=(const PackageAnalyzer &) = delete;
 
     QStringList archs;
-    QApt::Backend *backend = nullptr;
+    QSharedPointer<QApt::Backend> backend = nullptr;
     std::atomic_bool backendInInit;
     std::atomic_bool inPkgAnalyze;
     int pkgWaitToAnalyzeTotal = -1;

@@ -118,6 +118,7 @@ void DebInstaller::initTitleBar()
     DTitlebar *tb = titlebar();
     if (tb != nullptr) {
         tb->setMenu(menu);
+        menu->setParent(tb);
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
         tb->setAutoFillBackground(true);
