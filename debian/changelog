@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.17) unstable; urgency=medium
+
+  * fix: memory leak (#328)(Bug: 311727)
+
+ -- renbin <renbin@uniontech.com>  Tue, 29 Apr 2025 17:48:33 +0800
+
 deepin-deb-installer (6.5.16) unstable; urgency=medium
 
   * fix: Remove outdated mimetype "application-x-uab"
