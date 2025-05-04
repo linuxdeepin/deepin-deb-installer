@@ -169,7 +169,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="741"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Dependencias rotas, intenta instalar la aplicación en modo de compatibilidad</translation>
+        <translation>Dependencias rotas, intente instalar la aplicación en modo de compatibilidad</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="756"/>
