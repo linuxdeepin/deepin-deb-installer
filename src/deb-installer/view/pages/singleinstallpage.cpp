@@ -8,6 +8,7 @@
 #include "utils/utils.h"
 #include "utils/deb_package.h"
 #include "compatible/compatible_backend.h"
+#include "utils/ddlog.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -69,8 +70,10 @@ SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *p
         m_rootfsOsName = CompBackend::instance()->osName(rootfsName);
     }
 
+    qCDebug(appLog) << "Initializing SingleInstallPage...";
     initUI();                     // 初始化界面
     initControlAccessibleName();  // 自动化测试
+    qCDebug(appLog) << "SingleInstallPage initialized";
 }
 
 void SingleInstallPage::initUI()
@@ -410,7 +413,7 @@ void SingleInstallPage::initCompatibleRootfs()
                 m_pDSpinner->start();
                 m_pDSpinner->setVisible(true);
             } else {
-                qWarning() << "Can not call compatible app check!";
+                qCWarning(appLog) << "Cannot call compatible app check!";
             }
         }
     }
@@ -697,6 +700,7 @@ int SingleInstallPage::initLabelWidth(int fontinfo)
             break;
     }
     return fontlabelwidth;
+    qCDebug(appLog) << "SingleInstallPage setup completed";
 }
 
 void SingleInstallPage::slotReinstall()

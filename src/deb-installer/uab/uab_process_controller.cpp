@@ -9,7 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QDebug>
+#include "utils/ddlog.h"
 
 #include "uab_backend.h"
 #include "process/Pty.h"
@@ -46,7 +46,9 @@ const int kInitedIndex = -1;
 UabProcessController::UabProcessController(QObject *parent)
     : QObject{parent}
 {
+    qCDebug(appLog) << "Creating UabProcessController";
     setProcessType(BackendCli);
+    qCDebug(appLog) << "Process controller type set to BackendCli";
 }
 
 void UabProcessController::setProcessType(ProcessType type)
@@ -114,18 +116,23 @@ bool Uab::UabProcessController::markUninstall(const UabPackage::Ptr &uninstallPt
 
 bool UabProcessController::commitChanges()
 {
+    qCDebug(appLog) << "Committing changes, process list size:" << m_procList.size();
     if (isRunning() || !ensureProcess() || m_procList.isEmpty()) {
+        qCWarning(appLog) << "Cannot commit changes - process running/not ready or empty list";
         return false;
     }
 
     m_procFlag = Processing;
     m_currentIndex = kInitedIndex;
+    qCDebug(appLog) << "Starting first process in list";
     if (!nextProcess()) {
+        qCWarning(appLog) << "Failed to start first process";
         m_procFlag = Error;
         return false;
     }
 
     Q_EMIT processStart();
+    qCDebug(appLog) << "Process started successfully";
     return true;
 }
 
@@ -138,7 +145,7 @@ bool Uab::UabProcessController::ensureProcess()
         connect(
             m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &UabProcessController::onFinished);
     } else if (QProcess::NotRunning != m_process->state()) {
-        qWarning() << "Unable to restart uab process is still running";
+        qCWarning(appLog) << "Unable to restart uab process is still running";
         return false;
     }
 
@@ -198,7 +205,7 @@ void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
                 currUabPtr->setProcessError(Pkg::UnknownError, errorString);
             }
 
-            qWarning() << qPrintable("Uab process error:") << errorString;
+            qCWarning(appLog) << "Uab process error:" << errorString;
         }
 
         // TODO(renbin): signature verify error, etc.
@@ -245,19 +252,23 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
 {
     Q_UNUSED(exitStatus)
 
+    qCDebug(appLog) << "Process finished with exit code:" << exitCode;
     const bool exitSuccess = UabSuccess == exitCode;
 
     // continue next process
     if (exitSuccess) {
+        qCDebug(appLog) << "Process completed successfully, updating backend";
         // update uab backend
         commitCurrentChangeToBackend();
 
+        qCDebug(appLog) << "Attempting to start next process";
         // continue next process, if error occurred, terminate current install/uninstall.
         if (nextProcess()) {
             return;
         }
     }
 
+    qCWarning(appLog) << "Process failed or no more processes, error flag set";
     m_procFlag = Error;
     Q_EMIT processFinished(false);
 }
@@ -282,7 +293,7 @@ bool UabProcessController::nextProcess()
     }
 
     if (!checkIndexValid()) {
-        qWarning() << qPrintable("Invalid process index") << m_currentIndex;
+        qCWarning(appLog) << "Invalid process index:" << m_currentIndex << "for package:" << (currentPackagePtr() ? currentPackagePtr()->info()->id : "null");
         return false;
     }
 
@@ -296,19 +307,23 @@ bool UabProcessController::nextProcess()
             break;
     }
 
-    qWarning() << qPrintable("Invalid process type") << currentProc.first;
+    qCWarning(appLog) << "Invalid process type:" << currentProc.first << "for package:" << (currentProc.second ? currentProc.second->info()->id : "null");
     return false;
 }
 
 bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installPtr)
 {
     if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
+        qCWarning(appLog) << "Invalid package for installation";
         return false;
     }
 
+    qCDebug(appLog) << "Preparing backend CLI install for package:"
+                 << installPtr->info()->id << installPtr->info()->version;
     m_procFlag.setFlag(Installing);
 
     // e.g.: pkexec deepin-deb-installer-dependsInstall --uab --install [file to package].uab
+    qCDebug(appLog) << "Starting install process with pkexec";
     m_process->start(
         kPkexecBin, {kPkexecBin, kInstallProcessorBin, kParamUab, kParamInstall, installPtr->info()->filePath}, {}, 0, false);
 
@@ -318,7 +333,7 @@ bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installP
                                       .arg(kParamInstall)
                                       .arg(installPtr->info()->id)
                                       .arg(installPtr->info()->version);
-    qInfo() << recordCommand;
+    qCInfo(appLog) << "Install command:" << recordCommand;
 
     return true;
 }
@@ -326,19 +341,23 @@ bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installP
 bool UabProcessController::uninstallBackendCliImpl(const UabPackage::Ptr &uninstallPtr)
 {
     if (!uninstallPtr || !uninstallPtr->isValid()) {
+        qCWarning(appLog) << "Invalid package for uninstallation";
         return false;
     }
 
+    qCDebug(appLog) << "Preparing backend CLI uninstall for package:"
+                << uninstallPtr->info()->id << uninstallPtr->info()->version;
     m_procFlag.setFlag(Uninstalling);
 
     // e.g.: pkexec deepin-deb-installer-dependsInstall --uab --remove [id/version]
+    qCDebug(appLog) << "Starting uninstall process with pkexec";
     const QString mergeInfo = QString("%1/%2").arg(uninstallPtr->info()->id).arg(uninstallPtr->info()->version);
     m_process->start(kPkexecBin, {kPkexecBin, kInstallProcessorBin, kParamUab, kParamRemove, mergeInfo}, {}, 0, false);
 
     const QString recordCommand =
         QString("command: %1 %2 %3 %4").arg(kInstallProcessorBin).arg(kParamUab).arg(kParamRemove).arg(mergeInfo);
     Q_EMIT processOutput(recordCommand);
-    qInfo() << recordCommand;
+    qCInfo(appLog) << "Uninstall command:" << recordCommand;
 
     return true;
 }
@@ -361,7 +380,7 @@ bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &insta
                                       .arg(installPtr->info()->id)
                                       .arg(installPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
-    qInfo() << recordCommand;
+    qCInfo(appLog) << recordCommand;
 
     return true;
 }
@@ -391,7 +410,7 @@ bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uni
                                       .arg(uninstallPtr->info()->id)
                                       .arg(uninstallPtr->info()->version);
     Q_EMIT processOutput(recordCommand);
-    qInfo() << recordCommand;
+    qCInfo(appLog) << recordCommand;
 
     return true;
 }

@@ -4,6 +4,7 @@
 
 #include "packageselectview.h"
 #include "view/widgets/packageselectitem.h"
+#include "utils/ddlog.h"
 
 #include <DFrame>
 
@@ -22,10 +23,12 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     , selectAllBox(new QCheckBox(tr("Select all")))
     , installButton(new QPushButton(tr("Install", "button")))
 {
+    qCDebug(appLog) << "Initializing PackageSelectView...";
     this->setFocusPolicy(Qt::NoFocus);
     selectAllBox->setFocusPolicy(Qt::StrongFocus);
     installButton->setFocusPolicy(Qt::StrongFocus);
     installButton->setDefault(true);
+    qCDebug(appLog) << "PackageSelectView initialized";
 
     selectAllBox->setMinimumHeight(s_MinimumBoxHeight);
 
@@ -56,12 +59,15 @@ PackageSelectView::PackageSelectView(QWidget *parent)
 
 void PackageSelectView::onInstallClicked()
 {
+    qCDebug(appLog) << "Install button clicked, collecting selected packages";
     QList<int> selectIndexes;
     for (int i = 0; i != items.size(); ++i) {
         if (items[i]->isEnabled() && items[i]->isChecked()) {
+            qCDebug(appLog) << "Package selected at index:" << i;
             selectIndexes.push_back(i);
         }
     }
+    qCDebug(appLog) << "Total packages selected:" << selectIndexes.size();
     emit packageInstallConfim(selectIndexes);
 }
 
@@ -116,6 +122,7 @@ void PackageSelectView::setHaveMustInstallDeb(bool have)
 
 void PackageSelectView::flushDebList(const QList<DebIr> &selectInfos)
 {
+    qCDebug(appLog) << "Refreshing package list with" << selectInfos.size() << "items";
     clearDebList();  // 刷新之前做一下清理
     for (auto &eachInfo : selectInfos) {
         auto selectItem = new PackageSelectItem;
@@ -128,6 +135,8 @@ void PackageSelectView::flushDebList(const QList<DebIr> &selectInfos)
 
         items.push_back(selectItem);
         connect(selectItem, &PackageSelectItem::checkStatusChanged, this, &PackageSelectView::checkSelect);
+        qCDebug(appLog) << "Added package:" << eachInfo.filePath;
     }
     checkSelect();
+    qCDebug(appLog) << "Package list refresh completed";
 }

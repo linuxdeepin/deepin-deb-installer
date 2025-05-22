@@ -4,6 +4,7 @@
 
 #include "deblistmodel.h"
 #include "manager/packagesmanager.h"
+#include "utils/ddlog.h"
 #include "manager/PackageDependsStatus.h"
 #include "packageanalyzer.h"
 #include "view/pages/AptConfigMessage.h"
@@ -43,6 +44,7 @@ DebListModel::DebListModel(QObject *parent)
     : AbstractPackageListModel(parent)
     , m_packagesManager(new PackagesManager(this))
 {
+    qCDebug(appLog) << "DebListModel initializing...";
     m_supportPackageType = Pkg::Deb;
 
     // 配置包安装的进程
@@ -53,6 +55,7 @@ DebListModel::DebListModel(QObject *parent)
     initConnections();
     // 检查系统版本与是否开启了开发者模式
     m_isDevelopMode = Utils::isDevelopMode();
+    qCInfo(appLog) << "DebListModel initialized, develop mode:" << m_isDevelopMode;
 }
 
 bool DebListModel::isDpkgRunning()
@@ -369,9 +372,12 @@ bool DebListModel::isDevelopMode()
 
 bool DebListModel::slotInstallPackages()
 {
-    if (m_workerStatus != WorkerPrepare)
+    if (m_workerStatus != WorkerPrepare) {
+        qCWarning(appLog) << "Cannot start installation - worker status is" << m_workerStatus << "expected Prepare";
         return false;
+    }
 
+    qCDebug(appLog) << "Starting installation for" << m_packagesManager->m_preparedPackages.size() << "packages";
     m_workerStatus = WorkerProcessing;  // 刷新包安装器的工作状态
     m_operatingIndex = 0;               // 初始化当前操作的index
     m_operatingStatusIndex = 0;
@@ -380,11 +386,16 @@ bool DebListModel::slotInstallPackages()
 
     // start first
     initRowStatus();  // 初始化包的操作状态
+    qCDebug(appLog) << "Initialized package operating status";
 
     // 检查当前应用是否在黑名单中
     // 非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature())
+    if (checkBlackListApplication() || !checkDigitalSignature()) {
+        qCWarning(appLog) << "Installation blocked - blacklisted application or digital signature verification failed";
         return false;
+    }
+    
+    qCDebug(appLog) << "Proceeding with installation of" << m_packagesManager->m_preparedPackages.size() << "packages";
     installNextDeb();  // 开始安装
 
     return true;
@@ -392,6 +403,7 @@ bool DebListModel::slotInstallPackages()
 
 bool DebListModel::slotUninstallPackage(int index)
 {
+    qCDebug(appLog) << "Starting uninstall for package at index" << index;
     m_workerStatus = WorkerProcessing;  // 刷新当前包安装器的工作状态
     m_operatingIndex = index;           // 获取卸载的包的indx
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
@@ -434,26 +446,33 @@ bool DebListModel::slotUninstallPackage(int index)
     }
 
     DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
-    if (!debFile.isValid())
+    if (!debFile.isValid()) {
+        qCWarning(appLog) << "Invalid deb file at index" << m_operatingIndex;
         return false;
+    }
     const QStringList rdepends =
         m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture());  // 检查是否有应用依赖到该包
     qInfo() << QString("Will remove reverse depends before remove %1 , Lists:").arg(debFile.packageName()) << rdepends;
 
     Backend *backend = PackageAnalyzer::instance().backendPtr();
+
+    qCInfo(appLog) << "Uninstalling reverse dependencies:" << rdepends;
     for (const auto &r : rdepends) {  // 卸载所有依赖该包的应用（二者的依赖关系为depends）
         if (backend->package(r)) {
-            // 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
+            qCDebug(appLog) << "Purging reverse dependency:" << r;
             backend->package(r)->setPurge();
-        } else
-            qWarning() << "DebListModel:"
-                       << "reverse depend" << r << "error ,please check it!";
+        } else {
+            qCWarning(appLog) << "Failed to find reverse dependency package:" << r;
+        }
     }
     // 卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
-    QApt::Package *uninstalledPackage = backend->package(debFile.packageName() + ':' + debFile.architecture());
+    const QString packageId = debFile.packageName() + ':' + debFile.architecture();
+    qCDebug(appLog) << "Looking up package to uninstall:" << packageId;
+    QApt::Package *uninstalledPackage = backend->package(packageId);
 
     // 未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
     if (!uninstalledPackage) {
+        qCWarning(appLog) << "Failed to find package to uninstall:" << packageId;
         refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
         return false;
     }
@@ -482,6 +501,7 @@ bool DebListModel::slotUninstallPackage(int index)
 
     m_currentTransaction = transsaction;  // 保存trans指针
 
+    qCDebug(appLog) << "Starting uninstall transaction for package:" << packageId;
     transsaction->run();  // 开始卸载
 
     return true;

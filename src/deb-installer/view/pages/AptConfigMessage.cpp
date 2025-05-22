@@ -4,6 +4,7 @@
 
 #include "AptConfigMessage.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DGuiApplicationHelper>
 #include <DRecentManager>
@@ -22,12 +23,14 @@ DWIDGET_USE_NAMESPACE
 AptConfigMessage::AptConfigMessage(QWidget *parent)
     : DMainWindow(parent)
 {
+    qCDebug(appLog) << "Initializing AptConfigMessage...";
     initControl();         // 初始化控件
     initAccessibleName();  // 自动化测试，为控件添加AccessibleName
     initUI();              // 初始化UI界面
     initTitlebar();        // 初始化标题栏，隐藏标题栏的各种按钮
     initTabOrder();        // 初始化按钮的焦点切换顺序
     connect(m_pushbutton, &QPushButton::clicked, this, &AptConfigMessage::dealInput);  // 按钮按下，处理输入的内容并发送到安装程序
+    qCDebug(appLog) << "AptConfigMessage initialized";
 }
 
 /**
@@ -129,11 +132,14 @@ void AptConfigMessage::initUI()
  */
 void AptConfigMessage::appendTextEdit(QString processInfo)
 {
+    qCDebug(appLog) << "Appending config info to text edit";
     // 保证焦点在输入框上
     m_inputEdit->lineEdit()->setFocus();
     // 如果添加的数据是空的或者只有换行，则不添加
-    if (processInfo.isEmpty() || processInfo == "\\r\\n")
+    if (processInfo.isEmpty() || processInfo == "\\r\\n") {
+        qCDebug(appLog) << "Empty config info, skipping append";
         return;
+    }
 
     QString configMessage;
     configMessage = processInfo.replace("  ", "     ");
@@ -164,7 +170,7 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
         if (strFilter[0] == '\t')
             strFilter.remove(0, 1);         // 如果第一行的第一个数据是tab，去掉
         m_textEdit->appendText(strFilter);  // 添加数据
-        qDebug() << "strFilter" << strFilter;
+        qCDebug(appLog) << "Processing config line:" << strFilter;
 
         // 如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
         if (num == -1 && configMessage.size() > 0 && !configMessage.contains("\n")) {
@@ -179,14 +185,17 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
  */
 void AptConfigMessage::dealInput()
 {
+    qCDebug(appLog) << "Processing user input";
     // 如果当前输入框中的信息是空的 或者输入了00 则不提交，并清除信息
     // PS:dpkg 规定如果输入00 配置会结束
     if (m_inputEdit->text().isEmpty() || m_inputEdit->text() == "" || m_inputEdit->text() == "00") {
+        qCDebug(appLog) << "Empty or invalid input, skipping";
         m_inputEdit->clear();  // 每次提交输入信息后，输入框清除。
         return;
     }
     QString str = m_inputEdit->text();            // 获取输入框的输入信息
     str.remove(QChar('"'), Qt::CaseInsensitive);  // 去除输入框中多余的“"”
+    qCDebug(appLog) << "Sending config input:" << str;
     emit AptConfigInputStr(str);                  // 提交信息到配置安装程序
     m_inputEdit->clear();                         // 清除输入框的内容
 }

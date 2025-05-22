@@ -213,8 +213,11 @@ bool KPty::open()
 {
     Q_D(KPty);
 
-    if (d->masterFd >= 0)
+    qDebug() << "Opening PTY master/slave pair";
+    if (d->masterFd >= 0) {
+        qDebug() << "PTY master/slave pair already open";
         return true;
+    }
 
     d->ownMaster = true;
 
@@ -439,6 +442,8 @@ bool KPty::openSlave()
 {
     Q_D(KPty);
 
+    qDebug() << "Opening PTY slave";
+
     if (d->slaveFd >= 0)
 	return true;
     if (d->masterFd < 0) {
@@ -452,6 +457,7 @@ bool KPty::openSlave()
 	return false;
     }
     fcntl(d->slaveFd, F_SETFD, FD_CLOEXEC);
+    qDebug() << "Opened PTY slave return true, fd=" << d->slaveFd;
     return true;
 }
 
@@ -459,7 +465,9 @@ void KPty::close()
 {
     Q_D(KPty);
 
+    qDebug() << "Closing PTY master/slave pair";
     if (d->masterFd < 0) {
+        qDebug() << "PTY fd < 0, return";
         return;
     }
     closeSlave();
@@ -478,6 +486,7 @@ void KPty::close()
     }
     ::close(d->masterFd);
     d->masterFd = -1;
+    qDebug() << "Closed PTY master/slave pair";
 }
 
 void KPty::setCTty()
@@ -509,6 +518,7 @@ void KPty::setCTty()
 
 void KPty::login(const char * user, const char * remotehost)
 {
+    qDebug() << "Logging in to pty slave";
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
@@ -591,10 +601,13 @@ void KPty::login(const char * user, const char * remotehost)
 #  endif
 # endif
 #endif
+
+    qDebug() << "Logged in to pty slave";
 }
 
 void KPty::logout()
 {
+    qDebug() << "Logging out of pty slave";
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
@@ -664,6 +677,7 @@ endutent();
 #  endif
 # endif
 #endif
+    qDebug() << "Logged out of pty slave";
 }
 
 // XXX Supposedly, tc[gs]etattr do not work with the master on Solaris.

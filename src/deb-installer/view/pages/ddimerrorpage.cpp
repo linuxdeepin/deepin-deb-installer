@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ddimerrorpage.h"
+#include "utils/ddlog.h"
 
 #include <DLabel>
 #include <DFontSizeManager>
@@ -16,12 +17,14 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     , errorPicLabel(new Dtk::Widget::DLabel)
     , confimButton(new QPushButton(tr("OK")))
 {
+    qCDebug(appLog) << "Initializing DDIM error page";
     setFocusPolicy(Qt::NoFocus);
     auto allLayout = new QVBoxLayout;
     allLayout->addWidget(errorPicLabel, 0, Qt::AlignCenter | Qt::AlignBottom);
     allLayout->addWidget(errorMessageLabel, 0, Qt::AlignCenter | Qt::AlignBottom);
     allLayout->addWidget(confimButton, 0, Qt::AlignCenter | Qt::AlignBottom);
     setLayout(allLayout);
+    qCDebug(appLog) << "DDIM error page initialized";
 
     errorPicLabel->setScaledContents(true);  // 消除屏幕缩放锯齿
     errorPicLabel->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/di_fail_96px.png"));
@@ -43,11 +46,15 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     confimButton->setFocusPolicy(Qt::StrongFocus);
     confimButton->setFixedWidth(120);
     confimButton->setDefault(true);
-    connect(confimButton, &QPushButton::clicked, this, &DdimErrorPage::comfimPressed);
+    connect(confimButton, &QPushButton::clicked, this, [this]() {
+        qCDebug(appLog) << "Error confirmation button clicked";
+        comfimPressed();
+    });
 }
 
 void DdimErrorPage::setErrorMessage(const QString &message)
 {
+    qCDebug(appLog) << "Setting error message:" << message;
     errorMessageLabel->setText(message);
 }
 

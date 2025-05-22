@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "error_notify_dialog_helper.h"
+#include "utils/ddlog.h"
 
 #include <QStyle>
 #include <QLabel>
@@ -27,9 +28,12 @@ ErrorNotifyDialogHelper::ErrorNotifyDialogHelper(QObject *parent)
 
 void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
 {
+    qCDebug(appLog) << "Checking hierarchical verify status";
     if (!HierarchicalVerify::instance()->isValid()) {
+        qCDebug(appLog) << "Hierarchical verify not valid, skipping dialog";
         return;
     }
+    qCDebug(appLog) << "Creating error notify dialog";
 
     DDialog *dialog = new DDialog();
     // limit the display width
@@ -47,6 +51,7 @@ void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
     dialog->addButton(QObject::tr("Cancel", "button"), false, DDialog::ButtonNormal);
     dialog->addButton(QObject::tr("Proceed", "button"), true, DDialog::ButtonRecommend);
     dialog->show();
+    qCDebug(appLog) << "Error notify dialog shown";
 
     // Copy from ddialog.cpp, used to set the default dialog height.
     // Avoid incomplete display at large font size/high zoom ratio, called after show().
@@ -68,7 +73,9 @@ void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
     }
 
     connect(dialog, &DDialog::finished, [dialog](int result) {
+        qCDebug(appLog) << "Dialog finished with result:" << result;
         if (QDialog::Accepted == result) {
+            qCDebug(appLog) << "Proceeding to security center";
             HierarchicalVerify::instance()->proceedDefenderSafetyPage();
         }
         dialog->deleteLater();

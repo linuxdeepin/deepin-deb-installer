@@ -88,7 +88,9 @@ void Pty::setFlowControlEnabled(bool enable)
 }
 bool Pty::flowControlEnabled() const
 {
+    qDebug() << "Getting flow control status from terminal.";
     if (pty()->masterFd() >= 0) {
+        qDebug() << "The terminal is connected.";
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
         return ttmode.c_iflag & IXOFF &&
@@ -103,6 +105,7 @@ void Pty::setUtf8Mode(bool enable)
 #ifdef IUTF8 // XXX not a reasonable place to check it.
     _utf8 = enable;
 
+    qDebug() << "Setting UTF-8 mode to" << enable;
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
@@ -120,6 +123,7 @@ void Pty::setErase(char erase)
 {
     _eraseChar = erase;
 
+    qDebug() << "Setting erase character to" << erase;
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
@@ -131,17 +135,21 @@ void Pty::setErase(char erase)
 
 char Pty::erase() const
 {
+    qDebug() << "Getting erase character from terminal.";
     if (pty()->masterFd() >= 0) {
         struct ::termios ttyAttributes;
         pty()->tcGetAttr(&ttyAttributes);
         return ttyAttributes.c_cc[VERASE];
     }
 
+    qDebug() << "Unable to get erase character, terminal not connected.";
     return _eraseChar;
 }
 
 void Pty::addEnvironmentVariables(const QStringList &environment)
 {
+    qDebug() << "Adding environment variables:" << environment;
+
     QListIterator<QString> iter(environment);
     while (iter.hasNext()) {
         QString pair = iter.next();
@@ -154,8 +162,10 @@ void Pty::addEnvironmentVariables(const QStringList &environment)
             QString value = pair.mid(pos + 1);
 
             setEnv(variable, value);
+            qDebug() << "Added environment variable:" << variable << "=" << value;
         }
     }
+    qDebug() << "Environment variables added.";
 }
 
 int Pty::start(const QString &program,
@@ -167,6 +177,7 @@ int Pty::start(const QString &program,
                //const QString& dbusSession
               )
 {
+    qDebug() << "Starting program:" << program;
     clearProgram();
 
     // For historical reasons, the first argument in programArguments is the
@@ -219,9 +230,12 @@ int Pty::start(const QString &program,
 
     KProcess::start();
 
-    if (!waitForStarted())
+    if (!waitForStarted()) {
+        qWarning() << "Unable to start program:" << program;
         return -1;
+    }
 
+    qDebug() << "Program started.";
     return 0;
 }
 
@@ -470,16 +484,16 @@ void Pty::sendData(const char *data, int length, const QTextCodec *codec)
         QString unicodeData = codec->toUnicode(data);
         QByteArray unicode = utf8Codec->fromUnicode(unicodeData);
 
-        qInfo() << __FILE__ << __LINE__ << unicode;
+        qDebug() << "Converted input data to UTF-8:" << unicode;
         if (!pty()->write(unicode.constData(), unicode.length())) {
-            qWarning() << "Pty::doSendJobs - Could not send input data to terminal process.";
+            qWarning() << "Failed to send input data to terminal process";
             return;
         }
     }
     else {
-        qInfo() << __FILE__ << __LINE__ << QByteArray(data, length);
+        qDebug() << "Sending raw input data:" << QByteArray(data, length);
         if (!pty()->write(data, length)) {
-            qWarning() << "Pty::doSendJobs - Could not send input data to terminal process.";
+            qWarning() << "Failed to send input data to terminal process";
             return;
         }
     }
@@ -491,6 +505,7 @@ void Pty::dataReceived()
     QByteArray data = pty()->readAll();
 
     QString recvData = QString(data);
+    qDebug() << "Received data:" << recvData;
 
     if (_bNeedBlockCommand) {
         QString judgeData = recvData;
@@ -505,6 +520,7 @@ void Pty::dataReceived()
                 && judgeData.startsWith("e")
                 && -1 == _receiveDataIndex) {
             _receiveDataIndex = 0;
+            qDebug() << "Ignore the first letter 'e' of the command.";
             return;
         }
 
@@ -516,6 +532,7 @@ void Pty::dataReceived()
                 || judgeData.startsWith("e\bexpect")
                 || judgeData.startsWith("e\be")) {
             _receiveDataIndex = 1;
+            qDebug() << "Ignore the expect command.";
             return;
         }
 
@@ -537,6 +554,7 @@ void Pty::dataReceived()
             else {
                 ++_receiveDataIndex;
             }
+            qDebug() << "Ignore the command:" << judgeData;
             return;
         }
     }
@@ -547,16 +565,19 @@ void Pty::dataReceived()
             || recvData.contains("bash: **0800000000022d：")
             || recvData.contains("**^XB0800000000022d")
             || recvData.startsWith("**\u0018B0800000000022d\r\u008A")) {
+        qDebug() << "Ignore the command:" << recvData;
         return;
     }
 
     // "\u008A"这个乱码不替换调会导致显示时有\b的效果导致命令错乱bug#23741
     if (recvData.contains("\u008A")) {
+        qDebug() << "Replacing backspace control character";
         recvData.replace("\u008A", "\b \b #");
         data = recvData.toUtf8();
     }
 
     if (recvData == "rz waiting to receive.") {
+        qDebug() << "Detected rz file transfer prompt";
         recvData += "\r\n";
         data = recvData.toUtf8();
     }
@@ -578,11 +599,13 @@ void Pty::lockPty(bool lock)
 int Pty::foregroundProcessGroup() const
 {
     int pid = tcgetpgrp(pty()->masterFd());
+    qDebug() << "Foreground process group:" << pid;
 
     if (pid != -1) {
         return pid;
     }
 
+    qDebug() << "Unable to get foreground process group, returning 0.";
     return 0;
 }
 

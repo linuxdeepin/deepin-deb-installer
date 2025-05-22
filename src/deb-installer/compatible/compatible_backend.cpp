@@ -4,6 +4,7 @@
 
 #include "compatible_backend.h"
 #include "compatible_json_parser.h"
+#include "utils/ddlog.h"
 
 #include <QApplication>
 #include <QProcess>
@@ -64,6 +65,7 @@ bool CompatibleBackend::recheckCompatibleExists()
     const QString execPath = QStandardPaths::findExecutable(kCompatibleBin);
     m_compatibleExists = !execPath.isEmpty();
 
+    qCDebug(appLog) << "check compatible return: " << m_compatibleExists;
     return m_compatibleExists;
 }
 #endif
@@ -75,14 +77,19 @@ QList<RootfsInfo::Ptr> CompatibleBackend::rootfsList() const
 
 QString CompatibleBackend::osName(const QString &rootfsName) const
 {
+    qCDebug(appLog) << "get os name for rootfs: " << rootfsName;
+
     auto findItr = std::find_if(m_rootfsList.begin(), m_rootfsList.end(), [&](const RootfsInfo::Ptr &rootfsPtr) {
         return rootfsPtr->name == rootfsName;
     });
 
     if (findItr != m_rootfsList.end()) {
-        return (*findItr)->osName;
+        auto osName = (*findItr)->osName;
+        qCDebug(appLog) << "find os name: " << osName;
+        return osName;
     }
 
+    qCDebug(appLog) << "os name not found for rootfs: " << rootfsName;
     return {};
 }
 
@@ -93,22 +100,30 @@ CompPkgInfo::Ptr CompatibleBackend::containsPackage(const QString &packageName)
 
 void CompatibleBackend::packageInstalled(const CompPkgInfo::Ptr &appendPtr)
 {
+    qCDebug(appLog) << "Adding installed package to list:" << appendPtr->name << appendPtr->version;
+
     if (!appendPtr) {
+        qCDebug(appLog) << "appendPtr is null, return";
         return;
     }
     appendPtr->rootfs = appendPtr->targetRootfs;
 
     m_packages.insert(appendPtr->name, appendPtr);
+    qCDebug(appLog) << "Adding package to list:" << appendPtr->name << appendPtr->version;
 }
 
 void CompatibleBackend::packageRemoved(const CompPkgInfo::Ptr &removePtr)
 {
+    qCDebug(appLog) << "Removing removed package from list:" << removePtr->name << removePtr->version;
+
     if (!removePtr) {
+        qCDebug(appLog) << "removePtr is null, return";
         return;
     }
     removePtr->rootfs.clear();
 
     m_packages.remove(removePtr->name);
+    qCDebug(appLog) << "Removing package from list:" << removePtr->name << removePtr->version;
 }
 
 bool CompatibleBackend::supportAppCheck() const
@@ -118,12 +133,17 @@ bool CompatibleBackend::supportAppCheck() const
 
 bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkPtr)
 {
+    qCDebug(appLog) << "Checking package support rootfs";
+
     if (!checkPtr || checkPtr->filePath.isEmpty() || !supportAppCheck()) {
+        qCDebug(appLog) << "checkPtr is null or empty, return false";
         return false;
     }
 
     QString captureFilePath = checkPtr->filePath;
     captureFilePath.detach();
+    qCDebug(appLog) << "check package file path: " << captureFilePath;
+
     QThreadPool::globalInstance()->start(
         [=]() {
 
@@ -145,7 +165,7 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
                     rootfs = parseRootfsFromRawOutputV2(output);
                 }
             } else {
-                qWarning() << "Delay get(init) rootfs list failed! " << queryProcess.errorString();
+                qCWarning(appLog) << "Delay get(init) rootfs list failed! " << queryProcess.errorString();
             }
 
 #else
@@ -164,7 +184,7 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
             checkProc.start("pkexec", params);
             checkProc.waitForFinished(1000 * 60 * 10);
             if (QProcess::UnknownError != checkProc.error()) {
-                qWarning() << "Compatible app check failed: " << checkProc.errorString();
+                qCWarning(appLog) << "Compatible app check failed: " << checkProc.errorString();
             }
 
             QList<RootfsInfo::Ptr> rootfs;
@@ -174,7 +194,7 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
 
             if (-1 != lastLineOffset) {
                 QByteArray lastLine = checkOutput.mid(lastLineOffset + 1);
-                qInfo() << "Parse app check return" << lastLine;
+                qCInfo(appLog) << "Parse app check return" << lastLine;
 
                 auto ret = CompatibleJsonParser::parseCommonField(lastLine);
                 if (ret && CompSuccess == ret->code) {
@@ -199,12 +219,15 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
         },
         QThread::TimeCriticalPriority);
 
+    qCDebug(appLog) << "Check package support rootfs finished, return true";
     return true;
 }
 
 QList<RootfsInfo::Ptr> CompatibleBackend::parseRootfsFromRawOutputV1(const QByteArray &output)
 {
     QTextStream stream(output, QIODevice::ReadOnly);
+
+    qCDebug(appLog) << "parse rootfs from raw output: " << output;
 
     // remove title
     stream.readLine();
@@ -239,6 +262,8 @@ QList<RootfsInfo::Ptr> CompatibleBackend::parseRootfsFromRawOutputV1(const QByte
         rootfsList.append(rootfsPtr);
     }
 
+    qCDebug(appLog) << "parse rootfs from raw output finished, size: " << rootfsList.size();
+
     return rootfsList;
 }
 
@@ -251,7 +276,7 @@ QList<RootfsInfo::Ptr> CompatibleBackend::parseRootfsFromRawOutputV2(const QByte
     */
 
     QTextStream stream(output, QIODevice::ReadOnly);
-
+    qCDebug(appLog) << "V2 parse rootfs from raw output: " << output;
     // remove title
     stream.readLine();
     stream.readLine();
@@ -270,12 +295,16 @@ QList<RootfsInfo::Ptr> CompatibleBackend::parseRootfsFromRawOutputV2(const QByte
         rootfsList.append(rootfsPtr);
     }
 
+    qCDebug(appLog) << "V2 parse rootfs from raw output finished, size: " << rootfsList.size();
+
     return rootfsList;
 }
 
 QHash<QString, CompPkgInfo::Ptr> CompatibleBackend::parseAppListFromRawOutput(const QByteArray &output)
 {
     QHash<QString, CompPkgInfo::Ptr> packageList;
+
+    qCDebug(appLog) << "parse app list from raw output: " << output;
 
     QTextStream stream(output, QIODevice::ReadOnly);
 
@@ -294,12 +323,16 @@ QHash<QString, CompPkgInfo::Ptr> CompatibleBackend::parseAppListFromRawOutput(co
         packageList.insert(pkgPtr->name, pkgPtr);
     }
 
+    qCDebug(appLog) << "parse app list from raw output finished, size: " << packageList.size();
+
     return packageList;
 }
 
 void CompatibleBackend::initBackend(bool async)
 {
+    qCDebug(appLog) << "init compatible backend: " << async;
     if (!compatibleExists()) {
+        qCDebug(appLog) << "Compatible backend not exists, return";
         return;
     }
 
@@ -311,6 +344,7 @@ void CompatibleBackend::initBackend(bool async)
             CompatibleBackend::backendProcessWithRaw(this);
         }
     });
+    qCDebug(appLog) << "init compatible backend finished";
 }
 
 void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
@@ -318,6 +352,8 @@ void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
     QHash<QString, CompPkgInfo::Ptr> packages;
     QList<RootfsInfo::Ptr> rootfsList;
     QByteArray output;
+
+    qCDebug(appLog) << "Compatible backend process with raw";
 
     QProcess queryProcess;
     queryProcess.setProgram(kCompatibleBin);
@@ -328,7 +364,7 @@ void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
         output = queryProcess.readAllStandardOutput();
         rootfsList = parseRootfsFromRawOutputV2(output);
     } else {
-        qWarning() << "Get rootfs list failed! " << queryProcess.errorString();
+        qCWarning(appLog) << "Get rootfs list failed! " << queryProcess.errorString();
     }
 
     queryProcess.setArguments({kCompApp, kCompList, kCompListAll});
@@ -337,12 +373,14 @@ void CompatibleBackend::backendProcessWithRaw(CompatibleBackend *backend)
         output = queryProcess.readAllStandardOutput();
         packages = parseAppListFromRawOutput(output);
     } else {
-        qWarning() << "Get app list failed! " << queryProcess.errorString();
+        qCWarning(appLog) << "Get app list failed! " << queryProcess.errorString();
     }
 
     // NOTE: ComaptibleBackend might not inited in main thread( no event loop ), so use qApp instaed.
     QMetaObject::invokeMethod(
         qApp, [backend, rootfsList, packages]() { backend->initFinished(rootfsList, packages); }, Qt::QueuedConnection);
+
+    qCDebug(appLog) << "Compatible backend process finished";
 }
 
 void CompatibleBackend::backendProcessWithJson(CompatibleBackend *backend)
@@ -351,6 +389,8 @@ void CompatibleBackend::backendProcessWithJson(CompatibleBackend *backend)
     QList<RootfsInfo::Ptr> rootfsList;
     QByteArray output;
     CompatibleRet::Ptr retPtr;
+
+    qCDebug(appLog) << "Compatible backend process with json";
 
     QProcess queryProcess;
     queryProcess.setProcessChannelMode(QProcess::MergedChannels);
@@ -363,7 +403,7 @@ void CompatibleBackend::backendProcessWithJson(CompatibleBackend *backend)
         retPtr = CompatibleJsonParser::parseCommonField(output);
         packages = CompatibleJsonParser::parseAppList(retPtr);
     } else {
-        qWarning() << "Get app list failed! " << queryProcess.errorString();
+        qCWarning(appLog) << "Get app list failed! " << queryProcess.errorString();
     }
 
     queryProcess.setArguments({kCompRootFs, kCompJsonFormat, kCompList});
@@ -373,12 +413,14 @@ void CompatibleBackend::backendProcessWithJson(CompatibleBackend *backend)
         retPtr = CompatibleJsonParser::parseCommonField(output);
         rootfsList = CompatibleJsonParser::parseRootfsList(retPtr);
     } else {
-        qWarning() << "Get rootfs list failed! " << queryProcess.errorString();
+        qCWarning(appLog) << "Get rootfs list failed! " << queryProcess.errorString();
     }
 
     // NOTE: ComaptibleBackend might not inited in main thread( no event loop ), so use qApp instaed.
     QMetaObject::invokeMethod(
         qApp, [backend, rootfsList, packages]() { backend->initFinished(rootfsList, packages); }, Qt::QueuedConnection);
+
+    qCDebug(appLog) << "Compatible backend process finished";
 }
 
 void CompatibleBackend::initFinished(const QList<RootfsInfo::Ptr> &rootfsList, const QHash<QString, CompPkgInfo::Ptr> &packages)
@@ -387,7 +429,7 @@ void CompatibleBackend::initFinished(const QList<RootfsInfo::Ptr> &rootfsList, c
     m_rootfsList = rootfsList;
     m_packages = packages;
 
-    qInfo() << "Comaptible init finished, rootfs: " << m_rootfsList << "Package size: " << m_packages.size();
+    qCInfo(appLog) << "Comaptible init finished, rootfs: " << m_rootfsList << "Package size: " << m_packages.size();
 
     Q_EMIT compatibleInitFinished();
 }

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "hierarchicalverify.h"
+#include "ddlog.h"
 #include "utils/qtcompat.h"
 
 #include <mutex>
@@ -65,6 +66,7 @@ HierarchicalVerify *HierarchicalVerify::instance()
 bool HierarchicalVerify::isValid()
 {
     if (interfaceInvalid) {
+        qCDebug(appLog) << "Hierarchical interface is marked as invalid, skipping check";
         return false;
     }
 
@@ -85,7 +87,7 @@ bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QSt
     static REG_EXP s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError).arg(VerffyErrorVer2));
     if (errorString.contains(s_ErrorReg)) {
         invalidPackages.insert(pkgName);
-        qWarning() << QString("[Hierarchical] Package %1 detected hierarchical error!").arg(pkgName);
+        qCWarning(appLog) << QString("[Hierarchical] Package %1 detected hierarchical error!").arg(pkgName);
         return true;
     }
 
@@ -123,7 +125,7 @@ void HierarchicalVerify::proceedDefenderSafetyPage()
     }
 
     if (QDBusError::NoError != error.type()) {
-        qWarning() << QString("[Hierarchical] Show defender app-safety page error [%2] %3")
+        qCWarning(appLog) << QString("[Hierarchical] Show defender app-safety page error [%2] %3")
                           .arg(DBUS_DEFENDER_BUS)
                           .arg(error.name())
                           .arg(error.message());
@@ -169,7 +171,7 @@ bool HierarchicalVerify::checkHierarchicalInterface()
         }
     } else {
         interfaceInvalid = true;
-        qInfo() << QString("[Hierarchical] DBus interface %1 invalid! error: [%2] %3")
+        qCInfo(appLog) << QString("[Hierarchical] DBus interface %1 invalid! error: [%2] %3")
                        .arg(DBUS_HIERARCHICAL_INTERFACE)
                        .arg(interface.lastError().name())
                        .arg(interface.lastError().message());

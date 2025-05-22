@@ -18,6 +18,7 @@
 #include "model/packageselectmodel.h"
 #include "settingdialog.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DInputDialog>
 #include <DRecentManager>
@@ -64,10 +65,17 @@ DebInstaller::DebInstaller(QWidget *parent)
     , m_settingDialog(new SettingDialog(this))
     , m_ddimModel(new PackageSelectModel(this))
 {
+    qCDebug(appLog) << "Initializing DebInstaller...";
     initUI();
     initConnections();
 
-    QtConcurrent::run([]() { PackageAnalyzer::instance().initBackend(); });
+    qCDebug(appLog) << "Starting backend initialization in background";
+    QtConcurrent::run([]() {
+        qCDebug(appLog) << "Background backend initialization started";
+        PackageAnalyzer::instance().initBackend();
+        qCDebug(appLog) << "Background backend initialization completed";
+    });
+    qCDebug(appLog) << "DebInstaller initialization completed";
 }
 
 DebInstaller::~DebInstaller() {}
@@ -216,13 +224,17 @@ void DebInstaller::slotSettingDialogVisiable()
 
 void DebInstaller::PackagesSelected(const QStringList &debPathList)
 {
+    qCDebug(appLog) << "Packages selected:" << debPathList;
+    
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
     // 依赖配置过程中，不添加其他包
     if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare) ||
         DebListModel::WorkerProcessing == m_fileListModel->getWorkerStatus() ||
         DebListModel::WorkerUnInstall == m_fileListModel->getWorkerStatus() || DebListModel::AuthPop == m_wineAuthStatus ||
         DebListModel::AuthConfirm == m_wineAuthStatus || DebListModel::AuthDependsErr == m_wineAuthStatus) {
+        qCWarning(appLog) << "Cannot add packages - worker status:" << m_fileListModel->getWorkerStatus();
     } else {
+        qCDebug(appLog) << "Adding packages to model";
         // 开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(debPathList);
     }
@@ -230,12 +242,16 @@ void DebInstaller::PackagesSelected(const QStringList &debPathList)
 
 QString DebInstaller::startInstallPackge(const QString &debPath)
 {
+    qCDebug(appLog) << "Starting package installation:" << debPath;
     QString message;
     message = m_fileListModel->checkPackageValid(debPath);
-    if (!message.isEmpty())
+    if (!message.isEmpty()) {
+        qCWarning(appLog) << "Package validation failed:" << message;
         return message;
+    }
 
     if (!m_fileListModel->isWorkerPrepare()) {
+        qCWarning(appLog) << "Installation rejected - worker busy";
         return "installer is busy";
     }
 
@@ -266,11 +282,15 @@ QString DebInstaller::startInstallPackge(const QString &debPath)
 
 QString DebInstaller::startUnInstallPackge(const QString &debPath)
 {
+    qCDebug(appLog) << "Starting package uninstallation:" << debPath;
     // check duplicate install
-    if (Pkg::PackageInstallStatus::NotInstalled == checkInstallStatus(debPath))
+    if (Pkg::PackageInstallStatus::NotInstalled == checkInstallStatus(debPath)) {
+        qCWarning(appLog) << "Uninstallation failed - package not installed";
         return "currentdeb not install, uninstall package faild";
+    }
 
     if (!m_fileListModel->isWorkerPrepare()) {
+        qCWarning(appLog) << "Uninstallation rejected - worker busy";
         return "uninstaller is busy";
     }
 
@@ -302,8 +322,11 @@ QString DebInstaller::startUnInstallPackge(const QString &debPath)
 
 int DebInstaller::checkInstallStatus(const QString &debPath)
 {
-    if (debPath.isEmpty())
+    if (debPath.isEmpty()) {
+        qCDebug(appLog) << "Empty package path for install status check";
         return -1;
+    }
+    qCDebug(appLog) << "Checking install status for:" << debPath;
     return m_fileListModel->checkInstallStatus(debPath);
 }
 
@@ -358,7 +381,7 @@ void DebInstaller::slotShowSelectPage(const QList<DebIr> &selectedInfos)
 {
     if (selectedInfos.isEmpty() && m_ddimView == nullptr) {
         // 不应该能够跳转至此
-        qWarning() << "ddim error process";
+        qCWarning(appLog) << "Invalid DDIM process state";
         return;
     }
 
@@ -451,13 +474,17 @@ void DebInstaller::enableCloseAndExit()
 void DebInstaller::dragEnterEvent(QDragEnterEvent *dragEnterEvent)
 {
     this->activateWindow();  // 拖入时，激活窗口
+    qCDebug(appLog) << "Drag enter event, worker status:" << m_fileListModel->getWorkerStatus();
     if (m_fileListModel->getWorkerStatus() == AbstractPackageListModel::WorkerProcessing ||
         m_fileListModel->getWorkerStatus() == AbstractPackageListModel::WorkerUnInstall) {  // 如果当前正在安装，不允许拖入包
+        qCDebug(appLog) << "Rejecting drag - worker busy";
         this->setAcceptDrops(false);                                                        // 不允许拖入
     } else {
         m_fileChooseWidget->setAcceptDrops(true);  // 允许包被拖入
-        if (m_dragflag == 0)                       // 如果当前不允许拖入，则直接返回
+        if (m_dragflag == 0) {                     // 如果当前不允许拖入，则直接返回
+            qCDebug(appLog) << "Drag flag is 0, ignoring drag";
             return;
+        }
 
         auto *const mime = dragEnterEvent->mimeData();
         if (!mime->hasUrls())

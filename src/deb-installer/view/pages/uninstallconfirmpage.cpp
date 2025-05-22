@@ -4,6 +4,7 @@
 
 #include "uninstallconfirmpage.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -18,6 +19,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_cancelBtn(new DPushButton(this))
     , m_confirmBtn(new DPushButton(this))
 {
+    qCDebug(appLog) << "Initializing UninstallConfirmPage...";
     this->setAcceptDrops(false);
     const QIcon icon = QIcon::fromTheme("application-x-deb");
 
@@ -120,9 +122,9 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     connect(m_infoControl, &InfoControlButton::expand, this, &UninstallConfirmPage::slotShowDetail);
     connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::slotHideDetail);
 }
-
 void UninstallConfirmPage::setPackage(const QString &name)
 {
+    qCDebug(appLog) << "Setting package for uninstall confirmation:" << name;
     m_packageName = name;
 
     // add tips
@@ -134,17 +136,20 @@ void UninstallConfirmPage::setPackage(const QString &name)
     m_tips->setText(
         Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));  // 2020.0210修改中英文状态下描述输出自动换行
 }
-
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
+    qCDebug(appLog) << "Setting required packages list, count:" << requiredList.size();
     // According to the dependency status, it is determined whether there is a package that depends on the current package, and if
     // so, it is prompted.
     m_requiredList = requiredList;
     if (!requiredList.isEmpty()) {
+        qCDebug(appLog) << "Showing dependency warning for package uninstall";
         m_infoControl->setVisible(true);
     } else {
+        qCDebug(appLog) << "No dependencies found for package uninstall";
         m_infoControl->setVisible(false);
     }
+
 
     m_dependsInfomation->setTextColor(DPalette::TextTitle);
     m_dependsInfomation->appendText(requiredList.join(", "));
@@ -178,6 +183,7 @@ void UninstallConfirmPage::showEvent(QShowEvent *e)
 
 void UninstallConfirmPage::slotShowDetail()
 {
+    qCDebug(appLog) << "Showing package dependency details";
     // Show dependency information
     m_infoWrapperWidget->setVisible(false);
     m_dependsInfomation->setVisible(true);

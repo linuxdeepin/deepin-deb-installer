@@ -5,10 +5,12 @@
 #include "DealDependThread.h"
 #include "model/deblistmodel.h"
 #include "utils/hierarchicalverify.h"
+#include "utils/ddlog.h"
 
 DealDependThread::DealDependThread(QObject *parent)
 {
     Q_UNUSED(parent);
+    qCDebug(appLog) << "DealDependThread created";
     proc = new QProcess(this);
     connect(proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &DealDependThread::slotInstallFinished);
     connect(proc, &QProcess::readyReadStandardOutput, this, &DealDependThread::slotReadOutput);
@@ -40,20 +42,21 @@ void DealDependThread::slotReadOutput()
     }
     if (tmp.contains("Not authorized")) {
         bDependsStatusErr = true;
-        qWarning() << qPrintable("install Wine dependency Not authorized");
+        qCWarning(appLog) << "Wine dependency install not authorized";
         emit signalDependResult(DebListModel::CancelAuth, m_index, m_brokenDepend);
     }
 
     // 检测是否包含分级验签错误信息
     if (HierarchicalVerify::instance()->checkTransactionError(m_brokenDepend, tmp)) {
         bVerifyStatusErr = true;
-        qWarning() << QString("[Hierarchical] Install Wine dependency not verify, [output]: %1").arg(tmp);
+        qCWarning(appLog) << "Hierarchical verify failed for wine dependency. Output:" << tmp;
         // 结束后统一发送信号
     }
 }
 
 void DealDependThread::run()
 {
+    qCDebug(appLog) << "Starting dependency thread run";
     proc->setProcessChannelMode(QProcess::MergedChannels);
     msleep(100);
 
@@ -64,6 +67,8 @@ void DealDependThread::run()
     proc->start("pkexec",
                 QStringList() << "deepin-deb-installer-dependsInstall"
                               << "--install_wine" << m_dependsList);
+
+    qCDebug(appLog) << "starting command: pkexec deepin-deb-installer-dependsInstall --install_wine" << m_dependsList;
     emit signalEnableCloseButton(false);
 }
 
@@ -72,22 +77,25 @@ void DealDependThread::slotInstallFinished(int num = -1)
     if (bDependsStatusErr) {
         emit signalDependResult(DebListModel::AnalysisErr, m_index, m_brokenDepend);
         bDependsStatusErr = false;
+        qCDebug(appLog) << "Dependency install failed. Dependencies:" << m_dependsList;
         return;
     }
 
     if (bVerifyStatusErr) {
         emit signalDependResult(DebListModel::VerifyDependsErr, m_index, m_brokenDepend);
         bVerifyStatusErr = false;
+        qCDebug(appLog) << "Hierarchical verify failed for wine dependency. Exit code:" << num << "Dependencies:" << m_dependsList;
         return;
     }
 
     if (num == 0) {
+        qCDebug(appLog) << "Dependency install succeeded. Exit code:" << num << "Dependencies:" << m_dependsList;
         emit signalDependResult(DebListModel::AuthDependsSuccess, m_index, m_brokenDepend);
     } else {
-        qWarning() << m_dependsList << "install error" << num;
+        qCWarning(appLog) << "Dependency install failed. Exit code:" << num << "Dependencies:" << m_dependsList;
         emit signalDependResult(DebListModel::AuthDependsErr, m_index, m_brokenDepend);
     }
     emit signalEnableCloseButton(true);
 
-    qInfo() << qPrintable("Process(apt) install finished, num: ") << num << qPrintable("Depends list:") << m_dependsList;
+    qCDebug(appLog) << "Dependency install process finished. Exit code:" << num << "Dependencies:" << m_dependsList;
 }

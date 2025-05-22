@@ -6,6 +6,7 @@
 #include "model/abstract_package_list_model.h"
 #include "utils/utils.h"
 #include "singleInstallerApplication.h"
+#include "utils/ddlog.h"
 
 #include <QPainter>
 #include <QShortcut>
@@ -16,10 +17,12 @@ PackagesListView::PackagesListView(QWidget *parent)
     , m_bLeftMouse(false)
     , m_rightMenu(nullptr)
 {
+    qCDebug(appLog) << "Initializing PackagesListView...";
     initUI();                // 初始化界面参数
     initConnections();       // 初始化链接
     initRightContextMenu();  // 初始化右键菜单
     initShortcuts();         // 添加快捷删除键
+    qCDebug(appLog) << "PackagesListView initialized";
 }
 
 /**
@@ -70,8 +73,10 @@ void PackagesListView::initShortcuts()
 void PackagesListView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {  // 当前检测到鼠标左键按下
+        qCDebug(appLog) << "Left mouse button pressed at" << event->pos();
         m_bLeftMouse = true;
     } else {
+        qCDebug(appLog) << "Non-left mouse button pressed at" << event->pos();
         m_bLeftMouse = false;  // 当前按下的不是左键
     }
     DListView::mousePressEvent(event);
@@ -85,7 +90,8 @@ void PackagesListView::mousePressEvent(QMouseEvent *event)
 void PackagesListView::mouseReleaseEvent(QMouseEvent *event)
 {
     AbstractPackageListModel *listModel = qobject_cast<AbstractPackageListModel *>(this->model());  // 获取debListModel
-    if (!listModel->isWorkerPrepare()) {                                                            // 当前model未就绪
+    if (!listModel->isWorkerPrepare()) {  // 当前model未就绪
+        qCDebug(appLog) << "Model not ready, ignoring mouse release";
         return;
     }
     emit signalCurrentIndexRow(m_currentIndex);
@@ -260,6 +266,7 @@ void PackagesListView::setRightMenuShowStatus(bool isShow)
 void PackagesListView::focusInEvent(QFocusEvent *event)
 {
     if (event->reason() == Qt::TabFocusReason) {  // tab焦点
+        qCDebug(appLog) << "Focus gained, selecting first item";
         if (this->count() > 0) {
             m_currModelIndex = this->model()->index(0, 0);
             this->setCurrentIndex(m_currModelIndex);  // 存在焦点时，默认选入第一项
@@ -277,6 +284,7 @@ void PackagesListView::focusOutEvent(QFocusEvent *event)
 {
     // not change focus index when the right menu pop-up.
     if (event->reason() != Qt::PopupFocusReason) {
+        qCDebug(appLog) << "Focus lost, clearing selection";
         this->clearSelection();
         m_currentIndex = -1;
         m_currModelIndex = this->model()->index(-1, -1);
@@ -293,7 +301,7 @@ bool PackagesListView::event(QEvent *event)
 {
     // 字体变化事件
     if (event->type() == QEvent::FontChange) {
-        qInfo() << DFontSizeManager::fontPixelSize(qGuiApp->font());
+        qCDebug(appLog) << "Font size changed to:" << DFontSizeManager::fontPixelSize(qGuiApp->font());
         if (DFontSizeManager::fontPixelSize(qGuiApp->font()) <= 13) {  // 当前字体大小是否小于13
             emit signalChangeItemHeight(50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font())));
         } else {

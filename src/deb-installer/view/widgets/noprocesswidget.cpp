@@ -4,6 +4,7 @@
 
 #include "noprocesswidget.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DSpinner>
 #include <DLabel>
@@ -15,6 +16,7 @@
 NoProcessWidget::NoProcessWidget(QWidget *parent)
     : QWidget(parent)
 {
+    qCDebug(appLog) << "Initializing NoProcessWidget...";
     spinner = new Dtk::Widget::DSpinner;
     spinner->setFixedSize(24, 24);
 
@@ -29,15 +31,18 @@ NoProcessWidget::NoProcessWidget(QWidget *parent)
     allLayer->addWidget(spinner, 0, Qt::AlignHCenter | Qt::AlignBottom);
     allLayer->addWidget(actionTextLabel, 0, Qt::AlignHCenter | Qt::AlignTop);
     setLayout(allLayer);
+    qCDebug(appLog) << "NoProcessWidget initialized";
 }
 
 void NoProcessWidget::start()
 {
+    qCDebug(appLog) << "Starting spinner animation";
     spinner->start();
 }
 
 void NoProcessWidget::stop()
 {
+    qCDebug(appLog) << "Stopping spinner animation";
     spinner->stop();
 }
 
@@ -55,5 +60,6 @@ bool NoProcessWidget::event(QEvent *e)
 
 void NoProcessWidget::setActionText(const QString &text)
 {
+    qCDebug(appLog) << "Setting action text:" << text;
     actionTextLabel->setText(text);
 }

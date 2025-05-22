@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "processwidget.h"
+#include "utils/ddlog.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -13,6 +14,7 @@
 ProcessWidget::ProcessWidget(QWidget *parent)
     : QWidget(parent)
 {
+    qCDebug(appLog) << "Initializing ProcessWidget...";
     mainIcon = new Dtk::Widget::DLabel;
 
     mainLabel = new Dtk::Widget::DLabel;
@@ -36,29 +38,35 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     allLayer->addStretch();
 
     setLayout(allLayer);
+    qCDebug(appLog) << "ProcessWidget initialized";
 }
 
 void ProcessWidget::setIcon(const QIcon &icon)
 {
+    qCDebug(appLog) << "Setting icon";
     mainIcon->setPixmap(icon.pixmap(64, 64));
 }
 
 void ProcessWidget::setMainText(const QString &text)
 {
+    qCDebug(appLog) << "Setting main text:" << text;
     mainLabel->setText(text);
 }
 
 void ProcessWidget::setProcessText(const QString &text)
 {
+    qCDebug(appLog) << "Setting process text template:" << text;
     processText = text;
 }
 
 void ProcessWidget::setProgress(int current, int all)
 {
+    qCDebug(appLog) << "Updating progress:" << current << "/" << all;
     auto currentText = processText.arg(current).arg(all);
     processTextLabel->setText(currentText);
     processTextLabel->adjustSize();
     processTextLabel->move((this->width() - processTextLabel->width()) / 2, processBar->y() + 30);
     processBar->setRange(0, all);
     processBar->setValue(current);
+    qCDebug(appLog) << "Progress updated";
 }

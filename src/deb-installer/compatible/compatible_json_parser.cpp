@@ -4,6 +4,7 @@
 
 #include "compatible_json_parser.h"
 #include "compatible_backend.h"
+#include "utils/ddlog.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -28,14 +29,17 @@ CompatibleJsonParser::CompatibleJsonParser() {}
  */
 CompatibleRet::Ptr CompatibleJsonParser::parseCommonField(const QByteArray &jsonString)
 {
+    qCDebug(appLog) << "Parse common field";
+
     if (jsonString.isEmpty()) {
+        qCWarning(appLog) << "Empty json string";
         return {};
     }
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(jsonString, &err);
     if (QJsonParseError::NoError != err.error) {
-        qWarning() << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
+        qCWarning(appLog) << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
         return {};
     }
 
@@ -51,17 +55,23 @@ CompatibleRet::Ptr CompatibleJsonParser::parseCommonField(const QByteArray &json
         ret->ext.detailMessage = extObj.value(kFieldMsg);
     }
 
+    qCDebug(appLog) << "Common field:" << ret->code << ret->message << ret->ext.code << ret->ext.detailMessage;
+
     return ret;
 }
 
 QHash<QString, CompPkgInfo::Ptr> CompatibleJsonParser::parseAppList(const CompatibleRet::Ptr &ret)
 {
+    qCDebug(appLog) << "Parse app list";
+
     if (ret.isNull() || CompError == ret->code) {
+        qCWarning(appLog) << "Null app list";
         return {};
     }
 
     auto array = ret->ext.detailMessage.toArray();
     if (array.empty()) {
+        qCWarning(appLog) << "Empty app list";
         return {};
     }
 
@@ -72,7 +82,7 @@ QHash<QString, CompPkgInfo::Ptr> CompatibleJsonParser::parseAppList(const Compat
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(listJson.toUtf8(), &err);
     if (QJsonParseError::NoError != err.error) {
-        qWarning() << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
+        qCWarning(appLog) << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
         return {};
     }
 
@@ -92,6 +102,8 @@ QHash<QString, CompPkgInfo::Ptr> CompatibleJsonParser::parseAppList(const Compat
         packages.insert(pkgPtr->name, pkgPtr);
     }
 
+    qCDebug(appLog) << "App list:" << packages.size();
+
     return packages;
 }
 
@@ -102,13 +114,16 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseRootfsList(const CompatibleRet
        \"Name\":\"uos-rootfs-20\",\n      \"Status\": \"Up 15 minutes\",\n      \"Image\": \"localhost/uos-rootfs-20:latest\"\n
        }\n  ]\n}"]}}
      */
+    qCDebug(appLog) << "Parse rootfs list";
 
     if (ret.isNull() || CompError == ret->code) {
+        qCWarning(appLog) << "Null rootfs list";
         return {};
     }
 
     auto array = ret->ext.detailMessage.toArray();
     if (array.empty()) {
+        qCWarning(appLog) << "Empty rootfs list";
         return {};
     }
 
@@ -119,7 +134,7 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseRootfsList(const CompatibleRet
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(listJson.toUtf8(), &err);
     if (QJsonParseError::NoError != err.error) {
-        qWarning() << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
+        qCWarning(appLog)  << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
         return {};
     }
 
@@ -140,6 +155,8 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseRootfsList(const CompatibleRet
         rootfs.append(rootfsPtr);
     }
 
+    qCDebug(appLog) << "Rootfs list:" << rootfs.size();
+
     return rootfs;
 }
 
@@ -150,13 +167,16 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseSupportfsList(const Compatible
        {"Code":0,"Msg":null,"Ext":{"Code":0,"Msg":["成功 [\n \"uos-rootfs-20\",\n \"ubuntu-18.04\" \n]"]}}
        {"Code":0,"Msg":null,"Ext":{"Code":0,"Msg":["失败 [\n \"NOTFOUND\" \n]"]}}
      */
+    qCDebug(appLog) << "Parse supportfs list";
 
     if (ret.isNull() || CompError == ret->code) {
+        qCWarning(appLog) << "Null support rootfs list";
         return {};
     }
 
     auto array = ret->ext.detailMessage.toArray();
     if (array.empty()) {
+        qCWarning(appLog) << "Empty support rootfs list";
         return {};
     }
 
@@ -167,7 +187,7 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseSupportfsList(const Compatible
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(listJson.toUtf8(), &err);
     if (QJsonParseError::NoError != err.error) {
-        qWarning() << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
+        qCWarning(appLog) << QString("Parse compatible result failed: %1 offset:%2").arg(err.errorString()).arg(err.offset);
         return {};
     }
 
@@ -185,6 +205,8 @@ QList<RootfsInfo::Ptr> CompatibleJsonParser::parseSupportfsList(const Compatible
             supportRootfs.append(*findItr);
         }
     }
+
+    qCDebug(appLog) << "Support rootfs list:" << supportRootfs.size();
 
     return supportRootfs;
 }

@@ -33,6 +33,7 @@
 #include "kpty_p.h"
 
 #include <QSocketNotifier>
+#include <QDebug>
 
 #include <unistd.h>
 #include <cerrno>
@@ -300,9 +301,11 @@ KPtyDevice::~KPtyDevice()
 bool KPtyDevice::open(OpenMode mode)
 {
     Q_D(KPtyDevice);
-
-    if (masterFd() >= 0)
+    qDebug() << "KPtyDevice::open" << mode;
+    if (masterFd() >= 0) {
+        qDebug() << "PTY already open";
         return true;
+    }
 
     if (!KPty::open()) {
         setErrorString(QLatin1String("Error opening PTY"));
@@ -310,30 +313,33 @@ bool KPtyDevice::open(OpenMode mode)
     }
 
     d->finishOpen(mode);
-
+    qDebug() << "PTY opened";
     return true;
 }
 
 bool KPtyDevice::open(int fd, OpenMode mode)
 {
     Q_D(KPtyDevice);
-
+    qDebug() << "KPtyDevice::open" << mode;
     if (!KPty::open(fd)) {
         setErrorString(QLatin1String("Error opening PTY"));
+        qDebug() << "Error opening PTY";
         return false;
     }
 
     d->finishOpen(mode);
-
+    qDebug() << "PTY opened";
     return true;
 }
 
 void KPtyDevice::close()
 {
     Q_D(KPtyDevice);
-
-    if (masterFd() < 0)
+    qDebug() << "KPtyDevice::close";
+    if (masterFd() < 0) {
+        qDebug() << "PTY not open";
         return;
+    }
 
     delete d->readNotifier;
     delete d->writeNotifier;
@@ -341,6 +347,7 @@ void KPtyDevice::close()
     QIODevice::close();
 
     KPty::close();
+    qDebug() << "PTY closed";
 }
 
 bool KPtyDevice::isSequential() const

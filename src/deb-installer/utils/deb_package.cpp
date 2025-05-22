@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deb_package.h"
+#include "ddlog.h"
 
 #include <QApt/Backend>
 #include <QApt/Package>
@@ -55,6 +56,7 @@ const QSharedPointer<QApt::DebFile> &DebPackage::debInfo() const
 
 void DebPackage::setOperationStatus(Pkg::PackageOperationStatus s)
 {
+    qCInfo(appLog) << "Package operation status changed from" << m_operationStatus << "to" << s;
     m_operationStatus = s;
 }
 
@@ -89,13 +91,16 @@ bool DebPackage::containRemovePackages() const
 
 void DebPackage::setMarkedPackages(const QStringList &installDepends)
 {
+    qCDebug(appLog) << "Setting marked packages for" << m_debFilePtr->filePath() << "with depends:" << installDepends;
     m_removePackages.clear();
     if (!m_debFilePtr->isValid()) {
+        qCWarning(appLog) << "Invalid deb file when setting marked packages:" << m_debFilePtr->filePath();
         return;
     }
 
     QApt::Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
+        qCWarning(appLog) << "Backend is null when setting marked packages";
         return;
     }
 
@@ -144,6 +149,7 @@ QStringList DebPackage::removePackages() const
 
 void DebPackage::setError(int code, const QString &string)
 {
+    qCWarning(appLog) << "Package error occurred, code:" << code << "message:" << string;
     m_errorCode = code;
     m_errorString = string;
 }
@@ -161,6 +167,7 @@ QString DebPackage::errorString() const
 const QSharedPointer<Compatible::CompPkgInfo> &DebPackage::compatible()
 {
     if (!m_compInfoPtr && isValid()) {
+        qCDebug(appLog) << "Checking compatible mode for package:" << m_debFilePtr->packageName();
         // might installed in compatbile mode.
         m_compInfoPtr = CompBackend::instance()->containsPackage(m_debFilePtr->packageName());
 

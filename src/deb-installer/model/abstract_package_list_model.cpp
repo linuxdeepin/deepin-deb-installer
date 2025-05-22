@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "abstract_package_list_model.h"
+#include "utils/ddlog.h"
 
 /**
    @class AbstractPackageListModel
@@ -23,6 +24,7 @@ AbstractPackageListModel::WorkerStatus AbstractPackageListModel::getWorkerStatus
  */
 void AbstractPackageListModel::setWorkerStatus(WorkerStatus status)
 {
+    qCDebug(appLog) << "Worker status changed from" << m_workerStatus << "to" << status;
     m_workerStatus = status;
 
     switch (status) {

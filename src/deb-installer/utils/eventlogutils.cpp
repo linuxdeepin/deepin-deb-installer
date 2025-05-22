@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "eventlogutils.h"
+#include "ddlog.h"
 #include <QLibrary>
 #include <QDir>
 #include <QLibraryInfo>
@@ -31,8 +32,11 @@ Eventlogutils::Eventlogutils()
     initFunc = reinterpret_cast<bool (*)(const std::string &, bool)>(library.resolve("Initialize"));
     writeEventLogFunc = reinterpret_cast<void (*)(const std::string &)>(library.resolve("WriteEventLog"));
 
-    if (!initFunc)
+    if (!initFunc) {
+        qCWarning(appLog) << "Failed to resolve Initialize function from libdeepin-event-log.so";
         return;
+    }
 
+    qCDebug(appLog) << "Initializing event log with package name: deepin-deb-installer";
     initFunc("deepin-deb-installer", true);
 }
