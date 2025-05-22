@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 
     if (!isValidInvoker()) {
+        qWarning() << "Invalid invoker";
         return 1;
     }
 

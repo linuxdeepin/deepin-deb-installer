@@ -11,6 +11,7 @@
 
 #include "uab_backend.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 namespace Uab {
 
@@ -27,6 +28,7 @@ UabPackageListModel::UabPackageListModel(QObject *parent)
     , m_processor(new UabProcessController(this))
     , m_fileWatcher(new QFileSystemWatcher(this))
 {
+    qCDebug(appLog) << "Creating UabPackageListModel";
     m_supportPackageType = Pkg::Uab;
 
     connect(m_processor, &UabProcessController::processOutput, this, &UabPackageListModel::signalAppendOutputInfo);
@@ -37,11 +39,13 @@ UabPackageListModel::UabPackageListModel(QObject *parent)
 
     // call init uab backend while uab package list model create
     connect(Uab::UabBackend::instance(), &Uab::UabBackend::backendInitFinsihed, this, [this]() {
+        qCDebug(appLog) << "UAB backend initialized, processing delayed packages:" << m_delayAppendPackages.size();
         if (!m_delayAppendPackages.isEmpty()) {
             slotAppendPackage(m_delayAppendPackages);
         }
         m_delayAppendPackages.clear();
     });
+    qCDebug(appLog) << "Initializing UAB backend";
     Uab::UabBackend::instance()->initBackend();
 }
 
@@ -97,28 +101,35 @@ int UabPackageListModel::rowCount(const QModelIndex &parent) const
 
 void UabPackageListModel::slotAppendPackage(const QStringList &packageList)
 {
+    qCDebug(appLog) << "Appending packages to model:" << packageList;
     if (!isWorkerPrepare()) {
+        qCWarning(appLog) << "Cannot append packages - worker not ready";
         return;
     }
 
     // delay append when uab backend not ready. sa backendInitFinsihed()
     if (!Uab::UabBackend::instance()->backendInited()) {
+        qCDebug(appLog) << "Backend not initialized, delaying package append";
         m_delayAppendPackages.append(packageList);
         return;
     }
 
     const int oldRowCount = rowCount();
     for (const QString &path : packageList) {
+        qCDebug(appLog) << "Processing package:" << path;
         auto uabPtr = preCheckPackage(path);
 
         if (uabPtr && uabPtr->isValid()) {
+            qCDebug(appLog) << "Adding valid package to model:" << uabPtr->info()->id;
             m_uabPkgList.append(uabPtr);
-
             m_fileWatcher->addPath(path);
+        } else {
+            qCWarning(appLog) << "Package validation failed:" << path;
         }
     }
 
     if (oldRowCount != rowCount()) {
+        qCDebug(appLog) << "Package count changed from" << oldRowCount << "to" << rowCount();
         Q_EMIT signalPackageCountChanged(rowCount());
     }
 }
@@ -224,17 +235,21 @@ bool UabPackageListModel::containsSignatureFailed() const
 
 bool UabPackageListModel::slotInstallPackages()
 {
+    qCDebug(appLog) << "Starting package installation for" << rowCount() << "packages";
     bool callRet = false;
 
     do {
         if (!isWorkerPrepare() || rowCount() <= 0) {
+            qCWarning(appLog) << "Cannot install packages - worker not ready or empty package list";
             break;
         }
 
         if (!linglongExists()) {
+            qCWarning(appLog) << "Cannot install packages - Linglong environment not found";
             break;
         }
 
+        qCDebug(appLog) << "Resetting install status for all packages";
         // reset, mark package waiting install
         resetInstallStatus();
         for (auto uabPtr : m_uabPkgList) {
@@ -243,11 +258,13 @@ bool UabPackageListModel::slotInstallPackages()
         Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
 
         setWorkerStatus(WorkerProcessing);
+        qCDebug(appLog) << "Starting installation process";
         installNextUab();
         callRet = true;
     } while (false);
 
     if (!callRet) {
+        qCWarning(appLog) << "Package installation failed, marking all as failed";
         for (auto uabPtr : m_uabPkgList) {
             uabPtr->m_operationStatus = Pkg::Failed;
         }
@@ -257,6 +274,7 @@ bool UabPackageListModel::slotInstallPackages()
         return false;
     }
 
+    qCDebug(appLog) << "Package installation started successfully";
     return true;
 }
 
@@ -334,14 +352,17 @@ void UabPackageListModel::resetInstallStatus()
 bool UabPackageListModel::installNextUab()
 {
     m_operatingIndex++;
+    qCDebug(appLog) << "Processing package at index:" << m_operatingIndex;
     Q_ASSERT_X(m_operatingIndex >= 0, "install uab", "operating index invalid");
     if (m_operatingIndex < 0) {
+        qCWarning(appLog) << "Invalid operating index:" << m_operatingIndex;
         setWorkerStatus(WorkerFinished);
         return false;
     }
 
     // check install finish
     if (m_operatingIndex >= rowCount()) {
+        qCDebug(appLog) << "All packages processed, installation complete";
         Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(kCompleteProgress));
         Q_EMIT signalWholeProgressChanged(static_cast<int>(kCompleteProgress));
 
@@ -354,11 +375,13 @@ bool UabPackageListModel::installNextUab()
 
     auto uabPtr = m_uabPkgList.value(m_operatingIndex);
     if (!uabPtr || Pkg::DependsOk != uabPtr->m_dependsStatus) {
+        qCWarning(appLog) << "Skipping invalid package or dependency issue at index:" << m_operatingIndex;
         setCurrentOperation(Pkg::Failed);
         installNextUab();
         return false;
     }
 
+    qCDebug(appLog) << "Starting installation for package:" << uabPtr->info()->id << uabPtr->info()->version;
     setCurrentOperation(Pkg::Operating);
 
     m_processor->reset();
@@ -372,24 +395,30 @@ bool UabPackageListModel::installNextUab()
 
             if (ret == 0) {
                 installStatus = Pkg::InstalledSameVersion;
+                qCDebug(appLog) << "Same version already installed:" << uabPtr->info()->id << uabPtr->info()->version;
             } else if (ret < 0) {
                 installStatus = Pkg::InstalledLaterVersion;
+                qCDebug(appLog) << "Newer version already installed:" << uabPtr->info()->id << uabPtr->info()->version;
             } else {
                 installStatus = Pkg::InstalledEarlierVersion;
+                qCDebug(appLog) << "Older version already installed:" << uabPtr->info()->id << uabPtr->info()->version;
             }
         }
     }
 
     switch (installStatus) {
         case Pkg::NotInstalled:
+            qCDebug(appLog) << "Marking package for fresh install:" << uabPtr->info()->id;
             m_processor->markInstall(uabPtr);
             break;
         case Pkg::InstalledSameVersion: {
+            qCDebug(appLog) << "Marking package for reinstall (same version):" << uabPtr->info()->id;
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version);
             m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
             m_processor->markInstall(uabPtr);
         } break;
         default: {
+            qCDebug(appLog) << "Marking package for upgrade/downgrade:" << uabPtr->info()->id;
             auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
             m_processor->markInstall(uabPtr);
             m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
@@ -397,11 +426,13 @@ bool UabPackageListModel::installNextUab()
     }
 
     if (!m_processor->commitChanges()) {
+        qCWarning(appLog) << "Failed to commit changes for package:" << uabPtr->info()->id;
         setCurrentOperation(Pkg::Failed);
         installNextUab();
         return false;
     }
 
+    qCDebug(appLog) << "Successfully started installation process for package:" << uabPtr->info()->id;
     return true;
 }
 

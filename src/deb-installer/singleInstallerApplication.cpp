@@ -5,6 +5,7 @@
 #include "singleInstallerApplication.h"
 #include "view/pages/debinstaller.h"
 #include "uab/uab_backend.h"
+#include "utils/ddlog.h"
 
 #include <DWidgetUtil>
 #include <DGuiApplicationHelper>
@@ -20,11 +21,13 @@ std::atomic_bool SingleInstallerApplication::BackendIsRunningInit;
 SingleInstallerApplication::SingleInstallerApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
+    qCDebug(appLog) << "SingleInstallerApplication constructor";
     BackendIsRunningInit = false;
 }
 
 void SingleInstallerApplication::activateWindow()
 {
+    qCDebug(appLog) << "Activating window, mode:" << mode;
     if (!m_ddimFiles.isEmpty()) {
         mode = DdimChannel;
     } else {
@@ -60,6 +63,7 @@ void SingleInstallerApplication::activateWindow()
 
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
+    qCInfo(appLog) << "InstallerDeb called with" << debPathList.size() << "packages";
     if (mode == DdimChannel) {
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotDdimSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     } else if (debPathList.size() > 0) {
@@ -75,23 +79,33 @@ void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 
 QString SingleInstallerApplication::InstallerDebPackge(const QString &debPath)
 {
+    qCDebug(appLog) << "Starting package installation for:" << debPath;
     QString ret;
     // 启动安装
     QMetaObject::invokeMethod(
         m_qspMainWnd.get(), "startInstallPackge", Qt::DirectConnection, Q_RETURN_ARG(QString, ret), Q_ARG(QString, debPath));
+    qCDebug(appLog) << "Installation result:" << ret;
     // 调用结束关闭进程
-    QTimer::singleShot(100, [&]() { quit(); });
+    QTimer::singleShot(100, [&]() {
+        qCDebug(appLog) << "Quitting application after installation";
+        quit();
+    });
     return ret;
 }
 
 QString SingleInstallerApplication::unInstallDebPackge(const QString &debPath)
 {
+    qCDebug(appLog) << "Starting package uninstallation for:" << debPath;
     QString ret;
     // 卸载包
     QMetaObject::invokeMethod(
         m_qspMainWnd.get(), "startUnInstallPackge", Qt::DirectConnection, Q_RETURN_ARG(QString, ret), Q_ARG(QString, debPath));
+    qCDebug(appLog) << "Uninstallation result:" << ret;
     // 调用结束关闭进程
-    QTimer::singleShot(100, [&]() { quit(); });
+    QTimer::singleShot(100, [&]() {
+        qCDebug(appLog) << "Quitting application after uninstallation";
+        quit();
+    });
     return ret;
 }
 
@@ -133,6 +147,7 @@ QString SingleInstallerApplication::getPackageInfo(const QString &debPath)
 
 bool SingleInstallerApplication::parseCmdLine()
 {
+    qCDebug(appLog) << "Parsing command line arguments";
     QCommandLineParser parser;
     parser.setApplicationDescription("Deepin Package Installer.");
     parser.addOption(QCommandLineOption("dbus", "enable daemon mode"));
@@ -140,6 +155,8 @@ bool SingleInstallerApplication::parseCmdLine()
     parser.addVersionOption();
     parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
     parser.process(*this);
+    qCDebug(appLog) << "Positional arguments:" << parser.positionalArguments();
+    qCDebug(appLog) << "D-Bus mode:" << parser.isSet("dbus");
 
     m_selectedFiles.clear();
     m_ddimFiles.clear();
@@ -149,17 +166,17 @@ bool SingleInstallerApplication::parseCmdLine()
     if (!conn.registerService(kDebInstallManagerService) ||
         !conn.registerObject(
             kDebInstallManagerIface, this, QDBusConnection::ExportScriptableSlots)) {  // 注册失败 说明已经存在deb-installer
-        qDebug() << "Failed to register dbus";
+        qCWarning(appLog) << "Failed to register D-Bus service, another instance may be running";
         QDBusInterface deb_install(
             kDebInstallManagerService, kDebInstallManagerIface, kDebInstallManagerService, QDBusConnection::sessionBus());
         QList<QVariant> debInstallPathList;
         debInstallPathList << parser.positionalArguments();
         // 激活已有deb-installer
         QDBusMessage msg = deb_install.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
-        qWarning() << msg.errorMessage();
+        qCWarning(appLog) << "D-Bus call failed:" << msg.errorMessage();
         return false;
     } else {
-        qDebug() << "Register dbus service successfully";
+        qCInfo(appLog) << "Registered D-Bus service successfully";
         const QStringList paraList = parser.positionalArguments();
         if (paraList.isEmpty()) {
             // hide main window on dbus
@@ -167,10 +184,13 @@ bool SingleInstallerApplication::parseCmdLine()
                 bIsDbus = true;
             }
         } else {
+            qCDebug(appLog) << "Processing" << paraList.size() << "package files";
             for (auto it : paraList) {
                 if (it.endsWith("ddim")) {
+                    qCDebug(appLog) << "Adding DDIM file:" << it;
                     m_ddimFiles.append(it);
                 } else {
+                    qCDebug(appLog) << "Adding DEB file:" << it;
                     m_selectedFiles.append(it);
                 }
             }

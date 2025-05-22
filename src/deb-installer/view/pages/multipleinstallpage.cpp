@@ -8,6 +8,7 @@
 #include "model/packageslistdelegate.h"
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DLabel>
 
@@ -40,6 +41,7 @@ MultipleInstallPage::MultipleInstallPage(AbstractPackageListModel *model, QWidge
     , m_tipsLabel(new DCommandLinkButton("", this))
     , m_dSpinner(new DSpinner(this))
 {
+    qCDebug(appLog) << "Initializing MultipleInstallPage...";
     initControlAccessibleName();  // 自动化测试
     initContentLayout();          // 初始化主布局
     initUI();                     // 初始化控件
@@ -47,6 +49,7 @@ MultipleInstallPage::MultipleInstallPage(AbstractPackageListModel *model, QWidge
     initTabOrder();               // 初始化焦点切换顺序
     // 添加后默认可以调用右键删除菜单。
     m_appsListView->setRightMenuShowStatus(true);  // 设置批量安装右键删除菜单可用
+    qCDebug(appLog) << "MultipleInstallPage initialized";
 }
 
 void MultipleInstallPage::initControlAccessibleName()
@@ -360,6 +363,7 @@ void MultipleInstallPage::initConnections()
 
 void MultipleInstallPage::slotWorkerFinshed()
 {
+    qCDebug(appLog) << "Installation finished";
     // 安装结束显示返回和确认按钮
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
@@ -368,6 +372,7 @@ void MultipleInstallPage::slotWorkerFinshed()
     m_processFrame->setVisible(false);  // 隐藏进度条
     // 当前安装结束后，不允许调出右键菜单
     m_appsListView->setRightMenuShowStatus(false);  // 安装结束不允许删除包
+    qCDebug(appLog) << "UI updated after installation completion";
 }
 
 void MultipleInstallPage::slotOutputAvailable(const QString &output)
@@ -382,12 +387,14 @@ void MultipleInstallPage::slotOutputAvailable(const QString &output)
 
 void MultipleInstallPage::slotProgressChanged(const int progress)
 {
+    qCDebug(appLog) << "Installation progress:" << progress << "%";
     m_progressAnimation->setStartValue(m_installProgress->value());  // 设置动画开始的进度
     m_progressAnimation->setEndValue(progress);                      // 设置进度条动画结束的进度
     m_progressAnimation->start();                                    // 开始动画
 
     // finished
     if (progress == 100) {
+        qCDebug(appLog) << "Installation completed";
         slotOutputAvailable(QString());
         QTimer::singleShot(m_progressAnimation->duration(), this, &MultipleInstallPage::slotWorkerFinshed);  // 当前安装完成
     }

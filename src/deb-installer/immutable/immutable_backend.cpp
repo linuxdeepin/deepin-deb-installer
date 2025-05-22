@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "immutable_backend.h"
+#include "utils/ddlog.h"
 
 #include <QProcess>
 
@@ -32,6 +33,7 @@ bool ImmutableBackend::immutableEnabled() const
 
 void ImmutableBackend::initBackend()
 {
+    qCDebug(appLog) << "initBackend";
     QProcess process;
     process.setProgram(kImmutableBin);
     process.setArguments({kImmutableStatus});
@@ -40,6 +42,7 @@ void ImmutableBackend::initBackend()
     const QByteArray output = process.readAllStandardOutput();
 
     m_immutableEnabled = output.contains(kImmutableEnable);
+    qCDebug(appLog) << "end initBackend, immutableEnabled:" << m_immutableEnabled;
 }
 
 };  // namespace Immutable

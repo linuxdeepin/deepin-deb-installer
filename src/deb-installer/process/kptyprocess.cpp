@@ -73,6 +73,7 @@ KPtyProcess::~KPtyProcess()
 {
     Q_D(KPtyProcess);
 
+    qDebug() << "Process state before cleanup:" << state();
     if (state() != QProcess::NotRunning)
     {
         if (d->addUtmp)
@@ -98,6 +99,7 @@ void KPtyProcess::setPtyChannels(PtyChannels channels)
 {
     Q_D(KPtyProcess);
 
+    qDebug() << "Setting PTY channels:" << channels;
     d->ptyChannels = channels;
 }
 
@@ -112,6 +114,7 @@ void KPtyProcess::setUseUtmp(bool value)
 {
     Q_D(KPtyProcess);
 
+    qDebug() << "Setting use utmp to:" << value;
     d->addUtmp = value;
 }
 
@@ -135,6 +138,7 @@ void KPtyProcess::setupChildProcess()
 void KPtyProcess::setupChildProcessImpl()
 {
     Q_D(KPtyProcess);
+    qDebug() << "Setting up child process PTY channels:" << d->ptyChannels;
 
     d->pty->setCTty();
 

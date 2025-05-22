@@ -31,3 +31,9 @@ debian/deepin-deb-installer/
 debian/files
 obj-x86_64-linux-gnu/
 resources/images/icon22.svg
+
+
+# AI configuration files
+.roo/
+.ruru/
+.roomodes

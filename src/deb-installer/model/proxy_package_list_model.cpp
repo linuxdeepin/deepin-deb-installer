@@ -6,6 +6,7 @@
 #include "deblistmodel.h"
 #include "uab/uab_package_list_model.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 ProxyPackageListModel::ProxyPackageListModel(QObject *parent)
     : AbstractPackageListModel{parent}
@@ -57,9 +58,11 @@ int ProxyPackageListModel::rowCount(const QModelIndex &parent) const
 
 void ProxyPackageListModel::slotAppendPackage(const QStringList &packageList)
 {
+    qCDebug(appLog) << "Appending packages:" << packageList;
     QMap<Pkg::PackageType, QStringList> filterList;
     for (const QString &packagePath : packageList) {
         const Pkg::PackageType type = Utils::detectPackage(packagePath);
+        qCDebug(appLog) << "Package type detected:" << type << "for" << packagePath;
         filterList[type].append(packagePath);
     };
 
@@ -81,12 +84,15 @@ void ProxyPackageListModel::slotAppendPackage(const QStringList &packageList)
 
 void ProxyPackageListModel::removePackage(int index)
 {
+    qCDebug(appLog) << "Removing package at index:" << index;
     auto modelWithIndex = findFromProxyIndex(index);
     if (!modelWithIndex.first) {
+        qCWarning(appLog) << "Invalid index for removal:" << index;
         return;
     }
 
     modelWithIndex.first->removePackage(modelWithIndex.second);
+    qCDebug(appLog) << "Package removed successfully";
 }
 
 QString ProxyPackageListModel::checkPackageValid(const QString &packagePath)
@@ -154,13 +160,16 @@ bool ProxyPackageListModel::containsSignatureFailed() const
 bool ProxyPackageListModel::slotInstallPackages()
 {
     if (!isWorkerPrepare()) {
+        qCWarning(appLog) << "Worker not ready for installation";
         return false;
     }
 
     if (m_packageModels.isEmpty() || m_packageModels.last().rightCount <= 0) {
+        qCWarning(appLog) << "No packages to install";
         return false;
     }
 
+    qCDebug(appLog) << "Starting package installation for" << m_packageModels.last().rightCount << "packages";
     setWorkerStatus(WorkerProcessing);
     m_procModelIndex = -1;
     return nextModelInstall();
@@ -395,7 +404,7 @@ void ProxyPackageListModel::onSourcePacakgeCountChanged(int count)
         Q_EMIT signalPackageCountChanged(m_packageModels.last().rightCount);
 
     } else {
-        qWarning() << qPrintable("Inavlid model signal sender");
+        qCWarning(appLog) << "Invalid model signal sender for package count change";
     }
 }
 
@@ -417,7 +426,7 @@ void ProxyPackageListModel::onSourceWholeProgressChanged(int progress)
         Q_EMIT signalWholeProgressChanged(wholeProgress);
 
     } else {
-        qWarning() << qPrintable("Inavlid model signal sender");
+        qCWarning(appLog) << "Invalid model signal sender for progress change";
     }
 }
 
@@ -438,7 +447,7 @@ void ProxyPackageListModel::onSourceCurrentProcessPackageIndex(int index)
         Q_EMIT signalCurrentProcessPackageIndex(proxyIndex);
 
     } else {
-        qWarning() << qPrintable("Inavlid model signal sender");
+        qCWarning(appLog) << "Invalid model signal sender for process index";
     }
 }
 
@@ -457,7 +466,7 @@ void ProxyPackageListModel::onSoureWorkerFinished()
         }
 
     } else {
-        qWarning() << qPrintable("Inavlid model signal sender");
+        qCWarning(appLog) << "Invalid model signal sender for worker finished";
     }
 }
 
@@ -483,6 +492,7 @@ void ProxyPackageListModel::onSourceDataChanged(const QModelIndex &topLeft,
                 Q_EMIT dataChanged(proxyTopLeft, proxyBottomRight, roles);
             }
 
+            qCDebug(appLog) << "return: Data changed in proxy model:" << topLeft << bottomRight << roles;
             return;
         }
     }

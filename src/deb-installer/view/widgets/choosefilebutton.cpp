@@ -4,6 +4,7 @@
 
 #include "choosefilebutton.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DGuiApplicationHelper>
 
@@ -12,6 +13,7 @@
 ChooseFileButton::ChooseFileButton(QString text, QWidget *parent)
     : DCommandLinkButton(text, parent)
 {
+    qCDebug(appLog) << "Initializing ChooseFileButton with text:" << text;
     QString fontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);  // 设置字体
     Utils::bindFontBySizeAndWeight(this, fontFamily, 12, QFont::ExtraLight);       // 设置字体样式与字体大小
 
@@ -20,6 +22,7 @@ ChooseFileButton::ChooseFileButton(QString text, QWidget *parent)
     // 添加AccessibleName
     this->setObjectName("ChooseFileButton");
     this->setAccessibleName("ChooseFileButton");
+    qCDebug(appLog) << "ChooseFileButton initialized";
 }
 
 void ChooseFileButton::keyPressEvent(QKeyEvent *event)
@@ -27,6 +30,7 @@ void ChooseFileButton::keyPressEvent(QKeyEvent *event)
     // 当按下回车、换行、或空格时，如果当前按钮存在焦点则触发click事件
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) {
         if (this->hasFocus()) {
+            qCDebug(appLog) << "Triggering click via key press:" << event->key();
             this->clicked();
         }
     }

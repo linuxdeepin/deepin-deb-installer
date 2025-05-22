@@ -4,6 +4,7 @@
 
 #include "compatible_process_controller.h"
 #include "compatible_json_parser.h"
+#include "utils/ddlog.h"
 
 #include <QDebug>
 
@@ -39,19 +40,24 @@ const Deb::DebPackage::Ptr &CompatibleProcessController::currentPackage() const
 
 bool CompatibleProcessController::isRunning() const
 {
+    qCDebug(appLog) << "is running?";
     if (m_process && QProcess::NotRunning != m_process->state()) {
         return true;
     }
 
+    qCDebug(appLog) << "not running";
     return false;
 }
 
 bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
 {
+    qCDebug(appLog) << "install package:";
     if (!package || !package->isValid() || isRunning()) {
+        qCDebug(appLog) << "invalid package or running";
         return false;
     }
     if (!ensureProcess()) {
+        qCDebug(appLog) << "ensure process failed";
         return false;
     }
 
@@ -83,17 +89,20 @@ bool CompatibleProcessController::install(const Deb::DebPackage::Ptr &package)
 
     m_process->start(kPkexecBin, params, {}, 0, false);
 
-    qInfo() << "Comaptible install:" << m_process->program();
+    qCInfo(appLog) << "Comaptible install:" << m_process->program();
     Q_EMIT processStart();
     return true;
 }
 
 bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
 {
+    qCDebug(appLog) << "uninstall package:";
     if (!package || !package->isValid() || isRunning()) {
+        qCDebug(appLog) << "invalid package or running";
         return false;
     }
     if (!ensureProcess()) {
+        qCDebug(appLog) << "ensure process failed";
         return false;
     }
 
@@ -122,7 +131,7 @@ bool CompatibleProcessController::uninstall(const Deb::DebPackage::Ptr &package)
     // sa: Pty::start()
     m_process->start(kPkexecBin, params, {}, 0, false);
 
-    qInfo() << "Comaptible uninstall:" << m_process->program();
+    qCInfo(appLog) << "Comaptible uninstall:" << m_process->program();
     Q_EMIT processStart();
     return true;
 }
@@ -142,6 +151,7 @@ void CompatibleProcessController::writeConfigData(const QString &configData)
 
 bool CompatibleProcessController::ensureProcess()
 {
+    qCDebug(appLog) << "ensure process";
     if (!m_process) {
         m_process = new Konsole::Pty(this);
 
@@ -151,16 +161,19 @@ bool CompatibleProcessController::ensureProcess()
                 this,
                 &CompatibleProcessController::onFinished);
     } else if (QProcess::NotRunning != m_process->state()) {
-        qWarning() << "Unable to restart compatible process is still running";
+        qCWarning(appLog) << "Unable to restart compatible process is still running";
         return false;
     }
 
+    qCDebug(appLog) << "ensure process success";
+        
     return true;
 }
 
 void CompatibleProcessController::onReadOutput(const char *buffer, int length, bool isCommandExec)
 {
     Q_UNUSED(isCommandExec);
+    qCDebug(appLog) << "on read output:" << length;
 
     const QByteArray output = QByteArray::fromRawData(buffer, length);
     Q_EMIT processOutput(output);
@@ -176,16 +189,21 @@ void CompatibleProcessController::onReadOutput(const char *buffer, int length, b
     }
 
     float progress = qMin(9, bitMax) * 10;
+    qCDebug(appLog) << "emit progress:" << progress;
+
     Q_EMIT progressChanged(progress);
 }
 
 void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
 {
     bool success = (Pkg::ExitNoError == exitCode && QProcess::NormalExit == exitStatus);
+    qCDebug(appLog) << "process finished? " << success;
+
     if (!success) {
         switch (exitCode) {
             case Pkg::ExitAuthError:
                 m_currentPackage->setError(Pkg::ConfigAuthCancel, {});
+                qCDebug(appLog) << "auth error";
                 break;
             default: {  // up to 512 outputs
                 static const int kMaxCheckLen = 512;
@@ -203,21 +221,24 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
         auto lastRetOutput = m_outputList.last().toUtf8();
         auto retPtr = CompatibleJsonParser::parseCommonField(lastRetOutput);
         if (retPtr && CompSuccess != retPtr->ext.code) {
-            qWarning() << "Compatible install/uninstall failed" << lastRetOutput;
+            qCWarning(appLog) << "Compatible install/uninstall failed" << lastRetOutput;
 
             m_currentPackage->setError(Pkg::UnknownError, {});
             success = false;
         }
     }
 
+    qCDebug(appLog) << "emit process finished:" << success;
     Q_EMIT processFinished(success);
 
     if (success) {
         switch (m_type) {
             case Install:
+                qCDebug(appLog) << "backend do package installed";
                 CompatibleBackend::instance()->packageInstalled(m_currentPackage->compatible());
                 break;
             case Uninstall:
+                qCDebug(appLog) << "backend do package removed";
                 CompatibleBackend::instance()->packageRemoved(m_currentPackage->compatible());
                 break;
             default:
@@ -225,18 +246,22 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
         }
     }
 
+    qCDebug(appLog) << "reset state";
+
     // release temp data
     m_outputList.clear();
 }
 
 void CompatibleProcessController::appendCurrentUser(QStringList &params)
 {
+    qCDebug(appLog) << "Compatible append current user";
     auto env = QProcessEnvironment::systemEnvironment();
     QString currentUser = env.value(kEnvUser);
     if (!currentUser.isEmpty()) {
+        qCDebug(appLog) << "Compatible current user:" << currentUser;
         params << kParamUser << currentUser;
     } else {
-        qWarning() << "Compatible current user is empty";
+        qCWarning(appLog) << "Compatible current user is empty";
     }
 }
 

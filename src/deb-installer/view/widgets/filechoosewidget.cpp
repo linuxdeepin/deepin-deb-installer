@@ -5,6 +5,7 @@
 #include "filechoosewidget.h"
 #include "view/widgets/choosefilebutton.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <QDebug>
 #include <QDir>
@@ -26,8 +27,10 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent)
     , m_settings("deepin", "deepin-deb-install")
 {
+    qCDebug(appLog) << "Initializing FileChooseWidget...";
     setFocusPolicy(Qt::NoFocus);
     setAcceptDrops(true);
+    qCDebug(appLog) << "FileChooseWidget initialized";
     DPalette palette;
 
     // fileChooseWidget的图标
@@ -141,10 +144,13 @@ void FileChooseWidget::showEvent(QShowEvent *e)
 
 void FileChooseWidget::chooseFiles()
 {
+    qCDebug(appLog) << "Choosing files...";
     QString historyDir = m_settings.value("history_dir").toString();  // 获取保存的文件路径
+    qCDebug(appLog) << "History directory:" << historyDir;
 
     if (historyDir.isEmpty()) {
         historyDir = QDir::homePath();
+        qCDebug(appLog) << "Using default home directory:" << historyDir;
     }
     // 为DFileDialog指定父对象
     DFileDialog dialog(this);  // 获取文件
@@ -156,11 +162,13 @@ void FileChooseWidget::chooseFiles()
     QString currentPackageDir = dialog.directoryUrl().toLocalFile();  // 获取当前打开的文件夹路径
 
     if (mode != QDialog::Accepted) {
+        qCDebug(appLog) << "File dialog cancelled";
         m_chooseFileBtn->setFocus();
         return;
     }
 
     const QStringList selected_files = dialog.selectedFiles();  // 获取选中的文件
+    qCDebug(appLog) << "Selected files:" << selected_files;
     emit packagesSelected(selected_files);                      // 发送信号
 
     // 判断路径信息是否为本地路径
@@ -172,6 +180,7 @@ void FileChooseWidget::chooseFiles()
 
 void FileChooseWidget::themeChanged()
 {
+    qCDebug(appLog) << "Theme changed, updating icons";
     // 更新icon
     QIcon icon_install = QIcon::fromTheme("di_icon_install");
     m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));

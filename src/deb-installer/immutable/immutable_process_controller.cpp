@@ -5,6 +5,7 @@
 #include "immutable_process_controller.h"
 
 #include <QDebug>
+#include "utils/ddlog.h"
 
 #include "process/Pty.h"
 #include "utils/hierarchicalverify.h"
@@ -31,19 +32,24 @@ const Deb::DebPackage::Ptr &ImmutableProcessController::currentPackage() const
 
 bool ImmutableProcessController::isRunning() const
 {
+    qCDebug(appLog) << "immutable process is running";
     if (m_process && QProcess::NotRunning != m_process->state()) {
         return true;
     }
 
+    qCDebug(appLog) << "immutable process is not running";
     return false;
 }
 
 bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package)
 {
+    qCDebug(appLog) << "install immutable package";
     if (!package || !package->isValid() || isRunning()) {
+        qCDebug(appLog) << "invalid package or process is running";
         return false;
     }
     if (!ensureProcess()) {
+        qCDebug(appLog) << "failed to ensure process";
         return false;
     }
 
@@ -62,22 +68,26 @@ bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package)
     // sa: Pty::start()
     QStringList params{kPkexecBin, kInstallProcessorBin, kParamImmutable, kParamInstall, m_currentPackage->filePath()};
     if (m_currentPackage->containsTemplates()) {
+        qCDebug(appLog) << "install config templates";
         params << kParamInstallConfig;
     }
 
     m_process->start(kPkexecBin, params, {}, 0, false);
 
-    qInfo() << "Comaptible install:" << m_process->program();
+    qCInfo(appLog) << "Comaptible install:" << m_process->program();
     Q_EMIT processStart();
     return true;
 }
 
 bool ImmutableProcessController::uninstall(const Deb::DebPackage::Ptr &package)
 {
+    qCDebug(appLog) << "uninstall immutable package";
     if (!package || !package->isValid() || isRunning()) {
+        qCDebug(appLog) << "invalid package or process is running";
         return false;
     }
     if (!ensureProcess()) {
+        qCDebug(appLog) << "failed to ensure process";
         return false;
     }
 
@@ -101,7 +111,7 @@ bool ImmutableProcessController::uninstall(const Deb::DebPackage::Ptr &package)
         0,
         false);
 
-    qInfo() << "Comaptible uninstall:" << m_process->program();
+    qCInfo(appLog) << "Comaptible uninstall:" << m_process->program();
     Q_EMIT processStart();
     return true;
 }
@@ -114,15 +124,20 @@ bool ImmutableProcessController::needTemplates() const
 
 void ImmutableProcessController::writeConfigData(const QString &configData)
 {
+    qCDebug(appLog) << "write config data to immutable process";
     if (m_process) {
         m_process->pty()->write(configData.toUtf8());
         m_process->pty()->write("\n");
+        qCDebug(appLog) << "writed config data:" << configData;
     }
+    qCDebug(appLog) << "write config data to immutable process finished";
 }
 
 bool ImmutableProcessController::ensureProcess()
 {
+    qCDebug(appLog) << "ensure immutable process";
     if (!m_process) {
+        qCDebug(appLog) << "create immutable process";
         m_process = new Konsole::Pty(this);
 
         connect(m_process, &Konsole::Pty::receivedData, this, &ImmutableProcessController::onReadOutput);
@@ -131,10 +146,11 @@ bool ImmutableProcessController::ensureProcess()
                 this,
                 &ImmutableProcessController::onFinished);
     } else if (QProcess::NotRunning != m_process->state()) {
-        qWarning() << "Unable to restart compatible process is still running";
+        qCWarning(appLog) << "Unable to restart compatible process is still running";
         return false;
     }
 
+    qCDebug(appLog) << "ensure immutable process finished";
     return true;
 }
 
@@ -143,6 +159,7 @@ void ImmutableProcessController::onReadOutput(const char *buffer, int length, bo
     Q_UNUSED(isCommandExec);
 
     const QByteArray output = QByteArray::fromRawData(buffer, length);
+    qCDebug(appLog) << "read output from immutable process:" << output;
     Q_EMIT processOutput(output);
 
     // simulate progress, progress = floor(log2(x)) * 10
@@ -156,16 +173,19 @@ void ImmutableProcessController::onReadOutput(const char *buffer, int length, bo
     }
 
     float progress = qMin(9, bitMax) * 10;
+    qCDebug(appLog) << "progress:" << progress;
     Q_EMIT progressChanged(progress);
 }
 
 void ImmutableProcessController::onFinished(int exitCode, int exitStatus)
 {
     const bool success = (Pkg::ExitNoError == exitCode && QProcess::NormalExit == exitStatus);
+    qCDebug(appLog) << "immutable process finished, success:" << success << "exit code:" << exitCode << "exit status:" << exitStatus;
     if (!success) {
         switch (exitCode) {
             case Pkg::ExitAuthError:
                 m_currentPackage->setError(Pkg::ConfigAuthCancel, {});
+                qCDebug(appLog) << "config auth cancel";
                 break;
             default: {  // up to 512 outputs
                 static const int kMaxCheckLen = 512;
@@ -174,6 +194,7 @@ void ImmutableProcessController::onFinished(int exitCode, int exitStatus)
                                                                               m_outputList.at(i))) {
                         // mark hierachical verify failed
                         m_currentPackage->setError(Pkg::DigitalSignatureError, {});
+                        qCDebug(appLog) << "digital signature error";
                     }
                 }
             } break;
@@ -181,6 +202,7 @@ void ImmutableProcessController::onFinished(int exitCode, int exitStatus)
     }
 
     Q_EMIT processFinished(success);
+    qCDebug(appLog) << "immutable process finished";
 
     // release temp data
     m_outputList.clear();

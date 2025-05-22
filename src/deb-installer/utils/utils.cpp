@@ -4,6 +4,7 @@
 
 #include "utils.h"
 #include "qtcompat.h"
+#include "ddlog.h"
 
 #include <mutex>
 
@@ -127,13 +128,13 @@ bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &str
 {
     QDir dir(strfilepath);
     if (!dir.exists()) {
-        qDebug() << "文件夹不存在";
+        qCDebug(appLog) << "文件夹不存在";
         return false;
     }
     dir.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
     int file_count = list.count();
-    qDebug() << "file_count                 " << file_count;
+    qCDebug(appLog) << "file_count                 " << file_count;
     if (file_count <= 0) {
         qDebug() << "当前文件夹为空";
         return false;
@@ -141,7 +142,7 @@ bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &str
     for (int i = 0; i < list.count(); i++) {
         QFileInfo file_info = list.at(i);
         if (file_info.fileName() == strfilename) {
-            qDebug() << "文件路径：  " << file_info.path() << "           "
+            qCDebug(appLog) << "文件路径：  " << file_info.path() << "           "
                      << "文件名：  " << file_info.fileName();
             return true;
         }
@@ -154,14 +155,14 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
     QString verifyfilepath = "/usr/bin/";
     QString verifyfilename = "deepin-deb-verify";
     bool result_verify_file = Return_Digital_Verify(verifyfilepath, verifyfilename);
-    qDebug() << "result_verify_file" << result_verify_file;
+    qCDebug(appLog) << "result_verify_file" << result_verify_file;
     if (result_verify_file) {
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify";
         proc.start(program, {filepath_name});
         proc.waitForFinished(-1);
         const QString output1 = proc.readAllStandardError();
-        qInfo() << "签名校验结果：" << output1;
+        qCInfo(appLog) << "签名校验结果：" << output1;
         for (const auto &item : output1.split('\n')) {
             if (item.toLatin1() == "[INFO] signature verified!") {
                 return VerifySuccess;
@@ -315,7 +316,7 @@ Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
     // that currently manages the remote directory
     if (fsType.startsWith("gvfs") || fsType.startsWith("cifs")
         || device.startsWith("gvfs") || device.startsWith("cifs")) {
-        qWarning() << "Disable open remote file, the devices is" << device;
+        qCWarning(appLog) << "Disable open remote file, the devices is" << device;
         return Pkg::PkgNotInLocal;
     }
 
@@ -328,11 +329,11 @@ Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
     if (!outfile.isOpen()) {
         QFile::FileError error = outfile.error();
         if (error == QFile::FileError::NoError) {
-            qWarning() << "Package has permission but cannot open!";
+            qCWarning(appLog) << "Package has permission but cannot open!";
             return Pkg::PkgNotInLocal;
         }
 
-        qWarning() << "Package has no read permission!";
+        qCWarning(appLog) << "Package has no read permission!";
         return Pkg::PkgNoPermission;
     }
 

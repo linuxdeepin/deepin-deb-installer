@@ -4,6 +4,7 @@
 
 #include "view/widgets/packageselectitem.h"
 #include "model/packageanalyzer.h"
+#include "utils/ddlog.h"
 
 #include <DFontSizeManager>
 #include <DPalette>
@@ -21,6 +22,7 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     , descriptionLabel(new Dtk::Widget::DLabel)
     , checkBox(new QCheckBox)
 {
+    qCDebug(appLog) << "Initializing PackageSelectItem...";
     checkBox->setIcon(QIcon::fromTheme("application-x-deb"));
     checkBox->setIconSize(QSize(32, 32));
 
@@ -57,10 +59,11 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     Dtk::Widget::DFontSizeManager::instance()->bind(descriptionLabel, Dtk::Widget::DFontSizeManager::T8, QFont::Medium);
 
     connect(checkBox, &QCheckBox::stateChanged, this, &PackageSelectItem::checkStatusChanged);
+    qCDebug(appLog) << "PackageSelectItem initialized";
 }
-
 void PackageSelectItem::setDebIR(const DebIr &ir)
 {
+    qCDebug(appLog) << "Setting package info - name:" << ir.appName << "version:" << ir.version << "archMatched:" << ir.archMatched;
     nameLabel->setText(ir.appName);
     versionLabel->setText(ir.version);
     checkBox->setEnabled(ir.archMatched);
@@ -91,9 +94,11 @@ void PackageSelectItem::setDebIR(const DebIr &ir)
         }
         descriptionLabel->setText(displayText);
     } else {
+        qCDebug(appLog) << "Package architecture not matched";
         descriptionLabel->setText(tr("Unmatched package architecture"));
         descriptionLabel->setForegroundRole(Dtk::Gui::DPalette::TextWarning);
     }
+    qCDebug(appLog) << "Package info set completed";
 }
 
 bool PackageSelectItem::isChecked()
@@ -108,5 +113,7 @@ bool PackageSelectItem::isEnabled()
 
 void PackageSelectItem::setChecked(bool checked)
 {
+    qCDebug(appLog) << "Setting checked state:" << checked;
     checkBox->setChecked(checked);
+    qCDebug(appLog) << "Checked state changed";
 }

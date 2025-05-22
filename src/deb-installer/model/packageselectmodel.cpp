@@ -4,6 +4,7 @@
 
 #include "packageselectmodel.h"
 #include "model/packageanalyzer.h"
+#include "utils/ddlog.h"
 
 #include <QStandardItemModel>
 #include <QtConcurrent/QtConcurrent>
@@ -24,6 +25,7 @@ QStandardItemModel *PackageSelectModel::viewModel() const
 
 void PackageSelectModel::appendDdimPackages(const QList<DdimSt> &ddims)
 {
+    qCDebug(appLog) << "Appending" << ddims.size() << "ddim packages";
     for (const auto &ddim : ddims) {
         // 初始化ddim ir包
         DdimIrPackage ddimIrPkg;
@@ -59,22 +61,27 @@ void PackageSelectModel::appendDdimPackages(const QList<DdimSt> &ddims)
             return currentDdimIrPkg.token == ddimIrPkg.token;
         });
         if (ddimIter != ddimIrs.end()) {
+            qCDebug(appLog) << "Updating existing ddim package with token:" << ddimIrPkg.token;
             *ddimIter = ddimIrPkg;
         } else {
+            qCDebug(appLog) << "Adding new ddim package with token:" << ddimIrPkg.token;
             ddimIrs.push_back(ddimIrPkg);
         }
     }
 
     // 汇聚全部数据（依据ddimIrs目前的情况，刷新selectInfos，dependInfos，mustInstallInfos）
     if (collectData()) {
+        qCDebug(appLog) << "Select infos changed, emitting signal";
         emit selectInfosChanged(selectInfos);  // 刷新选择界面
     } else {
+        qCDebug(appLog) << "Select infos unchanged";
         emit selectInfosDoNotHaveChange();  // 告知没有必要刷新选择界面
     }
 }
 
 QList<DebIr> PackageSelectModel::analyzePackageInstallNeeded(const QList<int> &selectIndexes) const
 {
+    qCDebug(appLog) << "Analyzing install needs for" << selectIndexes.size() << "selected packages";
     QList<DebIr> installIrs;
     QList<DebIr> dependIrs;
 
@@ -92,6 +99,7 @@ QList<DebIr> PackageSelectModel::analyzePackageInstallNeeded(const QList<int> &s
     auto result = PackageAnalyzer::instance().bestInstallQueue(installIrs, dependIrs);
     PackageAnalyzer::instance().stopPkgAnalyze();
 
+    qCDebug(appLog) << "Best install queue contains" << result.size() << "packages";
     return result;
 }
 
@@ -111,6 +119,7 @@ void getDebIrs(QList<DebIr> *container, QSet<QString> *md5s, const QList<DdimIrP
 
 bool PackageSelectModel::collectData()
 {
+    qCDebug(appLog) << "Collecting package data from" << ddimIrs.size() << "ddim packages";
     // 1.构建新数据包，由于只需要监控可选项，因此其它两个直接清空
     QList<DebIr> newSelectInfos;
     dependInfos.clear();
@@ -144,5 +153,6 @@ bool PackageSelectModel::collectData()
     // 4.清理老数据
     selectInfos = newSelectInfos;
 
+    qCDebug(appLog) << "Data collection completed, changes detected:" << ret;
     return ret;
 }

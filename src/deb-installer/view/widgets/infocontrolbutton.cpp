@@ -5,6 +5,7 @@
 #include "infocontrolbutton.h"
 #include "InfoCommandLinkButton.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <DStyleHelper>
 #include <DGuiApplicationHelper>
@@ -23,6 +24,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     , m_arrowIcon(new DLabel(this))
     , m_tipsText(new InfoCommandLinkButton("", this))
 {
+    qCDebug(appLog) << "Initializing InfoControlButton with tips - expand:" << expandTips << "shrink:" << shrinkTips;
     // 添加AccessibleName
     m_arrowIcon->setObjectName("arrowIcon");
     m_arrowIcon->setAccessibleName("arrowIcon");
@@ -75,6 +77,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
     // add clicked connection fot expand or shrink
     connect(m_tipsText, &DCommandLinkButton::clicked, this, &InfoControlButton::onMouseRelease);
+    qCDebug(appLog) << "InfoControlButton initialized";
 }
 
 QAbstractButton *InfoControlButton::controlButton()
@@ -101,13 +104,17 @@ void InfoControlButton::keyPressEvent(QKeyEvent *event)
 
 void InfoControlButton::onMouseRelease()
 {
+    qCDebug(appLog) << "Mouse release, current state:" << (m_expand ? "expanded" : "shrunk");
     if (m_expand) {     // 当前已经展开
+        qCDebug(appLog) << "Emitting shrink signal";
         emit shrink();  // 发送收缩信号
     } else {
+        qCDebug(appLog) << "Emitting expand signal";
         emit expand();  // 发送展开信号
     }
 
     m_expand = !m_expand;  // 修改标志
+    qCDebug(appLog) << "New state:" << (m_expand ? "expanded" : "shrunk");
     centralLayout->removeWidget(m_arrowIcon);
     centralLayout->removeWidget(m_tipsText);
     if (!m_expand) {  // 当前是收缩状态
@@ -152,6 +159,7 @@ void InfoControlButton::setShrinkTips(const QString text)
 
 void InfoControlButton::themeChanged()
 {
+    qCDebug(appLog) << "Theme changed, updating icons";
     if (m_expand) {                                            // 当前是展开状态
         QIcon arrow_down = QIcon::fromTheme("di_arrow_down");  // 重新获取收缩的提示
         m_arrowIcon->setPixmap(arrow_down.pixmap(QSize(25, 8)));
@@ -159,4 +167,5 @@ void InfoControlButton::themeChanged()
         QIcon arrow_up = QIcon::fromTheme("di_arrow_up");  // 重新设置展开的提示
         m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
     }
+    qCDebug(appLog) << "Icons updated for current state";
 }

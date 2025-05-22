@@ -5,6 +5,7 @@
 #include "uab_package.h"
 #include "uab_backend.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 namespace Uab {
 
@@ -16,6 +17,7 @@ namespace Uab {
 UabPackage::UabPackage(const UabPkgInfo::Ptr &metaPtr)
     : m_metaPtr(metaPtr)
 {
+    qCDebug(appLog) << "Creating UabPackage for:" << (metaPtr ? metaPtr->id : "null");
     reset();
 }
 
@@ -39,18 +41,24 @@ bool UabPackage::isValid() const
 
 void UabPackage::setDependsStatus(Pkg::DependsStatus status)
 {
+    qCDebug(appLog) << "Setting depends status for package:" << (m_metaPtr ? m_metaPtr->id : "null")
+                 << "from" << m_dependsStatus << "to" << status;
     m_dependsStatus = status;
     switch (m_dependsStatus) {
         case Pkg::DependsBreak:
             m_failReason = QObject::tr("The system has not installed Linglong environment, please install it first");
+            qCWarning(appLog) << "Package dependency broken:" << (m_metaPtr ? m_metaPtr->id : "null");
             break;
         default:
+            qCDebug(appLog) << "Package dependency status OK:" << (m_metaPtr ? m_metaPtr->id : "null");
             break;
     }
 }
 
 void UabPackage::setProcessError(Pkg::ErrorCode err, const QString &errorString)
 {
+    qCWarning(appLog) << "Setting process error for package:" << (m_metaPtr ? m_metaPtr->id : "null")
+                  << "Code:" << err << "Message:" << errorString;
     m_errorCode = err;
     m_processError = errorString;
 }
@@ -124,9 +132,11 @@ UabPackage::Ptr UabPackage::fromFilePath(const QString &filePath)
 void UabPackage::reset()
 {
     if (!m_metaPtr) {
+        qCWarning(appLog) << "Cannot reset package with null meta pointer";
         return;
     }
 
+    qCDebug(appLog) << "Resetting package state:" << m_metaPtr->id;
     m_operationStatus = Pkg::Prepare;
 
     m_installedVersion.clear();
@@ -136,12 +146,15 @@ void UabPackage::reset()
     m_processError.clear();
 
     if (!Uab::UabBackend::instance()->linglongExists()) {
+        qCWarning(appLog) << "Linglong environment not found for package:" << m_metaPtr->id;
         setDependsStatus(Pkg::DependsBreak);
     } else {
+        qCDebug(appLog) << "Linglong environment exists for package:" << m_metaPtr->id;
         setDependsStatus(Pkg::DependsOk);
     }
 
     if (Uab::UabBackend::instance()->backendInited()) {
+        qCDebug(appLog) << "Checking installed version for package:" << m_metaPtr->id;
         auto uabInfoPtr = Uab::UabBackend::instance()->findPackage(m_metaPtr->id);
         if (uabInfoPtr) {
             m_installedVersion = uabInfoPtr->version;
@@ -149,12 +162,21 @@ void UabPackage::reset()
 
             if (ret == 0) {
                 m_installStatus = Pkg::InstalledSameVersion;
+                qCDebug(appLog) << "Package version matches installed:" << m_metaPtr->id << m_metaPtr->version;
             } else if (ret < 0) {
                 m_installStatus = Pkg::InstalledLaterVersion;
+                qCDebug(appLog) << "Package version is older than installed:" << m_metaPtr->id
+                            << m_metaPtr->version << "<" << uabInfoPtr->version;
             } else {
                 m_installStatus = Pkg::InstalledEarlierVersion;
+                qCDebug(appLog) << "Package version is newer than installed:" << m_metaPtr->id
+                            << m_metaPtr->version << ">" << uabInfoPtr->version;
             }
+        } else {
+            qCDebug(appLog) << "No installed version found for package:" << m_metaPtr->id;
         }
+    } else {
+        qCDebug(appLog) << "Backend not initialized, skipping version check for package:" << m_metaPtr->id;
     }
 }
 

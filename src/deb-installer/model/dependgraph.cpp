@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "dependgraph.h"
+#include "utils/ddlog.h"
 
 #include <QSet>
 #include <QDebug>
@@ -28,6 +29,7 @@ void DependGraph::addNode(const QString &packagePath,
                           const QString &packageName,
                           const QList<QApt::DependencyItem> &depends)
 {
+    qCDebug(appLog) << "Adding node:" << packageName << "path:" << packagePath;
     auto node = new DependGraphNode;
     node->packagePath = packagePath;
     node->packageName = packageName;
@@ -93,7 +95,7 @@ void addDepend(QList<QString> &paths, QList<QByteArray> &md5s, QStringList &resu
             md5s.push_back(eachDependNode->md5);
         } else {
             if (isCircularDepend(node, eachDependNode)) {  // 检查循环依赖
-                qWarning() << "Detect circular depend: lhs:" << node->packageName << "rhs:" << eachDependNode->packageName;
+                qCWarning(appLog) << "Circular dependency detected between" << node->packageName << "and" << eachDependNode->packageName;
                 continue;
             }
             addDepend(paths, md5s, result, eachDependNode);
@@ -109,6 +111,7 @@ void addDepend(QList<QString> &paths, QList<QByteArray> &md5s, QStringList &resu
 
 std::pair<QList<QString>, QList<QByteArray>> DependGraph::getBestInstallQueue() const
 {
+    qCDebug(appLog) << "Calculating best install order for" << nodes.size() << "packages";
     QStringList result;
     QList<QString> paths;
     QList<QByteArray> md5s;
@@ -131,6 +134,7 @@ std::pair<QList<QString>, QList<QByteArray>> DependGraph::getBestInstallQueue() 
 
 void DependGraph::reset()
 {
+    qCDebug(appLog) << "Resetting dependency graph with" << nodes.size() << "nodes";
     for (auto &node : nodes) {
         delete node;
     }
@@ -139,12 +143,14 @@ void DependGraph::reset()
 
 void DependGraph::remove(const QByteArray &md5)
 {
+    qCDebug(appLog) << "Removing node with md5:" << md5;
     for (size_t i = 0; i != nodes.size(); ++i) {
         if (nodes[i]->md5 == md5) {
             // 删除包需要更新依赖图(bug 179891)
             removeInGraph(nodes[i]);
             delete nodes[i];
             nodes.erase(nodes.begin() + static_cast<int>(i));
+            qCDebug(appLog) << "Node removed, remaining nodes:" << nodes.size();
             break;
         }
     }

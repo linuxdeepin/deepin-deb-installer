@@ -4,6 +4,7 @@
 
 #include "PackageDependsStatus.h"
 #include "utils/package_defines.h"
+#include "utils/ddlog.h"
 
 PackageDependsStatus PackageDependsStatus::ok()
 {
@@ -29,6 +30,7 @@ PackageDependsStatus PackageDependsStatus::_prohibit(const QString &package)
 PackageDependsStatus::PackageDependsStatus()
     : PackageDependsStatus(Pkg::DependsStatus::DependsOk, QString())
 {
+    qCDebug(appLog) << "Default PackageDependsStatus created";
 }
 
 PackageDependsStatus::PackageDependsStatus(const int status, const QString &package)
@@ -47,8 +49,10 @@ PackageDependsStatus &PackageDependsStatus::operator=(const PackageDependsStatus
 
 PackageDependsStatus PackageDependsStatus::max(const PackageDependsStatus &other)
 {
-    if (other.status > status)
+    if (other.status > status) {
+        qCDebug(appLog) << "Upgrading status from" << status << "to" << other.status << "for package:" << other.package;
         *this = other;
+    }
 
     return *this;
 }
@@ -63,8 +67,10 @@ PackageDependsStatus PackageDependsStatus::maxEq(const PackageDependsStatus &oth
 
 PackageDependsStatus PackageDependsStatus::min(const PackageDependsStatus &other)
 {
-    if (other.status < status)
+    if (other.status < status) {
+        qCDebug(appLog) << "Downgrading status from" << status << "to" << other.status << "for package:" << other.package;
         *this = other;
+    }
 
     return *this;
 }
@@ -79,7 +85,11 @@ PackageDependsStatus PackageDependsStatus::minEq(const PackageDependsStatus &oth
 
 bool PackageDependsStatus::isBreak() const
 {
-    return status == Pkg::DependsStatus::DependsBreak;
+    bool result = status == Pkg::DependsStatus::DependsBreak;
+    if (result) {
+        qCDebug(appLog) << "Package" << package << "has broken dependencies";
+    }
+    return result;
 }
 
 bool PackageDependsStatus::isAuthCancel() const
@@ -99,7 +109,9 @@ bool PackageDependsStatus::isProhibit() const
 
 bool PackageDependsStatus::canInstall() const
 {
-    return status == Pkg::DependsAvailable || status == Pkg::DependsOk;
+    bool result = status == Pkg::DependsAvailable || status == Pkg::DependsOk;
+    qCDebug(appLog) << "Package" << package << (result ? "can" : "cannot") << "be installed";
+    return result;
 }
 
 bool PackageDependsStatus::canInstallCompatible() const

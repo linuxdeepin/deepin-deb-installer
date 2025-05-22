@@ -30,6 +30,7 @@
 #include "kprocess.h"
 
 #include <qfile.h>
+#include <QDebug>
 
 #ifdef Q_OS_WIN
 # include <windows.h>
@@ -344,6 +345,7 @@ void KProcess::start()
 {
     Q_D(KProcess);
 
+    qDebug() << "Starting process:" << d->prog << d->args;
     QProcess::start(d->prog, d->args, d->openMode);
 }
 
@@ -353,6 +355,7 @@ int KProcess::execute(int msecs)
     if (!waitForFinished(msecs)) {
         kill();
         waitForFinished(-1);
+        qDebug() << "kill process, return -2";
         return -2;
     }
     return (exitStatus() == QProcess::NormalExit) ? exitCode() : -1;

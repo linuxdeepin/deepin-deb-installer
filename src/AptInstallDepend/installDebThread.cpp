@@ -33,6 +33,7 @@ static const QString kDebConfDisable = "noninteractive";
 
 InstallDebThread::InstallDebThread()
 {
+    qDebug() << "Initializing InstallDebThread";
     m_proc = new KProcess;
 
     // Note: 目前 deepin-deb-installer 使用 KPty 捕获所有通道进行设置，因此旧版的
@@ -47,6 +48,7 @@ InstallDebThread::InstallDebThread()
 
 InstallDebThread::~InstallDebThread()
 {
+    qDebug() << "Destroying InstallDebThread";
     if (m_proc)
         delete m_proc;
 }
@@ -54,6 +56,7 @@ InstallDebThread::~InstallDebThread()
 void InstallDebThread::setParam(const QStringList &arguments)
 {
     if (!m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is not empty, return";
         return;
     }
 
@@ -84,20 +87,27 @@ void InstallDebThread::setParam(const QStringList &arguments)
     }
     if (m_parser.isSet(rootfsOpt)) {
         m_rootfs = m_parser.value(rootfsOpt);
+        qDebug() << "isSet rootfsOpt, m_rootfs:" << m_rootfs;
     }
     if (m_parser.isSet(userOpt)) {
         m_user = m_parser.value(userOpt);
+        qDebug() << "isSet userOpt, m_user:" << m_user;
     }
 
     m_listParam = m_parser.positionalArguments();
+    qDebug() << "Set param end, m_listParam:" << m_listParam;
 }
 
 void InstallDebThread::getDescription(const QString &debPath)
 {
+    qDebug() << "Get description:" << debPath;
+
     // system() 存在可控命令参数注入漏洞，即使拼接也存在命令分隔符（特殊字符）机制，因此更换方式去执行命令
     QProcess process;
     process.start("dpkg", {"-e", debPath, TEMPLATE_DIR});
     process.waitForFinished(-1);
+
+    qDebug() << "Exec finished:" << "dpkg -e " << debPath << " " << TEMPLATE_DIR;
 
     QFile file;
     file.setFileName(TEMPLATE_PATH);
@@ -115,13 +125,17 @@ void InstallDebThread::getDescription(const QString &debPath)
         }
 
         file.close();
+    } else {
+        qDebug() << "Open file error:" << file.errorString();
     }
 }
 
 void InstallDebThread::onReadoutput()
 {
+    qDebug() << "onReadoutput";
+
     QString tmp = m_proc->readAllStandardOutput().data();
-    qDebug() << tmp;
+    qDebug() << "read output tmp:" << tmp;
 
     foreach (QString eachData, m_listDescribeData) {
         if (tmp.contains(eachData)) {
@@ -134,6 +148,7 @@ void InstallDebThread::onReadoutput()
                 m_proc->write(str.toLatin1().data());
 
                 m_proc->waitForFinished(1500);
+                qDebug() << "break, finished write input:" << str;
 
                 break;
             }
@@ -143,26 +158,36 @@ void InstallDebThread::onReadoutput()
 
 void InstallDebThread::onFinished(int num, QProcess::ExitStatus exitStatus)
 {
+    qDebug() << "onFinished:" << num << exitStatus;
     m_resultFlag = num;
 }
 
 void InstallDebThread::run()
 {
+    qDebug() << "thread enter run >>";
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
 
     if (m_cmds.testFlag(InstallWine)) {
+        qDebug() << "cmd test flag: InstallWine";   
         installWine();
     } else if (m_cmds.testFlag(Compatible)) {
+        qDebug() << "cmd test flag: Compatible";
         compatibleProcess();
     } else if (m_cmds.testFlag(Immutable)) {
+        qDebug() << "cmd test flag: Immutable";
         immutableProcess();
     } else if (m_cmds.testFlag(InstallConfig)) {
+        qDebug() << "cmd test flag: InstallConfig";
         // InstallConfig must last, Compatible and Immutable maybe set InstallConfig too.
         installConfig();
     } else if (m_cmds.testFlag(LinglongUab)) {
+        qDebug() << "cmd test flag: LinglongUab";
         uabProcessCli();
+    } else {
+        qDebug() << "other unknow cmd:" << m_cmds;
     }
 }
 
@@ -171,12 +196,14 @@ void InstallDebThread::run()
  */
 void InstallDebThread::installWine()
 {
+    qDebug() << "InstallWine";
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
 
     // Note: Notify the front-end installation to start, don't remove it.
-    qInfo() << "StartInstallDeepinwine";
+    qDebug() << "StartInstallDeepinwine";
 
     // On immutable system: --fix-missing not support, apt command will transport to deepin-immutable-ctl
     system("echo 'libpam-runtime libpam-runtime/override boolean false' | debconf-set-selections");
@@ -185,6 +212,8 @@ void InstallDebThread::installWine()
     m_proc->start();
     m_proc->waitForFinished(-1);
     m_proc->close();
+
+    qDebug() << "Exec finished:" << "apt-get install " << m_listParam << "-y";
 }
 
 /**
@@ -193,13 +222,16 @@ void InstallDebThread::installWine()
  */
 void InstallDebThread::installConfig()
 {
+    qDebug() << "InstallConfig";
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
 
     QString debPath = m_listParam.first();
     const QFileInfo info(debPath);
     const QFile debFile(debPath);
+    qDebug() << "debPath:" << debPath;
 
     if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
         debPath.contains("`")) {  // 过滤反引号,修复中危漏洞，bug 115739，处理命令连接符，命令注入导致无法软链接成功
@@ -207,7 +239,7 @@ void InstallDebThread::installConfig()
     }
 
     if (debFile.exists() && info.isFile() && info.suffix().toLower() == "deb") {  // 大小写不敏感的判断是否为deb后缀
-        qInfo() << "StartInstallAptConfig";
+        qDebug() << "StartInstallAptConfig";
 
         getDescription(debPath);
 
@@ -218,13 +250,18 @@ void InstallDebThread::installConfig()
         m_proc->start();
         m_proc->waitForFinished(-1);
 
+        qDebug() << "Exec finished:" << "sudo dpkg -i " << debPath;
+
         QDir filePath(TEMPLATE_DIR);
         if (filePath.exists()) {
+            qDebug() << "remove dir:" << TEMPLATE_DIR;
             filePath.removeRecursively();
         }
 
         m_proc->close();
+        qDebug() << "EndInstallAptConfig";
     }
+    qDebug() << "EndInstallConfig";
 }
 
 /**
@@ -232,7 +269,9 @@ void InstallDebThread::installConfig()
  */
 void InstallDebThread::compatibleProcess()
 {
+    qDebug() << "CompatibleProcess";
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
 
@@ -241,6 +280,7 @@ void InstallDebThread::compatibleProcess()
     if (m_cmds.testFlag(Install)) {
         // only one package support
         QString debPath = m_listParam.first();
+        qDebug() << "flag Install, debPath:" << debPath;
 
         if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
             debPath.contains("`")) {
@@ -248,6 +288,7 @@ void InstallDebThread::compatibleProcess()
         }
 
         if (m_cmds.testFlag(InstallConfig)) {
+            qDebug() << "flag InstallConfig";
             getDescription(debPath);
         }
 
@@ -257,20 +298,23 @@ void InstallDebThread::compatibleProcess()
     } else if (m_cmds.testFlag(Remove)) {
         // e.g.: deepin-compatible-ctl app --json remove [package name]
         params << kCompApp << kCompJsonFormat << kRemove << m_listParam.first();
-
+        qDebug() << "flag Remove, package name:" << m_listParam.first();
     } else if (m_cmds.testFlag(AppCheck)) {
         // e.g.: deepin-compatible-ctl app --json check [package name]
         params << kCompApp << kCompJsonFormat << kCompCheck << m_listParam.first();
-
+        qDebug() << "flag AppCheck, package name:" << m_listParam.first();
     } else {
+        qDebug() << "return, other unknow cmd:" << m_cmds;
         return;
     }
 
     if (!m_rootfs.isEmpty()) {
+        qDebug() << "flag Compatible, rootfs name:" << m_rootfs;
         params << kCompRootfsName << m_rootfs;
     }
 
     if (!m_user.isEmpty()) {
+        qDebug() << "flag Compatible, current user:" << m_user;
         auto env = QProcessEnvironment::systemEnvironment();
         env.insert("SUDO_USER", m_user);
         m_proc->setProcessEnvironment(env);
@@ -283,17 +327,25 @@ void InstallDebThread::compatibleProcess()
     m_proc->waitForFinished(-1);
     m_proc->close();
 
+    qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
+
     QDir filePath(TEMPLATE_DIR);
     if (filePath.exists()) {
+        qDebug() << "remove dir:" << TEMPLATE_DIR;
         filePath.removeRecursively();
     }
+    qDebug() << "EndCompatibleProcess";
 }
 
 bool newImmutableVersion() {
+    qDebug() << "Check new immutable version";
+
     QProcess process;
     process.start("dpkg-query", {"-W", "-f='${Version}'", "deepin-immutable-ctl"});
     process.waitForFinished();
     QString versionStr = process.readAllStandardOutput();
+
+    qDebug() << "deepin-immutable-ctl version:" << versionStr;
 
     QVersionNumber version = QVersionNumber::fromString(versionStr.remove('\''));
 
@@ -305,7 +357,10 @@ bool newImmutableVersion() {
  */
 void InstallDebThread::immutableProcess()
 {
+    qDebug() << "ImmutableProcess";
+
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
     // for immutable system
@@ -319,6 +374,7 @@ void InstallDebThread::immutableProcess()
         // e.g.: deepin-compatible app install [deb file]
         // only one package support
         QString debPath = m_listParam.first();
+        qDebug() << "flag Install, debPath:" << debPath;
 
         if (debPath.contains(" ") || debPath.contains("&") || debPath.contains(";") || debPath.contains("|") ||
             debPath.contains("`")) {
@@ -327,9 +383,11 @@ void InstallDebThread::immutableProcess()
 
         if (m_cmds.testFlag(InstallConfig)) {
             getDescription(debPath);
+            qDebug() << "flag InstallConfig, get description";
         } else {
             // If current pacakge no DebConf config, disable DebConf
             m_proc->setEnv(kDebConfEnv, kDebConfDisable);
+            qDebug() << "other flag, set Env";
         }
 
         // Note: deepin-immutable-ctl actually use apt to install/uninstall. (params transport to deepin-immutable-ctl)
@@ -338,6 +396,7 @@ void InstallDebThread::immutableProcess()
 
         // FIXME: temporary code, check if current Immutable System need --allow-downgrades
         if (newImmutableVersion()) {
+            qDebug() << "new immutable version, add --allow-downgrades";
             params << kImmuAllowDowngrades;
         }
 
@@ -345,12 +404,16 @@ void InstallDebThread::immutableProcess()
         // e.g.: apt remove [package name] -y
         params << kRemove << m_listParam.first() << kImmuYes;
 
+        qDebug() << "flag Remove, package name:" << m_listParam.first();
+
         // Disable DebConf while remove package
         m_proc->setEnv(kDebConfEnv, kDebConfDisable);
 
     } else {
+        qDebug() << "return, other unknow cmd:" << m_cmds;
         return;
     }
+    qDebug() << "params:" << params;
 
     // enable wait another process release dpkg lock
     m_proc->setEnv(kImmuEnvEnableWait, "1");
@@ -361,10 +424,14 @@ void InstallDebThread::immutableProcess()
     m_proc->waitForFinished(-1);
     m_proc->close();
 
+    qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
+
     QDir filePath(TEMPLATE_DIR);
     if (filePath.exists()) {
+        qDebug() << "remove dir:" << TEMPLATE_DIR;
         filePath.removeRecursively();
     }
+    qDebug() << "EndImmutableProcess";
 }
 
 /**
@@ -375,7 +442,10 @@ void InstallDebThread::immutableProcess()
  */
 void InstallDebThread::uabProcessCli()
 {
+    qDebug() << "UabProcessCli";
+
     if (m_listParam.isEmpty()) {
+        qDebug() << "m_listParam is empty, return";
         return;
     }
     // The Linglong params
@@ -391,12 +461,13 @@ void InstallDebThread::uabProcessCli()
     if (m_cmds.testFlag(Install)) {
         // e.g.: ll-cli install --json --force -y [uab file]
         params << kUabInstall << kUabJson << kUabForce << kUabPass << m_listParam.first();
-
+        qDebug() << "flag Install, uabPath:" << m_listParam.first();
     } else if (m_cmds.testFlag(Remove)) {
         // e.g.: ll-cli uninstall --json [id/version]
         params << kUabUninstall << kUabJson << m_listParam.first();
-
+        qDebug() << "flag Remove, package name:" << m_listParam.first();
     } else {
+        qDebug() << "return, other unknow cmd:" << m_cmds;
         return;
     }
 
@@ -406,6 +477,8 @@ void InstallDebThread::uabProcessCli()
     m_proc->start();
     m_proc->waitForFinished(-1);
     m_proc->close();
+
+    qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
 }
 
 /**
@@ -416,9 +489,9 @@ void InstallDebThread::uabProcessCli()
  */
 QString InstallDebThread::SymbolicLink(const QString &previousName, const QString &packageName)
 {
+    qDebug() << "SymbolicLink";
     if (!mkTempDir()) {
-        qWarning() << "InstallDebThread:"
-                   << "Failed to create temporary folder";
+        qWarning() << "Failed to create temporary folder, return:" << previousName;
         return previousName;
     }
     return link(previousName, packageName);
@@ -430,10 +503,13 @@ QString InstallDebThread::SymbolicLink(const QString &previousName, const QStrin
  */
 bool InstallDebThread::mkTempDir()
 {
+    qDebug() << "mkTempDir";
     QDir tempPath(m_tempLinkDir);
     if (!tempPath.exists()) {
+        qDebug() << "Create temporary folder:" << m_tempLinkDir;
         return tempPath.mkdir(m_tempLinkDir);
     } else {
+        qDebug() << "Temporary folder already exists:" << m_tempLinkDir;
         return true;
     }
 }
@@ -444,10 +520,13 @@ bool InstallDebThread::mkTempDir()
  */
 bool InstallDebThread::rmTempDir()
 {
+    qDebug() << "rmTempDir";
     QDir tempPath(m_tempLinkDir);
     if (tempPath.exists()) {
+        qDebug() << "Remove temporary folder:" << m_tempLinkDir;
         return tempPath.removeRecursively();
     } else {
+        qDebug() << "Temporary folder does not exist:" << m_tempLinkDir;
         return true;
     }
 }
@@ -477,6 +556,7 @@ QString InstallDebThread::link(const QString &linkPath, const QString &packageNa
                        << tempName;
             count++;
         } else {
+            qDebug() << "break, tempName:" << tempName;
             break;
         }
     }

@@ -5,6 +5,7 @@
 #include "packageanalyzer.h"
 #include "singleInstallerApplication.h"
 #include "compatible/compatible_backend.h"
+#include "utils/ddlog.h"
 
 #include <QtDebug>
 #include <QThread>
@@ -42,9 +43,11 @@ void PackageAnalyzer::setUiExit()
 void PackageAnalyzer::initBackend()
 {
     if (backend != nullptr) {
+        qCDebug(appLog) << "Backend already initialized";
         return;
     }
 
+    qCInfo(appLog) << "Initializing backend...";
     emit runBackend(true);
     backendInInit = true;
 
@@ -65,6 +68,7 @@ void PackageAnalyzer::initBackend()
     SingleInstallerApplication::BackendIsRunningInit = false;
 
     if (!initSuccess) {
+        qCCritical(appLog) << "Backend initialization failed:" << backend->initErrorMessage();
         qFatal("%s", backend->initErrorMessage().toStdString().c_str());
     }
 
@@ -84,7 +88,9 @@ void PackageAnalyzer::initBackend()
 
 bool PackageAnalyzer::isBackendReady()
 {
-    return backend.get() != nullptr;
+    bool ready = backend.get() != nullptr;
+    qCDebug(appLog) << "Backend ready status:" << ready;
+    return ready;
 }
 
 QApt::Backend *PackageAnalyzer::backendPtr()
@@ -132,6 +138,7 @@ QPair<Pkg::PackageInstallStatus, QString> PackageAnalyzer::packageInstallStatus(
 QApt::Package *
 PackageAnalyzer::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation) const
 {
+    qCDebug(appLog) << "Looking for package:" << packageName << "arch:" << sysArch << "annotation:" << annotation;
     QApt::Package *package =
         backend->package(packageName + resolvMultiArchAnnotation(annotation, sysArch, QApt::InvalidMultiArchType));
 
@@ -289,7 +296,7 @@ QList<DebIr> PackageAnalyzer::analyzeDebFiles(const QFileInfoList &infos,
     QList<DebIr> irs;
     QList<int> appNameNeedRemove;
     for (int i = 0; i != infos.size(); ++i) {
-        qWarning() << __FUNCTION__ << "analyze deb file:" << infos[i].absoluteFilePath();
+        qCDebug(appLog) << "Analyzing deb file:" << infos[i].absoluteFilePath();
 
         if (uiExited) {
             break;
@@ -398,7 +405,7 @@ QList<DebIr> PackageAnalyzer::bestInstallQueue(const QList<DebIr> &installIrs, c
     // 1.检查依赖是否已就绪，将未就绪的项抽取出来
     QList<QApt::DependencyItem> installDeps;  // 记录每一个安装项的依赖情况
     for (const auto &installIr : installIrs) {
-        qWarning() << __FUNCTION__ << "analyze deb file:" << installIr.filePath;
+        qCDebug(appLog) << "Analyzing install package:" << installIr.filePath;
 
         if (uiExited) {
             return QList<DebIr>();

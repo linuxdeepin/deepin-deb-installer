@@ -8,6 +8,7 @@
 #include "singleInstallerApplication.h"
 #include "environments.h"
 #include "utils/eventlogutils.h"
+#include "utils/ddlog.h"
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -51,18 +52,27 @@ int main(int argc, char *argv[])
 
     qputenv("DTK_USE_SEMAPHORE_SINGLEINSTANCE", "1");
 
-    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin"))
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+        qCDebug(appLog) << "Setting XDG_CURRENT_DESKTOP to Deepin";
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+    }
 
+    // set log format and register console and file appenders
+    const QString logFormat = "%{time}{yy-MM-ddTHH:mm:ss.zzz} [%{type:-7}] [%{category}] <%{function}:%{line}> %{message}";
+    DLogManager::setLogFormat(logFormat);
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
     QAccessible::installFactory(accessibleFactory);  // 自动化测试
 
-    qInfo() << qApp->applicationName() << "started, version = " << qApp->applicationVersion();
+    qCInfo(appLog) << "Application started - name:" << qApp->applicationName()
+                     << "version:" << qApp->applicationVersion();
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
+    qCDebug(appLog) << "Initializing DBus connection";
+
     if (app.parseCmdLine()) {
+        qCDebug(appLog) << "Command line arguments parsed successfully";
         app.activateWindow();
         // 埋点记录启动数据
         QJsonObject objStartEvent{
@@ -74,9 +84,12 @@ int main(int argc, char *argv[])
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
         return app.exec();
     } else {
-        qDebug() << "argument_parser.parseArguments()";
+        qCWarning(appLog) << "Failed to parse command line arguments";
         // 解析参数失败，１００ｍｓ退出进程
-        QTimer::singleShot(100, [&]() { app.quit(); });
+        QTimer::singleShot(100, [&]() {
+            qCDebug(appLog) << "Exiting application due to argument parsing failure";
+            app.quit();
+        });
         return app.exec();
-    }
+}
 }

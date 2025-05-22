@@ -7,6 +7,8 @@
 #include "PackageDependsStatus.h"
 #include "AddPackageThread.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
+
 #include "utils/deb_package.h"
 #include "model/deblistmodel.h"
 #include "model/dependgraph.h"
@@ -303,6 +305,7 @@ QString PackagesManager::checkPackageValid(const QStringList &package_path)
 PackagesManager::PackagesManager(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(appLog) << "PackagesManager initialized";
     m_installWineThread = new DealDependThread();
     connect(m_installWineThread, &DealDependThread::signalDependResult, this, &PackagesManager::slotDealDependResult);
     connect(m_installWineThread, &DealDependThread::signalEnableCloseButton, this, &PackagesManager::signalEnableCloseButton);
@@ -339,7 +342,7 @@ bool PackagesManager::isArchError(const int idx)
 
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
-        qWarning() << "Failed to load libqapt backend";
+        qCCritical(appLog) << "Failed to load libqapt backend in isArchErrorQstring";
         return true;
     }
     DebFile deb(m_preparedPackages[idx]);
@@ -361,7 +364,7 @@ bool PackagesManager::isArchErrorQstring(const QString &package_name)
 {
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
-        qWarning() << "Failed to load libqapt backend";
+        qCCritical(appLog) << "Failed to load libqapt backend in isArchError";
         return true;
     }
     DebFile deb(package_name);
@@ -394,14 +397,14 @@ const ConflictResult PackagesManager::packageConflictStat(const int index)
 const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch, Package *package)
 {
     if (!package) {
-        qWarning() << "invalid package pointer";
+        qCWarning(appLog) << "Invalid package pointer in isConflictSatisfy";
         return ConflictResult::err("");
     }
 
     const QString &packageName = package->name();
     const auto ret_installed = isInstalledConflict(packageName, package->version(), package->architecture());
     if (!ret_installed.is_ok()) {
-        qWarning() << packageName << "check installed conflict not satisfied";
+        qCWarning(appLog) << "Installed conflict check failed for package:" << packageName;
         return ret_installed;
     }
 
@@ -771,7 +774,7 @@ int PackagesManager::packageInstallStatus(const int index)
     const QString packageArch = debFile.architecture();
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
-        qWarning() << "Failed to load libqapt backend";
+        qCCritical(appLog) << "Failed to load libqapt backend";
         return Pkg::PackageInstallStatus::NotInstalled;
     }
     Package *package = packageWithArch(packageName, packageArch);
@@ -908,7 +911,7 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         dependsStatus.status = Pkg::DependsStatus::Prohibit;
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
-        qWarning() << debFile.packageName() << "In the blacklist";
+        qCWarning(appLog) << "Package in blacklist:" << debFile.packageName();
         return dependsStatus;
     }
 
@@ -925,15 +928,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     bool isWineApplication = false;
 
     if (!debConflitsResult.is_ok()) {
-        qWarning() << "PackagesManager:"
-                   << "depends break because conflict" << debFile.packageName();
+        qCWarning(appLog) << "Dependency conflict for package:" << debFile.packageName()
+                            << "Conflicting package:" << debConflitsResult.unwrap();
         dependsStatus.package = debConflitsResult.unwrap();
         dependsStatus.status = Pkg::DependsStatus::DependsBreak;
     } else {
         const ConflictResult localConflictsResult = isInstalledConflict(debFile.packageName(), debFile.version(), architecture);
         if (!localConflictsResult.is_ok()) {
-            qWarning() << "PackagesManager:"
-                       << "depends break because conflict with local package" << debFile.packageName();
+            qCWarning(appLog) << "Local package conflict for:" << debFile.packageName()
+                              << "Conflicting package:" << localConflictsResult.unwrap();
             dependsStatus.package = localConflictsResult.unwrap();
             dependsStatus.status = Pkg::DependsStatus::DependsBreak;
         } else {
@@ -1236,12 +1239,12 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set,
         QString packageInfo = QString("%1 (%2)").arg(choosed_name).arg(package->version());
         QVector<QString> infos;
         if (!m_unCheckedOrDepends.isEmpty()) {
-            for (auto dInfo : m_unCheckedOrDepends) {  // 遍历或依赖容器中容器中是否存在当前依赖
-                if (!dInfo.contains(package->name())) {
+            for (auto deInfo : m_unCheckedOrDepends) {  // 遍历或依赖容器中容器中是否存在当前依赖
+                if (!deInfo.contains(package->name())) {
                     continue;
                 } else {
-                    infos = dInfo;
-                    m_unCheckedOrDepends.removeOne(dInfo);
+                    infos = deInfo;
+                    m_unCheckedOrDepends.removeOne(deInfo);
                 }
             }
         }

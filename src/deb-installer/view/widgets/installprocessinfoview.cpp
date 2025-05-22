@@ -6,6 +6,7 @@
 #include "droundbgframe.h"
 #include "utils/utils.h"
 #include "ShowInstallInfoTextEdit.h"
+#include "utils/ddlog.h"
 
 #include <QVBoxLayout>
 #include <QScroller>
@@ -16,7 +17,9 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
     : QWidget(parent)
     , m_editor(new ShowInstallInfoTextEdit(this))  // 修改为自写控件
 {
+    qCDebug(appLog) << "Initializing InstallProcessInfoView with size:" << w << "x" << h;
     initUI(w, h);
+    qCDebug(appLog) << "InstallProcessInfoView initialized";
 
     // 数据更新后，直接跳转到最后一行
     connect(m_editor, &QTextEdit::textChanged, this, &InstallProcessInfoView::slotMoveCursorToEnd);
@@ -94,6 +97,7 @@ void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
 
 void InstallProcessInfoView::appendText(QString text)
 {
+    qCDebug(appLog) << "Appending text:" << text;
     m_editor->append(text);
 }
 
@@ -102,11 +106,13 @@ InstallProcessInfoView::~InstallProcessInfoView() {}
 void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
+    qCDebug(appLog) << "Updating colors for theme change";
 
     DPalette pa = m_editor->palette();
 
     // 获取当前的主题
     DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    qCDebug(appLog) << "Current theme type:" << themeType;
 
     if (themeType == DGuiApplicationHelper::LightType) {  // 当前是浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));
@@ -119,6 +125,7 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
     pa.setColor(DPalette::HighlightedText, QColor(Qt::white));
     pa.setColor(DPalette::Highlight, DGuiApplicationHelper::instance()->applicationPalette().highlight().color());
     m_editor->setPalette(pa);
+    qCDebug(appLog) << "Colors updated for theme";
 }
 
 /**
@@ -127,6 +134,7 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
  */
 void InstallProcessInfoView::clearText()
 {
+    qCDebug(appLog) << "Clearing text content";
     m_editor->clear();
 }
 

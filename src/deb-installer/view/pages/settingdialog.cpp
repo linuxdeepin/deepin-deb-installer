@@ -4,6 +4,7 @@
 
 #include "settingdialog.h"
 #include "utils/hierarchicalverify.h"
+#include "utils/ddlog.h"
 
 #include <DSettingsWidgetFactory>
 #include <DStandardPaths>
@@ -93,7 +94,9 @@ void ProceedLabel::updateText()
 SettingDialog::SettingDialog(QWidget *parent)
     : DSettingsDialog(parent)
 {
+    qCDebug(appLog) << "Initializing SettingDialog...";
     init();
+    qCDebug(appLog) << "SettingDialog initialized";
 }
 
 SettingDialog::~SettingDialog()
@@ -132,6 +135,7 @@ void SettingDialog::init()
         m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
     });
     m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
+    qCDebug(appLog) << "Initial digital verify setting:" << m_isDigital;
 
     // 分级管控不同状态下切换显示信息，初始化后绑定信号
     switchHierarchicalNotify(HierarchicalVerify::instance()->isValid());
@@ -169,6 +173,7 @@ void SettingDialog::showEvent(QShowEvent *e)
  */
 void SettingDialog::switchHierarchicalNotify(bool valid)
 {
+    qCDebug(appLog) << "Switching hierarchical notify, valid:" << valid;
     setGroupVisible("basic.develop_digital_verify", !valid);
     setResetVisible(!valid);
     setGroupVisible("basic.hierarachical_verify", valid);

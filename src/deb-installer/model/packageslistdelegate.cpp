@@ -5,6 +5,7 @@
 #include "packageslistdelegate.h"
 #include "model/deblistmodel.h"
 #include "utils/utils.h"
+#include "utils/ddlog.h"
 
 #include <QPixmap>
 #include <QPainterPath>
@@ -80,10 +81,10 @@ void PackagesListDelegate::refreshDebItemStatus(
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (!index.isValid()) {  // 判断传入的index是否有效
+        qCDebug(appLog) << "Invalid index, skipping paint";
         DStyledItemDelegate::paint(painter, option, index);
         return;
     }
-
     auto themeType = DGuiApplicationHelper::instance()->themeType();
 
     painter->save();
@@ -192,6 +193,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // install status
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();  // 获取包的状态
+    qCDebug(appLog) << "Package operation status:" << operate_stat;
     if (operate_stat != Pkg::PackageOperationStatus::Prepare) {
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 20);
@@ -246,12 +248,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     if (operate_stat == Pkg::PackageOperationStatus::Failed) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+        qCWarning(appLog) << "Package operation failed:" << info_str;
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
     // not contains prohibit error
     if (dependsStat == Pkg::DependsStatus::DependsBreak || dependsStat == Pkg::DependsStatus::DependsAuthCancel ||
         dependsStat == Pkg::DependsStatus::DependsVerifyFailed || dependsStat == Pkg::DependsStatus::ArchBreak ||
         dependsStat == Pkg::CompatibleIntalled || dependsStat == Pkg::CompatibleNotInstalled) {
+        qCWarning(appLog) << "Dependency issue detected, status:" << dependsStat;
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
@@ -287,6 +291,7 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(index);
     Q_UNUSED(option);
 
+    qCDebug(appLog) << "Item height:" << m_itemHeight;
     QSize itemSize = QSize(0, m_itemHeight);  // 设置Item的高度
     return itemSize;
 }

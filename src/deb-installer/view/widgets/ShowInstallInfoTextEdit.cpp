@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ShowInstallInfoTextEdit.h"
+#include "utils/ddlog.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocumentFragment>
@@ -34,8 +35,10 @@ void ShowInstallInfoTextEdit::onSelectionArea()
 
 bool ShowInstallInfoTextEdit::event(QEvent *event)
 {
-    if (event->type() == QEvent::Gesture)
+    if (event->type() == QEvent::Gesture) {
+        qCDebug(appLog) << "Gesture event received";
         gestureEvent(static_cast<QGestureEvent *>(event));
+    }
     return QTextEdit::event(event);
 }
 
@@ -56,11 +59,13 @@ void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
     // 单指点击函数
     switch (tap->state()) {         // 根据点击的状态进行不同的操作
         case Qt::GestureStarted: {  // 开始点击，记录时间。时间不同 进行不同的操作
+            qCDebug(appLog) << "Tap gesture started";
             m_gestureAction = GA_tap;
             m_tapBeginTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
             break;
         }
         case Qt::GestureUpdated: {
+            qCDebug(appLog) << "Tap gesture updated - switching to slide mode";
             m_gestureAction = GA_slide;  // 触控滑动
             break;
         }
@@ -68,18 +73,22 @@ void ShowInstallInfoTextEdit::tapGestureTriggered(QTapGesture *tap)
             // 根据时间长短区分轻触滑动
             qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
             if (timeSpace < TAP_MOVE_DELAY || m_slideContinue) {  // 普通滑动
+                qCDebug(appLog) << "Tap gesture canceled - continuing slide";
                 m_slideContinue = false;
                 m_gestureAction = GA_slide;
             } else {  // 选中滑动
+                qCDebug(appLog) << "Tap gesture canceled - resetting";
                 m_gestureAction = GA_null;
             }
             break;
         }
         case Qt::GestureFinished: {
+            qCDebug(appLog) << "Tap gesture finished";
             m_gestureAction = GA_null;
             break;
         }
         default: {
+            qCWarning(appLog) << "Unknown tap gesture state";
             Q_ASSERT(false);
             break;
         }
@@ -115,6 +124,7 @@ void ShowInstallInfoTextEdit::slideGesture(qreal diff)
     static qreal delta = 0.0;
     int step = static_cast<int>(diff + delta);
     delta = diff + delta - step;
+    qCDebug(appLog) << "Sliding with diff:" << diff << "step:" << step;
     verticalScrollBar()->setValue(verticalScrollBar()->value() + step);  // 移动滚动条
 }
 
@@ -176,14 +186,18 @@ void ShowInstallInfoTextEdit::mouseMoveEvent(QMouseEvent *e)
 
 FlashTween::FlashTween()
 {
+    qCDebug(appLog) << "Initializing FlashTween";
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &FlashTween::__run);
 }
 
 void FlashTween::start(qreal t, qreal b, qreal c, qreal d, FunSlideInertial f)
 {
-    if (c == 0.0 || d == 0.0)
+    if (c == 0.0 || d == 0.0) {
+        qCDebug(appLog) << "FlashTween start ignored - zero change or duration";
         return;
+    }
+    qCDebug(appLog) << "Starting FlashTween - change:" << c << "duration:" << d;
     m_currentTime = t;
     m_beginValue = b;
     m_changeValue = c;
@@ -206,6 +220,7 @@ void FlashTween::__run()
     if (m_currentTime < m_durationTime) {
         m_currentTime += CELL_TIME;
     } else {
+        qCDebug(appLog) << "FlashTween completed";
         m_timer->stop();
     }
 }
