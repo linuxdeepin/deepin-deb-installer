@@ -424,8 +424,18 @@ void DebListModel::slotUninstallPackage(const int index)
     // 卸载结束之后 删除指针
     connect(transsaction, &Transaction::finished, transsaction, &Transaction::deleteLater);
 
-    m_currentTransaction = transsaction;   //保存trans指针
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QVariantMap map;
 
+    m_currentTransaction = transsaction;   //保存trans指针
+    // 获取当前真实用户信息
+    QString currentUser = env.value("USER");
+    // 如果SUDO_USER存在，说明当前是通过sudo启动的
+    QString realUser = env.value("SUDO_USER");
+    if (realUser.isEmpty())
+        realUser = currentUser;
+    map.insert("SUDO_USER", realUser);
+    transsaction->setEnvVariable(map);
     transsaction->run();                   //开始卸载
 }
 
@@ -895,6 +905,18 @@ void DebListModel::installDebs()
     connect(transaction, &Transaction::errorOccurred, this, &DebListModel::slotTransactionErrorOccurred);
 
     m_currentTransaction = transaction;
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QVariantMap map;
+
+    // 获取当前真实用户信息
+    QString currentUser = env.value("USER");
+    // 如果SUDO_USER存在，说明当前是通过sudo启动的
+    QString realUser = env.value("SUDO_USER");
+    if (realUser.isEmpty())
+        realUser = currentUser;
+    map.insert("SUDO_USER", realUser);
+    m_currentTransaction->setEnvVariable(map);
 
     m_currentTransaction->run();
 }
