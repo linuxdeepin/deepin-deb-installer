@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.19) unstable; urgency=medium
+
+  * Update version to 6.5.19.
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Tue, 17 Jun 2025 17:35:26 +0800
+
 deepin-deb-installer (6.5.18) unstable; urgency=medium
 
   *  Update version to 6.5.18.
