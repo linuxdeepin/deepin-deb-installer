@@ -557,6 +557,21 @@ bool DebListModel::slotUninstallPackage(int index)
 
     m_currentTransaction = transsaction;  // 保存trans指针
 
+#ifdef ENABLE_QAPT_SETENV // Qt5环境且qapt >= 3.0.5.1-1-deepin1，支持setEnvVariable
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QVariantMap map;
+
+    m_currentTransaction = transsaction;   //保存trans指针
+    // 获取当前真实用户信息
+    QString currentUser = env.value("USER");
+    // 如果SUDO_USER存在，说明当前是通过sudo启动的
+    QString realUser = env.value("SUDO_USER");
+    if (realUser.isEmpty())
+        realUser = currentUser;
+    map.insert("SUDO_USER", realUser);
+    transsaction->setEnvVariable(map);
+#endif
+
     qCDebug(appLog) << "Starting uninstall transaction for package:" << packageId;
     transsaction->run();  // 开始卸载
 
@@ -1238,6 +1253,19 @@ void DebListModel::installDebs()
 
     m_currentTransaction = transaction;
 
+#ifdef ENABLE_QAPT_SETENV   // Qt5环境且qapt >= 3.0.5.1-1-deepin1，支持setEnvVariable
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QVariantMap map;
+
+    // 获取当前真实用户信息
+    QString currentUser = env.value("USER");
+    // 如果SUDO_USER存在，说明当前是通过sudo启动的
+    QString realUser = env.value("SUDO_USER");
+    if (realUser.isEmpty())
+        realUser = currentUser;
+    map.insert("SUDO_USER", realUser);
+    m_currentTransaction->setEnvVariable(map);
+#endif
     qCDebug(appLog) << "Running current transaction";
     m_currentTransaction->run();
 }

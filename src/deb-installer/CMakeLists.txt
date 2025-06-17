@@ -39,6 +39,8 @@ else()
         if(${QAPT_VERSION_STR} VERSION_GREATER_EQUAL "3.0.5.1-1-deepin1" AND ${QAPT_VERSION_STR} MATCHES ".*deepin.*")
             message(STATUS "enable virtual package enhance")
             add_definitions(-DENABLE_VIRTUAL_PACKAGE_ENHANCE)
+            # Qt5环境且QApt版本>=3.0.5.1-1-deepin1，支持setEnvVariable方法
+            add_definitions(-DENABLE_QAPT_SETENV)
         else()
             message(STATUS "disable virtual package enhance")
         endif()
