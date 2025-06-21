@@ -55,7 +55,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="732"/>
         <source>Installing other packages... Please open it later.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,8 +100,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="799"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="940"/>
         <source>Bulk Install</source>
         <translation>መግጠሚያ</translation>
     </message>
@@ -111,7 +108,6 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="97"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="114"/>
         <source>Installation failed, please check your network connection</source>
         <translation>መግጠም አልተቻለም: እባክዎን የ ኔትዎርክ ግንኙነት ይመርምሩ</translation>
     </message>
@@ -122,8 +118,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="106"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>መግጠም አልተቻለም: በቂ ነፃ የ ዲስክ ቦታ የለም</translation>
     </message>
@@ -134,14 +128,11 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="774"/>
         <source>Invalid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1685"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,8 +185,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1193"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1687"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>እሺ</translation>
@@ -223,26 +212,23 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1190"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1684"/>
         <source>Unable to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1191"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>ዚህ ቁ绛 የድርጊ አይነት ምልክት ምልክት አልተሰጠም</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="784"/>
         <source>Broken dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ነገድ የተወሰነ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="131"/>
         <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
+        <translation>የማረጋገጫ ምልክት አልተሳካም</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="731"/>
@@ -255,7 +241,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation type="unfinished"></translation>
+        <translation>deb ቁ绛 ምልክቶች ለዚህ ያስገቡ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
@@ -268,7 +254,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>ዝርዝር ይታይ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
@@ -286,7 +272,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="173"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ተጠቃለህ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="175"/>
@@ -297,22 +283,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="508"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"></translation>
+        <translation>Install %1 አይነት ምልክት አይነት ምልክት ለማስወገድ: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="524"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"></translation>
+        <translation>ማስወገድ አይነት ምልክቶች ውስጥ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="530"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>ማስወገድ አይነት ምልክቶች ምissing</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="582"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ማስወገድ አይነት ምልክቶች ም: %1</translation>
     </message>
 </context>
 <context>
@@ -325,12 +311,12 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="88"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በፊት ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="92"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በኔ ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="98"/>
@@ -343,7 +329,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation type="unfinished"></translation>
+        <translation>ሁሉንም ያስገቡ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -372,7 +358,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="66"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>በመጠ expecting</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="234"/>
@@ -382,12 +368,12 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="236"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በኔ ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="238"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በፊት ያስገቡ አይነት ምልክት: %1</translation>
     </message>
 </context>
 <context>
@@ -395,15 +381,13 @@
     <message>
         <location filename="../src/deb-installer/model/packagelistview.cpp" line="167"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ይለፍ</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="52"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>ማሳነሻ</translation>
@@ -414,37 +398,37 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation>ትክክል</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>አስተዳደር ምልክቶች ምን ያስተዳደር ያስፈልገኝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="83"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"></translation>
+        <source>To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can be installed.</source>
+        <translation>የተረጋግ አይነት ምልክቶች ምን ያስገቡ፣ ከመጠ expecting ውስጥ ያስገቡ፣ እና የሚገቡ አይነት ምልክቶች ምን ያስተዳደር ያስፈልገኝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="85"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"></translation>
+        <source>Security Center > Tools > App Security</source>
+        <translation>መጠ expecting ውስጥ ያስገቡ > አስተዳደር > አይነት ምልክት ምን ያስተዳደር ያስፈልገኝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="49"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"></translation>
+        <translation>የመስystem አይነት ምልክት ምን ያስተዳደር ያስፈልገኝ Linglong አይነት ምልክት ምን ያስተዳደር ያስፈልገኝ፣ የምስ ምን ያስገቡ ያስፈልገኝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="46"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>ይለፍ ይችላል</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"></translation>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center > Tools > App Security to change the settings.</source>
+        <translation>ዚህ ቁ绛 የድርጊ አይነት ምልክት ምልክት አልተሰጠም እና የማስወገድ/ይዘፍ ውስጥ ያስገቡ ያስፈልገኝ፣ ከመጠ expecting ውስጥ ያስገቡ > አስተዳደር > አይነት ምልክት ምን ያስተዳደር ያስፈልገኝ ያስገቡ ያስፈልገኝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="51"/>
@@ -456,12 +440,12 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ይዘፍ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="268"/>
         <source>Will remove: </source>
-        <translation type="unfinished"></translation>
+        <translation>ይለፍ: </translation>
     </message>
 </context>
 <context>
@@ -473,33 +457,28 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="485"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Reinstall</source>
         <translation>እንደገና መግጠሚያ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1159"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1346"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በኔ ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1347"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>በፊት ያስገቡ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1351"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>በፊት ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1247"/>
         <source>Installing dependencies: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ማስወገድ አይነት ምልክቶች ም: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1394"/>
@@ -548,7 +527,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -599,7 +577,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1352"/>
         <source>Update</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
@@ -616,7 +593,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1341"/>
         <source>Same version installed</source>
         <translation>ተመሳሳይ እትም ተገጥሟል</translation>
     </message>
@@ -625,15 +601,11 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="721"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="760"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="51"/>
         <source>Show dependencies</source>
         <translation type="unfinished"></translation>
     </message>
@@ -642,7 +614,6 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="942"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -702,7 +673,6 @@ from %1 compatibility mode?</source>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
         <translation type="unfinished"></translation>
     </message>

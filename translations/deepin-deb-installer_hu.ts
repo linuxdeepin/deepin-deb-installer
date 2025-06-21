@@ -55,7 +55,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="732"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Más csomagok telepítése folyamatban... Kérjük nyissa meg később.</translation>
     </message>
@@ -101,8 +100,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="799"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="940"/>
         <source>Bulk Install</source>
         <translation>Csoportos telepítés</translation>
     </message>
@@ -111,7 +108,6 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="97"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="114"/>
         <source>Installation failed, please check your network connection</source>
         <translation>A telepítés sikertelen, kérjük ellenőrizze a hálózati kapcsolatot</translation>
     </message>
@@ -122,8 +118,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="106"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>A telepítés sikertelen, nincs elég hely a lemezen</translation>
     </message>
@@ -134,14 +128,11 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="774"/>
         <source>Invalid digital signature</source>
         <translation>Érvénytelen digitális aláírás</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1685"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Az rendszergazda házirendeket állított be a csomag telepítésének megakadályozására</translation>
     </message>
@@ -194,8 +185,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1193"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1687"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -223,8 +212,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1190"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1684"/>
         <source>Unable to install</source>
         <translation>A telepítés nem lehetséges</translation>
     </message>
@@ -235,7 +222,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="784"/>
         <source>Broken dependencies: %1</source>
         <translation>Hibás függőségek: %1</translation>
     </message>
@@ -402,8 +388,6 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="52"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>Összecsukás</translation>
@@ -423,13 +407,13 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="83"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Aláíratlan alkalmazások telepítéséhez lépjen a Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság menüpontra, és válassza ki a telepíthető alkalmazástípusokat.</translation>
+        <source>To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can be installed.</source>
+        <translation>Aláíratlan alkalmazások telepítéséhez lépjen a Biztonsági Központ > Eszközök > Alkalmazásbiztonság menüpontra, és válassza ki a telepíthető alkalmazástípusokat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="85"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság</translation>
+        <source>Security Center > Tools > App Security</source>
+        <translation>Biztonsági Központ > Eszközök > Alkalmazásbiztonság</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="49"/>
@@ -443,8 +427,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Ez a csomag nem rendelkezik érvényes digitális aláírással, és le van tiltva a telepítéstől/futtatástól. A beállítások módosításához lépjen a Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság menüpontra.</translation>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center > Tools > App Security to change the settings.</source>
+        <translation>Ez a csomag nem rendelkezik érvényes digitális aláírással, és le van tiltva a telepítéstől/futtatástól. A beállítások módosításához lépjen a Biztonsági Központ > Eszközök > Alkalmazásbiztonság menüpontra.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="51"/>
@@ -473,26 +457,21 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="485"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Reinstall</source>
         <translation>Újratelepítés</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1159"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1346"/>
         <source>Later version installed: %1</source>
         <translation>Újabb verzió telepítve: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1347"/>
         <source>Downgrade</source>
         <translation>Visszaminősítés</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1351"/>
         <source>Earlier version installed: %1</source>
         <translation>Korábbi verzió telepítve: %1</translation>
     </message>
@@ -548,7 +527,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
         <translation>A %2 telepítése %1 kompatibilitási módban</translation>
     </message>
@@ -560,7 +538,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 sikeresen telepítve lett a %1 kompatibilitási módra</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
@@ -599,7 +577,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1352"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Frissítés</translation>
@@ -616,7 +593,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1341"/>
         <source>Same version installed</source>
         <translation>Ez a verzió már telepítve van</translation>
     </message>
@@ -625,15 +601,11 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="721"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="760"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Show details</source>
         <translation>Részletek mutatása</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="51"/>
         <source>Show dependencies</source>
         <translation>Függőségek megjelenítése</translation>
     </message>
@@ -642,7 +614,6 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="942"/>
         <source>Show details</source>
         <translation>Részletek mutatása</translation>
     </message>
@@ -705,7 +676,6 @@ a %1 kompatibilitási módból?</translation>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
         <translation>Csomagtelepítő</translation>
     </message>

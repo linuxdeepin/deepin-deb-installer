@@ -55,7 +55,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="732"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Bezig met installeren van andere pakketten… Keer later terug.</translation>
     </message>
@@ -101,8 +100,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="799"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="940"/>
         <source>Bulk Install</source>
         <translation>Alles installeren</translation>
     </message>
@@ -111,7 +108,6 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="97"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="114"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Installatie mislukt: controleer je internetverbinding.</translation>
     </message>
@@ -122,8 +118,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="106"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Installatie mislukt: onvoldoende schijfruimte.</translation>
     </message>
@@ -134,14 +128,11 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="774"/>
         <source>Invalid digital signature</source>
         <translation>Ongeldige digitale handtekening</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1685"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>De beheerder voert een beleid wat voorkomt dat dit pakket geïnstalleerd mag worden</translation>
     </message>
@@ -194,8 +185,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1193"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1687"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Oké</translation>
@@ -223,8 +212,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1190"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1684"/>
         <source>Unable to install</source>
         <translation>Installeren niet mogelijk</translation>
     </message>
@@ -235,7 +222,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="784"/>
         <source>Broken dependencies: %1</source>
         <translation>Niet-voldane afhankelijkheden: %1</translation>
     </message>
@@ -402,8 +388,6 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="52"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>Inklappen</translation>
@@ -423,12 +407,12 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="83"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <source>To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can be installed.</source>
         <translation>Ga naar Beveiligingscentrum → Hulpmiddelen → Programmabeveiliging en kies de programmasoorten die geïnstalleerd mogen worden.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="85"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
+        <source>Security Center > Tools > App Security</source>
         <translation>Beveiligingscentrum → Hulpmiddelen → Programmabeveiliging</translation>
     </message>
     <message>
@@ -443,7 +427,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center > Tools > App Security to change the settings.</source>
         <translation>Dit pakket bevat geen geldige ondertekening en is daarom geblokkeerd. Ga naar Beveiligingscentrum → Hulpmiddelen → Programmabeveiliging om de instellingen te wijzigen.</translation>
     </message>
     <message>
@@ -473,26 +457,21 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="485"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Reinstall</source>
         <translation>Opnieuw installeren</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1159"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1346"/>
         <source>Later version installed: %1</source>
         <translation>Nieuwere versie geïnstalleerd: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1347"/>
         <source>Downgrade</source>
         <translation>Afwaarderen</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1351"/>
         <source>Earlier version installed: %1</source>
         <translation>Oudere versie geïnstalleerd: %1</translation>
     </message>
@@ -548,7 +527,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
         <translation>Probeer %2 in de %1-compatibiliteitsmodus te installeren</translation>
     </message>
@@ -560,7 +538,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 is succesvol geïnstalleerd in %1 compatibiliteitsmodus</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
@@ -599,7 +577,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1352"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Bijwerken</translation>
@@ -616,7 +593,6 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1341"/>
         <source>Same version installed</source>
         <translation>Dezelfde versie is geïnstalleerd</translation>
     </message>
@@ -625,15 +601,11 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="721"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="760"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Show details</source>
         <translation>Informatie tonen</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="51"/>
         <source>Show dependencies</source>
         <translation>Afhankelijkheden tonen</translation>
     </message>
@@ -642,7 +614,6 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="942"/>
         <source>Show details</source>
         <translation>Informatie tonen</translation>
     </message>
@@ -691,7 +662,7 @@ Alle afhankelijkheden worden eveneens verwijderd.</translation>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Weet je zeker dat je %1 wilt verwijderen?
-Het systeem of andere programma&apos;s werken dan mogelijk niet goed meer.</translation>
+Het systeem of andere programma's werken dan mogelijk niet goed meer.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="174"/>
@@ -704,7 +675,6 @@ from %1 compatibility mode?</source>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
         <translation>Pakketinstallatie</translation>
     </message>
