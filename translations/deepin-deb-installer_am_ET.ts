@@ -483,7 +483,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1394"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>የ%1 የመстанов መጥ vä</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="231"/>
@@ -493,7 +493,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="180"/>
         <source>Select a compatibility mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>የሚመatch የሞድ ምოክል ምረጥ:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="477"/>
@@ -523,22 +523,22 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="497"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>ተው already</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>የ%2 የመстанов ምም የ%1 የሞድ ምረጥ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="812"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>የ%2 የመመ ምም የ%1 የሞድ ምረጥ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>የ%2 የ%1 የሞድ ምረጥ የተመстанов የተሳካ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>የ%2 የ%1 የሞድ ምረጥ የተመመ የተሳካ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="949"/>
@@ -563,28 +563,28 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1008"/>
         <source>Install %1 will remove: </source>
-        <translation type="unfinished"></translation>
+        <translation>የ%1 የመстанов ምም ይሰር: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1028"/>
         <source>Dependencies in the repository</source>
-        <translation type="unfinished"></translation>
+        <translation>የመነሳ ምም የተመዘገበ የምር unserialize</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1034"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>የመነሳ ምም የሌለ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>አዘዝ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1399"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>የዲጅታል ምም የሌለ ባለስ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="219"/>
@@ -602,12 +602,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>ዝርዝር ይምረጥ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <source>Show dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>ዝርዝር የመነሳ ምም ይምረጥ</translation>
     </message>
 </context>
 <context>
@@ -615,7 +615,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>ዝርዝር ይምረጥ</translation>
     </message>
 </context>
 <context>
@@ -631,7 +631,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Show related packages</source>
-        <translation type="unfinished"></translation>
+        <translation>ዝርዝር የተያያዝ የምር unserialize ይምረጥ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
@@ -654,19 +654,22 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>እርግጠኛ ነህ የ%1 የመመ እንደሚፈልጋ?
+ሁሉም የመነሳ ምም ይሰር</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="133"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>እርግጠኛ ነህ የ%1 የመመ እንደሚፈልጋ?
+የሰርተ የመሰረት ወይም የሌላ አፕሊኬሽኖች የሚሰራ የሌለ እንደሚሸ的可能性</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="174"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>እርግጠኛ ነህ የ%2 የመመ እንደሚፈልጋ?
+የ%1 የሞድ ምረጥ የሚሰር</translation>
     </message>
 </context>
 <context>
@@ -674,12 +677,12 @@ from %1 compatibility mode?</source>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
         <source>Package Installer</source>
-        <translation type="unfinished"></translation>
+        <translation>የምር unserialize የተመстанов</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation type="unfinished"></translation>
+        <translation>የምር unserialize የተመстанов የተሳካ የተመстанов እና የተሰር የተመстанов የተሳካ እና የተመዘገበ የመстанов ምም የተሳካ ነው.</translation>
     </message>
 </context>
 </TS>

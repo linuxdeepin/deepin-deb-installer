@@ -468,7 +468,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
         <source>Downgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>Povlačenje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>

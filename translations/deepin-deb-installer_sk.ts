@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="79"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"></translation>
+        <translation>Zadajte číslo na nastavenie: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="84"/>
@@ -20,17 +20,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"></translation>
+        <translation>Načítavanie balíčkov...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/%2 načítaných</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicializácia...</translation>
     </message>
 </context>
 <context>
@@ -51,52 +51,52 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="123"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenia</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inštalácia iných balíčkov... Prosím, otvorte to neskôr.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="635"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Parsovanie zlyhalo: v manifestovom súbore sa našlo neplatné štruktúr</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="637"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Parsovanie zlyhalo: v manifestovom súbore sa našlo neplatné číslo verzie!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="639"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie sú nájdené žiadne deb balíčky. Prosím, skontrolujte priečinok.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="751"/>
         <source>The %1 package may be broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Balíčok %1 môže byť poškodený</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <source>You can only install local %1 packages</source>
-        <translation type="unfinished"></translation>
+        <translation>Môžete inštalovať len lokálne %1 balíčky</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="767"/>
         <source>No permission to access this folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Žiadna oprávnenie na prístup do tohto priečinku</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="783"/>
         <source>Already Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Už pridaný</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="792"/>
         <source>%1 does not exist, please reselect</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 neexistuje, prosím, zvoľte znovu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="100"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Inštalácia zlyhala, prosím, skontrolujte aktualizácie v Štandardnom centrále</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
@@ -124,17 +124,17 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="123"/>
         <source>No digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Žiadna digitálna podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
         <source>Invalid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Neplatný digitálny podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrátor nastavil politiky, ktoré zabraňujú inštalácii tohto balíčka</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="139"/>
@@ -144,32 +144,32 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="752"/>
         <source>current system</source>
-        <translation type="unfinished"></translation>
+        <translation>súčasný systém</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="755"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="unfinished"></translation>
+        <translation> %2 je nainštalovaný v %1, prosím, odstanovte tento balíčok pred inštaláciou</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="761"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Nerovnajúce sa závislosti, skúste inštalovať aplikáciu v režime kompatibility</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="776"/>
         <source>Failed to install %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa inštalovať %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1133"/>
         <source>Unable to install - no digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa inštalovať – žiadny digitálny podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1134"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosím, ídite do Štandardného centrála a povolte režim vývojára, potom skúste znovu. Pokračovať?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1137"/>
@@ -181,7 +181,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1138"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pokračovať</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
@@ -192,12 +192,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1095"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa inštalovať %1: žiadny platný digitálny podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento balíčok nemá platný digitálny podpis. Pokračovať s inštaláciou?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1233"/>
@@ -208,17 +208,17 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1234"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pokračovať</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
         <source>Unable to install</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa inštalovať</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1191"/>
         <source>This package does not have a valid digital signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento balíčok nemá platný digitálny podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
