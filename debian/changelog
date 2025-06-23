@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.22) unstable; urgency=medium
+
+  * chore: Update deepin-manual resources
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Mon, 23 Jun 2025 16:27:12 +0800
+
 deepin-deb-installer (6.5.21) unstable; urgency=medium
 
   * update translations.

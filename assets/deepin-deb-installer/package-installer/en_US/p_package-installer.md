@@ -51,25 +51,19 @@ Package Installer is able to identify the packages could not be installed automa
 
 Please read the prompt carefully, common causes include: 
 
-- Unmatched package architecture.
+- Unmatched package architecture. 
   
-
-![unable](fig/unable1.png) 
 
 - Broken dependencies.
   
 
-![unable](fig/unable.png)
-
-- No digital signature. 
+- No digital signature.  
   
 
-![cant](fig/cant3.png) 
-
-- Lack of valid digital signature.
+- The installation package does not have a valid digital signature. Click **Go** to jump to the Security Center for settings.
   
 
-![cant4](fig/cant4.png)
+
 
 ### Uninstall
 
@@ -95,7 +89,7 @@ In the main menu, you can switch window themes, view manual and get more informa
 
 1. Click ![icon_menu](../common/icon_menu.svg) on the interface.
 2. Click **Settings**.
-3. Check **Check digital signatures if the developer mode is enabled**, so when an installation package is being installed, this application will detect whether the installation package has a signature and whether the signature is valid. 
+3. To install unsigned applications, click **Security Center > Security Tools > Application Security** to jump to the Security Center app for configuration.  
 
 ### Theme
 
