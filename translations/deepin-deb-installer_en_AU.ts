@@ -6,13 +6,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="79"/>
         <source>Enter the number to configure: </source>
-        <translation>أدخل الرقم لضبطه: </translation>
+        <translation>Enter the number to configure: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="84"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>حسناً</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -20,17 +20,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>جارٍ تحميل الحزم...</translation>
+	 <translation>Loading packages...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 تم تحميلها</translation>
+        <translation>%1/%2 loaded</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>جارٍ بدء التشغيل...</translation>
+        <translation>Initializing...</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/ddimerrorpage.cpp" line="18"/>
         <source>OK</source>
-        <translation>حسناً</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -46,57 +46,57 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="115"/>
         <source>Package Installer</source>
-        <translation>مثبت الحزم</translation>
+        <translation>Package Installer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="123"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation>Settings</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>جارٍ تثبيت حزم أخرى... الرجاء فتحها لاحقاً.</translation>
+        <translation>Installing other packages... Please open it later.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="635"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>فشل التحليل: تم العثور على هيكل ملف غير قانوني في ملف التصحيح!</translation>
+        <translation>Parsing failed: An illegal file structure was found in the manifest file!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="637"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>فشل التحليل: تم العثور على رقم إصدار غير قانوني في ملف التصحيح!</translation>
+        <translation>Parsing failed: An illegal version number was found in the manifest file!</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="639"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>لم يتم العثور على حزم deb. الرجاء التحقق من المجلد.</translation>
+        <translation>No deb packages found. Please check the folder.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="751"/>
         <source>The %1 package may be broken</source>
-        <translation>قد يكون حزمة %1 تالفة</translation>
+        <translation>The %1 package may be broken</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <source>You can only install local %1 packages</source>
-        <translation>يمكنك تثبيت حزم %1 المحلية فقط</translation>
+        <translation>You can only install local %1 packages</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="767"/>
         <source>No permission to access this folder</source>
-        <translation>لا يوجد إذن للوصول إلى هذا المجلد</translation>
+        <translation>No permission to access this folder</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="783"/>
         <source>Already Added</source>
-        <translation>تم الإضافة بالفعل</translation>
+        <translation>Already Added</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="792"/>
         <source>%1 does not exist, please reselect</source>
-        <translation>لا يوجد %1، الرجاء اختياره مرة أخرى</translation>
+        <translation>%1 does not exist, please reselect</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
@@ -114,130 +114,126 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="100"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>فشل التثبيت، الرجاء التحقق من تحديثات في مركز التحكم</translation>
+        <translation>Installation failed, please check for updates in Control Center</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>فشل التثبيت، مساحة القرص غير كافية</translation>
+        <translation>Installation failed, insufficient disk space</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="123"/>
         <source>No digital signature</source>
-        <translation>لا يوجد توقيع رقمي</translation>
+        <translation>No digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
         <source>Invalid digital signature</source>
-        <translation>التوقيع الرقمي غير صحيح</translation>
+        <translation>Invalid digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>لقد وضعت الإدارة سياسات لمنع تثبيت هذه الحزمة</translation>
+        <translation>The administrator has set policies to prevent installation of this package</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="139"/>
         <source>Installation Failed</source>
-        <translation>فشل التثبيت</translation>
+        <translation>Installation Failed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="752"/>
         <source>current system</source>
-        <translation>النظام الحالي</translation>
+        <translation>current system</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="755"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>>-
-تم تثبيت %2 في %1، من فضلك أزل هذه الحزمة قبل تثبيتها
-</translation>
+        <translation>%2 has been installed in %1, please uninstall this package before installing it</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="761"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>هناك اعتمادات مكسورة، جرّب تثبيت التطبيق في وضع التوافق</translation>
+        <translation>Broken dependencies, try installing the app in compatibility mode</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="776"/>
         <source>Failed to install %1</source>
-        <translation>فشل تثبيت %1</translation>
+        <translation>Failed to install %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1133"/>
         <source>Unable to install - no digital signature</source>
-        <translation>غير قادر على التثبيت - لا يوجد توقيع رقمي</translation>
+        <translation>Unable to install - no digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1134"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>>-
-يرجى الانتقال إلى مركز التحكم لتمكين وضع المطورين وحاول مرة أخرى.
-هل ترغب في المتابعة؟</translation>
+        <translation>Please go to Control Center to enable developer mode and try again. Proceed?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1137"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>الإلغاء</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1138"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>استمر</translation>
+        <translation>Proceed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>أوكي</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1095"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>فشل في تثبيت %1: لا توقيع رقمي صحيح</translation>
+        <translation>Failed to install %1: no valid digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>هذا الحزمة لا تحتوي على توقيع رقمي صحيح. هل ترغب في المتابعة مع التثبيت؟</translation>
+        <translation>This package does not have a valid digital signature. Continue with the installation?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1233"/>
         <source>Cancel</source>
-        <translation>إلغاء</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1234"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation>استمر</translation>
+        <translation>Continue</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
         <source>Unable to install</source>
-        <translation>غير قادر على التثبيت</translation>
+        <translation>Unable to install</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1191"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>هذا الحزمة لا تحتوي على توقيع رقمي صحيح</translation>
+        <translation>This package does not have a valid digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
         <source>Broken dependencies: %1</source>
-        <translation>الاعتماديات التالفة: %1</translation>
+        <translation>Broken dependencies: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="131"/>
         <source>Authentication failed</source>
-        <translation>فشل التحقق من الهوية</translation>
+        <translation>Authentication failed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="731"/>
         <source>Unmatched package architecture</source>
-        <translation>هندسة الحزمة غير متوافقة</translation>
+        <translation>Unmatched package architecture</translation>
     </message>
 </context>
 <context>
@@ -245,12 +241,12 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation>اسحب حزم deb هنا</translation>
+        <translation>Drag deb packages here</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>اختر ملف</translation>
+        <translation>Select File</translation>
     </message>
 </context>
 <context>
@@ -258,51 +254,51 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation> покажи детали</translation>
+        <translation>Show details</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>تقليل</translation>
+        <translation>Collapse</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="172"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>تثبيت</translation>
+        <translation>Install</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="173"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation>انتهى</translation>
+        <translation>Done</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="175"/>
         <source>Back</source>
         <comment>button</comment>
-        <translation>عودة</translation>
+        <translation>Back</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="508"/>
         <source>Install %1 will remove: </source>
-        <translation>تثبيت %1 سيقوم بإزالة:</translation>
+        <translation>Install %1 will remove: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="524"/>
         <source>Dependencies in the repository</source>
-        <translation>الاعتماديات في المستودع</translation>
+        <translation>Dependencies in the repository</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="530"/>
         <source>Missing dependencies</source>
-        <translation>الاعتماديات المفقودة</translation>
+        <translation>Missing dependencies</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="582"/>
         <source>Installing dependencies: %1</source>
-        <translation>تثبيت الاعتماديات: %1</translation>
+        <translation>Installing dependencies: %1</translation>
     </message>
 </context>
 <context>
@@ -310,22 +306,22 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="85"/>
         <source>Same version installed</source>
-        <translation>النسخة نفسها مثبتة</translation>
+        <translation>Same version installed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="88"/>
         <source>Earlier version installed: %1</source>
-        <translation>النسخة السابقة مثبتة: %1</translation>
+        <translation>Earlier version installed: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="92"/>
         <source>Later version installed: %1</source>
-        <translation>النسخة الأحدث مثبتة: %1</translation>
+        <translation>Later version installed: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="98"/>
         <source>Unmatched package architecture</source>
-        <translation>هندسة الحزمة غير متوافقة</translation>
+        <translation>Unmatched package architecture</translation>
     </message>
 </context>
 <context>
@@ -333,13 +329,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>اختر جميع</translation>
+        <translation>Select all</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>تثبيت</translation>
+        <translation>Install</translation>
     </message>
 </context>
 <context>
@@ -347,12 +343,12 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="58"/>
         <source>Installing</source>
-        <translation>تثبيت</translation>
+        <translation>Installing</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="62"/>
         <source>Installed</source>
-        <translation>مثبت</translation>
+        <translation>Installed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
@@ -527,7 +523,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="497"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation>完了</translation>
+        <translation>Done</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>

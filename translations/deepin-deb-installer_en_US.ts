@@ -513,88 +513,88 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>%2 تم تثبيته بنجاح في وضع التوافق مع %1</translation>
+        <translation>%2 was successfully installed to %1 compatibility mode</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
         <source>Installed successfully</source>
-        <translation>تم التثبيت بنجاح</translation>
+        <translation>Installed successfully</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation>%2 تم إلغاؤه بنجاح من وضع التوافق مع %1</translation>
+        <translation>%2 has been successfully uninstalled from %1 compatibility mode</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="949"/>
         <source>Uninstalled successfully</source>
-        <translation>تم الإلغاء بنجاح</translation>
+        <translation>Uninstalled successfully</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="968"/>
         <source>Uninstall Failed</source>
-        <translation>فشل الإلغاء</translation>
+        <translation>Uninstall Failed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="978"/>
         <source>Collapse</source>
-        <translation>طي</translation>
+        <translation>Collapse</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1008"/>
         <source>Install %1 will remove: </source>
-        <translation>تثبيت %1 سيقوم بإزالة: </translation>
+        <translation>Install %1 will remove: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1028"/>
         <source>Dependencies in the repository</source>
-        <translation>الاعتماديات في المستودع</translation>
+        <translation>Dependencies in the repository</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1034"/>
         <source>Missing dependencies</source>
-        <translation>الاعتماديات المفقودة</translation>
+        <translation>Missing dependencies</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
         <source>Same version installed</source>
-        <translation>النسخة نفسها مثبتة</translation>
+        <translation>Same version installed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1159"/>
         <source>Later version installed: %1</source>
-        <translation>النسخة الأحدث مثبتة: %1</translation>
+        <translation>Later version installed: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
         <source>Downgrade</source>
-        <translation>الحد من النسخة</translation>
+        <translation>Downgrade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
         <source>Earlier version installed: %1</source>
-        <translation>النسخة الأقدم مثبتة: %1</translation>
+        <translation>Earlier version installed: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation>تحديث</translation>
+        <translation>Update</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1247"/>
         <source>Installing dependencies: %1</source>
-        <translation>تثبيت الاعتماديات: %1</translation>
+        <translation>Installing dependencies: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1394"/>
         <source>Failed to install %1</source>
-        <translation>فشل تثبيت %1</translation>
+        <translation>Failed to install %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1399"/>
         <source>Invalid digital signature</source>
-        <translation>التوقيع الرقمية غير صالحة</translation>
+        <translation>Invalid digital signature</translation>
     </message>
 </context>
 <context>
@@ -602,12 +602,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
         <source>Show details</source>
-        <translation> покажите детали</translation>
+        <translation>Show details</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <source>Show dependencies</source>
-        <translation> покажите зависимости</translation>
+        <translation>Show dependencies</translation>
     </message>
 </context>
 <context>
@@ -615,7 +615,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
         <source>Show details</source>
-        <translation> покажите детали</translation>
+        <translation>Show details</translation>
     </message>
 </context>
 <context>
@@ -623,7 +623,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package_list_model.cpp" line="487"/>
         <source>Installation Failed</source>
-        <translation>فشل التثبيت</translation>
+        <translation>Installation Failed</translation>
     </message>
 </context>
 <context>
@@ -631,44 +631,39 @@
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Show related packages</source>
-        <translation> покажите связанные пакеты</translation>
+        <translation>Show related packages</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>طي</translation>
+        <translation>Collapse</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="39"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>إلغاء</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="41"/>
         <source>Confirm</source>
-        <translation>تؤكد</translation>
+        <translation>Confirm</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
-        <source>Are you sure you want to uninstall %1?
-All dependencies will also be removed</source>
-        <translation>هل أنت متأكد من رغبتك في إلغاء تثبيت %1؟
-سيتم إزالة جميع الاعتماديات أيضًا</translation>
+        <source>Are you sure you want to uninstall %1?All dependencies will also be removed</source>
+        <translation>Are you sure you want to uninstall %1?All dependencies will also be removed</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="133"/>
-        <source>Are you sure you want to uninstall %1?
-The system or other applications may not work properly</source>
-        <translation>هل أنت متأكد من رغبتك في إلغاء تثبيت %1؟
-قد لا تعمل النظام أو التطبيقات الأخرى بشكل صحيح</translation>
+        <source>Are you sure you want to uninstall %1?The system or other applications may not work properly</source>
+        <translation>Are you sure you want to uninstall %1?The system or other applications may not work properly</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="174"/>
-        <source>Are you sure you want to uninstall %2 
-from %1 compatibility mode?</source>
-        <translation>هل أنت متأكد من رغبتك في إلغاء تثبيت %2 من وضع التوافق مع %1؟</translation>
+        <source>Are you sure you want to uninstall %2 from %1 compatibility mode?</source>
+        <translation>Are you sure you want to uninstall %2 from %1 compatibility mode?</translation>
     </message>
 </context>
 <context>
@@ -676,12 +671,12 @@ from %1 compatibility mode?</source>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
         <source>Package Installer</source>
-        <translation>برنامج التثبيت</translation>
+        <translation>Package Installer</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>يُساعد المستخدمين على تثبيت وإزالة حزم التثبيت المحلية، ويدعم التثبيت الجماعي.</translation>
+        <translation>Package Installer helps users install and remove local packages, and supports bulk installation.</translation>
     </message>
 </context>
 </TS>
