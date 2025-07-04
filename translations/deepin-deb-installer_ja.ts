@@ -600,7 +600,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1352"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation type="unfinished"/>
+        <translation>アップデート</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1399"/>
