@@ -53,14 +53,7 @@ Please read the prompt carefully, common causes include:
 
 - Unmatched package architecture. 
   
-
 - Broken dependencies.
-  
-
-- No digital signature.  
-  
-
-- The installation package does not have a valid digital signature. Click **Go** to jump to the Security Center for settings.
   
 
 
