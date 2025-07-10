@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_HK">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_HK">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -158,12 +156,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="755"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>已在%1中安裝%2，請先卸載後再安裝此包</translation>
+        <translation>已在%1中安裝%2, 請先卸載後再安裝此包</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="761"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>依賴關係不滿足，請嘗試使用兼容模式安裝該應用</translation>
+        <translation>依賴關係不滿足,請嘗試使用兼容模式安裝該應用</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="776"/>
@@ -469,7 +467,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="978"/>
         <source>Collapse</source>
-        <translation>收起</translation>
+        <translation>收 起</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="485"/>
@@ -697,8 +695,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="174"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation>您確定要從%1兼容模式
-卸載%2嗎？</translation>
+        <translation>您確定要從%1兼容模式\n卸載%2嗎？</translation>
     </message>
 </context>
 <context>
