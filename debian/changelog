@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.25) unstable; urgency=medium
+
+  * chore: Update the help manual
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 10 Jul 2025 19:51:47 +0800
+
 deepin-deb-installer (6.5.24) unstable; urgency=medium
 
   * update version to 6.5.24. 
