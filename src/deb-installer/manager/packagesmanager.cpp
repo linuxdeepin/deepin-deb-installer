@@ -639,7 +639,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
             const auto result = Package::compareVersion(installed_version, conflict_version);
 
             // not match, ok
-            if (!dependencyVersionMatch(result, type)) {
+            if (conflict_version.isEmpty() || !dependencyVersionMatch(result, type)) {
                 package = nullptr;
                 continue;
             }
