@@ -25,6 +25,9 @@
 #include "kpty_p.h"
 
 #include <QtDebug>
+#include <QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(procLog)
 
 #define HAVE_POSIX_OPENPT
 
@@ -175,10 +178,12 @@ extern "C" {
 KPtyPrivate::KPtyPrivate(KPty* parent) :
         masterFd(-1), slaveFd(-1), ownMaster(true), q_ptr(parent)
 {
+    qCDebug(procLog) << "KPtyPrivate constructor";
 }
 
 KPtyPrivate::~KPtyPrivate()
 {
+    qCDebug(procLog) << "KPtyPrivate destructor";
 }
 
 bool KPtyPrivate::chownpty(bool)
@@ -195,16 +200,19 @@ bool KPtyPrivate::chownpty(bool)
 KPty::KPty() :
         d_ptr(new KPtyPrivate(this))
 {
+    qCDebug(procLog) << "KPty constructor";
 }
 
 KPty::KPty(KPtyPrivate *d) :
         d_ptr(d)
 {
+    qCDebug(procLog) << "KPty constructor with private data";
     d_ptr->q_ptr = this;
 }
 
 KPty::~KPty()
 {
+    qCDebug(procLog) << "KPty destructor";
     close();
     delete d_ptr;
 }
@@ -213,9 +221,9 @@ bool KPty::open()
 {
     Q_D(KPty);
 
-    qDebug() << "Opening PTY master/slave pair";
+    qCDebug(procLog) << "Opening PTY master/slave pair";
     if (d->masterFd >= 0) {
-        qDebug() << "PTY master/slave pair already open";
+        qCDebug(procLog) << "PTY master/slave pair already open";
         return true;
     }
 
@@ -236,9 +244,10 @@ bool KPty::open()
     if (::openpty( &d->masterFd, &d->slaveFd, ptsn, 0, 0)) {
         d->masterFd = -1;
         d->slaveFd = -1;
-        qWarning() << "Can't open a pseudo teletype";
+        qCWarning(procLog) << "Can't open a pseudo teletype";
         return false;
     }
+    qCDebug(procLog) << "openpty() successful, ttyName:" << ptsn;
     d->ttyName = ptsn;
 
 #else
@@ -307,17 +316,22 @@ bool KPty::open()
                 }
 #endif /* Q_OS_SOLARIS */
                 if (!access(d->ttyName.data(),R_OK|W_OK)) { // checks availability based on permission bits
+                    qCDebug(procLog) << "PTY is accessible, proceeding with permission setup for" << d->ttyName;
                     if (!geteuid()) {
+                        qCDebug(procLog) << "Running as root, attempting to set tty group";
                         struct group * p = getgrnam(TTY_GROUP);
                         if (!p) {
+                            qCDebug(procLog) << "Could not find 'tty' group, trying 'wheel' group";
                             p = getgrnam("wheel");
                         }
                         gid_t gid = p ? p->gr_gid : getgid ();
 
                         if (!chown(d->ttyName.data(), getuid(), gid)) {
+                            qCDebug(procLog) << "Successfully chowned and chmoded" << d->ttyName;
                             chmod(d->ttyName.data(), S_IRUSR|S_IWUSR|S_IWGRP);
                         }
                     }
+                    qCDebug(procLog) << "PTY found, jumping to gotpty";
                     goto gotpty;
                 }
                 ::close(d->masterFd);
@@ -326,12 +340,13 @@ bool KPty::open()
         }
     }
 
-    qWarning() << "Can't open a pseudo teletype";
+    qCWarning(procLog) << "Can't open a pseudo teletype";
     return false;
 
 gotpty:
     struct stat st;
     if (stat(d->ttyName.data(), &st)) {
+        qCWarning(procLog) << "stat failed for tty:" << d->ttyName.data() << "errno:" << errno;
         return false; // this just cannot happen ... *cough*  Yeah right, I just
         // had it happen when pty #349 was allocated.  I guess
         // there was some sort of leak?  I only had a few open.
@@ -339,7 +354,8 @@ gotpty:
     if (((st.st_uid != getuid()) ||
             (st.st_mode & (S_IRGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH))) &&
             !d->chownpty(true)) {
-        qWarning()
+        qCWarning(procLog) << "chownpty failed or permissions are insecure for tty:" << d->ttyName.data();
+        qCWarning(procLog)
         << "chownpty failed for device " << ptyName << "::" << d->ttyName
         << "\nThis means the communication can be eavesdropped.";
     }
@@ -361,7 +377,7 @@ grantedpt:
 
     d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     if (d->slaveFd < 0) {
-        qWarning() << "Can't open slave pseudo teletype";
+        qCWarning(procLog) << "Can't open slave pseudo teletype";
         ::close(d->masterFd);
         d->masterFd = -1;
         return false;
@@ -384,13 +400,13 @@ grantedpt:
 bool KPty::open(int fd)
 {
 #if !defined(HAVE_PTSNAME) && !defined(TIOCGPTN)
-     qWarning() << "Unsupported attempt to open pty with fd" << fd;
+     qCWarning(procLog) << "Unsupported attempt to open pty with fd" << fd;
      return false;
 #else
     Q_D(KPty);
 
     if (d->masterFd >= 0) {
-        qWarning() << "Attempting to open an already open pty";
+        qCWarning(procLog) << "Attempting to open an already open pty";
          return false;
     }
 
@@ -412,7 +428,7 @@ bool KPty::open(int fd)
         d->ttyName = buf;
 # endif
     } else {
-        qWarning() << "Failed to determine pty slave device for fd" << fd;
+        qCWarning(procLog) << "Failed to determine pty slave device for fd" << fd;
         return false;
     }
 
@@ -429,35 +445,38 @@ bool KPty::open(int fd)
 
 void KPty::closeSlave()
 {
+    qCDebug(procLog) << "Closing PTY slave";
     Q_D(KPty);
 
     if (d->slaveFd < 0) {
+        qCDebug(procLog) << "PTY slave already closed, fd < 0";
         return;
     }
     ::close(d->slaveFd);
     d->slaveFd = -1;
+    qCDebug(procLog) << "Closed PTY slave";
 }
 
 bool KPty::openSlave()
 {
     Q_D(KPty);
 
-    qDebug() << "Opening PTY slave";
+    qCDebug(procLog) << "Opening PTY slave";
 
     if (d->slaveFd >= 0)
 	return true;
     if (d->masterFd < 0) {
-	qInfo() << "Attempting to open pty slave while master is closed";
+	qCInfo(procLog) << "Attempting to open pty slave while master is closed";
 	return false;
     }
     //d->slaveFd = KDE_open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
     if (d->slaveFd < 0) {
-	qInfo() << "Can't open slave pseudo teletype";
+	qCInfo(procLog) << "Can't open slave pseudo teletype";
 	return false;
     }
     fcntl(d->slaveFd, F_SETFD, FD_CLOEXEC);
-    qDebug() << "Opened PTY slave return true, fd=" << d->slaveFd;
+    qCDebug(procLog) << "Opened PTY slave return true, fd=" << d->slaveFd;
     return true;
 }
 
@@ -465,32 +484,37 @@ void KPty::close()
 {
     Q_D(KPty);
 
-    qDebug() << "Closing PTY master/slave pair";
+    qCDebug(procLog) << "Closing PTY master/slave pair";
     if (d->masterFd < 0) {
-        qDebug() << "PTY fd < 0, return";
+        qCDebug(procLog) << "PTY fd < 0, return";
         return;
     }
     closeSlave();
     // don't bother resetting unix98 pty, it will go away after closing master anyway.
     if (memcmp(d->ttyName.data(), "/dev/pts/", 9)) {
+        qCDebug(procLog) << "Not a standard unix98 pty, attempting to reset permissions for" << d->ttyName.data();
         if (!geteuid()) {
+            qCDebug(procLog) << "Running as root, resetting permissions";
             struct stat st;
             if (!stat(d->ttyName.data(), &st)) {
+                qCDebug(procLog) << "stat successful, changing owner and mode";
                 chown(d->ttyName.data(), 0, st.st_gid == getgid() ? 0 : -1);
                 chmod(d->ttyName.data(), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
             }
         } else {
+            qCDebug(procLog) << "Not running as root, revoking pty";
             fcntl(d->masterFd, F_SETFD, 0);
             d->chownpty(false);
         }
     }
     ::close(d->masterFd);
     d->masterFd = -1;
-    qDebug() << "Closed PTY master/slave pair";
+    qCDebug(procLog) << "Closed PTY master/slave pair";
 }
 
 void KPty::setCTty()
 {
+    qCDebug(procLog) << "Setting controlling TTY";
     Q_D(KPty);
 
     // Setup job control //////////////////////////////////
@@ -501,14 +525,17 @@ void KPty::setCTty()
 
     // make our slave pty the new controlling terminal.
 #ifdef TIOCSCTTY
+    qCDebug(procLog) << "Setting controlling TTY using TIOCSCTTY";
     ioctl(d->slaveFd, TIOCSCTTY, 0);
 #else
+    qCDebug(procLog) << "Setting controlling TTY using open/close hack";
     // __svr4__ hack: the first tty opened after setsid() becomes controlling tty
     ::close(::open(d->ttyName, O_WRONLY, 0));
 #endif
 
     // make our new process group the foreground group on the pty
     int pgrp = getpid();
+    qCDebug(procLog) << "Setting process group to " << pgrp;
 #if defined(_POSIX_VERSION) || defined(__svr4__)
     tcsetpgrp(d->slaveFd, pgrp);
 #elif defined(TIOCSPGRP)
@@ -518,13 +545,15 @@ void KPty::setCTty()
 
 void KPty::login(const char * user, const char * remotehost)
 {
-    qDebug() << "Logging in to pty slave";
+    qCDebug(procLog) << "Logging in to pty slave";
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
+    qCDebug(procLog) << "Using utempter to log in";
     addToUtmp(d->ttyName.constData(), remotehost, d->masterFd);
     Q_UNUSED(user);
 #else
+    qCDebug(procLog) << "Not using utempter, using utmp/utmpx";
 # ifdef HAVE_UTMPX
     struct utmpx l_struct;
 # else
@@ -534,6 +563,7 @@ void KPty::login(const char * user, const char * remotehost)
     // note: strncpy without terminators _is_ correct here. man 4 utmp
 
     if (user) {
+        qCDebug(procLog) << "Setting user to" << user;
 # ifdef HAVE_UTMPX
         strncpy(l_struct.ut_user, user, sizeof(l_struct.ut_user));
 # else
@@ -542,6 +572,7 @@ void KPty::login(const char * user, const char * remotehost)
     }
 
     if (remotehost) {
+        qCDebug(procLog) << "Setting remote host to" << remotehost;
         strncpy(l_struct.ut_host, remotehost, sizeof(l_struct.ut_host));
 # ifdef HAVE_STRUCT_UTMP_UT_SYSLEN
         l_struct.ut_syslen = qMin(strlen(remotehost), sizeof(l_struct.ut_host));
@@ -569,12 +600,14 @@ void KPty::login(const char * user, const char * remotehost)
 # endif
 
 # ifdef HAVE_LOGIN
+    qCDebug(procLog) << "Using login/loginx";
 #  ifdef HAVE_LOGINX
     ::loginx(&l_struct);
 #  else
     ::login(&l_struct);
 #  endif
 # else
+    qCDebug(procLog) << "Not using login/loginx, manually updating utmp/utmpx";
 #  ifdef HAVE_STRUCT_UTMP_UT_TYPE
     l_struct.ut_type = USER_PROCESS;
 #  endif
@@ -602,17 +635,19 @@ void KPty::login(const char * user, const char * remotehost)
 # endif
 #endif
 
-    qDebug() << "Logged in to pty slave";
+    qCDebug(procLog) << "Logged in to pty slave";
 }
 
 void KPty::logout()
 {
-    qDebug() << "Logging out of pty slave";
+    qCDebug(procLog) << "Logging out of pty slave";
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
+    qCDebug(procLog) << "Using utempter to log out";
     removeLineFromUtmp(d->ttyName.constData(), d->masterFd);
 #else
+    qCDebug(procLog) << "Not using utempter, using utmp/utmpx for logout";
     Q_D(KPty);
 
     const char *str_ptr = d->ttyName.data();
@@ -628,12 +663,14 @@ void KPty::logout()
     }
 # endif
 # ifdef HAVE_LOGIN
+    qCDebug(procLog) << "Using logout/logoutx";
 #  ifdef HAVE_LOGINX
     ::logoutx(str_ptr, 0, DEAD_PROCESS);
 #  else
     ::logout(str_ptr);
 #  endif
 # else
+    qCDebug(procLog) << "Not using logout/logoutx, manually updating utmp/utmpx";
 #  ifdef HAVE_UTMPX
     struct utmpx l_struct, *ut;
 #  else
@@ -652,6 +689,7 @@ void KPty::logout()
     setutent();
     if ((ut = getutline(&l_struct))) {
 #  endif
+        qCDebug(procLog) << "Found utmp/utmpx entry, clearing it";
 #  ifdef HAVE_UTMPX
         memset(ut->ut_user, 0, sizeof(*ut->ut_user));
 #  else
@@ -677,7 +715,7 @@ endutent();
 #  endif
 # endif
 #endif
-    qDebug() << "Logged out of pty slave";
+    qCDebug(procLog) << "Logged out of pty slave";
 }
 
 // XXX Supposedly, tc[gs]etattr do not work with the master on Solaris.
@@ -685,6 +723,7 @@ endutent();
 
 bool KPty::tcGetAttr(struct ::termios * ttmode) const
 {
+    qCDebug(procLog) << "Getting termios attributes";
     Q_D(const KPty);
 
     return _tcgetattr(d->masterFd, ttmode) == 0;
@@ -692,6 +731,7 @@ bool KPty::tcGetAttr(struct ::termios * ttmode) const
 
 bool KPty::tcSetAttr(struct ::termios * ttmode)
 {
+    qCDebug(procLog) << "Setting termios attributes";
     Q_D(KPty);
 
     return _tcsetattr(d->masterFd, ttmode) == 0;
@@ -699,6 +739,7 @@ bool KPty::tcSetAttr(struct ::termios * ttmode)
 
 bool KPty::setWinSize(int lines, int columns)
 {
+    qCDebug(procLog) << "Setting window size to" << lines << "x" << columns;
     Q_D(KPty);
 
     struct winsize winSize;
@@ -710,13 +751,17 @@ bool KPty::setWinSize(int lines, int columns)
 
 bool KPty::setEcho(bool echo)
 {
+    qCDebug(procLog) << "Setting echo to" << echo;
     struct ::termios ttmode;
     if (!tcGetAttr(&ttmode)) {
+        qCWarning(procLog) << "Failed to get termios attributes";
         return false;
     }
     if (!echo) {
+        qCDebug(procLog) << "Disabling echo";
         ttmode.c_lflag &= ~ECHO;
     } else {
+        qCDebug(procLog) << "Enabling echo";
         ttmode.c_lflag |= ECHO;
     }
     return tcSetAttr(&ttmode);
@@ -724,6 +769,7 @@ bool KPty::setEcho(bool echo)
 
 const char * KPty::ttyName() const
 {
+    qCDebug(procLog) << "Getting tty name";
     Q_D(const KPty);
 
     return d->ttyName.data();
@@ -731,6 +777,7 @@ const char * KPty::ttyName() const
 
 int KPty::masterFd() const
 {
+    qCDebug(procLog) << "Getting master fd";
     Q_D(const KPty);
 
     return d->masterFd;
@@ -738,6 +785,7 @@ int KPty::masterFd() const
 
 int KPty::slaveFd() const
 {
+    qCDebug(procLog) << "Getting slave fd";
     Q_D(const KPty);
 
     return d->slaveFd;

@@ -30,10 +30,12 @@ InstallProcessInfoView::InstallProcessInfoView(int w, int h, QWidget *parent)
 
 void InstallProcessInfoView::slotMoveCursorToEnd()
 {
+    qCDebug(appLog) << "Moving cursor to end";
     m_editor->moveCursor(QTextCursor::End);
 }
 void InstallProcessInfoView::initUI(int w, int h)
 {
+    qCDebug(appLog) << "Initializing UI with size:" << w << "x" << h;
     // 设置控件背景色
     DRoundBgFrame *bgFrame = new DRoundBgFrame(this);
     bgFrame->setFixedSize(w, h);
@@ -53,6 +55,7 @@ void InstallProcessInfoView::initUI(int w, int h)
     // 设置字体颜色
     DebApplicationHelper *pdebhelp = DebApplicationHelper::instance();
     if (nullptr == pdebhelp) {
+        qCWarning(appLog) << "DebApplicationHelper instance is null";
         return;
     }
 
@@ -77,16 +80,19 @@ void InstallProcessInfoView::initUI(int w, int h)
     textBlockFormat.setBottomMargin(1);
     textCursor.setBlockFormat(textBlockFormat);
     m_editor->setTextCursor(textCursor);
+    qCDebug(appLog) << "UI initialized";
 }
 
 void InstallProcessInfoView::setTextFontSize(int fontSize, int fontWeight)
 {
+    qCDebug(appLog) << "Setting text font size to" << fontSize << "and weight to" << fontWeight;
     QString textFont = Utils::loadFontFamilyByType(Utils::DefautFont);
     Utils::bindFontBySizeAndWeight(m_editor, textFont, fontSize, fontWeight);
 }
 
 void InstallProcessInfoView::setTextColor(DPalette::ColorType ct)
 {
+    qCDebug(appLog) << "Setting text color to type:" << ct;
     m_colorType = ct;  // 保存传入的颜色类型
     DPalette pa = m_editor->palette();
     pa.setColor(DPalette::Text, pa.color(m_colorType));  // editor设置传入的颜色类型
@@ -101,7 +107,10 @@ void InstallProcessInfoView::appendText(QString text)
     m_editor->append(text);
 }
 
-InstallProcessInfoView::~InstallProcessInfoView() {}
+InstallProcessInfoView::~InstallProcessInfoView()
+{
+    qCDebug(appLog) << "InstallProcessInfoView destructed";
+}
 
 void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 {
@@ -140,6 +149,7 @@ void InstallProcessInfoView::clearText()
 
 void InstallProcessInfoView::setTextCursor(QTextCursor::MoveOperation operation)
 {
+    qCDebug(appLog) << "Setting text cursor with operation:" << operation;
     QTextCursor textCursor = m_editor->textCursor();
     textCursor.movePosition(operation, QTextCursor::MoveAnchor);
     m_editor->setTextCursor(textCursor);

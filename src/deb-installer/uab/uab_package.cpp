@@ -23,19 +23,24 @@ UabPackage::UabPackage(const UabPkgInfo::Ptr &metaPtr)
 
 const UabPkgInfo::Ptr &UabPackage::info() const
 {
+    qCDebug(appLog) << "Getting package info for:" << (m_metaPtr ? m_metaPtr->id : "null");
     return m_metaPtr;
 }
 
 bool UabPackage::isValid() const
 {
+    qCDebug(appLog) << "Checking if package is valid:" << (m_metaPtr ? m_metaPtr->id : "null");
     if (!m_metaPtr || !fileExists()) {
+        qCDebug(appLog) << "Package is invalid: null meta pointer or file does not exist";
         return false;
     }
 
     if (m_metaPtr->id.isEmpty() || m_metaPtr->appName.isEmpty()) {
+        qCDebug(appLog) << "Package is invalid: empty id or app name";
         return false;
     }
 
+    qCDebug(appLog) << "Package is valid:" << m_metaPtr->id;
     return true;
 }
 
@@ -65,72 +70,87 @@ void UabPackage::setProcessError(Pkg::ErrorCode err, const QString &errorString)
 
 bool UabPackage::fileExists() const
 {
+    qCDebug(appLog) << "Checking if file exists for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_exists;
     return m_exists;
 }
 
 void UabPackage::markNotExists()
 {
+    qCDebug(appLog) << "Marking package as not existing:" << (m_metaPtr ? m_metaPtr->id : "null");
     m_exists = false;
 }
 
 Pkg::DependsStatus UabPackage::dependsStatus() const
 {
+    qCDebug(appLog) << "Getting depends status for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_dependsStatus;
     return m_dependsStatus;
 }
 
 Pkg::PackageInstallStatus UabPackage::installStatus() const
 {
+    qCDebug(appLog) << "Getting install status for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_installStatus;
     return m_installStatus;
 }
 
 Pkg::PackageOperationStatus UabPackage::operationStatus() const
 {
+    qCDebug(appLog) << "Getting operation status for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_operationStatus;
     return m_operationStatus;
 }
 
 Pkg::ErrorCode UabPackage::errorCode() const
 {
+    qCDebug(appLog) << "Getting error code for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_errorCode;
     return m_errorCode;
 }
 
 QString UabPackage::installedVersion() const
 {
+    qCDebug(appLog) << "Getting installed version for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_installedVersion;
     return m_installedVersion;
 }
 
 QString UabPackage::failedReason() const
 {
+    qCDebug(appLog) << "Getting failed reason for package:" << (m_metaPtr ? m_metaPtr->id : "null");
     if (m_failReason.isEmpty()) {
+        qCDebug(appLog) << "No specific fail reason, returning process error:" << m_processError;
         return m_processError;
     }
 
+    qCDebug(appLog) << "Returning fail reason:" << m_failReason;
     return m_failReason;
 }
 
 QString UabPackage::processError() const
 {
+    qCDebug(appLog) << "Getting process error for package:" << (m_metaPtr ? m_metaPtr->id : "null") << m_processError;
     return m_processError;
 }
 
 UabPackage::Ptr UabPackage::fromInfo(const UabPkgInfo::Ptr &infoPtr)
 {
+    qCDebug(appLog) << "Creating UabPackage from info object for package:" << (infoPtr ? infoPtr->id : "null");
     return Uab::UabPackage::Ptr::create(infoPtr);
 }
 
 UabPackage::Ptr UabPackage::fromFilePath(const QString &filePath)
 {
+    qCDebug(appLog) << "Creating UabPackage from file path:" << filePath;
     QString error;
     auto infoPtr = Uab::UabBackend::packageFromMetaData(filePath, &error);
     auto uabPtr = Uab::UabPackage::Ptr::create(infoPtr);
 
     if (!error.isEmpty()) {
-        qWarning() << qPrintable("Uab from path:") << error;
+        qCWarning(appLog) << qPrintable("Uab from path:") << error;
     }
+    qCDebug(appLog) << "UabPackage created from file path:" << filePath;
     return uabPtr;
 }
 
 void UabPackage::reset()
 {
+    qCDebug(appLog) << "Resetting package state";
     if (!m_metaPtr) {
         qCWarning(appLog) << "Cannot reset package with null meta pointer";
         return;

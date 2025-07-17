@@ -73,6 +73,7 @@ void PackageSelectView::onInstallClicked()
 
 void PackageSelectView::showEvent(QShowEvent *e)
 {
+    qCDebug(appLog) << "PackageSelectView shown";
     QWidget::showEvent(e);
 
     // 首次展示焦点在全选(默认安装是被禁用的)
@@ -81,6 +82,7 @@ void PackageSelectView::showEvent(QShowEvent *e)
 
 void PackageSelectView::selectAll(bool select)
 {
+    qCDebug(appLog) << "Setting all selectable items to:" << select;
     for (auto &item : items) {
         if (item->isEnabled()) {
             item->setChecked(select);
@@ -90,6 +92,7 @@ void PackageSelectView::selectAll(bool select)
 
 void PackageSelectView::checkSelect()
 {
+    qCDebug(appLog) << "Checking selection state";
     bool isAllChecked = true;
     bool haveChecked = false;
     for (auto &item : items) {
@@ -102,20 +105,25 @@ void PackageSelectView::checkSelect()
     }
     selectAllBox->setChecked(isAllChecked);
     installButton->setEnabled(haveChecked || haveMustInstallDeb);
+    qCDebug(appLog) << "All checked:" << isAllChecked << "Have checked:" << haveChecked << "Install button enabled:" << installButton->isEnabled();
 }
 
 void PackageSelectView::clearDebList()
 {
+    qCDebug(appLog) << "Clearing package list";
     packageListWidget->clear();
     items.clear();
 }
 
 void PackageSelectView::setHaveMustInstallDeb(bool have)
 {
+    qCDebug(appLog) << "Setting haveMustInstallDeb to:" << have;
     haveMustInstallDeb = have;
     if (haveMustInstallDeb) {
+        qCDebug(appLog) << "Have must install deb, enable install button";
         installButton->setEnabled(true);
     } else {
+        qCDebug(appLog) << "No must install deb, check select";
         checkSelect();
     }
 }

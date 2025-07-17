@@ -24,6 +24,7 @@ static const int kDefaultDialogWidth = 380;
 ErrorNotifyDialogHelper::ErrorNotifyDialogHelper(QObject *parent)
     : QObject{parent}
 {
+    qCDebug(appLog) << "ErrorNotifyDialogHelper constructed";
 }
 
 void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
@@ -57,8 +58,10 @@ void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
     // Avoid incomplete display at large font size/high zoom ratio, called after show().
     auto *msgLabel = dialog->findChild<QLabel *>("MessageLabel");
     if (msgLabel) {
+        qCDebug(appLog) << "Setting message label minimum height";
         auto *dialogStyle = dialog->style();
         if (dialogStyle) {
+            qCDebug(appLog) << "Getting dialog style";
             const QSize sz =
                 dialogStyle->itemTextRect(msgLabel->fontMetrics(), msgLabel->rect(), Qt::TextWordWrap, false, msgLabel->text())
                     .size();
@@ -68,6 +71,7 @@ void ErrorNotifyDialogHelper::showHierarchicalVerifyWindow()
 
     auto *btnPorceed = qobject_cast<QPushButton *>(dialog->getButton(1));
     if (btnPorceed) {
+        qCDebug(appLog) << "Setting focus policy for proceed button";
         btnPorceed->setFocusPolicy(Qt::TabFocus);
         btnPorceed->setFocus();
     }

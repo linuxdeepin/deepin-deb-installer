@@ -45,10 +45,12 @@ QHash<QString, QString> Utils::m_fontNameCache;
 Utils::Utils(QObject *parent)
     : QObject(parent)
 {
+    qCDebug(appLog) << "Utils constructed";
 }
 
 QString Utils::loadFontFamilyByType(FontType fontType)
 {
+    qCDebug(appLog) << "Loading font family for type:" << fontType;
     Q_UNUSED(fontType);
     QFont font;
     return font.family();
@@ -56,6 +58,7 @@ QString Utils::loadFontFamilyByType(FontType fontType)
 
 QFont Utils::loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, int fontWeight)
 {
+    qCDebug(appLog) << "Loading font by size and weight:" << fontFamily << fontSize << fontWeight;
     Q_UNUSED(fontSize)
 
     QFont font(fontFamily);
@@ -66,8 +69,11 @@ QFont Utils::loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, in
 
 void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, int fontSize, int fontWeight)
 {
-    if (nullptr == widget)
+    qCDebug(appLog) << "Binding font to widget:" << widget->objectName() << fontFamily << fontSize << fontWeight;
+    if (nullptr == widget) {
+        qCWarning(appLog) << "Cannot bind font to null widget";
         return;
+    }
     QFont font = loadFontBySizeAndWeight(fontFamily, fontSize, fontWeight);
     widget->setFont(font);
 
@@ -104,6 +110,7 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, 
             sizeType = DFontSizeManager::T1;
         } break;
     }
+    qCDebug(appLog) << "Binding font size type" << sizeType << "and weight" << fontWeight;
 
     DFontSizeManager *fontManager = DFontSizeManager::instance();
     fontManager->bind(widget, sizeType, fontWeight);
@@ -111,21 +118,26 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, 
 
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
+    qCDebug(appLog) << "Converting from special encoding";
     bool bFlag = inputStr.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
     if (bFlag) {
+        qCDebug(appLog) << "Input string contains Chinese characters, returning as is";
         return inputStr;
     }
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     if (codec) {
         QString unicodeStr = codec->toUnicode(inputStr.toLatin1());
+        qCDebug(appLog) << "Successfully converted to Unicode";
         return unicodeStr;
     } else {
+        qCWarning(appLog) << "UTF-8 codec not found, returning original string";
         return inputStr;
     }
 }
 bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &strfilename)
 {
+    qCDebug(appLog) << "Return digital verify, strfilepath:" << strfilepath << ", strfilename:" << strfilename;
     QDir dir(strfilepath);
     if (!dir.exists()) {
         qCDebug(appLog) << "文件夹不存在";
@@ -152,6 +164,7 @@ bool Utils::Return_Digital_Verify(const QString &strfilepath, const QString &str
 
 Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
 {
+    qCDebug(appLog) << "Digital verify, filepath_name:" << filepath_name;
     QString verifyfilepath = "/usr/bin/";
     QString verifyfilename = "deepin-deb-verify";
     bool result_verify_file = Return_Digital_Verify(verifyfilepath, verifyfilename);
@@ -183,6 +196,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const QSize &size)
 {
+    qCDebug(appLog) << "Hold text in rect, font:" << font.family() << ", srcText:" << srcText << ", size:" << size;
     bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
     QString text;
@@ -241,13 +255,16 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const Q
     }
 
     if (lineCount > 0) {
+        qCDebug(appLog) << "Line count is greater than 0, add tempText";
         text += tempText;
     }
+    qCDebug(appLog) << "Hold text in rect, text:" << text;
     return text;
 }
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const int &width)
 {
+    qCDebug(appLog) << "Hold text in rect, font:" << font.family() << ", srcText:" << srcText << ", width:" << width;
     bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
     QString text;
@@ -293,6 +310,7 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
         text += "\n";
     text += tempText;
 
+    qCDebug(appLog) << "Hold text in rect, text:" << text;
     return text;
 }
 
@@ -308,6 +326,7 @@ QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const i
 */
 Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
 {
+    qCDebug(appLog) << "Check package readable, packagePath:" << packagePath;
     // Determine whether the route information is a local path
     QStorageInfo info(packagePath);
     QString device = info.device();
@@ -344,22 +363,27 @@ Pkg::PackageReadability Utils::checkPackageReadable(const QString &packagePath)
 
 int Utils::compareVersion(const QString &v1, const QString &v2)
 {
+    qCDebug(appLog) << "Comparing versions:" << v1 << "and" << v2;
     return QApt::Package::compareVersion(v1, v2);
 }
 
 Pkg::PackageType Utils::detectPackage(const QString &filePath)
 {
+    qCDebug(appLog) << "Detecting package type for:" << filePath;
     QMimeDatabase db;
     const QMimeType mime = db.mimeTypeForFile(filePath);
     const QFileInfo info(filePath);
 
     if (info.suffix().toLower() == "deb" || mime.name().startsWith("application/vnd.debian.binary-package")) {
+        qCDebug(appLog) << "Detected DEB package";
         return Pkg::Deb;
     }
     if (info.suffix().toLower() == "uab" || mime.name().startsWith("application/vnd.linyaps.uab")) {
+        qCDebug(appLog) << "Detected UAB package";
         return Pkg::Uab;
     }
 
+    qCWarning(appLog) << "Unknown package type for:" << filePath;
     return Pkg::UnknownPackage;
 }
 
@@ -369,6 +393,7 @@ Pkg::PackageType Utils::detectPackage(const QString &filePath)
  */
 QIcon Utils::packageIcon(Pkg::PackageType type)
 {
+    qCDebug(appLog) << "Package icon, type:" << type;
     if (Pkg::Uab == type) {
         // linglong uab package
         static QIcon kUabIcon = QIcon::fromTheme("application/x-executable");
@@ -380,11 +405,13 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
                 kUabIcon = QIcon(dciIcon.pixmap(qApp->devicePixelRatio(), availibleSizes.first(), DDciIcon::Light));
             }
         }
+        qCDebug(appLog) << "return uab package icon, type:" << type;
         return kUabIcon;
 
     } else {
         // default, deb package
         static const QIcon kDebIcon = QIcon::fromTheme("application-x-deb");
+        qCDebug(appLog) << "return deb package icon, type:" << type;
         return kDebIcon;
     }
 }
@@ -394,6 +421,7 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
  */
 bool Utils::checkPackageContainsDebConf(const QString &filePath)
 {
+    qCDebug(appLog) << "Checking if package contains DebConf templates:" << filePath;
     // create template dir
     QTemporaryDir templateDir;
     if (!templateDir.isValid()) {
@@ -410,7 +438,9 @@ bool Utils::checkPackageContainsDebConf(const QString &filePath)
                    << "Failed to decompress the main control file" << errorOutput;
     }
 
-    return QFile::exists(templateDir.filePath("templates"));
+    const bool exists = QFile::exists(templateDir.filePath("templates"));
+    qCDebug(appLog) << "Templates file exists:" << exists;
+    return exists;
 }
 
 /**
@@ -418,12 +448,13 @@ bool Utils::checkPackageContainsDebConf(const QString &filePath)
  */
 bool Utils::isDevelopMode()
 {
+    qCDebug(appLog) << "Check if the current mode is development mode";
     static bool kIsDevelopMode = false;
     static std::once_flag kDevelopOnceFlag;
     std::call_once(kDevelopOnceFlag, [&]() {
     // Add for judge OS Version
 #if (DTK_VERSION >= DTK_VERSION_CHECK(5, 2, 2, 2))
-        qInfo() << "system code(UOS): " << Dtk::Core::DSysInfo::uosEditionType();
+        qCDebug(appLog) << "system code(UOS): " << Dtk::Core::DSysInfo::uosEditionType();
         switch (Dtk::Core::DSysInfo::uosEditionType()) {
 #if (DTK_VERSION > DTK_VERSION_CHECK(5, 4, 10, 0))
             case Dtk::Core::DSysInfo::UosEducation:
@@ -435,7 +466,7 @@ bool Utils::isDevelopMode()
                 QDBusInterface *dbusInterFace = new QDBusInterface(
                     "com.deepin.sync.Helper", "/com/deepin/sync/Helper", "com.deepin.sync.Helper", QDBusConnection::systemBus());
                 bool deviceMode = dbusInterFace->property("DeveloperMode").toBool();
-                qInfo() << "DebListModel:"
+                qCDebug(appLog) << "DebListModel:"
                         << "system editon:" << Dtk::Core::DSysInfo::uosEditionName() << "develop mode:" << deviceMode;
                 kIsDevelopMode = deviceMode;
                 delete dbusInterFace;
@@ -450,13 +481,15 @@ bool Utils::isDevelopMode()
                 break;
         }
 #else
-        qInfo() << "system code(Deepin): " << Dtk::Core::DSysInfo::deepinType();
+        qCDebug(appLog) << "system code(Deepin): " << Dtk::Core::DSysInfo::deepinType();
         switch (Dtk::Core::DSysInfo::deepinType()) {
         case Dtk::Core::DSysInfo::DeepinDesktop:
+            qCDebug(appLog) << "DeepinDesktop";
             kIsDevelopMode = true;
             break;
         case Dtk::Core::DSysInfo::DeepinPersonal:
         case Dtk::Core::DSysInfo::DeepinProfessional:
+            qCDebug(appLog) << "DeepinProfessional";
             // Check if develop mode
             QDBusInterface *dbusInterFace = new QDBusInterface("com.deepin.deepinid", "/com/deepin/deepinid", "com.deepin.deepinid");
             bool deviceMode = dbusInterFace->property("DeviceUnlocked").toBool();
@@ -466,9 +499,11 @@ bool Utils::isDevelopMode()
             break;
         case Dtk::Core::DSysInfo::isCommunityEdition():
         case Dtk::Core::DSysInfo::DeepinServer:
+            qCDebug(appLog) << "DeepinServer";
             kIsDevelopMode = true;
             break;
         default:
+            qCDebug(appLog) << "Default";
             kIsDevelopMode = true;
             break;
         }
@@ -484,12 +519,15 @@ bool Utils::isDevelopMode()
  */
 QString Utils::formatWrapText(const QString &text, int textWidth)
 {
+    qCDebug(appLog) << "Format wrap text, text:" << text << ", textWidth:" << textWidth;
     // GUI thread only
     if (QThread::currentThread() != qApp->thread()) {
+        qCDebug(appLog) << "Not in GUI thread, return text";
         return text;
     }
 
     if (text.isEmpty() || !textWidth) {
+        qCDebug(appLog) << "Text is empty or textWidth is 0, return text";
         return text;
     }
 
@@ -518,6 +556,7 @@ QString Utils::formatWrapText(const QString &text, int textWidth)
         block = block.next();
     }
 
+    qCDebug(appLog) << "Format wrap text, tipsText:" << tipsText;
     return tipsText;
 }
 
@@ -526,6 +565,7 @@ QString Utils::formatWrapText(const QString &text, int textWidth)
  */
 QStringList Utils::parseBlackList()
 {
+    qCDebug(appLog) << "Parse black list";
     static const QString kBlackFileV20 {"/usr/share/udcp/appblacklist.txt"};
     static const QString kBlackFileV25 {"/var/lib/udcp/appblacklist.txt"};
     static const int kV25Version = 25;
@@ -543,7 +583,7 @@ QStringList Utils::parseBlackList()
         return blackApplications.split(",");
     }
 
-    qInfo() << "Black File not Found, " << blackFile;
+    qCDebug(appLog) << "Black File not Found, " << blackFile;
     return {};
 }
 
@@ -555,16 +595,19 @@ static bool kWinePreDependsStatus = false;
 
 bool GlobalStatus::winePreDependsInstalling()
 {
+    qCDebug(appLog) << "Wine pre-dependency installing, status:" << kWinePreDependsStatus;
     return kWinePreDependsStatus;
 }
 
 void GlobalStatus::setWinePreDependsInstalling(bool b)
 {
+    qCDebug(appLog) << "Set wine pre-dependency installing, status:" << b;
     kWinePreDependsStatus = b;
 }
 
 DebApplicationHelper *DebApplicationHelper::instance()
 {
+    // qCDebug(appLog) << "Get deb application helper instance";
     static DebApplicationHelper *phelper = new DebApplicationHelper;
 
     return phelper;
@@ -644,13 +687,16 @@ static QColor dark_dpalette[DPalette::NColorTypes]{
 
 DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType type) const
 {
+    qCDebug(appLog) << "Get deb application helper instance";
     DPalette pa;
     const QColor *qcolor_list, *dcolor_list;
 
     if (type == DarkType) {
+        qCDebug(appLog) << "Dark type";
         qcolor_list = dark_qpalette;
         dcolor_list = dark_dpalette;
     } else {
+        qCDebug(appLog) << "Light type";
         qcolor_list = light_qpalette;
         dcolor_list = light_dpalette;
     }
@@ -676,6 +722,7 @@ DPalette DebApplicationHelper::standardPalette(DGuiApplicationHelper::ColorType 
 
 DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &base) const
 {
+    // qCDebug(appLog) << "Get palette, widget:" << widget << ", base:" << base;
     Q_UNUSED(base)
 
     DPalette palette;
@@ -695,6 +742,7 @@ DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &ba
 
 void DebApplicationHelper::setPalette(QWidget *widget, const DPalette &palette)
 {
+    // qCDebug(appLog) << "Set palette, widget:" << widget << ", palette:" << palette;
     // 记录此控件被设置过palette
     if (nullptr == widget)
         return;
@@ -704,6 +752,7 @@ void DebApplicationHelper::setPalette(QWidget *widget, const DPalette &palette)
 
 void DebApplicationHelper::resetPalette(QWidget *widget)
 {
+    // qCDebug(appLog) << "Reset palette, widget:" << widget;
     if (nullptr == widget)
         return;
     widget->setProperty("_d_set_palette", QVariant());

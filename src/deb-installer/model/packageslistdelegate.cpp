@@ -24,17 +24,20 @@ PackagesListDelegate::PackagesListDelegate(AbstractPackageListModel *m_model, QA
     , m_fileListModel(m_model)  // 从新new一个对象修改为获取传入的对象
     , m_parentView(parent)
 {
+    qCDebug(appLog) << "PackagesListDelegate constructed.";
     qGuiApp->installEventFilter(this);  // 事件筛选
 
     m_itemHeight = 50 - 2 * (13 - DFontSizeManager::fontPixelSize(qGuiApp->font()));
     if (DFontSizeManager::fontPixelSize(qGuiApp->font()) > 13) {  // 当前字体大小是否小于13
         m_itemHeight += 2;
     }
+    qCDebug(appLog) << "Initial item height set to:" << m_itemHeight;
 }
 
 void PackagesListDelegate::refreshDebItemStatus(
     const int operate_stat, QRect install_status_rect, QPainter *painter, bool isSelect, bool isEnable) const
 {
+    // qCDebug(appLog) << "Refreshing deb item status. Op status:" << operate_stat << "isSelect:" << isSelect << "isEnable:" << isEnable;
     DPalette parentViewPattle = DebApplicationHelper::instance()->palette(m_parentView);
 
     DGuiApplicationHelper *dAppHelper = DGuiApplicationHelper::instance();
@@ -50,6 +53,7 @@ void PackagesListDelegate::refreshDebItemStatus(
     } else {
         colorGroup = DPalette::Inactive;  // 设置Palette为非激活状态
     }
+    // qCDebug(appLog) << "Color group set to:" << colorGroup;
 
     // 根据操作的状态显示提示语
     switch (operate_stat) {
@@ -70,8 +74,10 @@ void PackagesListDelegate::refreshDebItemStatus(
             showText = tr("Failed");
             break;
     }
+    // qCDebug(appLog) << "Display text set to:" << showText;
 
     if (isSelect && isEnable) {  // 当前被选中 未被选中使用默认颜色
+        // qCDebug(appLog) << "Item is selected and enabled, setting highlighted text color.";
         forground.setColor(appPalette.color(colorGroup, DPalette::HighlightedText));
         painter->setPen(forground);
     }
@@ -80,12 +86,14 @@ void PackagesListDelegate::refreshDebItemStatus(
 
 void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    // qCDebug(appLog) << "Painting item for index:" << index.row() << "with state:" << option.state;
     if (!index.isValid()) {  // 判断传入的index是否有效
         qCDebug(appLog) << "Invalid index, skipping paint";
         DStyledItemDelegate::paint(painter, option, index);
         return;
     }
     auto themeType = DGuiApplicationHelper::instance()->themeType();
+    // qCDebug(appLog) << "Theme type:" << themeType;
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
@@ -111,12 +119,14 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
             colorGroup = DPalette::Active;  // 当前窗口被激活
         }
     }
+    // qCDebug(appLog) << "Paint color group set to:" << colorGroup;
     background.setColor(QColor(0, 0, 0, 0));  // 未选中时直接背景透明
 
     // 被选中时设置颜色高亮
     forground.setColor(palette.color(colorGroup, DPalette::Text));
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {
+            // qCDebug(appLog) << "Item is selected, setting highlight background.";
             background = palette.color(colorGroup, DPalette::Highlight);
         }
     }
@@ -166,6 +176,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QFontMetrics fontMetric(pkg_name_font);
 
     const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
+    // qCDebug(appLog) << "Painting package name:" << elided_pkg_name;
 
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {
@@ -195,6 +206,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const int operate_stat = index.data(DebListModel::PackageOperateStatusRole).toInt();  // 获取包的状态
     qCDebug(appLog) << "Package operation status:" << operate_stat;
     if (operate_stat != Pkg::PackageOperationStatus::Prepare) {
+        // qCDebug(appLog) << "Operation status is not 'Prepare', refreshing deb item status display.";
         QRect install_status_rect = option.rect;
         install_status_rect.setRight(option.rect.right() - 20);
         install_status_rect.setTop(version_y - 4);
@@ -245,6 +257,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         // fix bug: 43139
         forground.setColor(palette.color(colorGroup, DPalette::TextTips));
     }
+    // qCDebug(appLog) << "Initial info string set to:" << info_str;
 
     if (operate_stat == Pkg::PackageOperationStatus::Failed) {
         info_str = index.data(DebListModel::PackageFailReasonRole).toString();
@@ -264,6 +277,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     if (dependsStat != Pkg::CompatibleIntalled && dependsStat != Pkg::CompatibleNotInstalled) {
         QStringList removePackages = index.data(DebListModel::PackageRemoveDependsRole).toStringList();
         if (!removePackages.isEmpty()) {
+            // qCWarning(appLog) << "Packages to be removed:" << removePackages;
             forground.setColor(palette.color(colorGroup, DPalette::TextWarning));
             info_str = QObject::tr("Will remove: ") + removePackages.join(' ');
         }
@@ -281,6 +295,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     info_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
     painter->setFont(info_font);
     info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
+    // qCDebug(appLog) << "Final info string to draw:" << info_str;
     painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);  // 将提示绘制到item上
 
     painter->restore();
@@ -291,14 +306,16 @@ QSize PackagesListDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     Q_UNUSED(index);
     Q_UNUSED(option);
 
-    qCDebug(appLog) << "Item height:" << m_itemHeight;
+    // qCDebug(appLog) << "Providing size hint. Item height:" << m_itemHeight;
     QSize itemSize = QSize(0, m_itemHeight);  // 设置Item的高度
     return itemSize;
 }
 
 bool PackagesListDelegate::eventFilter(QObject *watched, QEvent *event)
 {
+    // qCDebug(appLog) << "Event filter: FontChange event detected.";
     if (event->type() == QEvent::FontChange && watched == this) {
+        // qCDebug(appLog) << "Event filter: FontChange event detected.";
         QFontInfo fontinfo = m_parentView->fontInfo();
         emit fontinfo.pixelSize();
     }
@@ -307,5 +324,6 @@ bool PackagesListDelegate::eventFilter(QObject *watched, QEvent *event)
 
 void PackagesListDelegate::getItemHeight(int height)
 {
+    // qCDebug(appLog) << "Setting item height to:" << height;
     m_itemHeight = height;
 }

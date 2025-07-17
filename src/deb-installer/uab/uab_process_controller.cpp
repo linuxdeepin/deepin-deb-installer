@@ -53,64 +53,82 @@ UabProcessController::UabProcessController(QObject *parent)
 
 void UabProcessController::setProcessType(ProcessType type)
 {
+    qCDebug(appLog) << "Setting process type from" << m_type << "to" << type;
     if (type == m_type) {
+        qCDebug(appLog) << "Process type is the same, return";
         return;
     }
     m_type = type;
+    qCDebug(appLog) << "Process type set to" << type;
 }
 
 UabProcessController::ProcessType UabProcessController::processType() const
 {
+    qCDebug(appLog) << "Getting process type:" << m_type;
     return m_type;
 }
 
 UabProcessController::ProcFlags UabProcessController::procFlag() const
 {
+    qCDebug(appLog) << "Getting process flag:" << m_procFlag;
     return m_procFlag;
 }
 
 bool UabProcessController::isRunning() const
 {
+    qCDebug(appLog) << "Checking if process is running";
     if (m_procFlag & (Uninstalling | Installing | Processing)) {
+        qCDebug(appLog) << "Process is running (flag set)";
         return true;
     }
 
     if (m_process && QProcess::NotRunning != m_process->state()) {
+        qCDebug(appLog) << "Process is running (QProcess state)";
         return true;
     }
 
+    qCDebug(appLog) << "Process is not running";
     return false;
 }
 
 bool UabProcessController::reset()
 {
+    qCDebug(appLog) << "Resetting process controller";
     if (isRunning() || !ensureProcess()) {
+        qCWarning(appLog) << "Cannot reset - process running or cannot ensure process";
         return false;
     }
 
     m_currentIndex = kInitedIndex;
     m_procList.clear();
+    qCDebug(appLog) << "Process controller reset successfully";
 
     return true;
 }
 
 bool Uab::UabProcessController::markInstall(const UabPackage::Ptr &installPtr)
 {
+    qCDebug(appLog) << "Marking package for installation:" << (installPtr ? installPtr->info()->id : "null");
     if (isRunning() || !ensureProcess() || !installPtr || !installPtr->isValid()) {
+        qCWarning(appLog) << "Cannot mark for installation - process running, not ready, or invalid package";
         return false;
     }
 
     m_procList.append(qMakePair(Installing, installPtr));
+    qCDebug(appLog) << "Package marked for installation:" << installPtr->info()->id;
     return true;
 }
 
 bool Uab::UabProcessController::markUninstall(const UabPackage::Ptr &uninstallPtr)
 {
+    qCDebug(appLog) << "Marking package for uninstallation:" << (uninstallPtr ? uninstallPtr->info()->id : "null");
     if (isRunning() || !ensureProcess() || !uninstallPtr || !uninstallPtr->isValid()) {
+        qCWarning(appLog) << "Cannot mark for uninstallation - process running, not ready, or invalid package";
         return false;
     }
 
     m_procList.append(qMakePair(Uninstalling, uninstallPtr));
+    qCDebug(appLog) << "Package marked for uninstallation:" << uninstallPtr->info()->id;
     return true;
 }
 
@@ -138,7 +156,9 @@ bool UabProcessController::commitChanges()
 
 bool Uab::UabProcessController::ensureProcess()
 {
+    qCDebug(appLog) << "Ensuring process";
     if (!m_process) {
+        qCDebug(appLog) << "Creating new process";
         m_process = new Konsole::Pty(this);
 
         connect(m_process, &Konsole::Pty::receivedData, this, &UabProcessController::onReadOutput);
@@ -180,26 +200,32 @@ bool Uab::UabProcessController::ensureProcess()
  */
 void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
 {
+    qCDebug(appLog) << "Parsing progress from JSON data:" << jsonData;
     const QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
     if (doc.isArray()) {
+        qCDebug(appLog) << "JSON data is an array";
         // maybe percentage info
         const QJsonObject obj = doc.array().first().toObject();
         if (obj.contains(kJsonPercentage)) {
             float progress = obj.value(kJsonPercentage).toDouble();
+            qCDebug(appLog) << "Found progress in JSON array:" << progress;
             updateWholeProgress(progress);
         }
 
     } else if (doc.isObject()) {
+        qCDebug(appLog) << "JSON data is an object";
         // maybe percentage / code info
         const QJsonObject obj = doc.object();
 
         if (obj.contains(kJsonPercentage)) {
             float progress = obj.value(kJsonPercentage).toDouble();
+            qCDebug(appLog) << "Found progress in JSON object:" << progress;
             updateWholeProgress(progress);
 
         } else if (UabError == obj.value(kJsonCode).toInt()) {
             const QString errorString = obj.value(kJsonMessage).toString();
+            qCWarning(appLog) << "Found error in JSON object:" << errorString;
             auto currUabPtr = currentPackagePtr();
             if (currUabPtr) {
                 currUabPtr->setProcessError(Pkg::UnknownError, errorString);
@@ -209,11 +235,14 @@ void UabProcessController::parseProgressFromJson(const QByteArray &jsonData)
         }
 
         // TODO(renbin): signature verify error, etc.
+    } else {
+        qCWarning(appLog) << "JSON data is not an array or object";
     }
 }
 
 void UabProcessController::parseProgressFromRawOutput(const QByteArray &output)
 {
+    qCDebug(appLog) << "Parsing progress from raw output:" << output;
     // Detect progress change, filter ANSI code, receive data such as:
     // "\r\x1B[K\x1B[?25l0% prepare for installing uab\x1B[?25h"
     // "\r\x1B[K\x1B[?25l100% install uab successfully\x1B[?25h\n"
@@ -224,15 +253,18 @@ void UabProcessController::parseProgressFromRawOutput(const QByteArray &output)
     if (match.hasMatch()) {
         // get (\\d+) capture
         float progress = match.captured(match.lastCapturedIndex()).toFloat();
+        qCDebug(appLog) << "Found progress in raw output:" << progress;
         updateWholeProgress(progress);
     }
 }
 
 void UabProcessController::updateWholeProgress(float currentTaskProgress)
 {
+    qCDebug(appLog) << "Updating whole progress with current task progress:" << currentTaskProgress;
     const int count = m_procList.size();
     if (count > 1) {
         currentTaskProgress = (m_currentIndex * 100.0f + currentTaskProgress) / static_cast<float>(count);
+        qCDebug(appLog) << "Calculated whole progress:" << currentTaskProgress;
     }
 
     Q_EMIT progressChanged(currentTaskProgress);
@@ -240,6 +272,7 @@ void UabProcessController::updateWholeProgress(float currentTaskProgress)
 
 void UabProcessController::onReadOutput(const char *buffer, int length, bool isCommandExec)
 {
+    qCDebug(appLog) << "Read output from process, length:" << length << "isCommandExec:" << isCommandExec;
     Q_UNUSED(isCommandExec)
     QByteArray output = QByteArray::fromRawData(buffer, length);
     Q_EMIT processOutput(output);
@@ -250,6 +283,7 @@ void UabProcessController::onReadOutput(const char *buffer, int length, bool isC
 
 void UabProcessController::onFinished(int exitCode, int exitStatus)
 {
+    qCDebug(appLog) << "Process finished with exit code:" << exitCode << "exit status:" << exitStatus;
     Q_UNUSED(exitStatus)
 
     qCDebug(appLog) << "Process finished with exit code:" << exitCode;
@@ -275,18 +309,21 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
 
 void UabProcessController::onDBusProgressChanged(int progress, const QString &message)
 {
+    qCDebug(appLog) << "D-Bus progress changed:" << progress << "message:" << message;
     updateWholeProgress(static_cast<float>(progress));
     Q_EMIT processOutput(message);
 }
 
 bool UabProcessController::nextProcess()
 {
+    qCDebug(appLog) << "Next process";
     m_procFlag.setFlag(Installing, false);
     m_procFlag.setFlag(Uninstalling, false);
 
     // check process finish
     m_currentIndex++;
     if (m_currentIndex >= m_procList.size()) {
+        qCDebug(appLog) << "Current index is greater than or equal to process list size, set process flag to Finish";
         m_procFlag = Finish;
         Q_EMIT processFinished(true);
         return true;
@@ -300,8 +337,10 @@ bool UabProcessController::nextProcess()
     const auto &currentProc = m_procList.at(m_currentIndex);
     switch (currentProc.first) {
         case Installing:
+            qCDebug(appLog) << "Installing process";
             return (BackendCli == m_type) ? installBackendCliImpl(currentProc.second) : installCliImpl(currentProc.second);
         case Uninstalling:
+            qCDebug(appLog) << "Uninstalling process";
             return (BackendCli == m_type) ? uninstallBackendCliImpl(currentProc.second) : uninstallCliImpl(currentProc.second);
         default:
             break;
@@ -313,6 +352,7 @@ bool UabProcessController::nextProcess()
 
 bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installPtr)
 {
+    qCDebug(appLog) << "Preparing backend CLI install for package:" << installPtr->info()->id << installPtr->info()->version;
     if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
         qCWarning(appLog) << "Invalid package for installation";
         return false;
@@ -340,6 +380,7 @@ bool UabProcessController::installBackendCliImpl(const UabPackage::Ptr &installP
 
 bool UabProcessController::uninstallBackendCliImpl(const UabPackage::Ptr &uninstallPtr)
 {
+    qCDebug(appLog) << "Preparing backend CLI uninstall for package:" << uninstallPtr->info()->id << uninstallPtr->info()->version;
     if (!uninstallPtr || !uninstallPtr->isValid()) {
         qCWarning(appLog) << "Invalid package for uninstallation";
         return false;
@@ -364,6 +405,7 @@ bool UabProcessController::uninstallBackendCliImpl(const UabPackage::Ptr &uninst
 
 bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &installPtr)
 {
+    qCDebug(appLog) << "Preparing CLI install for package:" << installPtr->info()->id << installPtr->info()->version;
     if (!installPtr || !installPtr->isValid() || installPtr->info()->filePath.isEmpty()) {
         return false;
     }
@@ -387,6 +429,7 @@ bool Uab::UabProcessController::installCliImpl(const Uab::UabPackage::Ptr &insta
 
 bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uninstallPtr)
 {
+    qCDebug(appLog) << "Preparing CLI uninstall for package:" << uninstallPtr->info()->id << uninstallPtr->info()->version;
     if (!uninstallPtr || !uninstallPtr->isValid()) {
         return false;
     }
@@ -417,12 +460,16 @@ bool Uab::UabProcessController::uninstallCliImpl(const Uab::UabPackage::Ptr &uni
 
 bool UabProcessController::checkIndexValid()
 {
-    return 0 <= m_currentIndex && m_currentIndex < m_procList.size();
+    const bool isValid = 0 <= m_currentIndex && m_currentIndex < m_procList.size();
+    // qCDebug(appLog) << "Checking if index" << m_currentIndex << "is valid:" << isValid;
+    return isValid;
 }
 
 UabPackage::Ptr UabProcessController::currentPackagePtr()
 {
+    qCDebug(appLog) << "Getting current package pointer at index:" << m_currentIndex;
     if (!checkIndexValid()) {
+        qCWarning(appLog) << "Invalid index, cannot get current package pointer";
         return {};
     }
 
@@ -431,25 +478,31 @@ UabPackage::Ptr UabProcessController::currentPackagePtr()
 
 void UabProcessController::commitCurrentChangeToBackend()
 {
+    qCDebug(appLog) << "Committing current change to backend";
     if (!checkIndexValid()) {
+        qCWarning(appLog) << "Invalid index, cannot commit change";
         return;
     }
 
     const auto &currentProc = m_procList.at(m_currentIndex);
     UabPkgInfo::Ptr infoPtr;
     if (!currentProc.second || !currentProc.second->isValid()) {
+        qCWarning(appLog) << "Invalid package, cannot commit change";
         return;
     }
     infoPtr = currentProc.second->info();
 
     switch (currentProc.first) {
         case Installing:
+            qCDebug(appLog) << "Committing installation for package:" << infoPtr->id;
             Uab::UabBackend::instance()->packageInstalled(infoPtr);
             break;
         case Uninstalling:
+            qCDebug(appLog) << "Committing uninstallation for package:" << infoPtr->id;
             Uab::UabBackend::instance()->packageRemoved(infoPtr);
             break;
         default:
+            qCWarning(appLog) << "Unhandled process type:" << currentProc.first;
             break;
     }
 }

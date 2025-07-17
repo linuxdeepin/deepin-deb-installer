@@ -47,15 +47,22 @@ enum HierarchicalError {
        安装器接收输出信息并判断是否为验签错误。
  */
 
-HierarchicalVerify::HierarchicalVerify() {}
+HierarchicalVerify::HierarchicalVerify()
+{
+    qCDebug(appLog) << "HierarchicalVerify constructed";
+}
 
-HierarchicalVerify::~HierarchicalVerify() {}
+HierarchicalVerify::~HierarchicalVerify()
+{
+    qCDebug(appLog) << "HierarchicalVerify destructed";
+}
 
 /**
    @return 返回分级管控签名校验辅助类实例
  */
 HierarchicalVerify *HierarchicalVerify::instance()
 {
+    qCDebug(appLog) << "Getting HierarchicalVerify instance";
     static HierarchicalVerify ins;
     return &ins;
 }
@@ -65,6 +72,7 @@ HierarchicalVerify *HierarchicalVerify::instance()
  */
 bool HierarchicalVerify::isValid()
 {
+    // qCDebug(appLog) << "Checking hierarchical interface validity";
     if (interfaceInvalid) {
         qCDebug(appLog) << "Hierarchical interface is marked as invalid, skipping check";
         return false;
@@ -73,6 +81,7 @@ bool HierarchicalVerify::isValid()
     static std::once_flag checkFlag;
     std::call_once(checkFlag, [this]() { checkValidImpl(); });
 
+    qCDebug(appLog) << "Hierarchical interface is valid, return:" << valid;
     return valid;
 }
 
@@ -84,6 +93,7 @@ bool HierarchicalVerify::isValid()
  */
 bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QString &errorString)
 {
+    qCDebug(appLog) << "Checking transaction error, pkgName:" << pkgName << ", errorString:" << errorString;
     static REG_EXP s_ErrorReg(QString(VERIFY_ERROR_REGEXP).arg(VerifyError).arg(VerffyErrorVer2));
     if (errorString.contains(s_ErrorReg)) {
         invalidPackages.insert(pkgName);
@@ -91,6 +101,7 @@ bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QSt
         return true;
     }
 
+    qCDebug(appLog) << "No hierarchical error detected, return false";
     return false;
 }
 
@@ -100,6 +111,7 @@ bool HierarchicalVerify::checkTransactionError(const QString &pkgName, const QSt
  */
 bool HierarchicalVerify::pkgVerifyPassed(const QString &pkgName)
 {
+    qCDebug(appLog) << "Checking if package verify passed, pkgName:" << pkgName;
     return !invalidPackages.contains(pkgName);
 }
 
@@ -108,6 +120,7 @@ bool HierarchicalVerify::pkgVerifyPassed(const QString &pkgName)
  */
 void HierarchicalVerify::clearVerifyResult()
 {
+    qCDebug(appLog) << "Clearing verify result";
     invalidPackages.clear();
 }
 
@@ -116,19 +129,23 @@ void HierarchicalVerify::clearVerifyResult()
  */
 void HierarchicalVerify::proceedDefenderSafetyPage()
 {
+    qCDebug(appLog) << "Proceeding to defender safety page";
     QDBusInterface interface(DBUS_DEFENDER_BUS, DBUS_DEFENDER_PATH, DBUS_DEFENDER_INTERFACE, QDBusConnection::sessionBus());
     QDBusError error = interface.lastError();
 
     if (interface.isValid()) {
+        qCDebug(appLog) << "DBus interface is valid, calling ShowPage";
         QDBusMessage message = interface.call(DBUS_DEFENDER_METHOD, DBUS_DEFENDER_SECURITYTOOLS, DBUS_DEFENDER_APP_SAFETY);
-        QDBusError error = interface.lastError();
+        error = interface.lastError();
     }
 
     if (QDBusError::NoError != error.type()) {
-        qCWarning(appLog) << QString("[Hierarchical] Show defender app-safety page error [%2] %3")
+        qCWarning(appLog) << QString("[Hierarchical] Show defender app-safety page error [%1] [%2] %3")
                           .arg(DBUS_DEFENDER_BUS)
                           .arg(error.name())
                           .arg(error.message());
+    } else {
+        qCDebug(appLog) << "Successfully called ShowPage on defender";
     }
 }
 
@@ -137,16 +154,18 @@ void HierarchicalVerify::proceedDefenderSafetyPage()
  */
 bool HierarchicalVerify::checkHierarchicalInterface()
 {
+    qCDebug(appLog) << "Checking hierarchical interface";
     bool availabled = false;
     QDBusInterface interface(
         DBUS_HIERARCHICAL_BUS, DBUS_HIERARCHICAL_PATH, DBUS_HIERARCHICAL_INTERFACE, QDBusConnection::systemBus());
 
     if (interface.isValid()) {
+        qCDebug(appLog) << "DBus interface is valid, calling Availabled";
         QDBusMessage message = interface.call(DBUS_HIERARCHICAL_METHOD);
         QDBusError error = interface.lastError();
         if (QDBusError::NoError != error.type()) {
             // The log not need warning level.
-            qInfo() << QString("[Hierarchical] DBus %1 read property %2 error: type(%2) [%3] %4")
+            qCInfo(appLog) << QString("[Hierarchical] DBus %1 read property %2 error: type(%2) [%3] %4")
                            .arg(DBUS_HIERARCHICAL_BUS)
                            .arg(DBUS_HIERARCHICAL_METHOD)
                            .arg(error.type())
@@ -157,14 +176,14 @@ bool HierarchicalVerify::checkHierarchicalInterface()
             if (!interface.isValid() || QDBusError::UnknownInterface == error.type() ||
                 QDBusError::InvalidInterface == error.type()) {
                 interfaceInvalid = true;
-                qInfo() << QString("[Hierarchical] Interface %1 is not valid! Disable check hierarchical control interface.")
+                qCInfo(appLog) << QString("[Hierarchical] Interface %1 is not valid! Disable check hierarchical control interface.")
                                .arg(DBUS_HIERARCHICAL_INTERFACE);
             }
         } else {
             QDBusReply<bool> reply(message);
             availabled = reply.value();
 
-            qInfo() << QString("[Hierarchical] Get %1 property %2 value: %3")
+            qCInfo(appLog) << QString("[Hierarchical] Get %1 property %2 value: %3")
                            .arg(DBUS_HIERARCHICAL_BUS)
                            .arg(DBUS_HIERARCHICAL_METHOD)
                            .arg(availabled);
@@ -182,17 +201,22 @@ bool HierarchicalVerify::checkHierarchicalInterface()
 
 bool HierarchicalVerify::checkValidImpl()
 {
+    qCDebug(appLog) << "Checking hierarchical interface validity implementation";
     const bool availabled = checkHierarchicalInterface();
     if (valid != availabled) {
+        qCDebug(appLog) << "Validity changed from" << valid << "to" << availabled;
         valid = availabled;
 
         // if the hierarchical signature verification is not available, clear cache.
         if (!valid) {
+            qCDebug(appLog) << "Hierarchical verification not valid, clearing verify result";
             clearVerifyResult();
         }
 
         Q_EMIT validChanged(valid);
+        qCDebug(appLog) << "Emitted validChanged signal with value:" << valid;
     }
 
+    qCDebug(appLog) << "Hierarchical interface validity check completed, return:" << availabled;
     return availabled;
 }
