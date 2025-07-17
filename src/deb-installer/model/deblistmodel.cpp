@@ -429,6 +429,7 @@ void DebListModel::slotUninstallPackage(const int index)
 
     m_currentTransaction = transsaction;   //保存trans指针
     // 获取当前真实用户信息
+#ifdef DENABLE_VIRTUAL_PACKAGE_ENHANCE
     QString currentUser = env.value("USER");
     // 如果SUDO_USER存在，说明当前是通过sudo启动的
     QString realUser = env.value("SUDO_USER");
@@ -436,6 +437,7 @@ void DebListModel::slotUninstallPackage(const int index)
         realUser = currentUser;
     map.insert("SUDO_USER", realUser);
     transsaction->setEnvVariable(map);
+#endif
     transsaction->run();                   //开始卸载
 }
 
@@ -909,6 +911,7 @@ void DebListModel::installDebs()
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QVariantMap map;
 
+#ifdef DENABLE_VIRTUAL_PACKAGE_ENHANCE
     // 获取当前真实用户信息
     QString currentUser = env.value("USER");
     // 如果SUDO_USER存在，说明当前是通过sudo启动的
@@ -917,6 +920,7 @@ void DebListModel::installDebs()
         realUser = currentUser;
     map.insert("SUDO_USER", realUser);
     m_currentTransaction->setEnvVariable(map);
+#endif
 
     m_currentTransaction->run();
 }
