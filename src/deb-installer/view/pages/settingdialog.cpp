@@ -39,6 +39,7 @@ protected:
 
 ProceedLabel::ProceedLabel()
 {
+    qCDebug(appLog) << "Constructing ProceedLabel";
     setObjectName("OptionProceedLabel");
     setAccessibleName("OptionProceedLabel");
 
@@ -51,6 +52,7 @@ ProceedLabel::ProceedLabel()
     // 点击链接跳转安全中 > 应用安全
     QObject::connect(
         this, &DLabel::linkActivated, [](const QString &) { HierarchicalVerify::instance()->proceedDefenderSafetyPage(); });
+    qCDebug(appLog) << "ProceedLabel constructed";
 }
 
 /**
@@ -58,8 +60,10 @@ ProceedLabel::ProceedLabel()
  */
 bool ProceedLabel::event(QEvent *e)
 {
+    // qCDebug(appLog) << "ProceedLabel event:" << e->type();
     switch (e->type()) {
         case QEvent::PaletteChange:
+            qCDebug(appLog) << "Palette changed, updating text";
             updateText();
             break;
         default:
@@ -79,6 +83,7 @@ bool ProceedLabel::event(QEvent *e)
  */
 void ProceedLabel::updateText()
 {
+    qCDebug(appLog) << "Updating ProceedLabel text";
     QString proceedNotify =
         QObject::tr("To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can "
                     "be installed.");
@@ -89,6 +94,7 @@ void ProceedLabel::updateText()
     proceedNotify =
         proceedNotify.replace(tmp, QString(WEBSITE_LINK_TEMPLATE).arg("localtest.com").arg(pxSize).arg(color.name()).arg(tmp));
     setText(proceedNotify);
+    qCDebug(appLog) << "ProceedLabel text updated";
 }
 
 SettingDialog::SettingDialog(QWidget *parent)
@@ -101,11 +107,13 @@ SettingDialog::SettingDialog(QWidget *parent)
 
 SettingDialog::~SettingDialog()
 {
+    qCDebug(appLog) << "Destructing SettingDialog";
     delete m_setting;
 }
 
 void SettingDialog::init()
 {
+    qCDebug(appLog) << "Initializing settings";
     if (widgetFactory()) {
         widgetFactory()->registerWidget("proceedLabel", &SettingDialog::createProceedDefenderSafetyLabel);
     }
@@ -117,8 +125,10 @@ void SettingDialog::init()
     const QString confPath = confDir + QDir::separator() + "deepin-deb-installer.conf";
     QDir dir;
     bool isexist = dir.exists(confDir);
-    if (!isexist)
+    if (!isexist) {
+        qCDebug(appLog) << "Creating config directory:" << confDir;
         dir.mkpath(confDir);
+    }
     // 创建设置项存储后端
     auto backend = new QSettingBackend(confPath, this);
     m_setting->setBackend(backend);
@@ -133,6 +143,7 @@ void SettingDialog::init()
 
     connect(m_setting, &DSettings::valueChanged, this, [=] {
         m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
+        qCDebug(appLog) << "Digital verify setting changed:" << m_isDigital;
     });
     m_isDigital = m_setting->value("basic.develop_digital_verify.").toBool();
     qCDebug(appLog) << "Initial digital verify setting:" << m_isDigital;
@@ -140,11 +151,14 @@ void SettingDialog::init()
     // 分级管控不同状态下切换显示信息，初始化后绑定信号
     switchHierarchicalNotify(HierarchicalVerify::instance()->isValid());
     connect(HierarchicalVerify::instance(), &HierarchicalVerify::validChanged, this, &SettingDialog::switchHierarchicalNotify);
+    qCDebug(appLog) << "Settings initialized";
 }
 
 bool SettingDialog::isDigitalVerified()
 {
-    return m_setting->value("basic.develop_digital_verify.").toBool();
+    const bool isVerified = m_setting->value("basic.develop_digital_verify.").toBool();
+    qCDebug(appLog) << "Checking if digital is verified:" << isVerified;
+    return isVerified;
 }
 
 /**
@@ -153,6 +167,7 @@ bool SettingDialog::isDigitalVerified()
  */
 QWidget *SettingDialog::createProceedDefenderSafetyLabel(QObject *obj)
 {
+    qCDebug(appLog) << "Creating proceed defender safety label";
     Q_UNUSED(obj)
     ProceedLabel *label = new ProceedLabel;
     return label;
@@ -163,6 +178,7 @@ QWidget *SettingDialog::createProceedDefenderSafetyLabel(QObject *obj)
  */
 void SettingDialog::showEvent(QShowEvent *e)
 {
+    qCDebug(appLog) << "SettingDialog shown";
     // 刷新分级管控接口状态
     (void)HierarchicalVerify::instance()->isValid();
     DSettingsDialog::showEvent(e);

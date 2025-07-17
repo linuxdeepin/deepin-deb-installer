@@ -82,11 +82,13 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
 
 QAbstractButton *InfoControlButton::controlButton()
 {
+    // qCDebug(appLog) << "Getting control button";
     return m_tipsText;
 }
 
 void InfoControlButton::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
+    // qCDebug(appLog) << "InfoControlButton mouse release event";
     QWidget::mouseReleaseEvent(mouseEvent);
 
     onMouseRelease();  // 鼠标事件的响应
@@ -94,9 +96,11 @@ void InfoControlButton::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
 void InfoControlButton::keyPressEvent(QKeyEvent *event)
 {
+    // qCDebug(appLog) << "InfoControlButton key press event, key:" << event->key();
     // 添加回车键，空格键，换行键来触发展开或收缩
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) {
         if (this->hasFocus()) {
+            qCDebug(appLog) << "Enter/Space pressed, triggering click";
             m_tipsText->clicked();
         }
     }
@@ -140,12 +144,14 @@ void InfoControlButton::onMouseRelease()
 
 void InfoControlButton::setExpandTips(const QString text)
 {
+    qCDebug(appLog) << "Setting expand tips to:" << text;
     m_expandTips = text;                // 保存提示语
     m_tipsText->setText(m_expandTips);  // 设置提示语
 }
 
 void InfoControlButton::shrinkContent()
 {
+    qCDebug(appLog) << "Shrinking content, current state:" << (m_expand ? "expanded" : "shrunk");
     if (m_expand) {
         onMouseRelease();
     }
@@ -153,6 +159,7 @@ void InfoControlButton::shrinkContent()
 
 void InfoControlButton::setShrinkTips(const QString text)
 {
+    qCDebug(appLog) << "Setting shrink tips to:" << text;
     m_shrinkTips = text;                // 保存提示语
     m_tipsText->setText(m_shrinkTips);  // 设置提示语
 }

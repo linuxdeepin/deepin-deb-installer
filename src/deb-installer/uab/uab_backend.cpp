@@ -52,10 +52,13 @@ UabBackend::UabBackend(QObject *parent)
     qCDebug(appLog) << "UabBackend initialized, linglong exists:" << m_linglongExists;
 }
 
-UabBackend::~UabBackend() {}
+UabBackend::~UabBackend() {
+    qCDebug(appLog) << "UabBackend destructed";
+}
 
 UabBackend *UabBackend::instance()
 {
+    // qCDebug(appLog) << "UabBackend::instance()";
     static UabBackend ins;
     return &ins;
 }
@@ -72,6 +75,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
     if (!info.exists()) {
         qCWarning(appLog) << "UAB file not exists:" << uabPath;
         if (errorString) {
+            qCDebug(appLog) << "UAB file not exists, set error string";
             *errorString = QString("uab file not exists");
         }
         return {};
@@ -79,11 +83,13 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
 
     const QByteArray output = uabExecuteOutput(uabPath, errorString);
     if (output.isEmpty()) {
+        qCDebug(appLog) << "UAB execute output is empty";
         return {};
     }
 
     auto uabPtr = UabBackend::packageFromMetaJson(output);
     if (uabPtr) {
+        qCDebug(appLog) << "UAB execute output is not empty";
         uabPtr->filePath = info.absoluteFilePath();
     }
     return uabPtr;
@@ -96,6 +102,7 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaData(const QString &uabPath, QString 
  */
 UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId, const QString &version)
 {
+    qCDebug(appLog) << "Finding package:" << packageId << "version:" << version;
     if (!backendInited()) {
         qCWarning(appLog) << "Uab backend not initialized for package:" << packageId;
         m_lastError = QString("uab backend not init");
@@ -115,12 +122,14 @@ UabPkgInfo::Ptr UabBackend::findPackage(const QString &packageId, const QString 
     // versions with the same ID are listed in descending order
     while ((m_packageList.end() != itr) && ((*itr)->id == packageId)) {
         if (version.isEmpty() || ((*itr)->version == version)) {
+            qCDebug(appLog) << "Found package:" << (*itr)->id << "version:" << (*itr)->version;
             return *itr;
         }
 
         itr++;
     }
 
+    qCDebug(appLog) << "Package not found:" << packageId << "version:" << version;
     return {};
 }
 
@@ -147,25 +156,30 @@ void UabBackend::initBackend(bool async)
 
 bool UabBackend::backendInited() const
 {
+    // qCDebug(appLog) << "Checking if backend is initialized:" << m_init;
     return m_init;
 }
 
 bool UabBackend::linglongExists() const
 {
+    qCDebug(appLog) << "Checking if linglong exists:" << m_linglongExists;
     return m_linglongExists;
 }
 
 bool UabBackend::recheckLinglongExists()
 {
+    qCDebug(appLog) << "Re-checking for linglong existence";
     // find ll-cli in $PATH
     const QString execPath = QStandardPaths::findExecutable(kUabCliBin);
     m_linglongExists = !execPath.isEmpty();
+    qCDebug(appLog) << "Linglong exists:" << m_linglongExists << "at path:" << execPath;
 
     return m_linglongExists;
 }
 
 QString UabBackend::lastError() const
 {
+    qCDebug(appLog) << "Getting last error:" << m_lastError;
     return m_lastError;
 }
 
@@ -179,14 +193,17 @@ void UabBackend::dumpPackageList() const
 
 void UabBackend::backendInitData(const QList<UabPkgInfo::Ptr> &packageList, const QSet<QString> &archs)
 {
+    qCDebug(appLog) << "Initializing backend data with" << packageList.size() << "packages and" << archs.size() << "architectures";
     m_packageList = packageList;
     m_supportArchSet = archs;
     m_init = true;
     Q_EMIT backendInitFinsihed();
+    qCDebug(appLog) << "Backend data initialized and signal emitted";
 }
 
 bool UabBackend::parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabPkgInfo::Ptr> &packageList)
 {
+    qCDebug(appLog) << "Parsing packages from raw JSON data";
     QJsonParseError jsonError;
     QJsonDocument doc = QJsonDocument::fromJson(jsonData, &jsonError);
     if (QJsonParseError::NoError != jsonError.error) {
@@ -196,8 +213,10 @@ bool UabBackend::parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabP
 
     packageList.clear();
     QJsonArray rootArray = doc.array();
+    qCDebug(appLog) << "Found" << rootArray.size() << "packages in JSON data";
     for (const auto &value : rootArray) {
         if (!value.isObject()) {
+            qCWarning(appLog) << "Skipping non-object value in JSON array";
             continue;
         }
 
@@ -219,11 +238,13 @@ bool UabBackend::parsePackagesFromRawJson(const QByteArray &jsonData, QList<UabP
         packageList.append(uabPtr);
     }
 
+    qCDebug(appLog) << "Finished parsing packages from JSON data, total packages:" << packageList.size();
     return true;
 }
 
 bool UabBackend::parsePackagesFromRawOutput(const QByteArray &output, QList<UabPkgInfo::Ptr> &packageList)
 {
+    qCDebug(appLog) << "Parsing packages from raw output";
     QTextStream stream(output, QIODevice::ReadOnly);
 
     // remove title
@@ -248,6 +269,7 @@ bool UabBackend::parsePackagesFromRawOutput(const QByteArray &output, QList<UabP
 
         packageList.append(uabPtr);
     }
+    qCDebug(appLog) << "Finished parsing packages from raw output, total packages:" << packageList.size();
 
     return true;
 }
@@ -301,7 +323,9 @@ void UabBackend::backendProcess(const QPointer<Uab::UabBackend> &notifyPtr)
  */
 void UabBackend::sortPackages(QList<UabPkgInfo::Ptr> &packageList)
 {
+    qCDebug(appLog) << "Sorting" << packageList.size() << "packages";
     if (packageList.isEmpty()) {
+        qCDebug(appLog) << "Package list is empty, skipping sort";
         return;
     }
 
@@ -312,6 +336,7 @@ void UabBackend::sortPackages(QList<UabPkgInfo::Ptr> &packageList)
         }
         return Utils::compareVersion(left->version, right->version) > 0;
     });
+    qCDebug(appLog) << "Finished sorting packages";
 }
 
 void UabBackend::packageInstalled(const UabPkgInfo::Ptr &appendPtr)
@@ -407,8 +432,13 @@ UabPkgInfo::Ptr UabBackend::packageFromMetaJson(const QByteArray &json, QString 
 
 QByteArray UabBackend::uabExecuteOutput(const QString &uabPath, QString *errorString)
 {
+    qCDebug(appLog) << "Executing uab package to get output:" << uabPath;
     QFile uabFile(uabPath);
     if (!uabFile.exists()) {
+        qCWarning(appLog) << "UAB file does not exist:" << uabPath;
+        if (errorString) {
+            *errorString = "UAB file does not exist";
+        }
         return {};
     }
 
@@ -431,6 +461,7 @@ QByteArray UabBackend::uabExecuteOutput(const QString &uabPath, QString *errorSt
     proc.waitForFinished();
 
     if (needExecutable) {
+        qCDebug(appLog) << "Restoring original permissions for:" << uabPath;
         uabFile.setPermissions(savePermission);
     }
 
@@ -443,6 +474,7 @@ QByteArray UabBackend::uabExecuteOutput(const QString &uabPath, QString *errorSt
         return {};
     }
 
+    qCDebug(appLog) << "Successfully executed uab package and got output";
     return proc.readAllStandardOutput();
 }
 
@@ -452,6 +484,7 @@ QT_BEGIN_NAMESPACE
 #ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug out, const Uab::UabPkgInfo &uabPkg)
 {
+    // qCDebug(appLog) << "UabPackageInfo:" << uabPkg;
     out << "UabPackageInfo(" << QString("0x%0").arg(reinterpret_cast<quintptr>(&uabPkg), 0, 16) << "){";
     out << Uab::kUabId << ":" << uabPkg.id << ";";
     out << Uab::kUabName << ":" << uabPkg.appName << ";";
@@ -467,6 +500,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug out, const Uab::UabPkgInfo &uabPkg)
 
 Q_CORE_EXPORT QDebug operator<<(QDebug out, const Uab::UabPkgInfo::Ptr &uabPkgPtr)
 {
+    // qCDebug(appLog) << "UabPackageInfoPtr:" << uabPkgPtr;
     if (uabPkgPtr) {
         out << *uabPkgPtr;
     } else {

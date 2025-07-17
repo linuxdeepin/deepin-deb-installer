@@ -18,31 +18,39 @@ namespace Deb {
 DebPackage::DebPackage(const QString &debFilePath)
     : m_debFilePtr(QSharedPointer<QApt::DebFile>::create(debFilePath))
 {
+    qCDebug(appLog) << "Creating DebPackage for:" << debFilePath;
 }
 
 bool DebPackage::isValid() const
 {
-    return m_debFilePtr->isValid();
+    const bool valid = m_debFilePtr->isValid();
+    // qCDebug(appLog) << "Checking if deb package is valid:" << valid;
+    return valid;
 }
 
 bool DebPackage::fileExists() const
 {
+    qCDebug(appLog) << "Checking if deb file exists:" << m_exists;
     return m_exists;
 }
 
 void DebPackage::markNotExists()
 {
+    qCDebug(appLog) << "Marking deb file as not existing";
     m_exists = false;
 }
 
 QString DebPackage::filePath() const
 {
+    qCDebug(appLog) << "Getting file path:" << m_debFilePtr->filePath();
     return m_debFilePtr->filePath();
 }
 
 QByteArray DebPackage::md5()
 {
+    qCDebug(appLog) << "Getting MD5 sum";
     if (m_md5.isEmpty() && m_debFilePtr->isValid()) {
+        qCDebug(appLog) << "MD5 sum is empty, calculating it";
         m_md5 = m_debFilePtr->md5Sum();
     }
 
@@ -51,6 +59,7 @@ QByteArray DebPackage::md5()
 
 const QSharedPointer<QApt::DebFile> &DebPackage::debInfo() const
 {
+    qCDebug(appLog) << "Getting deb file info";
     return m_debFilePtr;
 }
 
@@ -62,23 +71,29 @@ void DebPackage::setOperationStatus(Pkg::PackageOperationStatus s)
 
 Pkg::PackageOperationStatus DebPackage::operationStatus() const
 {
+    qCDebug(appLog) << "Getting operation status:" << m_operationStatus;
     return m_operationStatus;
 }
 
 Pkg::PackageInstallStatus DebPackage::installStatus() const
 {
+    qCDebug(appLog) << "Getting install status:" << m_installStatus;
     return m_installStatus;
 }
 
 PackageDependsStatus &DebPackage::dependsStatus()
 {
+    qCDebug(appLog) << "Getting depends status";
     return m_dependsStatus;
 }
 
 bool DebPackage::containsTemplates()
 {
+    qCDebug(appLog) << "Checking if package contains templates";
     if (UnknownTemplates == m_templatesState) {
+        qCDebug(appLog) << "Templates state is unknown, checking now";
         m_templatesState = Utils::checkPackageContainsDebConf(m_debFilePtr->filePath()) ? ContainTemplates : NoTemplates;
+        qCDebug(appLog) << "Templates state set to:" << m_templatesState;
     }
 
     return m_templatesState == ContainTemplates;
@@ -86,7 +101,9 @@ bool DebPackage::containsTemplates()
 
 bool DebPackage::containRemovePackages() const
 {
-    return !m_removePackages.isEmpty();
+    const bool contains = !m_removePackages.isEmpty();
+    // qCDebug(appLog) << "Checking if package contains packages to remove:" << contains;
+    return contains;
 }
 
 void DebPackage::setMarkedPackages(const QStringList &installDepends)
@@ -144,6 +161,7 @@ void DebPackage::setMarkedPackages(const QStringList &installDepends)
 
 QStringList DebPackage::removePackages() const
 {
+    // qCDebug(appLog) << "Getting list of packages to remove:" << m_removePackages;
     return m_removePackages;
 }
 
@@ -156,22 +174,26 @@ void DebPackage::setError(int code, const QString &string)
 
 int DebPackage::errorCode() const
 {
+    // qCDebug(appLog) << "Getting error code:" << m_errorCode;
     return m_errorCode;
 }
 
 QString DebPackage::errorString() const
 {
+    // qCDebug(appLog) << "Getting error string:" << m_errorString;
     return m_errorString;
 }
 
 const QSharedPointer<Compatible::CompPkgInfo> &DebPackage::compatible()
 {
+    qCDebug(appLog) << "Getting compatible info";
     if (!m_compInfoPtr && isValid()) {
         qCDebug(appLog) << "Checking compatible mode for package:" << m_debFilePtr->packageName();
         // might installed in compatbile mode.
         m_compInfoPtr = CompBackend::instance()->containsPackage(m_debFilePtr->packageName());
 
         if (!m_compInfoPtr) {
+            qCDebug(appLog) << "Creating compatible info";
             m_compInfoPtr = Compatible::CompPkgInfo::Ptr::create();
 
             m_compInfoPtr->name = m_debFilePtr->packageName();

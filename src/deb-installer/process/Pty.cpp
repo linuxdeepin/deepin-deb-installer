@@ -54,12 +54,15 @@
 #include <QRegExp>
 #include <QRegExpValidator>
 #endif
+#include <QLoggingCategory>
 
+Q_DECLARE_LOGGING_CATEGORY(procLog)
 
 using namespace Konsole;
 
 void Pty::setWindowSize(int lines, int cols)
 {
+    qCDebug(procLog) << "Setting window size to lines:" << lines << "cols:" << cols;
     _windowColumns = cols;
     _windowLines = lines;
 
@@ -68,11 +71,13 @@ void Pty::setWindowSize(int lines, int cols)
 }
 QSize Pty::windowSize() const
 {
+    qCDebug(procLog) << "Getting window size, cols:" << _windowColumns << "lines:" << _windowLines;
     return {_windowColumns, _windowLines};
 }
 
 void Pty::setFlowControlEnabled(bool enable)
 {
+    qCDebug(procLog) << "Setting flow control enabled to:" << enable;
     _xonXoff = enable;
 
     if (pty()->masterFd() >= 0) {
@@ -83,20 +88,21 @@ void Pty::setFlowControlEnabled(bool enable)
         else
             ttmode.c_iflag |= (IXOFF | IXON);
         if (!pty()->tcSetAttr(&ttmode))
-            qWarning() << "Unable to set terminal attributes.";
+            qCWarning(procLog) << "Unable to set terminal attributes.";
     }
 }
 bool Pty::flowControlEnabled() const
 {
-    qDebug() << "Getting flow control status from terminal.";
+    qCDebug(procLog) << "Getting flow control status from terminal.";
     if (pty()->masterFd() >= 0) {
-        qDebug() << "The terminal is connected.";
+        qCDebug(procLog) << "The terminal is connected.";
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
-        return ttmode.c_iflag & IXOFF &&
-               ttmode.c_iflag & IXON;
+        const bool enabled = (ttmode.c_iflag & IXOFF) && (ttmode.c_iflag & IXON);
+        qCDebug(procLog) << "Flow control is" << (enabled ? "enabled" : "disabled");
+        return enabled;
     }
-    qWarning() << "Unable to get flow control status, terminal not connected.";
+    qCWarning(procLog) << "Unable to get flow control status, terminal not connected.";
     return false;
 }
 
@@ -105,7 +111,7 @@ void Pty::setUtf8Mode(bool enable)
 #ifdef IUTF8 // XXX not a reasonable place to check it.
     _utf8 = enable;
 
-    qDebug() << "Setting UTF-8 mode to" << enable;
+    qCDebug(procLog) << "Setting UTF-8 mode to" << enable;
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
@@ -114,7 +120,7 @@ void Pty::setUtf8Mode(bool enable)
         else
             ttmode.c_iflag |= IUTF8;
         if (!pty()->tcSetAttr(&ttmode))
-            qWarning() << "Unable to set terminal attributes.";
+            qCWarning(procLog) << "Unable to set terminal attributes.";
     }
 #endif
 }
@@ -123,32 +129,34 @@ void Pty::setErase(char erase)
 {
     _eraseChar = erase;
 
-    qDebug() << "Setting erase character to" << erase;
+    qCDebug(procLog) << "Setting erase character to" << erase;
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
         ttmode.c_cc[VERASE] = erase;
         if (!pty()->tcSetAttr(&ttmode))
-            qWarning() << "Unable to set terminal attributes.";
+            qCWarning(procLog) << "Unable to set terminal attributes.";
     }
 }
 
 char Pty::erase() const
 {
-    qDebug() << "Getting erase character from terminal.";
+    qCDebug(procLog) << "Getting erase character from terminal.";
     if (pty()->masterFd() >= 0) {
         struct ::termios ttyAttributes;
         pty()->tcGetAttr(&ttyAttributes);
-        return ttyAttributes.c_cc[VERASE];
+        char eraseChar = ttyAttributes.c_cc[VERASE];
+        qCDebug(procLog) << "Terminal erase char is:" << eraseChar;
+        return eraseChar;
     }
 
-    qDebug() << "Unable to get erase character, terminal not connected.";
+    qCWarning(procLog) << "Unable to get erase character, terminal not connected. Returning default:" << _eraseChar;
     return _eraseChar;
 }
 
 void Pty::addEnvironmentVariables(const QStringList &environment)
 {
-    qDebug() << "Adding environment variables:" << environment;
+    qCDebug(procLog) << "Adding environment variables:" << environment;
 
     QListIterator<QString> iter(environment);
     while (iter.hasNext()) {
@@ -162,10 +170,10 @@ void Pty::addEnvironmentVariables(const QStringList &environment)
             QString value = pair.mid(pos + 1);
 
             setEnv(variable, value);
-            qDebug() << "Added environment variable:" << variable << "=" << value;
+            qCDebug(procLog) << "Added environment variable:" << variable << "=" << value;
         }
     }
-    qDebug() << "Environment variables added.";
+    qCDebug(procLog) << "Environment variables added.";
 }
 
 int Pty::start(const QString &program,
@@ -177,7 +185,7 @@ int Pty::start(const QString &program,
                //const QString& dbusSession
               )
 {
-    qDebug() << "Starting program:" << program;
+    qCDebug(procLog) << "Starting program:" << program << "with args:" << programArguments;
     clearProgram();
 
     // For historical reasons, the first argument in programArguments is the
@@ -224,23 +232,24 @@ int Pty::start(const QString &program,
         ttmode.c_cc[VERASE] = _eraseChar;
 
     if (!pty()->tcSetAttr(&ttmode))
-        qWarning() << "Unable to set terminal attributes.";
+        qCWarning(procLog) << "Unable to set terminal attributes.";
 
     pty()->setWinSize(_windowLines, _windowColumns);
 
     KProcess::start();
 
     if (!waitForStarted()) {
-        qWarning() << "Unable to start program:" << program;
+        qCWarning(procLog) << "Unable to start program:" << program;
         return -1;
     }
 
-    qDebug() << "Program started.";
+    qCDebug(procLog) << "Program started successfully:" << program;
     return 0;
 }
 
 void Pty::setEmptyPTYProperties()
 {
+    qCDebug(procLog) << "Setting empty PTY properties.";
     struct ::termios ttmode;
     pty()->tcGetAttr(&ttmode);
     if (!_xonXoff)
@@ -258,13 +267,17 @@ void Pty::setEmptyPTYProperties()
         ttmode.c_cc[VERASE] = _eraseChar;
 
     if (!pty()->tcSetAttr(&ttmode))
-        qWarning() << "Unable to set terminal attributes.";
+        qCWarning(procLog) << "Unable to set terminal attributes.";
 }
 
 void Pty::setWriteable(bool writeable)
 {
+    qCDebug(procLog) << "Setting TTY" << pty()->ttyName() << "writeable to:" << writeable;
     struct stat sbuf;
-    stat(pty()->ttyName(), &sbuf);
+    if (stat(pty()->ttyName(), &sbuf) != 0) {
+        qCWarning(procLog) << "Failed to stat TTY:" << pty()->ttyName() << "error:" << strerror(errno);
+        return;
+    }
     if (writeable)
         chmod(pty()->ttyName(), sbuf.st_mode | S_IWGRP);
     else
@@ -274,17 +287,20 @@ void Pty::setWriteable(bool writeable)
 Pty::Pty(int masterFd, QObject *parent)
     : KPtyProcess(masterFd, parent)
 {
+    qCDebug(procLog) << "Pty created with master FD:" << masterFd;
     init();
 }
 
 Pty::Pty(QObject *parent)
     : KPtyProcess(parent)
 {
+    qCDebug(procLog) << "Pty created without master FD";
     init();
 }
 
 void Pty::init()
 {
+    qCDebug(procLog) << "Initializing Pty properties";
     _windowColumns = 0;
     _windowLines = 0;
     _eraseChar = 0;
@@ -298,20 +314,25 @@ void Pty::init()
 
 Pty::~Pty()
 {
+    qCDebug(procLog) << "Pty destroyed";
 }
 
 bool Pty::isTerminalRemoved()
 {
+    qCDebug(procLog) << "Checking if deepin-terminal is removed by checking for /usr/bin/deepin-terminal";
     QFile terminalExecFile("/usr/bin/deepin-terminal");
     if (terminalExecFile.exists()) {
+        qCDebug(procLog) << "deepin-terminal exists.";
         return false;
     }
 
+    qCDebug(procLog) << "deepin-terminal does not exist, assuming it is removed.";
     return true;
 }
 
 bool isPatternAcceptable(QString strCommand, QString strPattern)
 {
+    qCDebug(procLog) << "Checking if command '" << strCommand << "' is acceptable for pattern '" << strPattern << "'";
     QString strTrimmedCmd = strCommand.trimmed();
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -326,18 +347,22 @@ bool isPatternAcceptable(QString strCommand, QString strPattern)
     int pos = 0;
     QValidator::State validateState = cmdREValidator.validate(strTrimmedCmd, pos);
 
-    return (validateState == QValidator::Acceptable);
+    bool isAcceptable = (validateState == QValidator::Acceptable);
+    qCDebug(procLog) << "Validation result:" << isAcceptable;
+    return isAcceptable;
 }
 
 //判断当前命令是否是要删除终端
 bool Pty::bWillRemoveTerminal(QString strCommand)
 {
+    qCDebug(procLog) << "Checking if command will remove terminal:" << strCommand;
     QString packageName = "deepin-terminal";
 
     QStringList strCommandList;
     strCommandList.append(strCommand);
 
     if (strCommand.contains("&&")) {
+        qCDebug(procLog) << "Command contains '&&', splitting...";
         QStringList cmdList = strCommand.split("&&");
         for (int i = 0; i < cmdList.size(); i++) {
             QString currCmd = cmdList.at(i).trimmed();
@@ -348,6 +373,7 @@ bool Pty::bWillRemoveTerminal(QString strCommand)
     }
 
     if (strCommand.contains(";")) {
+        qCDebug(procLog) << "Command contains ';', splitting...";
         QStringList cmdList = strCommand.split(";");
         for (int i = 0; i < cmdList.size(); i++) {
             QString currCmd = cmdList.at(i).trimmed();
@@ -387,18 +413,22 @@ bool Pty::bWillRemoveTerminal(QString strCommand)
         }
     }
 
-    return acceptableList.contains(true);
+    const bool bWillRemove = acceptableList.contains(true);
+    qCDebug(procLog) << "Will remove terminal:" << bWillRemove;
+    return bWillRemove;
 }
 
 /******** Add by nt001000 renfeixiang 2020-05-27:增加 Purge卸载命令的判断，显示不同的卸载提示框 Begin***************/
 bool Pty::bWillPurgeTerminal(QString strCommand)
 {
+    qCDebug(procLog) << "Checking if command will purge terminal:" << strCommand;
     QString packageName = "deepin-terminal";
 
     QStringList strCommandList;
     strCommandList.append(strCommand);
 
     if (strCommand.contains("&&")) {
+        qCDebug(procLog) << "Command contains '&&', splitting...";
         QStringList cmdList = strCommand.split("&&");
         for (int i = 0; i < cmdList.size(); i++) {
             QString currCmd = cmdList.at(i).trimmed();
@@ -409,6 +439,7 @@ bool Pty::bWillPurgeTerminal(QString strCommand)
     }
 
     if (strCommand.contains(";")) {
+        qCDebug(procLog) << "Command contains ';', splitting...";
         QStringList cmdList = strCommand.split(";");
         for (int i = 0; i < cmdList.size(); i++) {
             QString currCmd = cmdList.at(i).trimmed();
@@ -456,7 +487,9 @@ bool Pty::bWillPurgeTerminal(QString strCommand)
         }
     }
 
-    return acceptableList.contains(true);
+    const bool bWillPurge = acceptableList.contains(true);
+    qCDebug(procLog) << "Will purge terminal:" << bWillPurge;
+    return bWillPurge;
 }
 /******** Add by nt001000 renfeixiang 2020-05-27:增加 Purge卸载命令的判断，显示不同的卸载提示框 End***************/
 
@@ -467,6 +500,7 @@ void Pty::sendData(const char *data, int length, const QTextCodec *codec)
     if (!length) {
         return;
     }
+    // qCDebug(procLog) << "Sending data with length:" << length;
 
     //判断是否是点了自定义命令面板列表项触发的命令
     bool isCustomCommand = false;
@@ -484,16 +518,16 @@ void Pty::sendData(const char *data, int length, const QTextCodec *codec)
         QString unicodeData = codec->toUnicode(data);
         QByteArray unicode = utf8Codec->fromUnicode(unicodeData);
 
-        qDebug() << "Converted input data to UTF-8:" << unicode;
+        // qCDebug(procLog) << "Converted input data to UTF-8:" << unicode;
         if (!pty()->write(unicode.constData(), unicode.length())) {
-            qWarning() << "Failed to send input data to terminal process";
+            qCWarning(procLog) << "Failed to send input data to terminal process";
             return;
         }
     }
     else {
-        qDebug() << "Sending raw input data:" << QByteArray(data, length);
+        // qCDebug(procLog) << "Sending raw input data:" << QByteArray(data, length);
         if (!pty()->write(data, length)) {
-            qWarning() << "Failed to send input data to terminal process";
+            qCWarning(procLog) << "Failed to send input data to terminal process";
             return;
         }
     }
@@ -505,7 +539,7 @@ void Pty::dataReceived()
     QByteArray data = pty()->readAll();
 
     QString recvData = QString(data);
-    qDebug() << "Received data:" << recvData;
+    qCDebug(procLog) << "Received data:" << recvData;
 
     if (_bNeedBlockCommand) {
         QString judgeData = recvData;
@@ -520,7 +554,7 @@ void Pty::dataReceived()
                 && judgeData.startsWith("e")
                 && -1 == _receiveDataIndex) {
             _receiveDataIndex = 0;
-            qDebug() << "Ignore the first letter 'e' of the command.";
+            qCDebug(procLog) << "Ignore the first letter 'e' of the command.";
             return;
         }
 
@@ -532,7 +566,7 @@ void Pty::dataReceived()
                 || judgeData.startsWith("e\bexpect")
                 || judgeData.startsWith("e\be")) {
             _receiveDataIndex = 1;
-            qDebug() << "Ignore the expect command.";
+            qCDebug(procLog) << "Ignore the expect command.";
             return;
         }
 
@@ -554,7 +588,7 @@ void Pty::dataReceived()
             else {
                 ++_receiveDataIndex;
             }
-            qDebug() << "Ignore the command:" << judgeData;
+            qCDebug(procLog) << "Ignore the command:" << judgeData;
             return;
         }
     }
@@ -565,19 +599,19 @@ void Pty::dataReceived()
             || recvData.contains("bash: **0800000000022d：")
             || recvData.contains("**^XB0800000000022d")
             || recvData.startsWith("**\u0018B0800000000022d\r\u008A")) {
-        qDebug() << "Ignore the command:" << recvData;
+        qCWarning(procLog) << "Ignoring garbled command:" << recvData;
         return;
     }
 
     // "\u008A"这个乱码不替换调会导致显示时有\b的效果导致命令错乱bug#23741
     if (recvData.contains("\u008A")) {
-        qDebug() << "Replacing backspace control character";
+        qCDebug(procLog) << "Replacing backspace control character";
         recvData.replace("\u008A", "\b \b #");
         data = recvData.toUtf8();
     }
 
     if (recvData == "rz waiting to receive.") {
-        qDebug() << "Detected rz file transfer prompt";
+        qCDebug(procLog) << "Detected rz file transfer prompt";
         recvData += "\r\n";
         data = recvData.toUtf8();
     }
@@ -587,6 +621,7 @@ void Pty::dataReceived()
 
 void Pty::lockPty(bool lock)
 {
+    qCDebug(procLog) << "Pty::lockPty called with lock:" << lock;
     Q_UNUSED(lock);
 
 // TODO: Support for locking the Pty
@@ -618,6 +653,7 @@ void Pty::setSessionId(int sessionId)
 void Pty::setupChildProcess()
 #else
 void Pty::setupChildProcessImpl()
+#endif
 {
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -642,4 +678,3 @@ void Pty::setupChildProcessImpl()
     }
     sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
 }
-#endif

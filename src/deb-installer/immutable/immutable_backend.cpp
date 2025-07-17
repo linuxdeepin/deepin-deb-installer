@@ -17,17 +17,20 @@ static const QByteArray kImmutableEnable = "true";
 ImmutableBackend::ImmutableBackend(QObject *parent)
     : QObject{parent}
 {
+    qCDebug(appLog) << "Constructing ImmutableBackend";
     initBackend();
 }
 
 ImmutableBackend *ImmutableBackend::instance()
 {
+    // qCDebug(appLog) << "Getting ImmutableBackend instance";
     static ImmutableBackend ins;
     return &ins;
 }
 
 bool ImmutableBackend::immutableEnabled() const
 {
+    qCDebug(appLog) << "Checking if immutable is enabled:" << m_immutableEnabled;
     return m_immutableEnabled;
 }
 

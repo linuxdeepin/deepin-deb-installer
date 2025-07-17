@@ -157,14 +157,17 @@ void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 
 void UninstallConfirmPage::setPackageType(Pkg::PackageType type)
 {
+    // qCDebug(appLog) << "Setting package type to:" << type;
     const QIcon icon = Utils::packageIcon(type);
     m_icon->setPixmap(icon.pixmap(m_icon->size()));
 }
 
 void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
 {
+    qCDebug(appLog) << "Setting compatible info for rootfs:" << rootfs;
     m_rootfs = rootfs;
     if (rootfs.isEmpty()) {
+        qCDebug(appLog) << "Rootfs is empty, nothing to do";
         return;
     }
 
@@ -172,10 +175,12 @@ void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
     m_icon->setFixedSize(85, 85);
     m_icon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(m_icon->size()));
     m_tips->setText(tr("Are you sure you want to uninstall %2 \nfrom %1 compatibility mode?").arg(m_rootfs).arg(m_packageName));
+    qCDebug(appLog) << "Compatible info set";
 }
 
 void UninstallConfirmPage::showEvent(QShowEvent *e)
 {
+    qCDebug(appLog) << "UninstallConfirmPage shown";
     // 每次展示时设置默认焦点
     m_confirmBtn->setFocus();
     QWidget::showEvent(e);
@@ -191,6 +196,7 @@ void UninstallConfirmPage::slotShowDetail()
 
 void UninstallConfirmPage::slotHideDetail()
 {
+    qCDebug(appLog) << "Hiding package dependency details";
     // Hide dependency information
     m_infoWrapperWidget->setVisible(true);
     m_dependsInfomation->setVisible(false);

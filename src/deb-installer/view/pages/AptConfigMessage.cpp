@@ -39,6 +39,7 @@ AptConfigMessage::AptConfigMessage(QWidget *parent)
  */
 void AptConfigMessage::initTabOrder()
 {
+    qCDebug(appLog) << "Initializing tab order";
     QWidget::setTabOrder(m_pushbutton, m_inputEdit->lineEdit());  // 设置焦点的切换顺序从按钮到输入框
     QWidget::setTabOrder(m_inputEdit->lineEdit(), m_pushbutton);  // 设置焦点的切换顺序从输入框到按钮
 }
@@ -48,6 +49,7 @@ void AptConfigMessage::initTabOrder()
  */
 void AptConfigMessage::initTitlebar()
 {
+    qCDebug(appLog) << "Initializing title bar";
     DTitlebar *tb = titlebar();
     if (tb) {
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));  // 设置图标
@@ -55,6 +57,9 @@ void AptConfigMessage::initTitlebar()
         tb->setVisible(false);
         tb->setMenuVisible(false);         // 设置标题栏菜单按钮不可见
         tb->setAutoFillBackground(false);  // 填充标题栏背景
+        qCDebug(appLog) << "Title bar initialized";
+    } else {
+        qCWarning(appLog) << "Title bar is null";
     }
 }
 
@@ -63,6 +68,7 @@ void AptConfigMessage::initTitlebar()
  */
 void AptConfigMessage::initControl()
 {
+    qCDebug(appLog) << "Initializing controls";
     this->setFocusPolicy(Qt::NoFocus);  // 设置自身无焦点
 
     // 初始化 配置信息展示框的样式
@@ -87,6 +93,7 @@ void AptConfigMessage::initControl()
 
     // 焦点在信息输入框时，按回车触发提交信息。
     connect(m_inputEdit, &DLineEdit::returnPressed, m_pushbutton, &DPushButton::click);
+    qCDebug(appLog) << "Controls initialized";
 }
 
 /**
@@ -95,6 +102,7 @@ void AptConfigMessage::initControl()
  */
 void AptConfigMessage::initUI()
 {
+    qCDebug(appLog) << "Initializing UI";
     setFixedSize(380, 332);           // 固定配置框的大小
     setTitlebarShadowEnabled(false);  // 设置标题栏无阴影
 
@@ -124,6 +132,7 @@ void AptConfigMessage::initUI()
 
     setWindowIcon(QIcon::fromTheme("deepin-deb-installer"));                 // 给程序添加图标文件
     move(qApp->primaryScreen()->geometry().center() - geometry().center());  // 移动此窗口到屏幕中间。
+    qCDebug(appLog) << "UI initialized";
 }
 
 /**
@@ -151,6 +160,7 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
     int num = configMessage.indexOf("\\n");
     // 下标为-1 表明此时只有一行数据需要展示，则直接添加
     if (num == -1) {
+        qCDebug(appLog) << "Only one line of data, append directly";
         m_textEdit->appendText(processInfo);
         //        m_textEdit->appendText("\n");
         return;
@@ -174,6 +184,7 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
 
         // 如果当前已经是最后一行。此时text的数据长度大于0且text已经不包含任何的换行则退出，说明信息获取完成。
         if (num == -1 && configMessage.size() > 0 && !configMessage.contains("\n")) {
+            qCDebug(appLog) << "Last line of data, break";
             break;
         }
     }
@@ -208,6 +219,7 @@ void AptConfigMessage::dealInput()
  */
 void AptConfigMessage::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(appLog) << "Paint event";
     DMainWindow::paintEvent(event);
     QLayout *layout = titlebar()->layout();
     for (int i = 0; i < layout->count(); ++i) {
@@ -233,6 +245,7 @@ void AptConfigMessage::paintEvent(QPaintEvent *event)
 
 void AptConfigMessage::closeEvent(QCloseEvent *event)
 {
+    // qCDebug(appLog) << "Close event triggered, ignoring it";
     // bug121131  右键dock栏软件包安装器，选择“关闭所有”，关闭配置项弹窗
     // bug121123  禁用Alt+f4组合键关闭 配置包窗口
     // Alt+F4按键是由系统驱动实现的，根本无法捕获这个事件
@@ -245,6 +258,7 @@ void AptConfigMessage::closeEvent(QCloseEvent *event)
  */
 void AptConfigMessage::clearTexts()
 {
+    qCDebug(appLog) << "Clearing text edit and input edit";
     m_textEdit->clearText();  // 清除信息框的内容
     m_inputEdit->clear();     // 清除输入框的内容
 }
@@ -254,6 +268,7 @@ void AptConfigMessage::clearTexts()
  */
 void AptConfigMessage::initAccessibleName()
 {
+    qCDebug(appLog) << "Initializing accessible names";
     this->setObjectName("AptConfigMessage");
     this->setAccessibleName("AptConfigMessage");
 
@@ -265,13 +280,16 @@ void AptConfigMessage::initAccessibleName()
 
     m_pushbutton->setObjectName("ConfigConfirmButton");
     m_pushbutton->setAccessibleName("ConfigConfirmButton");
+    qCDebug(appLog) << "Accessible names initialized";
 }
 
 AptConfigMessage::~AptConfigMessage()
 {
+    // qCDebug(appLog) << "Destructing AptConfigMessage";
     delete m_textEdit;
     delete m_inputEdit;
     delete m_pushbutton;
     delete m_pQuestionLabel;
     delete aptConfig;
+    // qCDebug(appLog) << "AptConfigMessage destructed";
 }

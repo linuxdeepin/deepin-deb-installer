@@ -31,6 +31,9 @@
 
 #include <qfile.h>
 #include <QDebug>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(procLog, "org.deepin.deb-installer.process")
 
 #ifdef Q_OS_WIN
 # include <windows.h>
@@ -50,14 +53,17 @@
 
 void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
 {
+    // qCDebug(procLog) << "KProcessPrivate::writeAll called with fd:" << fd << "size:" << buf.size();
 #ifdef Q_OS_WIN
 #ifndef _WIN32_WCE
     HANDLE h = GetStdHandle(fd);
     if (h) {
+        // qCDebug(procLog) << "Got valid handle, writing to file";
         DWORD wr;
         WriteFile(h, buf.data(), buf.size(), &wr, 0);
     }
 #else
+    qCDebug(procLog) << "Writing to file using fwrite for WIN32_WCE";
     fwrite(buf.data(), 1, buf.size(), (FILE *)fd);
 #endif
 #else
@@ -65,17 +71,22 @@ void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
     do {
         int ret = ::write(fd, buf.data() + off, buf.size() - off);
         if (ret < 0) {
-            if (errno != EINTR)
+            if (errno != EINTR) {
+                qCWarning(procLog) << "Write error, errno:" << errno;
                 return;
+            }
+            // qCDebug(procLog) << "Write interrupted, retrying";
         } else {
             off += ret;
         }
     } while (off < buf.size());
+    // qCDebug(procLog) << "Wrote" << off << "bytes";
 #endif
 }
 
 void KProcessPrivate::forwardStd(KProcess::ProcessChannel good, int fd)
 {
+    // qCDebug(procLog) << "KProcessPrivate::forwardStd called with channel:" << good << "fd:" << fd;
     Q_Q(KProcess);
 
     QProcess::ProcessChannel oc = q->readChannel();
@@ -110,6 +121,7 @@ KProcess::KProcess(QObject *parent) :
     QProcess(parent),
     d_ptr(new KProcessPrivate)
 {
+    qCDebug(procLog) << "KProcess constructor with parent object";
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
 }
@@ -118,17 +130,20 @@ KProcess::KProcess(KProcessPrivate *d, QObject *parent) :
     QProcess(parent),
     d_ptr(d)
 {
+    qCDebug(procLog) << "KProcess constructor with private data";
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
 }
 
 KProcess::~KProcess()
 {
+    qCDebug(procLog) << "KProcess destructor";
     delete d_ptr;
 }
 
 void KProcess::setOutputChannelMode(OutputChannelMode mode)
 {
+    qCDebug(procLog) << "Setting output channel mode to:" << mode;
     Q_D(KProcess);
 
     d->outputChannelMode = mode;
@@ -136,20 +151,25 @@ void KProcess::setOutputChannelMode(OutputChannelMode mode)
     disconnect(this, SIGNAL(readyReadStandardError()));
     switch (mode) {
     case OnlyStdoutChannel:
+        qCDebug(procLog) << "Mode is OnlyStdoutChannel, forwarding stderr";
         connect(this, SIGNAL(readyReadStandardError()), SLOT(_k_forwardStderr()));
         break;
     case OnlyStderrChannel:
+        qCDebug(procLog) << "Mode is OnlyStderrChannel, forwarding stdout";
         connect(this, SIGNAL(readyReadStandardOutput()), SLOT(_k_forwardStdout()));
         break;
     default:
+        qCDebug(procLog) << "Mode is" << mode << ", setting process channel mode directly";
         QProcess::setProcessChannelMode((ProcessChannelMode)mode);
         return;
     }
+    qCDebug(procLog) << "Setting process channel mode to SeparateChannels";
     QProcess::setProcessChannelMode(QProcess::SeparateChannels);
 }
 
 KProcess::OutputChannelMode KProcess::outputChannelMode() const
 {
+    qCDebug(procLog) << "Getting output channel mode";
     Q_D(const KProcess);
 
     return d->outputChannelMode;
@@ -157,6 +177,7 @@ KProcess::OutputChannelMode KProcess::outputChannelMode() const
 
 void KProcess::setNextOpenMode(QIODevice::OpenMode mode)
 {
+    qCDebug(procLog) << "Setting next open mode to:" << mode;
     Q_D(KProcess);
 
     d->openMode = mode;
@@ -166,11 +187,13 @@ void KProcess::setNextOpenMode(QIODevice::OpenMode mode)
 
 void KProcess::clearEnvironment()
 {
+    qCDebug(procLog) << "Clearing environment";
     setEnvironment(QStringList() << QString::fromLatin1(DUMMYENV));
 }
 
 void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
 {
+    qCDebug(procLog) << "Setting environment:" << name << "=" << value << "overwrite:" << overwrite;
     QStringList env = environment();
     if (env.isEmpty()) {
         env = systemEnvironment();
@@ -192,6 +215,7 @@ void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
 
 void KProcess::unsetEnv(const QString &name)
 {
+    qCDebug(procLog) << "Unsetting environment:" << name;
     QStringList env = environment();
     if (env.isEmpty()) {
         env = systemEnvironment();
@@ -211,6 +235,7 @@ void KProcess::unsetEnv(const QString &name)
 
 void KProcess::setProgram(const QString &exe, const QStringList &args)
 {
+    qCDebug(procLog) << "Setting program:" << exe << "with args:" << args;
     Q_D(KProcess);
 
     d->prog = exe;
@@ -222,6 +247,7 @@ void KProcess::setProgram(const QString &exe, const QStringList &args)
 
 void KProcess::setProgram(const QStringList &argv)
 {
+    qCDebug(procLog) << "Setting program with argv:" << argv;
     Q_D(KProcess);
 
     Q_ASSERT(!argv.isEmpty());
@@ -234,6 +260,7 @@ void KProcess::setProgram(const QStringList &argv)
 
 KProcess &KProcess::operator<<(const QString &arg)
 {
+    // qCDebug(procLog) << "Appending argument:" << arg;
     Q_D(KProcess);
 
     if (d->prog.isEmpty())
@@ -245,6 +272,7 @@ KProcess &KProcess::operator<<(const QString &arg)
 
 KProcess &KProcess::operator<<(const QStringList &args)
 {
+    // qCDebug(procLog) << "Appending arguments:" << args;
     Q_D(KProcess);
 
     if (d->prog.isEmpty())
@@ -256,6 +284,7 @@ KProcess &KProcess::operator<<(const QStringList &args)
 
 void KProcess::clearProgram()
 {
+    qCDebug(procLog) << "Clearing program";
     Q_D(KProcess);
 
     d->prog.clear();
@@ -268,6 +297,7 @@ void KProcess::clearProgram()
 #if 0
 void KProcess::setShellCommand(const QString &cmd)
 {
+    qCDebug(procLog) << "Setting shell command:" << cmd;
     Q_D(KProcess);
 
     KShell::Errors err;
@@ -345,7 +375,7 @@ void KProcess::start()
 {
     Q_D(KProcess);
 
-    qDebug() << "Starting process:" << d->prog << d->args;
+    qCDebug(procLog) << "Starting process:" << d->prog << d->args;
     QProcess::start(d->prog, d->args, d->openMode);
 }
 
@@ -355,7 +385,7 @@ int KProcess::execute(int msecs)
     if (!waitForFinished(msecs)) {
         kill();
         waitForFinished(-1);
-        qDebug() << "kill process, return -2";
+        qCWarning(procLog) << "Process timed out, killing process, return -2";
         return -2;
     }
     return (exitStatus() == QProcess::NormalExit) ? exitCode() : -1;
@@ -364,6 +394,7 @@ int KProcess::execute(int msecs)
 // static
 int KProcess::execute(const QString &exe, const QStringList &args, int msecs)
 {
+    qCDebug(procLog) << "Executing process:" << exe << "with args:" << args << "with msecs:" << msecs;
     KProcess p;
     p.setProgram(exe, args);
     return p.execute(msecs);
@@ -372,6 +403,7 @@ int KProcess::execute(const QString &exe, const QStringList &args, int msecs)
 // static
 int KProcess::execute(const QStringList &argv, int msecs)
 {
+    qCDebug(procLog) << "Executing process with argv:" << argv << "with msecs:" << msecs;
     KProcess p;
     p.setProgram(argv);
     return p.execute(msecs);
@@ -379,6 +411,7 @@ int KProcess::execute(const QStringList &argv, int msecs)
 
 int KProcess::startDetached()
 {
+    qCDebug(procLog) << "Starting detached process";
     Q_D(KProcess);
 
     qint64 pid;
@@ -390,6 +423,7 @@ int KProcess::startDetached()
 // static
 int KProcess::startDetached(const QString &exe, const QStringList &args)
 {
+    qCDebug(procLog) << "Starting detached process with exe:" << exe << "and args:" << args;
     qint64 pid;
     if (!QProcess::startDetached(exe, args, QString(), &pid))
         return 0;
@@ -399,6 +433,7 @@ int KProcess::startDetached(const QString &exe, const QStringList &args)
 // static
 int KProcess::startDetached(const QStringList &argv)
 {
+    qCDebug(procLog) << "Starting detached process with argv:" << argv;
     QStringList args = argv;
     QString prog = args.takeFirst();
     return startDetached(prog, args);
@@ -406,6 +441,7 @@ int KProcess::startDetached(const QStringList &argv)
 
 int KProcess::pid() const
 {
+    qCDebug(procLog) << "Getting process id";
 #ifdef Q_OS_UNIX
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return (int) QProcess::pid();

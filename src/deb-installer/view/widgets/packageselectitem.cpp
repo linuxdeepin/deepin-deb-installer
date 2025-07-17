@@ -77,20 +77,24 @@ void PackageSelectItem::setDebIR(const DebIr &ir)
         auto installStatus = installInfo.first;
         auto installedVersion = installInfo.second;
         switch (installStatus) {
-            case Pkg::NotInstalled:  // 未安装
-                displayText = ir.shortDescription;
-                checkBox->setChecked(true);
-                break;
-            case Pkg::InstalledSameVersion:  // 已安装相同版本
-                displayText = tr("Same version installed");
-                break;
-            case Pkg::InstalledEarlierVersion:  // 已安装较早版本
-                displayText = tr("Earlier version installed: %1").arg(installedVersion);
-                checkBox->setChecked(true);
-                break;
-            case Pkg::InstalledLaterVersion:  // 已安装较新版本
-                displayText = tr("Later version installed: %1").arg(installedVersion);
-                break;
+        case Pkg::NotInstalled:  // 未安装
+            qCDebug(appLog) << "Package not installed";
+            displayText = ir.shortDescription;
+            checkBox->setChecked(true);
+            break;
+        case Pkg::InstalledSameVersion:  // 已安装相同版本
+            qCDebug(appLog) << "Package installed same version";
+            displayText = tr("Same version installed");
+            break;
+        case Pkg::InstalledEarlierVersion:  // 已安装较早版本
+            qCDebug(appLog) << "Package installed earlier version";
+            displayText = tr("Earlier version installed: %1").arg(installedVersion);
+            checkBox->setChecked(true);
+            break;
+        case Pkg::InstalledLaterVersion:  // 已安装较新版本
+            qCDebug(appLog) << "Package installed later version";
+            displayText = tr("Later version installed: %1").arg(installedVersion);
+            break;
         }
         descriptionLabel->setText(displayText);
     } else {
@@ -103,11 +107,13 @@ void PackageSelectItem::setDebIR(const DebIr &ir)
 
 bool PackageSelectItem::isChecked()
 {
+    qCDebug(appLog) << "Getting checked state";
     return checkBox->isChecked();
 }
 
 bool PackageSelectItem::isEnabled()
 {
+    qCDebug(appLog) << "Getting enabled state";
     return checkBox->isEnabled();
 }
 

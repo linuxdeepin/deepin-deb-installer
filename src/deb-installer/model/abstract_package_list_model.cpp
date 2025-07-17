@@ -12,10 +12,12 @@
 AbstractPackageListModel::AbstractPackageListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    qCDebug(appLog) << "Constructing AbstractPackageListModel";
 }
 
 AbstractPackageListModel::WorkerStatus AbstractPackageListModel::getWorkerStatus() const
 {
+    qCDebug(appLog) << "Getting worker status:" << m_workerStatus;
     return m_workerStatus;
 }
 
@@ -29,14 +31,18 @@ void AbstractPackageListModel::setWorkerStatus(WorkerStatus status)
 
     switch (status) {
         case WorkerProcessing:
+            qCDebug(appLog) << "Worker status is Processing, emitting signalWorkerStart.";
             Q_FALLTHROUGH();
         case WorkerUnInstall:
+            qCDebug(appLog) << "Worker status is UnInstall, emitting signalWorkerStart.";
             Q_EMIT signalWorkerStart();
             break;
         case WorkerFinished:
+            qCDebug(appLog) << "Worker status is Finished, emitting signalWorkerFinished.";
             Q_EMIT signalWorkerFinished();
             break;
         default:
+            qCDebug(appLog) << "Worker status is other, do nothing.";
             break;
     }
 }

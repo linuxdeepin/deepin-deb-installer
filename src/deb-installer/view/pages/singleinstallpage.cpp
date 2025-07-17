@@ -78,6 +78,7 @@ SingleInstallPage::SingleInstallPage(AbstractPackageListModel *model, QWidget *p
 
 void SingleInstallPage::initUI()
 {
+    qCDebug(appLog) << "Initializing UI";
     QFontInfo fontinfo = this->fontInfo();  // 获取字体信息
     int fontsize = fontinfo.pixelSize();    // 获得字体大小
     initContentLayout();                    // 初始化主布局
@@ -96,10 +97,12 @@ void SingleInstallPage::initUI()
     // update show info, must call before refresh depends
     showPackageInfo();
     connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
+    qCDebug(appLog) << "UI initialized";
 }
 
 void SingleInstallPage::initControlAccessibleName()
 {
+    qCDebug(appLog) << "Initializing control accessible names";
     // 获取的包名
     m_packageName->setObjectName("SinglePagePackageName");
     m_packageName->setAccessibleName("SinglePagePackageName");
@@ -123,10 +126,12 @@ void SingleInstallPage::initControlAccessibleName()
     // 依赖安装的提示信息
     m_pLoadingLabel->setObjectName("SinglePagePackageLoadingTips");
     m_pLoadingLabel->setAccessibleName("SinglePagePackageLoadingTips");
+    qCDebug(appLog) << "Control accessible names initialized";
 }
 
 void SingleInstallPage::initContentLayout()
 {
+    qCDebug(appLog) << "Initializing content layout";
     m_contentLayout->setSpacing(0);                       // 设置控件边距
     m_contentLayout->setContentsMargins(20, 10, 20, 20);  // 设置四周边距
     m_contentFrame->setLayout(m_contentLayout);           // 设置布局
@@ -140,10 +145,12 @@ void SingleInstallPage::initContentLayout()
 #ifdef SHOWBGCOLOR
     m_contentFrame->setStyleSheet("QFrame{background: cyan}");
 #endif
+    qCDebug(appLog) << "Content layout initialized";
 }
 
 void SingleInstallPage::initInstallWineLoadingLayout()
 {
+    qCDebug(appLog) << "Initializing install wine loading layout";
     QVBoxLayout *m_pLoadingLayout = new QVBoxLayout();  // 依赖安装的布局
 
     m_pDSpinner->setFixedSize(24, 24);  // 设置动画的大小
@@ -167,11 +174,14 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     Utils::bindFontBySizeAndWeight(m_pLoadingLabel, fontFamily, 12, QFont::ExtraLight);
 
     m_contentLayout->addLayout(m_pLoadingLayout);  // 添加到主布局中
+    qCDebug(appLog) << "Install wine loading layout initialized";
 }
 
 void SingleInstallPage::initCompatibleSelectLayout()
 {
+    qCDebug(appLog) << "Initializing compatible select layout";
     if (!m_inCompatibleMode) {
+        qCDebug(appLog) << "Not in compatible mode, skipping initialization";
         return;
     }
 
@@ -195,10 +205,12 @@ void SingleInstallPage::initCompatibleSelectLayout()
     m_compatibleLayout->setAlignment(Qt::AlignHCenter);
 
     m_contentLayout->addLayout(m_compatibleLayout);
+    qCDebug(appLog) << "Compatible select layout initialized";
 }
 
 void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
+    qCDebug(appLog) << "Initializing package info view with font size:" << fontinfosize;
     // 根据系统字体的大小设置显示字体的大小
     int fontinfosizetemp = 0;
     int fontinfosizetemp_version = 0;
@@ -209,6 +221,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
         fontinfosizetemp = 20;  // 使用小字体显示
         fontinfosizetemp_version = 20;
     }
+    qCDebug(appLog) << "Using font size:" << fontinfosizetemp << "and version font size:" << fontinfosizetemp_version;
 
     m_packageIcon->setText("icon");       // 图标
     m_packageIcon->setFixedSize(64, 64);  // 设置图标的大小
@@ -313,10 +326,12 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
     m_itemInfoFrame->setVisible(false);
 
     m_contentLayout->addWidget(m_itemInfoFrame);
+    qCDebug(appLog) << "Package info view initialized";
 }
 
 void SingleInstallPage::initTabOrder()
 {
+    qCDebug(appLog) << "Initializing tab order";
     // 调整tab切换焦点的顺序，第一个焦点是infoControlButton中的DCommandLinkButton
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_installButton);  // 当前包首次安装
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);     // 安装完成或安装失败
@@ -325,15 +340,19 @@ void SingleInstallPage::initTabOrder()
 
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_uninstallButton);  // 当前场景为重新安装
     QWidget::setTabOrder(m_uninstallButton, m_reinstallButton);                     // 重新安装场景
+    qCDebug(appLog) << "Tab order initialized";
 }
 
 void SingleInstallPage::initCompatibleRootfs()
 {
+    qCDebug(appLog) << "Initializing compatible rootfs";
     if (!m_inCompatibleMode) {
+        qCDebug(appLog) << "Not in compatible mode, skipping initialization";
         return;
     }
 
     if (!CompBackend::instance()->supportAppCheck()) {
+        qCDebug(appLog) << "App check not supported, populating rootfs list directly";
         auto rootfsList = CompBackend::instance()->rootfsList();
         for (const auto &rootfs : rootfsList) {
             m_compatibleBox->addItem(rootfs->osName, rootfs->name);
@@ -343,17 +362,21 @@ void SingleInstallPage::initCompatibleRootfs()
         }
 
     } else {
+        qCDebug(appLog) << "App check supported, connecting to packageSupportRootfsChanged signal";
         connect(CompBackend::instance(),
                 &CompBackend::packageSupportRootfsChanged,
                 this,
                 [this](const Compatible::CompPkgInfo::Ptr &checkPtr) {
+                    qCDebug(appLog) << "packageSupportRootfsChanged signal received";
                     if (!m_inCompatibleMode || !checkPtr || !checkPtr->checked) {
+                        qCDebug(appLog) << "Skipping rootfs update, not in compatible mode or invalid check pointer";
                         return;
                     }
 
                     const QModelIndex index = m_packagesModel->index(0);
                     auto currentPtr = index.data(DebListModel::PackageSharedPointerRole).value<Deb::DebPackage::Ptr>();
                     if (currentPtr->compatible() != checkPtr) {
+                        qCDebug(appLog) << "Skipping rootfs update, package pointer mismatch";
                         return;
                     }
 
@@ -361,6 +384,7 @@ void SingleInstallPage::initCompatibleRootfs()
                     auto rootfsList = checkPtr->supportRootfs;
 
                     if (!rootfsList.isEmpty()) {
+                        qCDebug(appLog) << "Found" << rootfsList.size() << "supported rootfs, updating UI";
                         for (const auto &rootfs : rootfsList) {
                             m_compatibleBox->addItem(rootfs->osName, rootfs->name);
                         }
@@ -373,6 +397,7 @@ void SingleInstallPage::initCompatibleRootfs()
 
                         showPackageInfo();
                     } else {
+                        qCDebug(appLog) << "No supported rootfs found, quitting compatible mode";
                         // Quit compatible mode if no support rootfs
                         m_inCompatibleMode = false;
 
@@ -394,6 +419,7 @@ void SingleInstallPage::initCompatibleRootfs()
         // seems need recheck rootfs in every time
         // if current package installed in rootfs, need uninstall fisrt
         if (currentCompPtr->checked || !currentCompPtr->rootfs.isEmpty()) {
+            qCDebug(appLog) << "Rootfs already checked, populating list";
             auto rootfsList = currentCompPtr->supportRootfs;
             for (const auto &rootfs : rootfsList) {
                 m_compatibleBox->addItem(rootfs->osName, rootfs->name);
@@ -404,6 +430,7 @@ void SingleInstallPage::initCompatibleRootfs()
 
         } else {
             if (CompBackend::instance()->checkPackageSupportRootfs(currentPtr->compatible())) {
+                qCDebug(appLog) << "Checking for supported rootfs";
                 m_compatibleChekcing = true;
 
                 // show spinner, wait check finished.
@@ -417,10 +444,12 @@ void SingleInstallPage::initCompatibleRootfs()
             }
         }
     }
+    qCDebug(appLog) << "Compatible rootfs initialized";
 }
 
 void SingleInstallPage::initButtonFocusPolicy()
 {
+    qCDebug(appLog) << "Initializing button focus policy";
     this->setFocusPolicy(Qt::NoFocus);  // 主界面不接受焦点
     auto focus = Qt::TabFocus;          // 其余控件焦点为tabFocus
     m_installButton->setFocusPolicy(focus);
@@ -430,26 +459,31 @@ void SingleInstallPage::initButtonFocusPolicy()
     m_backButton->setFocusPolicy(focus);
     m_doneButton->setFocusPolicy(focus);
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
+    qCDebug(appLog) << "Button focus policy initialized";
 }
 
 void SingleInstallPage::initButtonAutoDefault()
 {
+    qCDebug(appLog) << "Initializing button auto default";
     m_installButton->setAutoDefault(true);
     m_uninstallButton->setAutoDefault(true);
     m_reinstallButton->setAutoDefault(true);
     m_confirmButton->setAutoDefault(true);
     m_backButton->setAutoDefault(true);
     m_doneButton->setAutoDefault(true);
+    qCDebug(appLog) << "Button auto default initialized";
 }
 
 void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 {
+    qCDebug(appLog) << "Initializing package install process view with font size:" << fontinfosize;
     int fontinfosizetemp = 0;  // 根据当前字体的大小设置按钮的字体大小
     if (fontinfosize > 16) {
         fontinfosizetemp = 21;
     } else {
         fontinfosizetemp = 18;
     }
+    qCDebug(appLog) << "Using font size:" << fontinfosizetemp;
 
     // 添加Accessible Name
     m_infoControlButton->setObjectName("InfoControlButton");
@@ -498,6 +532,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_doneButton->setVisible(false);
 
     m_packageDescription->setWordWrap(true);  // 允许内容自动换行
+    qCDebug(appLog) << "Package install process view initialized";
 
     // 设置各个按钮的大小
     m_installButton->setMinimumWidth(120);
@@ -618,6 +653,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
 void SingleInstallPage::initPkgDependsInfoView()
 {
+    qCDebug(appLog) << "Initializing package depends info view";
     m_showDependsView->setVisible(false);
     m_showDependsButton->setVisible(false);
     m_showDependsView->setAcceptDrops(false);  // 不接受拖入的数据
@@ -629,6 +665,7 @@ void SingleInstallPage::initPkgDependsInfoView()
 
 void SingleInstallPage::initConnections()
 {
+    qCDebug(appLog) << "Initializing connections";
     // infoControlButton的展开与收缩
     connect(m_infoControlButton, &InfoControlButton::expand, this, &SingleInstallPage::slotShowInfomation);
     connect(m_infoControlButton, &InfoControlButton::shrink, this, &SingleInstallPage::slotHideInfomation);
@@ -646,12 +683,14 @@ void SingleInstallPage::initConnections()
         QModelIndex index = m_packagesModel->index(0);
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
         if (m_inCompatibleMode && Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
+            qCDebug(appLog) << "Requesting install package to compatible";
             // requset install package to compatible.
             m_targetRootfsOsName = m_compatibleBox->currentText();
             const QString targetRootfs = m_compatibleBox->currentData().toString();
             m_packagesModel->setData(index, targetRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
             slotInstall();
         } else {
+            qCDebug(appLog) << "Quitting application";
             qApp->quit();
         }
     });
@@ -669,6 +708,7 @@ void SingleInstallPage::initConnections()
 
 int SingleInstallPage::initLabelWidth(int fontinfo)
 {
+    qCDebug(appLog) << "Initializing label width";
     int fontlabelwidth = 0;
     switch (fontinfo) {
         case 11:
@@ -705,6 +745,7 @@ int SingleInstallPage::initLabelWidth(int fontinfo)
 
 void SingleInstallPage::slotReinstall()
 {
+    qCDebug(appLog) << "Slot reinstall";
     // 重装按钮点击后清除焦点
     m_reinstallButton->clearFocus();
 
@@ -728,6 +769,7 @@ void SingleInstallPage::slotReinstall()
 
     // for compatible mode
     if (m_inCompatibleMode) {
+        qCDebug(appLog) << "Setting compatible mode visible to false";
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
@@ -746,6 +788,7 @@ void SingleInstallPage::slotReinstall()
 
 void SingleInstallPage::slotInstall()
 {
+    qCDebug(appLog) << "Slot install";
     // 安装按钮点击后清除焦点
     m_installButton->clearFocus();
 
@@ -767,6 +810,7 @@ void SingleInstallPage::slotInstall()
 
     // for compatible mode
     if (m_inCompatibleMode) {
+        qCDebug(appLog) << "Setting compatible mode visible to false";
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
@@ -785,6 +829,7 @@ void SingleInstallPage::slotInstall()
 
 void SingleInstallPage::slotUninstallCurrentPackage()
 {
+    qCDebug(appLog) << "Slot uninstall";
     // 卸载按钮点击后清除焦点
     m_uninstallButton->clearFocus();
 
@@ -805,6 +850,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
 
     // for compatible mode
     if (m_inCompatibleMode) {
+        qCDebug(appLog) << "Setting compatible mode visible to false";
         m_compatibleLabel->setVisible(false);
         m_compatibleBox->setVisible(false);
 
@@ -823,6 +869,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
 
 void SingleInstallPage::slotShowInfomation()
 {
+    qCDebug(appLog) << "Slot show information";
     m_upDown = false;
     m_installProcessView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
@@ -832,6 +879,7 @@ void SingleInstallPage::slotShowInfomation()
 
 void SingleInstallPage::slotHideInfomation()
 {
+    qCDebug(appLog) << "Slot hide information";
     m_upDown = true;
     m_installProcessView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
@@ -841,6 +889,7 @@ void SingleInstallPage::slotHideInfomation()
 
 void SingleInstallPage::slotShowDependsInfo()
 {
+    qCDebug(appLog) << "Slot show depends info";
     m_showDependsView->setVisible(true);
     m_itemInfoFrame->setVisible(false);
 
@@ -849,6 +898,7 @@ void SingleInstallPage::slotShowDependsInfo()
 
 void SingleInstallPage::slotHideDependsInfo()
 {
+    qCDebug(appLog) << "Slot hide depends info";
     m_showDependsView->setVisible(false);
     m_itemInfoFrame->setVisible(true);
 
@@ -857,6 +907,7 @@ void SingleInstallPage::slotHideDependsInfo()
 
 void SingleInstallPage::slotShowInfo()
 {
+    qCDebug(appLog) << "Slot show info";
     // 显示进度信息
     m_infoControlButton->setVisible(true);
     m_showDependsButton->setVisible(false);
@@ -881,6 +932,7 @@ void SingleInstallPage::slotShowInfo()
 
 void SingleInstallPage::slotOutputAvailable(const QString &output)
 {
+    qCDebug(appLog) << "Slot output available";
     // 信息展示窗口添加进程数据
     m_installProcessView->appendText(output.trimmed());
 
@@ -897,6 +949,7 @@ void SingleInstallPage::slotOutputAvailable(const QString &output)
 
 void SingleInstallPage::slotWorkerFinished()
 {
+    qCDebug(appLog) << "Slot worker finished";
     // 显示infoControlButton
     m_infoControlButton->setVisible(true);
 
@@ -914,6 +967,7 @@ void SingleInstallPage::slotWorkerFinished()
     m_backButton->setVisible(true);
 
     if (m_inCompatibleMode) {
+        qCDebug(appLog) << "Setting compatible mode visible to false";
         m_confirmButton->setVisible(false);
     }
 
@@ -922,6 +976,7 @@ void SingleInstallPage::slotWorkerFinished()
     const int stat = index.data(DebListModel::PackageOperateStatusRole).toInt();
 
     if (stat == Pkg::PackageOperationStatus::Success) {  // 操作成功
+        qCDebug(appLog) << "Operation success";
         m_doneButton->setVisible(true);
         m_doneButton->setFocus();
         if (m_operate == Install || m_operate == Reinstall) {  // 安装成功
@@ -952,6 +1007,7 @@ void SingleInstallPage::slotWorkerFinished()
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         }
     } else if (stat == Pkg::PackageOperationStatus::Failed) {  // 安装/卸载失败
+        qCDebug(appLog) << "Operation failed";
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -969,6 +1025,7 @@ void SingleInstallPage::slotWorkerFinished()
         }
     } else {
         // 正常情况不会进入此分支，如果进入此分支表明状态错误。
+        qCDebug(appLog) << "Operate status error";
         m_confirmButton->setVisible(true);
         m_confirmButton->setFocus();
         qDebug() << "Operate Status Error. current"
@@ -983,7 +1040,9 @@ void SingleInstallPage::slotWorkerFinished()
 
 void SingleInstallPage::slotWorkerProgressChanged(const int progress)
 {
+    qCDebug(appLog) << "Slot worker progress changed";
     if (progress < m_progress->value()) {  // 进度不后退
+        qCDebug(appLog) << "Progress not decrease";
         return;
     }
 
@@ -992,16 +1051,19 @@ void SingleInstallPage::slotWorkerProgressChanged(const int progress)
 
 void SingleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends)
 {
+    qCDebug(appLog) << "Slot depend packages";
     // 依赖关系满足或者正在下载wine依赖，则不显示依赖关系
     m_showDependsView->clearText();
     m_showRemovePackages = false;
 
     // if compatible valid, disable extend info
     if (installWineDepends || m_inCompatibleMode) {
+        qCDebug(appLog) << "Install wine depends or in compatible mode, skip depend packages";
         return;
     }
 
     if (dependPackages.second.isEmpty()) {
+        qCDebug(appLog) << "Depends ok or available, show package that will be remove after install";
         // depends ok or available, show package that will be remove after install
         const QStringList removePackages = m_packagesModel->index(0).data(DebListModel::PackageRemoveDependsRole).toStringList();
         if (!removePackages.isEmpty()) {
@@ -1025,12 +1087,14 @@ void SingleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool
     m_showDependsButton->setVisible(true);
 
     if (dependPackages.first.size() > 0) {
+        qCDebug(appLog) << "Dependencies in the repository";
         m_showDependsView->appendText(tr("Dependencies in the repository"));
         for (int i = 0; i < dependPackages.first.size(); i++)
             m_showDependsView->appendText(dependPackages.first.at(i).packageName + "   " + dependPackages.first.at(i).version);
         m_showDependsView->appendText(tr(""));
     }
     if (dependPackages.second.size() > 0) {
+        qCDebug(appLog) << "Missing dependencies";
         m_showDependsView->appendText(tr("Missing dependencies"));
         for (int i = 0; i < dependPackages.second.size(); i++)
             m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
@@ -1044,7 +1108,9 @@ void SingleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool
  */
 void SingleInstallPage::slotRefreshSinglePackageDepends()
 {
+    qCDebug(appLog) << "Slot refresh single package depends";
     if (1 == m_packagesModel->rowCount()) {
+        qCDebug(appLog) << "Refresh single package depends";
         QModelIndex index = m_packagesModel->index(0);
         QVariant data = m_packagesModel->data(index, AbstractPackageListModel::PackageDependsDetailRole);
         auto depends = data.value<Pkg::DependsPair>();
@@ -1058,12 +1124,14 @@ void SingleInstallPage::slotRefreshSinglePackageDepends()
  */
 void SingleInstallPage::showPackageInfo()
 {
+    qCDebug(appLog) << "Show package info";
     const QSize boundingSize = QSize(m_packageDescription->width(), m_packageDescription->height());
     QFontInfo fontinfosize = this->fontInfo();  // 获取系统字体
     int fontlabelsize = fontinfosize.pixelSize();
     const QModelIndex index = m_packagesModel->index(0);
 
     if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
+        qCDebug(appLog) << "Show package info";
         m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
         m_pkgNameDescription = index.data(DebListModel::PackageNameRole).toString();
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
@@ -1080,6 +1148,7 @@ void SingleInstallPage::showPackageInfo()
         // 根据依赖状态调整显示效果
         // 添加依赖授权确认处理
         if (dependsError(dependsStat) && dependAuthStatu != DebListModel::AuthConfirm) {  // 添加架构不匹配的处理
+            qCDebug(appLog) << "Depends error and depend auth status not confirm";
             m_tipsLabel->setTextAndTips(index.data(DebListModel::PackageFailReasonRole).toString());
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
@@ -1093,10 +1162,12 @@ void SingleInstallPage::showPackageInfo()
                     case Pkg::CompatibleNotInstalled:
                         // no back button, select 'compatible rootfs' and install
                         if (m_compatibleChekcing) {
+                            qCDebug(appLog) << "Compatible checking, hide compatible label and box";
                             m_compatibleLabel->setVisible(false);
                             m_compatibleBox->setVisible(false);
                             m_confirmButton->setVisible(false);
                         } else {
+                            qCDebug(appLog) << "Compatible not checking, show compatible label and box";
                             m_compatibleLabel->setVisible(true);
                             m_compatibleBox->setVisible(true);
                             m_confirmButton->setVisible(true);
@@ -1104,6 +1175,7 @@ void SingleInstallPage::showPackageInfo()
                         break;
                     case Pkg::CompatibleIntalled:
                         // uninstall or quit
+                        qCDebug(appLog) << "Compatible installed, hide compatible label and box";
                         m_compatibleLabel->setVisible(false);
                         m_compatibleBox->setVisible(false);
                         m_uninstallButton->setVisible(true);
@@ -1112,10 +1184,12 @@ void SingleInstallPage::showPackageInfo()
                         break;
                 }
             } else {
+                qCDebug(appLog) << "Not compatible mode, show back button";
                 m_backButton->setVisible(true);
             }
 
             if (resetButtonFocus) {
+                qCDebug(appLog) << "Reset button focus";
                 resetButtonFocus = false;
                 m_confirmButton->setFocus();
             }
@@ -1125,16 +1199,19 @@ void SingleInstallPage::showPackageInfo()
         // 根据安装状态调整显示效果
         const bool installed = installStat != Pkg::PackageInstallStatus::NotInstalled;
         if (dependAuthStatu == DebListModel::AuthConfirm) {  // 安装wine依赖时，所有的按钮都不显示
+            qCDebug(appLog) << "Install wine depends, hide all buttons";
             m_installButton->setVisible(false);
             m_uninstallButton->setVisible(false);
             m_reinstallButton->setVisible(false);
             m_infoControlButton->setVisible(false);
         } else {  // 安装wine前或者安装完成后，根据安装状态显示对应的按钮
+            qCDebug(appLog) << "Install wine not depends, show buttons according to install status";
             m_installButton->setVisible(!installed);
             m_uninstallButton->setVisible(installed);
             m_reinstallButton->setVisible(installed);
 
             if (resetButtonFocus) {
+                qCDebug(appLog) << "Reset button focus";
                 resetButtonFocus = false;
                 if (installed) {
                     m_reinstallButton->setFocus();
@@ -1150,15 +1227,18 @@ void SingleInstallPage::showPackageInfo()
         // 根据安装状态设置提示文字
         if (installed) {
             if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
+                qCDebug(appLog) << "Same version installed";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
+                qCDebug(appLog) << "Later version installed";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Downgrade"));
             } else {
+                qCDebug(appLog) << "Earlier version installed";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
@@ -1173,6 +1253,7 @@ void SingleInstallPage::showPackageInfo()
 
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
+    qCDebug(appLog) << "Set enable button";
     // After the uninstall authorization is canceled, hide the uninstall details and display the version status
     m_tipsLabel->setVisible(true);
     m_tipsLabel->setVisible(true);
@@ -1185,6 +1266,7 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    qCDebug(appLog) << "After get auther false";
     // 取消授权/授权失败后，界面重绘，复位焦点
     resetButtonFocus = true;
 
@@ -1196,25 +1278,30 @@ void SingleInstallPage::afterGetAutherFalse()
 
     // 根据安装场景显示按钮
     if (m_operate == Install) {
+        qCDebug(appLog) << "Install operation, show install button";
         m_installButton->setVisible(true);
         m_installButton->setFocus();
     } else if (m_operate == Uninstall) {
+        qCDebug(appLog) << "Uninstall operation, show reinstall and uninstall buttons";
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
         m_reinstallButton->setFocus();
     } else if (m_operate == Reinstall) {
+        qCDebug(appLog) << "Reinstall operation, show reinstall and uninstall buttons";
         m_reinstallButton->setVisible(true);
         m_uninstallButton->setVisible(true);
         m_reinstallButton->setFocus();
     }
 
     if (m_showRemovePackages) {
+        qCDebug(appLog) << "Show remove packages, show depends button";
         m_showDependsButton->setVisible(true);
     }
 }
 
 void SingleInstallPage::showEvent(QShowEvent *e)
 {
+    qCDebug(appLog) << "Show event";
     showPackageInfo();
     // 每次切换展示当前页面，复位焦点状态
     resetButtonFocus = true;
@@ -1223,6 +1310,7 @@ void SingleInstallPage::showEvent(QShowEvent *e)
 
 void SingleInstallPage::paintEvent(QPaintEvent *event)
 {
+    // qCDebug(appLog) << "Paint event";
     QWidget::paintEvent(event);
 
     DPalette palette = DPaletteHelper::instance()->palette(m_packageDescription);
@@ -1232,6 +1320,7 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
 
 void SingleInstallPage::setAuthConfirm(QString dependName)
 {
+    qCDebug(appLog) << "Set auth confirm";
     // 调整按钮的显示效果
     m_installButton->setVisible(false);
     m_reinstallButton->setVisible(false);
@@ -1254,6 +1343,7 @@ void SingleInstallPage::setAuthConfirm(QString dependName)
 
 void SingleInstallPage::setAuthBefore()
 {
+    qCDebug(appLog) << "Set auth before";
     // 显示包信息提示
     m_tipsLabel->setVisible(true);
 
@@ -1299,6 +1389,7 @@ void SingleInstallPage::setAuthBefore()
 
 void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 {
+    qCDebug(appLog) << "Set cancel auth or auth depends err";
     m_tipsLabel->setVisible(true);
     m_progressFrame->setVisible(false);
     m_btnsFrame->setVisible(true);
@@ -1308,6 +1399,7 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
     const int dependsStatus = index.data(DebListModel::PackageDependsStatusRole).toInt();
     // 根据依赖状态 调整界面显示
     if (dependsError(dependsStatus)) {
+        qCDebug(appLog) << "Depends error, show confirm and back buttons";
         // 依赖不满足或依赖授权取消
         m_tipsLabel->setTextAndTips(index.data(DebListModel::PackageFailReasonRole).toString());  // 修复授权取消后无提示的问题
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -1323,29 +1415,35 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 
         m_confirmButton->setFocus();
     } else {
+        qCDebug(appLog) << "Depends ok, show install button";
         // 依赖安装成功
         m_tipsLabel->clear();  // 依赖安装成功后，去除依赖错误的提示信息。
         m_confirmButton->setVisible(false);
         m_backButton->setVisible(false);
         const int installStat = index.data(DebListModel::PackageVersionStatusRole).toInt();
         if (installStat == Pkg::PackageInstallStatus::NotInstalled) {  // 没有安装过其他版本
+            qCDebug(appLog) << "Not installed, show install button";
             m_installButton->setVisible(true);
             m_installButton->setEnabled(true);
             m_tipsLabel->setVisible(false);
 
             m_installButton->setFocus();
         } else {  // 已经安装过其他版本
+            qCDebug(appLog) << "Installed, show reinstall and uninstall buttons";
             // 增加提示 依赖安装完成后的提示
             if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
+                qCDebug(appLog) << "Same version installed, show reinstall button";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(tr("Same version installed"));
                 m_reinstallButton->setText(tr("Reinstall"));
             } else if (installStat == Pkg::PackageInstallStatus::InstalledLaterVersion) {
+                qCDebug(appLog) << "Later version installed, show downgrade button";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(
                     tr("Later version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
                 m_reinstallButton->setText(tr("Downgrade"));
             } else {
+                qCDebug(appLog) << "Earlier version installed, show update button";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
                 m_tipsLabel->setTextAndTips(
                     tr("Earlier version installed: %1").arg(index.data(DebListModel::PackageInstalledVersionRole).toString()));
@@ -1368,33 +1466,41 @@ void SingleInstallPage::setCancelAuthOrAuthDependsErr()
 
 bool SingleInstallPage::dependsError(int status) const
 {
+    qCDebug(appLog) << "Depends error check";
     return status != Pkg::DependsOk && status != Pkg::DependsAvailable;
 }
 
 void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
 {
+    qCDebug(appLog) << "Deal depend result";
     dependAuthStatu = authStatus;
     switch (authStatus) {
         case DebListModel::AuthConfirm:  // 授权成功
+            qCDebug(appLog) << "Auth confirm";
             setAuthConfirm(dependName);
             break;
 
         case DebListModel::AuthBefore:  // 授权之前
+            qCDebug(appLog) << "Auth before";
             setAuthBefore();
             break;
         case DebListModel::AnalysisErr:  // 解析错误
+            qCDebug(appLog) << "Analysis error";
             setCancelAuthOrAuthDependsErr();
             break;
         case DebListModel::AuthDependsSuccess:  // 下载成功
+            qCDebug(appLog) << "Auth depends success";
             setCancelAuthOrAuthDependsErr();
             break;
         case DebListModel::CancelAuth:  // 授权取消和授权失败的提示语公用，修复授权取消后无提示的问题
         case DebListModel::AuthDependsErr:
+            qCDebug(appLog) << "Auth depends err";
             setCancelAuthOrAuthDependsErr();
             m_tipsLabel->setTextAndTips(tr("Failed to install %1").arg(dependName));
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
             break;
         case DebListModel::VerifyDependsErr:
+            qCDebug(appLog) << "Verify depends err";
             setCancelAuthOrAuthDependsErr();
             m_tipsLabel->setTextAndTips(dependName + tr("Invalid digital signature"));
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);

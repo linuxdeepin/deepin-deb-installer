@@ -54,6 +54,7 @@ MultipleInstallPage::MultipleInstallPage(AbstractPackageListModel *model, QWidge
 
 void MultipleInstallPage::initControlAccessibleName()
 {
+    qCDebug(appLog) << "Initializing control accessible names";
     // 添加contentFrame AccessibleName
     m_contentFrame->setObjectName("contentFrame");
     m_contentFrame->setAccessibleName("contentFrame");
@@ -93,10 +94,12 @@ void MultipleInstallPage::initControlAccessibleName()
     // 添加 tipsLabel AccessibleName
     m_tipsLabel->setObjectName("TipsCommandLinkButton");
     m_tipsLabel->setAccessibleName("TipsCommandLinkButton");
+    qCDebug(appLog) << "Control accessible names initialized";
 }
 
 void MultipleInstallPage::initContentLayout()
 {
+    qCDebug(appLog) << "Initializing content layout";
     // 子布局设置控件间的间距为0
     m_contentLayout->setSpacing(0);
     // 子布局设定上下左右的边距
@@ -117,10 +120,12 @@ void MultipleInstallPage::initContentLayout()
 #ifdef SHOWBGCOLOR
     m_contentFrame->setStyleSheet("QFrame{background: cyan}");
 #endif
+    qCDebug(appLog) << "Content layout initialized";
 }
 
 void MultipleInstallPage::initPkgDependsInfoView()
 {
+    qCDebug(appLog) << "Initializing package depends info view";
     m_showDependsView->setVisible(false);
     m_showDependsButton->setVisible(false);
     m_showDependsView->setAcceptDrops(false);  // 不接受拖入的数据
@@ -128,10 +133,12 @@ void MultipleInstallPage::initPkgDependsInfoView()
     m_showDependsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_contentLayout->addWidget(m_showDependsButton);
     m_contentLayout->addWidget(m_showDependsView);
+    qCDebug(appLog) << "Package depends info view initialized";
 }
 
 void MultipleInstallPage::initUI()
 {
+    qCDebug(appLog) << "Initializing UI";
     this->setFocusPolicy(Qt::NoFocus);
     // 直接传入debListModel 修复多次创建packageManager导致崩溃的问题
     PackagesListDelegate *delegate = new PackagesListDelegate(m_debListModel, m_appsListView);
@@ -275,10 +282,12 @@ void MultipleInstallPage::initUI()
     m_tipsLabel->setVisible(false);                               // 依赖安装提示默认不可见
 
     m_contentLayout->addWidget(btnsFrame);
+    qCDebug(appLog) << "UI initialized";
 }
 
 void MultipleInstallPage::initTabOrder()
 {
+    qCDebug(appLog) << "Initializing tab order";
     // 修改焦点切换的顺序
     QWidget::setTabOrder(m_appsListView, m_infoControlButton);
     // 焦点从infoCommandLinkButton直接切换到安装或返回按钮
@@ -286,10 +295,12 @@ void MultipleInstallPage::initTabOrder()
     QWidget::setTabOrder(m_infoControlButton->controlButton(), m_backButton);
     // 焦点从返回按钮可以直接切换到确认按钮
     QWidget::setTabOrder(m_backButton, m_acceptButton);
+    qCDebug(appLog) << "Tab order initialized";
 }
 
 void MultipleInstallPage::setButtonFocusPolicy()
 {
+    qCDebug(appLog) << "Setting button focus policy";
     // 修改焦点控制 启用焦点设置为TabFouce
     auto focus = Qt::TabFocus;
 
@@ -300,18 +311,22 @@ void MultipleInstallPage::setButtonFocusPolicy()
 
     // 设置ControlButton的焦点策略
     m_infoControlButton->controlButton()->setFocusPolicy(focus);
+    qCDebug(appLog) << "Button focus policy set";
 }
 
 void MultipleInstallPage::setButtonAutoDefault()
 {
+    qCDebug(appLog) << "Setting button auto default";
     // 增加键盘enter控制按钮
     m_installButton->setAutoDefault(true);
     m_acceptButton->setAutoDefault(true);
     m_backButton->setAutoDefault(true);
+    qCDebug(appLog) << "Button auto default set";
 }
 
 void MultipleInstallPage::initConnections()
 {
+    qCDebug(appLog) << "Initializing connections";
     // 详细信息展开
     connect(m_infoControlButton, &InfoControlButton::expand, this, &MultipleInstallPage::slotShowInfo);
 
@@ -345,7 +360,10 @@ void MultipleInstallPage::initConnections()
     connect(m_debListModel, &DebListModel::signalAppendOutputInfo, this, &MultipleInstallPage::slotOutputAvailable);
 
     // 开始安装时，显示安装进度条
-    connect(m_debListModel, &DebListModel::signalWorkerStart, this, [=] { m_processFrame->setVisible(true); });
+    connect(m_debListModel, &DebListModel::signalWorkerStart, this, [=] {
+        qCDebug(appLog) << "Worker started, showing process frame";
+        m_processFrame->setVisible(true);
+    });
 
     // 一个包安装结束后 listView滚动到其在listview中的位置
     connect(
@@ -353,12 +371,14 @@ void MultipleInstallPage::initConnections()
 
     // 点击安装包列表时，向后端传递当前选中行
     connect(m_appsListView, &PackagesListView::signalCurrentIndexRow, this, [this](int row) {
+        qCDebug(appLog) << "Current index row changed:" << row;
         QModelIndex index = m_debListModel->index(row);
         QVariant data = m_debListModel->data(index, AbstractPackageListModel::PackageDependsDetailRole);
         auto depends = data.value<Pkg::DependsPair>();
 
         slotDependPackages(depends, GlobalStatus::winePreDependsInstalling());
     });
+    qCDebug(appLog) << "Connections initialized";
 }
 
 void MultipleInstallPage::slotWorkerFinshed()
@@ -377,10 +397,12 @@ void MultipleInstallPage::slotWorkerFinshed()
 
 void MultipleInstallPage::slotOutputAvailable(const QString &output)
 {
+    qCDebug(appLog) << "Output available:" << output;
     m_installProcessInfoView->appendText(output.trimmed());  // 添加信息到窗口
 
     // change to install
     if (!m_installButton->isVisible()) {
+        qCDebug(appLog) << "Install button not visible, show info control button";
         m_infoControlButton->setVisible(true);  // 如果有信息添加说明此时正在安装，进度条要显示出来
     }
 }
@@ -402,6 +424,7 @@ void MultipleInstallPage::slotProgressChanged(const int progress)
 
 void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 {
+    qCDebug(appLog) << "Auto scrolling install list to index:" << opIndex;
     // 当前安装包的下标是合法的
     if (opIndex > 1 && opIndex < m_debListModel->rowCount()) {
         QModelIndex currIndex = m_debListModel->index(opIndex - 1);
@@ -414,18 +437,23 @@ void MultipleInstallPage::slotAutoScrollInstallList(int opIndex)
 
 void MultipleInstallPage::slotRequestRemoveItemClicked(const QModelIndex &index)
 {
-    if (!m_debListModel->isWorkerPrepare())
+    qCDebug(appLog) << "Request to remove item at index:" << index.row();
+    if (!m_debListModel->isWorkerPrepare()) {
+        qCWarning(appLog) << "Worker not ready, cannot remove item";
         return;  // 当前未处于准备阶段，不允许删除
+    }
 
     const int row = index.row();  // 要删除的包的下标转换
 
     m_showDependsButton->setVisible(false);
 
     m_debListModel->removePackage(row);  // 删除指定包
+    qCDebug(appLog) << "Item removed at index:" << row;
 }
 
 void MultipleInstallPage::slotShowInfo()
 {
+    qCDebug(appLog) << "Showing installation info";
     m_appsListView->setFocusPolicy(Qt::NoFocus);        // 详细信息出现后 设置appListView不接受焦点
     m_upDown = false;                                   // 未使用
     m_contentLayout->setContentsMargins(20, 0, 20, 0);  // 设置上下左右边距
@@ -440,6 +468,7 @@ void MultipleInstallPage::slotShowInfo()
 
 void MultipleInstallPage::slotHideInfo()
 {
+    qCDebug(appLog) << "Hiding installation info";
     m_appsListView->setFocusPolicy(Qt::TabFocus);  // 隐藏详细信息后，设置appListView的焦点策略
     m_upDown = true;
     m_contentLayout->setContentsMargins(10, 0, 10, 0);  // 设置边距
@@ -450,6 +479,7 @@ void MultipleInstallPage::slotHideInfo()
 
 void MultipleInstallPage::slotHiddenCancelButton()
 {
+    qCDebug(appLog) << "Hiding cancel button";
     // 安装开始后不允许调出右键菜单。
     // 安装按钮点击后清除其焦点。解决授权框消失后标题栏菜单键被focus的问题
     m_installButton->clearFocus();
@@ -459,10 +489,12 @@ void MultipleInstallPage::slotHiddenCancelButton()
 
     m_showDependsButton->shrinkContent();
     m_showDependsButton->setVisible(false);
+    qCDebug(appLog) << "Cancel button hidden";
 }
 
 void MultipleInstallPage::slotShowDependsInfo()
 {
+    qCDebug(appLog) << "Showing depends info";
     m_showDependsView->setVisible(true);
     m_appsListView->setFocusPolicy(Qt::NoFocus);        // 详细信息出现后 设置appListView不接受焦点
     m_contentLayout->setContentsMargins(20, 0, 20, 0);  // 设置上下左右边距
@@ -476,6 +508,7 @@ void MultipleInstallPage::slotShowDependsInfo()
 
 void MultipleInstallPage::slotHideDependsInfo()
 {
+    qCDebug(appLog) << "Hiding depends info";
     m_showDependsView->setVisible(false);
     m_appsListView->setFocusPolicy(Qt::TabFocus);       // 隐藏详细信息后，设置appListView的焦点策略
     m_contentLayout->setContentsMargins(10, 0, 10, 0);  // 设置边距
@@ -489,7 +522,9 @@ void MultipleInstallPage::slotHideDependsInfo()
 
 void MultipleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bool installWineDepends)
 {
+    qCDebug(appLog) << "Handling depend packages, installWineDepends:" << installWineDepends;
     if (m_debListModel->rowCount() <= 1) {
+        qCDebug(appLog) << "Less than 2 packages, skipping depend packages handling";
         return;
     }
 
@@ -498,9 +533,11 @@ void MultipleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bo
     m_showDependsButton->setVisible(false);
 
     if (installWineDepends) {
+        qCDebug(appLog) << "Install wine depends, skip depend packages handling";
         return;
     }
     if (dependPackages.second.isEmpty()) {
+        qCDebug(appLog) << "No depends, show remove packages";
         // depends ok or available, show package that will be remove after install
         QModelIndex index = m_appsListView->currentIndex();
         const QStringList removePackages = index.data(DebListModel::PackageRemoveDependsRole).toStringList();
@@ -519,14 +556,17 @@ void MultipleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bo
         return;
     }
 
+    qCDebug(appLog) << "Show depends info";
     m_showDependsButton->setVisible(true);
     if (dependPackages.first.size() > 0) {
+        qCDebug(appLog) << "Show depends in the repository";
         m_showDependsView->appendText(tr("Dependencies in the repository"));
         for (int i = 0; i < dependPackages.first.size(); i++)
             m_showDependsView->appendText(dependPackages.first.at(i).packageName + "   " + dependPackages.first.at(i).version);
         m_showDependsView->appendText(tr(""));
     }
     if (dependPackages.second.size() > 0) {
+        qCDebug(appLog) << "Show missing dependencies";
         m_showDependsView->appendText(tr("Missing dependencies"));
         for (int i = 0; i < dependPackages.second.size(); i++)
             m_showDependsView->appendText(dependPackages.second.at(i).packageName + "   " + dependPackages.second.at(i).version);
@@ -536,6 +576,7 @@ void MultipleInstallPage::slotDependPackages(Pkg::DependsPair dependPackages, bo
 
 void MultipleInstallPage::setEnableButton(bool bEnable)
 {
+    qCDebug(appLog) << "Set enable button to:" << bEnable;
     m_installButton->setEnabled(bEnable);  // 设置按钮是否可用
     m_installButton->setFocus();
     if (bEnable) {  // 按钮可用时刷新一次model 保证所有的包都能显示出来
@@ -545,6 +586,7 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
+    qCDebug(appLog) << "After get auther false";
     m_processFrame->setVisible(false);       // 隐藏进度条
     m_infoControlButton->setVisible(false);  // 隐藏infoControlButton
     m_installButton->setVisible(true);       // 显示安装按钮
@@ -557,13 +599,16 @@ void MultipleInstallPage::afterGetAutherFalse()
 
 void MultipleInstallPage::refreshModel()
 {
+    qCDebug(appLog) << "Refresh model";
     m_appsListView->reset();
 }
 
 void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
 {
+    qCDebug(appLog) << "Deal depend result, authStatus:" << authStatus << ", dependName:" << dependName;
     switch (authStatus) {
         case DebListModel::AuthBefore:          // 授权之前
+            qCDebug(appLog) << "Auth before";
             m_appsListView->setEnabled(false);  // listView不可用
             m_installButton->setVisible(true);  // 显示安装按钮但是不可用
             m_installButton->setEnabled(false);
@@ -572,12 +617,14 @@ void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
             m_tipsLabel->setVisible(false);  // 隐藏提示
             break;
         case DebListModel::CancelAuth:          // 授权被取消
+            qCDebug(appLog) << "Cancel auth";
             m_appsListView->setEnabled(true);   // appListView可用
             m_installButton->setVisible(true);  // 安装按钮可见并可用
             m_installButton->setEnabled(true);
             m_installButton->setFocus();
             break;
         case DebListModel::AuthConfirm:                                               // 确认授权
+            qCDebug(appLog) << "Auth confirm";
             m_appsListView->setEnabled(false);                                        // listView不可用
             m_tipsLabel->setText(tr("Installing dependencies: %1").arg(dependName));  // 设置提示语
             m_tipsLabel->setVisible(true);                                            // 提示可见
@@ -589,6 +636,7 @@ void MultipleInstallPage::DealDependResult(int authStatus, QString dependName)
         case DebListModel::AuthDependsErr:      // 依赖安装错误
         case DebListModel::AnalysisErr:         // 解析错误
         case DebListModel::VerifyDependsErr:    // 依赖验签失败
+            qCDebug(appLog) << "AuthDependsSuccess or AuthDependsErr or AnalysisErr or VerifyDependsErr";
             m_appsListView->setEnabled(true);   // listView可以操作
             m_installButton->setVisible(true);  // 显示安装按钮
             m_installButton->setEnabled(true);  // 安装按钮可用
