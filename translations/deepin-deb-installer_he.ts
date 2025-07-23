@@ -4,7 +4,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="79"/>
         <source>Enter the number to configure: </source>
-        <translation type="unfinished"/>
+        <translation>נא לציין את המספר להגדרה:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="84"/>
@@ -18,17 +18,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation type="unfinished"/>
+        <translation>החבילות בהליכי התקנה...</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation type="unfinished"/>
+        <translation>נטענו %1/%2</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation type="unfinished"/>
+        <translation>מתבצע אתחול...</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="123"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>הגדרות</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
