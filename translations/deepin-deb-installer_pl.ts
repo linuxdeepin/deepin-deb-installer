@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -55,6 +53,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="631"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="732"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Trwa instalacja innych pakietów... Otwórz później.</translation>
     </message>
@@ -100,6 +99,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="404"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="799"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="940"/>
         <source>Bulk Install</source>
         <translation>Instalacja zbiorcza</translation>
     </message>
@@ -108,6 +109,7 @@
     <name>DebListModel</name>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="97"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="114"/>
         <source>Installation failed, please check your network connection</source>
         <translation>Błąd instalacji, sprawdź połączenie sieciowe</translation>
     </message>
@@ -118,6 +120,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="102"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="106"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="118"/>
         <source>Installation failed, insufficient disk space</source>
         <translation>Błąd instalacji: za mało miejsca na dysku</translation>
     </message>
@@ -128,11 +132,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="774"/>
         <source>Invalid digital signature</source>
         <translation>Nieprawidłowa sygnatura certyfikatu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="764"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1685"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Administrator ustalił reguły, aby zapobiec instalacji tego pakietu</translation>
     </message>
@@ -185,6 +192,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1091"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1193"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1687"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -212,6 +221,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1089"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1190"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1684"/>
         <source>Unable to install</source>
         <translation>Nie można zainstalować</translation>
     </message>
@@ -222,6 +233,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="779"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="784"/>
         <source>Broken dependencies: %1</source>
         <translation>Zerwane zależności: %1</translation>
     </message>
@@ -388,6 +400,8 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="52"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>Zwiń</translation>
@@ -407,13 +421,13 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="83"/>
-        <source>To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can be installed.</source>
-        <translation>Aby instalować niepodpisane aplikacje, przejdź do Centrum bezpieczeństwa > Narzędzia > Bezpieczeństwo aplikacji i zmień ustawienia.</translation>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>Aby instalować niepodpisane aplikacje, przejdź do Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji i zmień ustawienia.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="85"/>
-        <source>Security Center > Tools > App Security</source>
-        <translation>Centrum bezpieczeństwa > Narzędzia > Bezpieczeństwo aplikacji</translation>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="49"/>
@@ -427,14 +441,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="48"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center > Tools > App Security to change the settings.</source>
-        <translation>Pakiet nie posiada prawidłowej sygnatury i został zablokowany przed uruchomieniem/instalacją. Przejdź do Centrum bezpieczeństwa > Narzędzia > Bezpieczeństwo aplikacji, aby zmienić ustawienia.</translation>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Pakiet nie posiada prawidłowej sygnatury i został zablokowany przed uruchomieniem/instalacją. Przejdź do Centrum bezpieczeństwa &gt; Narzędzia &gt; Bezpieczeństwo aplikacji, aby zmienić ustawienia.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="51"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Anuluj</translation>
+        <translation>Anuluj</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
@@ -445,7 +459,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="268"/>
         <source>Will remove: </source>
-        <translation>Do usunięcia: </translation>
+        <translation>Do usunięcia:</translation>
     </message>
 </context>
 <context>
@@ -457,21 +471,26 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="485"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1342"/>
         <source>Reinstall</source>
         <translation>Przeinstaluj</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1159"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1346"/>
         <source>Later version installed: %1</source>
         <translation>Nowsza wersja zainstalowana: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1347"/>
         <source>Downgrade</source>
         <translation>Downgrade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1351"/>
         <source>Earlier version installed: %1</source>
         <translation>Wcześniejsza wersja zainstalowana: %1</translation>
     </message>
@@ -527,6 +546,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
         <translation>Próba zainstalowania %2 w trybie kompatybilności %1</translation>
     </message>
@@ -538,7 +558,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>%2 został pomyślnie zainstalowany w trybie zgodności %1</translation>
+        <translation>Zainstalowano pomyślnie %2 w trybie kompatybilności %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="936"/>
@@ -577,6 +597,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1165"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1352"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Aktualizuj</translation>
@@ -593,6 +614,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1341"/>
         <source>Same version installed</source>
         <translation>Zainstalowana ta sama wersja</translation>
     </message>
@@ -601,11 +623,15 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="50"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="721"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="760"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>Show details</source>
         <translation>Pokaż szczegóły</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="51"/>
         <source>Show dependencies</source>
         <translation>Pokaż zależności</translation>
     </message>
@@ -614,6 +640,7 @@
     <name>SingleInstallPage_Uninstall</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="798"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="942"/>
         <source>Show details</source>
         <translation>Pokaż szczegóły</translation>
     </message>
@@ -676,6 +703,7 @@ z trybu kompatybilności %1?</translation>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
+        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
         <translation>Instalator pakietów</translation>
     </message>
