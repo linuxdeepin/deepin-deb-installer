@@ -327,6 +327,13 @@ private:
      */
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
 
+    /**
+     * @brief pathTransform 将安装包路径转换为真实路径
+     * @param pathList 路径列表
+     * @return 转换后的路径列表
+     */
+    QStringList pathTransform(const QStringList &pkgList);
+
 private:
     AbstractPackageListModel *m_fileListModel = nullptr;  // model 类
     FileChooseWidget *m_fileChooseWidget = nullptr;       // 文件选择的widget
