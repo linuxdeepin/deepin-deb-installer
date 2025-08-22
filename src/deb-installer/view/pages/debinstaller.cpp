@@ -239,8 +239,9 @@ void DebInstaller::slotSettingDialogVisiable()
 
 void DebInstaller::PackagesSelected(const QStringList &debPathList)
 {
-    qCDebug(appLog) << "Packages selected:" << debPathList;
-    
+    const QStringList &pkgRealPathList = pathTransform(debPathList);
+    qCDebug(appLog) << "Packages selected:" << pkgRealPathList;
+
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
     // 依赖配置过程中，不添加其他包
     if ((!m_lastPage.isNull() && m_fileListModel->getWorkerStatus() != DebListModel::WorkerPrepare) ||
@@ -251,7 +252,7 @@ void DebInstaller::PackagesSelected(const QStringList &debPathList)
     } else {
         qCDebug(appLog) << "Adding packages to model";
         // 开始添加包，将要添加的包传递到后端，添加包由后端处理
-        m_fileListModel->slotAppendPackage(debPathList);
+        m_fileListModel->slotAppendPackage(pkgRealPathList);
     }
 }
 
@@ -593,7 +594,8 @@ void DebInstaller::dragMoveEvent(QDragMoveEvent *dragMoveEvent)
 
 void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
 {
-    qCDebug(appLog) << "Packages selected:" << packagesPathList;
+    const QStringList &pkgRealPathList = pathTransform(packagesPathList);
+    qCDebug(appLog) << "Packages selected:" << pkgRealPathList;
     this->showNormal();      // 非特效模式下激活窗口
     this->activateWindow();  // 特效模式下激活窗口
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加
@@ -608,7 +610,7 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
         qApp->processEvents();
 
         // 开始添加包，将要添加的包传递到后端，添加包由后端处理
-        m_fileListModel->slotAppendPackage(packagesPathList);
+        m_fileListModel->slotAppendPackage(pkgRealPathList);
     }
 }
 
@@ -632,7 +634,7 @@ void DebInstaller::slotDdimSelected(const QStringList &ddimFiles)
         if (url.isLocalFile()) {
             eachFile = url.toLocalFile();
         }
-        
+
         // 0.打开文件
         if (eachFile.endsWith(".deb")) {  // 直接排除掉deb包
             haveDeb = true;
@@ -768,6 +770,17 @@ DdimSt DebInstaller::analyzeV10(const QJsonObject &ddimobj, const QString &ddimD
     // 2.返回数据
     qCDebug(appLog) << "Return result";
     return result;
+}
+
+QStringList DebInstaller::pathTransform(const QStringList &pkgList)
+{
+    QStringList pkgRealPathList;
+    std::transform(pkgList.cbegin(), pkgList.cend(), std::back_inserter(pkgRealPathList),
+                   [](const QString &path) {
+                       QFileInfo info(path);
+                       return info.canonicalFilePath();
+                   });
+    return pkgRealPathList;
 }
 
 void DebInstaller::refreshMulti()
