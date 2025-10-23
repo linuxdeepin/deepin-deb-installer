@@ -119,7 +119,7 @@ void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, 
 QString Utils::fromSpecialEncoding(const QString &inputStr)
 {
     qCDebug(appLog) << "Converting from special encoding";
-    bool bFlag = inputStr.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
+    bool bFlag = inputStr.contains(REG_EXP("[\\x{4e00}-\\x{9fa5}]+"));
     if (bFlag) {
         qCDebug(appLog) << "Input string contains Chinese characters, returning as is";
         return inputStr;
