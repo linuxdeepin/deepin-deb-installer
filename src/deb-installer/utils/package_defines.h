@@ -62,6 +62,7 @@ enum DependsStatus {
 
     CompatibleNotInstalled,  // Package depends break, but can install to compatible rootfs
     CompatibleIntalled,      // Package depends ok, but installed in (compatible mode / current system)
+    CompatibleInstallFailed
 };
 
 enum PackageOperationStatus {
