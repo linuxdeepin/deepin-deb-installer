@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.29) unstable; urgency=medium
+
+  * fix bugs
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 23 Oct 2025 19:28:30 +0800
+
 deepin-deb-installer (6.5.28) unstable; urgency=medium
 
   * fix: implement path transformation for package selection
