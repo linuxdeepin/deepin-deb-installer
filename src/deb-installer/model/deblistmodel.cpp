@@ -441,7 +441,7 @@ bool DebListModel::slotInstallPackages()
         qCWarning(appLog) << "Installation blocked - blacklisted application or digital signature verification failed";
         return false;
     }
-    
+
     qCDebug(appLog) << "Proceeding with installation of" << m_packagesManager->m_preparedPackages.size() << "packages";
     installNextDeb();  // 开始安装
 
@@ -844,6 +844,8 @@ QString DebListModel::packageFailedReason(const int idx) const
                 if (compPtr->checked && compPtr->supportRootfs.isEmpty()) {
                     qCDebug(appLog) << "No support rootfs on compatible mode, setting status to DependsBreak";
                     status = Pkg::DependsBreak;
+                } else if (compPtr->checked && !compPtr->targetRootfs.isEmpty()) {
+                    status = Pkg::CompatibleInstallFailed;
                 }
             }
         }
@@ -869,6 +871,9 @@ QString DebListModel::packageFailedReason(const int idx) const
         case Pkg::CompatibleNotInstalled:
             qCDebug(appLog) << "Package has broken dependencies, suggesting compatibility mode";
             return tr("Broken dependencies, try installing the app in compatibility mode");
+
+        case Pkg::CompatibleInstallFailed:
+            return tr("Compatibility mode installation failed");
 
         case Pkg::Prohibit:
             qCDebug(appLog) << "Package installation is prohibited by administrator policy";
