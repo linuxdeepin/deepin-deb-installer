@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"/>
+        <translation>Falló la instalación en modo de compatibilidad.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="898"/>
