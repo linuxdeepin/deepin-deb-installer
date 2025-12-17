@@ -658,7 +658,7 @@ const ConflictResult PackagesManager::isConflictSatisfy(const QString &arch,
                             auto replaceType = replace.relationType();  // 提取版本号规则
                             auto versionCompare =
                                 Package::compareVersion(installed_version, replace.packageVersion());  // 比较版本号
-                            if (dependencyVersionMatch(versionCompare, replaceType)) {  // 如果版本号符合要求，即判定replace成立
+                            if (replace.packageVersion().isEmpty() || dependencyVersionMatch(versionCompare, replaceType)) {  // 如果版本号符合要求，即判定replace成立
                                 conflict_yes = false;
                                 break;
                             }
