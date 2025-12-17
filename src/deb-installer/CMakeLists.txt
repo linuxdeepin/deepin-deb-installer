@@ -118,6 +118,12 @@ configure_file(${APP_RES_DIR}/environments.h.in environments.h @ONLY)
 
 add_definitions(-DUSE_POLKIT -DENABLE_INACTIVE_DISPLAY)
 
+# Qt5环境不支持兼容模式（QThreadPool::start不支持lambda）
+if (NOT QT_DESIRED_VERSION MATCHES 6)
+    add_definitions(-DDISABLE_COMPATIBLE)
+    message(STATUS "Qt5 environment detected, disabling compatible mode")
+endif()
+
 # Find the library
 find_package(PkgConfig REQUIRED)
 

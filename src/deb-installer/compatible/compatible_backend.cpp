@@ -126,6 +126,7 @@ void CompatibleBackend::packageRemoved(const CompPkgInfo::Ptr &removePtr)
     qCDebug(appLog) << "Removing package from list:" << removePtr->name << removePtr->version;
 }
 
+#ifndef DISABLE_COMPATIBLE
 bool CompatibleBackend::supportAppCheck() const
 {
     return true;
@@ -222,6 +223,7 @@ bool CompatibleBackend::checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkP
     qCDebug(appLog) << "Check package support rootfs finished, return true";
     return true;
 }
+#endif
 
 QList<RootfsInfo::Ptr> CompatibleBackend::parseRootfsFromRawOutputV1(const QByteArray &output)
 {
