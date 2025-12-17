@@ -57,8 +57,13 @@ public:
     void packageRemoved(const CompPkgInfo::Ptr &removePtr);
 
     // use app check support rootfs with special package
+#ifdef DISABLE_COMPATIBLE
+    [[nodiscard]] bool supportAppCheck() const { return false; }
+    [[nodiscard]] bool checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkPtr) { Q_UNUSED(checkPtr); return false; }
+#else
     [[nodiscard]] bool supportAppCheck() const;
     [[nodiscard]] bool checkPackageSupportRootfs(const CompPkgInfo::Ptr &checkPtr);
+#endif
     Q_SIGNAL void packageSupportRootfsChanged(const CompPkgInfo::Ptr &checkPtr);
 
 private:
