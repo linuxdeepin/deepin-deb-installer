@@ -197,121 +197,108 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const QSize &size)
 {
     qCDebug(appLog) << "Hold text in rect, font:" << font.family() << ", srcText:" << srcText << ", size:" << size;
-    bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
-    QString text;
-    QString tempText;
-    int totalHeight = size.height();
-    int lineWidth = size.width() - font.pixelSize();
-
-    int offset = bContainsChinese ? font.pixelSize() : 0;
+    if (srcText.isEmpty() || size.width() <= 0 || size.height() <= 0) {
+        qCDebug(appLog) << "Invalid input parameters, returning empty or original text";
+        return srcText;
+    }
 
     QFontMetrics fm(font);
+    const int lineHeight = fm.height();
+    const int maxLines = size.height() / lineHeight;
 
-    int calcHeight = 0;
-    int lineHeight = fm.height();
-    int lineSpace = 0;
-    int lineCount = (totalHeight - lineSpace) / lineHeight;
-    int prevLineCharIndex = 0;
-    for (int charIndex = 0; charIndex < srcText.size() && lineCount >= 0; ++charIndex) {
-        int fmWidth = fm.horizontalAdvance(tempText);
-        if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
-            calcHeight += lineHeight + 3;
-            if (calcHeight + lineHeight > totalHeight) {
-                QString endString = srcText.mid(prevLineCharIndex);
-                const QString &endText = fm.elidedText(endString, Qt::ElideRight, size.width());
-                text += endText;
+    if (maxLines <= 0) {
+        qCDebug(appLog) << "Height too small for any line, returning empty";
+        return QString();
+    }
 
-                lineCount = 0;
-                break;
-            }
+    // Use QTextLayout for proper word wrapping
+    QTextLayout textLayout(srcText, font);
+    textLayout.beginLayout();
 
-            if (!bContainsChinese) {
-                QChar currChar = tempText.at(tempText.length() - 1);
-                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
-                if (currChar.isLetter() && nextChar.isLetter()) {
-                    tempText += '-';
-                }
-                fmWidth = fm.horizontalAdvance(tempText);
-                if (fmWidth > size.width()) {
-                    --charIndex;
-                    --prevLineCharIndex;
-                    tempText = tempText.remove(tempText.length() - 2, 1);
-                }
-            }
-            text += tempText;
+    QString resultText;
+    int currentLine = 0;
+    const int textWidth = size.width();
 
-            --lineCount;
-            if (lineCount > 0) {
-                if (!tempText.contains("\n"))
-                    text += "\n";
-            }
-            tempText = srcText.at(charIndex);
-
-            prevLineCharIndex = charIndex;
-        } else {
-            tempText += srcText.at(charIndex);
+    while (currentLine < maxLines) {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid()) {
+            break;
         }
+
+        line.setLineWidth(textWidth);
+        const int lineStart = line.textStart();
+        const int lineLength = line.textLength();
+
+        // Check if we're at the last allowed line and there's more text
+        if (currentLine == maxLines - 1 && lineStart + lineLength < srcText.length()) {
+            // Elide the remaining text
+            QString remainingText = srcText.mid(lineStart);
+            QString elidedText = fm.elidedText(remainingText, Qt::ElideRight, textWidth);
+            if (!resultText.isEmpty()) {
+                resultText += "\n";
+            }
+            resultText += elidedText;
+            break;
+        }
+
+        // Add current line to result
+        if (!resultText.isEmpty()) {
+            resultText += "\n";
+        }
+        resultText += srcText.mid(lineStart, lineLength);
+
+        currentLine++;
     }
 
-    if (lineCount > 0) {
-        qCDebug(appLog) << "Line count is greater than 0, add tempText";
-        text += tempText;
-    }
-    qCDebug(appLog) << "Hold text in rect, text:" << text;
-    return text;
+    textLayout.endLayout();
+
+    qCDebug(appLog) << "Hold text in rect, text:" << resultText;
+    return resultText;
 }
 
 QString Utils::holdTextInRect(const QFont &font, const QString &srcText, const int &width)
 {
     qCDebug(appLog) << "Hold text in rect, font:" << font.family() << ", srcText:" << srcText << ", width:" << width;
-    bool bContainsChinese = srcText.contains(REG_EXP("[\\x4e00-\\x9fa5]+"));
 
-    QString text;
-    QString tempText;
-    int lineWidth = width - 12;
-
-    int offset = bContainsChinese ? font.pixelSize() : 0;
-
-    QFontMetrics fm(font);
-
-    int prevLineCharIndex = 0;
-    for (int charIndex = 0; charIndex < srcText.size(); ++charIndex) {
-        int fmWidth = fm.horizontalAdvance(tempText);
-        if (fmWidth > lineWidth - offset || tempText.contains("\n")) {
-            if (!bContainsChinese) {
-                QChar currChar = tempText.at(tempText.length() - 1);
-                QChar nextChar = srcText.at(srcText.indexOf(tempText) + tempText.length());
-                if (currChar.isLetter() && nextChar.isLetter()) {
-                    tempText += '-';
-                }
-                fmWidth = fm.horizontalAdvance(tempText);
-                if (fmWidth > lineWidth) {
-                    --charIndex;
-                    --prevLineCharIndex;
-                    tempText = tempText.remove(tempText.length() - 2, 1);
-                    if (currChar != '\n' && nextChar != '\n') {
-                        text += tempText;
-                        text += "\n";
-                    }
-                }
-            } else {
-                text += tempText;
-                text += "\n";
-            }
-
-            tempText = srcText.at(charIndex);
-            prevLineCharIndex = charIndex;
-        } else {
-            tempText += srcText.at(charIndex);
-        }
+    if (srcText.isEmpty() || width <= 0) {
+        qCDebug(appLog) << "Invalid input parameters, returning original text";
+        return srcText;
     }
-    if (text.size() >= 1 && text[text.size() - 1] != '\n')
-        text += "\n";
-    text += tempText;
 
-    qCDebug(appLog) << "Hold text in rect, text:" << text;
-    return text;
+    const int effectiveWidth = width - 12;
+    if (effectiveWidth <= 0) {
+        qCDebug(appLog) << "Width too small after margin, returning original text";
+        return srcText;
+    }
+
+    // Use QTextLayout for proper word wrapping
+    QTextLayout textLayout(srcText, font);
+    textLayout.beginLayout();
+
+    QString resultText;
+
+    while (true) {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid()) {
+            break;
+        }
+
+        line.setLineWidth(effectiveWidth);
+        const int lineStart = line.textStart();
+        const int lineLength = line.textLength();
+
+        // Add current line to result
+        if (!resultText.isEmpty()) {
+            resultText += "\n";
+        }
+        resultText += srcText.mid(lineStart, lineLength);
+    }
+
+    textLayout.endLayout();
+
+    qCDebug(appLog) << "Hold text in rect, text:" << resultText;
+    return resultText;
 }
 
 /*!

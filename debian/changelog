@@ -1,3 +1,14 @@
+deepin-deb-installer (6.5.30) unstable; urgency=medium
+
+  * Fix Qt5 build: disable compatible mode
+  * fix: empty value check (#348)
+  * fix: handle empty package version in conflict resolution (#346) - Add check for empty package version in replace logic - Fix potential issue when replace.packageVersion() is empty - Improve conflict resolution reliability
+  * fix: [env] set user`s environment to QApt (#334)
+  * fix: 双击ddim文件使用软件包安装器打开
+  * refactor: improve text wrapping and code formatting
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 22 Jan 2026 16:14:13 +0800
+
 deepin-deb-installer (6.5.29) unstable; urgency=medium
 
   * fix bugs
