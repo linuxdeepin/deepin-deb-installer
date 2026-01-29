@@ -30,6 +30,11 @@
         <source>Initializing...</source>
         <translation>Başlatılıyor...</translation>
     </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
+        <source>Updating package cache...</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>DdimErrorPage</name>
@@ -52,55 +57,55 @@
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="695"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="819"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="715"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="862"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Diğer paketler yükleniyor... Lütfen daha sonra tekrar açınız</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="700"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="720"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Ayrıştırma başarısız oldu: Manifest dosyasında geçersiz bir dosya yapısı bulundu!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="702"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="722"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Ayrıştırma başarısız oldu: Manifest dosyasında geçersiz bir sürüm numarası bulundu!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="704"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="724"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>Hiçbir deb paketi bulunamadı. Lütfen klasörü kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="842"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="885"/>
         <source>The %1 package may be broken</source>
         <translation>%1 paketi bozulmuş olabilir</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="851"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="894"/>
         <source>You can only install local %1 packages</source>
         <translation>Yalnızca yerel %1 paketlerini yükleyebilirsiniz</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="860"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="903"/>
         <source>No permission to access this folder</source>
         <translation>Bu klasöre erişim izni yok</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="877"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="920"/>
         <source>Already Added</source>
         <translation>Zaten Eklenmiş</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="929"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 mevcut değil, lütfen yeniden seçin</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="445"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="894"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1047"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="937"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1090"/>
         <source>Bulk Install</source>
         <translation>Toplu Kurulum</translation>
     </message>
@@ -132,14 +137,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="144"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="895"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="910"/>
         <source>Invalid digital signature</source>
         <translation>Geçersiz dijital imza</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="152"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="880"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1981"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="895"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2009"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Yönetici, bu paketin yüklenmesini önlemek için politikalar belirledi</translation>
     </message>
@@ -149,96 +154,96 @@
         <translation>Kurulum tamamlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
         <source>current system</source>
         <translation>mevcut sistem</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
         <translation>%2, %1&apos; in içinde yüklendi, lütfen yüklemeden önce bu paketi kaldırın</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="873"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Bozuk bağımlılıklar, uygulamayı uyumluluk modunda yüklemeyi deneyin</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="891"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="898"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="913"/>
         <source>Failed to install %1</source>
         <translation>%1 Kurulamadı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1356"/>
         <source>Unable to install - no digital signature</source>
         <translation>Yüklenemiyor - dijital imza yok</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Geliştirici kipini etkinleştirmek için lütfen Kontrol Merkezi&apos;ne gidin ve tekrar deneyin. İlerle?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1332"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1360"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1333"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1361"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>İlerle</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1280"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1394"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1983"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2011"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1284"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>%1 yüklenemedi: geçerli dijital imza yok</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1435"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1463"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Bu paketin geçerli bir dijital imzası yok. Kuruluma devam edilsin mi? </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1437"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1465"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1438"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1466"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Devam et</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1278"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1391"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1980"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1306"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1419"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
         <source>Unable to install</source>
         <translation>Kurulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1392"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1420"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Bu paketin geçerli bir dijital imzası yok</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="902"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="908"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
         <source>Broken dependencies: %1</source>
         <translation>Bozuk bağımlılıklar: %1</translation>
     </message>
@@ -248,7 +253,7 @@
         <translation>Kimlik doğrulama başarısız</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>Unmatched package architecture</source>
         <translation>Paket mimarisi uyumsuz</translation>
     </message>
