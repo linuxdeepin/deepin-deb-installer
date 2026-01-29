@@ -716,6 +716,7 @@ void DebListModel::reset()
     m_packagesManager->reset();  // 重置packageManager
 
     m_hierarchicalVerifyError = false;  // 复位分级管控安装状态
+    m_cacheUpdated = false;  // 重置缓存更新标记
 }
 
 int DebListModel::getInstallFileSize()
@@ -728,6 +729,7 @@ void DebListModel::resetFileStatus()
 {
     qCDebug(appLog) << "Resetting file status.";
     m_packageOperateStatus.clear();  // 重置包的操作状态
+    m_cacheUpdated = false;  // 重置缓存更新标记
     m_packageFailReason.clear();     // 重置包的错误状态
     m_packageFailCode.clear();
 }
@@ -1101,27 +1103,74 @@ void DebListModel::checkBoxStatus()
 
 void DebListModel::installDebs()
 {
-    qCDebug(appLog) << "Entering installDebs for operating index" << m_operatingIndex;
+    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
+    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
+
+    // Ensure cache is updated before installation
+    if (ensureCacheUpdated()) {
+        qCDebug(appLog) << "Cache update in progress, waiting for completion";
+        return;  // Cache update is in progress, wait for callback
+    }
+
+    // Proceed with actual installation
+    performInstallation();
+}
+
+bool DebListModel::ensureCacheUpdated()
+{
+    if (m_cacheUpdated) {
+        qCDebug(appLog) << "Cache already updated";
+        return false;  // Cache is already updated, no need to wait
+    }
+
+    qCDebug(appLog) << "Cache not updated, starting update process";
+    auto *const backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        qCWarning(appLog) << "Backend pointer is null, skipping cache update";
+        m_cacheUpdated = true;
+        return false;
+    }
+
+    emit signalWorkerStart();
+    emit signalAppendOutputInfo("Updating package cache...");
+
+    Transaction *transaction = backend->updateCache();
+    if (!transaction) {
+        qCWarning(appLog) << "Failed to create updateCache transaction, continuing without update";
+        m_cacheUpdated = true;
+        return false;
+    }
+
+    transaction->setLocale(".UTF-8");
+    connect(transaction, &Transaction::statusDetailsChanged, this, &DebListModel::signalAppendOutputInfo);
+    connect(transaction, &Transaction::finished, this, &DebListModel::slotUpdateCacheFinished);
+    connect(transaction, &Transaction::errorOccurred, this, &DebListModel::slotTransactionErrorOccurred);
+
+    m_currentTransaction = transaction;
+    transaction->run();
+
+    qCDebug(appLog) << "Cache update transaction started";
+    return true;  // Cache update is in progress, need to wait
+}
+
+void DebListModel::performInstallation()
+{
+    qCDebug(appLog) << "Performing installation for operating index" << m_operatingIndex;
     DebFile deb(m_packagesManager->package(m_operatingIndex));
     if (!deb.isValid()) {
         qCDebug(appLog) << "Deb file is invalid, returning";
         return;
     }
-    qCInfo(appLog)
-        << QString("Prepare to install %1, ver: %2, arch: %3").arg(deb.packageName()).arg(deb.version()).arg(deb.architecture());
+    qCInfo(appLog) << QString("Prepare to install %1, ver: %2, arch: %3").arg(deb.packageName()).arg(deb.version()).arg(deb.architecture());
 
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
-    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
-    // 在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
-    qCDebug(appLog) << "Emitting signalWorkerStart";
-    emit signalWorkerStart();
-
-    // fetch next deb
+    // Get backend pointer
     auto *const backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
-        qCDebug(appLog) << "Backend pointer is null, returning";
+        qCWarning(appLog) << "Backend pointer is null, cannot perform installation";
         return;
     }
+
+    emit signalWorkerStart();
 
     Transaction *transaction = nullptr;
 
@@ -1266,7 +1315,7 @@ void DebListModel::installDebs()
     map.insert("SUDO_USER", realUser);
     m_currentTransaction->setEnvVariable(map);
 #endif
-    qCDebug(appLog) << "Running current transaction";
+    qCDebug(appLog) << "Running current transaction" ;
     m_currentTransaction->run();
 }
 
@@ -2295,4 +2344,36 @@ void Dialog::keyPressEvent(QKeyEvent *event)
         qCDebug(appLog) << "Escape key pressed, emitting signalClosed";
         emit signalClosed();
     }
+}
+
+void DebListModel::slotUpdateCacheFinished()
+{
+    qCDebug(appLog) << "Cache update transaction finished";
+
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if (!transaction) {
+        qCWarning(appLog) << "Update cache transaction is null";
+        return;
+    }
+
+    disconnect(transaction, &Transaction::finished, this, &DebListModel::slotUpdateCacheFinished);
+
+    if (transaction->exitStatus()) {
+        qCWarning(appLog) << "Cache update failed:" << transaction->errorString();
+        emit signalAppendOutputInfo(QString("Failed to update cache: %1").arg(transaction->errorString()));
+    } else {
+        qCDebug(appLog) << "Cache update successful";
+        emit signalAppendOutputInfo("Cache updated successfully");
+    }
+
+    m_cacheUpdated = true;
+
+    if (!m_currentTransaction.isNull()) {
+        m_currentTransaction->deleteLater();
+        m_currentTransaction = nullptr;
+    }
+
+    // Continue with actual installation after cache update
+    qCDebug(appLog) << "Cache update completed, continuing with installation";
+    performInstallation();
 }
