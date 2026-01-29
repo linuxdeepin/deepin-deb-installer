@@ -81,26 +81,34 @@ bool PackagesManager::isArchMatches(QString sysArch, const QString &packageArch,
 
 QString PackagesManager::resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, const int multiArchType)
 {
+    qCDebug(appLog) << "Resolving multi-arch annotation. Annotation:" << annotation << "Deb arch:" << debArch << "Multi-arch type:" << multiArchType;
     if ("native" == annotation || "any" == annotation) {
+        qCDebug(appLog) << "Annotation is 'native' or 'any', returning empty string.";
         return QString();
     }
     if ("all" == annotation) {
+        qCDebug(appLog) << "Annotation is 'all', returning empty string.";
         return QString();
     }
     if (multiArchType == MultiArchForeign) {
+        qCDebug(appLog) << "Multi-arch type is Foreign, returning empty string.";
         return QString();
     }
 
     QString arch;
     if (annotation.isEmpty()) {
+        qCDebug(appLog) << "Annotation is empty, using deb arch:" << debArch;
         arch = debArch;
     } else {
+        qCDebug(appLog) << "Using annotation arch:" << annotation;
         arch = annotation;
     }
 
     if (!arch.startsWith(':') && !arch.isEmpty()) {
+        qCDebug(appLog) << "Prepending ':' to arch:" << arch;
         return arch.prepend(':');
     } else {
+        qCDebug(appLog) << "Returning arch as is:" << arch;
         return arch;
     }
 }
@@ -1388,7 +1396,10 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set,
             }
         }
 
+        qCDebug(appLog) << __func__ << infos << package->name() << "ChooseName:" << choosed_name;
+
         if (infos.isEmpty()) {  // 没有或依赖关系或者当前依赖不属于或依赖关系
+            qCDebug(appLog) << "not ordepends or not contain depend";
             // 当前依赖未安装，则安装当前依赖。
             if (package->installedVersion().isEmpty()) {
                 choosed_set << choosed_name;
@@ -2386,6 +2397,7 @@ bool PackagesManager::checkPackageArchValid(const QApt::Package *package, const 
 
 Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation)
 {
+    qCDebug(appLog) << "Getting package with arch for package:" << packageName;
     Backend *backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
         qCWarning(appLog) << "Failed to load libqapt backend";

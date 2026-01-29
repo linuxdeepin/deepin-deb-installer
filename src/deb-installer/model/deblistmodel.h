@@ -298,14 +298,6 @@ private slots:
     void slotDependsInstallTransactionFinished();
 
     /**
-     * @brief slotUpdateCacheFinished
-     * 更新缓存操作结束
-     * 缓存更新成功，继续安装流程
-     * 缓存更新失败，仍然继续安装流程
-     */
-    void slotUpdateCacheFinished();
-
-    /**
      * @brief slotUninstallFinished
      * 卸载结束槽函数
      * 切换工作状态
@@ -364,17 +356,6 @@ private:
      * @brief installDebs 安装单个包。
      */
     void installDebs();
-
-    /**
-     * @brief ensureCacheUpdated 确保缓存已更新
-     * @return true 正在更新缓存,需要等待; false 缓存已更新,可以继续安装
-     */
-    bool ensureCacheUpdated();
-
-    /**
-     * @brief performInstallation 执行实际的安装逻辑
-     */
-    void performInstallation();
 
     /**
      * @brief refreshOperatingPackageStatus 刷新当前操作的包的操作状态
@@ -553,9 +534,6 @@ private:
 
     // 当前安装是否存在分级管控签名验证失败
     bool m_hierarchicalVerifyError = false;
-
-    // 标记本次安装流程中是否已更新缓存
-    bool m_cacheUpdated{false};
 
     // Compatible
     Deb::DebPackage::Ptr m_currentPackage;
