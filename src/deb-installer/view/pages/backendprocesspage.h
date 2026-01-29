@@ -17,6 +17,7 @@ class BackendProcessPage : public QWidget
 public:
     enum DisplayMode {
         APT_INIT,    // apt初始化
+        APT_UPDATE_CACHE, // 更新缓存
         READ_PKG,    // 读取包数据
         PROCESS_FIN  // 处理结束
     };
