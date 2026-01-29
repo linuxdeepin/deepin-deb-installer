@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.31) unstable; urgency=medium
+
+  * feat: add package cache update functionality
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 29 Jan 2026 16:28:05 +0800
+
 deepin-deb-installer (6.5.30) unstable; urgency=medium
 
   * Fix Qt5 build: disable compatible mode
