@@ -246,6 +246,8 @@ private slots:
     // install / unisntall finished
     void slotWorkerFinished();
 
+    void slotUpdateCacheFinished();
+
 private:
     /**
      * @brief initUI
@@ -333,6 +335,11 @@ private:
      * @return 转换后的路径列表
      */
     QStringList pathTransform(const QStringList &pkgList);
+
+    /**
+     * @brief updatePackageCache 更新软件包缓存
+     */
+    void updatePackageCache();
 
 private:
     AbstractPackageListModel *m_fileListModel = nullptr;  // model 类

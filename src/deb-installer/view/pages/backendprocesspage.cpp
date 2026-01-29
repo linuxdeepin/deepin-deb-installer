@@ -35,6 +35,8 @@ void BackendProcessPage::setDisplayPage(DisplayMode mode)
         qCDebug(appLog) << "Showing APT initialization view";
         allLayout->setCurrentWidget(noProcessWidget);
         noProcessWidget->start();
+    } else if (mode == APT_UPDATE_CACHE) {
+        noProcessWidget->setActionText(tr("Updating package cache..."));
     } else if (mode == READ_PKG) {
         qCDebug(appLog) << "Showing package loading view";
         allLayout->setCurrentWidget(processWidget);
