@@ -33,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"/>
+        <translation>S&apos;actualitza la memòria cau del paquet...</translation>
     </message>
 </context>
 <context>
