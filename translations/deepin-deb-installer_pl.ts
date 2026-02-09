@@ -33,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"/>
+        <translation>Aktualizowanie pam. podręcznej pakietu...</translation>
     </message>
 </context>
 <context>
