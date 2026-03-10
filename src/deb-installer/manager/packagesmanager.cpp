@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,6 +36,10 @@ static const QString g_Tagi386 = "i386";
 static const QString g_TagDeepinWine = "deepin-wine";
 static const QString g_DeepinWineHelper = "deepin-wine-helper";
 
+// LoongArch compatible-mode arch names
+static const QString g_ArchLoong64 = "loong64";       // Debian LoongArch port native arch
+static const QString g_ArchLoongarch64 = "loongarch64"; // legacy arch name used by older packages
+
 /**
  * @brief 检测传入软件包架构是否支持多架构
  */
@@ -45,6 +49,21 @@ bool archMultiSupport(const QString &arch)
     bool result = "native" == arch || "all" == arch || "any" == arch;
     qCDebug(appLog) << "Multi-arch supported:" << result;
     return result;
+}
+
+/**
+ * @brief PackagesManager::isLoongArchCompatible
+ *
+ * Returns true when \a pkgArch is "loongarch64" and \a sysArch is "loong64".
+ * These two names represent the same ISA: loong64 is the Debian port name while
+ * loongarch64 is the legacy name used by some older pre-packaged binaries.
+ * Such packages cannot be installed natively by dpkg on a loong64 host, but they
+ * can be handled through the compatible-mode rootfs, so we must NOT treat them as
+ * an architecture error — instead we redirect them to compatible-mode installation.
+ */
+bool PackagesManager::isLoongArchCompatible(const QString &sysArch, const QString &pkgArch)
+{
+    return (sysArch == g_ArchLoong64 && pkgArch == g_ArchLoongarch64);
 }
 
 /**
@@ -447,6 +466,14 @@ bool PackagesManager::isArchError(const int idx)
         return false;
     }
 
+    // loongarch64 packages on a loong64 system are handled by compatible mode, not an error
+    const QString nativeArch = backend->nativeArchitecture();
+    if (isLoongArchCompatible(nativeArch, arch)) {
+        qCDebug(appLog) << "Package arch" << arch << "is compatible with system arch" << nativeArch
+                        << ", skipping arch error check";
+        return false;
+    }
+
     bool architectures = !backend->architectures().contains(deb.architecture());
     qCDebug(appLog) << "Architecture error status:" << architectures;
 
@@ -473,6 +500,14 @@ bool PackagesManager::isArchErrorQstring(const QString &package_name)
 
     if ("all" == arch || "any" == arch) {
         qCDebug(appLog) << "Architecture is 'all' or 'any', no error.";
+        return false;
+    }
+
+    // loongarch64 packages on a loong64 system are handled by compatible mode, not an error
+    const QString nativeArch = backend->nativeArchitecture();
+    if (isLoongArchCompatible(nativeArch, arch)) {
+        qCDebug(appLog) << "Package arch" << arch << "is compatible with system arch" << nativeArch
+                        << ", skipping arch error check";
         return false;
     }
 
@@ -573,8 +608,10 @@ PackagesManager::isInstalledConflict(const QString &packageName, const QString &
             Conflicts: ImageEnhance
             Replaces: ImageEnhnace
         */
-        if (pkg->name() == info.first) {
-            // qCDebug(appLog) << "Conflict with self, ignoring:" << pkg->name();
+        // Use packageName as fallback when pkg is null (package not found in local repo)
+        const QString currentPkgName = pkg ? pkg->name() : packageName;
+        if (currentPkgName == info.first) {
+            // qCDebug(appLog) << "Conflict with self, ignoring:" << currentPkgName;
             continue;
         }
 
@@ -1162,7 +1199,15 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
             auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
 
-            if (compPkgPtr && compPkgPtr->installed()) {
+            // On loong64 systems, loongarch64 packages must always go through compatible mode
+            // regardless of dependency status, because dpkg cannot install them natively.
+            Backend *aptBackend = PackageAnalyzer::instance().backendPtr();
+            const QString nativeArch = aptBackend ? aptBackend->nativeArchitecture() : QString();
+            if (isLoongArchCompatible(nativeArch, debFile.architecture())) {
+                qCInfo(appLog) << "loongarch64 package on loong64 system, forcing CompatibleNotInstalled"
+                               << "for package:" << debFile.packageName();
+                dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+            } else if (compPkgPtr && compPkgPtr->installed()) {
                 dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
             } else if (dependsStatus.isBreak()) {
                 // check if current system install the package.

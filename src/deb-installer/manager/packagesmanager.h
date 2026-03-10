@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -176,6 +176,22 @@ public:
      */
     bool isArchError(const int idx);
     bool isArchErrorQstring(const QString &package_name);
+
+    /**
+     * @brief isLoongArchCompatible Check if a loongarch64 package should be redirected
+     *        to compatible mode installation on a loong64 system.
+     *
+     * loong64 (the Debian LoongArch port name) and loongarch64 (the legacy arch name
+     * used by older toolchains / packages) refer to the same ISA. A loongarch64 .deb
+     * cannot be installed natively on a loong64 system via dpkg, but it can be
+     * installed through the compatible-mode rootfs.
+     *
+     * @param sysArch  Native system architecture reported by the apt backend (e.g. "loong64")
+     * @param pkgArch  Architecture field of the .deb package (e.g. "loongarch64")
+     * @return true when the package should bypass the arch-error check and be
+     *         redirected to compatible-mode installation.
+     */
+    static bool isLoongArchCompatible(const QString &sysArch, const QString &pkgArch);
 
     /**
      * @brief packageInstallStatus 获取指定index的包的安装状态
