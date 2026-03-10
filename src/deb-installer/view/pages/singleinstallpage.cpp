@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,7 @@
 #include "utils/utils.h"
 #include "utils/deb_package.h"
 #include "compatible/compatible_backend.h"
+#include "model/packageanalyzer.h"
 #include "utils/ddlog.h"
 
 #include <QApplication>

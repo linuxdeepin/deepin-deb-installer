@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -337,6 +337,15 @@ bool PackageStatus::isArchError(const QString &packagePath)
 
     if (arch == "all" || arch == "any") {
         qCDebug(devLog) << "Arch is 'all' or 'any', no error.";
+        return false;
+    }
+
+    // loongarch64 packages on a loong64 system are redirected to compatible mode, not an error
+    // loong64 = Debian LoongArch port native arch; loongarch64 = legacy arch name in older packages
+    const QString nativeArch = backend->nativeArchitecture();
+    if (nativeArch == QLatin1String("loong64") && arch == QLatin1String("loongarch64")) {
+        qCDebug(devLog) << "Package arch" << arch << "is compatible with system arch" << nativeArch
+                        << ", skipping arch error check";
         return false;
     }
 
