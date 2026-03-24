@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.32) unstable; urgency=medium
+
+  * fix: enhance package installation process for immutable systems
+
+ -- dengzhongyuan <dengzhongyuan@uniontech.com>  Tue, 24 Mar 2026 19:45:22 +0800
+
 deepin-deb-installer (6.5.31) unstable; urgency=medium
 
   * feat: add package cache update functionality
