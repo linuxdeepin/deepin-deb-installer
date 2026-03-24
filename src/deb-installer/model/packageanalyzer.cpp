@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -101,6 +101,19 @@ bool PackageAnalyzer::isBackendReady()
     bool ready = backend.get() != nullptr;
     qCDebug(appLog) << "Backend ready status:" << ready;
     return ready;
+}
+
+void PackageAnalyzer::setCacheUpdateFinished(bool finished)
+{
+    m_cacheUpdateFinished = finished;
+    if (finished) {
+        emit cacheUpdateFinished();
+    }
+}
+
+bool PackageAnalyzer::isCacheUpdateFinished() const
+{
+    return m_cacheUpdateFinished.load();
 }
 
 QApt::Backend *PackageAnalyzer::backendPtr()
