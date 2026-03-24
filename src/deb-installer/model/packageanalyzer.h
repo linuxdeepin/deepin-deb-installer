@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -35,6 +35,10 @@ public:
     void initBackend();
     bool isBackendReady();
     QApt::Backend *backendPtr();
+
+    // 软件包缓存更新完成（apt 锁已释放，可安全执行 apt install 等操作）
+    void setCacheUpdateFinished(bool finished);
+    bool isCacheUpdateFinished() const;
 
     // 选择阶段
 
@@ -87,6 +91,9 @@ signals:
     // 正在分析包情况
     void runAnalyzeDeb(bool inProcess, int currentRote, int pkgCount);
 
+    // 软件包缓存更新完成，apt 锁已释放
+    void cacheUpdateFinished();
+
 private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation) const;
     QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, int multiArchType) const;
@@ -102,6 +109,7 @@ private:
     int pkgWaitToAnalyzeTotal = -1;
     int alreadyAnalyzed = 0;
     std::atomic_bool uiExited;
+    std::atomic_bool m_cacheUpdateFinished{false};
 };
 
 Q_DECLARE_METATYPE(QList<DebIr>);

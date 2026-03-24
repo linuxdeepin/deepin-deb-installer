@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -430,6 +430,7 @@ bool DebListModel::slotInstallPackages()
     m_operatingStatusIndex = 0;
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
     m_hierarchicalVerifyError = false;
+    m_immutableInstallDeferred = false;
 
     // start first
     initRowStatus();  // 初始化包的操作状态
@@ -716,6 +717,7 @@ void DebListModel::reset()
     m_packagesManager->reset();  // 重置packageManager
 
     m_hierarchicalVerifyError = false;  // 复位分级管控安装状态
+    m_immutableInstallDeferred = false;
 }
 
 int DebListModel::getInstallFileSize()
@@ -1143,6 +1145,21 @@ void DebListModel::installDebs()
 
     // for immutable system, if immutable is enabled, the normal installation process will not be entered
     if (dependsStat.canInstall() && ImmBackend::instance()->immutableEnabled()) {
+        // 确保软件包缓存更新已完成、apt 锁已释放，避免与 QApt 的 updateCache 争用锁
+        if (!PackageAnalyzer::instance().isCacheUpdateFinished()) {
+            if (m_immutableInstallDeferred) {
+                qCInfo(appLog) << "Immutable install is already deferred, skip duplicate cache-finished connection";
+                return;
+            }
+            m_immutableInstallDeferred = true;
+            qCInfo(appLog) << "Cache update not finished yet, deferring immutable install until apt lock released";
+            connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished, this, [this]() {
+                m_immutableInstallDeferred = false;
+                installDebs();
+            }, Qt::SingleShotConnection);
+            return;
+        }
+        m_immutableInstallDeferred = false;
         qCDebug(appLog) << "Package can be installed in immutable mode";
         if (installImmutablePackage()) {
             qCDebug(appLog) << "Immutable package installation started, setting status to Operating";

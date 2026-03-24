@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -505,6 +505,7 @@ void DebInstaller::slotUpdateCacheFinished()
     Transaction *transaction = qobject_cast<Transaction *>(sender());
     if (!transaction) {
         slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        PackageAnalyzer::instance().setCacheUpdateFinished(true);
         qCWarning(appLog) << "Update cache transaction is null";
         return;
     }
@@ -518,6 +519,7 @@ void DebInstaller::slotUpdateCacheFinished()
     transaction->deleteLater();
     if (auto backend = PackageAnalyzer::instance().backendPtr())
         backend->reloadCache();
+    PackageAnalyzer::instance().setCacheUpdateFinished(true);
 }
 
 void DebInstaller::disableCloseAndExit()
@@ -810,6 +812,7 @@ void DebInstaller::updatePackageCache()
     if (!backend) {
         qCWarning(appLog) << "Backend pointer is null, cannot update package cache";
         slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        PackageAnalyzer::instance().setCacheUpdateFinished(true);
         return;
     }
 
@@ -817,6 +820,7 @@ void DebInstaller::updatePackageCache()
     if (!transaction) {
         qCWarning(appLog) << "Failed to create update cache transaction";
         slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        PackageAnalyzer::instance().setCacheUpdateFinished(true);
         return;
     }
 
