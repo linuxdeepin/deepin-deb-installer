@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="az">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="az">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket keşi yenilənir...</translation>
     </message>
 </context>
 <context>
@@ -173,7 +171,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="891"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Uyğunluq rejiminin quraşdırılması baş tutmadı</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="913"/>
