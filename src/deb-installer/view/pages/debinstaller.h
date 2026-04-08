@@ -239,6 +239,8 @@ private slots:
      */
     void slotShowPkgProcessBlockPage(BackendProcessPage::DisplayMode mode, int currentRate, int pkgCount);
 
+    void slotUpdateCacheFinished();
+
 private:
     /**
      * @brief initUI
@@ -320,6 +322,11 @@ private:
      * 根据JSON进行解析操作，仅处理1.0版本
      */
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
+
+    /**
+     * @brief updatePackageCache 更新软件包缓存
+     */
+    void updatePackageCache();
 
 private:
     DebListModel        *m_fileListModel      = nullptr;                  //model 类
