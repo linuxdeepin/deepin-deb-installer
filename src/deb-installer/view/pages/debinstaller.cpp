@@ -182,7 +182,7 @@ void DebInstaller::initConnections()
         if (inProcess) {
             slotShowPkgProcessBlockPage(BackendProcessPage::APT_INIT, 0, 0);
         } else {
-            slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+            updatePackageCache();
         }
     });
 
@@ -367,6 +367,26 @@ void DebInstaller::slotShowPkgProcessBlockPage(BackendProcessPage::DisplayMode m
             m_centralLayout->setCurrentWidget(m_backendProcessPage);
         }
     }
+}
+
+void DebInstaller::slotUpdateCacheFinished()
+{
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if (!transaction) {
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        qWarning() << "Update cache transaction is null";
+        return;
+    }
+
+    disconnect(transaction, &Transaction::finished, this, &DebInstaller::slotUpdateCacheFinished);
+    slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+    qDebug() << (transaction->exitStatus() == QApt::ExitSuccess
+                            ? "Package cache update succeeded"
+                            : QString("Package cache update failed: %1").arg(transaction->errorString()));
+
+    transaction->deleteLater();
+    if (auto backend = PackageAnalyzer::instance().backendPtr())
+        backend->reloadCache();
 }
 
 void DebInstaller::disableCloseAndExit()
@@ -610,6 +630,29 @@ DdimSt DebInstaller::analyzeV10(const QJsonObject &ddimobj, const QString &ddimD
 
     //2.返回数据
     return result;
+}
+
+void DebInstaller::updatePackageCache()
+{
+    slotShowPkgProcessBlockPage(BackendProcessPage::APT_UPDATE_CACHE, 0, 0);
+    auto backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        qWarning() << "Backend pointer is null, cannot update package cache";
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        return;
+    }
+
+    auto transaction = backend->updateCache();
+    if (!transaction) {
+        qWarning() << "Failed to create update cache transaction";
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        return;
+    }
+
+    transaction->setLocale(".UTF-8");
+    connect(transaction, &Transaction::finished, this, &DebInstaller::slotUpdateCacheFinished);
+
+    transaction->run();
 }
 
 void DebInstaller::refreshMulti()

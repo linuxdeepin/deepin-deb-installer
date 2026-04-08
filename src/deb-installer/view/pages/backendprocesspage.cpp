@@ -30,6 +30,8 @@ void BackendProcessPage::setDisplayPage(DisplayMode mode)
     if (mode == APT_INIT) {
         allLayout->setCurrentWidget(noProcessWidget);
         noProcessWidget->start();
+    } else if (mode == APT_UPDATE_CACHE) {
+        noProcessWidget->setActionText(tr("Updating package cache..."));
     } else if (mode == READ_PKG) {
         allLayout->setCurrentWidget(processWidget);
         noProcessWidget->stop();

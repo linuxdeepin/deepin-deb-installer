@@ -32,6 +32,11 @@
         <source>Initializing...</source>
         <translation>Initializing...</translation>
     </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="34"/>
+        <source>Updating package cache...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DdimErrorPage</name>
@@ -55,54 +60,54 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="130"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="543"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="563"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Installing other packages... Please open it later.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="547"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="567"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Parsing failed: An illegal file structure was found in the manifest file!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="549"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="569"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Parsing failed: An illegal version number was found in the manifest file!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="551"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="571"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>No deb packages found. Please check the folder.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="637"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="680"/>
         <source>The deb package may be broken</source>
         <translation>The deb package may be broken</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="645"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="688"/>
         <source>You can only install local deb packages</source>
         <translation>You can only install local deb packages</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="653"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="696"/>
         <source>No permission to access this folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="667"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="710"/>
         <source>Already Added</source>
         <translation>Already Added</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="676"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="719"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 does not exist, please reselect</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="333"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="683"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="811"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="726"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="854"/>
         <source>Bulk Install</source>
         <translation>Bulk Install</translation>
     </message>
@@ -134,14 +139,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="641"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="653"/>
         <source>Invalid digital signature</source>
         <translation>Invalid digital signature</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="124"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="634"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1595"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="646"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1620"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>The administrator has set policies to prevent installation of this package</translation>
     </message>
@@ -151,84 +156,84 @@
         <translation>Installation Failed</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="643"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="655"/>
         <source>Failed to install %1</source>
         <translation>Failed to install %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1638"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1663"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="972"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="997"/>
         <source>Unable to install - no digital signature</source>
         <translation>Unable to install - no digital signature</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="973"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="998"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
         <translation>Please go to Control Center to enable developer mode and try again. Proceed?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="976"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1641"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1001"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1666"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="977"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1642"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1002"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1667"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>Proceed</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1032"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1597"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="955"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1057"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1622"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1070"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1095"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>This package does not have a valid digital signature. Continue with the installation?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1072"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1097"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1073"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1098"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="928"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1029"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1594"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1637"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="953"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1054"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1619"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1662"/>
         <source>Unable to install</source>
         <translation>Unable to install</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1030"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1055"/>
         <source>This package does not have a valid digital signature</source>
         <translation>This package does not have a valid digital signature</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="646"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="651"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="658"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="663"/>
         <source>Broken dependencies: %1</source>
         <translation>Broken dependencies: %1</translation>
     </message>
@@ -238,7 +243,7 @@
         <translation>Authentication failed</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="632"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="644"/>
         <source>Unmatched package architecture</source>
         <translation>Unmatched package architecture</translation>
     </message>
