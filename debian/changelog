@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.33) unstable; urgency=medium
+
+  * feat: add LoongArch compatible mode support
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 09 Apr 2026 13:47:02 +0800
+
 deepin-deb-installer (6.5.32) unstable; urgency=medium
 
   * fix: enhance package installation process for immutable systems
