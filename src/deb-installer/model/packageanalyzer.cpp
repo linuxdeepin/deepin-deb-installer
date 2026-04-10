@@ -11,6 +11,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QMetaType>
+#include <QDir>
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
@@ -114,6 +115,78 @@ void PackageAnalyzer::setCacheUpdateFinished(bool finished)
 bool PackageAnalyzer::isCacheUpdateFinished() const
 {
     return m_cacheUpdateFinished.load();
+}
+
+QDateTime PackageAnalyzer::getSourcesLastModified() const
+{
+    QDateTime latestModified;
+
+    // 1. 检查主源文件
+    QFileInfo mainSources("/etc/apt/sources.list");
+    if (mainSources.exists()) {
+        latestModified = mainSources.lastModified();
+        qCDebug(appLog) << "Main sources.list modified:" << latestModified;
+    }
+
+    // 2. 遍历 sources.list.d 目录下的所有 .list 文件
+    QDir sourcesDir("/etc/apt/sources.list.d");
+    if (sourcesDir.exists()) {
+        QFileInfoList listFiles = sourcesDir.entryInfoList(
+            QStringList() << "*.list",
+            QDir::Files | QDir::NoDotAndDotDot
+        );
+
+        for (const QFileInfo &file : listFiles) {
+            qCDebug(appLog) << "Checking source file:" << file.fileName()
+                           << "modified:" << file.lastModified();
+
+            if (!latestModified.isValid() ||
+                file.lastModified() > latestModified) {
+                latestModified = file.lastModified();
+            }
+        }
+    }
+
+    qCDebug(appLog) << "Latest sources modification time:" << latestModified;
+    return latestModified;
+}
+
+QDateTime PackageAnalyzer::getCacheLastModified() const
+{
+    QFileInfo cacheFile("/var/cache/apt/pkgcache.bin");
+    if (cacheFile.exists()) {
+        QDateTime modified = cacheFile.lastModified();
+        qCDebug(appLog) << "Cache file modified:" << modified;
+        return modified;
+    }
+    qCDebug(appLog) << "Cache file does not exist";
+    return QDateTime(); // 返回无效时间
+}
+
+bool PackageAnalyzer::shouldUpdateCache() const
+{
+    // 如果缓存文件不存在，需要更新
+    QDateTime cacheTime = getCacheLastModified();
+    if (!cacheTime.isValid()) {
+        qCInfo(appLog) << "Cache file does not exist, need to update";
+        return true;
+    }
+
+    // 如果源文件不存在或无法访问，保守起见不更新
+    QDateTime sourcesTime = getSourcesLastModified();
+    if (!sourcesTime.isValid()) {
+        qCWarning(appLog) << "Cannot determine sources modification time, skip update";
+        return false;
+    }
+
+    // 核心判断：源文件的修改时间是否晚于缓存文件
+    bool needUpdate = sourcesTime > cacheTime;
+
+    qCInfo(appLog) << "Sources last modified:" << sourcesTime
+                   << "Cache last modified:" << cacheTime
+                   << "Need update:" << needUpdate;
+
+    return needUpdate;
 }
 
 QApt::Backend *PackageAnalyzer::backendPtr()

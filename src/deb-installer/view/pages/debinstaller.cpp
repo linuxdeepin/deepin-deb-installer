@@ -200,7 +200,8 @@ void DebInstaller::initConnections()
         if (inProcess) {
             slotShowPkgProcessBlockPage(BackendProcessPage::APT_INIT, 0, 0);
         } else {
-            updatePackageCache();
+            // 按需更新缓存（非强制）
+            updatePackageCache(false);
         }
     });
 
@@ -805,8 +806,16 @@ QStringList DebInstaller::pathTransform(const QStringList &pkgList)
     return pkgRealPathList;
 }
 
-void DebInstaller::updatePackageCache()
+void DebInstaller::updatePackageCache(bool force)
 {
+    // 如果不是强制更新，先判断是否需要更新
+    if (!force && !PackageAnalyzer::instance().shouldUpdateCache()) {
+        qCInfo(appLog) << "Sources not changed, cache is still valid, skip update";
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        PackageAnalyzer::instance().setCacheUpdateFinished(true);
+        return;
+    }
+
     slotShowPkgProcessBlockPage(BackendProcessPage::APT_UPDATE_CACHE, 0, 0);
     auto backend = PackageAnalyzer::instance().backendPtr();
     if (!backend) {
