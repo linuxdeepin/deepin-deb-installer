@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -338,8 +338,9 @@ private:
 
     /**
      * @brief updatePackageCache 更新软件包缓存
+     * @param force 是否强制更新（默认false，按需更新）
      */
-    void updatePackageCache();
+    void updatePackageCache(bool force = false);
 
 private:
     AbstractPackageListModel *m_fileListModel = nullptr;  // model 类

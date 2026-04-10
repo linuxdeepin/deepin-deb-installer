@@ -7,6 +7,8 @@
 
 #include <QSharedPointer>
 #include <QObject>
+#include <QDateTime>
+#include <QFileInfo>
 
 #include <atomic>
 
@@ -39,6 +41,10 @@ public:
     // 软件包缓存更新完成（apt 锁已释放，可安全执行 apt install 等操作）
     void setCacheUpdateFinished(bool finished);
     bool isCacheUpdateFinished() const;
+
+    // 判断是否需要更新软件包缓存
+    // 基于文件时间戳比较：比较源文件和缓存文件的修改时间
+    bool shouldUpdateCache() const;
 
     // 选择阶段
 
@@ -97,6 +103,12 @@ signals:
 private:
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation) const;
     QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, int multiArchType) const;
+
+    // 获取APT源文件的最新修改时间
+    QDateTime getSourcesLastModified() const;
+
+    // 获取APT缓存文件的修改时间
+    QDateTime getCacheLastModified() const;
 
     explicit PackageAnalyzer(QObject *parent = nullptr);
     PackageAnalyzer(const PackageAnalyzer &) = delete;
