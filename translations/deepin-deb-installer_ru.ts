@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>Введите номер чтобы сконфигурировать</translation>
+        <translation>Введите номер для настройки: </translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
@@ -25,7 +23,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 загружено</translation>
+        <translation>Загружено %1 из %2</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление кэша пакетов...</translation>
     </message>
 </context>
 <context>
@@ -62,7 +60,7 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="715"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="862"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Установка других пакетов... Пожалуйста, откройте его позже.</translation>
+        <translation>Установка других пакетов... Пожалуйста, откройте позже.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="720"/>
@@ -77,39 +75,39 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="724"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>Не найдено deb-пакетов. Проверьте папку.</translation>
+        <translation>DEB-пакеты не найдены. Проверьте папку.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="885"/>
         <source>The %1 package may be broken</source>
-        <translation>Упаковка% 1 может быть повреждена</translation>
+        <translation>Пакет %1 может быть повреждён</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="894"/>
         <source>You can only install local %1 packages</source>
-        <translation>Вы можете устанавливать только локальные пакеты% 1</translation>
+        <translation>Вы можете устанавливать только локальные пакеты %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="903"/>
         <source>No permission to access this folder</source>
-        <translation>Нет разрешения на доступ к этой папке</translation>
+        <translation>Нет прав доступа к этой папке</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="920"/>
         <source>Already Added</source>
-        <translation>Уже добавлен</translation>
+        <translation>Уже добавлено</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="929"/>
         <source>%1 does not exist, please reselect</source>
-        <translation>%1 не существует, пожалуйста, повторите выбор</translation>
+        <translation>%1 не существует, пожалуйста, выберите снова</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="445"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="937"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1090"/>
         <source>Bulk Install</source>
-        <translation>Массовая Установка</translation>
+        <translation>Массовая установка</translation>
     </message>
 </context>
 <context>
@@ -118,19 +116,19 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="104"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="127"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Установка не удалась, проверьте ваше интернет соединение</translation>
+        <translation>Ошибка установки, проверьте подключение к Интернету</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="108"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Установка не удалась, проверьте обновления в Центре Управления</translation>
+        <translation>Ошибка установки, проверьте наличие обновлений в Центре управления</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="111"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="133"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Установка не удалась, недостаточно места на диске</translation>
+        <translation>Ошибка установки, недостаточно места на диске</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="139"/>
@@ -141,29 +139,29 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="144"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="910"/>
         <source>Invalid digital signature</source>
-        <translation>Неверная цифровая подпись</translation>
+        <translation>Недействительная цифровая подпись</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="152"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="895"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2009"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>Администратор установил политики для предотвращения установки этого пакета</translation>
+        <translation>Администратор установил политики, запрещающие установку этого пакета</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="159"/>
         <source>Installation Failed</source>
-        <translation>Установка не удалась</translation>
+        <translation>Ошибка установки</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
         <source>current system</source>
-        <translation>действующая система</translation>
+        <translation>текущая система</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>% 2 был установлен в% 1, пожалуйста, удалите этот пакет перед его установкой</translation>
+        <translation>%2 уже установлен в %1, пожалуйста, удалите этот пакет перед установкой</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
@@ -173,7 +171,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="891"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка установки в режиме совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="913"/>
@@ -183,12 +181,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1356"/>
         <source>Unable to install - no digital signature</source>
-        <translation>Невозможно установить - нет цифровой подписи</translation>
+        <translation>Невозможно установить — нет цифровой подписи</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
         <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Перейдите в Центр управления, чтобы включить режим разработчика, и повторите попытку.  Продолжить?</translation>
+        <translation>Пожалуйста, перейдите в Центр управления, чтобы включить режим разработчика, и повторите попытку. Продолжить?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1360"/>
@@ -241,23 +239,23 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1420"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>Пакет не имеет действующей цифровой подписи</translation>
+        <translation>Этот пакет не имеет действительной цифровой подписи</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="917"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="923"/>
         <source>Broken dependencies: %1</source>
-        <translation>Нарушены Зависимости: %1</translation>
+        <translation>Нарушенные зависимости: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="149"/>
         <source>Authentication failed</source>
-        <translation>Аутентификация не удалась</translation>
+        <translation>Ошибка аутентификации</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>Unmatched package architecture</source>
-        <translation>Архитектура пакета некорректна</translation>
+        <translation>Несоответствие архитектуры пакета</translation>
     </message>
 </context>
 <context>
@@ -265,12 +263,12 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation>Перетащите пакеты deb сюда</translation>
+        <translation>Перетащите DEB-пакеты сюда</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>Выберите Файл</translation>
+        <translation>Выбрать файл</translation>
     </message>
 </context>
 <context>
@@ -307,12 +305,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>Установка %1 удалит:</translation>
+        <translation>Установка %1 приведёт к удалению:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>Зависимости в репозитории</translation>
+        <translation>Зависимости из репозитория</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
@@ -330,22 +328,22 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="87"/>
         <source>Same version installed</source>
-        <translation>Эта версия уже установлена</translation>
+        <translation>Такая же версия уже установлена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="91"/>
         <source>Earlier version installed: %1</source>
-        <translation>Установлена более ранняя версия: %1</translation>
+        <translation>Установлена более старая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="96"/>
         <source>Later version installed: %1</source>
-        <translation>Более поздняя версия  уже установлена: %1</translation>
+        <translation>Установлена более новая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="102"/>
         <source>Unmatched package architecture</source>
-        <translation>Архитектура пакета некорректна</translation>
+        <translation>Несоответствие архитектуры пакета</translation>
     </message>
 </context>
 <context>
@@ -353,7 +351,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Выбрать все</translation>
+        <translation>Выбрать всё</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -377,7 +375,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="74"/>
         <source>Failed</source>
-        <translation>Не удалось</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
@@ -387,17 +385,17 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="246"/>
         <source>Same version installed</source>
-        <translation>Эта версия уже установлена</translation>
+        <translation>Такая же версия уже установлена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Later version installed: %1</source>
-        <translation>Более поздняя версия  уже установлена: %1</translation>
+        <translation>Установлена более новая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="250"/>
         <source>Earlier version installed: %1</source>
-        <translation>Установлена более ранняя версия: %1</translation>
+        <translation>Установлена более старая версия: %1</translation>
     </message>
 </context>
 <context>
@@ -424,17 +422,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>Базовый</translation>
+        <translation>Основные</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>Проверьте цифровые подписи, если режим разработчика включен</translation>
+        <translation>Проверять цифровые подписи, если включён режим разработчика</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Чтобы установить неподписанные приложения, перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений и выберите типы приложений, которые можно установить.</translation>
+        <translation>Чтобы установить неподписанные приложения, перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений и выберите типы приложений, которые можно устанавливать.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
@@ -444,7 +442,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>В системе не установлена среда Linglong, пожалуйста, сначала установите ее</translation>
+        <translation>В системе не установлена среда Linglong, пожалуйста, сначала установите её</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -454,13 +452,13 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Этот пакет не имеет действительной цифровой подписи и был заблокирован для установки/запуска. Перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений, чтобы изменить настройки.</translation>
+        <translation>Этот пакет не имеет действительной цифровой подписи и заблокирован для установки/запуска. Перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений, чтобы изменить настройки.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -471,7 +469,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
         <source>Will remove: </source>
-        <translation>Будут удалены:</translation>
+        <translation>Будет удалено:</translation>
     </message>
 </context>
 <context>
@@ -492,19 +490,19 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1238"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1443"/>
         <source>Later version installed: %1</source>
-        <translation>Более поздняя версия  уже установлена: %1</translation>
+        <translation>Установлена более новая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1239"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
         <source>Downgrade</source>
-        <translation>Понизить</translation>
+        <translation>Понизить версию</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1449"/>
         <source>Earlier version installed: %1</source>
-        <translation>Установлена более ранняя версия: %1</translation>
+        <translation>Установлена более старая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1336"/>
@@ -560,12 +558,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="777"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation>Пытаюсь установить% 2 в режиме совместимости% 1</translation>
+        <translation>Попытка установки %2 в режиме совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="858"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>Удаление% 2 из режима совместимости% 1</translation>
+        <translation>Удаление %2 из режима совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="987"/>
@@ -575,32 +573,32 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
         <source>Installed successfully</source>
-        <translation>Установка успешно завершена</translation>
+        <translation>Установка выполнена успешно</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1000"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation>% 2 был успешно удален из режима совместимости% 1</translation>
+        <translation>%2 успешно удалён из режима совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
         <source>Uninstalled successfully</source>
-        <translation>Удаление успешно завершено</translation>
+        <translation>Удаление выполнено успешно</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1024"/>
         <source>Uninstall Failed</source>
-        <translation>Ошибка Удаления</translation>
+        <translation>Ошибка удаления</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
         <source>Install %1 will remove: </source>
-        <translation>Установка %1 удалит:</translation>
+        <translation>Установка %1 приведёт к удалению:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Dependencies in the repository</source>
-        <translation>Зависимости в репозитории</translation>
+        <translation>Зависимости из репозитория</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
@@ -617,18 +615,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1505"/>
         <source>Invalid digital signature</source>
-        <translation>Неверная цифровая подпись</translation>
+        <translation>Недействительная цифровая подпись</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="232"/>
         <source>Name: </source>
-        <translation>Наименование:</translation>
+        <translation>Название:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1232"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1437"/>
         <source>Same version installed</source>
-        <translation>Эта версия уже установлена</translation>
+        <translation>Такая же версия уже установлена</translation>
     </message>
 </context>
 <context>
@@ -662,7 +660,7 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package_list_model.cpp" line="557"/>
         <source>Installation Failed</source>
-        <translation>Установка не удалась</translation>
+        <translation>Ошибка установки</translation>
     </message>
 </context>
 <context>
@@ -701,14 +699,14 @@ All dependencies will also be removed</source>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
         <translation>Вы действительно хотите удалить %1?
-Это может привести к неправильной работе системы и других приложений. </translation>
+Система или другие приложения могут работать некорректно.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2 
 from %1 compatibility mode?</source>
-        <translation>Вы уверены, что хотите удалить% 2
-из %1 режима совместимости?</translation>
+        <translation>Вы действительно хотите удалить %2
+из режима совместимости %1?</translation>
     </message>
 </context>
 <context>
@@ -717,12 +715,12 @@ from %1 compatibility mode?</source>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
         <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
-        <translation>Установщик Пакетов</translation>
+        <translation>Установщик пакетов</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Установщик Пакетов используется для  установки и удаления программного обеспечения и поддерживает массовую установку приложений.</translation>
+        <translation>Установщик пакетов помогает пользователям устанавливать и удалять локальные пакеты, а также поддерживает массовую установку.</translation>
     </message>
 </context>
 </TS>
