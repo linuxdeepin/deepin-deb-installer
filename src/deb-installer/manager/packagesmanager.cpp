@@ -1210,15 +1210,20 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             } else if (compPkgPtr && compPkgPtr->installed()) {
                 dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
             } else if (dependsStatus.isBreak()) {
-                // check if current system install the package.
-                Package *pkg = packageWithArch(debFile.packageName(), debFile.architecture());
-                if (pkg && pkg->isInstalled()) {
-                    dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
-                } else {
-                    dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+                // Fix: Only set CompatibleIntalled if the package itself caused the break.
+                // If a dependency caused the break (e.g., version mismatch), keep DependsBreak
+                // to show the actual dependency error, don't suggest compatible mode.
+                // dependsStatus.package contains the name of the package that caused the dependency break.
+                if (dependsStatus.package == debFile.packageName()) {
+                    Package *pkg = packageWithArch(debFile.packageName(), debFile.architecture());
+                    if (pkg && pkg->isInstalled()) {
+                        dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+                    } else {
+                        dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+                    }
                 }
+                // If depends ok and not installed in compatible, not need install to compatible rootfs
             }
-            // If depends ok and not installed in compatible, not need install to compatible rootfs
         }
     }
 
