@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pt_BR">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -25,7 +23,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 carregado</translation>
+        <translation>%1 / %2 carregado</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizando cache de pacotes...</translation>
     </message>
 </context>
 <context>
@@ -173,12 +171,12 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="891"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>A instalação em modo de compatibilidade falhou</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="913"/>
         <source>Failed to install %1</source>
-        <translation>Falha ao instalar %1</translation>
+        <translation>Falha na instalação %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1356"/>
@@ -270,7 +268,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>Selecionar Arquivo</translation>
+        <translation>Selecionar arquivo</translation>
     </message>
 </context>
 <context>
@@ -284,7 +282,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="179"/>
@@ -382,7 +380,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
         <source>Waiting</source>
-        <translation>Aguardando...</translation>
+        <translation>Aguardando</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="246"/>
@@ -416,7 +414,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="52"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
 </context>
 <context>
@@ -460,7 +458,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -479,7 +477,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1035"/>
         <source>Collapse</source>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="519"/>
@@ -514,7 +512,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1499"/>
         <source>Failed to install %1</source>
-        <translation>Falha ao instalar %1</translation>
+        <translation>Falha na instalação %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="244"/>
@@ -570,7 +568,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="987"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%2 foi instalado em %1 com sucesso pelo modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
@@ -676,7 +674,7 @@
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Recolher</translation>
+        <translation>Ocultar</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="39"/>
@@ -722,7 +720,7 @@ de %1 pelo modo de compatibilidade?</translation>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>O Instalador de Pacotes auxilia os usuários a instalar e remover pacotes, e permite a instalação em massa.</translation>
+        <translation>O Instalador de Pacotes ajuda os usuários a instalar e remover os pacotes; além de, permitir a instalação em massa.</translation>
     </message>
 </context>
 </TS>
