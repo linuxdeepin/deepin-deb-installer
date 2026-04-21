@@ -2454,6 +2454,15 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         return nullptr;
     }
 
+    // First check if any installed package provides this package (provider priority)
+    // Only iterate over installed packages (thousands) instead of all available (hundreds of thousands)
+    for (auto *pkg : backend->availablePackages()) {
+        if (pkg->isInstalled() && pkg->name() != packageName && pkg->providesList().contains(packageName)) {
+            qCDebug(appLog) << "Found installed provider for" << packageName << ":" << pkg->name();
+            return packageWithArch(pkg->name(), sysArch, annotation);
+        }
+    }
+
     QString suggestArch = resolvMultiArchAnnotation(annotation, sysArch);
     Package *package = backend->package(packageName + suggestArch);
 
@@ -2469,10 +2478,11 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
             return package;
     }
 
-    // check virtual package providers
-    for (auto *virtualPackage : backend->availablePackages()) {
-        if (virtualPackage->name() != packageName && virtualPackage->providesList().contains(packageName)) {
-            return packageWithArch(virtualPackage->name(), sysArch, annotation);
+    // If still not found, check if any available (not installed) package provides this
+    for (auto *pkg : backend->availablePackages()) {
+        if (!pkg->isInstalled() && pkg->name() != packageName && pkg->providesList().contains(packageName)) {
+            qCDebug(appLog) << "Found available provider for" << packageName << ":" << pkg->name();
+            return packageWithArch(pkg->name(), sysArch, annotation);
         }
     }
 
