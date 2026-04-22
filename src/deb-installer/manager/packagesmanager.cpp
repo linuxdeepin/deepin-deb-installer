@@ -2456,6 +2456,25 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     if (!package)
         package = backend->package(packageName);
 
+    if (package) {
+        // 检查反向提供者：如果当前包未安装，但某个提供者已安装，优先使用已安装的提供者
+        QString installedVersion = package->installedVersion();
+        if (installedVersion.isEmpty()) {
+            const auto &reprvList = package->reverseProvidesList();
+            for (const auto &rep : reprvList) {
+                Package *provider = backend->package(rep);
+                if (provider && !provider->installedVersion().isEmpty()) {
+                    // 检查提供者的架构是否有效
+                    if (checkPackageArchValid(provider, packageName, suggestArch)) {
+                        qCInfo(appLog) << "Using installed reverse provider" << rep
+                                      << "instead of" << packageName;
+                        return provider;
+                    }
+                }
+            }
+        }
+    }
+
     if (checkPackageArchValid(package, packageName, suggestArch))
         return package;
     for (QString arch : backend->architectures()) {
