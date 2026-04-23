@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.35) unstable; urgency=medium
+
+  * fix(packagesmanager): prioritize installed reverse providers
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Thu, 23 Apr 2026 18:26:19 +0800
+
 deepin-deb-installer (6.5.34) unstable; urgency=medium
 
   * feat: implement intelligent package cache update
