@@ -1153,10 +1153,15 @@ void DebListModel::installDebs()
             }
             m_immutableInstallDeferred = true;
             qCInfo(appLog) << "Cache update not finished yet, deferring immutable install until apt lock released";
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished,
+                    this, &DebListModel::slotImmutableDeferredInstall);
+#else
             connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished, this, [this]() {
                 m_immutableInstallDeferred = false;
                 installDebs();
             }, Qt::SingleShotConnection);
+#endif
             return;
         }
         m_immutableInstallDeferred = false;
@@ -1728,6 +1733,14 @@ void DebListModel::slotTransactionOutput()
     refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Operating);  // 刷新当前包的操作状态
 
     disconnect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::slotTransactionOutput);
+}
+
+void DebListModel::slotImmutableDeferredInstall()
+{
+    disconnect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished,
+               this, &DebListModel::slotImmutableDeferredInstall);
+    m_immutableInstallDeferred = false;
+    installDebs();
 }
 
 void DebListModel::slotUninstallFinished()

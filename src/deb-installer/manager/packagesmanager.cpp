@@ -2460,6 +2460,33 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
         // 检查反向提供者：如果当前包未安装，但某个提供者已安装，优先使用已安装的提供者
         QString installedVersion = package->installedVersion();
         if (installedVersion.isEmpty()) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QString providedPackageName = package->name();
+            providedPackageName.remove(QRegExp(":[^:]*$"));
+
+            for (auto *provider : backend->availablePackages()) {
+                if (!provider || provider->installedVersion().isEmpty()) {
+                    continue;
+                }
+
+#ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
+                if (!provider->providesListEnhance().contains(providedPackageName)) {
+                    continue;
+                }
+#else
+                if (!provider->providesList().contains(providedPackageName)) {
+                    continue;
+                }
+#endif
+
+                // 检查提供者的架构是否有效
+                if (checkPackageArchValid(provider, packageName, suggestArch)) {
+                    qCInfo(appLog) << "Using installed reverse provider" << provider->name()
+                                   << "instead of" << packageName;
+                    return provider;
+                }
+            }
+#else
             const auto &reprvList = package->reverseProvidesList();
             for (const auto &rep : reprvList) {
                 Package *provider = backend->package(rep);
@@ -2472,6 +2499,7 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
                     }
                 }
             }
+#endif
         }
     }
 

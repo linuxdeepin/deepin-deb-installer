@@ -96,7 +96,25 @@ if (QT_DESIRED_VERSION MATCHES 6)
 endif()
 
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
-find_package(Dtk${DTK_VERSION_MAJOR} COMPONENTS Core Gui Widget REQUIRED)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    find_package(Dtk${DTK_VERSION_MAJOR} COMPONENTS Core Gui Widget REQUIRED)
+    set(DTK_WIDGET_LIB Dtk${DTK_VERSION_MAJOR}::Widget)
+    set(DTK_CORE_LIB Dtk${DTK_VERSION_MAJOR}::Core)
+    set(DTK_GUI_LIB Dtk${DTK_VERSION_MAJOR}::Gui)
+else()
+    find_package(DtkWidget REQUIRED)
+    find_package(DtkGui REQUIRED)
+    find_package(DtkCore REQUIRED)
+    set(DTK_WIDGET_LIB ${DtkWidget_LIBRARIES})
+    set(DTK_CORE_LIB ${DtkCore_LIBRARIES})
+
+    if (DEFINED DtkGui_LIBRARIES)
+        set(DTK_GUI_LIB ${DtkGui_LIBRARIES})
+    else()
+        set(DTK_GUI_LIB ${DtkGUI_LIBRARIES})
+    endif()
+endif()
 
 set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
@@ -105,9 +123,9 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Widgets
     Qt${QT_DESIRED_VERSION}::Concurrent
     Qt${QT_DESIRED_VERSION}::Test
-    Dtk${DTK_VERSION_MAJOR}::Widget
-    Dtk${DTK_VERSION_MAJOR}::Core
-    Dtk${DTK_VERSION_MAJOR}::Gui
+    ${DTK_WIDGET_LIB}
+    ${DTK_CORE_LIB}
+    ${DTK_GUI_LIB}
     PolkitQt${QT_DESIRED_VERSION}-1::Agent
 )
 
