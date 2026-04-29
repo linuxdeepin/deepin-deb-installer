@@ -137,7 +137,33 @@ if (QT_DESIRED_VERSION MATCHES 6)
 endif()
 
 find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
-find_package(Dtk${DTK_VERSION_MAJOR} COMPONENTS Core Gui Widget REQUIRED)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    find_package(Dtk${DTK_VERSION_MAJOR} COMPONENTS Core Gui Widget REQUIRED)
+    set(DTK_WIDGET_LIB Dtk${DTK_VERSION_MAJOR}::Widget)
+    set(DTK_CORE_LIB Dtk${DTK_VERSION_MAJOR}::Core)
+    set(DTK_GUI_LIB Dtk${DTK_VERSION_MAJOR}::Gui)
+else()
+    find_package(DtkWidget REQUIRED)
+    find_package(DtkGui REQUIRED)
+    find_package(DtkCore REQUIRED)
+    set(DTK_WIDGET_LIB ${DtkWidget_LIBRARIES})
+    set(DTK_CORE_LIB ${DtkCore_LIBRARIES})
+
+    if (DEFINED DtkGui_LIBRARIES)
+        set(DTK_GUI_LIB ${DtkGui_LIBRARIES})
+    else()
+        set(DTK_GUI_LIB ${DtkGUI_LIBRARIES})
+    endif()
+endif()
+
+set(DTK_INCLUDE_DIRS)
+foreach(dtk_include_dir_var DtkWidget_INCLUDE_DIRS DtkGui_INCLUDE_DIRS DtkGUI_INCLUDE_DIRS DtkCore_INCLUDE_DIRS)
+    if (DEFINED ${dtk_include_dir_var})
+        list(APPEND DTK_INCLUDE_DIRS ${${dtk_include_dir_var}})
+    endif()
+endforeach()
+list(REMOVE_DUPLICATES DTK_INCLUDE_DIRS)
 
 set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
@@ -145,9 +171,9 @@ set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Gui
     Qt${QT_DESIRED_VERSION}::Widgets
     Qt${QT_DESIRED_VERSION}::Concurrent
-    Dtk${DTK_VERSION_MAJOR}::Widget
-    Dtk${DTK_VERSION_MAJOR}::Core
-    Dtk${DTK_VERSION_MAJOR}::Gui
+    ${DTK_WIDGET_LIB}
+    ${DTK_CORE_LIB}
+    ${DTK_GUI_LIB}
     PolkitQt${QT_DESIRED_VERSION}-1::Agent
 )
 
@@ -187,7 +213,7 @@ file(GLOB_RECURSE APP_SRCS
 add_executable(${PROJECT_NAME} ${APP_SRCS} ${APP_QRC})
 
 target_include_directories(${APP_BIN_NAME}
-    PUBLIC ${OBJECT_BINARY_DIR})
+    PUBLIC ${DTK_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
 
 target_link_libraries(${APP_BIN_NAME}
     ${LINK_LIBS}

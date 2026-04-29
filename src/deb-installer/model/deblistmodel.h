@@ -306,6 +306,8 @@ private slots:
      */
     void slotUninstallFinished();
 
+    void slotImmutableDeferredInstall();
+
     /**
      * @brief slotNoDigitalSignature 无数字签名
      */
