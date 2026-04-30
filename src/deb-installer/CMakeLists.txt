@@ -163,7 +163,9 @@ foreach(dtk_include_dir_var DtkWidget_INCLUDE_DIRS DtkGui_INCLUDE_DIRS DtkGUI_IN
         list(APPEND DTK_INCLUDE_DIRS ${${dtk_include_dir_var}})
     endif()
 endforeach()
-list(REMOVE_DUPLICATES DTK_INCLUDE_DIRS)
+if(DEFINED DTK_INCLUDE_DIRS)
+    list(REMOVE_DUPLICATES DTK_INCLUDE_DIRS)
+endif()
 
 set(LINK_LIBS
     Qt${QT_DESIRED_VERSION}::Core
