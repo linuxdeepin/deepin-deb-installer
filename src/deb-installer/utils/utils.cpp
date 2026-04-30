@@ -33,7 +33,9 @@
 #include <QThread>
 
 #include <DSysInfo>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <DDciIcon>
+#endif
 
 #include <QApt/Package>
 
@@ -384,6 +386,7 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
     if (Pkg::Uab == type) {
         // linglong uab package
         static QIcon kUabIcon = QIcon::fromTheme("application/x-executable");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (kUabIcon.isNull()) {
             // using DDciIcon to support new svg version (dsvg use librsvg backend)
             Dtk::Gui::DDciIcon dciIcon(QString(":/icons/deepin/uab/uos-application-bundle.dci"));
@@ -392,6 +395,7 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
                 kUabIcon = QIcon(dciIcon.pixmap(qApp->devicePixelRatio(), availibleSizes.first(), DDciIcon::Light));
             }
         }
+#endif
         qCDebug(appLog) << "return uab package icon, type:" << type;
         return kUabIcon;
 
