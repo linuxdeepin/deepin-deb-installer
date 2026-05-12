@@ -29,6 +29,8 @@
 DWIDGET_USE_NAMESPACE
 
 class AptConfigMessage;
+class AptInstallBackend;
+class CompatibleInstallBackend;
 namespace Compatible {
 class CompatibleProcessController;
 }
@@ -49,6 +51,8 @@ signals:
 class DebListModel : public AbstractPackageListModel
 {
     Q_OBJECT
+    friend class AptInstallBackend;
+    friend class CompatibleInstallBackend;
 
 public:
     explicit DebListModel(QObject *parent = nullptr);
@@ -510,7 +514,10 @@ private:
     // 后端类
     PackagesManager *m_packagesManager = nullptr;
 
-    // 当前正在运行的Trans
+    // apt install backend (owns m_currentTransaction)
+    AptInstallBackend *m_aptBackend = nullptr;
+
+    // 当前正在运行的Trans (retained for lastProcessError() backward compat)
     QPointer<QApt::Transaction> m_currentTransaction;
 
     // 所有包的操作状态Map
@@ -541,6 +548,9 @@ private:
     Deb::DebPackage::Ptr m_currentPackage;
     QMap<QByteArray, Deb::DebPackage::Ptr> m_packagePtrMap;
     QScopedPointer<Compatible::CompatibleProcessController> m_compProcessor;
+#ifndef DISABLE_COMPATIBLE
+    CompatibleInstallBackend *m_compBackend = nullptr;
+#endif
 
     // immutable
     QScopedPointer<Immutable::ImmutableProcessController> m_immProcessor;

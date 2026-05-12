@@ -18,6 +18,11 @@
 #include "immutable/immutable_backend.h"
 #include "immutable/immutable_process_controller.h"
 #include "utils/qtcompat.h"
+#include "backend/apt_install_backend.h"
+#ifndef DISABLE_COMPATIBLE
+#include "backend/compatible_install_backend.h"
+#endif
+#include "backend/apt_install_backend.h"
 
 #include <DDialog>
 #include <DSysInfo>
@@ -43,6 +48,10 @@ using namespace QApt;
 DebListModel::DebListModel(QObject *parent)
     : AbstractPackageListModel(parent)
     , m_packagesManager(new PackagesManager(this))
+    , m_aptBackend(new AptInstallBackend(this, this))
+#ifndef DISABLE_COMPATIBLE
+    , m_compBackend(new CompatibleInstallBackend(this, this))
+#endif
 {
     qCDebug(appLog) << "DebListModel initializing...";
     m_supportPackageType = Pkg::Deb;
@@ -438,7 +447,7 @@ bool DebListModel::slotInstallPackages()
 
     // 检查当前应用是否在黑名单中
     // 非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature()) {
+    if (checkBlackListApplication() || !m_aptBackend->verifySignature(m_operatingIndex)) {
         qCWarning(appLog) << "Installation blocked - blacklisted application or digital signature verification failed";
         return false;
     }
@@ -462,13 +471,14 @@ bool DebListModel::slotUninstallPackage(int index)
     auto dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
 
     // for comaptible mode
+#ifndef DISABLE_COMPATIBLE
     if (Pkg::CompatibleIntalled == dependStatus.status && supportCompatible() && 0 == index) {
         qCDebug(appLog) << "Uninstalling in compatible mode.";
         auto ptr = packagePtr(index);
         // check pacakge installed in compatible rootfs
         if (ptr && ptr->compatible()->installed()) {
             qCDebug(appLog) << "Package is installed in compatible rootfs.";
-            if (uninstallCompatiblePackage()) {
+            if (m_compBackend->uninstall(index)) {
                 qCDebug(appLog) << "Compatible package uninstall successful.";
                 refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Operating);
                 return true;
@@ -481,6 +491,7 @@ bool DebListModel::slotUninstallPackage(int index)
 
         // otherwise uninstall from current system
     }
+#endif
 
     if (ImmBackend::instance()->immutableEnabled()) {
         qCDebug(appLog) << "Uninstalling in immutable mode.";
@@ -502,82 +513,16 @@ bool DebListModel::slotUninstallPackage(int index)
         return false;
     }
 
-    DebFile debFile(m_packagesManager->package(m_operatingIndex));  // 获取到包
-    if (!debFile.isValid()) {
-        qCWarning(appLog) << "Invalid deb file at index" << m_operatingIndex;
-        return false;
+    // Route to apt install backend for normal apt uninstall
+    if (m_aptBackend->uninstall(m_operatingIndex)) {
+        // Sync m_currentTransaction for backward compatibility (lastProcessError)
+        m_currentTransaction = m_aptBackend->m_currentTransaction;
+        qCDebug(appLog) << "slotUninstallPackage returning true.";
+        return true;
     }
-    const QStringList rdepends =
-        m_packagesManager->packageReverseDependsList(debFile.packageName(), debFile.architecture());  // 检查是否有应用依赖到该包
-    qCInfo(appLog) << QString("Will remove reverse depends before remove %1 , Lists:").arg(debFile.packageName()) << rdepends;
 
-    Backend *backend = PackageAnalyzer::instance().backendPtr();
-
-    qCInfo(appLog) << "Uninstalling reverse dependencies:" << rdepends;
-    for (const auto &r : rdepends) {  // 卸载所有依赖该包的应用（二者的依赖关系为depends）
-        if (backend->package(r)) {
-            qCDebug(appLog) << "Purging reverse dependency:" << r;
-            backend->package(r)->setPurge();
-        } else {
-            qCWarning(appLog) << "Failed to find reverse dependency package:" << r;
-        }
-    }
-    // 卸载当前包 更换卸载包的方式，remove卸载不卸载完全会在影响下次安装的依赖判断。
-    const QString packageId = debFile.packageName() + ':' + debFile.architecture();
-    qCDebug(appLog) << "Looking up package to uninstall:" << packageId;
-    QApt::Package *uninstalledPackage = backend->package(packageId);
-
-    // 未通过当前包的包名以及架构名称获取package对象，刷新操作状态为卸载失败
-    if (!uninstalledPackage) {
-        qCWarning(appLog) << "Failed to find package to uninstall:" << packageId;
-        refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);
-        return false;
-    }
-    uninstalledPackage->setPurge();
-
-    refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Operating);  // 刷新当前index的操作状态
-    Transaction *transsaction = backend->commitChanges();
-
-    // trans 进度change 链接
-    connect(transsaction, &Transaction::progressChanged, this, &DebListModel::signalCurrentPacakgeProgressChanged);
-
-    // 详细状态信息（安装情况）展示链接
-    connect(transsaction, &Transaction::statusDetailsChanged, this, &DebListModel::signalAppendOutputInfo);
-
-    // trans 运行情况（授权是否成功）
-    connect(transsaction, &Transaction::statusChanged, this, &DebListModel::slotTransactionStatusChanged);
-
-    // trans运行中出现错误
-    connect(transsaction, &Transaction::errorOccurred, this, &DebListModel::slotTransactionErrorOccurred);
-
-    // 卸载结束，处理卸载成功与失败的情况并发送结束信号
-    connect(transsaction, &Transaction::finished, this, &DebListModel::slotUninstallFinished);
-
-    // 卸载结束之后 删除指针
-    connect(transsaction, &Transaction::finished, transsaction, &Transaction::deleteLater);
-
-    m_currentTransaction = transsaction;  // 保存trans指针
-
-#ifdef ENABLE_QAPT_SETENV // Qt5环境且qapt >= 3.0.5.1-1-deepin1，支持setEnvVariable
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QVariantMap map;
-
-    m_currentTransaction = transsaction;   //保存trans指针
-    // 获取当前真实用户信息
-    QString currentUser = env.value("USER");
-    // 如果SUDO_USER存在，说明当前是通过sudo启动的
-    QString realUser = env.value("SUDO_USER");
-    if (realUser.isEmpty())
-        realUser = currentUser;
-    map.insert("SUDO_USER", realUser);
-    transsaction->setEnvVariable(map);
-#endif
-
-    qCDebug(appLog) << "Starting uninstall transaction for package:" << packageId;
-    transsaction->run();  // 开始卸载
-
-    qCDebug(appLog) << "slotUninstallPackage returning true.";
-    return true;
+    qCDebug(appLog) << "slotUninstallPackage returning false.";
+    return false;
 }
 
 void DebListModel::removePackage(const int idx)
@@ -654,6 +599,11 @@ QStringList DebListModel::getPackageInfo(const QString &package_path)
 QString DebListModel::lastProcessError()
 {
     qCDebug(appLog) << "Getting last process error.";
+    // Check backend transaction first, then legacy m_currentTransaction
+    if (m_aptBackend && m_aptBackend->m_currentTransaction) {
+        qCDebug(appLog) << "Returning error string from apt backend transaction:" << m_aptBackend->m_currentTransaction->errorString();
+        return m_aptBackend->m_currentTransaction->errorString();
+    }
     if (m_currentTransaction) {
         qCDebug(appLog) << "Returning error string from current transaction:" << m_currentTransaction->errorString();
         return m_currentTransaction->errorString();
@@ -747,7 +697,7 @@ void DebListModel::resetInstallStatus()
 void DebListModel::bumpInstallIndex()
 {
     qCDebug(appLog) << "Bumping install index.";
-    if (m_currentTransaction.isNull()) {
+    if (m_aptBackend->m_currentTransaction.isNull()) {
         qWarning() << "previous transaction not finished";
     }
     if (++m_operatingIndex >= m_packagesManager->m_preparedPackages.size()) {
@@ -767,7 +717,7 @@ void DebListModel::bumpInstallIndex()
 
     // 检查当前应用是否在黑名单中
     // 非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature()) {
+    if (checkBlackListApplication() || !m_aptBackend->verifySignature(m_operatingIndex)) {
         qCDebug(appLog) << "Installation blocked by blacklist or digital signature check.";
         return;
     }
@@ -1104,36 +1054,15 @@ void DebListModel::checkBoxStatus()
 void DebListModel::installDebs()
 {
     qCDebug(appLog) << "Entering installDebs for operating index" << m_operatingIndex;
-    DebFile deb(m_packagesManager->package(m_operatingIndex));
-    if (!deb.isValid()) {
-        qCDebug(appLog) << "Deb file is invalid, returning";
-        return;
-    }
-    qCInfo(appLog)
-        << QString("Prepare to install %1, ver: %2, arch: %3").arg(deb.packageName()).arg(deb.version()).arg(deb.architecture());
-
-    Q_ASSERT_X(m_workerStatus == WorkerProcessing, Q_FUNC_INFO, "installer status error");
-    Q_ASSERT_X(m_currentTransaction.isNull(), Q_FUNC_INFO, "previous transaction not finished");
-    // 在判断dpkg启动之前就发送开始安装的信号，并在安装信息中输出 dpkg正在运行的信息。
-    qCDebug(appLog) << "Emitting signalWorkerStart";
-    emit signalWorkerStart();
-
-    // fetch next deb
-    auto *const backend = PackageAnalyzer::instance().backendPtr();
-    if (!backend) {
-        qCDebug(appLog) << "Backend pointer is null, returning";
-        return;
-    }
-
-    Transaction *transaction = nullptr;
 
     // reset package depends status on installNextDeb(), check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
 
     // for compatbile install
+#ifndef DISABLE_COMPATIBLE
     if (dependsStat.canInstallCompatible() && supportCompatible()) {
         qCDebug(appLog) << "Package can be installed in compatible mode";
-        if (installCompatiblePackage()) {
+        if (m_compBackend->install(m_operatingIndex)) {
             qCDebug(appLog) << "Compatible package installation started, setting status to Operating";
             refreshOperatingPackageStatus(Pkg::Operating);
         } else {
@@ -1142,6 +1071,7 @@ void DebListModel::installDebs()
         }
         return;
     }
+#endif
 
     // for immutable system, if immutable is enabled, the normal installation process will not be entered
     if (dependsStat.canInstall() && ImmBackend::instance()->immutableEnabled()) {
@@ -1176,120 +1106,13 @@ void DebListModel::installDebs()
         return;
     }
 
-    if (!dependsStat.canInstall()) {
-        qCDebug(appLog) << "Dependencies cannot be satisfied";
-        // 依赖不满足或者下载wine依赖时授权被取消
-        refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新错误状态
-
-        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-        m_packageFailCode.insert(m_operatingPackageMd5, -1);  // 保存错误原因
-        // 记录详细错误原因
-        m_packageFailReason.insert(m_operatingPackageMd5, packageFailedReason(m_operatingStatusIndex));
-
-        qCDebug(appLog) << "Bumping install index due to unsatisfied dependencies";
-        bumpInstallIndex();  // 开始下一步的安装流程
+    // Route to apt install backend for normal apt installation
+    if (m_aptBackend->install(m_operatingIndex)) {
+        // backend will handle the rest via signals
+        // Sync m_currentTransaction for backward compatibility (lastProcessError)
+        m_currentTransaction = m_aptBackend->m_currentTransaction;
         return;
-    } else if (dependsStat.isAvailable()) {
-        qCDebug(appLog) << "Dependencies are available";
-        if (isDpkgRunning()) {
-            qCInfo(appLog) << "DebListModel:"
-                    << "dpkg running, waitting...";
-            // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
-            qCDebug(appLog) << "Dpkg is running, waiting before next install check";
-            QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-            return;
-        }
-        // 依赖可用 但是需要下载
-        Q_ASSERT_X(m_packageOperateStatus[m_operatingPackageMd5],
-                   Q_FUNC_INFO,
-                   "package operate status error when start install availble dependencies");
-
-        // 获取到所有的依赖包 准备安装
-        const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
-        qCInfo(appLog) << QString("Prepare install package: %1 , install depends: ").arg(deb.packageName()) << availableDepends;
-
-        // 获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
-        for (auto const &p : availableDepends) {
-            if (p.contains(" not found")) {                                          // 依赖安装失败
-                qCDebug(appLog) << "Dependency not found:" << p;
-                refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新当前包的状态
-                // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);  // 记录错误代码与错误原因
-                m_packageFailReason.insert(m_operatingPackageMd5, p);
-                emit signalAppendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " +
-                                            p);  // 输出错误原因
-                bumpInstallIndex();              // 开始安装下一个包或结束安装
-
-                qWarning() << QString("Packge %1 install failed, not found depend package: %2").arg(deb.packageName()).arg(p);
-                return;
-            }
-            qCDebug(appLog) << "Marking dependency for installation:" << p;
-            backend->markPackageForInstall(p);  // 开始安装依赖包
-        }
-        // 打印待安装的软件包信息
-        printDependsChanges();
-
-        qCDebug(appLog) << "Committing changes for dependency installation";
-        transaction = backend->commitChanges();
-        if (!transaction) {
-            qCDebug(appLog) << "Transaction is null after committing changes, returning";
-            return;
-        }
-        // 依赖安装结果处理
-        connect(transaction, &Transaction::finished, this, &DebListModel::slotDependsInstallTransactionFinished);
-    } else {
-        qCDebug(appLog) << "Dependencies are not available";
-        if (isDpkgRunning()) {
-            qCInfo(appLog) << "DebListModel:"
-                    << "dpkg running, waitting...";
-            // 缩短检查的时间，每隔1S检查当前dpkg是否正在运行。
-            qCDebug(appLog) << "Dpkg is running, waiting before next install check";
-            QTimer::singleShot(1000 * 1, this, &DebListModel::installNextDeb);
-            return;
-        }
-        qCDebug(appLog) << "Installing file directly";
-        transaction = backend->installFile(deb);  // 触发Qapt授权框和安装线程
-        if (!transaction) {
-            qCDebug(appLog) << "Transaction is null after installing file, returning";
-            return;
-        }
-        // 进度变化和结束过程处理
-        connect(transaction, &Transaction::progressChanged, this, &DebListModel::signalCurrentPacakgeProgressChanged);
-        connect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);
     }
-
-    // NOTE: DO NOT remove this.
-    transaction->setLocale(".UTF-8");
-
-    // 记录日志
-    connect(transaction, &Transaction::statusDetailsChanged, this, &DebListModel::signalAppendOutputInfo);
-
-    // 刷新操作状态
-    connect(transaction, &Transaction::statusDetailsChanged, this, &DebListModel::slotTransactionOutput);
-
-    // 授权处理
-    connect(transaction, &Transaction::statusChanged, this, &DebListModel::slotTransactionStatusChanged);
-
-    // 错误处理
-    connect(transaction, &Transaction::errorOccurred, this, &DebListModel::slotTransactionErrorOccurred);
-
-    m_currentTransaction = transaction;
-
-#ifdef ENABLE_QAPT_SETENV   // Qt5环境且qapt >= 3.0.5.1-1-deepin1，支持setEnvVariable
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QVariantMap map;
-
-    // 获取当前真实用户信息
-    QString currentUser = env.value("USER");
-    // 如果SUDO_USER存在，说明当前是通过sudo启动的
-    QString realUser = env.value("SUDO_USER");
-    if (realUser.isEmpty())
-        realUser = currentUser;
-    map.insert("SUDO_USER", realUser);
-    m_currentTransaction->setEnvVariable(map);
-#endif
-    qCDebug(appLog) << "Running current transaction";
-    m_currentTransaction->run();
 }
 
 void DebListModel::digitalVerifyFailed(Pkg::ErrorCode errorCode)
@@ -1944,9 +1767,9 @@ void DebListModel::slotConfigReadOutput(const char *buffer, int length, bool isC
 void DebListModel::slotConfigInputWrite(const QString &str)
 {
     qCDebug(appLog) << "Writing config input: " << str;
-    if (supportCompatible() && m_compProcessor && m_compProcessor->isRunning()) {
+    if (supportCompatible() && m_compBackend && m_compBackend->isRunning()) {
         qCDebug(appLog) << "Writing to compatible processor";
-        m_compProcessor->writeConfigData(str);
+        m_compBackend->writeConfigData(str);
         return;
     }
 
