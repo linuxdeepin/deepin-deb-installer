@@ -37,20 +37,73 @@ bool AptInstallBackend::verifySignature(int index)
     Q_UNUSED(index)
     qCDebug(appLog) << "AptInstallBackend::verifySignature entering";
 
-    // 分级管控可用时，交由分级管控进行签名验证
-    if (HierarchicalVerify::instance()->isValid()) {
-        qCDebug(appLog) << "Hierarchical verification is valid, skipping signature check";
-        return true;
-    }
-
-    const auto stat = m_model->m_packagesManager->getPackageDependsStatus(m_model->m_operatingIndex);
-    if (stat.isBreak() || stat.isAuthCancel()) {
-        qCDebug(appLog) << "Dependency is broken or auth cancelled, skipping signature check";
-        return true;
-    }
     SettingDialog dialog;
     m_model->m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(m_model->m_packagesManager->package(m_model->m_operatingIndex));
+    qCInfo(appLog) << "m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
+                   << " /digitalSigntual:" << digitalSigntual;
+    if (m_model->m_isDevelopMode && !m_model->m_isDigitalVerify) {
+        qCDebug(appLog) << "Developer mode and digital verification is disabled, returning true";
+        return true;
+    } else if (m_model->m_isDevelopMode && m_model->m_isDigitalVerify) {
+        qCDebug(appLog) << "Developer mode and digital verification is enabled";
+        if (digitalSigntual == Utils::VerifySuccess) {
+            qCDebug(appLog) << "Signature verification successful in developer mode";
+            return true;
+        } else {
+            qCDebug(appLog) << "Signature verification failed in developer mode";
+            Pkg::ErrorCode code;
+            if (digitalSigntual == Utils::DebfileInexistence) {
+                qCDebug(appLog) << "Deb file inexistence, setting code to NoDigitalSignature";
+                code = Pkg::NoDigitalSignature;
+            } else {
+                qCDebug(appLog) << "Digital signature error, setting code to DigitalSignatureError";
+                code = Pkg::DigitalSignatureError;
+            }
+            m_model->showDevelopDigitalErrWindow(code);
+            return false;
+        }
+    } else {
+        qCDebug(appLog) << "Not in developer mode, checking signature status";
+        bool verifiedResult = false;
+        switch (digitalSigntual) {
+            case Utils::VerifySuccess:
+                qCDebug(appLog) << "Signature verification successful";
+                verifiedResult = true;
+                break;
+            case Utils::DebfileInexistence:
+                qCDebug(appLog) << "Deb file inexistence, showing no digital signature window";
+                m_model->showNoDigitalErrWindow();
+                verifiedResult = false;
+                break;
+            case Utils::ExtractDebFail:
+                qCDebug(appLog) << "Failed to extract deb, showing digital error window";
+                m_model->showDigitalErrWindow();
+                verifiedResult = false;
+                break;
+            case Utils::DebVerifyFail:
+            case Utils::OtherError:
+                qCDebug(appLog) << "Deb verification failed or other error, showing digital error window";
+                m_model->showDigitalErrWindow();
+                verifiedResult = false;
+                break;
+            default:
+                qCInfo(appLog) << "unknown mistake";
+                qCDebug(appLog) << "Unknown signature verification error";
+                verifiedResult = false;
+                break;
+        }
+        return verifiedResult;
+    }
+}
+
+bool AptInstallBackend::verifySignature(const QString &packagePath)
+{
+    qCDebug(appLog) << "AptInstallBackend::verifySignature(packagePath) entering for" << packagePath;
+
+    SettingDialog dialog;
+    m_model->m_isDigitalVerify = dialog.isDigitalVerified();
+    int digitalSigntual = Utils::Digital_Verify(packagePath);
     qCInfo(appLog) << "m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
                    << " /digitalSigntual:" << digitalSigntual;
     if (m_model->m_isDevelopMode && !m_model->m_isDigitalVerify) {
