@@ -630,6 +630,11 @@ void DebListModel::slotAppendPackage(const QStringList &package)
     if (WorkerPrepare != m_workerStatus) {
         qWarning() << "installer status error";
     }
+    // Verify digital signature before appending the package
+    if (!m_aptBackend->verifySignature(package.first())) {
+        qCWarning(appLog) << "Digital signature verification failed for package:" << package.first();
+        return;
+    }
     m_packagesManager->appendPackage(package);  // 添加包，并返回添加结果
 }
 

@@ -21,6 +21,7 @@ public:
     ~AptInstallBackend() override;
 
     bool verifySignature(int index) override;
+    bool verifySignature(const QString &packagePath);
     bool install(int index) override;
     bool uninstall(int index) override;
 
