@@ -1137,6 +1137,13 @@ void DebInstaller::refreshSingle()
     // 刷新成单包安装界面时，删除标题
     titlebar()->setTitle(QString());
 
+    // check if single package in compatible mode
+    const QModelIndex singleIdx = m_fileListModel->index(0);
+    const int compatStat = singleIdx.data(DebListModel::PackageDependsStatusRole).toInt();
+    if (Pkg::CompatibleNotInstalled == compatStat || Pkg::CompatibleIntalled == compatStat) {
+        titlebar()->setTitle(tr("Compatible Mode Install"));
+    }
+
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");
     connect(singlePage, &SingleInstallPage::signalBacktoFileChooseWidget, this, &DebInstaller::slotReset);
@@ -1145,8 +1152,12 @@ void DebInstaller::refreshSingle()
     m_lastPage = singlePage;
     m_centralLayout->addWidget(singlePage);
 
+    // 兼容模式下禁止拖入追加包，避免从兼容模式单安装页面切换到批量安装页面
+    // Log: task-389473 屏蔽兼容模式下添加更多包的入口
+    const bool compatMode = (compatStat == Pkg::CompatibleNotInstalled || compatStat == Pkg::CompatibleIntalled);
+
     // 重置安装器拖入的状态与工作的状态
-    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel) {
+    if (SingleInstallerApplication::mode == SingleInstallerApplication::DdimChannel || compatMode) {
         qCDebug(appLog) << "Set drag flag to 0";
         m_dragflag = 0;
         m_Filterflag = NonePage;
