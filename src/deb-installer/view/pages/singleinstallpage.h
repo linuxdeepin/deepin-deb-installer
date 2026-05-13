@@ -17,7 +17,7 @@
 #include <DSpinner>
 #include <DDialog>
 #include <DCommandLinkButton>
-#include <DComboBox>
+#include <DCheckBox>
 
 #include <QWidget>
 #include <QProcess>
@@ -63,11 +63,9 @@ public slots:
     void slotUninstallCurrentPackage();
 
 protected:
-    /**
-       @brief 每次切换展示当前页面，复位焦点状态
-     */
     void showEvent(QShowEvent *e) override;
     void paintEvent(QPaintEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 signals:
 
@@ -109,8 +107,6 @@ private:
      */
     void initInstallWineLoadingLayout();
 
-    void initCompatibleSelectLayout();
-
     /**
      * @brief initPkgInfoView 初始化 包信息视图布局
      * @param fontinfosize  字体大小
@@ -151,8 +147,6 @@ private:
      */
     void initTabOrder();
 
-    void initCompatibleRootfs();
-
     /**
      * @brief initButtonFocusPolicy 设置按钮的焦点策略
      */
@@ -189,6 +183,8 @@ private:
      * @brief setAuthDependsSuccess 暂未使用
      */
     void setAuthDependsSuccess();
+
+    void showCompatConfirmView();
 
     bool dependsError(int status) const;
 
@@ -290,6 +286,7 @@ private:
 private:
     QVBoxLayout *m_contentLayout = nullptr;
     QVBoxLayout *m_centralLayout = nullptr;  // 主布局
+    QHBoxLayout *m_btnsLayout = nullptr;
 
     QString m_description = "";         // 包的描述文本
     QString m_pkgNameDescription = "";  // 包名的文本
@@ -305,13 +302,14 @@ private:
     bool m_showRemovePackages = false;  // current package need show remove packages
 
     // for comaptible mode
-    bool m_inCompatibleMode = false;    // current pacakge in comaptbile mode;
-    bool m_compatibleChekcing = false;  // trigger appcheck
-    QString m_rootfsOsName;             // current package rootfs (empty if not installed)
-    QString m_targetRootfsOsName;
-    DLabel *m_compatibleLabel = nullptr;
-    DComboBox *m_compatibleBox = nullptr;  // compatible rootfs selector
-    QHBoxLayout *m_compatibleLayout = nullptr;
+    bool m_inCompatibleMode = false;  // current pacakge in comaptbile mode;
+    QString m_rootfsOsName;          // current package rootfs (empty if not installed)
+    static constexpr const char *kDefaultRootfs = "uos-rootfs-20";
+    static constexpr const char *kDefaultRootfsOsName = "UOS 20";
+    DLabel *m_compatHintLabel = nullptr;
+    QString m_compatToolTip;
+    DCheckBox *m_compatCheckBox = nullptr;
+    DLabel *m_compatDescLabel = nullptr;
 };
 
 #endif  // SINGLEINSTALLPAGE_H

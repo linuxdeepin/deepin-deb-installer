@@ -697,7 +697,7 @@ void DebListModel::resetInstallStatus()
 void DebListModel::bumpInstallIndex()
 {
     qCDebug(appLog) << "Bumping install index.";
-    if (m_aptBackend->m_currentTransaction.isNull()) {
+    if (!m_aptBackend->m_currentTransaction.isNull()) {
         qWarning() << "previous transaction not finished";
     }
     if (++m_operatingIndex >= m_packagesManager->m_preparedPackages.size()) {
@@ -803,15 +803,11 @@ QString DebListModel::packageFailedReason(const int idx) const
 
     // need refactor, move to Deb::DebPackage
     int status = dependStatus.status;
-    if (Pkg::CompatibleNotInstalled == status && CompBackend::instance()->supportAppCheck()) {
-        qCDebug(appLog) << "Package is not installed but compatibility check is supported";
+    if (Pkg::CompatibleNotInstalled == status) {
+        // Compatible mode always installs to default rootfs, no retry on failure.
         if (auto ptr = packagePtr(idx)) {
             if (auto compPtr = ptr->compatible()) {
-                // back to depends break if no support rootfs on compatible mode.
-                if (compPtr->checked && compPtr->supportRootfs.isEmpty()) {
-                    qCDebug(appLog) << "No support rootfs on compatible mode, setting status to DependsBreak";
-                    status = Pkg::DependsBreak;
-                } else if (compPtr->checked && !compPtr->targetRootfs.isEmpty()) {
+                if (!compPtr->targetRootfs.isEmpty()) {
                     status = Pkg::CompatibleInstallFailed;
                 }
             }
