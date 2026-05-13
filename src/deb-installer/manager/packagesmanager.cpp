@@ -1220,6 +1220,14 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
             }
             // If depends ok and not installed in compatible, not need install to compatible rootfs
         }
+    } else if (CompBackend::instance()->compatibleExists() && dependsStatus.isBreak()) {
+        // 兼容环境存在但尚未初始化完成，跳过同名包校验，直接走兼容安装流程
+        // 安装时由外部命令负责环境初始化
+        if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
+            qCInfo(appLog) << "Compatible environment not yet initialized, skip package check"
+                           << "for package:" << debFile.packageName();
+            dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+        }
     }
 
     // If depends need install

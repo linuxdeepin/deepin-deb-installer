@@ -18,6 +18,13 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QFontMetrics>
+#include <QBuffer>
+#include <QMouseEvent>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QAbstractTextDocumentLayout>
+#include <QToolTip>
 
 #include <QApt/DebFile>
 #include <QApt/Transaction>
@@ -178,37 +185,6 @@ void SingleInstallPage::initInstallWineLoadingLayout()
     qCDebug(appLog) << "Install wine loading layout initialized";
 }
 
-void SingleInstallPage::initCompatibleSelectLayout()
-{
-    qCDebug(appLog) << "Initializing compatible select layout";
-    if (!m_inCompatibleMode) {
-        qCDebug(appLog) << "Not in compatible mode, skipping initialization";
-        return;
-    }
-
-    m_compatibleLabel = new DLabel(this);
-    m_compatibleLabel->setObjectName("SinglePageCompatibleLabel");
-    m_compatibleLabel->setText(tr("Select a compatibility mode:"));
-
-    m_compatibleBox = new DComboBox(this);
-    m_compatibleBox->setObjectName("SinglePageCompatibleBox");
-    m_compatibleBox->setFixedWidth(226);
-
-    QString normalFontFamily = Utils::loadFontFamilyByType(Utils::SourceHanSansNormal);
-    Utils::bindFontBySizeAndWeight(m_compatibleLabel, normalFontFamily, 12, QFont::Normal);
-    Utils::bindFontBySizeAndWeight(m_compatibleBox, normalFontFamily, 14, QFont::Normal);
-
-    m_compatibleLayout = new QHBoxLayout;
-    m_compatibleLayout->setContentsMargins(0, 0, 0, 0);
-    m_compatibleLayout->setSpacing(10);
-    m_compatibleLayout->addWidget(m_compatibleLabel);
-    m_compatibleLayout->addWidget(m_compatibleBox);
-    m_compatibleLayout->setAlignment(Qt::AlignHCenter);
-
-    m_contentLayout->addLayout(m_compatibleLayout);
-    qCDebug(appLog) << "Compatible select layout initialized";
-}
-
 void SingleInstallPage::initPkgInfoView(int fontinfosize)
 {
     qCDebug(appLog) << "Initializing package info view with font size:" << fontinfosize;
@@ -344,110 +320,6 @@ void SingleInstallPage::initTabOrder()
     qCDebug(appLog) << "Tab order initialized";
 }
 
-void SingleInstallPage::initCompatibleRootfs()
-{
-    qCDebug(appLog) << "Initializing compatible rootfs";
-    if (!m_inCompatibleMode) {
-        qCDebug(appLog) << "Not in compatible mode, skipping initialization";
-        return;
-    }
-
-    if (!CompBackend::instance()->supportAppCheck()) {
-        qCDebug(appLog) << "App check not supported, populating rootfs list directly";
-        auto rootfsList = CompBackend::instance()->rootfsList();
-        for (const auto &rootfs : rootfsList) {
-            m_compatibleBox->addItem(rootfs->osName, rootfs->name);
-        }
-        if (!rootfsList.isEmpty()) {
-            m_compatibleBox->setCurrentIndex(0);
-        }
-
-    } else {
-        qCDebug(appLog) << "App check supported, connecting to packageSupportRootfsChanged signal";
-        connect(CompBackend::instance(),
-                &CompBackend::packageSupportRootfsChanged,
-                this,
-                [this](const Compatible::CompPkgInfo::Ptr &checkPtr) {
-                    qCDebug(appLog) << "packageSupportRootfsChanged signal received";
-                    if (!m_inCompatibleMode || !checkPtr || !checkPtr->checked) {
-                        qCDebug(appLog) << "Skipping rootfs update, not in compatible mode or invalid check pointer";
-                        return;
-                    }
-
-                    const QModelIndex index = m_packagesModel->index(0);
-                    auto currentPtr = index.data(DebListModel::PackageSharedPointerRole).value<Deb::DebPackage::Ptr>();
-                    if (currentPtr->compatible() != checkPtr) {
-                        qCDebug(appLog) << "Skipping rootfs update, package pointer mismatch";
-                        return;
-                    }
-
-                    m_compatibleChekcing = false;
-                    auto rootfsList = checkPtr->supportRootfs;
-
-                    if (!rootfsList.isEmpty()) {
-                        qCDebug(appLog) << "Found" << rootfsList.size() << "supported rootfs, updating UI";
-                        for (const auto &rootfs : rootfsList) {
-                            m_compatibleBox->addItem(rootfs->osName, rootfs->name);
-                        }
-
-                        m_compatibleBox->setCurrentIndex(0);
-
-                        m_compatibleLabel->setVisible(true);
-                        m_compatibleBox->setVisible(true);
-                        m_backButton->setVisible(true);
-
-                        showPackageInfo();
-                    } else {
-                        qCDebug(appLog) << "No supported rootfs found, quitting compatible mode";
-                        // Quit compatible mode if no support rootfs
-                        m_inCompatibleMode = false;
-
-                        m_compatibleLabel->setVisible(false);
-                        m_compatibleBox->setVisible(false);
-
-                        slotRefreshSinglePackageDepends();
-                        showPackageInfo();
-                    }
-
-                    m_pDSpinner->setVisible(false);
-                    m_pDSpinner->stop();
-                });
-
-        const QModelIndex index = m_packagesModel->index(0);
-        auto currentPtr = index.data(DebListModel::PackageSharedPointerRole).value<Deb::DebPackage::Ptr>();
-        auto currentCompPtr = currentPtr->compatible();
-
-        // seems need recheck rootfs in every time
-        // if current package installed in rootfs, need uninstall fisrt
-        if (currentCompPtr->checked || !currentCompPtr->rootfs.isEmpty()) {
-            qCDebug(appLog) << "Rootfs already checked, populating list";
-            auto rootfsList = currentCompPtr->supportRootfs;
-            for (const auto &rootfs : rootfsList) {
-                m_compatibleBox->addItem(rootfs->osName, rootfs->name);
-            }
-            if (!rootfsList.isEmpty()) {
-                m_compatibleBox->setCurrentIndex(0);
-            }
-
-        } else {
-            if (CompBackend::instance()->checkPackageSupportRootfs(currentPtr->compatible())) {
-                qCDebug(appLog) << "Checking for supported rootfs";
-                m_compatibleChekcing = true;
-
-                // show spinner, wait check finished.
-                m_compatibleLabel->setVisible(false);
-                m_compatibleBox->setVisible(false);
-
-                m_pDSpinner->start();
-                m_pDSpinner->setVisible(true);
-            } else {
-                qCWarning(appLog) << "Cannot call compatible app check!";
-            }
-        }
-    }
-    qCDebug(appLog) << "Compatible rootfs initialized";
-}
-
 void SingleInstallPage::initButtonFocusPolicy()
 {
     qCDebug(appLog) << "Initializing button focus policy";
@@ -560,24 +432,24 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     btnsFrameLayout->addSpacing(5);
 
     // 安装 卸载 重新安装 返回 完成 确认按钮的布局
-    QHBoxLayout *btnsLayout = new QHBoxLayout();
-    btnsLayout->addStretch();
-    btnsLayout->addWidget(m_installButton, 0, Qt::AlignBottom);
-    btnsLayout->addWidget(m_uninstallButton, 0, Qt::AlignBottom);
-    btnsLayout->addWidget(m_reinstallButton, 0, Qt::AlignBottom);
-    btnsLayout->addWidget(m_backButton, 0, Qt::AlignBottom);
-    btnsLayout->addWidget(m_confirmButton, 0, Qt::AlignBottom);
-    btnsLayout->addWidget(m_doneButton, 0, Qt::AlignBottom);
-    btnsLayout->addStretch();
-    btnsLayout->setSpacing(20);
+    m_btnsLayout = new QHBoxLayout();
+    m_btnsLayout->addStretch();
+    m_btnsLayout->addWidget(m_installButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addWidget(m_uninstallButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addWidget(m_reinstallButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addWidget(m_backButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addWidget(m_confirmButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addWidget(m_doneButton, 0, Qt::AlignBottom);
+    m_btnsLayout->addStretch();
+    m_btnsLayout->setSpacing(20);
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     // adapt compact mode
-    auto setBtnSizeMode = [btnsLayout]() {
+    auto setBtnSizeMode = [this]() {
         if (DGuiApplicationHelper::instance()->isCompactMode()) {
-            btnsLayout->setContentsMargins(0, 0, 0, 4);
+            m_btnsLayout->setContentsMargins(0, 0, 0, 4);
         } else {
-            btnsLayout->setContentsMargins(0, 0, 0, 0);
+            m_btnsLayout->setContentsMargins(0, 0, 0, 0);
         }
     };
     setBtnSizeMode();
@@ -585,7 +457,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, setBtnSizeMode);
 
 #else
-    btnsLayout->setContentsMargins(0, 0, 0, 0);
+    m_btnsLayout->setContentsMargins(0, 0, 0, 0);
 #endif  // DTKWIDGET_CLASS_DSizeMode
 
     // 进度条 布局
@@ -610,7 +482,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_btnsFrame->setObjectName("btnsFrame");
     m_btnsFrame->setAccessibleName("btnsFrame");
     m_btnsFrame->setMinimumHeight(m_installButton->maximumHeight());
-    btnsFrameLayout->addLayout(btnsLayout);
+    btnsFrameLayout->addLayout(m_btnsLayout);
     m_btnsFrame->setLayout(btnsFrameLayout);
     m_btnsFrame->setFixedHeight(45);
 
@@ -634,8 +506,44 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_tipsLabel);
 
-    // for compatible mode
-    initCompatibleSelectLayout();
+    // compatibility mode hint label (between tips and buttons)
+    m_compatHintLabel = new DLabel(this);
+    m_compatHintLabel->setObjectName("CompatibleHintLabel");
+    m_compatHintLabel->setWordWrap(true);
+    m_compatHintLabel->setTextFormat(Qt::RichText);
+    m_compatHintLabel->setAlignment(Qt::AlignCenter);
+    const QString compatHintText = tr("If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.");
+    m_compatToolTip = tr("UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.");
+    // 将图标 pixmap 转为 base64 data URI 嵌入富文本，使图标随文本换行到最后一行末尾
+    QByteArray iconData;
+    QBuffer iconBuf(&iconData);
+    iconBuf.open(QIODevice::WriteOnly);
+    QIcon::fromTheme("dialog-information").pixmap(16, 16).save(&iconBuf, "PNG");
+    m_compatHintLabel->setText(compatHintText
+        + QString(" <img src=\"data:image/png;base64,%1\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"/>")
+              .arg(QString(iconData.toBase64())));
+    m_compatHintLabel->setMouseTracking(true);
+    m_compatHintLabel->installEventFilter(this);
+    m_compatHintLabel->setVisible(false);
+    Utils::bindFontBySizeAndWeight(m_compatHintLabel, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    m_contentLayout->addWidget(m_compatHintLabel);
+
+    // compatibility mode confirmation: checkbox and description
+    m_compatCheckBox = new DCheckBox(this);
+    m_compatCheckBox->setObjectName("CompatibleCheckBox");
+    m_compatCheckBox->setText(tr("Confirm to install in compatibility mode"));
+    m_compatCheckBox->setVisible(false);
+    Utils::bindFontBySizeAndWeight(m_compatCheckBox, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    m_contentLayout->addWidget(m_compatCheckBox);
+
+    m_compatDescLabel = new DLabel(this);
+    m_compatDescLabel->setObjectName("CompatibleDescLabel");
+    m_compatDescLabel->setWordWrap(true);
+    m_compatDescLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_compatDescLabel->setText(tr("UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well."));
+    m_compatDescLabel->setVisible(false);
+    Utils::bindFontBySizeAndWeight(m_compatDescLabel, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    m_contentLayout->addWidget(m_compatDescLabel);
 
     m_contentLayout->addWidget(m_progressFrame);
 
@@ -648,8 +556,6 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
 
     // bug 139875  Tab Order要在布局之后设置才能生效
     initTabOrder();
-
-    initCompatibleRootfs();
 }
 
 void SingleInstallPage::initPkgDependsInfoView()
@@ -683,18 +589,30 @@ void SingleInstallPage::initConnections()
     connect(m_confirmButton, &DPushButton::clicked, this, [this]() {
         QModelIndex index = m_packagesModel->index(0);
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-        if (m_inCompatibleMode && Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
-            qCDebug(appLog) << "Requesting install package to compatible";
-            // requset install package to compatible.
-            m_targetRootfsOsName = m_compatibleBox->currentText();
-            const QString targetRootfs = m_compatibleBox->currentData().toString();
-            m_packagesModel->setData(index, targetRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
+
+        // if in compat confirm view (checkbox visible), proceed with install
+        if (m_inCompatibleMode && m_compatCheckBox->isVisible()) {
+            qCDebug(appLog) << "Confirmed compatible install, proceeding to install";
+            m_packagesModel->setData(index, kDefaultRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
             slotInstall();
-        } else {
-            qCDebug(appLog) << "Quitting application";
-            qApp->quit();
+            return;
         }
+
+        // first click on Compatible Install -> show confirmation
+        if (m_inCompatibleMode && Finished != m_operate && Pkg::CompatibleNotInstalled == dependsStat) {
+            qCDebug(appLog) << "Switching to compatible install confirmation view";
+            showCompatConfirmView();
+            return;
+        }
+
+        qCDebug(appLog) << "Quitting application";
+        qApp->quit();
     });
+    // compatibility mode: checkbox controls install button enabled state
+    connect(m_compatCheckBox, &DCheckBox::stateChanged, this, [this]() {
+        m_confirmButton->setEnabled(m_compatCheckBox->isChecked());
+    });
+
     connect(m_doneButton, &DPushButton::clicked, qApp, &QApplication::quit);
 
     // model 安装进程信息的展示
@@ -770,12 +688,11 @@ void SingleInstallPage::slotReinstall()
 
     // for compatible mode
     if (m_inCompatibleMode) {
-        qCDebug(appLog) << "Setting compatible mode visible to false";
-        m_compatibleLabel->setVisible(false);
-        m_compatibleBox->setVisible(false);
-
+        qCDebug(appLog) << "Compatible mode reinstall";
+        m_compatCheckBox->setVisible(false);
+        m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
+            tr("Trying to install %2 in %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -811,12 +728,11 @@ void SingleInstallPage::slotInstall()
 
     // for compatible mode
     if (m_inCompatibleMode) {
-        qCDebug(appLog) << "Setting compatible mode visible to false";
-        m_compatibleLabel->setVisible(false);
-        m_compatibleBox->setVisible(false);
-
+        qCDebug(appLog) << "Compatible mode install";
+        m_compatCheckBox->setVisible(false);
+        m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Trying to install %2 in %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
+            tr("Trying to install %2 in %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -851,12 +767,11 @@ void SingleInstallPage::slotUninstallCurrentPackage()
 
     // for compatible mode
     if (m_inCompatibleMode) {
-        qCDebug(appLog) << "Setting compatible mode visible to false";
-        m_compatibleLabel->setVisible(false);
-        m_compatibleBox->setVisible(false);
-
+        qCDebug(appLog) << "Compatible mode uninstall";
+        m_compatCheckBox->setVisible(false);
+        m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Uninstalling %2 from %1 compatibility mode").arg(m_targetRootfsOsName).arg(m_pkgNameDescription));
+            tr("Uninstalling %2 from %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -970,6 +885,9 @@ void SingleInstallPage::slotWorkerFinished()
     if (m_inCompatibleMode) {
         qCDebug(appLog) << "Setting compatible mode visible to false";
         m_confirmButton->setVisible(false);
+        m_compatHintLabel->setVisible(false);
+        m_tipsLabel->setContentsMargins(0, 0, 0, 0);
+        m_btnsLayout->setSpacing(20);
     }
 
     // 获取当前包的安装结果
@@ -979,14 +897,17 @@ void SingleInstallPage::slotWorkerFinished()
     if (stat == Pkg::PackageOperationStatus::Success) {  // 操作成功
         qCDebug(appLog) << "Operation success";
         m_doneButton->setVisible(true);
+        m_doneButton->setText(tr("Done", "button"));
         m_doneButton->setFocus();
         if (m_operate == Install || m_operate == Reinstall) {  // 安装成功
             qDebug() << "SingleInstallPage: Installed successfully";
             m_infoControlButton->setExpandTips(QApplication::translate("SingleInstallPage_Install", "Show details"));
 
             if (m_inCompatibleMode) {
+                m_backButton->setVisible(false);
+                m_btnsLayout->setAlignment(m_doneButton, Qt::AlignCenter);
                 m_tipsLabel->setTextAndTips(tr("%2 was successfully installed to %1 compatibility mode")
-                                                .arg(m_targetRootfsOsName)
+                                                .arg(kDefaultRootfsOsName)
                                                 .arg(m_pkgNameDescription));
             } else {
                 m_tipsLabel->setTextAndTips(tr("Installed successfully"));
@@ -1009,8 +930,15 @@ void SingleInstallPage::slotWorkerFinished()
         }
     } else if (stat == Pkg::PackageOperationStatus::Failed) {  // 安装/卸载失败
         qCDebug(appLog) << "Operation failed";
-        m_confirmButton->setVisible(true);
-        m_confirmButton->setFocus();
+        if (m_inCompatibleMode) {
+            m_confirmButton->setVisible(false);
+            m_compatHintLabel->setVisible(false);
+            m_tipsLabel->setContentsMargins(0, 0, 0, 0);
+            m_btnsLayout->setSpacing(20);
+        } else {
+            m_confirmButton->setVisible(true);
+            m_confirmButton->setFocus();
+        }
         m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
 
         if (m_operate == Install || m_operate == Reinstall) {
@@ -1161,24 +1089,17 @@ void SingleInstallPage::showPackageInfo()
             if (m_inCompatibleMode) {
                 switch (dependsStat) {
                     case Pkg::CompatibleNotInstalled:
-                        // no back button, select 'compatible rootfs' and install
-                        if (m_compatibleChekcing) {
-                            qCDebug(appLog) << "Compatible checking, hide compatible label and box";
-                            m_compatibleLabel->setVisible(false);
-                            m_compatibleBox->setVisible(false);
-                            m_confirmButton->setVisible(false);
-                        } else {
-                            qCDebug(appLog) << "Compatible not checking, show compatible label and box";
-                            m_compatibleLabel->setVisible(true);
-                            m_compatibleBox->setVisible(true);
-                            m_confirmButton->setVisible(true);
-                        }
+                        qCDebug(appLog) << "Compatible not installed, show install and cancel buttons";
+                        m_tipsLabel->setContentsMargins(0, 0, 0, 5);
+                        m_compatHintLabel->setVisible(true);
+                        m_btnsLayout->setSpacing(10);
+                        m_confirmButton->setText(tr("Compatible Install"));
+                        m_confirmButton->setVisible(true);
+                        m_doneButton->setText(tr("Cancel", "button"));
+                        m_doneButton->setVisible(true);
                         break;
                     case Pkg::CompatibleIntalled:
-                        // uninstall or quit
-                        qCDebug(appLog) << "Compatible installed, hide compatible label and box";
-                        m_compatibleLabel->setVisible(false);
-                        m_compatibleBox->setVisible(false);
+                        qCDebug(appLog) << "Compatible installed, show uninstall button";
                         m_uninstallButton->setVisible(true);
                         break;
                     default:
@@ -1250,6 +1171,28 @@ void SingleInstallPage::showPackageInfo()
         // refresh depends at init.
         slotRefreshSinglePackageDepends();
     }
+}
+
+void SingleInstallPage::showCompatConfirmView()
+{
+    qCDebug(appLog) << "Showing compatible install confirmation view";
+
+    // hide error tips and hint
+    m_tipsLabel->setVisible(false);
+    m_compatHintLabel->setVisible(false);
+
+    // show checkbox and description
+    m_compatCheckBox->setChecked(false);
+    m_compatCheckBox->setVisible(true);
+    m_compatDescLabel->setVisible(true);
+
+    // hide Cancel/Done, show install button (disabled until checkbox checked)
+    m_doneButton->setVisible(false);
+    m_confirmButton->setText(tr("Install", "button"));
+    m_confirmButton->setEnabled(false);
+    m_confirmButton->setVisible(true);
+    m_confirmButton->setFocus();
+    m_btnsLayout->setSpacing(20);
 }
 
 void SingleInstallPage::setEnableButton(bool bEnable)
@@ -1509,4 +1452,35 @@ void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
         default:
             break;
     }
+}
+
+bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_compatHintLabel) {
+        if (event->type() == QEvent::MouseMove) {
+            auto *me = static_cast<QMouseEvent *>(event);
+            QTextDocument doc;
+            doc.setHtml(m_compatHintLabel->text());
+            doc.setDefaultFont(m_compatHintLabel->font());
+            QRect cr = m_compatHintLabel->contentsRect();
+            doc.setTextWidth(cr.width());
+
+            QPointF relPos(me->pos().x() - cr.x(), me->pos().y() - cr.y());
+            int pos = doc.documentLayout()->hitTest(relPos, Qt::FuzzyHit);
+            if (pos != -1) {
+                QTextCursor cursor(&doc);
+                cursor.setPosition(pos);
+                if (cursor.charFormat().isImageFormat()) {
+                    QString tooltipHtml = QString("<div style='max-width:232px;'>%1</div>").arg(m_compatToolTip.toHtmlEscaped());
+                    QToolTip::showText(me->globalPos(), tooltipHtml, m_compatHintLabel);
+                    return true;
+                }
+            }
+            QToolTip::hideText();
+            return true;
+        } else if (event->type() == QEvent::Leave) {
+            QToolTip::hideText();
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
