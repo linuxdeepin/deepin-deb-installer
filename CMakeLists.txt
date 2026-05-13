@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -34,6 +34,7 @@ if (QT_DESIRED_VERSION MATCHES 6)
     find_package(QApt-qt6 REQUIRED)
     include_directories(${QApt-qt6_INCLUDE_DIRS})
     set(QAPT_LIB QApt-qt6)
+    add_subdirectory(src/dfmplugin-debinstaller)
 else()
     find_package(QApt REQUIRED)
     include_directories(${QApt_INCLUDE_DIRS})

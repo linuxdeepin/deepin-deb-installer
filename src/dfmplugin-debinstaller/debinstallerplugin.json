@@ -1,0 +1,15 @@
+{
+    "Name" : "dfmplugin-debinstaller",
+    "Version" : "1.0.0",
+    "CompatVersion" : "1.0.0",
+    "Vendor" : "UnionTech Software Technology Co., Ltd.",
+    "Copyright" : "Copyright (C) 2025 UnionTech Software Technology Co., Ltd.",
+    "License" : [
+    ],
+    "Category" : "",
+    "Description" : "Add compatible mode install menu item for deb packages in file manager.",
+    "UrlLink" : "https://www.deepin.org",
+    "Depends" : [
+        {"Name" : "dfmplugin-core", "Version": "1.0.0"}
+    ]
+}
