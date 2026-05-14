@@ -559,13 +559,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"/>
+        <translation>Jeśli ten program został stworzony dla starszej wersji systemu, możesz spróbować zainstalować go w warstwie kompatybilności.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"/>
+        <translation>Tryb kompatybilności systemu UOS 25 umożliwia instalację aplikacji przeznaczonych na system UOS 20 w UOS 25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"/>
+        <translation>Zainstaluj w warstwie</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
