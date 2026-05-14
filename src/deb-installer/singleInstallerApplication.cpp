@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "singleInstallerApplication.h"
 #include "view/pages/debinstaller.h"
+#include "manager/packagesmanager.h"
 #include "uab/uab_backend.h"
 #include "utils/ddlog.h"
 
@@ -17,12 +18,21 @@ const QString kDebInstallManagerIface = "/com/deepin/DebInstaller";
 
 SingleInstallerApplication::AppWorkChannel SingleInstallerApplication::mode;
 std::atomic_bool SingleInstallerApplication::BackendIsRunningInit;
+bool SingleInstallerApplication::s_forceCompatible = false;
 
 SingleInstallerApplication::SingleInstallerApplication(int &argc, char **argv)
     : DApplication(argc, argv)
 {
     qCDebug(appLog) << "SingleInstallerApplication constructor";
     BackendIsRunningInit = false;
+}
+
+void SingleInstallerApplication::setHasPackages(bool has)
+{
+    if (m_hasPackages == has)
+        return;
+    m_hasPackages = has;
+    Q_EMIT hasPackagesChanged(has);
 }
 
 void SingleInstallerApplication::activateWindow()
@@ -39,6 +49,7 @@ void SingleInstallerApplication::activateWindow()
     if (nullptr == m_qspMainWnd.get()) {
         qCDebug(appLog) << "Main window is not initialized, creating new DebInstaller";
         m_qspMainWnd.reset(new DebInstaller());
+        connect(static_cast<DebInstaller *>(m_qspMainWnd.get()), &DebInstaller::packagesCleared, this, [this]() { setHasPackages(false); });
         Dtk::Widget::moveToCenter(m_qspMainWnd.get());
         m_qspMainWnd->show();
     } else {
@@ -58,8 +69,11 @@ void SingleInstallerApplication::activateWindow()
     }
 
     if (!m_ddimFiles.isEmpty()) {
+        setHasPackages(true);
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotDdimSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_ddimFiles));
     } else if (!m_selectedFiles.isEmpty()) {
+        setHasPackages(true);
+        PackagesManager::setForceCompatible(s_forceCompatible);
         QMetaObject::invokeMethod(
             m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, m_selectedFiles));
     } else {  // do nothing
@@ -69,11 +83,14 @@ void SingleInstallerApplication::activateWindow()
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
     qCInfo(appLog) << "InstallerDeb called with" << debPathList.size() << "packages";
+    if (!debPathList.isEmpty())
+        setHasPackages(true);
     if (mode == DdimChannel) {
         qCDebug(appLog) << "DdimChannel mode, invoking slotDdimSelected";
         QMetaObject::invokeMethod(m_qspMainWnd.get(), "slotDdimSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     } else if (debPathList.size() > 0) {
         qCDebug(appLog) << "NormalChannel mode, invoking slotPackagesSelected";
+        PackagesManager::setForceCompatible(false);
         QMetaObject::invokeMethod(
             m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
     } else {
@@ -81,6 +98,22 @@ void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
         if (m_qspMainWnd.get()) {                  // 先判断当前是否已经存在一个进程。
             m_qspMainWnd.get()->activateWindow();  // 特效模式下激活窗口
             m_qspMainWnd.get()->showNormal();      // 无特效激活窗口
+        }
+    }
+}
+
+void SingleInstallerApplication::InstallerDebCompatible(const QStringList &debPathList)
+{
+    qCInfo(appLog) << "InstallerDebCompatible called with" << debPathList.size() << "packages";
+    if (!debPathList.isEmpty()) {
+        setHasPackages(true);
+        PackagesManager::setForceCompatible(true);
+        QMetaObject::invokeMethod(
+            m_qspMainWnd.get(), "slotPackagesSelected", Qt::QueuedConnection, Q_ARG(QStringList, debPathList));
+    } else {
+        if (m_qspMainWnd.get()) {
+            m_qspMainWnd.get()->activateWindow();
+            m_qspMainWnd.get()->showNormal();
         }
     }
 }
@@ -167,11 +200,14 @@ bool SingleInstallerApplication::parseCmdLine()
     QCommandLineParser parser;
     parser.setApplicationDescription("Deepin Package Installer.");
     parser.addOption(QCommandLineOption("dbus", "enable daemon mode"));
+    parser.addOption(QCommandLineOption("compatible", "force compatible mode installation"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("filename", "Deb package path.", "file [file..]");
     parser.process(*this);
+    s_forceCompatible = parser.isSet("compatible");
     qCDebug(appLog) << "Positional arguments:" << parser.positionalArguments();
+    qCDebug(appLog) << "Force compatible mode:" << s_forceCompatible;
     qCDebug(appLog) << "D-Bus mode:" << parser.isSet("dbus");
 
     m_selectedFiles.clear();
@@ -181,15 +217,17 @@ bool SingleInstallerApplication::parseCmdLine()
 
     if (!conn.registerService(kDebInstallManagerService) ||
         !conn.registerObject(
-            kDebInstallManagerIface, this, QDBusConnection::ExportScriptableSlots)) {  // 注册失败 说明已经存在deb-installer
+            kDebInstallManagerIface,
+            this,
+            QDBusConnection::ExportScriptableSlots | QDBusConnection::ExportScriptableProperties)) {  // 注册失败 说明已经存在deb-installer
         qCWarning(appLog) << "Failed to register D-Bus service, another instance may be running";
         QDBusInterface deb_install(
             kDebInstallManagerService, kDebInstallManagerIface, kDebInstallManagerService, QDBusConnection::sessionBus());
         QList<QVariant> debInstallPathList;
         debInstallPathList << parser.positionalArguments();
-        // 激活已有deb-installer
-        QDBusMessage msg = deb_install.callWithArgumentList(QDBus::AutoDetect, "InstallerDeb", debInstallPathList);
-        qCWarning(appLog) << "D-Bus call failed:" << msg.errorMessage();
+        const QString method = s_forceCompatible ? "InstallerDebCompatible" : "InstallerDeb";
+        QDBusMessage msg = deb_install.callWithArgumentList(QDBus::AutoDetect, method, debInstallPathList);
+        qCWarning(appLog) << "D-Bus call" << method << "failed:" << msg.errorMessage();
         return false;
     } else {
         qCInfo(appLog) << "Registered D-Bus service successfully";

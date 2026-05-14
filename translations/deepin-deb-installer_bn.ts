@@ -475,42 +475,42 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="964"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="966"/>
         <source>Collapse</source>
         <translation>ক্লেপ্লে</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="392"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1382"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1157"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1384"/>
         <source>Reinstall</source>
         <translation>রিইনস্টল</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1387"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1162"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1389"/>
         <source>Later version installed: %1</source>
         <translation>বাদের সংস্করণ ইনস্টলড হয়েছে: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1388"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1163"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1390"/>
         <source>Downgrade</source>
         <translation>ডাউনগ্রেড</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1166"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1393"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
         <source>Earlier version installed: %1</source>
         <translation>পুরোনো সংস্করণ ইনস্টলড হয়েছে: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1280"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1282"/>
         <source>Installing dependencies: %1</source>
         <translation>অবশ্যক প্রদান ইনস্টল হচ্ছে: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1443"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
         <source>Failed to install %1</source>
         <translation>%1 ইনস্টল করতে ব্যর্থ হয়েছে</translation>
     </message>
@@ -521,7 +521,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="384"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1191"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1193"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>ইনস্টল করুন</translation>
@@ -589,55 +589,55 @@
         <translation>সফলভাবে ইনস্টল হয়েছে</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="922"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
         <translation>%2 সফলভাবে %1 সহযোগিতা মডেল থেকে বাতিল হয়েছে</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
         <source>Uninstalled successfully</source>
         <translation>সফলভাবে বাতিল হয়েছে</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="953"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
         <source>Uninstall Failed</source>
         <translation>বাতিল ব্যর্থ হয়েছে</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="999"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1001"/>
         <source>Install %1 will remove: </source>
         <translation>%1 ইনস্টল করতে নিম্নলিখিত থাকার কথা: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1020"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1022"/>
         <source>Dependencies in the repository</source>
         <translation>রিপোজিটরীতে নির্ভরশীল উপাদান</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1027"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1029"/>
         <source>Missing dependencies</source>
         <translation>কমিশ্ন নির্ভরশীল উপাদান</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1100"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1394"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1396"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>সংশোধন</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1449"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
         <source>Invalid digital signature</source>
         <translation>মূল্যায়ন অকৃত্রিম চিহ্ন অবিশ্বাসযোগ্য</translation>
     </message>
@@ -647,8 +647,8 @@
         <translation>নাম: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1381"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1383"/>
         <source>Same version installed</source>
         <translation>ইনস্টল করা হয়েছে তাঁরা একই সংস্করণ</translation>
     </message>
@@ -729,6 +729,14 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2
 fromcompatibility mode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
+    <message>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="34"/>
+        <source>Install in compatible mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

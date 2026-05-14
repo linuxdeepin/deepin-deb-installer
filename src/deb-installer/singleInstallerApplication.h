@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,6 +15,7 @@ class SingleInstallerApplication : public DApplication
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.DebInstaller")
+    Q_PROPERTY(bool hasPackages READ hasPackages NOTIFY hasPackagesChanged)
 public:
     enum AppWorkChannel { NormalChannel, DdimChannel };
 
@@ -35,6 +36,7 @@ public:
 
     static AppWorkChannel mode;  // 当前运行的工作模式,用于判断二次启动的时候走哪个通道
     static std::atomic_bool BackendIsRunningInit;
+    static bool s_forceCompatible;
 
 public slots:
 
@@ -45,6 +47,11 @@ public slots:
      * @return Q_SCRIPTABLE
      */
     Q_SCRIPTABLE void InstallerDeb(const QStringList &debPathList);
+    /**
+     * @brief InstallerDebCompatible 以兼容模式安装包
+     * @param debPathList 包路径列表
+     */
+    Q_SCRIPTABLE void InstallerDebCompatible(const QStringList &debPathList);
     /**
      * @brief InstallerDebPackge 安装包
      *
@@ -103,12 +110,19 @@ public slots:
      */
     Q_SCRIPTABLE QString getPackageInfo(const QString &debPath);
 
+    bool hasPackages() const { return m_hasPackages; }
+    void setHasPackages(bool has);
+
+signals:
+    void hasPackagesChanged(bool has);
+
 private:
     QStringList m_selectedFiles;
     QStringList m_ddimFiles;
     QScopedPointer<DMainWindow> m_qspMainWnd;  // MainWindow ptr
 
     bool bIsDbus = false;
+    bool m_hasPackages = false;
 };
 
 #endif  // SINGLEFONTAPPLICATION_H

@@ -46,6 +46,9 @@ public:
     explicit PackagesManager(QObject *parent = nullptr);
     ~PackagesManager();
 
+    static bool forceCompatible() { return s_forceCompatible; }
+    static void setForceCompatible(bool force) { s_forceCompatible = force; }
+
     /**
      * @brief isArchMatches 判断包的架构是否符合系统要求
      * @param sysArch       系统架构
@@ -609,6 +612,8 @@ private:
     QMap<QString, DependencyInfo> m_dependsInfo;  // 所有依赖的信息
 
     DependGraph m_dependGraph;  // 依赖关系图计算器
+
+    static bool s_forceCompatible;
 };
 
 #endif  // PACKAGESMANAGER_H
