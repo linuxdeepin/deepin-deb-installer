@@ -1197,32 +1197,31 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
     // Wine or DDIM package not support compatible mode
     if (CompBackend::instance()->compatibleValid()) {
         if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
-            auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
-
             // On loong64 systems, loongarch64 packages must always go through compatible mode
-            // regardless of dependency status, because dpkg cannot install them natively.
             Backend *aptBackend = PackageAnalyzer::instance().backendPtr();
             const QString nativeArch = aptBackend ? aptBackend->nativeArchitecture() : QString();
             if (isLoongArchCompatible(nativeArch, debFile.architecture())) {
                 qCInfo(appLog) << "loongarch64 package on loong64 system, forcing CompatibleNotInstalled"
                                << "for package:" << debFile.packageName();
-                dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
-            } else if (compPkgPtr && compPkgPtr->installed()) {
-                dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+                // loongarch64 强制兼容模式，检查兼容环境同名包
+                auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
+                if (compPkgPtr && compPkgPtr->installed()) {
+                    dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+                } else {
+                    dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+                }
             } else if (dependsStatus.isBreak()) {
-                // check if current system install the package.
-                Package *pkg = packageWithArch(debFile.packageName(), debFile.architecture());
-                if (pkg && pkg->isInstalled()) {
+                // 依赖不满足：进入兼容模式，检查兼容环境中是否存在同名包
+                auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
+                if (compPkgPtr && compPkgPtr->installed()) {
                     dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
                 } else {
                     dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
                 }
             }
-            // If depends ok and not installed in compatible, not need install to compatible rootfs
+            // 依赖满足时，不走兼容模式，由上层检查普通环境同名包
         }
     } else if (CompBackend::instance()->compatibleExists() && dependsStatus.isBreak()) {
-        // 兼容环境存在但尚未初始化完成，跳过同名包校验，直接走兼容安装流程
-        // 安装时由外部命令负责环境初始化
         if (!isWineApplication && SingleInstallerApplication::mode != SingleInstallerApplication::DdimChannel) {
             qCInfo(appLog) << "Compatible environment not yet initialized, skip package check"
                            << "for package:" << debFile.packageName();

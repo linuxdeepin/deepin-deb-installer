@@ -150,6 +150,36 @@ void HierarchicalVerify::proceedDefenderSafetyPage()
 }
 
 /**
+   @brief 通过DBus读取org.deepin.security.hierarchical.Control的Mode属性，
+          判断是否允许安装无签名包。Mode为0表示允许，非0表示不允许。
+   @return true表示允许安装无签名包，false表示不允许
+ */
+bool HierarchicalVerify::allowInstallUnsigned()
+{
+    qCDebug(appLog) << "Checking allowInstallUnsigned via Mode property";
+    QDBusInterface interface(
+        DBUS_HIERARCHICAL_BUS, DBUS_HIERARCHICAL_PATH, DBUS_HIERARCHICAL_INTERFACE, QDBusConnection::systemBus());
+
+    if (!interface.isValid()) {
+        qCWarning(appLog) << "[Hierarchical] DBus interface invalid when reading Mode property, defaulting to false";
+        return false;
+    }
+
+    QVariant reply = interface.property("Mode");
+    if (reply.isValid()) {
+        bool ok = false;
+        int mode = reply.toInt(&ok);
+        if (ok) {
+            qCInfo(appLog) << "[Hierarchical] Mode property value:" << mode;
+            return mode == 0;
+        }
+    }
+
+    qCWarning(appLog) << "[Hierarchical] Failed to read Mode property";
+    return false;
+}
+
+/**
    @brief 检测当前系统环境下是否包含分级管控接口，并取值判断接口是否可用。
  */
 bool HierarchicalVerify::checkHierarchicalInterface()

@@ -59,60 +59,60 @@
         <translation>Tetapan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="875"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Memasang pakej lain... Sila buka ia kemudian.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="723"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Gagal dihurai: Satu struktur fail tidak sah telah ditemui dalam fail manifes!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="725"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Gagal dihurai: Satu nombor versi tidak sah telah ditemui dalam fail manife!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>Tiada pakej deb ditemui. Sila periksa folder.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="898"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
         <source>The %1 package may be broken</source>
         <translation>Pakej %1 mungkin rosak</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="907"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
         <source>You can only install local %1 packages</source>
         <translation>Anda hanya boleh memasang pakej %1 yang lokasl</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="916"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
         <source>No permission to access this folder</source>
         <translation>Tiada kebenaran untuk mengakses folder ini</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
         <source>Already Added</source>
         <translation>Sudah Ditambah</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="942"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 tidak wujud, sila pilih semula</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
         <source>Compatible Mode Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1103"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
         <source>Bulk Install</source>
         <translation>Pasang Pukal</translation>
     </message>
@@ -144,14 +144,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>Invalid digital signature</source>
         <translation>Tandatangan digital tidak sah</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Pentadbir telah menetapkan dasar yang menghalang pemasangan pakej ini</translation>
     </message>
@@ -161,96 +161,87 @@
         <translation>Pemasangan Gagal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="831"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>current system</source>
         <translation>sistem semasa</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
         <translation>%2 telah dipasang dalam %1, sila unistall pakej ini sebelum memasangnya</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Pendependen yang rosak, cuba pasang aplikasi dalam mod kompatibiliti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="844"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
         <source>Failed to install %1</source>
         <translation>Gagal memasang %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1202"/>
-        <source>Unable to install - no digital signature</source>
-        <translation>Tidak dapat pasang - tiada tandatangan digital</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1203"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Sila pergi ke Pusat Kawalan untuk membenarkan mod pembangun dan cuba sekali lagi. Teruskan?</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1206"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1207"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>Teruskan</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1154"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1158"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>Gagal memasang %1: tiada tandatangan digital yang sah</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1309"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Pakej ini tidak memiliki tandatangan digital yang sah. Teruskan pemasangan?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Teruskan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1152"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1265"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
         <source>Unable to install</source>
         <translation>Tidak boleh memasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished">Teruskan</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Pakej ini tidak memiliki tandatangan digital yang sah</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="870"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
         <source>Broken dependencies: %1</source>
         <translation>Dependensi rosak: %1</translation>
     </message>
@@ -260,7 +251,7 @@
         <translation>Pengesahihan gagal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="806"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
         <source>Unmatched package architecture</source>
         <translation>Senibina pakej tidak sepadan</translation>
     </message>
@@ -457,6 +448,7 @@
         <translation>Tidak boleh memasang</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>Pakej ini tidak mempunyai tandatangan digital yang sah dan telah disekat daripada pemasangan/dijalankan. Pergi ke Pusat Keselamatan &gt; Alatan &gt; Keselamatan Apl untuk mengubah tetapan ini.</translation>

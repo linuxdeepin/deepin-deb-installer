@@ -59,60 +59,60 @@
         <translation>سیٹنگس</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="875"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>دوسرے پکیجز انSTALL کر رہے ہیں ... کیا کریں اسے بعد میں چھوڑ دیں۔</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="723"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>پارس کرنا ہے: مانیفیسٹ فائل میں غیرقانونی فائل ساخت پائی گئی!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="725"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>پارس کرنا ہے: مانیفیسٹ فائل میں غیرقانونی ورژن نمبر پائی گئی!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>کوئی دیب پکیج نہیں پایا گیا۔ فولڈر کا جائزہ لیں۔</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="898"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
         <source>The %1 package may be broken</source>
         <translation>پکیج %1 ٹوٹ چکا ہو سکتا ہے</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="907"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
         <source>You can only install local %1 packages</source>
         <translation>آپ صرف لوکل %1 پکیجز انSTALL کر سکتے ہیں</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="916"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
         <source>No permission to access this folder</source>
         <translation>اس فولڈر کا اکسیس کرنے کی اجازت نہیں</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
         <source>Already Added</source>
         <translation>پہلے ہی شامل کر دیا گیا</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="942"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 موجود نہیں ہے، کیا کریں اسے دوبارہ انتخاب کریں۔</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
         <source>Compatible Mode Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1103"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
         <source>Bulk Install</source>
         <translation>بک انSTALL</translation>
     </message>
@@ -144,14 +144,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>Invalid digital signature</source>
         <translation>غیر درست دیجیٹل سائنچر</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>اڈمن نے ایسی پالیسیاں سیٹ کی ہیں جو اس پکیج کی انSTALL کو روک دیتی ہیں</translation>
     </message>
@@ -161,99 +161,88 @@
         <translation>انSTALL ہے ناکام</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="831"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>current system</source>
         <translation>current system</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
         <translation>&gt;-
 %2 %1 میں انSTALL ہو چکا ہو سکتا ہے، اسے انSTALL کرنے سے پہلے اس پکیج کو انسٹال کریں۔</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>برک ڈپندنسز، کمپیٹیبلٹی میڈ کے ساتھ اپ کو انSTALL کریں۔</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="844"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
         <source>Failed to install %1</source>
         <translation>%1 کو انSTALL کرنا ہے ناکام</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1202"/>
-        <source>Unable to install - no digital signature</source>
-        <translation>انSTALL کرنا ہے ناکام - کوئی دیجیٹل سائنچر نہیں</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1203"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>&gt;-
-کنٹرول سینٹر جائیں اور ڈیویلپر میڈ کو فعال کریں اور دوبارہ کوشش کریں۔
-جاری کریں؟</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1206"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>انسول کریں</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1207"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>ਜاری رکھو</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1154"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
         <source>OK</source>
         <comment>button</comment>
         <translation type="unfinished">ਠੀਕ ਹੈ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1158"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>اُنہاں کو انسٹال کرنا فیل ہو گیا: کوئی درست دیجیٹل سائنچر نہیں</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1309"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>اُس پیکیج میں کوئی درست دیجیٹل سائنچر نہیں ہے۔ انسٹال کرنا جاری رکھو؟</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
         <source>Cancel</source>
         <translation>رکو</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>جاری رکھو</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1152"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1265"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
         <source>Unable to install</source>
         <translation>انسٹال کرنا ممکن نہیں</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished">المتابعة</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
         <source>This package does not have a valid digital signature</source>
         <translation>اُس پیکیج میں کوئی درست دیجیٹل سائنچر نہیں ہے</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="870"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
         <source>Broken dependencies: %1</source>
         <translation>ٹوٹے ہوئے منشیات: %1</translation>
     </message>
@@ -263,7 +252,7 @@
         <translation>اینٹیکیشن فیل ہو گیا</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="806"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
         <source>Unmatched package architecture</source>
         <translation>متواجہ پیکیج آرکیٹیکچر</translation>
     </message>
@@ -465,6 +454,7 @@
         <translation>غير قادر على التثبيت</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>هذا الحزمة لا تحتوي على توقيع رقمي صحيح، وقد تم حظرها من التثبيت/التشغيل. انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيق لتغيير الإعدادات.</translation>

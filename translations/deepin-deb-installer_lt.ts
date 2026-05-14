@@ -59,60 +59,60 @@
         <translation>Nustatymai</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="875"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Yra kitų pакетų įdiegimas... Atidarykite vėliau.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="723"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Analizė nepavyko: rinkinio failo struktūra yra nesilaikanti kūrėjo vadovėlių!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="725"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Analizė nepavyko: rinkinio failo rinkinio numeris yra nesilaikantis kūrėjo vadovėlių!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>Nerasta deb pакетų. Patikrinkite folderį.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="898"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
         <source>The %1 package may be broken</source>
         <translation>Gali būti, kad %1 paketas yra sugadintas</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="907"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
         <source>You can only install local %1 packages</source>
         <translation>Galite įdiegti tik vietinius %1 pакетus</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="916"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
         <source>No permission to access this folder</source>
         <translation>Nėra leidimų priežiūrėti šio folderio</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
         <source>Already Added</source>
         <translation>Jau pridėta</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="942"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 neegzistuoja, pasirinkite iš naujo</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
         <source>Compatible Mode Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1103"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
         <source>Bulk Install</source>
         <translation>Masinis įdiegimas</translation>
     </message>
@@ -144,14 +144,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>Invalid digital signature</source>
         <translation>Netinkamas elektroninis pareigos</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Administratorius nustatė politikas, kad pакетas nebūtų įdiegtas</translation>
     </message>
@@ -161,96 +161,87 @@
         <translation>Įdiegimas nepavyko</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="831"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>current system</source>
         <translation> dabartinis sistema</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
         <translation>%2 yra įdiegta %1, prašome išvalyti šį pакетą prieš jį įdiegiant</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Nesukurtos priklausomybės, bandykite įdiegti programą kompatibilitės režime</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="844"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
         <source>Failed to install %1</source>
         <translation>Nepavyko įdiegti %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1202"/>
-        <source>Unable to install - no digital signature</source>
-        <translation>Nepavyko įdiegti – nėra skaitmeninio parašo</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1203"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Perklausykite į Valdymo centrą įjungti kūrėjo režimą ir bandykite dar kartą. Tęsti?</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1206"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Atsisakyti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1207"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>Tęsti</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1154"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Gerai</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1158"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>Nepavyko įdiegti %1: netinkama elektroninė pareigos</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1309"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Šis pакетas neturi teisingos elektronios pareigos. Tęsti įdiegimą?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Tęsti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1152"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1265"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
         <source>Unable to install</source>
         <translation>Nepavyko įdiegti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished">Tęsti</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Šis pакетas neturi teisingos elektronios pareigos</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="870"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
         <source>Broken dependencies: %1</source>
         <translation>Sugadintos priklausomybės: %1</translation>
     </message>
@@ -260,7 +251,7 @@
         <translation>Nepavyko nustatyti tapatybės</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="806"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
         <source>Unmatched package architecture</source>
         <translation>Neatitinkanti paketo architektūra</translation>
     </message>
@@ -457,6 +448,7 @@
         <translation>Nepavyko įdiegti</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>Ši pakeitimų paketas neturi teisingo skaitmeninio pareigos ir jis buvo užblokuotas įdiegimui/vykdytui. Perkelkite į saugumo centrą &gt; įrankiai &gt; programos saugumas, kad pakeistumėte nustatymus.</translation>

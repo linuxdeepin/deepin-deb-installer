@@ -578,6 +578,24 @@ int DebListModel::checkDigitalSignature(const QString &package_path)
     m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(package_path);  // 判断是否有数字签名
     qCDebug(appLog) << "Digital signature verification result:" << digitalSigntual;
+    // 无数字签名：专业版检查Mode属性，社区版走原有开发者模式逻辑
+    if (digitalSigntual == Utils::DebfileInexistence) {
+        if (HierarchicalVerify::instance()->isValid()) {
+            if (HierarchicalVerify::instance()->allowInstallUnsigned()) {
+                qCDebug(appLog) << "No digital signature, professional Mode=0, returning VerifySuccess.";
+                return Utils::VerifySuccess;
+            }
+            qCDebug(appLog) << "No digital signature, professional Mode!=0, returning DebfileInexistence.";
+            return digitalSigntual;
+        }
+        // 社区版：开发者模式且未设置验签直接放行
+        if (m_isDevelopMode && !m_isDigitalVerify) {
+            qCDebug(appLog) << "No digital signature, community developer no verify, returning VerifySuccess.";
+            return Utils::VerifySuccess;
+        }
+        qCDebug(appLog) << "No digital signature, returning DebfileInexistence.";
+        return digitalSigntual;
+    }
     if (m_isDevelopMode && !m_isDigitalVerify) {                // 开发者模式且未设置验签功能
         qCDebug(appLog) << "Developer mode and digital verification is not set, returning success.";
         return Utils::VerifySuccess;
@@ -1192,20 +1210,21 @@ void DebListModel::showNoDigitalErrWindow()
     // 批量安装时，如果不是最后一个包，则不弹窗，只记录详细错误原因。
     if (m_operatingIndex < m_packagesManager->m_preparedPackages.size() - 1) {
         qCDebug(appLog) << "Not the last package in batch install, failing silently";
-        digitalVerifyFailed(Pkg::NoDigitalSignature);  // 刷新安装错误，并记录错误原因
+        digitalVerifyFailed(Pkg::NoDigitalSignature);
         return;
     }
-    qCDebug(appLog) << "Showing no digital signature dialog";
-    DDialog *Ddialog = new DDialog();  // 弹出窗口
+    qCDebug(appLog) << "Showing no digital signature dialog (security center)";
+    DDialog *Ddialog = new DDialog();
     Ddialog->setModal(true);
-    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);  // 窗口一直置顶
-    Ddialog->setTitle(tr("Unable to install - no digital signature"));
-    Ddialog->setMessage(QString(tr("Please go to Control Center to enable developer mode and try again. Proceed?")));
-    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
+    Ddialog->setWindowFlag(Qt::WindowStaysOnTopHint);
+    Ddialog->setTitle(tr("Unable to install"));
+    Ddialog->setMessage(
+        QObject::tr("This package does not have a valid digital signature and has been blocked from installing/running. "
+                    "Go to Security Center > Tools > App Security to change the settings."));    Ddialog->setIcon(QIcon::fromTheme("di_popwarning"));
 
-    Ddialog->addButton(QString(tr("Cancel", "button")), true, DDialog::ButtonNormal);      // 添加取消按钮
-    Ddialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);  // 添加前往按钮
-    Ddialog->show();                                                                       // 显示弹窗
+    Ddialog->addButton(QString(tr("Cancel", "button")), true, DDialog::ButtonNormal);
+    Ddialog->addButton(QString(tr("Proceed", "button")), true, DDialog::ButtonRecommend);
+    Ddialog->show();
 
     // 消息框reject后的操作，包括点击取消按钮、关闭图标、按ESC退出
     std::function<void(void)> rejectOperate = [this, Ddialog]() {
@@ -1214,21 +1233,19 @@ void DebListModel::showNoDigitalErrWindow()
         Ddialog->deleteLater();
     };
 
-    // 取消按钮
     QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
     connect(btnCancel, &DPushButton::clicked, rejectOperate);
-
-    // 关闭图标
     connect(Ddialog, &DDialog::aboutToClose, rejectOperate);
-
-    // ESC退出
     connect(Ddialog, &DDialog::rejected, rejectOperate);
 
-    // 前往按钮1
-    QPushButton *btnProceedControlCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
-    connect(btnProceedControlCenter, &DPushButton::clicked, this, &DebListModel::slotShowDevelopModeWindow);
-    connect(btnProceedControlCenter, &DPushButton::clicked, this, &QApplication::exit);
-    connect(btnProceedControlCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    // 前往安全中心按钮
+    QPushButton *btnProceedSecurityCenter = qobject_cast<QPushButton *>(Ddialog->getButton(1));
+    connect(btnProceedSecurityCenter, &DPushButton::clicked, this, [] {
+        qCDebug(appLog) << "Proceeding to security center";
+        HierarchicalVerify::instance()->proceedDefenderSafetyPage();
+    });
+    connect(btnProceedSecurityCenter, &DPushButton::clicked, this, &QApplication::exit);
+    connect(btnProceedSecurityCenter, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
 }
 
 void DebListModel::showDigitalErrWindow(bool recordError)
@@ -1440,6 +1457,32 @@ bool DebListModel::checkDigitalSignature()
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex));  // 判断是否有数字签名
     qCInfo(appLog) << "m_isDevelopMode:" << m_isDevelopMode << " /m_isDigitalVerify:" << m_isDigitalVerify
             << " /digitalSigntual:" << digitalSigntual;
+
+    // 无数字签名：专业版检查Mode属性，社区版走开发者模式逻辑
+    if (digitalSigntual == Utils::DebfileInexistence) {
+        if (HierarchicalVerify::instance()->isValid()) {
+            if (HierarchicalVerify::instance()->allowInstallUnsigned()) {
+                qCDebug(appLog) << "No digital signature, professional Mode=0, allowing install";
+                return true;
+            }
+            qCDebug(appLog) << "No digital signature, professional Mode!=0, showing security center dialog";
+            showNoDigitalErrWindow();
+            return false;
+        }
+        if (!m_isDevelopMode) {
+            qCDebug(appLog) << "No digital signature, community non-developer, showDigitalErrWindow";
+            showDigitalErrWindow();
+            return false;
+        }
+        if (!m_isDigitalVerify) {
+            qCDebug(appLog) << "No digital signature, community developer no verify, allowing";
+            return true;
+        }
+        qCDebug(appLog) << "No digital signature, community developer with verify, showDevelopDigitalErrWindow";
+        showDevelopDigitalErrWindow(Pkg::NoDigitalSignature);
+        return false;
+    }
+
     if (m_isDevelopMode && !m_isDigitalVerify) {  // 开发者模式且未设置验签功能
         qCDebug(appLog) << "Developer mode and digital verification is disabled, returning true";
         return true;
@@ -1450,14 +1493,7 @@ bool DebListModel::checkDigitalSignature()
             return true;
         } else {
             qCDebug(appLog) << "Signature verification failed in developer mode";
-            Pkg::ErrorCode code;
-            if (digitalSigntual == Utils::DebfileInexistence) {
-                qCDebug(appLog) << "Deb file inexistence, setting code to NoDigitalSignature";
-                code = Pkg::NoDigitalSignature;
-            } else {
-                qCDebug(appLog) << "Digital signature error, setting code to DigitalSignatureError";
-                code = Pkg::DigitalSignatureError;
-            }
+            Pkg::ErrorCode code = Pkg::DigitalSignatureError;
             showDevelopDigitalErrWindow(code);  // 弹出提示框
             return false;
         }
@@ -1468,11 +1504,6 @@ bool DebListModel::checkDigitalSignature()
             case Utils::VerifySuccess:  // 签名验证成功
                 qCDebug(appLog) << "Signature verification successful";
                 verifiedResult = true;
-                break;
-            case Utils::DebfileInexistence:  // 无签名文件
-                qCDebug(appLog) << "Deb file inexistence, showing no digital signature window";
-                showNoDigitalErrWindow();
-                verifiedResult = false;
                 break;
             case Utils::ExtractDebFail:  // 无有效的数字签名
                 qCDebug(appLog) << "Failed to extract deb, showing digital error window";

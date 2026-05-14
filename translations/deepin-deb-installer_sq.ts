@@ -59,60 +59,60 @@
         <translation>Rregullime</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="875"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Po instalohen paketa të tjera… Ju lutemi, hapeni më vonë.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="723"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Analizimi dështoi: Te kartela manifest u gjet një strukturë jo e ligjshme kartelash!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="725"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Analizimi dështoi: Te kartela manifest u gjet një numër jo i ligjshëm versioni!</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>S’u gjetën paketa deb. Ju lutemi, kontrolloni dosjen.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="898"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
         <source>The %1 package may be broken</source>
         <translation>Paketa %1 mund të jetë e dëmtuar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="907"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
         <source>You can only install local %1 packages</source>
         <translation>Mund të instaloni vetëm paketa %1 vendore</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="916"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
         <source>No permission to access this folder</source>
         <translation>S’ka leje për hyrjen në këtë dosje</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
         <source>Already Added</source>
         <translation>E shtuar Tashmë</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="942"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 s’ekziston, ju lutemi, ripërzgjidhni</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
         <source>Compatible Mode Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1103"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
         <source>Bulk Install</source>
         <translation>Instalim Në Masë</translation>
     </message>
@@ -144,14 +144,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
         <source>Invalid digital signature</source>
         <translation>Nënshkrim dixhital i pavlefshëm</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Përgjegjësi ka ujdisur rregulla për të penguar instalimin e kësaj pakete</translation>
     </message>
@@ -161,96 +161,87 @@
         <translation>Instalimi Dështoi</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="831"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>current system</source>
         <translation>sistemi i tanishëm</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
         <translation>%2 është instaluar te %1, ju lutemi, çinstalojeni këtë paketë, para instalimit</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Varësi të papërmbushura, provoni ta instaloni aplikacionin nën mënyrën përputhje</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="844"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
         <source>Failed to install %1</source>
         <translation>S’u arrit të instalohej %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1202"/>
-        <source>Unable to install - no digital signature</source>
-        <translation>Nënshkrim dixhital i pavlefshëm</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1203"/>
-        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
-        <translation>Që të aktivizohet mënyra zhvillues dhe të riprovohet, ju lutemi, kaloni te Qendra e Kontrollit. Të vazhdohet?</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1206"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1207"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>Vazhdo</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1154"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1158"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>S’u arrit të instalohet %1: s’ka nënshkrim dixhital të vlefshëm</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1309"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Kjo paketë s’ka një nënshkrim dixhital të vlefshëm. Të vazhdohet me instalimin?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Vazhdo</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1152"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1265"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
         <source>Unable to install</source>
         <translation>S’arrihet të instalohet</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished">Vazhdo</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Kjo paketë s’ka një nënshkrim dixhital të vlefshëm</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="870"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
         <source>Broken dependencies: %1</source>
         <translation>Varësi të papërmbushura: %1</translation>
     </message>
@@ -260,7 +251,7 @@
         <translation>Mirëfilltësimi dështoi</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="806"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
         <source>Unmatched package architecture</source>
         <translation>Arkitekturë paketash e papërputhshme</translation>
     </message>
@@ -457,6 +448,7 @@
         <translation>S’arrihet të instalohet</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>Kjo paketë s’ka nënshkrim dixhital të vlefshëm dhe i është bllokuar instalimi/xhirimi. Që të ndryshoni rregullimet, kaloni te Qendër Sigurie &gt; Mjete &gt; Siguri Aplikacionesh.</translation>
