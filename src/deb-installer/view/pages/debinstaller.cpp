@@ -619,6 +619,17 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
 {
     const QStringList &pkgRealPathList = pathTransform(packagesPathList);
     qCDebug(appLog) << "Packages selected:" << pkgRealPathList;
+    // 兼容模式下不允许追加新包
+    const QModelIndex existIdx = m_fileListModel->index(0);
+    if (existIdx.isValid()) {
+        const int existStat = existIdx.data(DebListModel::PackageDependsStatusRole).toInt();
+        if (Pkg::CompatibleNotInstalled == existStat || Pkg::CompatibleIntalled == existStat) {
+            qCDebug(appLog) << "In compatible mode, refusing to append new packages";
+            this->showNormal();
+            this->activateWindow();
+            return;
+        }
+    }
     this->showNormal();      // 非特效模式下激活窗口
     this->activateWindow();  // 特效模式下激活窗口
     // 如果此时 软件包安装器不是处于准备状态且还未初始化完成或此时正处于正在安装或者卸载状态，则不添加

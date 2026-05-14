@@ -35,61 +35,76 @@ AptInstallBackend::~AptInstallBackend() = default;
 bool AptInstallBackend::verifySignature(int index)
 {
     Q_UNUSED(index)
-    qCDebug(appLog) << "AptInstallBackend::verifySignature entering";
+    qCWarning(appLog) << "AptInstallBackend::verifySignature(int) entering";
 
     SettingDialog dialog;
     m_model->m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(m_model->m_packagesManager->package(m_model->m_operatingIndex));
-    qCInfo(appLog) << "m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
+    qCWarning(appLog) << "verifySignature(int) m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
                    << " /digitalSigntual:" << digitalSigntual;
+    // 无数字签名：专业版检查Mode属性，社区版走开发者模式逻辑
+    if (digitalSigntual == Utils::DebfileInexistence) {
+        if (HierarchicalVerify::instance()->isValid()) {
+            // 专业版：Mode为0允许安装，否则弹安全中心对话框
+            if (HierarchicalVerify::instance()->allowInstallUnsigned()) {
+                qCWarning(appLog) << "verifySignature(int): No signature, Mode=0, allowing install";
+                return true;
+            }
+            qCWarning(appLog) << "verifySignature(int): No signature, Mode!=0, showing security center dialog";
+            m_model->showNoDigitalErrWindow();
+            return false;
+        }
+        // 社区版：非开发者模式弹签名无效提示，开发者模式按验签设置处理
+        if (!m_model->m_isDevelopMode) {
+            qCWarning(appLog) << "verifySignature(int): No signature, community non-developer, showDigitalErrWindow";
+            m_model->showDigitalErrWindow();
+            return false;
+        }
+        if (!m_model->m_isDigitalVerify) {
+            qCWarning(appLog) << "verifySignature(int): No signature, community developer no verify, allowing";
+            return true;
+        }
+        qCWarning(appLog) << "verifySignature(int): No signature, community developer with verify, showDevelopDigitalErrWindow";
+        m_model->showDevelopDigitalErrWindow(Pkg::NoDigitalSignature);
+        return false;
+    }
+
+    // 有签名的情况按原逻辑处理
     if (m_model->m_isDevelopMode && !m_model->m_isDigitalVerify) {
-        qCDebug(appLog) << "Developer mode and digital verification is disabled, returning true";
+        qCWarning(appLog) << "verifySignature(int): developer mode + no digital verify, returning true";
         return true;
     } else if (m_model->m_isDevelopMode && m_model->m_isDigitalVerify) {
-        qCDebug(appLog) << "Developer mode and digital verification is enabled";
+        qCWarning(appLog) << "verifySignature(int): developer mode + digital verify enabled";
         if (digitalSigntual == Utils::VerifySuccess) {
-            qCDebug(appLog) << "Signature verification successful in developer mode";
+            qCWarning(appLog) << "verifySignature(int): signature ok in developer mode";
             return true;
         } else {
-            qCDebug(appLog) << "Signature verification failed in developer mode";
-            Pkg::ErrorCode code;
-            if (digitalSigntual == Utils::DebfileInexistence) {
-                qCDebug(appLog) << "Deb file inexistence, setting code to NoDigitalSignature";
-                code = Pkg::NoDigitalSignature;
-            } else {
-                qCDebug(appLog) << "Digital signature error, setting code to DigitalSignatureError";
-                code = Pkg::DigitalSignatureError;
-            }
+            qCWarning(appLog) << "verifySignature(int): signature failed in developer mode, showDevelopDigitalErrWindow";
+            Pkg::ErrorCode code = Pkg::DigitalSignatureError;
             m_model->showDevelopDigitalErrWindow(code);
             return false;
         }
     } else {
-        qCDebug(appLog) << "Not in developer mode, checking signature status";
+        qCWarning(appLog) << "verifySignature(int): non-developer mode";
         bool verifiedResult = false;
         switch (digitalSigntual) {
             case Utils::VerifySuccess:
-                qCDebug(appLog) << "Signature verification successful";
+                qCWarning(appLog) << "verifySignature(int): non-developer signature ok";
                 verifiedResult = true;
                 break;
-            case Utils::DebfileInexistence:
-                qCDebug(appLog) << "Deb file inexistence, showing no digital signature window";
-                m_model->showNoDigitalErrWindow();
-                verifiedResult = false;
-                break;
             case Utils::ExtractDebFail:
-                qCDebug(appLog) << "Failed to extract deb, showing digital error window";
+                qCWarning(appLog) << "verifySignature(int): extract deb failed, showDigitalErrWindow";
                 m_model->showDigitalErrWindow();
                 verifiedResult = false;
                 break;
             case Utils::DebVerifyFail:
             case Utils::OtherError:
-                qCDebug(appLog) << "Deb verification failed or other error, showing digital error window";
+                qCWarning(appLog) << "verifySignature(int): verify failed, showDigitalErrWindow";
                 m_model->showDigitalErrWindow();
                 verifiedResult = false;
                 break;
             default:
-                qCInfo(appLog) << "unknown mistake";
-                qCDebug(appLog) << "Unknown signature verification error";
+                qCWarning(appLog) << "verifySignature(int): unknown signature error";
                 verifiedResult = false;
                 break;
         }
@@ -99,61 +114,75 @@ bool AptInstallBackend::verifySignature(int index)
 
 bool AptInstallBackend::verifySignature(const QString &packagePath)
 {
-    qCDebug(appLog) << "AptInstallBackend::verifySignature(packagePath) entering for" << packagePath;
+    qCWarning(appLog) << "AptInstallBackend::verifySignature(packagePath) entering for" << packagePath;
 
     SettingDialog dialog;
     m_model->m_isDigitalVerify = dialog.isDigitalVerified();
     int digitalSigntual = Utils::Digital_Verify(packagePath);
     qCInfo(appLog) << "m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
                    << " /digitalSigntual:" << digitalSigntual;
+
+    // 无数字签名：专业版检查Mode属性，社区版走开发者模式逻辑
+    if (digitalSigntual == Utils::DebfileInexistence) {
+        if (HierarchicalVerify::instance()->isValid()) {
+            if (HierarchicalVerify::instance()->allowInstallUnsigned()) {
+                qCWarning(appLog) << "verifySignature(packagePath): No signature, Mode=0, allowing install";
+                return true;
+            }
+            qCWarning(appLog) << "verifySignature(packagePath): No signature, Mode!=0, showing security center dialog";
+            m_model->showNoDigitalErrWindow();
+            return false;
+        }
+        if (!m_model->m_isDevelopMode) {
+            qCWarning(appLog) << "verifySignature(packagePath): No signature, community non-developer, showDigitalErrWindow";
+            m_model->showDigitalErrWindow();
+            return false;
+        }
+        if (!m_model->m_isDigitalVerify) {
+            qCWarning(appLog) << "verifySignature(packagePath): No signature, community developer no verify, allowing";
+            return true;
+        }
+        qCWarning(appLog) << "verifySignature(packagePath): No signature, community developer with verify, showDevelopDigitalErrWindow";
+        m_model->showDevelopDigitalErrWindow(Pkg::NoDigitalSignature);
+        return false;
+    }
+
+    // 有签名的情况按原逻辑处理
     if (m_model->m_isDevelopMode && !m_model->m_isDigitalVerify) {
-        qCDebug(appLog) << "Developer mode and digital verification is disabled, returning true";
+        qCWarning(appLog) << "verifySignature(packagePath): developer mode + no digital verify, returning true";
         return true;
     } else if (m_model->m_isDevelopMode && m_model->m_isDigitalVerify) {
-        qCDebug(appLog) << "Developer mode and digital verification is enabled";
+        qCWarning(appLog) << "verifySignature(packagePath): developer mode + digital verify enabled";
         if (digitalSigntual == Utils::VerifySuccess) {
-            qCDebug(appLog) << "Signature verification successful in developer mode";
+            qCWarning(appLog) << "Signature verification successful in developer mode";
             return true;
         } else {
-            qCDebug(appLog) << "Signature verification failed in developer mode";
-            Pkg::ErrorCode code;
-            if (digitalSigntual == Utils::DebfileInexistence) {
-                qCDebug(appLog) << "Deb file inexistence, setting code to NoDigitalSignature";
-                code = Pkg::NoDigitalSignature;
-            } else {
-                qCDebug(appLog) << "Digital signature error, setting code to DigitalSignatureError";
-                code = Pkg::DigitalSignatureError;
-            }
+            qCWarning(appLog) << "Signature verification failed in developer mode, showing develop digital err window";
+            Pkg::ErrorCode code = Pkg::DigitalSignatureError;
             m_model->showDevelopDigitalErrWindow(code);
             return false;
         }
     } else {
-        qCDebug(appLog) << "Not in developer mode, checking signature status";
+        qCWarning(appLog) << "verifySignature(packagePath): non-developer mode";
         bool verifiedResult = false;
         switch (digitalSigntual) {
             case Utils::VerifySuccess:
-                qCDebug(appLog) << "Signature verification successful";
+                qCWarning(appLog) << "verifySignature(packagePath): non-developer signature ok";
                 verifiedResult = true;
                 break;
-            case Utils::DebfileInexistence:
-                qCDebug(appLog) << "Deb file inexistence, showing no digital signature window";
-                m_model->showNoDigitalErrWindow();
-                verifiedResult = false;
-                break;
             case Utils::ExtractDebFail:
-                qCDebug(appLog) << "Failed to extract deb, showing digital error window";
+                qCWarning(appLog) << "verifySignature(packagePath): extract deb failed, showing digital error window";
                 m_model->showDigitalErrWindow();
                 verifiedResult = false;
                 break;
             case Utils::DebVerifyFail:
             case Utils::OtherError:
-                qCDebug(appLog) << "Deb verification failed or other error, showing digital error window";
+                qCWarning(appLog) << "verifySignature(packagePath): verify failed or other error, showing digital error window";
                 m_model->showDigitalErrWindow();
                 verifiedResult = false;
                 break;
             default:
-                qCInfo(appLog) << "unknown mistake";
-                qCDebug(appLog) << "Unknown signature verification error";
+                qCWarning(appLog) << "Non-developer: unknown signature error";
                 verifiedResult = false;
                 break;
         }

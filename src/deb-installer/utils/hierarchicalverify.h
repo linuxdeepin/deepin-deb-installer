@@ -23,6 +23,7 @@ public:
     void clearVerifyResult();
 
     Q_SLOT void proceedDefenderSafetyPage();
+    bool allowInstallUnsigned();
     Q_SIGNAL void validChanged(bool valid);
 
 private:
