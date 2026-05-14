@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hi_IN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hi_IN">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -20,22 +18,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>पैकेज लोड कर रहे हैं...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 लोड कर रहे हैं</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>प्रारंभ कर रहे हैं...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -59,60 +57,60 @@
         <translation>सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="718"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="875"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>अन्य पैकेज इंस्टॉल कर रहे हैं... बाद में खोलें</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="723"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>पार्सिंग विफल: मैनिफेस्ट फ़ाइल में अवैध फ़ाइल संरचना पाई गई!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="725"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>पार्सिंग विफल: मैनिफेस्ट फ़ाइल में अवैध संस्करण संख्या पाई गई!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="727"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>कोई deb पैकेज नहीं मिला। कृपया फ़ोल्डर चेक करें।</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="898"/>
         <source>The %1 package may be broken</source>
-        <translation>पैकेज %1 टूट गया हो सकता है</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="907"/>
         <source>You can only install local %1 packages</source>
-        <translation>आप केवल स्थानीय %1 पैकेज इंस्टॉल कर सकते हैं</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="916"/>
         <source>No permission to access this folder</source>
-        <translation>इस फ़ोल्डर के एक्सेस के लिए अनुमति नहीं है</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="933"/>
         <source>Already Added</source>
         <translation>पहले से ही शामिल</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="942"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 मौजूद नहीं है, कृपया पुनः चुनें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1103"/>
         <source>Bulk Install</source>
         <translation>सामूहिक इंस्टॉल</translation>
     </message>
@@ -144,14 +142,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
         <source>Invalid digital signature</source>
         <translation>अमान्य डिजिटल हस्ताक्षर</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="848"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1863"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>प्रशासक द्वारा निर्धारित नीतियों के कारण इस पैकेज का इंस्टॉल बाधित है</translation>
     </message>
@@ -161,87 +159,96 @@
         <translation>इंस्टॉल विफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="831"/>
         <source>current system</source>
-        <translation>वर्तमान सिस्टम</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="834"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>%2 %1 में इंस्टॉल कर दिया गया है, इस पैकेज को इंस्टॉल करने से पहले इसे अनइंस्टॉल करें</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="841"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>टूटे डिपेंडेंसी, संगतता मोड में ऐप इंस्टॉल करें</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="844"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
         <source>Failed to install %1</source>
         <translation>%1 इंस्टॉल विफल</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1202"/>
+        <source>Unable to install - no digital signature</source>
+        <translation>इंस्टॉल विफल - कोई डिजिटल हस्ताक्षर नहीं</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1203"/>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation>कृपया नियंत्रण केंद्र द्वारा विकासकर्ता मोड सक्रिय कर पुनः प्रयास करें। जारी रखें?</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1206"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1207"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>जारी रखें</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1154"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1865"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ठीक है</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1158"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>%1 के इंस्टॉल में विफल: कोई वैध डिजिटल संयोजन नहीं मिला</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1309"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>इस पैकेज का डिजिटल हस्ताक्षर अमान्य है। इंस्टॉल प्रक्रिया जारी रखें?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>जारी रखें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1152"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1265"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1862"/>
         <source>Unable to install</source>
         <translation>इंस्टॉल करने में अक्षम</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">जारी रखें</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
         <source>This package does not have a valid digital signature</source>
         <translation>इस पैकेज का डिजिटल हस्ताक्षर अमान्य है</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="870"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="876"/>
         <source>Broken dependencies: %1</source>
         <translation>खंडित आश्रित पैकेज : %1</translation>
     </message>
@@ -251,7 +258,7 @@
         <translation>प्रमाणीकरण विफल</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="806"/>
         <source>Unmatched package architecture</source>
         <translation>पैकेज संरचना मेल नहीं खाती</translation>
     </message>
@@ -303,7 +310,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>%1 के इंस्टॉल करने से हटाया जाएगा: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
@@ -349,7 +356,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>सभी चुनें</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -430,17 +437,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>अनसाइनेड ऐप इंस्टॉल करने के लिए सुरक्षा केंद्र &gt; टूल्स &gt; ऐप सुरक्षा जाएं और इंस्टॉल कर सकने वाले ऐप प्रकार का चयन करें।</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>सुरक्षा केंद्र &gt; टूल्स &gt; ऐप सुरक्षा</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>सिस्टम ने Linglong परिवेश इंस्टॉल नहीं किया है, कृपया पहले इसे इंस्टॉल करें</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -448,16 +455,15 @@
         <translation>इंस्टॉल करने में अक्षम</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>इस पैकेज में कोई वैध डिजिटल संयोजन नहीं है और इसे इंस्टॉल करने/चलाने से रोक दिया गया है। सुरक्षा केंद्र &gt; टूल्स &gt; ऐप सुरक्षा जाएं और सेटिंग्स को बदलें।</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">रद्द करें</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -468,48 +474,48 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
         <source>Will remove: </source>
-        <translation>हटाया जाएगा: </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="966"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="964"/>
         <source>Collapse</source>
         <translation>संक्षिप्त करें</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="392"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1157"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1384"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1382"/>
         <source>Reinstall</source>
         <translation>पुनः इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1162"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1389"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1160"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1387"/>
         <source>Later version installed: %1</source>
         <translation>नवीन संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1163"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1390"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1161"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1388"/>
         <source>Downgrade</source>
         <translation>डाउनग्रेड</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1166"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1393"/>
         <source>Earlier version installed: %1</source>
         <translation>पूर्व संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1282"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1280"/>
         <source>Installing dependencies: %1</source>
         <translation>आश्रित पैकेज इंस्टॉल हो रहे हैं : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1443"/>
         <source>Failed to install %1</source>
         <translation>%1 इंस्टॉल विफल</translation>
     </message>
@@ -520,7 +526,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="384"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1193"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1191"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>इंस्टॉल करें</translation>
@@ -553,34 +559,34 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="695"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation>%2 को %1 संगतता मोड में इंस्टॉल करने की कोशिश कर रहे हैं</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>%2 को %1 संगतता मोड से अनइंस्टॉल कर रहे हैं</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="909"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>%2 %1 संगतता मोड में सफलतापूर्वक इंस्टॉल कर दिया गया है</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="913"/>
@@ -588,55 +594,55 @@
         <translation>इंस्टॉल सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="922"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation>%2 %1 संगतता मोड से सफलतापूर्वक अनइंस्टॉल कर दिया गया है</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
         <source>Uninstalled successfully</source>
         <translation>इंस्टॉल हटाना सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="953"/>
         <source>Uninstall Failed</source>
         <translation>इंस्टॉल हटाना विफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1001"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="999"/>
         <source>Install %1 will remove: </source>
-        <translation>%1 के इंस्टॉल करने से हटाया जाएगा: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1022"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1020"/>
         <source>Dependencies in the repository</source>
         <translation>पैकेज-संग्रह में मौजूद आश्रित पैकेज</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1029"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1027"/>
         <source>Missing dependencies</source>
         <translation>अनुपलब्ध आश्रित पैकेज</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1100"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">रद्द करें</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1396"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1394"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>अपडेट</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1449"/>
         <source>Invalid digital signature</source>
         <translation>अमान्य डिजिटल हस्ताक्षर</translation>
     </message>
@@ -646,8 +652,8 @@
         <translation>नाम :</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1383"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1154"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1381"/>
         <source>Same version installed</source>
         <translation>समान संस्करण पहले से इंस्टॉल है</translation>
     </message>
@@ -728,15 +734,7 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2
 fromcompatibility mode?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="34"/>
-        <source>Install in compatible mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
