@@ -8,14 +8,36 @@
 #include <dfm-base/dfm_menu_defines.h>
 
 #include <QUrl>
-#include <QProcess>
 #include <QStandardPaths>
+#include <QProcess>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 inline constexpr char kCompatibleInstall[] { "compatible-install" };
 inline constexpr char kOpenWithActionID[] { "open-with" };
+inline constexpr char kDebInstallService[] { "com.deepin.DebInstaller" };
+inline constexpr char kDebInstallPath[] { "/com/deepin/DebInstaller" };
 
 using namespace dfmplugin_debinstaller;
 DFMBASE_USE_NAMESPACE
+
+static bool installerHasPackages()
+{
+    QDBusInterface iface(kDebInstallService, kDebInstallPath,
+                         kDebInstallService, QDBusConnection::sessionBus());
+    if (!iface.isValid())
+        return false;
+    QVariant reply = iface.property("hasPackages");
+    return reply.isValid() && reply.toBool();
+}
+
+static bool isInstallerRunning()
+{
+    return QDBusInterface(kDebInstallService, kDebInstallPath,
+                          kDebInstallService, QDBusConnection::sessionBus())
+        .isValid();
+}
 
 AbstractMenuScene *DebInstallerMenuCreator::create()
 {
@@ -51,13 +73,16 @@ bool DebInstallerMenuScene::initialize(const QVariantHash &params)
     d->selectFiles = params.value(MenuParamKey::kSelectFiles).value<QList<QUrl>>();
     d->isEmptyArea = params.value(MenuParamKey::kIsEmptyArea).toBool();
 
-    // only show for single deb file selection, not empty area
-    if (d->isEmptyArea || d->selectFiles.size() != 1)
+    if (d->isEmptyArea) {
+        if (!isInstallerRunning())
+            return false;
+    } else if (d->selectFiles.size() != 1) {
         return false;
-
-    const auto &url = d->selectFiles.first();
-    if (!url.isLocalFile() || !url.toLocalFile().endsWith(".deb"))
-        return false;
+    } else {
+        const auto &url = d->selectFiles.first();
+        if (!url.isLocalFile() || !url.toLocalFile().endsWith(".deb"))
+            return false;
+    }
 
     return AbstractMenuScene::initialize(params);
 }
@@ -94,24 +119,21 @@ void DebInstallerMenuScene::updateState(QMenu *parent)
     if (!targetAction)
         return AbstractMenuScene::updateState(parent);
 
-    // disable if deb installer is already running
-    QProcess proc;
-    proc.start("pidof", { "deepin-deb-installer" });
-    proc.waitForFinished(1000);
-    targetAction->setEnabled(proc.exitCode() != 0);
+    bool running = isInstallerRunning();
+    if (running)
+        targetAction->setEnabled(!installerHasPackages());
+    else
+        targetAction->setEnabled(true);
 
-    // remove our action first
     parent->removeAction(targetAction);
 
-    // find "open-with" action and insert our action after it
     auto actions = parent->actions();
     bool inserted = false;
 
     for (auto it = actions.begin(); it != actions.end(); ++it) {
         auto actId = (*it)->property(ActionPropertyKey::kActionID).toString();
         if (actId == kOpenWithActionID) {
-            ++it;   // advance past "open-with"
-            // insert before the next action (or append if open-with was last)
+            ++it;
             if (it != actions.end()) {
                 parent->insertAction(*it, targetAction);
             } else {
@@ -122,7 +144,6 @@ void DebInstallerMenuScene::updateState(QMenu *parent)
         }
     }
 
-    // fallback: if "open-with" not found, append at end
     if (!inserted)
         parent->addAction(targetAction);
 
@@ -136,6 +157,9 @@ bool DebInstallerMenuScene::triggered(QAction *action)
         return AbstractMenuScene::triggered(action);
 
     if (actionId == kCompatibleInstall) {
+        if (d->selectFiles.isEmpty())
+            return QProcess::startDetached("deepin-deb-installer", { "--compatible" });
+
         QString debPath = d->selectFiles.first().toLocalFile();
         return QProcess::startDetached("deepin-deb-installer", { "--compatible", debPath });
     }

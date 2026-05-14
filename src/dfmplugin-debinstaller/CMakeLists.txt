@@ -23,7 +23,7 @@ FILE(GLOB PLUGIN_FILES
 )
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets DBus)
 find_package(dfm${DTK_VERSION_MAJOR}-framework REQUIRED)
 find_package(dfm${DTK_VERSION_MAJOR}-base REQUIRED)
 
@@ -35,6 +35,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::DBus
     dfm${DTK_VERSION_MAJOR}-framework
     dfm${DTK_VERSION_MAJOR}-base
 )

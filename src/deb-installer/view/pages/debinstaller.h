@@ -48,6 +48,7 @@ public:
 
 signals:
     void runOldProcess(const QStringList &paths);
+    void packagesCleared();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e) Q_DECL_OVERRIDE;  // 拖入事件

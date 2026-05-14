@@ -1058,6 +1058,7 @@ void DebInstaller::slotReset()
     m_Filterflag = ChoosePage;        // 当前显示的页面
     titlebar()->setTitle(QString());  // 重置标题栏
     m_fileListModel->reset();         // 重置model
+    Q_EMIT packagesCleared();
 
     // 删除所有的页面
     if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {

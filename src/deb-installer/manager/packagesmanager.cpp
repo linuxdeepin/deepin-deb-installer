@@ -251,6 +251,19 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
         return dependsStatus;
     }
 
+    if (s_forceCompatible) {
+        auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
+        if (compPkgPtr && compPkgPtr->installed()) {
+            dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+        } else {
+            dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+        }
+        dependsStatus.package = debFile.packageName();
+        qCInfo(appLog) << "Force compatible mode for package:" << debFile.packageName();
+        s_forceCompatible = false;
+        return dependsStatus;
+    }
+
     if (isArchErrorQstring(package_path)) {
         qCDebug(appLog) << "Architecture error, returning arch break status.";
         dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
@@ -402,6 +415,8 @@ QString PackagesManager::checkPackageValid(const QStringList &package_path)
     qCDebug(appLog) << "All packages are valid.";
     return "";
 }
+
+bool PackagesManager::s_forceCompatible = false;
 
 PackagesManager::PackagesManager(QObject *parent)
     : QObject(parent)
@@ -1093,6 +1108,20 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         dependsStatus.package = debFile.packageName();
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
         qCWarning(appLog) << "Package in blacklist:" << debFile.packageName();
+        return dependsStatus;
+    }
+
+    if (s_forceCompatible) {
+        auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
+        if (compPkgPtr && compPkgPtr->installed()) {
+            dependsStatus.status = Pkg::DependsStatus::CompatibleIntalled;
+        } else {
+            dependsStatus.status = Pkg::DependsStatus::CompatibleNotInstalled;
+        }
+        dependsStatus.package = debFile.packageName();
+        m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
+        qCInfo(appLog) << "Force compatible mode for package:" << debFile.packageName();
+        s_forceCompatible = false;
         return dependsStatus;
     }
 
