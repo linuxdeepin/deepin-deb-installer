@@ -31,6 +31,7 @@
 
 #include <DStyleHelper>
 #include <DGuiApplicationHelper>
+#include <DDciIcon>
 #include <DPaletteHelper>
 
 using QApt::DebFile;
@@ -273,6 +274,7 @@ void SingleInstallPage::initPkgInfoView(int fontinfosize)
 
     QWidget *itemInfoWidget = new QWidget(this);
     itemInfoWidget->setLayout(itemBlockLayout);  // 保存成一个widget
+    itemInfoWidget->setMinimumHeight(64);        // 确保图标不被裁切
 
     QHBoxLayout *packageDescLayout = new QHBoxLayout();  // 包描述的 布局
     packageDescLayout->addStretch();
@@ -518,14 +520,15 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     QByteArray iconData;
     QBuffer iconBuf(&iconData);
     iconBuf.open(QIODevice::WriteOnly);
-    QIcon::fromTheme("dialog-information").pixmap(16, 16).save(&iconBuf, "PNG");
+    Dtk::Gui::DDciIcon tipsIcon(QString(":/icons/deepin/uab/tips.dci"));
+    tipsIcon.pixmap(qApp->devicePixelRatio(), 16, Dtk::Gui::DDciIcon::Light).save(&iconBuf, "PNG");
     m_compatHintLabel->setText(compatHintText
         + QString(" <img src=\"data:image/png;base64,%1\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"/>")
               .arg(QString(iconData.toBase64())));
     m_compatHintLabel->setMouseTracking(true);
     m_compatHintLabel->installEventFilter(this);
     m_compatHintLabel->setVisible(false);
-    Utils::bindFontBySizeAndWeight(m_compatHintLabel, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    Utils::bindFontBySizeAndWeight(m_compatHintLabel, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 8, QFont::DemiBold);
     m_contentLayout->addWidget(m_compatHintLabel);
 
     // compatibility mode confirmation: checkbox and description
@@ -533,16 +536,18 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_compatCheckBox->setObjectName("CompatibleCheckBox");
     m_compatCheckBox->setText(tr("Confirm to install in compatibility mode"));
     m_compatCheckBox->setVisible(false);
-    Utils::bindFontBySizeAndWeight(m_compatCheckBox, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    Utils::bindFontBySizeAndWeight(m_compatCheckBox, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 8, QFont::DemiBold);
+    m_compatCheckBox->setContentsMargins(3, 0, 3, 0);
     m_contentLayout->addWidget(m_compatCheckBox);
 
     m_compatDescLabel = new DLabel(this);
     m_compatDescLabel->setObjectName("CompatibleDescLabel");
     m_compatDescLabel->setWordWrap(true);
     m_compatDescLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_compatDescLabel->setContentsMargins(3, 0, 0, 0);
     m_compatDescLabel->setText(tr("UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well."));
     m_compatDescLabel->setVisible(false);
-    Utils::bindFontBySizeAndWeight(m_compatDescLabel, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 12, QFont::Normal);
+    Utils::bindFontBySizeAndWeight(m_compatDescLabel, normalFontFamily, 12, QFont::ExtraLight);
     m_contentLayout->addWidget(m_compatDescLabel);
 
     m_contentLayout->addWidget(m_progressFrame);
@@ -1262,6 +1267,7 @@ void SingleInstallPage::paintEvent(QPaintEvent *event)
     DPalette palette = DPaletteHelper::instance()->palette(m_packageDescription);
     palette.setBrush(DPalette::WindowText, palette.color(DPalette::TextTips));
     m_packageDescription->setPalette(palette);
+    m_compatDescLabel->setPalette(palette);
 }
 
 void SingleInstallPage::setAuthConfirm(QString dependName)

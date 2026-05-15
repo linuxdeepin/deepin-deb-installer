@@ -40,9 +40,11 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QApplication>
+#include <QFont>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFileInfo>
+#include <QLabel>
 #include <QtConcurrent/QtConcurrent>
 
 using QApt::DebFile;
@@ -1153,7 +1155,16 @@ void DebInstaller::refreshSingle()
     const QModelIndex singleIdx = m_fileListModel->index(0);
     const int compatStat = singleIdx.data(DebListModel::PackageDependsStatusRole).toInt();
     if (Pkg::CompatibleNotInstalled == compatStat || Pkg::CompatibleIntalled == compatStat) {
-        titlebar()->setTitle(tr("Compatible Mode Install"));
+        const QString compatTitle = tr("Compatible Mode Install");
+        titlebar()->setTitle(compatTitle);
+        for (auto *label : titlebar()->findChildren<QLabel *>()) {
+            if (label->text() == compatTitle) {
+                QFont f = label->font();
+                f.setBold(true);
+                label->setFont(f);
+                break;
+            }
+        }
     }
 
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
