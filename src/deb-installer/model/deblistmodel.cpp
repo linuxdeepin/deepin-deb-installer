@@ -574,8 +574,11 @@ int DebListModel::checkDigitalSignature(const QString &package_path)
         qCDebug(appLog) << "Depends status is break or auth cancel, returning success.";
         return Utils::VerifySuccess;
     }
-    SettingDialog dialog;
-    m_isDigitalVerify = dialog.isDigitalVerified();
+    // 社区版不读取设置，保持 m_isDigitalVerify 默认值 false
+    if (DSysInfo::uosEditionType() != DSysInfo::UosCommunity) {
+        SettingDialog dialog;
+        m_isDigitalVerify = dialog.isDigitalVerified();
+    }
     int digitalSigntual = Utils::Digital_Verify(package_path);  // 判断是否有数字签名
     qCDebug(appLog) << "Digital signature verification result:" << digitalSigntual;
     // 无数字签名：专业版检查Mode属性，社区版走原有开发者模式逻辑
@@ -1452,8 +1455,11 @@ bool DebListModel::checkDigitalSignature()
         qCDebug(appLog) << "Dependency is broken or auth cancelled, skipping signature check";
         return true;
     }
-    SettingDialog dialog;
-    m_isDigitalVerify = dialog.isDigitalVerified();
+    // 社区版不读取设置，保持 m_isDigitalVerify 默认值 false
+    if (DSysInfo::uosEditionType() != DSysInfo::UosCommunity) {
+        SettingDialog dialog;
+        m_isDigitalVerify = dialog.isDigitalVerified();
+    }
     int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex));  // 判断是否有数字签名
     qCInfo(appLog) << "m_isDevelopMode:" << m_isDevelopMode << " /m_isDigitalVerify:" << m_isDigitalVerify
             << " /digitalSigntual:" << digitalSigntual;

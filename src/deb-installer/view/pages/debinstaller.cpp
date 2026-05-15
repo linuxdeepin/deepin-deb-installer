@@ -126,13 +126,16 @@ void DebInstaller::initUI()
 void DebInstaller::initTitleBar()
 {
     qCDebug(appLog) << "Initializing title bar";
-    // title bar settings
-    QAction *settingAction(new QAction(tr("Settings"), this));
-    DMenu *menu = new DMenu;
-    menu->addAction(settingAction);
     DTitlebar *tb = titlebar();
     if (tb != nullptr) {
-        tb->setMenu(menu);
+        // 社区版不显示设置菜单
+        if (DSysInfo::uosEditionType() != DSysInfo::UosCommunity) {
+            QAction *settingAction(new QAction(tr("Settings"), this));
+            DMenu *menu = new DMenu;
+            menu->addAction(settingAction);
+            tb->setMenu(menu);
+            connect(settingAction, &QAction::triggered, this, &DebInstaller::slotSettingDialogVisiable);
+        }
         tb->setIcon(QIcon::fromTheme("deepin-deb-installer"));
         tb->setTitle("");
         tb->setAutoFillBackground(true);
@@ -141,7 +144,6 @@ void DebInstaller::initTitleBar()
     } else {
         qCWarning(appLog) << "Title bar is null";
     }
-    connect(settingAction, &QAction::triggered, this, &DebInstaller::slotSettingDialogVisiable);
 }
 
 void DebInstaller::initConnections()

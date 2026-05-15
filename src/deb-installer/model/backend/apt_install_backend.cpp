@@ -37,8 +37,11 @@ bool AptInstallBackend::verifySignature(int index)
     Q_UNUSED(index)
     qCWarning(appLog) << "AptInstallBackend::verifySignature(int) entering";
 
-    SettingDialog dialog;
-    m_model->m_isDigitalVerify = dialog.isDigitalVerified();
+    // 社区版不读取设置，保持 m_isDigitalVerify 默认值 false
+    if (DSysInfo::uosEditionType() != DSysInfo::UosCommunity) {
+        SettingDialog dialog;
+        m_model->m_isDigitalVerify = dialog.isDigitalVerified();
+    }
     int digitalSigntual = Utils::Digital_Verify(m_model->m_packagesManager->package(m_model->m_operatingIndex));
     qCWarning(appLog) << "verifySignature(int) m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
                    << " /digitalSigntual:" << digitalSigntual;
@@ -116,8 +119,11 @@ bool AptInstallBackend::verifySignature(const QString &packagePath)
 {
     qCWarning(appLog) << "AptInstallBackend::verifySignature(packagePath) entering for" << packagePath;
 
-    SettingDialog dialog;
-    m_model->m_isDigitalVerify = dialog.isDigitalVerified();
+    // 社区版不读取设置，保持 m_isDigitalVerify 默认值 false
+    if (DSysInfo::uosEditionType() != DSysInfo::UosCommunity) {
+        SettingDialog dialog;
+        m_model->m_isDigitalVerify = dialog.isDigitalVerified();
+    }
     int digitalSigntual = Utils::Digital_Verify(packagePath);
     qCInfo(appLog) << "m_isDevelopMode:" << m_model->m_isDevelopMode << " /m_isDigitalVerify:" << m_model->m_isDigitalVerify
                    << " /digitalSigntual:" << digitalSigntual;
