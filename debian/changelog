@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.37) unstable; urgency=medium
+
+  * fix(context-menu): avoid auto-activating installer service on state query
+
+ -- Liu Zheng <liuzheng@uniontech.com>  Fri, 15 May 2026 19:21:35 +0800
+
 deepin-deb-installer (6.5.36) unstable; urgency=medium
 
   * fix(context-menu): hide compatible install in empty area right-click
