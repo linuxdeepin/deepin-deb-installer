@@ -11,8 +11,9 @@
 #include <QStandardPaths>
 #include <QProcess>
 #include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusReply>
+#include <QDBusMessage>
+#include <QDBusVariant>
+#include <QDBusConnectionInterface>
 
 inline constexpr char kCompatibleInstall[] { "compatible-install" };
 inline constexpr char kOpenWithActionID[] { "open-with" };
@@ -22,21 +23,34 @@ inline constexpr char kDebInstallPath[] { "/com/deepin/DebInstaller" };
 using namespace dfmplugin_debinstaller;
 DFMBASE_USE_NAMESPACE
 
-static bool installerHasPackages()
-{
-    QDBusInterface iface(kDebInstallService, kDebInstallPath,
-                         kDebInstallService, QDBusConnection::sessionBus());
-    if (!iface.isValid())
-        return false;
-    QVariant reply = iface.property("hasPackages");
-    return reply.isValid() && reply.toBool();
-}
+enum InstallerState : int {
+    NotRunning = 0,   // service not on bus, no activation risk
+    Ready = 1,        // service running, supports compat, no packages loaded
+    Busy = 2,         // service running, supports compat, has packages loaded
+    NotSupported = 3  // service running but lacks hasPackages (old version)
+};
 
-static bool isInstallerRunning()
+static InstallerState checkInstallerState()
 {
-    return QDBusInterface(kDebInstallService, kDebInstallPath,
-                          kDebInstallService, QDBusConnection::sessionBus())
-        .isValid();
+    auto bus = QDBusConnection::sessionBus();
+    auto connIface = bus.interface();
+    if (!connIface || !connIface->isServiceRegistered(kDebInstallService))
+        return NotRunning;
+
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        kDebInstallService, kDebInstallPath,
+        "org.freedesktop.DBus.Properties", "Get");
+    msg << QString(kDebInstallService) << QString("hasPackages");
+
+    QDBusMessage reply = bus.call(msg, QDBus::Block, 500);
+    if (reply.type() == QDBusMessage::ErrorMessage)
+        return NotSupported;
+
+    QVariant arg0 = reply.arguments().value(0);
+    if (!arg0.canConvert<QDBusVariant>())
+        return NotSupported;
+    QVariant value = arg0.value<QDBusVariant>().variant();
+    return value.toBool() ? Busy : Ready;
 }
 
 AbstractMenuScene *DebInstallerMenuCreator::create()
@@ -115,11 +129,16 @@ void DebInstallerMenuScene::updateState(QMenu *parent)
     if (!targetAction)
         return AbstractMenuScene::updateState(parent);
 
-    bool running = isInstallerRunning();
-    if (running)
-        targetAction->setEnabled(!installerHasPackages());
-    else
+    switch (checkInstallerState()) {
+    case NotRunning:
+    case Ready:
+    case NotSupported:
         targetAction->setEnabled(true);
+        break;
+    case Busy:
+        targetAction->setEnabled(false);
+        break;
+    }
 
     parent->removeAction(targetAction);
 
