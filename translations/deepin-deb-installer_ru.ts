@@ -105,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"/>
+        <translation>Установка в совместимом режиме</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
@@ -559,18 +559,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"/>
+        <translation>Если это более старая версия программного обеспечения (уже адаптированная для устаревшей версии системы), вы можете попробовать установить ее в режиме совместимости.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"/>
+        <translation>Режим совместимости UOS V25 — это функция, которая позволяет вам продолжать использовать приложения версии V20 в системе V25. Она создаёт для вас среду совместимости, позволяя программному обеспечению, которое изначально могло работать только в системе V20, верно работать и в системе V25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Подтвердите установку в режиме совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="695"/>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"/>
+        <translation>Совместимая установка</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
@@ -734,7 +734,8 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2
 fromcompatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Уверены, что хотите удалить %2
+из режима совместимости?</translation>
     </message>
 </context>
 <context>
