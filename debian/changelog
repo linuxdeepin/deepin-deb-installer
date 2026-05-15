@@ -1,3 +1,22 @@
+deepin-deb-installer (6.5.36) unstable; urgency=medium
+
+  * fix(context-menu): hide compatible install in empty area right-click
+  * feat(compat): hide settings menu in community edition
+  * feat(compat): polish compatible mode UI styles
+  * feat(compat): add --compatible flag and DBus-based plugin state management
+  * feat(signature): redirect unsigned packages to security center
+  * chore(i18n): update translation files for compatible mode UI
+  * feat(signature): move digital signature verification before dependency check
+  * feat(compat): remove rootfs combobox and redesign compatible install UI
+  * refactor: decouple install backends via strategy pattern
+  * feat: add DFM plugin for compatible mode deb installation
+  * fix: disable DciIcon in Qt5 builds for 105x compatibility
+  * fix: [build] cmake error at 105x env
+  * fix(build): adapt cmake and source compatibility for v20/1050
+  * chore: update version to 6.5.35
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Fri, 15 May 2026 17:04:37 +0800
+
 deepin-deb-installer (6.5.35) unstable; urgency=medium
 
   * fix(packagesmanager): prioritize installed reverse providers
