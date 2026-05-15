@@ -105,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"/>
+        <translation>Instal·lació en mode compatible</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
@@ -559,18 +559,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"/>
+        <translation>Si aquest programari és una versió antiga (ja adaptada per a una versió de sistema de llegat), podeu provar d&apos;instal·lar-lo en mode de compatibilitat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"/>
+        <translation>El mode de compatibilitat d&apos;UOS V25 és una funció que permet continuar usant aplicacions de la versió V20 al sistema V25. Crea un entorn de compatibilitat i permet que el programari que originalment només podia executar-se al sistema V20 també funcioni correctament al V25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Confirmeu la instal·lació en mode de compatibilitat</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="695"/>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"/>
+        <translation>Instal·lació compatible</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
@@ -734,7 +734,8 @@ Pot ser que el sistema o altres aplicacions no funcionin correctament.</translat
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2
 fromcompatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Segur que voleu desinstal·lar %2
+des del mode de compatibilitat?</translation>
     </message>
 </context>
 <context>
