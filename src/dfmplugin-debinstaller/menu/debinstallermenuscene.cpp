@@ -73,16 +73,12 @@ bool DebInstallerMenuScene::initialize(const QVariantHash &params)
     d->selectFiles = params.value(MenuParamKey::kSelectFiles).value<QList<QUrl>>();
     d->isEmptyArea = params.value(MenuParamKey::kIsEmptyArea).toBool();
 
-    if (d->isEmptyArea) {
-        if (!isInstallerRunning())
-            return false;
-    } else if (d->selectFiles.size() != 1) {
+    if (d->isEmptyArea)
         return false;
-    } else {
-        const auto &url = d->selectFiles.first();
-        if (!url.isLocalFile() || !url.toLocalFile().endsWith(".deb"))
-            return false;
-    }
+
+    const auto &url = d->selectFiles.first();
+    if (!url.isLocalFile() || !url.toLocalFile().endsWith(".deb"))
+        return false;
 
     return AbstractMenuScene::initialize(params);
 }
