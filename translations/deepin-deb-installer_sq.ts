@@ -105,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1144"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"/>
+        <translation>Instalim Nën Mënyrën Përputhjes</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
@@ -559,18 +559,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"/>
+        <translation>Nëse ky “software” është në një version të vjetër (i përshtatur tashmë për një version të dikurshëm sistemi), mund të provoni ta instaloni nën mënyrën përputhje.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"/>
+        <translation>Mënyra Përputhje e UOS V25 është një veçori që ju lejon të përdorni aplikacione versioni V20 në sisteme V25. Krijon për ju një mjedis të përputhshëm, duke bërë të mundur që “software” i cili mund të funksiononte vetëm në sistem V20 system, të funksionojë si duhet edhe në sistem V25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Ripohoni instalimin nën mënyrën përputhje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="695"/>
@@ -626,7 +626,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1096"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"/>
+        <translation>Instalim i Përputhshëm</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
@@ -734,7 +734,8 @@ Sistemi ose aplikacione të tjera mund të mos punojnë si duhet</translation>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %2
 fromcompatibility mode?</source>
-        <translation type="unfinished"/>
+        <translation>Jeni i sigurt se doni të çinstalohet %2
+që nga mënyra përputhje?</translation>
     </message>
 </context>
 <context>
