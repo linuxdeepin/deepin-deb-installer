@@ -445,6 +445,14 @@ bool DebListModel::slotInstallPackages()
     initRowStatus();  // 初始化包的操作状态
     qCDebug(appLog) << "Initialized package operating status";
 
+    // Check if the package file still exists before proceeding with signature verification.
+    // The file may have been renamed or moved after the installer was opened.
+    if (!recheckPackagePath(m_packagesManager->package(m_operatingIndex))) {
+        qCWarning(appLog) << "Package file no longer exists, aborting installation";
+        m_workerStatus = WorkerPrepare;
+        return false;
+    }
+
     // 检查当前应用是否在黑名单中
     // 非开发者模式且数字签名验证失败
     if (checkBlackListApplication() || !m_aptBackend->verifySignature(m_operatingIndex)) {
@@ -1135,6 +1143,13 @@ void DebListModel::installDebs()
         m_currentTransaction = m_aptBackend->m_currentTransaction;
         return;
     }
+
+    // Install failed (e.g. deb file no longer exists at stored path)
+    qCWarning(appLog) << "Apt install backend returned false for index" << m_operatingIndex;
+    refreshOperatingPackageStatus(Pkg::Failed);
+    m_packageFailCode.insert(m_operatingPackageMd5, Pkg::UnknownError);
+    m_packageFailReason.insert(m_operatingPackageMd5, tr("Installation failed"));
+    bumpInstallIndex();
 }
 
 void DebListModel::digitalVerifyFailed(Pkg::ErrorCode errorCode)
@@ -1535,6 +1550,7 @@ bool DebListModel::checkDigitalSignature()
 void DebListModel::installNextDeb()
 {
     qCDebug(appLog) << "Entering installNextDeb for operating index" << m_operatingStatusIndex;
+
     // If package is first package or install to compatible mode, not need reset status.
     bool isFirstPackageAndCached = (0 == m_operatingStatusIndex) && m_packagesManager->cachedPackageDependStatus(m_operatingStatusIndex);
     if (!isFirstPackageAndCached) {

@@ -746,7 +746,11 @@ void SingleInstallPage::slotInstall()
     m_operate = Install;
 
     // 开始安装
-    m_packagesModel->slotInstallPackages();
+    if (!m_packagesModel->slotInstallPackages()) {
+        // Package file no longer exists, go back to the initial file choose page.
+        Q_EMIT signalBacktoFileChooseWidget();
+        return;
+    }
 }
 
 void SingleInstallPage::slotUninstallCurrentPackage()

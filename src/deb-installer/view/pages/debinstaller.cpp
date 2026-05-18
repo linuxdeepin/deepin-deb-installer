@@ -1064,6 +1064,8 @@ void DebInstaller::slotReset()
     m_fileListModel->reset();         // 重置model
     Q_EMIT packagesCleared();
 
+    enableCloseAndExit();  // 确保关闭按钮可用
+
     // 删除所有的页面
     if (!m_lastPage.isNull() && m_lastPage != m_fileChooseWidget) {
         m_lastPage->deleteLater();
