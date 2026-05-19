@@ -174,7 +174,7 @@ void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
     m_infoWrapperWidget->layout()->setContentsMargins(0, 60, 0, 60);
     m_icon->setFixedSize(85, 85);
     m_icon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(m_icon->size()));
-    m_tips->setText(tr("Are you sure you want to uninstall %2\nfromcompatibility mode?").arg(m_rootfs).arg(m_packageName));
+    m_tips->setText(tr("Are you sure you want to uninstall %1 from compatibility mode?\nAll dependencies will also be removed").arg(m_packageName));
     qCDebug(appLog) << "Compatible info set";
 }
 
