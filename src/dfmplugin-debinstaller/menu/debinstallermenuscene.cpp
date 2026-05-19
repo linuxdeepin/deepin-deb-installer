@@ -87,7 +87,7 @@ bool DebInstallerMenuScene::initialize(const QVariantHash &params)
     d->selectFiles = params.value(MenuParamKey::kSelectFiles).value<QList<QUrl>>();
     d->isEmptyArea = params.value(MenuParamKey::kIsEmptyArea).toBool();
 
-    if (d->isEmptyArea)
+    if (d->isEmptyArea || d->selectFiles.size() != 1)
         return false;
 
     const auto &url = d->selectFiles.first();
