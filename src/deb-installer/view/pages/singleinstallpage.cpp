@@ -595,11 +595,22 @@ void SingleInstallPage::initConnections()
         QModelIndex index = m_packagesModel->index(0);
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
 
-        // if in compat confirm view (checkbox visible), proceed with install
+        // if in compat confirm view (checkbox visible), proceed with install/reinstall
         if (m_inCompatibleMode && m_compatCheckBox->isVisible()) {
             qCDebug(appLog) << "Confirmed compatible install, proceeding to install";
             m_packagesModel->setData(index, kDefaultRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
-            slotInstall();
+            if (Pkg::CompatibleIntalled == dependsStat) {
+                slotReinstall();
+            } else {
+                slotInstall();
+            }
+            return;
+        }
+
+        // first click on CompatibleIntalled -> show confirmation for reinstall
+        if (m_inCompatibleMode && Finished != m_operate && Pkg::CompatibleIntalled == dependsStat) {
+            qCDebug(appLog) << "Switching to compatible reinstall confirmation view";
+            showCompatConfirmView();
             return;
         }
 
@@ -1110,8 +1121,9 @@ void SingleInstallPage::showPackageInfo()
                         m_doneButton->setVisible(true);
                         break;
                     case Pkg::CompatibleIntalled:
-                        qCDebug(appLog) << "Compatible installed, show uninstall button";
+                        qCDebug(appLog) << "Compatible installed, show uninstall and reinstall buttons";
                         m_uninstallButton->setVisible(true);
+                        m_confirmButton->setText(tr("Reinstall"));
                         break;
                     default:
                         break;
@@ -1191,6 +1203,7 @@ void SingleInstallPage::showCompatConfirmView()
     // hide error tips and hint
     m_tipsLabel->setVisible(false);
     m_compatHintLabel->setVisible(false);
+    m_uninstallButton->setVisible(false);
 
     // show checkbox and description
     m_compatCheckBox->setChecked(false);

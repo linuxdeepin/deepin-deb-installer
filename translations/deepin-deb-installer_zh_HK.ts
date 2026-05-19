@@ -49,70 +49,70 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="118"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="120"/>
         <source>Package Installer</source>
         <translation>軟件包安裝器</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="128"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="133"/>
         <source>Settings</source>
         <translation>設置</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="729"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="886"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="733"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="890"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>正在執行安裝流程，無法打開</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="734"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>軟件包解析失敗，軟件包清單包含非法的文件結構！</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="736"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="740"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>軟件包解析失敗，軟件包清單包含非法版本號！</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="742"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>未檢測到安裝包，請檢查安裝目錄！</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="909"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="913"/>
         <source>The %1 package may be broken</source>
         <translation>請檢查%1包是否損壞</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="918"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="922"/>
         <source>You can only install local %1 packages</source>
         <translation>只能安裝本地的%1包</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="927"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="931"/>
         <source>No permission to access this folder</source>
         <translation>沒有權限訪問文件夾</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="944"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="948"/>
         <source>Already Added</source>
         <translation>已添加</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="953"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="957"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1文件不存在，請重新選擇文件</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1162"/>
         <source>Compatible Mode Install</source>
         <translation>相容模式安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="446"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="961"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="450"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="965"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1121"/>
         <source>Bulk Install</source>
         <translation>批量安裝</translation>
     </message>
@@ -144,14 +144,14 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="881"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="893"/>
         <source>Invalid digital signature</source>
         <translation>數字簽名無效</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="866"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1894"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1937"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>管理員已限制，該軟件禁止安裝</translation>
     </message>
@@ -161,87 +161,105 @@
         <translation>安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="849"/>
         <source>current system</source>
-        <translation>當前系統環境</translation>
+        <translation type="vanished">當前系統環境</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="852"/>
         <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation>已在%1中安裝%2，請先卸載後再安裝此包</translation>
+        <translation type="vanished">已在%1中安裝%2，請先卸載後再安裝此包</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="859"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="871"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>依賴關係不滿足，請嘗試使用兼容模式安裝該應用</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="862"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="874"/>
         <source>Compatibility mode installation failed</source>
         <translation>兼容模式安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="884"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Failed to install %1</source>
         <translation>%1安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1225"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1254"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1172"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1285"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1896"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1201"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1939"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1176"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="861"/>
+        <source>Same version installed</source>
+        <translation>已安裝相同版本</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <source>Later version installed: %1</source>
+        <translation>已安裝較新的版本：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="865"/>
+        <source>Earlier version installed: %1</source>
+        <translation>已安裝較早的版本：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
+        <source>Installation failed</source>
+        <translation>安裝失敗</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>無法安裝%1，安裝包無有效的數字簽名</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1326"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1355"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>此安裝包沒有有效的數字簽名，是否繼續安裝？</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1328"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
         <source>Cancel</source>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1329"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1358"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>繼續</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1170"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1220"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1893"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1199"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1249"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1936"/>
         <source>Unable to install</source>
         <translation>無法安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1226"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1255"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation>前 往</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1283"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
         <source>This package does not have a valid digital signature</source>
         <translation>此安裝包沒有有效的數字簽名</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="888"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="894"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="900"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="906"/>
         <source>Broken dependencies: %1</source>
         <translation>依賴關係不滿足：%1</translation>
     </message>
@@ -251,7 +269,7 @@
         <translation>配置授權失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="824"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="835"/>
         <source>Unmatched package architecture</source>
         <translation>軟件包架構不匹配</translation>
     </message>
@@ -408,8 +426,8 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="58"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>收 起</translation>
@@ -448,7 +466,7 @@
         <translation>無法安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1222"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1251"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>安裝包沒有有效的數字簽名，已被禁止安裝/運行，請前往安全中心-安全工具-應用安全進行調整。</translation>
@@ -474,180 +492,181 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="966"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
         <source>Collapse</source>
         <translation>收起</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="392"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1157"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1384"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1407"/>
         <source>Reinstall</source>
         <translation>重新安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1162"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1389"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1412"/>
         <source>Later version installed: %1</source>
         <translation>已安裝較新的版本：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1163"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1390"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1413"/>
         <source>Downgrade</source>
         <translation>安裝舊版本</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1395"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1418"/>
         <source>Earlier version installed: %1</source>
         <translation>已安裝較早的版本：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1282"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1305"/>
         <source>Installing dependencies: %1</source>
         <translation>正在安裝依賴：%1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
         <source>Failed to install %1</source>
         <translation>%1安裝失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="221"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="222"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="384"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1193"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>安 裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="388"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="390"/>
         <source>Remove</source>
         <comment>button</comment>
         <translation>卸 載</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="396"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>確 定</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="400"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="402"/>
         <source>Back</source>
         <comment>button</comment>
         <translation>返 回</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="404"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="900"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="920"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>完 成</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="515"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
         <translation>如該軟件為舊版（已適配歷史系統版本）應用，可嘗試以相容模式安裝。</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="516"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="543"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="548"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
         <translation>統信 UOS V25 相容模式是一項讓您能夠在 V25 系統上繼續使用 V20 版本應用程式的功能。為您建立了一個相容環境，讓原本只能在 V20 系統上運作的軟件，也能在 V25 系統上正常運作。</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="534"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>Confirm to install in compatibility mode</source>
         <translation>確認使用相容模式安裝軟件包</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="695"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="735"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
         <translation>正在嘗試使用%1兼容模式安裝%2</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="774"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
         <translation>正在從%1兼容模式卸載%2</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="909"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
         <translation>%2已從%1兼容模式成功卸載</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="913"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
         <source>Installed successfully</source>
         <translation>安裝成功</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="944"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
         <translation>%2已從%1兼容模式成功卸載</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="928"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="948"/>
         <source>Uninstalled successfully</source>
         <translation>卸載成功</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="975"/>
         <source>Uninstall Failed</source>
         <translation>卸載失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1001"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1021"/>
         <source>Install %1 will remove: </source>
         <translation>安裝%1將會卸載：</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1022"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Dependencies in the repository</source>
         <translation>倉庫中存在的依賴包</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1029"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1049"/>
         <source>Missing dependencies</source>
         <translation>倉庫中缺失的依賴包</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1098"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1118"/>
         <source>Compatible Install</source>
         <translation>相容模式安裝</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1100"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1120"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1396"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1419"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>更 新</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1474"/>
         <source>Invalid digital signature</source>
         <translation>數字簽名無效</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="209"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="210"/>
         <source>Name: </source>
         <translation>名稱：</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1383"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1406"/>
         <source>Same version installed</source>
         <translation>已安裝相同版本</translation>
     </message>
@@ -655,16 +674,16 @@
 <context>
     <name>SingleInstallPage_Install</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="58"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="681"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="721"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="904"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
         <source>Show details</source>
         <translation>顯示詳細訊息</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
         <source>Show dependencies</source>
         <translation>顯示依賴包關係</translation>
     </message>
@@ -672,8 +691,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="760"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="919"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="780"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="939"/>
         <source>Show details</source>
         <translation>顯示卸載進程</translation>
     </message>
@@ -735,7 +754,7 @@ fromcompatibility mode?</source>
 <context>
     <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
     <message>
-        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="34"/>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
         <translation>相容模式安裝</translation>
     </message>

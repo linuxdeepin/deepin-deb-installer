@@ -853,16 +853,17 @@ QString DebListModel::packageFailedReason(const int idx) const
         case Pkg::CompatibleIntalled:
             qCDebug(appLog) << "Package is already installed in a compatible system";
             if (auto ptr = packagePtr(idx)) {
-                QString system = ptr->compatible()->rootfs;
-                system = CompBackend::instance()->osName(system);
-                if (system.isEmpty()) {
-                    qCDebug(appLog) << "System name is empty, using 'current system'";
-                    system = tr("current system");
-                }
+                const QString debVersion = ptr->debInfo()->version();
+                const QString installedVersion = ptr->compatible()->version;
+                const int cmp = Utils::compareVersion(debVersion, installedVersion);
 
-                return tr("%2 has been installed in %1, please uninstall this package before installing it")
-                    .arg(system)
-                    .arg(ptr->compatible()->name);
+                if (cmp == 0) {
+                    return tr("Same version installed");
+                } else if (cmp < 0) {
+                    return tr("Later version installed: %1").arg(installedVersion);
+                } else {
+                    return tr("Earlier version installed: %1").arg(installedVersion);
+                }
             }
             break;
         case Pkg::CompatibleNotInstalled:
@@ -1090,7 +1091,17 @@ void DebListModel::installDebs()
 
     // for compatbile install
 #ifndef DISABLE_COMPATIBLE
-    if (dependsStat.canInstallCompatible() && supportCompatible()) {
+    bool useCompat = dependsStat.canInstallCompatible();
+    // Allow reinstall when package already installed in compatible mode with target rootfs set
+    if (!useCompat && Pkg::CompatibleIntalled == dependsStat.status && supportCompatible()) {
+        if (auto ptr = packagePtr(m_operatingIndex)) {
+            if (auto compPtr = ptr->compatible()) {
+                useCompat = !compPtr->targetRootfs.isEmpty();
+            }
+        }
+    }
+
+    if (useCompat && supportCompatible()) {
         qCDebug(appLog) << "Package can be installed in compatible mode";
         if (m_compBackend->install(m_operatingIndex)) {
             qCDebug(appLog) << "Compatible package installation started, setting status to Operating";
@@ -1561,7 +1572,17 @@ void DebListModel::installNextDeb()
     PackageDependsStatus dependStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
     qCDebug(appLog) << "Current dependency status:" << dependStatus.status;
 
-    if (dependStatus.canInstallCompatible() && supportCompatible()) {
+    // Check if compatible backend should be used (fresh install or reinstall)
+    bool useCompat = dependStatus.canInstallCompatible();
+    if (!useCompat && Pkg::CompatibleIntalled == dependStatus.status && supportCompatible()) {
+        if (auto ptr = packagePtr(m_operatingIndex)) {
+            if (auto compPtr = ptr->compatible()) {
+                useCompat = !compPtr->targetRootfs.isEmpty();
+            }
+        }
+    }
+
+    if (useCompat && supportCompatible()) {
         qCDebug(appLog) << "Can install in compatible mode, calling installDebs";
         installDebs();
     } else if (ImmBackend::instance()->immutableEnabled()) {
