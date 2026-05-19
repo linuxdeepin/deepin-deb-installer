@@ -33,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation>Обновление кэша пакетов...</translation>
+        <translation>Обновление кэша пакетов…</translation>
     </message>
 </context>
 <context>
@@ -60,7 +60,7 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="733"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="890"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Установка других пакетов... Пожалуйста, откройте позже.</translation>
+        <translation>Установка других пакетов… Пожалуйста, откройте позже.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
         <source>Installation failed</source>
-        <translation type="unfinished"/>
+        <translation>Установка не удалась</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
@@ -745,7 +745,8 @@ The system or other applications may not work properly</source>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Уверены, что хотите удалить %1 из режима совместимости?
+Все зависимости также будут удалены</translation>
     </message>
 </context>
 <context>
@@ -753,7 +754,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="unfinished"/>
+        <translation>Установить в режиме совместимости</translation>
     </message>
 </context>
 <context>
