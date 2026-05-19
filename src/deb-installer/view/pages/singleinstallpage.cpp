@@ -1270,9 +1270,12 @@ void SingleInstallPage::afterGetAutherFalse()
 void SingleInstallPage::showEvent(QShowEvent *e)
 {
     qCDebug(appLog) << "Show event";
-    showPackageInfo();
-    // 每次切换展示当前页面，复位焦点状态
-    resetButtonFocus = true;
+    // 兼容模式确认视图下不重置UI，避免最小化还原后界面状态被覆盖
+    if (!(m_inCompatibleMode && m_compatCheckBox->isVisible())) {
+        showPackageInfo();
+        // 每次切换展示当前页面，复位焦点状态
+        resetButtonFocus = true;
+    }
     QWidget::showEvent(e);
 }
 
