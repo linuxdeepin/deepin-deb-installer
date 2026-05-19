@@ -743,10 +743,9 @@ Pot ser que el sistema o altres aplicacions no funcionin correctament.</translat
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %2
-fromcompatibility mode?</source>
-        <translation>Segur que voleu desinstal·lar %2
-des del mode de compatibilitat?</translation>
+        <source>Are you sure you want to uninstall %1 from compatibility mode?
+All dependencies will also be removed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
