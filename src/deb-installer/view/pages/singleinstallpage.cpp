@@ -1511,16 +1511,28 @@ bool SingleInstallPage::eventFilter(QObject *watched, QEvent *event)
 
             QPointF relPos(me->pos().x() - cr.x(), me->pos().y() - cr.y());
             int pos = doc.documentLayout()->hitTest(relPos, Qt::FuzzyHit);
+
+            bool isOverImage = false;
             if (pos != -1) {
                 QTextCursor cursor(&doc);
-                cursor.setPosition(pos);
-                if (cursor.charFormat().isImageFormat()) {
-                    QString tooltipHtml = QString("<div style='max-width:232px;'>%1</div>").arg(m_compatToolTip.toHtmlEscaped());
-                    QToolTip::showText(me->globalPos(), tooltipHtml, m_compatHintLabel);
-                    return true;
+                for (int offset = 0; offset <= 2; ++offset) {
+                    int checkPos = pos + offset;
+                    if (checkPos < doc.characterCount()) {
+                        cursor.setPosition(checkPos);
+                        if (cursor.charFormat().isImageFormat()) {
+                            isOverImage = true;
+                            break;
+                        }
+                    }
                 }
             }
-            QToolTip::hideText();
+
+            if (isOverImage) {
+                QString tooltipHtml = QString("<div style='max-width:232px;'>%1</div>").arg(m_compatToolTip.toHtmlEscaped());
+                QToolTip::showText(me->globalPos(), tooltipHtml, m_compatHintLabel);
+            } else {
+                QToolTip::hideText();
+            }
             return true;
         } else if (event->type() == QEvent::Leave) {
             QToolTip::hideText();
