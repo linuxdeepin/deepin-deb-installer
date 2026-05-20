@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.39) unstable; urgency=medium
+
+  * fix(i18n): add missing translation for right-click compat install menu
+
+ -- Liu Zheng <liuzheng@uniontech.com>  Tue, 20 May 2026 17:47:00 +0800
+
 deepin-deb-installer (6.5.38) unstable; urgency=medium
 
   * fix(ui): improve tooltip image hover detection in compat hint label
