@@ -500,35 +500,41 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1407"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1410"/>
         <source>Reinstall</source>
         <translation>Újratelepítés</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <source>Installing in compatibility mode %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1412"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1415"/>
         <source>Later version installed: %1</source>
         <translation>Újabb verzió telepítve: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1413"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1416"/>
         <source>Downgrade</source>
         <translation>Visszaminősítés</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1418"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1421"/>
         <source>Earlier version installed: %1</source>
         <translation>Korábbi verzió telepítve: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1305"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1308"/>
         <source>Installing dependencies: %1</source>
         <translation>Telepítési függőségek: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1471"/>
         <source>Failed to install %1</source>
         <translation>A %1 telepítése sikertelen</translation>
     </message>
@@ -586,10 +592,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation>A %2 telepítése %1 kompatibilitási módban</translation>
+        <translation type="vanished">A %2 telepítése %1 kompatibilitási módban</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
@@ -649,13 +653,13 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1419"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1422"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Frissítés</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1474"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1477"/>
         <source>Invalid digital signature</source>
         <translation>Érvénytelen digitális aláírás</translation>
     </message>
@@ -666,7 +670,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1406"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1409"/>
         <source>Same version installed</source>
         <translation>Ez a verzió már telepítve van</translation>
     </message>
@@ -747,14 +751,6 @@ A rendszer, illetve más alkalmazások esetleg nem megfelelően fognak működni
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
 All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
-        <source>Install in compatible mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -508,35 +508,41 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1407"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1410"/>
         <source>Reinstall</source>
         <translation>Переустановить</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <source>Installing in compatibility mode %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1412"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1415"/>
         <source>Later version installed: %1</source>
         <translation>Установлена более новая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1413"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1416"/>
         <source>Downgrade</source>
         <translation>Понизить версию</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1418"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1421"/>
         <source>Earlier version installed: %1</source>
         <translation>Установлена более старая версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1305"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1308"/>
         <source>Installing dependencies: %1</source>
         <translation>Установка зависимостей: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1471"/>
         <source>Failed to install %1</source>
         <translation>Не удалось установить %1</translation>
     </message>
@@ -598,10 +604,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation>Попытка установки %2 в режиме совместимости %1</translation>
+        <translation type="vanished">Попытка установки %2 в режиме совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
@@ -661,13 +665,13 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1419"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1422"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1474"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1477"/>
         <source>Invalid digital signature</source>
         <translation>Недействительная цифровая подпись</translation>
     </message>
@@ -678,7 +682,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1406"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1409"/>
         <source>Same version installed</source>
         <translation>Такая же версия уже установлена</translation>
     </message>
@@ -766,14 +770,6 @@ All dependencies will also be removed</source>
 from %1 compatibility mode?</source>
         <translation type="vanished">Уверены, что хотите удалить %2
 из режима совместимости %1?</translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
-        <source>Install in compatible mode</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

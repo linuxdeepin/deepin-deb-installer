@@ -708,7 +708,7 @@ void SingleInstallPage::slotReinstall()
         m_compatCheckBox->setVisible(false);
         m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Trying to install %2 in %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
+            tr("Installing in compatibility mode %1").arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
@@ -748,7 +748,7 @@ void SingleInstallPage::slotInstall()
         m_compatCheckBox->setVisible(false);
         m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Trying to install %2 in %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
+            tr("Installing in compatibility mode %1").arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }
