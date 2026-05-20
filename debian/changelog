@@ -1,3 +1,16 @@
+deepin-deb-installer (6.5.38) unstable; urgency=medium
+
+  * fix(ui): improve tooltip image hover detection in compat hint label
+  * fix(ui): simplify compatible mode install progress text
+  * fix(signature): keep package info visible on signature verify failure
+  * fix(compatible): prevent UI reset on restore in compat confirm view
+  * fix(compatible): update uninstall confirmation text and fix typo
+  * feat(compatible): support reinstall and improve duplicate package hints
+  * fix(context-menu): hide compatible install on multi-file selection
+  * fix(install): abort installation when deb file no longer exists
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Wed, 20 May 2026 17:18:43 +0800
+
 deepin-deb-installer (6.5.37) unstable; urgency=medium
 
   * fix(context-menu): avoid auto-activating installer service on state query
