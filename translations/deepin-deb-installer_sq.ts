@@ -219,7 +219,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
         <source>Installation failed</source>
-        <translation type="unfinished"/>
+        <translation>Instalimi dështoi</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
@@ -745,7 +745,8 @@ Sistemi ose aplikacione të tjera mund të mos punojnë si duhet</translation>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Jeni i sigurt se doni të çinstalohet %1 që nga mënyra përputhje?
+Do hiqen gjithashtu krejt varësitë</translation>
     </message>
 </context>
 <context>
@@ -753,7 +754,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="unfinished"/>
+        <translation>Instaloje nën mënyrën përputhje</translation>
     </message>
 </context>
 <context>
