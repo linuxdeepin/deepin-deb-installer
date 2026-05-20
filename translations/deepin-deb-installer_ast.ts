@@ -683,6 +683,14 @@ del modu de compatibilidad %1?</translation>
     </message>
 </context>
 <context>
+    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
+    <message>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
+        <source>Install in compatible mode</source>
+        <translation>Instalar en mou compatible</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="47"/>

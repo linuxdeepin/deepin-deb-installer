@@ -756,6 +756,14 @@ All dependencies will also be removed</source>
     </message>
 </context>
 <context>
+    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
+    <message>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
+        <source>Install in compatible mode</source>
+        <translation>ਅਨੁਕੂਲ ਮੋਡ ਵਿੱਚ ਇੰਸਟੌਲ ਕਰੋ</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="../src/deb-installer/main.cpp" line="48"/>
