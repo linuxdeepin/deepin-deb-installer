@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -538,6 +538,16 @@ void ProxyPackageListModel::onSoureWorkerFinished()
             case AbstractPackageListModel::WorkerUnInstall:
                 setWorkerStatus(WorkerFinished);
                 break;
+            case AbstractPackageListModel::WorkerPrepare: {
+                // Source model finished without proxy orchestration (e.g. append-time
+                // signature verification failure in DebListModel::digitalVerifyFailed).
+                // The source model already set its own status to WorkerFinished and
+                // updated package operate status; sync proxy status and forward the
+                // signal so that views (SingleInstallPage) receive slotWorkerFinished.
+                qCDebug(appLog) << "Source finished while proxy is in Prepare state, forwarding";
+                setWorkerStatus(WorkerFinished);
+                break;
+            }
             default:
                 break;
         }

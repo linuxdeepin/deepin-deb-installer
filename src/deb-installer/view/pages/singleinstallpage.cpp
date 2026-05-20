@@ -898,6 +898,7 @@ void SingleInstallPage::slotWorkerFinished()
 
     // 显示需要显示的按钮
     m_btnsFrame->setVisible(true);
+    m_installButton->setVisible(false);
     m_uninstallButton->setVisible(false);
     m_reinstallButton->setVisible(false);
     m_backButton->setVisible(true);
@@ -973,6 +974,13 @@ void SingleInstallPage::slotWorkerFinished()
             m_tipsLabel->setToolTip(index.data(DebListModel::PackageFailReasonRole).toString());
         } else {
             m_tipsLabel->setTextAndTips(tr("Uninstall Failed"));  // 卸载只显示卸载失败
+        }
+
+        // 数字签名校验失败时，只显示确认按钮（关闭窗口），不显示返回按钮
+        const int failCode = index.data(DebListModel::PackageFailCodeRole).toInt();
+        if (failCode == Pkg::NoDigitalSignature || failCode == Pkg::DigitalSignatureError) {
+            m_backButton->setVisible(false);
+            m_infoControlButton->setVisible(false);
         }
     } else {
         // 正常情况不会进入此分支，如果进入此分支表明状态错误。
@@ -1082,6 +1090,14 @@ void SingleInstallPage::showPackageInfo()
     const QModelIndex index = m_packagesModel->index(0);
 
     if (m_packagesModel->isWorkerPrepare() && index.isValid()) {
+        // Skip UI reset if the package already has a terminal operate status (Failed/Success).
+        // This prevents dataChanged signals arriving during digitalVerifyFailed() from
+        // resetting the UI before slotWorkerFinished() has a chance to display the result.
+        const int operateStat = index.data(DebListModel::PackageOperateStatusRole).toInt();
+        if (operateStat == Pkg::PackageOperationStatus::Failed || operateStat == Pkg::PackageOperationStatus::Success) {
+            qCDebug(appLog) << "Package operate status is terminal:" << operateStat << ", skipping UI reset";
+            return;
+        }
         qCDebug(appLog) << "Show package info";
         m_description = index.data(DebListModel::PackageLongDescriptionRole).toString();
         m_pkgNameDescription = index.data(DebListModel::PackageNameRole).toString();

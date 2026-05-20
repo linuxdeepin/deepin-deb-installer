@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -29,6 +29,7 @@ public:
         PackageDependsStatusRole,         // sa Pkg::DependsStatus
         PackageAvailableDependsListRole,  // available dependencies for the package
         PackageFailReasonRole,            // fail reason for install / uninstall failed
+        PackageFailCodeRole,              // sa Pkg::ErrorCode, fail code for install / uninstall failed
         PackageOperateStatusRole,         // sa Pkg::PackageOperationStatus
         PackageReverseDependsListRole,    // list of packages that reversely depend on the current package
 

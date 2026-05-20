@@ -145,7 +145,7 @@ const QString DebListModel::workerErrorString(const int errorCode, const QString
         // 无数字签名的错误
         case Pkg::NoDigitalSignature:
             qCDebug(appLog) << "No digital signature error.";
-            return QApplication::translate("DebListModel", "No digital signature");
+            return QApplication::translate("DebListModel", "Invalid digital signature");
 
         // 无有效的数字签名
         case Pkg::DigitalSignatureError:
@@ -350,6 +350,13 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
             return Utils::fromSpecialEncoding(longDescription);  // 获取当前index包的长描述
         case PackageFailReasonRole:
             return packageFailedReason(currentRow);  // 获取当前index包的安装失败的原因
+        case PackageFailCodeRole: {
+            const QByteArray md5 = m_packagesManager->getPackageMd5(currentRow);
+            if (m_packageFailCode.contains(md5))
+                return m_packageFailCode[md5];
+            else
+                return 0;
+        }
         case PackageOperateStatusRole: {
             auto md5 = m_packagesManager->getPackageMd5(currentRow);
             if (m_packageOperateStatus.contains(md5))  // 获取当前包的操作状态
@@ -457,7 +464,13 @@ bool DebListModel::slotInstallPackages()
     // 非开发者模式且数字签名验证失败
     if (checkBlackListApplication() || !m_aptBackend->verifySignature(m_operatingIndex)) {
         qCWarning(appLog) << "Installation blocked - blacklisted application or digital signature verification failed";
-        return false;
+        // Signature/blacklist dialogs have been shown; their callbacks will set
+        // the package to Failed status and emit signalWorkerFinished().
+        // Return true so the view does NOT reset to the file-choose page.
+        // The caller (SingleInstallPage::slotInstall) uses false to trigger
+        // signalBacktoFileChooseWidget(). Returning true keeps the install page
+        // visible so the async dialog callbacks can render the error state.
+        return true;
     }
 
     qCDebug(appLog) << "Proceeding with installation of" << m_packagesManager->m_preparedPackages.size() << "packages";
@@ -659,12 +672,60 @@ void DebListModel::slotAppendPackage(const QStringList &package)
     if (WorkerPrepare != m_workerStatus) {
         qWarning() << "installer status error";
     }
-    // Verify digital signature before appending the package
-    if (!m_aptBackend->verifySignature(package.first())) {
+
+    // Save current operating state so we can restore it after verification.
+    // m_operatingIndex / m_operatingPackageMd5 are install-time values that
+    // the signature-error dialogs depend on, but this method is called at
+    // append time when those values may not yet be valid.
+    const int savedOperatingIndex = m_operatingIndex;
+    const int savedOperatingStatusIndex = m_operatingStatusIndex;
+    const QByteArray savedOperatingPackageMd5 = m_operatingPackageMd5;
+
+    // Append the package first so that the model has data to display when
+    // the signature-error dialogs invoke digitalVerifyFailed().
+    m_packagesManager->appendPackage(package);
+
+    // After append (synchronous for single-package case), m_packageMd5 is
+    // updated via the signalAppendFinished -> getPackageMd5 signal chain.
+    // Set up operating state so that error dialogs can reference the package.
+    if (!m_packageMd5.isEmpty()) {
+        // Use the last appended package's index for verification.
+        // The verifySignature(const QString&) overload checks only one file,
+        // so we point operating state at the first newly-added file.
+        int firstNewIndex = m_packageMd5.size() - 1;
+        // For multi-file append the first file was added synchronously; try
+        // to find the actual index of the first file in the package list.
+        for (int i = 0; i < m_packageMd5.size(); ++i) {
+            const QString pkgPath = m_packagesManager->package(i);
+            if (pkgPath == package.first()) {
+                firstNewIndex = i;
+                break;
+            }
+        }
+        m_operatingIndex = firstNewIndex;
+        m_operatingStatusIndex = firstNewIndex;
+        m_operatingPackageMd5 = m_packageMd5[firstNewIndex];
+    }
+
+    // Now verify digital signature.  If verification fails the error dialogs
+    // will work correctly because the package is already in the model and
+    // m_operatingIndex / m_operatingPackageMd5 are valid.
+    const bool verifyResult = m_aptBackend->verifySignature(package.first());
+    if (!verifyResult) {
         qCWarning(appLog) << "Digital signature verification failed for package:" << package.first();
+        // The error dialog callbacks will set Failed status and emit
+        // signalWorkerFinished() / bumpInstallIndex() as appropriate.
+        // Do not restore operating state here -- the dialog callbacks
+        // still need m_operatingIndex/m_operatingPackageMd5 to be valid
+        // until the dialog is dismissed.
         return;
     }
-    m_packagesManager->appendPackage(package);  // 添加包，并返回添加结果
+
+    // Signature OK -- restore the saved operating state so that a subsequent
+    // install flow starts from the correct position.
+    m_operatingIndex = savedOperatingIndex;
+    m_operatingStatusIndex = savedOperatingStatusIndex;
+    m_operatingPackageMd5 = savedOperatingPackageMd5;
 }
 
 void DebListModel::slotTransactionStatusChanged(TransactionStatus transactionStatus)
@@ -1173,20 +1234,18 @@ void DebListModel::digitalVerifyFailed(Pkg::ErrorCode errorCode)
         m_packageFailCode.insert(m_operatingPackageMd5, errorCode);  // 记录错误代码与错误原因
         m_packageFailReason.insert(m_operatingPackageMd5, "");
         bumpInstallIndex();  // 跳过当前包
-    } else if (preparedPackages().size() == 1) {
-        qCDebug(appLog) << "Single package prepared";
-        if (!m_isDevelopMode) {
-            qCDebug(appLog) << "Not in developer mode, exiting";
-            exit(0);
-        } else {  // 开发者模式下，点击取消按钮，返回错误界面
-            qCDebug(appLog) << "In developer mode, setting status to failed";
-            refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新操作状态
-            // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-            m_packageFailCode.insert(m_operatingPackageMd5, errorCode);  // 记录错误代码与错误原因
-            m_packageFailReason.insert(m_operatingPackageMd5, "");
-            qCDebug(appLog) << "Emitting signalWorkerFinished";
-            emit signalWorkerFinished();
-        }
+    } else {
+        // Single package (preparedPackages size == 1) or append-time check
+        // where preparedPackages may not yet be fully populated but
+        // m_operatingPackageMd5 is valid.
+        qCDebug(appLog) << "Single package or append-time verify, setting status to failed";
+        m_workerStatus = WorkerFinished;  // Prevent showPackageInfo() from resetting UI
+        refreshOperatingPackageStatus(Pkg::PackageOperationStatus::Failed);  // 刷新操作状态
+        // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+        m_packageFailCode.insert(m_operatingPackageMd5, errorCode);  // 记录错误代码与错误原因
+        m_packageFailReason.insert(m_operatingPackageMd5, "");
+        qCDebug(appLog) << "Emitting signalWorkerFinished";
+        emit signalWorkerFinished();
     }
 }
 
@@ -1263,8 +1322,8 @@ void DebListModel::showNoDigitalErrWindow()
     };
 
     QPushButton *btnCancel = qobject_cast<QPushButton *>(Ddialog->getButton(0));
-    connect(btnCancel, &DPushButton::clicked, rejectOperate);
-    connect(Ddialog, &DDialog::aboutToClose, rejectOperate);
+    connect(btnCancel, &DPushButton::clicked, Ddialog, &DDialog::reject);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::reject);
     connect(Ddialog, &DDialog::rejected, rejectOperate);
 
     // 前往安全中心按钮
@@ -1328,12 +1387,12 @@ void DebListModel::showDigitalErrWindow(bool recordError)
     };
 
     // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, exitOperate);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::reject);
 
     // 点击弹出窗口的确定按钮
-    connect(btnOK, &DPushButton::clicked, exitOperate);
+    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::reject);
 
-    // ESC退出
+    // ESC退出 / reject（所有退出路径汇聚到此信号）
     connect(Ddialog, &DDialog::rejected, exitOperate);
 }
 
@@ -1363,20 +1422,24 @@ void DebListModel::showDevelopDigitalErrWindow(Pkg::ErrorCode code)
     cancelBtn->setFocusPolicy(Qt::TabFocus);
     cancelBtn->setFocus();
 
-    // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, this, [=] {
-        qCDebug(appLog) << "Close button clicked on develop digital error window, calling digitalVerifyFailed";
-        // 刷新当前包的操作状态，失败原因为数字签名校验失败
+    // All cancel/close paths funnel through rejected, which triggers digitalVerifyFailed.
+    std::function<void(void)> cancelOperate = [this, Ddialog, code]() {
+        qCDebug(appLog) << "Develop digital error window canceled, calling digitalVerifyFailed";
         digitalVerifyFailed(code);
-    });
-    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::deleteLater);
+        Ddialog->deleteLater();
+    };
 
-    // 点击弹出窗口的确定按钮
-    connect(cancelBtn, &DPushButton::clicked, this, [=] {
-        qCDebug(appLog) << "Cancel button clicked on develop digital error window, calling digitalVerifyFailed";
-        digitalVerifyFailed(code);
-    });
-    connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
+    // Cancel button -> reject
+    connect(cancelBtn, &DPushButton::clicked, Ddialog, &DDialog::reject);
+
+    // Close icon -> reject
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::reject);
+
+    // ESC key -> reject (via Dialog::signalClosed which DDialog::rejected may not cover)
+    connect(Ddialog, &Dialog::signalClosed, Ddialog, &DDialog::reject);
+
+    // Single handler for all reject paths
+    connect(Ddialog, &DDialog::rejected, cancelOperate);
 
     QPushButton *continueBtn = qobject_cast<QPushButton *>(Ddialog->getButton(1));
     connect(continueBtn, &DPushButton::clicked, this, [&] {
@@ -1384,8 +1447,6 @@ void DebListModel::showDevelopDigitalErrWindow(Pkg::ErrorCode code)
         installNextDeb();
     });  // 点击继续，进入安装流程
     connect(continueBtn, &DPushButton::clicked, Ddialog, &DDialog::deleteLater);
-    connect(Ddialog, &Dialog::signalClosed, this, [=] { digitalVerifyFailed(code); });
-    connect(Ddialog, &Dialog::signalClosed, Ddialog, &DDialog::deleteLater);
 }
 
 void DebListModel::slotDigitalSignatureError()
@@ -1950,12 +2011,12 @@ void DebListModel::showProhibitWindow()
     };
 
     // 点击弹出窗口的关闭图标按钮
-    connect(Ddialog, &DDialog::aboutToClose, exitOperate);
+    connect(Ddialog, &DDialog::aboutToClose, Ddialog, &DDialog::reject);
 
     // 点击弹出窗口的确定按钮
-    connect(btnOK, &DPushButton::clicked, exitOperate);
+    connect(btnOK, &DPushButton::clicked, Ddialog, &DDialog::reject);
 
-    // ESC
+    // ESC / reject（所有退出路径汇聚到此信号）
     connect(Ddialog, &DDialog::rejected, exitOperate);
 }
 
