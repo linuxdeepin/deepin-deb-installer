@@ -896,6 +896,14 @@ QString DebListModel::packageFailedReason(const int idx) const
         return tr("Unmatched package architecture");  // 判断是否架构冲突
     }
 
+    // When the operation has actually failed, the dependency status may be stale
+    // (e.g. CompatibleIntalled from a prior detection). Return the real error directly.
+    if (m_packageOperateStatus.contains(md5) &&
+        m_packageOperateStatus[md5] == Pkg::PackageOperationStatus::Failed) {
+        qCDebug(appLog) << "Package operation failed, returning worker error string directly";
+        return workerErrorString(m_packageFailCode[md5], m_packageFailReason[md5]);
+    }
+
     // need refactor, move to Deb::DebPackage
     int status = dependStatus.status;
     if (Pkg::CompatibleNotInstalled == status) {
