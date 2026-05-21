@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -107,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1162"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="450"/>
@@ -161,14 +159,6 @@
         <translation>Installation fehlgeschlagen</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">momentanes System</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%2 wurde in %1 installiert. Bitte deinstalliere das Paket, bevor du es installierst</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Fehlerhafte Abhängigkeiten, versuche, die App im Kompatibilitätsmodus zu installieren.</translation>
@@ -176,18 +166,32 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
         <source>Failed to install %1</source>
-        <translation>Konnte %1 nicht installieren</translation>
+        <translation>%1 konnte nicht installiert werden</translation>
+    </message>
+    <message>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">Kann nicht installiert werden - keine digitale Signatur</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">Bitte aktivieren Sie im Kontrollzentrum den Entwicklermodus und versuchen Sie es erneut. Fortfahren?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>Fortfahren</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
@@ -200,22 +204,22 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Gleiche Version installiert</translation>
+        <translation>Gleiche Version installiert</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Neuere Version installiert: %1</translation>
+        <translation>Neuere Version installiert: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Ältere Version installiert: %1</translation>
+        <translation>Ältere Version installiert: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
@@ -245,12 +249,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
         <source>Unable to install</source>
         <translation>Kann nicht installiert werden</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Fortfahren</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
@@ -475,7 +473,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -508,12 +506,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
@@ -584,22 +582,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="548"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">Versuche %2 im %1-Kompatibilitätsmodus zu installieren.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
@@ -644,13 +638,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
@@ -753,7 +747,7 @@ Das System oder andere Anwendungen funktionieren dann möglicherweise nicht rich
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
 All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -761,7 +755,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Im Kompatibilitätsmodus installieren</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
