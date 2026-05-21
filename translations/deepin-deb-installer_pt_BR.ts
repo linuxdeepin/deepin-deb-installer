@@ -506,12 +506,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"/>
+        <translation>Instalando pelo modo de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%1 foi instalado com sucesso pelo modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
