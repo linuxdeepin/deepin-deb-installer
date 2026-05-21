@@ -161,7 +161,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>As dependências estão quebradas. Tente instalar o aplicativo no modo de compatibilidade</translation>
+        <translation>As dependências estão corrompidas. Tente instalar o aplicativo em modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
@@ -506,7 +506,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
         <source>Installing in compatibility mode %1</source>
-        <translation>Instalando pelo modo de compatibilidade %1</translation>
+        <translation>Instalando em modo de compatibilidade %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
@@ -582,7 +582,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation>Se este software for uma versão mais antiga (já adaptada para uma versão legada do sistema), você pode tentar instalá-lo no modo de compatibilidade.</translation>
+        <translation>Se este software for uma versão mais antiga (já adaptada para uma versão legada do sistema), você pode tentar instalá-lo em modo de compatibilidade.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
