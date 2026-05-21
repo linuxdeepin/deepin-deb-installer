@@ -492,15 +492,15 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1007"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1003"/>
         <source>Collapse</source>
         <translation>संक्षिप्त करें</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1151"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1203"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1435"/>
         <source>Reinstall</source>
         <translation>पुनः इंस्टॉल करें</translation>
     </message>
@@ -516,30 +516,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
         <source>Later version installed: %1</source>
         <translation>नवीन संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1213"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1209"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1441"/>
         <source>Downgrade</source>
         <translation>डाउनग्रेड</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1450"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1214"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1446"/>
         <source>Earlier version installed: %1</source>
         <translation>पूर्व संस्करण इंस्टॉल है : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1337"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1333"/>
         <source>Installing dependencies: %1</source>
         <translation>आश्रित पैकेज इंस्टॉल हो रहे हैं : %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1500"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1496"/>
         <source>Failed to install %1</source>
         <translation>%1 इंस्टॉल विफल</translation>
     </message>
@@ -550,7 +550,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1240"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>इंस्टॉल करें</translation>
@@ -563,7 +563,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="985"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ठीक है</translation>
@@ -616,56 +616,55 @@
         <translation>इंस्टॉल सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="944"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation>%2 %1 संगतता मोड से सफलतापूर्वक अनइंस्टॉल कर दिया गया है</translation>
+        <translation type="vanished">%2 %1 संगतता मोड से सफलतापूर्वक अनइंस्टॉल कर दिया गया है</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="948"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
         <source>Uninstalled successfully</source>
         <translation>इंस्टॉल हटाना सफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="975"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
         <source>Uninstall Failed</source>
         <translation>इंस्टॉल हटाना विफल रहा</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Install %1 will remove: </source>
         <translation>%1 के इंस्टॉल करने से हटाया जाएगा: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
         <source>Dependencies in the repository</source>
         <translation>पैकेज-संग्रह में मौजूद आश्रित पैकेज</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1066"/>
         <source>Missing dependencies</source>
         <translation>अनुपलब्ध आश्रित पैकेज</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1143"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1145"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">रद्द करें</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1447"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>अपडेट</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1506"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1502"/>
         <source>Invalid digital signature</source>
         <translation>अमान्य डिजिटल हस्ताक्षर</translation>
     </message>
@@ -675,8 +674,8 @@
         <translation>नाम :</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1206"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1438"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
         <source>Same version installed</source>
         <translation>समान संस्करण पहले से इंस्टॉल है</translation>
     </message>

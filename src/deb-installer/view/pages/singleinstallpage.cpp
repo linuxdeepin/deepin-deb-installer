@@ -941,12 +941,8 @@ void SingleInstallPage::slotWorkerFinished()
             if (m_inCompatibleMode) {
                 m_backButton->setVisible(false);
                 m_btnsLayout->setAlignment(m_doneButton, Qt::AlignCenter);
-                m_tipsLabel->setTextAndTips(tr("%2 has been successfully uninstalled from %1 compatibility mode")
-                                                .arg(m_rootfsOsName)
-                                                .arg(m_pkgNameDescription));
-            } else {
-                m_tipsLabel->setTextAndTips(tr("Uninstalled successfully"));
             }
+            m_tipsLabel->setTextAndTips(tr("Uninstalled successfully"));
 
             m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
         }

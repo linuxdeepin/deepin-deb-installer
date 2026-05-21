@@ -494,15 +494,15 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1007"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1003"/>
         <source>Collapse</source>
         <translation>Sulge</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1151"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1203"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1435"/>
         <source>Reinstall</source>
         <translation>Paigalda uuesti</translation>
     </message>
@@ -518,30 +518,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
         <source>Later version installed: %1</source>
         <translation>Parem versioon on installitud: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1213"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1209"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1441"/>
         <source>Downgrade</source>
         <translation>Väljastada</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1450"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1214"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1446"/>
         <source>Earlier version installed: %1</source>
         <translation>Aegsem versioon on installitud: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1337"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1333"/>
         <source>Installing dependencies: %1</source>
         <translation>Installitakse sõltuvusi: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1500"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1496"/>
         <source>Failed to install %1</source>
         <translation>Ei saa %1 installida</translation>
     </message>
@@ -552,7 +552,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1240"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>Paigalda</translation>
@@ -565,7 +565,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="985"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -618,56 +618,55 @@
         <translation>Paigaldatud</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="944"/>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation>%2 on edukalt %1 kompatüübilahendustest eemaldatud</translation>
+        <translation type="vanished">%2 on edukalt %1 kompatüübilahendustest eemaldatud</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="948"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
         <source>Uninstalled successfully</source>
         <translation>Eemaldatud</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="975"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
         <source>Uninstall Failed</source>
         <translation>Eemaldamine ebaõnnestus</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1038"/>
         <source>Install %1 will remove: </source>
         <translation>Installida %1 eemaldatakse: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
         <source>Dependencies in the repository</source>
         <translation>Salvestusala sõltuvused</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1066"/>
         <source>Missing dependencies</source>
         <translation>Puuduvad sõltuvused</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1143"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1145"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1447"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Uuenda</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1506"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1502"/>
         <source>Invalid digital signature</source>
         <translation>Vigane digitaalallikas</translation>
     </message>
@@ -677,8 +676,8 @@
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1206"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1438"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
         <source>Same version installed</source>
         <translation>Sama versioon on juba paigaldatud</translation>
     </message>
