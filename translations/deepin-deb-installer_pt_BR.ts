@@ -742,7 +742,8 @@ O sistema e/ou outros aplicativos podem não funcionar corretamente</translation
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
 All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Desinstalar %1 pelo modo de compatibilidade?
+Todas as dependências também serão removidas</translation>
     </message>
 </context>
 <context>
@@ -750,7 +751,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="unfinished"/>
+        <translation>Instalar pelo modo de compatibilidade</translation>
     </message>
 </context>
 <context>
