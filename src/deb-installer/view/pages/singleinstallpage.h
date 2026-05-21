@@ -188,6 +188,11 @@ private:
 
     bool dependsError(int status) const;
 
+    /**
+     * @brief updateCompatHintIcon 根据当前主题重新渲染 tips.dci 图标并更新提示标签
+     */
+    void updateCompatHintIcon();
+
 private slots:
 
     /**
@@ -307,6 +312,7 @@ private:
     static constexpr const char *kDefaultRootfs = "uos-rootfs-20";
     static constexpr const char *kDefaultRootfsOsName = "UOS 20";
     DLabel *m_compatHintLabel = nullptr;
+    QString m_compatHintText;
     QString m_compatToolTip;
     DCheckBox *m_compatCheckBox = nullptr;
     DLabel *m_compatDescLabel = nullptr;

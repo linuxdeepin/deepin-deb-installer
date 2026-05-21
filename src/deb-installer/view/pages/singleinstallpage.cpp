@@ -514,17 +514,10 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_compatHintLabel->setWordWrap(true);
     m_compatHintLabel->setTextFormat(Qt::RichText);
     m_compatHintLabel->setAlignment(Qt::AlignCenter);
-    const QString compatHintText = tr("If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.");
+    m_compatHintText = tr("If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.");
     m_compatToolTip = tr("UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.");
-    // 将图标 pixmap 转为 base64 data URI 嵌入富文本，使图标随文本换行到最后一行末尾
-    QByteArray iconData;
-    QBuffer iconBuf(&iconData);
-    iconBuf.open(QIODevice::WriteOnly);
-    Dtk::Gui::DDciIcon tipsIcon(QString(":/icons/deepin/uab/tips.dci"));
-    tipsIcon.pixmap(qApp->devicePixelRatio(), 16, Dtk::Gui::DDciIcon::Light).save(&iconBuf, "PNG");
-    m_compatHintLabel->setText(compatHintText
-        + QString(" <img src=\"data:image/png;base64,%1\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"/>")
-              .arg(QString(iconData.toBase64())));
+    updateCompatHintIcon();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SingleInstallPage::updateCompatHintIcon);
     m_compatHintLabel->setMouseTracking(true);
     m_compatHintLabel->installEventFilter(this);
     m_compatHintLabel->setVisible(false);
@@ -1465,6 +1458,25 @@ bool SingleInstallPage::dependsError(int status) const
 {
     qCDebug(appLog) << "Depends error check";
     return status != Pkg::DependsOk && status != Pkg::DependsAvailable;
+}
+
+void SingleInstallPage::updateCompatHintIcon()
+{
+    const auto theme = DGuiApplicationHelper::instance()->themeType();
+    Dtk::Gui::DDciIcon tipsIcon(QString(":/icons/deepin/uab/tips.dci"));
+    const auto iconTheme = (theme == DGuiApplicationHelper::DarkType) ? Dtk::Gui::DDciIcon::Dark : Dtk::Gui::DDciIcon::Light;
+
+    DDciIconPalette dciPalette = DDciIconPalette::fromQPalette(DPaletteHelper::instance()->palette(m_compatHintLabel));
+    QPixmap px = tipsIcon.pixmap(qApp->devicePixelRatio(), 16, iconTheme, DDciIcon::Normal, dciPalette);
+
+    QByteArray iconData;
+    QBuffer iconBuf(&iconData);
+    iconBuf.open(QIODevice::WriteOnly);
+    px.save(&iconBuf, "PNG");
+
+    m_compatHintLabel->setText(m_compatHintText
+        + QString(" <img src=\"data:image/png;base64,%1\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"/>")
+              .arg(QString(iconData.toBase64())));
 }
 
 void SingleInstallPage::DealDependResult(int authStatus, QString dependName)
