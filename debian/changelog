@@ -1,3 +1,15 @@
+deepin-deb-installer (6.5.40) unstable; urgency=medium
+
+  * fix(ui): make compat mode hint icon follow system theme
+  * fix(ui): show correct error on compat mode install failure
+  * fix(ui): unify compat mode uninstall success message with normal mode
+  * fix(i18n): simplify compat mode install success message
+  * fix(ui): show correct error text and button on compat mode sig failure
+  * chore: update version to 6.5.39
+  * fix(i18n): add missing translation for right-click compat install menu
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 21 May 2026 21:43:35 +0800
+
 deepin-deb-installer (6.5.39) unstable; urgency=medium
 
   * fix(i18n): add missing translation for right-click compat install menu
