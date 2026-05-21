@@ -593,7 +593,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation>Confirmar instalação no modo de compatibilidade</translation>
+        <translation>Confirmar instalação em modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
