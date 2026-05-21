@@ -138,20 +138,20 @@
         <translation>インストールに失敗しました。ディスクの空き領域が足りません</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <source>No digital signature</source>
-        <translation>デジタル署名がありません</translation>
+        <translation type="vanished">デジタル署名がありません</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="893"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
         <source>Invalid digital signature</source>
         <translation>デジタル署名が不正です</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1937"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1998"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation type="unfinished"></translation>
     </message>
@@ -161,97 +161,97 @@
         <translation>インストール失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="871"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="874"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
         <source>Failed to install %1</source>
         <translation>%1のインストールに失敗しました</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1254"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1201"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1373"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2000"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="861"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
         <source>Same version installed</source>
         <translation type="unfinished">同じバージョンがインストールされています</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished">新しいバージョンがインストールされています: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished">古いバージョンがインストールされています: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
         <source>Installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1355"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1414"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1416"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1358"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1417"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>続行</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1199"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1249"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1936"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1258"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1370"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
         <source>Unable to install</source>
         <translation>インストールできません</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1255"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation type="unfinished">確定</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
         <source>This package does not have a valid digital signature</source>
         <translation>このパッケージには有効なデジタル署名がありません</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="900"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="906"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="967"/>
         <source>Broken dependencies: %1</source>
         <translation>不正な依存関係: %1</translation>
     </message>
@@ -261,7 +261,7 @@
         <translation>認証に失敗しました</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="835"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
         <translation>パッケージのアーキテクチャが一致しません</translation>
     </message>
@@ -458,7 +458,7 @@
         <translation>インストールできません</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1251"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1310"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation type="unfinished"></translation>
@@ -484,15 +484,15 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1007"/>
         <source>Collapse</source>
         <translation>折りたたむ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1410"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
         <source>Reinstall</source>
         <translation>再インストール</translation>
     </message>
@@ -503,30 +503,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1415"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
+        <source>%1 was successfully installed to compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
         <source>Later version installed: %1</source>
         <translation>新しいバージョンがインストールされています: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1416"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1213"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
         <source>Downgrade</source>
         <translation>ダウングレード</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1421"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1450"/>
         <source>Earlier version installed: %1</source>
         <translation>古いバージョンがインストールされています: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1308"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1337"/>
         <source>Installing dependencies: %1</source>
         <translation>依存関係をインストール中: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1471"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1500"/>
         <source>Failed to install %1</source>
         <translation>%1のインストールに失敗しました</translation>
     </message>
@@ -537,7 +542,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>インストール</translation>
@@ -550,6 +555,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -562,7 +568,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="920"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="921"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>完了</translation>
@@ -589,11 +595,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
         <source>Installed successfully</source>
         <translation>インストールが完了しました</translation>
@@ -614,40 +615,41 @@
         <translation>アンインストール失敗</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1021"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Install %1 will remove: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
         <source>Dependencies in the repository</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1049"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
         <source>Missing dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1118"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1120"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1422"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
         <source>Update</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1477"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1506"/>
         <source>Invalid digital signature</source>
         <translation>デジタル署名が不正です</translation>
     </message>
@@ -657,8 +659,8 @@
         <translation>名前:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1409"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1206"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1438"/>
         <source>Same version installed</source>
         <translation>同じバージョンがインストールされています</translation>
     </message>
@@ -669,7 +671,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
         <source>Show details</source>
         <translation>詳細を表示</translation>
     </message>

@@ -139,19 +139,15 @@
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
-        <source>No digital signature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="893"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
         <source>Invalid digital signature</source>
         <translation type="unfinished">የዲጅታል ምም የሌለ ባለስ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1937"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1998"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation type="unfinished"></translation>
     </message>
@@ -161,97 +157,97 @@
         <translation>መግጠሙ አልተሳካም</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="871"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="874"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
         <source>Failed to install %1</source>
         <translation type="unfinished">የ%1 የመстанов መጥ vä</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1254"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1201"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1373"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2000"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>እሺ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="861"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
         <source>Same version installed</source>
         <translation type="unfinished">ተመሳሳይ እትም ተገጥሟል</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished">በኔ ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished">በፊት ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
         <source>Installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1355"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1414"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1416"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1358"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1417"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1199"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1249"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1936"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1258"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1370"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
         <source>Unable to install</source>
         <translation type="unfinished">ይለፍ ይችላል</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1255"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation type="unfinished">ይዘፍ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
         <source>This package does not have a valid digital signature</source>
         <translation>ዚህ ቁ绛 የድርጊ አይነት ምልክት ምልክት አልተሰጠም</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="900"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="906"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="967"/>
         <source>Broken dependencies: %1</source>
         <translation>ነገድ የተወሰነ አይነት ምልክት: %1</translation>
     </message>
@@ -261,7 +257,7 @@
         <translation>የማረጋገጫ ምልክት አልተሳካም</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="835"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
         <translation>የ ማይመሳሰል ጥቅል ግንባታ</translation>
     </message>
@@ -458,7 +454,7 @@
         <translation>ይለፍ ይችላል</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1251"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1310"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>ዚህ ቁ绛 የድርጊ አይነት ምልክት ምልክት አልተሰጠም እና የማስወገድ/ይዘፍ ውስጥ ያስገቡ ያስፈልገኝ፣ ከመጠ expecting ውስጥ ያስገቡ &gt; አስተዳደር &gt; አይነት ምልክት ምን ያስተዳደር ያስፈልገኝ ያስገቡ ያስፈልገኝ</translation>
@@ -484,15 +480,15 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1007"/>
         <source>Collapse</source>
         <translation>ማሳነሻ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1410"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
         <source>Reinstall</source>
         <translation>እንደገና መግጠሚያ</translation>
     </message>
@@ -503,30 +499,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1415"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
+        <source>%1 was successfully installed to compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
         <source>Later version installed: %1</source>
         <translation>በኔ ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1416"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1213"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
         <source>Downgrade</source>
         <translation>በፊት ያስገቡ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1421"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1450"/>
         <source>Earlier version installed: %1</source>
         <translation>በፊት ያስገቡ አይነት ምልክት: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1308"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1337"/>
         <source>Installing dependencies: %1</source>
         <translation>ማስወገድ አይነት ምልክቶች ም: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1471"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1500"/>
         <source>Failed to install %1</source>
         <translation>የ%1 የመстанов መጥ vä</translation>
     </message>
@@ -537,7 +538,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>መግጠሚያ</translation>
@@ -550,6 +551,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>እሺ</translation>
@@ -562,7 +564,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="920"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="921"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>ተው already</translation>
@@ -593,9 +595,8 @@
         <translation>የ%2 የመመ ምም የ%1 የሞድ ምረጥ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>የ%2 የ%1 የሞድ ምረጥ የተመстанов የተሳካ</translation>
+        <translation type="vanished">የ%2 የ%1 የሞድ ምረጥ የተመстанов የተሳካ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
@@ -618,40 +619,41 @@
         <translation>ማጥፋት አልተቻለም</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1021"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Install %1 will remove: </source>
         <translation>የ%1 የመстанов ምም ይሰር: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
         <source>Dependencies in the repository</source>
         <translation>የመነሳ ምም የተመዘገበ የምር unserialize</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1049"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
         <source>Missing dependencies</source>
         <translation>የመነሳ ምም የሌለ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1118"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1120"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">መሰረዣ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1422"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>አዘዝ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1477"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1506"/>
         <source>Invalid digital signature</source>
         <translation>የዲጅታል ምም የሌለ ባለስ</translation>
     </message>
@@ -661,8 +663,8 @@
         <translation>ስም: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1409"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1206"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1438"/>
         <source>Same version installed</source>
         <translation>ተመሳሳይ እትም ተገጥሟል</translation>
     </message>
@@ -673,7 +675,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
         <source>Show details</source>
         <translation>ዝርዝር ይምረጥ</translation>
     </message>

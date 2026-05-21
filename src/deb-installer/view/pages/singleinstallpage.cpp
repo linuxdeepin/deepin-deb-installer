@@ -927,8 +927,7 @@ void SingleInstallPage::slotWorkerFinished()
             if (m_inCompatibleMode) {
                 m_backButton->setVisible(false);
                 m_btnsLayout->setAlignment(m_doneButton, Qt::AlignCenter);
-                m_tipsLabel->setTextAndTips(tr("%2 was successfully installed to %1 compatibility mode")
-                                                .arg(kDefaultRootfsOsName)
+                m_tipsLabel->setTextAndTips(tr("%1 was successfully installed to compatibility mode")
                                                 .arg(m_pkgNameDescription));
             } else {
                 m_tipsLabel->setTextAndTips(tr("Installed successfully"));

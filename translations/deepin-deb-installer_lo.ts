@@ -143,20 +143,20 @@
         <translation>ការដាក់បញ្ចុចបានលើសលំហ័រទេសសាស្ត្រ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <source>No digital signature</source>
-        <translation>គ្មានចត្តាសេចក្តី</translation>
+        <translation type="vanished">គ្មានចត្តាសេចក្តី</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="893"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
         <source>Invalid digital signature</source>
         <translation>ចត្តាសេចក្តីមិនត្រឹមត្រូវ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="878"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1937"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1998"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>ម្ចាក់ប្រាស់បានកំណត់ច្តៅដើម្បីបញ្ញើការដាក់បញ្ចុចទំនិញនេះ</translation>
     </message>
@@ -166,7 +166,7 @@
         <translation>ការដាក់បញ្ចុចបានล้มเหล្យ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="835"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
         <translation>រចនាសម្ព័ន្ធទំនិញមិនសមស្រប</translation>
     </message>
@@ -179,97 +179,97 @@
         <translation type="vanished">ເພີ໋ມີການຕິດຕັ້ງແບບທີ່ສອດຄ່ອງໃນ %1, དີ້ນ ང་ອະທິບາຍວ່າ ང་ຕ້ອງລຸ່ມອອກອົບຮົມ ངའ່າ ཙຳນຶງ དັ້ງນີ້ ང་ຈະສາມາດຕິດຕັ້ງໄດ້.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="871"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>ការផ្គត់ផ្គង់មានបញ្ហា, សូមសាកល្បងដាក់បញ្ចុចក្នុងមードសមស្រប</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="874"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
         <source>Failed to install %1</source>
         <translation>ล้มเหลวในการติดตั้ง %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="900"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="906"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="967"/>
         <source>Broken dependencies: %1</source>
         <translation>ຂຸມຸນີ້ມີຂຸມຸນທີ່ອົງກອນບ່າຍ: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1254"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>ຍົກເcacel</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1201"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1939"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1373"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2000"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ຕິດຕັ້ງ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="861"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
         <source>Same version installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="863"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="865"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1162"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
         <source>Installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1205"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>ນ័យភាពຕິດຕັ້ງ %1 ຈະລະເກີນ: ຈີດ຿റ്റල ສະຫມັກບໍ່ຢຸດຕໍ່ໄດ້</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1355"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1414"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>ນີ້ບໍ່ມີສະຫມັກດີ digtal signature. ຂະຫຍານຕິດຕັ້ງຢື່ນ?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1357"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1416"/>
         <source>Cancel</source>
         <translation>ຍົກເລີກ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1358"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1417"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>ຕໍ່ຕໍ່ໄປ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1199"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1249"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1311"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1936"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1258"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1370"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
         <source>Unable to install</source>
         <translation>ບໍ່ສາມາດຕິດຕັ້ງໄດ້</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1255"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation type="unfinished">ຕໍ່ເນື່ອງ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1312"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
         <source>This package does not have a valid digital signature</source>
         <translation>ນີ້ບໍ່ມີສະຫມັກດີ digtal signature</translation>
     </message>
@@ -471,7 +471,7 @@
         <translation>ບໍ່ສາມາດຕິດຕື່ງໄດ້</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1251"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1310"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>ນີ້ແມ່ນບໍ້ຄວາມປະ່ອງສະຫນອງດ຿ຈ຿റັກແລະຖືກຈັບງັນຈາກການຕິດຕື່ງ/ນຳໃຊ້. ང຋ໄປ Security Center &gt; Tools &gt; App Security མືໜ້ອຍເພື່ອປັບປຸງຕີ້ນຕິ້ງ.</translation>
@@ -503,15 +503,15 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1126"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1178"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1410"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1155"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
         <source>Reinstall</source>
         <translation>ຕິດຕື່ງໃຫ້ຄັນອັກ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1244"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>ຕິດຕື່ງ</translation>
@@ -524,6 +524,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="989"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ຕົວຢ່າງ</translation>
@@ -536,7 +537,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="920"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="921"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>ສົ່ງສະໜອງແບບສົ່ງເປັນເຄື່ອງ</translation>
@@ -573,9 +574,13 @@
         <translation>ລື່ມ %2ຈາກແບບຄັນອັກ %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="929"/>
         <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation>ອົງປະຕິບັດທັງ່ %2 ເຊົ້າແລ້ວໄດ້ຖືກຕິດຕັ້ງຢຸດທາງ %1</translation>
+        <translation type="vanished">ອົງປະຕິບັດທັງ່ %2 ເຊົ້າແລ້ວໄດ້ຖືກຕິດຕັ້ງຢຸດທາງ %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
+        <source>%1 was successfully installed to compatibility mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
@@ -598,79 +603,80 @@
         <translation>ບໍ່ສົ່ງເຖິງຄວາມບໍ່ສົ່ງເຖິງ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="986"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1007"/>
         <source>Collapse</source>
         <translation>ກົນtract</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1021"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
         <source>Install %1 will remove: </source>
         <translation>%1 ລະບົດຈະຖືກລກງລົງ: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1042"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
         <source>Dependencies in the repository</source>
         <translation>ຖານທີ້ານົມໃນຖານທີ້ານົມ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1049"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1070"/>
         <source>Missing dependencies</source>
         <translation>ຖານທີ້ານົມທີ້າງພາກ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1118"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1147"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1120"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1149"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1177"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1409"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1206"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1438"/>
         <source>Same version installed</source>
         <translation>ລະບົດຕົວຈິງດຽວກັບທີ້າງພາກ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1183"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1415"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1212"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1444"/>
         <source>Later version installed: %1</source>
         <translation>ລະບົດເບິ່ງຄົງຫຼາຍກວ່າ: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1184"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1416"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1213"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1445"/>
         <source>Downgrade</source>
         <translation>ຕົວຈິງຫຼຸດລຸດ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1189"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1421"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1450"/>
         <source>Earlier version installed: %1</source>
         <translation>ລະບົດເບິ່ງຄົງແໆ: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1190"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1422"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1451"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>ປັບປຸງ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1308"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1337"/>
         <source>Installing dependencies: %1</source>
         <translation>ກົນtractຖານທີ້ານົມ: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1471"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1500"/>
         <source>Failed to install %1</source>
         <translation>ນំឡូតລ้ม hỏng %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1477"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1506"/>
         <source>Invalid digital signature</source>
         <translation>ວាយសេរុទ្ធសូចមិនถูกต้อง</translation>
     </message>
@@ -681,7 +687,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="924"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
         <source>Show details</source>
         <translation>ສម្រេចລើង</translation>
     </message>
