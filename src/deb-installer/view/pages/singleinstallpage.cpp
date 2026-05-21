@@ -981,6 +981,20 @@ void SingleInstallPage::slotWorkerFinished()
         if (failCode == Pkg::NoDigitalSignature || failCode == Pkg::DigitalSignatureError) {
             m_backButton->setVisible(false);
             m_infoControlButton->setVisible(false);
+
+            if (m_inCompatibleMode) {
+                // In compatible mode, the confirmButton was hidden earlier; show it for
+                // signature errors so the user can close the window. Also hide the
+                // doneButton which shows "Cancel" from the compat confirm view.
+                m_confirmButton->setVisible(true);
+                m_confirmButton->setText(tr("OK", "button"));
+                m_confirmButton->setFocus();
+                m_doneButton->setVisible(false);
+
+                // Override tips text: PackageFailReasonRole returns the compat-depends
+                // hint ("try compatibility mode") which is wrong for signature errors.
+                m_tipsLabel->setTextAndTips(tr("Invalid digital signature"));
+            }
         }
     } else {
         // 正常情况不会进入此分支，如果进入此分支表明状态错误。
