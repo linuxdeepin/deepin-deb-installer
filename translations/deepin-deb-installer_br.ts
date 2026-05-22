@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="br">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="br">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>أدخل الرقم الذي تريد تكوينه: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
@@ -20,22 +18,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>جارٍ تحميل الحزم...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 تم تحميلها</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>جارٍ بدء التشغيل...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -56,43 +54,43 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="133"/>
         <source>Settings</source>
-        <translation>الإعدادات</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="733"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="890"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>جارٍ تثبيت حزم أخرى... الرجاء فتحها لاحقاً.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>فشل التحليل: تم العثور على هيكل ملف غير قانوني في ملف الوضعية!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="740"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>فشل التحليل: تم العثور على رقم إصدار غير قانوني في ملف الوضعية!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="742"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>لم يتم العثور على أي حزم deb. الرجاء التحقق من المجلد.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="913"/>
         <source>The %1 package may be broken</source>
-        <translation>قد يكون حزمة %1 تالفة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="922"/>
         <source>You can only install local %1 packages</source>
-        <translation>يمكنك تثبيت حزم %1 المحلية فقط</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="931"/>
         <source>No permission to access this folder</source>
-        <translation>لا يوجد إذن لدخول هذا المجلد</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="948"/>
@@ -102,12 +100,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="957"/>
         <source>%1 does not exist, please reselect</source>
-        <translation>لا يوجد %1، الرجاء إعادة الاختيار</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1162"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="450"/>
@@ -139,21 +137,21 @@
     </message>
     <message>
         <source>No digital signature</source>
-        <translation type="vanished">لا يوجد توقيع رقمي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Invalid digital signature</source>
-        <translation>توقيع رقمي غير صحيح</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="939"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1998"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="947"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2006"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>لقد وضعت الإدارة سياسات لمنع تثبيت هذه الحزمة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="168"/>
@@ -161,112 +159,112 @@
         <translation>Staliadur c&apos;hwitet</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">النظام الحالي</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">تم تثبيت %2 في %1، الرجاء إزالة هذه الحزمة قبل تثبيتها</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>توجد اعتماديات معطوبة، جرّب تثبيت التطبيق في الوضع المتوافق</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
-        <translation>فشل تثبيت %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
+        <source>Unable to install - no digital signature</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Nullañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1373"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2000"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Mat eo</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Hevelep stumm staliet</translation>
+        <translation>Hevelep stumm staliet</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Stumm war-lerc&apos;h staliet: %1</translation>
+        <translation>Stumm war-lerc&apos;h staliet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Stumm kent staliet: %1</translation>
+        <translation>Stumm kent staliet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>فشل تثبيت %1: لا يوجد توقيع رقمي صحيح</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1414"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>لا يحتوي هذا الحزمة على توقيع رقمي صحيح. هل ترغب في المتابعة بالتحديث؟</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1416"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1424"/>
         <source>Cancel</source>
         <translation>Nullañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1417"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1425"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation>المتابعة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1258"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1370"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1316"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1378"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
         <translation>N&apos;heller ket distaliañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">المتابعة</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
         <source>This package does not have a valid digital signature</source>
         <translation>N&apos;eus ket ur sinadur niverel dereat gant ar pakad-mañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="967"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="969"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="975"/>
         <source>Broken dependencies: %1</source>
         <translation>Dalc&apos;hoù torret: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="158"/>
         <source>Authentication failed</source>
-        <translation>فشل التحقق من الهوية</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
@@ -321,17 +319,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>تثبيت %1 سيقوم بإزالة:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>الاعتماديات في المستودع</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
         <source>Missing dependencies</source>
-        <translation>الاعتماديات المفقودة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="629"/>
@@ -367,7 +365,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>تحديد جميع</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -438,27 +436,27 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>أساسي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>تحقق من توقيعات التشفير الرقمية إذا تم تمكين وضع المطور</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>لتنصيب التطبيقات غير الموقعة، انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيق، واختر أنواع التطبيقات التي يمكن تنصيبها.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>مركز الأمان &gt; أدوات &gt; أمان التطبيق</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>لم يتم تثبيت بيئة Linglong في النظام، من فضلك اثبتها أولاً</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -466,82 +464,82 @@
         <translation>N&apos;heller ket distaliañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1310"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>هذا الحزمة لا تحتوي على توقيع رقمي صحيح وقد تم حظرها من التنصيب/التشغيل. انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيق لتغيير الإعدادات.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Nullañ</translation>
+        <translation>Nullañ</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>المتابعة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
         <source>Will remove: </source>
-        <translation>سيتم إزالة:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1003"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="996"/>
         <source>Collapse</source>
         <translation>Bihanaat</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1151"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1203"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1435"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1196"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1428"/>
         <source>Reinstall</source>
         <translation>Adstaliañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1201"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1433"/>
         <source>Later version installed: %1</source>
         <translation>Stumm war-lerc&apos;h staliet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1209"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1441"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
         <source>Downgrade</source>
-        <translation>التحديث العكسي</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1214"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1446"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
         <source>Earlier version installed: %1</source>
         <translation>Stumm kent staliet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1333"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1326"/>
         <source>Installing dependencies: %1</source>
         <translation>O staliañ an dalc&apos;hioù: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1496"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1508"/>
         <source>Failed to install %1</source>
-        <translation>فشل في تنصيب %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="222"/>
@@ -550,7 +548,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1240"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1233"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>Staliañ</translation>
@@ -563,7 +561,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="985"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="978"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>Mat eo</translation>
@@ -576,7 +574,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="921"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="914"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>Echuet</translation>
@@ -584,89 +582,77 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="548"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="541"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="530"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">محاولة تنصيب %2 في وضع التوافق %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>إزالة %2 من وضع التوافق %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">تم تنصيب %2 بنجاح في وضع التوافق %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
         <source>Installed successfully</source>
         <translation>Staliet gant berzh</translation>
     </message>
     <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">تم إزالة %2 بنجاح من وضع التوافق %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Uninstalled successfully</source>
         <translation>Distaliet gant berzh</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="964"/>
         <source>Uninstall Failed</source>
         <translation>Distaliañ c&apos;hwitet</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1038"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1031"/>
         <source>Install %1 will remove: </source>
-        <translation>تنصيب %1 سيؤدي إلى إزالة:</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1052"/>
+        <source>Dependencies in the repository</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
-        <source>Dependencies in the repository</source>
-        <translation>الاعتماديات في المستودع</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1066"/>
         <source>Missing dependencies</source>
-        <translation>الاعتماديات المفقودة</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1143"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1136"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1145"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1138"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Nullañ</translation>
+        <translation>Nullañ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1447"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation>التحديث</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1502"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="984"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1514"/>
         <source>Invalid digital signature</source>
-        <translation>توقيع رقمي غير صحيح</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="210"/>
@@ -674,8 +660,8 @@
         <translation>Anv:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1195"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1427"/>
         <source>Same version installed</source>
         <translation>Hevelep stumm staliet</translation>
     </message>
@@ -684,9 +670,9 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="690"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="730"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="918"/>
         <source>Show details</source>
         <translation>Diskouez ar munudoù</translation>
     </message>
@@ -694,14 +680,14 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
         <source>Show dependencies</source>
-        <translation>عرض الاعتماديات</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="780"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="939"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="773"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>Show details</source>
         <translation>Diskouez ar munudoù</translation>
     </message>
@@ -754,9 +740,8 @@ Ar sistem pe aplikasionoù all a vo diaes dezho mont en-dro mat</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode?
-All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -764,7 +749,7 @@ All dependencies will also be removed</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Staliañ er mod kevveraat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
