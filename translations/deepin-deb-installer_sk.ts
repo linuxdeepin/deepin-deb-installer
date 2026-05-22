@@ -144,14 +144,14 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="954"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Invalid digital signature</source>
         <translation>Neplatný digitálny podpis</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="939"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1998"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="947"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2006"/>
         <source>The administrator has set policies to prevent installation of this package</source>
         <translation>Administrátor nastavil politiky, ktoré zabraňujú inštalácii tohto balíčka</translation>
     </message>
@@ -169,97 +169,97 @@
         <translation type="vanished"> %2 je nainštalovaný v %1, prosím, odstanovte tento balíčok pred inštaláciou</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Nerovnajúce sa závislosti, skúste inštalovať aplikáciu v režime kompatibility</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="935"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
         <source>Compatibility mode installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="957"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
         <translation>Nepodarilo sa inštalovať %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1313"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1260"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1373"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2000"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="922"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
         <translation type="unfinished">Rovnaká verzia je nainštalovaná</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="924"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
         <translation type="unfinished">Neskoršia verzia je nainštalovaná: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="926"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
         <translation type="unfinished">Nainštalovaná skoršia verzia: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1223"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1264"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
         <source>Failed to install %1: no valid digital signature</source>
         <translation>Nepodarilo sa inštalovať %1: žiadny platný digitálny podpis</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1414"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
         <translation>Tento balíčok nemá platný digitálny podpis. Pokračovať s inštaláciou?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1416"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1424"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1417"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1425"/>
         <source>Continue</source>
         <comment>button</comment>
         <translation>Pokračovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1258"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1308"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1370"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1997"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1316"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1378"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
         <translation>Nepodarilo sa inštalovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1314"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
         <source>Proceed</source>
         <comment>button</comment>
         <translation type="unfinished">Pokračovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1371"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
         <source>This package does not have a valid digital signature</source>
         <translation>Tento balíčok nemá platný digitálny podpis</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="961"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="967"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="969"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="975"/>
         <source>Broken dependencies: %1</source>
         <translation>Zlomené závislosti: %1</translation>
     </message>
@@ -466,7 +466,7 @@
         <translation>Nemôžem nainštalovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1310"/>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
         <translation>Tento balíček nemá platný digitálny podpis a bol zablokovaný pri inštalácii/spustení. Pre zmenenie nastavení pôjdite do Bezpečnostného centra &gt; Nástroje &gt; Bezpečnosť aplikácie.</translation>
@@ -492,54 +492,54 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1003"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="996"/>
         <source>Collapse</source>
         <translation>Zbaliť</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1151"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1203"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1435"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1144"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1196"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1428"/>
         <source>Reinstall</source>
         <translation>Reinštalovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="711"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="751"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
         <source>Installing in compatibility mode %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="930"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1201"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1433"/>
         <source>Later version installed: %1</source>
         <translation>Neskoršia verzia je nainštalovaná: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1209"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1441"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
         <source>Downgrade</source>
         <translation>Znížiť verziu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1214"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1446"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
         <source>Earlier version installed: %1</source>
         <translation>Nainštalovaná skoršia verzia: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1333"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1326"/>
         <source>Installing dependencies: %1</source>
         <translation>Inštalácia závislostí: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1496"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1508"/>
         <source>Failed to install %1</source>
         <translation>Nepodarilo sa nainštalovať %1</translation>
     </message>
@@ -550,7 +550,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1240"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1233"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>Inštalovať</translation>
@@ -563,7 +563,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="985"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="978"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
@@ -576,7 +576,7 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="921"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="914"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>Hotovo</translation>
@@ -588,12 +588,12 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="548"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="541"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="530"/>
         <source>Confirm to install in compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -602,7 +602,7 @@
         <translation type="vanished">Skúša sa inštalovať %2 v režime kompatibility %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="794"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
         <translation>Odstanovanie %2 z režimu kompatibility %1</translation>
     </message>
@@ -611,7 +611,7 @@
         <translation type="vanished">%2 bol úspešne nainštalovaný do režimu kompatibility %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="933"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
         <source>Installed successfully</source>
         <translation>Úspešne nainštalované</translation>
     </message>
@@ -620,51 +620,51 @@
         <translation type="vanished">%2 bol úspešne odinštalovaný v režime kompatibility s %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Uninstalled successfully</source>
         <translation>Úspešne odinštalované</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="971"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="964"/>
         <source>Uninstall Failed</source>
         <translation>Odinštalovanie zlyhalo</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1038"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1031"/>
         <source>Install %1 will remove: </source>
         <translation>Inštalácia %1 odstráni: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1052"/>
         <source>Dependencies in the repository</source>
         <translation>Závislosti v repozitári</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1066"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
         <source>Missing dependencies</source>
         <translation>Chýbajúce závislosti</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1143"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1136"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1145"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1138"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Zrušiť</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1215"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1447"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Aktualizovať</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="991"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1502"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="984"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1514"/>
         <source>Invalid digital signature</source>
         <translation>Neplatný digitálne podpis</translation>
     </message>
@@ -674,8 +674,8 @@
         <translation>Názov:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1195"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1427"/>
         <source>Same version installed</source>
         <translation>Rovnaká verzia je nainštalovaná</translation>
     </message>
@@ -684,9 +684,9 @@
     <name>SingleInstallPage_Install</name>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="697"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="737"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="925"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="690"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="730"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="918"/>
         <source>Show details</source>
         <translation>Zobraziť podrobnosti</translation>
     </message>
@@ -700,8 +700,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="780"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="939"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="773"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
         <source>Show details</source>
         <translation>Zobraziť podrobnosti</translation>
     </message>
@@ -754,8 +754,7 @@ Systém alebo iné aplikácie môžu nefungovať správne</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode?
-All dependencies will also be removed</source>
+        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
