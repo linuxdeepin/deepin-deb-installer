@@ -741,7 +741,7 @@ System lub inne aplikacje mogą nie działać poprawnie</translation>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"/>
+        <translation>Czy na pewno chcesz odinstalować %1 z warstwy kompatybilności? Wszystkie zależności również zostaną usunięte</translation>
     </message>
 </context>
 <context>
