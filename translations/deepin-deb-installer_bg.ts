@@ -511,6 +511,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -602,9 +607,8 @@
         <translation type="vanished">Показване на %2 в режим на съвместимост с %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>Премахване на %2 от режим на съвместимост с %1</translation>
+        <translation type="vanished">Премахване на %2 от режим на съвместимост с %1</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

@@ -512,6 +512,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -603,9 +608,8 @@
         <translation type="vanished">محاولة تثبيت %2 في وضع التوافق %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>إلغاء تثبيت %2 من وضع التوافق %1</translation>
+        <translation type="vanished">إلغاء تثبيت %2 من وضع التوافق %1</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

@@ -513,6 +513,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -604,9 +609,8 @@
         <translation type="vanished">Proovitakse %2 %1 kompatüübilahenduses installida</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>%2 eemaldatakse %1 kompatüübilahendustest</translation>
+        <translation type="vanished">%2 eemaldatakse %1 kompatüübilahendustest</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

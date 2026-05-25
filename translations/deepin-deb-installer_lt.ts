@@ -511,6 +511,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -602,9 +607,8 @@
         <translation type="vanished">Bandyta įdiegti %2 %1 kompatybumo režime</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>Pašalina %2 iš %1 kompatybumo režimo</translation>
+        <translation type="vanished">Pašalina %2 iš %1 kompatybumo režimo</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

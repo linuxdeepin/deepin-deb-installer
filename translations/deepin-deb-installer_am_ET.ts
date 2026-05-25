@@ -499,6 +499,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -590,9 +595,8 @@
         <translation type="vanished">የ%2 የመстанов ምም የ%1 የሞድ ምረጥ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>የ%2 የመመ ምም የ%1 የሞድ ምረጥ</translation>
+        <translation type="vanished">የ%2 የመመ ምም የ%1 የሞድ ምረጥ</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

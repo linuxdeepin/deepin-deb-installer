@@ -505,6 +505,11 @@
         <translation>重 裝</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation>正在從相容模式卸載%1</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation>%1已成功安裝到相容模式</translation>
@@ -598,9 +603,8 @@
         <translation>正在使用相容模式安裝%1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>正在從%1相容模式移除%2</translation>
+        <translation type="vanished">正在從%1相容模式移除%2</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

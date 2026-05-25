@@ -569,9 +569,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>ລື່ມ %2ຈາກແບບຄັນອັກ %1</translation>
+        <translation type="vanished">ລື່ມ %2ຈາກແບບຄັນອັກ %1</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>
@@ -590,6 +589,11 @@
     <message>
         <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
         <translation type="vanished">ອົງປະຕິບັດທັງ່ %2 ເຊົ້າແລ້ວໄດ້ຖືກແບ່ງບອກອອກຈາກຢຸດທາງ %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>

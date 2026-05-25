@@ -511,6 +511,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -602,9 +607,8 @@
         <translation type="vanished">%1&apos;in uyumluluk modunda %2 yüklenmeye çalışılıyor</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>%1&apos;in uyumluluk modundan %2 kaldırılıyor</translation>
+        <translation type="vanished">%1&apos;in uyumluluk modundan %2 kaldırılıyor</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

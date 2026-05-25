@@ -784,7 +784,7 @@ void SingleInstallPage::slotUninstallCurrentPackage()
         m_compatCheckBox->setVisible(false);
         m_compatDescLabel->setVisible(false);
         m_tipsLabel->setTextAndTips(
-            tr("Uninstalling %2 from %1 compatibility mode").arg(kDefaultRootfsOsName).arg(m_pkgNameDescription));
+            tr("Uninstalling %1 from compatibility mode").arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
     }

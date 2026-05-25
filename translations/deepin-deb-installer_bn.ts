@@ -512,6 +512,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -603,9 +608,8 @@
         <translation type="vanished">%1 সহযোগিতা মডেল এ %2 ইনস্টল করার প্রচেষ্টা করা হচ্ছে</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>%1 সহযোগিতা মডেল থেকে %2 বাতিল করা হচ্ছে</translation>
+        <translation type="vanished">%1 সহযোগিতা মডেল থেকে %2 বাতিল করা হচ্ছে</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>

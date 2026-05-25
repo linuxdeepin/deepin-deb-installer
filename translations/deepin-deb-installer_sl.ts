@@ -514,6 +514,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <source>Uninstalling %1 from compatibility mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
@@ -605,9 +610,8 @@
         <translation type="vanished">Namesto je %2 v kompatibilnostnem načinu %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation>Odstranjevanje %2 iz kompatibilnostnega načina %1</translation>
+        <translation type="vanished">Odstranjevanje %2 iz kompatibilnostnega načina %1</translation>
     </message>
     <message>
         <source>%2 was successfully installed to %1 compatibility mode</source>
