@@ -704,13 +704,24 @@ void SingleInstallPage::slotReinstall()
             tr("Installing in compatibility mode %1").arg(m_pkgNameDescription));
         m_tipsLabel->setCustomDPalette(DPalette::TextLively);
         m_tipsLabel->setVisible(true);
+
+        // Ensure targetRootfs is set when slotReinstall is called directly
+        // (e.g. after auth cancel via afterGetAutherFalse), bypassing the
+        // compat confirm flow where setData(targetRootfs) normally happens.
+        auto idx = m_packagesModel->index(0);
+        if (idx.data(DebListModel::CompatibleTargetRootfsRole).toString().isEmpty()) {
+            m_packagesModel->setData(idx, kDefaultRootfs, AbstractPackageListModel::CompatibleTargetRootfsRole);
+        }
     }
 
     // 重置包的工作状态
     m_operate = Reinstall;
 
     // 开始安装
-    m_packagesModel->slotInstallPackages();
+    if (!m_packagesModel->slotInstallPackages()) {
+        Q_EMIT signalBacktoFileChooseWidget();
+        return;
+    }
 }
 
 void SingleInstallPage::slotInstall()

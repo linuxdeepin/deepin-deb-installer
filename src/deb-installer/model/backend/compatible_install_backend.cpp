@@ -135,7 +135,6 @@ void CompatibleInstallBackend::ensureProcessor()
                         if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
                             m_model->m_workerStatus = AbstractPackageListModel::WorkerPrepare;
                             Q_EMIT m_model->signalAuthCancel();
-                            m_model->refreshOperatingPackageStatus(Pkg::Failed);
                             return;
                         }
                     }

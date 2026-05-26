@@ -2145,10 +2145,8 @@ void DebListModel::ensureCompatibleProcessor()
                     }
 
                     if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
-                        // notify UI reset, cancel current flow
                         m_workerStatus = WorkerPrepare;
                         Q_EMIT signalAuthCancel();
-                        refreshOperatingPackageStatus(Pkg::Failed);
                         return;
                     }
                 }
@@ -2226,10 +2224,8 @@ void DebListModel::ensureImmutableProcessor()
                     }
 
                     if (Pkg::ConfigAuthCancel == pkgPtr->errorCode()) {
-                        // notify UI reset, cancel current flow
                         m_workerStatus = WorkerPrepare;
                         Q_EMIT signalAuthCancel();
-                        refreshOperatingPackageStatus(Pkg::Failed);
                         return;
                     }
                 }
