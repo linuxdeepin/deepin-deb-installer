@@ -1,3 +1,12 @@
+deepin-deb-installer (6.5.41) unstable; urgency=medium
+
+  * fix(ui): fix compat mode reinstall failure after auth cancel
+  * fix(ui): remove OS name prefix from compat mode uninstall hint
+  * fix(ui): fix compat mode uninstall confirm text truncation
+  * chore: update version to 6.5.40
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 28 May 2026 17:46:45 +0800
+
 deepin-deb-installer (6.5.40) unstable; urgency=medium
 
   * fix(ui): make compat mode hint icon follow system theme
