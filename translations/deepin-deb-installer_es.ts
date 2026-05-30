@@ -219,7 +219,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"/>
+        <translation>Instalacion fallida</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
@@ -506,12 +506,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"/>
+        <translation>Instalar en modo compatible %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%1 se instaló correctamente en modo compatible</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1201"/>
@@ -749,7 +749,7 @@ El sistema u otras aplicaciones tal vez no funcionen correctamente</translation>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="unfinished"/>
+        <translation>Instalar en modo compatible</translation>
     </message>
 </context>
 <context>
