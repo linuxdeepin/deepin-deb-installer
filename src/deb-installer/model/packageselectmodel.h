@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -40,8 +40,8 @@ struct DebIr
     QStringList virtualPackages;          // 提供的虚拟包 QApt似乎不支持读Provides项
     QList<QApt::DependencyItem> depends;  // 完整的包依赖
 
-    bool archMatched;  // 是否与当前架构匹配
-    bool isValid;  // 包是否有效（根据以前的老代码，此处如果无效，可以暂时当做未安装处理，由后续的apt安装时进行报错）
+    bool archMatched = false;  // 是否与当前架构匹配
+    bool isValid = false;  // 包是否有效（根据以前的老代码，此处如果无效，可以暂时当做未安装处理，由后续的apt安装时进行报错）
 
     bool operator==(const DebIr &rhs) { return this->md5 == rhs.md5; }
 };

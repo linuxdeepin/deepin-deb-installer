@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -65,7 +65,7 @@ TEST_F(InfoControlButton_Test, InfoControlButton_UT_mouseReleaseEvent)
 {
     m_infoControlBtn->m_expand = true;
     m_infoControlBtn->m_expandTips = "expand";
-    QMouseEvent mouseReleaseEvent(QEvent::MouseButtonRelease, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent mouseReleaseEvent(QEvent::MouseButtonRelease, QPointF(10, 10), QPointF(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_infoControlBtn->mouseReleaseEvent(&mouseReleaseEvent);
     EXPECT_FALSE(m_infoControlBtn->m_expand);
     ASSERT_EQ("expand", m_infoControlBtn->m_tipsText->text());

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -943,7 +943,7 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_ConfigReadOutput)
     stub.set(ADDR(Konsole::Pty, receivedData), model_readAllStandardOutput);
     // asan检查 内存泄露
     QString buffer = "11111111";
-    int length = sizeof(buffer);
+    int length = buffer.size();
     bool isCommandExec = false;
     m_debListModel->slotConfigReadOutput(buffer.toStdString().c_str(), length, isCommandExec);
     EXPECT_EQ(Pkg::PackageOperationStatus::Operating,

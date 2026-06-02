@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -168,6 +168,12 @@ void AptConfigMessage::appendTextEdit(QString processInfo)
     int messageSize = configMessage.size();
     while (num != -1) {
         num = configMessage.indexOf("\\n");  // 获取第一行的下标
+        if (num == -1) {
+            // 没有更多换行符，将剩余内容追加后退出
+            if (configMessage.size() > 0)
+                m_textEdit->appendText(configMessage);
+            break;
+        }
 
         QString strFilter;                      // 存放第一行的数据
         strFilter = configMessage.mid(0, num);  // 截取第一行

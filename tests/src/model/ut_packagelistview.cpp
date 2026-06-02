@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -88,7 +88,7 @@ TEST_F(ut_packagelistview_Test, packagelistview_UT_setSelection)
 
 TEST_F(ut_packagelistview_Test, packagelistview_UT_mousePressEvent)
 {
-    QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPoint(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent mousePressEvent(QEvent::MouseButtonPress, QPointF(10, 10), QPointF(10, 10), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_listview->mousePressEvent(&mousePressEvent);
     EXPECT_TRUE(m_listview->m_bLeftMouse);
 }

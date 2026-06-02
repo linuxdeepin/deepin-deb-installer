@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -98,13 +98,11 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_gestureEvent)
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseEvent)
 {
     QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
-                             QPoint(0, 0),
-                             QPoint(0, 0),
-                             QPoint(0, 0),
+                             QPointF(0, 0),
+                             QPointF(0, 0),
                              Qt::LeftButton,
                              Qt::LeftButton,
-                             Qt::NoModifier,
-                             Qt::MouseEventSynthesizedByQt);
+                             Qt::NoModifier);
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
     m_infoTextEdit->mouseReleaseEvent(&releaseEvent);
     EXPECT_EQ(ShowInstallInfoTextEdit::GA_null, m_infoTextEdit->m_gestureAction);
@@ -112,7 +110,7 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseReleaseE
 
 TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEvent)
 {
-    QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_infoTextEdit->mouseMoveEvent(&moveEvent);
     ASSERT_EQ(0.0, m_infoTextEdit->m_lastMousepos);
 }
@@ -123,7 +121,7 @@ TEST_F(ut_showInstallInfoTextEdit_Test, ShowInstallInfoTextEdit_UT_mouseMoveEven
     stub.set(ADDR(QMouseEvent, source), stud_source);
 
     m_infoTextEdit->m_gestureAction = ShowInstallInfoTextEdit::GA_slide;
-    QMouseEvent moveEvent(QEvent::MouseMove, QPoint(0, 0), QPoint(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(10, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     m_infoTextEdit->mouseMoveEvent(&moveEvent);
     ASSERT_EQ(0.0, m_infoTextEdit->m_lastMousepos);
 }

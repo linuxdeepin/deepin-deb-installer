@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -71,11 +71,11 @@ QFont Utils::loadFontBySizeAndWeight(const QString &fontFamily, int fontSize, in
 
 void Utils::bindFontBySizeAndWeight(QWidget *widget, const QString &fontFamily, int fontSize, int fontWeight)
 {
-    qCDebug(appLog) << "Binding font to widget:" << widget->objectName() << fontFamily << fontSize << fontWeight;
     if (nullptr == widget) {
         qCWarning(appLog) << "Cannot bind font to null widget";
         return;
     }
+    qCDebug(appLog) << "Binding font to widget:" << widget->objectName() << fontFamily << fontSize << fontWeight;
     QFont font = loadFontBySizeAndWeight(fontFamily, fontSize, fontWeight);
     widget->setFont(font);
 
