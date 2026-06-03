@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>Päivitetään välimuistia...</translation>
     </message>
 </context>
 <context>
@@ -107,7 +105,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1162"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Asenna yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="450"/>
@@ -161,14 +159,6 @@
         <translation>Asennus epäonnistui</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">nykyinen järjestelmä</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%2 on asennettuna %1, poista tämä paketti ensin ennen asentamista</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
         <source>Broken dependencies, try installing the app in compatibility mode</source>
         <translation>Rikkinäiset riippuvuudet, yritä asentaa sovellus yhteensopivuustilassa</translation>
@@ -176,7 +166,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Yhteensopivuustilan asennus epäonnistui</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
@@ -184,10 +174,24 @@
         <translation>Kohteen %1 asentaminen epäonnistui</translation>
     </message>
     <message>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">Asennusta ei voi tehdä - digitaalinen allekirjoitus puuttuu</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">Ota kehittäjätila käyttöön Ohjauspaneelissa ja yritä uudelleen. Hyväksy?</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Peru</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>Hyväksy</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
@@ -200,22 +204,22 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Sama versio on asennettu</translation>
+        <translation>Sama versio on asennettu</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Uudempi versio asennettu: %1</translation>
+        <translation>Uudempi versio asennettu: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Aiempi versio asennettu: %1</translation>
+        <translation>Aiempi versio asennettu: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Asennus epäonnistui</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
@@ -245,12 +249,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
         <translation>Ei voi asentaa</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Hyväksy</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
@@ -475,7 +473,7 @@
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Peru</translation>
+        <translation>Peru</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -508,17 +506,12 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
-        <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Asennetaan %1 yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 asennettiin yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1201"/>
@@ -589,39 +582,28 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jos ohjelma on vanhempi versio (vanha järjestelmäversio), voit yrittää asentaa sen yhteensopivuustilassa.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="541"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation>UOS V25 -yhteensopivuustilassa, voit jatkaa V20-version sovellusten käyttöä. Se luo sinulle ympäristön, jonka ansiosta ohjelmat, jotka alun perin toimivat vain V20-versioissa, toimivat oikein myös V25-versiossa.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="530"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Vahvista asennus yhteensopivuustilassa</translation>
     </message>
     <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">Yritetään asentaa %2 %1 yhteensopivuustilassa</translation>
-    </message>
-    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
         <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Poistetaan asennusta %2 %1 yhteensopivuustilasta</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">%2 asennettiin onnistuneesti %1 yhteensopivuus -tilaan</translation>
+        <translation>Poistetaan asennusta %2 %1 yhteensopivuustilasta</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
         <source>Installed successfully</source>
         <translation>Asennettu onnistuneesti</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">%2 asennus poistettiin %1 yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
@@ -651,13 +633,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1136"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Yhteensopiva asennus</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1138"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Peru</translation>
+        <translation>Peru</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
@@ -759,7 +741,7 @@ Järjestelmä tai muut sovellukset eivät välttämättä toimi oikein</translat
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Haluatko varmasti poistaa %1 asennuksen yhteensopivuustilassa? Myös kaikki riippuvuudet poistetaan</translation>
     </message>
 </context>
 <context>
@@ -767,7 +749,7 @@ Järjestelmä tai muut sovellukset eivät välttämättä toimi oikein</translat
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Asenna yhteensopivassa tilassa</translation>
+        <translation>Asenna yhteensopivuustilassa</translation>
     </message>
 </context>
 <context>
