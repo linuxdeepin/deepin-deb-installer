@@ -1,3 +1,11 @@
+deepin-deb-installer (6.5.42) unstable; urgency=medium
+
+  * fix(compat): check arch mismatch before force compatible mode
+  * fix(test): adapt unit tests for Qt6 compilation and runtime
+  * chore: update version to 6.5.41
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 04 Jun 2026 20:06:45 +0800
+
 deepin-deb-installer (6.5.41) unstable; urgency=medium
 
   * fix(ui): fix compat mode reinstall failure after auth cancel
