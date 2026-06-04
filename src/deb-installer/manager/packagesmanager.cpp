@@ -251,6 +251,13 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
         return dependsStatus;
     }
 
+    if (isArchErrorQstring(package_path)) {
+        qCDebug(appLog) << "Architecture error, returning arch break status.";
+        dependsStatus.status = Pkg::DependsStatus::ArchBreak;
+        dependsStatus.package = debFile.packageName();
+        return dependsStatus;
+    }
+
     if (s_forceCompatible) {
         auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
         if (compPkgPtr && compPkgPtr->installed()) {
@@ -262,14 +269,6 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
         qCInfo(appLog) << "Force compatible mode for package:" << debFile.packageName();
         s_forceCompatible = false;
         return dependsStatus;
-    }
-
-    if (isArchErrorQstring(package_path)) {
-        qCDebug(appLog) << "Architecture error, returning arch break status.";
-        dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
-        dependsStatus.package = debFile.packageName();
-        QString packageName = debFile.packageName();
-        return PackageDependsStatus::_break(packageName);
     }
 
     // conflicts
@@ -1111,6 +1110,14 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         return dependsStatus;
     }
 
+    if (isArchError(index)) {
+        qCDebug(appLog) << "Package is in arch error:" << debFile.packageName();
+        dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
+        dependsStatus.package = debFile.packageName();
+        m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);  // 更换依赖的存储方式
+        return dependsStatus;
+    }
+
     if (s_forceCompatible) {
         auto compPkgPtr = CompBackend::instance()->containsPackage(debFile.packageName());
         if (compPkgPtr && compPkgPtr->installed()) {
@@ -1122,14 +1129,6 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);
         qCInfo(appLog) << "Force compatible mode for package:" << debFile.packageName();
         s_forceCompatible = false;
-        return dependsStatus;
-    }
-
-    if (isArchError(index)) {
-        qCDebug(appLog) << "Package is in arch error:" << debFile.packageName();
-        dependsStatus.status = Pkg::DependsStatus::ArchBreak;  // 添加ArchBreak错误。
-        dependsStatus.package = debFile.packageName();
-        m_packageMd5DependsStatus.insert(currentPackageMd5, dependsStatus);  // 更换依赖的存储方式
         return dependsStatus;
     }
 
