@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -42,6 +42,8 @@
 #include <QJsonObject>
 #include <QFileInfo>
 #include <QtConcurrent/QtConcurrent>
+
+#include <QApt/Transaction>
 
 using QApt::DebFile;
 
@@ -182,7 +184,8 @@ void DebInstaller::initConnections()
         if (inProcess) {
             slotShowPkgProcessBlockPage(BackendProcessPage::APT_INIT, 0, 0);
         } else {
-            slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+            // 按需更新缓存（非强制）
+            updatePackageCache(false);
         }
     });
 
@@ -461,13 +464,23 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
             || DebListModel::AuthPop == m_wineAuthStatus
             || DebListModel::AuthConfirm == m_wineAuthStatus
             || DebListModel::AuthDependsErr == m_wineAuthStatus) {
-    } else {
-        // 下一指令第1个包大小较大时，解析操作会阻塞当前线程，导致界面设置的逻辑顺序出现混乱，优先处理界面交互，然后再执行加载
-        qApp->processEvents();
-
-        //开始添加包，将要添加的包传递到后端，添加包由后端处理
-        m_fileListModel->slotAppendPackage(packagesPathList);
+        return;
     }
+
+    // 如果后端已就绪但缓存检查尚未完成，说明在缓存刷新之前
+    // 包就到达了（如双击deb包启动）。此时暂存包路径，
+    // 等待缓存刷新完成后再处理，确保依赖分析使用最新缓存数据。
+    if (PackageAnalyzer::instance().isBackendReady() && !m_cacheCheckDone) {
+        qInfo() << "Cache check pending, deferring package addition until cache is updated";
+        m_pendingPackages = packagesPathList;
+        return;
+    }
+
+    // 下一指令第1个包大小较大时，解析操作会阻塞当前线程，导致界面设置的逻辑顺序出现混乱，优先处理界面交互，然后再执行加载
+    qApp->processEvents();
+
+    //开始添加包，将要添加的包传递到后端，添加包由后端处理
+    m_fileListModel->slotAppendPackage(packagesPathList);
 }
 
 void DebInstaller::slotDdimSelected(const QStringList &ddimFiles)
@@ -923,6 +936,91 @@ void DebInstaller::slotShowHiddenButton()
         if (multiplePage) { //批量安装显示按钮
             multiplePage->afterGetAutherFalse();
         }
+    }
+}
+
+void DebInstaller::slotUpdateCacheFinished()
+{
+    Transaction *transaction = qobject_cast<Transaction *>(sender());
+    if (transaction) {
+        disconnect(transaction, &Transaction::finished, this, &DebInstaller::slotUpdateCacheFinished);
+
+        if (transaction->exitStatus() == QApt::ExitSuccess) {
+            if (auto backend = PackageAnalyzer::instance().backendPtr())
+                backend->reloadCache();
+        }
+        transaction->deleteLater();
+    }
+
+    m_cacheCheckDone = true;
+    slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+
+    // 缓存更新完成后，处理在缓存检查之前到达的待处理包
+    processPendingPackages();
+}
+
+void DebInstaller::updatePackageCache(bool force)
+{
+    // 如果不是强制更新，先判断是否需要更新
+    if (!force && !PackageAnalyzer::instance().shouldUpdateCache()) {
+        m_cacheCheckDone = true;
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        processPendingPackages();
+        return;
+    }
+
+    slotShowPkgProcessBlockPage(BackendProcessPage::APT_UPDATE_CACHE, 0, 0);
+    auto backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend) {
+        m_cacheCheckDone = true;
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        processPendingPackages();
+        return;
+    }
+
+    auto transaction = backend->updateCache();
+    if (!transaction) {
+        m_cacheCheckDone = true;
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        processPendingPackages();
+        return;
+    }
+
+    transaction->setLocale(".UTF-8");
+    connect(transaction, &Transaction::finished, this, &DebInstaller::slotUpdateCacheFinished);
+
+    // 缓存更新过程中的错误处理（包括鉴权失败）
+    // 当用户取消授权对话框时，transaction 触发 errorOccurred(AuthError)，
+    // 但 finished 信号可能不会随之触发，导致阻塞页面无法自动关闭。
+    // 此处统一处理所有错误：关闭阻塞页面并继续处理待添加的包。
+    connect(transaction, &Transaction::errorOccurred, this, [this](QApt::ErrorCode error) {
+        auto *trans = qobject_cast<Transaction *>(sender());
+        if (!trans)
+            return;
+
+        if (error == QApt::AuthError) {
+            qWarning() << "Cache update canceled by user (auth failed)";
+        }
+
+        // 断开 finished 信号，避免 errorOccurred 和 finished 同时触发导致重复处理
+        disconnect(trans, &Transaction::finished, this, &DebInstaller::slotUpdateCacheFinished);
+        trans->deleteLater();
+
+        m_cacheCheckDone = true;
+        slotShowPkgProcessBlockPage(BackendProcessPage::PROCESS_FIN, 0, 0);
+        processPendingPackages();
+    });
+
+    transaction->run();
+}
+
+void DebInstaller::processPendingPackages()
+{
+    if (!m_pendingPackages.isEmpty()) {
+        QStringList packages = m_pendingPackages;
+        m_pendingPackages.clear();
+        qInfo() << "Processing" << packages.size() << "deferred packages after cache update";
+        slotPackagesSelected(packages);
     }
 }
 

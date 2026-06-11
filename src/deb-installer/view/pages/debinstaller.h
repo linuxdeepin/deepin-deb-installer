@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -60,6 +60,8 @@ private slots:
      * 添加包时，对包进行处理，去除无效的包，提示已经添加过的包，并根据添加包的数量刷新界面
      */
     void slotPackagesSelected(const QStringList &packages);
+
+    void slotUpdateCacheFinished();
 
     /**
      * @brief slotDdimSelected
@@ -321,6 +323,18 @@ private:
      */
     DdimSt analyzeV10(const QJsonObject &ddimobj, const QString &ddimDir);
 
+    /**
+     * @brief updatePackageCache 更新软件包缓存
+     * @param force 是否强制更新（默认false，按需更新）
+     */
+    void updatePackageCache(bool force = false);
+
+    /**
+     * @brief processPendingPackages 处理在缓存更新前到达的待处理包
+     * 在缓存检查/更新完成后调用，确保包分析使用最新缓存数据。
+     */
+    void processPendingPackages();
+
 private:
     DebListModel        *m_fileListModel      = nullptr;                  //model 类
     FileChooseWidget    *m_fileChooseWidget   = nullptr;           //文件选择的widget
@@ -346,6 +360,9 @@ private:
 
     bool m_packageAppending = false;
     int m_wineAuthStatus = -1; //记录依赖配置授权状态
+
+    QStringList m_pendingPackages;  // 缓存更新前到达的待处理包
+    bool        m_cacheCheckDone = false; // 标记是否已完成缓存检查
 };
 
 #endif  // DEBINSTALLER_H
