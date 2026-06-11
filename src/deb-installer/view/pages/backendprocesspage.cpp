@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -30,6 +30,8 @@ void BackendProcessPage::setDisplayPage(DisplayMode mode)
     if (mode == APT_INIT) {
         allLayout->setCurrentWidget(noProcessWidget);
         noProcessWidget->start();
+    } else if (mode == APT_UPDATE_CACHE) {
+        noProcessWidget->setActionText(tr("Updating package cache..."));
     } else if (mode == READ_PKG) {
         allLayout->setCurrentWidget(processWidget);
         noProcessWidget->stop();

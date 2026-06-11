@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +8,8 @@
 #include "model/packageselectmodel.h"
 
 #include <QObject>
+#include <QDateTime>
+#include <QFileInfo>
 #include <atomic>
 
 namespace QApt {
@@ -39,6 +41,10 @@ public:
     void initBackend();
     bool isBackendReady();
     QApt::Backend *backendPtr();
+
+    // 判断是否需要更新软件包缓存
+    // 基于文件时间戳比较：比较源文件和缓存文件的修改时间
+    bool shouldUpdateCache() const;
 
     //选择阶段
 
@@ -94,6 +100,12 @@ private:
     QString resolvMultiArchAnnotation(const QString &annotation,
                                       const QString &debArch,
                                       int multiArchType) const;
+
+    // 获取APT源文件的最新修改时间
+    QDateTime getSourcesLastModified() const;
+
+    // 获取APT缓存文件的修改时间
+    QDateTime getCacheLastModified() const;
 
     explicit PackageAnalyzer(QObject *parent = nullptr);
     PackageAnalyzer(const PackageAnalyzer &) = delete;
