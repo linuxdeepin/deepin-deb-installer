@@ -15,6 +15,7 @@
 
 #include <QApt/Backend>
 #include <QApt/DebFile>
+#include <QApt/Transaction>
 
 PackageAnalyzer &PackageAnalyzer::instance()
 {
@@ -95,6 +96,19 @@ void PackageAnalyzer::initBackend()
     backendInInit = false;
     emit runBackend(false);
     qCInfo(appLog) << "Backend initialization process finished.";
+}
+
+void PackageAnalyzer::updatePackageCache()
+{
+    // 判断是否需要更新
+    if (!shouldUpdateCache()) {
+        qCInfo(appLog) << "Sources not changed, cache is still valid, skip update";
+        setCacheUpdateFinished(true);
+        return;
+    }
+
+    qCInfo(appLog) << "Package cache update started";
+    emit cacheUpdateStarted();
 }
 
 bool PackageAnalyzer::isBackendReady()

@@ -18,6 +18,7 @@
 namespace QApt {
 class Backend;
 class Package;
+class Transaction;
 }  // namespace QApt
 
 class PackageAnalyzer : public QObject
@@ -35,6 +36,7 @@ public:
     // 初始化阶段
 
     void initBackend();
+    void updatePackageCache();
     bool isBackendReady();
     QApt::Backend *backendPtr();
 
@@ -96,6 +98,9 @@ signals:
 
     // 正在分析包情况
     void runAnalyzeDeb(bool inProcess, int currentRote, int pkgCount);
+
+    // 软件包缓存更新已启动
+    void cacheUpdateStarted();
 
     // 软件包缓存更新完成，apt 锁已释放
     void cacheUpdateFinished();

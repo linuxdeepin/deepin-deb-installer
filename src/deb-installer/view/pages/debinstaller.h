@@ -337,12 +337,6 @@ private:
      */
     QStringList pathTransform(const QStringList &pkgList);
 
-    /**
-     * @brief updatePackageCache 更新软件包缓存
-     * @param force 是否强制更新（默认false，按需更新）
-     */
-    void updatePackageCache(bool force = false);
-
 private:
     AbstractPackageListModel *m_fileListModel = nullptr;  // model 类
     FileChooseWidget *m_fileChooseWidget = nullptr;       // 文件选择的widget
