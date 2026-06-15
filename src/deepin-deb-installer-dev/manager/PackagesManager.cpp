@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -71,6 +71,10 @@ void PackagesManager::slot_getDependsStatus(int index, DependsStatus dependsStat
 void PackagesManager::slot_getInstallStatus(int index, InstallStatus installStatus)
 {
     Package *pkg = searchByIndex(index);
+    if (!pkg) {
+        qWarning() << "[PackagesManager]<< slot_getInstallStatus" << "Package not found for index:" << index;
+        return;
+    }
     pkg->setPackageInstallStatus(installStatus);
     if (!m_appendFinished) {
         m_appendFinished = true;
