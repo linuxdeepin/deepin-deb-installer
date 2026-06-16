@@ -1200,6 +1200,9 @@ void SingleInstallPage::showPackageInfo()
 
         // 根据安装状态设置提示文字
         if (installed) {
+            // Ensure tips label is visible when showing status message
+            // (it may have been hidden during uninstall operation)
+            m_tipsLabel->setVisible(true);
             if (installStat == Pkg::PackageInstallStatus::InstalledSameVersion) {
                 qCDebug(appLog) << "Same version installed";
                 m_tipsLabel->setCustomDPalette(DPalette::TextWarning);
@@ -1273,22 +1276,11 @@ void SingleInstallPage::afterGetAutherFalse()
     m_progressFrame->setVisible(false);
     m_btnsFrame->setVisible(true);
 
-    // 根据安装场景显示按钮
-    if (m_operate == Install) {
-        qCDebug(appLog) << "Install operation, show install button";
-        m_installButton->setVisible(true);
-        m_installButton->setFocus();
-    } else if (m_operate == Uninstall) {
-        qCDebug(appLog) << "Uninstall operation, show reinstall and uninstall buttons";
-        m_reinstallButton->setVisible(true);
-        m_uninstallButton->setVisible(true);
-        m_reinstallButton->setFocus();
-    } else if (m_operate == Reinstall) {
-        qCDebug(appLog) << "Reinstall operation, show reinstall and uninstall buttons";
-        m_reinstallButton->setVisible(true);
-        m_uninstallButton->setVisible(true);
-        m_reinstallButton->setFocus();
-    }
+    // Call showPackageInfo() to properly restore UI state including:
+    // - Tips label text (fixes issue #1: prompt text not restored)
+    // - Button visibility state (fixes issue #2: duplicate reinstall buttons)
+    // This ensures consistent state management instead of manually managing buttons here.
+    showPackageInfo();
 
     if (m_showRemovePackages) {
         qCDebug(appLog) << "Show remove packages, show depends button";
