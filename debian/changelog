@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.43) unstable; urgency=medium
+
+  * refactor: restructure package cache update logic with signal-driven approach
+  * fix: restore UI state properly after authorization check
+
+ -- Liu Zhangjian <liuzhangjian@uniontech.com>  Wed, 17 Jun 2026 15:35:32 +0800
+
 deepin-deb-installer (6.5.42) unstable; urgency=medium
 
   * fix(compat): check arch mismatch before force compatible mode
