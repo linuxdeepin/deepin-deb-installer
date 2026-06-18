@@ -49,72 +49,67 @@
 <context>
     <name>DebInstaller</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="120"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="121"/>
         <source>Package Installer</source>
         <translation>Trình cài đặt gói</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="133"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="134"/>
         <source>Settings</source>
         <translation>Cài đặt</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="733"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="890"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="883"/>
         <source>Installing other packages... Please open it later.</source>
         <translation>Đang cài đặt các gói khác... Mở ứng dụng sau.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="738"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="764"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
         <translation>Phân tích thất bại: Có cấu trúc tệp bất hợp pháp được tìm thấy trong tệp manifest!
 </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="740"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="766"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
         <translation>Phân tích thất bại: Số phiên bản bất hợp pháp được tìm thấy trong tệp manifest!
 </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="742"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="768"/>
         <source>No deb packages found. Please check the folder.</source>
         <translation>Không tìm thấy các gói deb. Vui lòng kiểm tra thư mục.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="913"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="906"/>
         <source>The %1 package may be broken</source>
         <translation>Gói %1 có thể bị hỏng</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="922"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="915"/>
         <source>You can only install local %1 packages</source>
         <translation>Bạn chỉ có thể cài đặt các gói %1 cục bộ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="931"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="924"/>
         <source>No permission to access this folder</source>
         <translation>Không có quyền truy cập vào thư mục này</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="948"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="941"/>
         <source>Already Added</source>
         <translation>Đã thêm</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="957"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="950"/>
         <source>%1 does not exist, please reselect</source>
         <translation>%1 không tồn tại, vui lòng chọn lại</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1162"/>
-        <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="450"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="965"/>
-        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1121"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="478"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="958"/>
+        <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
         <source>Bulk Install</source>
         <translation>Cài đặt hàng loạt</translation>
     </message>
@@ -429,8 +424,8 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="61"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="64"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>Đóng lại</translation>
@@ -495,113 +490,118 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="996"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1016"/>
         <source>Collapse</source>
         <translation>Đóng lại</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="394"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1144"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1196"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1428"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="403"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1456"/>
         <source>Reinstall</source>
         <translation>Cài lại</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="704"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="744"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="713"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
         <source>Installing in compatibility mode %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="787"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
         <source>Uninstalling %1 from compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="923"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1201"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1433"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1224"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1461"/>
         <source>Later version installed: %1</source>
         <translation>Phiên bản mới nhất đã cài: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1202"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1434"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1225"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1462"/>
         <source>Downgrade</source>
         <translation>Giảm phiên bản</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1207"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1439"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1230"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1467"/>
         <source>Earlier version installed: %1</source>
         <translation>Phiên bản đã cài đặt trước đó: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1326"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
+        <source>Compatible Mode Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
         <source>Installing dependencies: %1</source>
         <translation>Đang cài đặt các thư viện liên quan: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1508"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1536"/>
         <source>Failed to install %1</source>
         <translation>Cài đặt thất bại %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="222"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="231"/>
         <source>Version: </source>
         <translation>Phiên bản:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="386"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1233"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="395"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1256"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>Cài dặt</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="390"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="399"/>
         <source>Remove</source>
         <comment>button</comment>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="398"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="978"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="407"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="998"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="402"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="411"/>
         <source>Back</source>
         <comment>button</comment>
         <translation>Trở lại</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="914"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="415"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="934"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>Hoàn thành</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="517"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="526"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="518"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="541"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="527"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="530"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="539"/>
         <source>Confirm to install in compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -618,7 +618,7 @@
         <translation type="vanished">%2 đã được cài đặt thành công trong chế độ tương thích %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="926"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="946"/>
         <source>Installed successfully</source>
         <translation>Đã cài đặt thành công</translation>
     </message>
@@ -627,62 +627,62 @@
         <translation type="vanished">%2 đã được gỡ cài đặt thành công từ chế độ tương thích %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
         <source>Uninstalled successfully</source>
         <translation>Gỡ cài đặt thành công</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="964"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="984"/>
         <source>Uninstall Failed</source>
         <translation>Gỡ cài đặt thất bại</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1031"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1051"/>
         <source>Install %1 will remove: </source>
         <translation>Cài đặt %1 sẽ gỡ cài đặt:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1052"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1072"/>
         <source>Dependencies in the repository</source>
         <translation>Tùy thuộc trong kho</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1059"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1079"/>
         <source>Missing dependencies</source>
         <translation>Tùy thuộc thiếu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1136"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1138"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1158"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1208"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1440"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1231"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Cập nhật</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="984"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1514"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1542"/>
         <source>Invalid digital signature</source>
         <translation>Chữ ký số không hợp lệ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="210"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="219"/>
         <source>Name: </source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1195"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1427"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1455"/>
         <source>Same version installed</source>
         <translation>Có một phiên bản tương tự đã được cài đặt</translation>
     </message>
@@ -690,16 +690,16 @@
 <context>
     <name>SingleInstallPage_Install</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="59"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="690"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="730"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="918"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="699"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="750"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
         <source>Show details</source>
         <translation>Hiện chi tiết</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="63"/>
         <source>Show dependencies</source>
         <translation>Hiển thị phụ thuộc</translation>
     </message>
@@ -707,8 +707,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="773"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="932"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="793"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="952"/>
         <source>Show details</source>
         <translation>Hiện chi tiết</translation>
     </message>
@@ -768,9 +768,8 @@ Hệ thống hoặc phần mềm khác có thể không hoạt động</translat
 <context>
     <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
     <message>
-        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Cài đặt ở chế độ tương thích</translation>
+        <translation type="vanished">Cài đặt ở chế độ tương thích</translation>
     </message>
 </context>
 <context>

@@ -79,6 +79,12 @@ signals:
      */
     void signalRequestUninstallConfirm() const;
 
+    /**
+     * @brief signalSetTitlebarText 设置 titlebar 标题文本
+     * @param text 标题文本，为空时清除标题
+     */
+    void signalSetTitlebarText(const QString &text) const;
+
 private:
     /**
      * @brief The current operate

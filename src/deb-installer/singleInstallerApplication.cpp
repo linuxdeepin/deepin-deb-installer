@@ -83,6 +83,8 @@ void SingleInstallerApplication::activateWindow()
 void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 {
     qCInfo(appLog) << "InstallerDeb called with" << debPathList.size() << "packages";
+    // 复位兼容标志，防止同一实例内"先兼容安装、后普通安装"时标志串味
+    s_forceCompatible = false;
     if (!debPathList.isEmpty())
         setHasPackages(true);
     if (mode == DdimChannel) {
@@ -105,6 +107,9 @@ void SingleInstallerApplication::InstallerDeb(const QStringList &debPathList)
 void SingleInstallerApplication::InstallerDebCompatible(const QStringList &debPathList)
 {
     qCInfo(appLog) << "InstallerDebCompatible called with" << debPathList.size() << "packages";
+    // 同步 app 级标志，避免 D-Bus 单实例转发路径下 s_forceCompatible 为过期值
+    // （老实例在 parseCmdLine 时未带 --compatible，s_forceCompatible 默认为 false）
+    s_forceCompatible = true;
     if (!debPathList.isEmpty()) {
         setHasPackages(true);
         PackagesManager::setForceCompatible(true);

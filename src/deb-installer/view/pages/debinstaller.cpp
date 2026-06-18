@@ -1145,27 +1145,26 @@ void DebInstaller::refreshSingle()
         m_lastPage->deleteLater();  // 清除widgets缓存
     }
     // 安装器中只有一个包，刷新单包安装页面
-    // 刷新成单包安装界面时，删除标题
+    // 重置标题栏（依赖不满足的界面不显示兼容模式标题，只在 checkbox 确认界面才显示）
     titlebar()->setTitle(QString());
 
-    // check if single package in compatible mode
-    const QModelIndex singleIdx = m_fileListModel->index(0);
-    const int compatStat = singleIdx.data(DebListModel::PackageDependsStatusRole).toInt();
-    if (Pkg::CompatibleNotInstalled == compatStat || Pkg::CompatibleIntalled == compatStat) {
-        const QString compatTitle = tr("Compatible Mode Install");
-        titlebar()->setTitle(compatTitle);
-        for (auto *label : titlebar()->findChildren<QLabel *>()) {
-            if (label->text() == compatTitle) {
-                QFont f = label->font();
-                f.setBold(true);
-                label->setFont(f);
-                break;
-            }
-        }
-    }
-
+    // 先创建 SingleInstallPage，在其构造函数中 initUI() 会立即调用 showCompatConfirmView()
+    // 所以必须先连接信号，确保 showCompatConfirmView() 发出的 signalSetTitlebarText 能被捕获
     SingleInstallPage *singlePage = new SingleInstallPage(m_fileListModel);
     singlePage->setObjectName("SingleInstallPage");
+    connect(singlePage, &SingleInstallPage::signalSetTitlebarText, this, [this](const QString &text) {
+        titlebar()->setTitle(text);
+        if (!text.isEmpty()) {
+            for (QLabel *label : titlebar()->findChildren<QLabel *>()) {
+                if (label->text() == text) {
+                    QFont f = label->font();
+                    f.setBold(true);
+                    label->setFont(f);
+                    break;
+                }
+            }
+        }
+    });
     connect(singlePage, &SingleInstallPage::signalBacktoFileChooseWidget, this, &DebInstaller::slotReset);
     connect(singlePage, &SingleInstallPage::signalRequestUninstallConfirm, this, &DebInstaller::slotShowUninstallConfirmPage);
 
@@ -1174,6 +1173,8 @@ void DebInstaller::refreshSingle()
 
     // 兼容模式下禁止拖入追加包，避免从兼容模式单安装页面切换到批量安装页面
     // Log: task-389473 屏蔽兼容模式下添加更多包的入口
+    const QModelIndex idx = m_fileListModel->index(0);
+    const int compatStat = idx.data(DebListModel::PackageDependsStatusRole).toInt();
     const bool compatMode = (compatStat == Pkg::CompatibleNotInstalled || compatStat == Pkg::CompatibleIntalled);
 
     // 重置安装器拖入的状态与工作的状态

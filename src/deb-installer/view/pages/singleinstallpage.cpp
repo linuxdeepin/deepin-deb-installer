@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "singleinstallpage.h"
+#include "singleInstallerApplication.h"
 #include "model/deblistmodel.h"
 #include "view/widgets/workerprogress.h"
 #include "utils/utils.h"
@@ -106,6 +107,14 @@ void SingleInstallPage::initUI()
     // update show info, must call before refresh depends
     showPackageInfo();
     connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
+
+    // 右键菜单"兼容模式安装"入口（--compatible 强制兼容）：直接进入 checkbox 二次确认视图，跳过第一视图
+    // 双击 deb 自动识别为兼容的不受 s_forceCompatible 影响，仍走原第一视图
+    // 注意：不能在构造函数中直接调用 showCompatConfirmView()，因为此时信号还未连接
+    // 使用 QTimer::singleShot 延迟到事件循环处理，确保 showCompatConfirmView() 发出的信号能被 DebInstaller 捕获
+    if (SingleInstallerApplication::s_forceCompatible && m_inCompatibleMode) {
+        QTimer::singleShot(0, this, [this]() { showCompatConfirmView(); });
+    }
     qCDebug(appLog) << "UI initialized";
 }
 
@@ -1249,6 +1258,10 @@ void SingleInstallPage::showCompatConfirmView()
     m_confirmButton->setVisible(true);
     m_confirmButton->setFocus();
     m_btnsLayout->setSpacing(20);
+
+    // 通知父窗口设置 titlebar 为兼容模式安装
+    const QString compatTitle = tr("Compatible Mode Install");
+    Q_EMIT signalSetTitlebarText(compatTitle);
 }
 
 void SingleInstallPage::setEnableButton(bool bEnable)
