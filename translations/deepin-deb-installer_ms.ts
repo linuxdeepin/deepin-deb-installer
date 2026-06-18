@@ -1,49 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ms">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ms">
 <context>
     <name>AptConfigMessage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>Masukkan bilangan konfigur:</translation>
+        <translation type="vanished">Masukkan bilangan konfigur:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
     <name>BackendProcessPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>Memuatkan pakej...</translation>
+        <translation type="vanished">Memuatkan pakej...</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 dimuatkan</translation>
+        <translation type="vanished">%1/%2 dimuatkan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>Memulakan...</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
-        <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Memulakan...</translation>
     </message>
 </context>
 <context>
     <name>DdimErrorPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/ddimerrorpage.cpp" line="18"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
@@ -82,17 +69,17 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="906"/>
         <source>The %1 package may be broken</source>
-        <translation>Pakej %1 mungkin rosak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="915"/>
         <source>You can only install local %1 packages</source>
-        <translation>Anda hanya boleh memasang pakej %1 yang lokasl</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="924"/>
         <source>No permission to access this folder</source>
-        <translation>Tiada kebenaran untuk mengakses folder ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="941"/>
@@ -115,312 +102,228 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="113"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Pemasangan gagal, sila periksa sambungan rangkaian anda</translation>
+        <translation type="vanished">Pemasangan gagal, sila periksa sambungan rangkaian anda</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Pemasangan gagal, sila periksa kemas kini dalam Pusat Kawalan</translation>
+        <translation type="vanished">Pemasangan gagal, sila periksa kemas kini dalam Pusat Kawalan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="126"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="142"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Pemasangan gagal, ruang cakera tidak mencukupi</translation>
+        <translation type="vanished">Pemasangan gagal, ruang cakera tidak mencukupi</translation>
     </message>
     <message>
         <source>No digital signature</source>
         <translation type="vanished">Tiada tandatangan digital</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Invalid digital signature</source>
-        <translation>Tandatangan digital tidak sah</translation>
+        <translation type="vanished">Tandatangan digital tidak sah</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="947"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2006"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>Pentadbir telah menetapkan dasar yang menghalang pemasangan pakej ini</translation>
+        <translation type="vanished">Pentadbir telah menetapkan dasar yang menghalang pemasangan pakej ini</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="168"/>
         <source>Installation Failed</source>
-        <translation>Pemasangan Gagal</translation>
+        <translation type="vanished">Pemasangan Gagal</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">sistem semasa</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%2 telah dipasang dalam %1, sila unistall pakej ini sebelum memasangnya</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Pendependen yang rosak, cuba pasang aplikasi dalam mod kompatibiliti</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
-        <translation>Gagal memasang %1</translation>
+        <translation type="vanished">Gagal memasang %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">Tidak dapat pasang - tiada tandatangan digital</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">Sila pergi ke Pusat Kawalan untuk membenarkan mod pembangun dan cuba sekali lagi. Teruskan?</translation>
+    </message>
+    <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Batal</translation>
+        <translation type="vanished">Batal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
-        <source>Same version installed</source>
-        <translation type="unfinished">Versi serupa telah dipasang</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
-        <source>Later version installed: %1</source>
-        <translation type="unfinished">Versi terkemudian dipasang: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
-        <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Versi lebih awal dipasang: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
-        <source>Installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
-        <source>Failed to install %1: no valid digital signature</source>
-        <translation>Gagal memasang %1: tiada tandatangan digital yang sah</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
-        <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>Pakej ini tidak memiliki tandatangan digital yang sah. Teruskan pemasangan?</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1424"/>
-        <source>Cancel</source>
-        <translation>Batal</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1425"/>
-        <source>Continue</source>
-        <comment>button</comment>
-        <translation>Teruskan</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1316"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1378"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
-        <source>Unable to install</source>
-        <translation>Tidak boleh memasang</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished">Teruskan</translation>
+        <translation type="vanished">Teruskan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Later version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Earlier version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This package does not have a valid digital signature. Continue with the installation?</source>
+        <translation type="vanished">Pakej ini tidak memiliki tandatangan digital yang sah. Teruskan pemasangan?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="vanished">Batal</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <comment>button</comment>
+        <translation type="vanished">Teruskan</translation>
+    </message>
+    <message>
+        <source>Unable to install</source>
+        <translation type="vanished">Tidak boleh memasang</translation>
+    </message>
+    <message>
         <source>This package does not have a valid digital signature</source>
-        <translation>Pakej ini tidak memiliki tandatangan digital yang sah</translation>
+        <translation type="vanished">Pakej ini tidak memiliki tandatangan digital yang sah</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="969"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="975"/>
         <source>Broken dependencies: %1</source>
-        <translation>Dependensi rosak: %1</translation>
+        <translation type="vanished">Dependensi rosak: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="158"/>
         <source>Authentication failed</source>
-        <translation>Pengesahihan gagal</translation>
+        <translation type="vanished">Pengesahihan gagal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
-        <translation>Senibina pakej tidak sepadan</translation>
+        <translation type="vanished">Senibina pakej tidak sepadan</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation>Seret pakej-pakej deb di sini</translation>
+        <translation type="vanished">Seret pakej-pakej deb di sini</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>Pilih Fail</translation>
+        <translation type="vanished">Pilih Fail</translation>
     </message>
 </context>
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation>Tunjuk perincian</translation>
+        <translation type="vanished">Tunjuk perincian</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Kuncup</translation>
+        <translation type="vanished">Kuncup</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="179"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Pasang</translation>
+        <translation type="vanished">Pasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="180"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation>Selesai</translation>
+        <translation type="vanished">Selesai</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="182"/>
         <source>Back</source>
         <comment>button</comment>
-        <translation>Undur</translation>
+        <translation type="vanished">Undur</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
-        <source>Install %1 will remove: </source>
-        <translation>Pemasangan %1 akan menghapuskan: </translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>Dependensi dalam repositori</translation>
+        <translation type="vanished">Dependensi dalam repositori</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
         <source>Missing dependencies</source>
-        <translation>Dependensi hilang</translation>
+        <translation type="vanished">Dependensi hilang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="629"/>
         <source>Installing dependencies: %1</source>
-        <translation>Memasang dependensi: %1</translation>
+        <translation type="vanished">Memasang dependensi: %1</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectItem</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="87"/>
         <source>Same version installed</source>
-        <translation>Versi serupa telah dipasang</translation>
+        <translation type="vanished">Versi serupa telah dipasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="91"/>
         <source>Earlier version installed: %1</source>
-        <translation>Versi lebih awal dipasang: %1</translation>
+        <translation type="vanished">Versi lebih awal dipasang: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="96"/>
         <source>Later version installed: %1</source>
-        <translation>Versi terkemudian dipasang: %1</translation>
+        <translation type="vanished">Versi terkemudian dipasang: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="102"/>
         <source>Unmatched package architecture</source>
-        <translation>Senibina pakej tidak sepadan</translation>
+        <translation type="vanished">Senibina pakej tidak sepadan</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectView</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Pilih semua</translation>
+        <translation type="vanished">Pilih semua</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Pasang</translation>
+        <translation type="vanished">Pasang</translation>
     </message>
 </context>
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="62"/>
         <source>Installing</source>
-        <translation>Memasang</translation>
+        <translation type="vanished">Memasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="66"/>
         <source>Installed</source>
-        <translation>Dipasang</translation>
+        <translation type="vanished">Dipasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="74"/>
         <source>Failed</source>
-        <translation>Gagal</translation>
+        <translation type="vanished">Gagal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
         <source>Waiting</source>
-        <translation>Menunggu</translation>
+        <translation type="vanished">Menunggu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="246"/>
         <source>Same version installed</source>
-        <translation>Versi serupa telah dipasang</translation>
+        <translation type="vanished">Versi serupa telah dipasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Later version installed: %1</source>
-        <translation>Versi terkemudian dipasang: %1</translation>
+        <translation type="vanished">Versi terkemudian dipasang: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="250"/>
         <source>Earlier version installed: %1</source>
-        <translation>Versi lebih awal dipasang: %1</translation>
+        <translation type="vanished">Versi lebih awal dipasang: %1</translation>
     </message>
 </context>
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb-installer/model/packagelistview.cpp" line="189"/>
         <source>Delete</source>
-        <translation>Padam</translation>
+        <translation type="vanished">Padam</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="64"/>
         <source>Collapse</source>
@@ -431,57 +334,26 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>Asas</translation>
+        <translation type="vanished">Asas</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>Periksa tandatangan digital jika mod pembangun dibenarkan</translation>
+        <translation type="vanished">Periksa tandatangan digital jika mod pembangun dibenarkan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Untuk memasang apl tiada tandatangan, pergi ke Pusat Keselamatan &gt; Alatan &gt; Keselamatan Apl, dan pilih jenis apl yang boleh dipasang.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Pusat Keselamatan &gt; Alatan &gt; Keselamatan Apl</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Sistem tidak memasang linglong environment, sila pasang terlebih dahulu</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
-        <translation>Tidak boleh memasang</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Pakej ini tidak mempunyai tandatangan digital yang sah dan telah disekat daripada pemasangan/dijalankan. Pergi ke Pusat Keselamatan &gt; Alatan &gt; Keselamatan Apl untuk mengubah tetapan ini.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Batal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>Teruskan</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
-        <source>Will remove: </source>
-        <translation>Akan menghapuskan: </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -503,17 +375,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="713"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1224"/>
@@ -536,7 +408,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -589,39 +461,23 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="526"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="527"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="539"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">Mencuba memasang %2 dalam mod kompatibiliti %1</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Menguninstall %2 dari mod kompatibiliti %1</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">%2 telah dipasang dengan jayanya ke dalam mod kompatibiliti %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="946"/>
         <source>Installed successfully</source>
         <translation>Berjaya dipasang</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">%2 telah diuninstall dengan jayanya dari mod kompatibiliti %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -636,7 +492,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1051"/>
         <source>Install %1 will remove: </source>
-        <translation>Pemasangan %1 akan menghapuskan: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1072"/>
@@ -651,13 +507,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1158"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1231"/>
@@ -695,7 +551,6 @@
         <translation>Tunjuk perincian</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="63"/>
         <source>Show dependencies</source>
         <translation>Tunjuk dependensi</translation>
@@ -713,74 +568,52 @@
 <context>
     <name>Uab::UabPackageListModel</name>
     <message>
-        <location filename="../src/deb-installer/uab/uab_package_list_model.cpp" line="557"/>
         <source>Installation Failed</source>
-        <translation>Pemasangan Gagal</translation>
+        <translation type="vanished">Pemasangan Gagal</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Show related packages</source>
-        <translation>Tunjuk pakej-pakej berkaitan</translation>
+        <translation type="vanished">Tunjuk pakej-pakej berkaitan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Kuncup</translation>
+        <translation type="vanished">Kuncup</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="39"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Batal</translation>
+        <translation type="vanished">Batal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="41"/>
         <source>Confirm</source>
-        <translation>Sahkan</translation>
+        <translation type="vanished">Sahkan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Anda pasti mahu menyahpasang %1?
+        <translation type="vanished">Anda pasti mahu menyahpasang %1?
 Semua dependensinya juga akan dibuang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="133"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>Anda pasti mahu menyahpasang %1?
+        <translation type="vanished">Anda pasti mahu menyahpasang %1?
 Sistem atau lain-lain aplikasi mungkin tidak berfungsi dengan baik</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <source>Install in compatible mode</source>
-        <translation type="vanished">Pasang dalam mod serasi</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
-        <translation>Pemasang Pakej</translation>
+        <translation type="vanished">Pemasang Pakej</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Pemasang pakej dapat membantu pengguna dan membuang pakej-pakej setempat, dan juga menyokong pemasangan pukal.</translation>
+        <translation type="vanished">Pemasang pakej dapat membantu pengguna dan membuang pakej-pakej setempat, dan juga menyokong pemasangan pukal.</translation>
     </message>
 </context>
 </TS>
