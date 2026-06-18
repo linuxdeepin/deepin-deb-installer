@@ -1,49 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="az">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="az">
 <context>
     <name>AptConfigMessage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>Konfiqurasiya nömrəsini daxil edin:</translation>
+        <translation type="vanished">Konfiqurasiya nömrəsini daxil edin:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
     <name>BackendProcessPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>Paketlər yüklənir...</translation>
+        <translation type="vanished">Paketlər yüklənir...</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1%2 yükləndi</translation>
+        <translation type="vanished">%1%2 yükləndi</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>Başladılır...</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
-        <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Başladılır...</translation>
     </message>
 </context>
 <context>
     <name>DdimErrorPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/ddimerrorpage.cpp" line="18"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
@@ -115,312 +102,228 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="113"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Quraşdırılma alınmadı, lütfən internet bağlantısını yoxlayın</translation>
+        <translation type="vanished">Quraşdırılma alınmadı, lütfən internet bağlantısını yoxlayın</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Quraşdırılma alınmadı, İdarəetmə Mərkəzində yenilənmələri yoxlayın</translation>
+        <translation type="vanished">Quraşdırılma alınmadı, İdarəetmə Mərkəzində yenilənmələri yoxlayın</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="126"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="142"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Quraşdırma alınmadı, qeyri-kafi disk sahəsi</translation>
+        <translation type="vanished">Quraşdırma alınmadı, qeyri-kafi disk sahəsi</translation>
     </message>
     <message>
         <source>No digital signature</source>
         <translation type="vanished">Rəqəmsal imza yoxdur</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Invalid digital signature</source>
-        <translation>Rəqəmsal imza səhvdir</translation>
+        <translation type="vanished">Rəqəmsal imza səhvdir</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="947"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2006"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>İnzibatçı, bu paketin quraşdırılmasının qarşçısını almaq üçün qaydalar təyin edib</translation>
+        <translation type="vanished">İnzibatçı, bu paketin quraşdırılmasının qarşçısını almaq üçün qaydalar təyin edib</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="168"/>
         <source>Installation Failed</source>
-        <translation>Quraşdırma baş tutmadı</translation>
+        <translation type="vanished">Quraşdırma baş tutmadı</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">meydan qurulu</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%1-də %2 yükləndiyi üçün, yükləmək üçün onu qalxalayın</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Xəta olmayan əsaslar, uyğunluq modunda uygulamayı yükləyin</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
-        <translation>%1 quraşdırılması baş tutmadı</translation>
+        <translation type="vanished">%1 quraşdırılması baş tutmadı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">Quraşdırılma mümkün deyil - rəqəmsal imza yoxdur</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">Lütfən, İdarəetmə Mərkəzinə keçin və tərtibatçı rejimini açın və yenidən cəhd edin. İcra olunsun?</translation>
+    </message>
+    <message>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>İmtina</translation>
+        <translation type="vanished">İmtina</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
-        <source>OK</source>
-        <comment>button</comment>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
-        <source>Same version installed</source>
-        <translation type="unfinished">Eyni versiya quraşdırıldı</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
-        <source>Later version installed: %1</source>
-        <translation type="unfinished">Sonrakı versiya quraşdırıldı: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
-        <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Əvvəlki versiya quraşdırıldı: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
-        <source>Installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
-        <source>Failed to install %1: no valid digital signature</source>
-        <translation>%1 quraşdırmaq mümkün olmadı: etibarlı rəqəmsal imza yoxdur</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
-        <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>Paketin elektron imzası etibarlı deyil. Quraşdırmaya davam edilsin?</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1424"/>
-        <source>Cancel</source>
-        <translation>İmtina</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1425"/>
-        <source>Continue</source>
-        <comment>button</comment>
-        <translation>Davam edin</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1316"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1378"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
-        <source>Unable to install</source>
-        <translation>Quraşdırıla bilmədi</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished">Davam edin</translation>
+        <translation type="vanished">Davam edin</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
+        <source>OK</source>
+        <comment>button</comment>
+        <translation type="vanished">OK</translation>
+    </message>
+    <message>
+        <source>Same version installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Later version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Earlier version installed: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This package does not have a valid digital signature. Continue with the installation?</source>
+        <translation type="vanished">Paketin elektron imzası etibarlı deyil. Quraşdırmaya davam edilsin?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="vanished">İmtina</translation>
+    </message>
+    <message>
+        <source>Continue</source>
+        <comment>button</comment>
+        <translation type="vanished">Davam edin</translation>
+    </message>
+    <message>
+        <source>Unable to install</source>
+        <translation type="vanished">Quraşdırıla bilmədi</translation>
+    </message>
+    <message>
         <source>This package does not have a valid digital signature</source>
-        <translation>Bu paketdə etibarlı rəqəmsal imza yoxdur</translation>
+        <translation type="vanished">Bu paketdə etibarlı rəqəmsal imza yoxdur</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="969"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="975"/>
         <source>Broken dependencies: %1</source>
-        <translation>Korlanmış asılılıqlar: %1</translation>
+        <translation type="vanished">Korlanmış asılılıqlar: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="158"/>
         <source>Authentication failed</source>
-        <translation>Doğrulama alınmadı</translation>
+        <translation type="vanished">Doğrulama alınmadı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
-        <translation>Uyğunsuz paket arxitekturaları</translation>
+        <translation type="vanished">Uyğunsuz paket arxitekturaları</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation>Deb paketləri buraya atın</translation>
+        <translation type="vanished">Deb paketləri buraya atın</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>Faylı seçin</translation>
+        <translation type="vanished">Faylı seçin</translation>
     </message>
 </context>
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation>Təfərrüatları göstərmək</translation>
+        <translation type="vanished">Təfərrüatları göstərmək</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Yığmaq</translation>
+        <translation type="vanished">Yığmaq</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="179"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Quraşdırmaq</translation>
+        <translation type="vanished">Quraşdırmaq</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="180"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation>İcra olundu</translation>
+        <translation type="vanished">İcra olundu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="182"/>
         <source>Back</source>
         <comment>button</comment>
-        <translation>Geriyə</translation>
+        <translation type="vanished">Geriyə</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
-        <source>Install %1 will remove: </source>
-        <translation>%1 yüklənəcək və siləcək: </translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>Bu repozitoriyadakı asılılıqlar</translation>
+        <translation type="vanished">Bu repozitoriyadakı asılılıqlar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
         <source>Missing dependencies</source>
-        <translation>Çatışmayan asılılıqlar</translation>
+        <translation type="vanished">Çatışmayan asılılıqlar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="629"/>
         <source>Installing dependencies: %1</source>
-        <translation>Asılılıqlar quraşdırılır: %1</translation>
+        <translation type="vanished">Asılılıqlar quraşdırılır: %1</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectItem</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="87"/>
         <source>Same version installed</source>
-        <translation>Eyni versiya quraşdırıldı</translation>
+        <translation type="vanished">Eyni versiya quraşdırıldı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="91"/>
         <source>Earlier version installed: %1</source>
-        <translation>Əvvəlki versiya quraşdırıldı: %1</translation>
+        <translation type="vanished">Əvvəlki versiya quraşdırıldı: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="96"/>
         <source>Later version installed: %1</source>
-        <translation>Sonrakı versiya quraşdırıldı: %1</translation>
+        <translation type="vanished">Sonrakı versiya quraşdırıldı: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="102"/>
         <source>Unmatched package architecture</source>
-        <translation>Uyğunsuz paket arxitekturaları</translation>
+        <translation type="vanished">Uyğunsuz paket arxitekturaları</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectView</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Hamısını seçin</translation>
+        <translation type="vanished">Hamısını seçin</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Quraşdırmaq</translation>
+        <translation type="vanished">Quraşdırmaq</translation>
     </message>
 </context>
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="62"/>
         <source>Installing</source>
-        <translation>Quraşdırılır</translation>
+        <translation type="vanished">Quraşdırılır</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="66"/>
         <source>Installed</source>
-        <translation>Quraşdırıldı</translation>
+        <translation type="vanished">Quraşdırıldı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="74"/>
         <source>Failed</source>
-        <translation>Alınmadı</translation>
+        <translation type="vanished">Alınmadı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
         <source>Waiting</source>
-        <translation>Gözləyir</translation>
+        <translation type="vanished">Gözləyir</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="246"/>
         <source>Same version installed</source>
-        <translation>Eyni versiya quraşdırıldı</translation>
+        <translation type="vanished">Eyni versiya quraşdırıldı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Later version installed: %1</source>
-        <translation>Sonrakı versiya quraşdırıldı: %1</translation>
+        <translation type="vanished">Sonrakı versiya quraşdırıldı: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="250"/>
         <source>Earlier version installed: %1</source>
-        <translation>Əvvəlki versiya quraşdırıldı: %1</translation>
+        <translation type="vanished">Əvvəlki versiya quraşdırıldı: %1</translation>
     </message>
 </context>
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb-installer/model/packagelistview.cpp" line="189"/>
         <source>Delete</source>
-        <translation>Silmək</translation>
+        <translation type="vanished">Silmək</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="64"/>
         <source>Collapse</source>
@@ -431,57 +334,26 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>Əsas</translation>
+        <translation type="vanished">Əsas</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>Əgər tərtibatçı rejimi aktivdirsə elektron imzaları yoxlayın</translation>
+        <translation type="vanished">Əgər tərtibatçı rejimi aktivdirsə elektron imzaları yoxlayın</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>İmzalanmamış tətbiqləri quraşdırmaq üçün Təhlükəsilzlik Mərkəzi &gt; Alətlər &gt; Tətbiq təhlükəsizliyi bölməsinə keçin və quraşdırıla biləcək tətbiq növlərini seçin.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Təhlükəsizlik Mərkəzi &gt; Alətlər &gt; Tətbiq təhlükəsizliyi</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Sistem Linglong mühitini yükləmədi, ilk olaraq onu yükləyin</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
-        <translation>Quraşdırıla bilmədi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Bu paket etibarlı rəqəmsal imzaya malik deyil və quraşdırılmasının və başladılmasının qarşısı alınıb. Buna uyğun ayarı dəyişmək üçün  Təhlükəsizlik Mərkəzi &gt; Alətlər &gt; Tətbiq təhlükəsizliyi bölməsinə keçin.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Vazgeç</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>Davam edin</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
-        <source>Will remove: </source>
-        <translation>Siləcək: </translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -503,17 +375,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="713"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1224"/>
@@ -536,7 +408,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -589,39 +461,23 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="526"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="527"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="539"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">%1 uyğunluq modunda %2 yükləyirik</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">%1 uyğunluq modundan %2 qalxalayır</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">&apos;%2 müvəffaqiyyətlə %1 uyğunluq modunda yükləndi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="946"/>
         <source>Installed successfully</source>
         <translation>Uğurla quraşdırıldı</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">&apos;%2 müvəffaqiyyətlə %1 uyğunluq modundan qalxalandı</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -651,13 +507,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1158"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vazgeç</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1231"/>
@@ -695,7 +551,6 @@
         <translation>Təfərrüatları göstərmək</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="63"/>
         <source>Show dependencies</source>
         <translation>Asılılıqları göstərmək</translation>
@@ -713,74 +568,52 @@
 <context>
     <name>Uab::UabPackageListModel</name>
     <message>
-        <location filename="../src/deb-installer/uab/uab_package_list_model.cpp" line="557"/>
         <source>Installation Failed</source>
-        <translation>Quraşdırma baş tutmadı</translation>
+        <translation type="vanished">Quraşdırma baş tutmadı</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Show related packages</source>
-        <translation>Əlaqəli paketləri göstərmək</translation>
+        <translation type="vanished">Əlaqəli paketləri göstərmək</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Yığmaq</translation>
+        <translation type="vanished">Yığmaq</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="39"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>İmtina</translation>
+        <translation type="vanished">İmtina</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="41"/>
         <source>Confirm</source>
-        <translation>Təsdiqləmək</translation>
+        <translation type="vanished">Təsdiqləmək</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>%1 silmək istədiyinizə əminsiniz?
+        <translation type="vanished">%1 silmək istədiyinizə əminsiniz?
 Həmçinin bütün asılılıqlar da silinəcək</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="133"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>%1 silmək istəfiyinizə əminsiniz?
+        <translation type="vanished">%1 silmək istəfiyinizə əminsiniz?
 Sistem və başqa tətbiqlər düzgün işləməyə bilər</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <source>Install in compatible mode</source>
-        <translation type="vanished">Uyğun rejimdə quraşdır</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
-        <translation>Paket quraşdırıcısı</translation>
+        <translation type="vanished">Paket quraşdırıcısı</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Paket quraşdırıcısı, istifadəçilərə paketləri quraşdırmağa və silməyə imkan verir, həmçinin toplu quraşdırmanı dəstəkləyir.</translation>
+        <translation type="vanished">Paket quraşdırıcısı, istifadəçilərə paketləri quraşdırmağa və silməyə imkan verir, həmçinin toplu quraşdırmanı dəstəkləyir.</translation>
     </message>
 </context>
 </TS>
