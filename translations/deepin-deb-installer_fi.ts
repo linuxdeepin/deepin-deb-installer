@@ -1,49 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
 <context>
     <name>AptConfigMessage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>Anna määritettävä numero:</translation>
+        <translation type="vanished">Anna määritettävä numero:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
     <name>BackendProcessPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>Ladataan paketteja...</translation>
+        <translation type="vanished">Ladataan paketteja...</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 ladattu</translation>
+        <translation type="vanished">%1/%2 ladattu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>Alustetaan...</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
-        <source>Updating package cache...</source>
-        <translation>Päivitetään välimuistia...</translation>
+        <translation type="vanished">Alustetaan...</translation>
     </message>
 </context>
 <context>
     <name>DdimErrorPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/ddimerrorpage.cpp" line="18"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
@@ -105,10 +92,6 @@
         <translation>%1 ei ole, valitse uudelleen</translation>
     </message>
     <message>
-        <source>Compatible Mode Install</source>
-        <translation type="vanished">Asenna yhteensopivuustilassa</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="478"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="958"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
@@ -119,60 +102,36 @@
 <context>
     <name>DebListModel</name>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="113"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="136"/>
         <source>Installation failed, please check your network connection</source>
-        <translation>Asennus epäonnistui, tarkista verkkoyhteys</translation>
+        <translation type="vanished">Asennus epäonnistui, tarkista verkkoyhteys</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="117"/>
         <source>Installation failed, please check for updates in Control Center</source>
-        <translation>Asennus epäonnistui, tarkista päivitykset ohjauspaneelista</translation>
+        <translation type="vanished">Asennus epäonnistui, tarkista päivitykset ohjauspaneelista</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="120"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="126"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="142"/>
         <source>Installation failed, insufficient disk space</source>
-        <translation>Asennus epäonnistui, levytilaa ei ollut riittävästi</translation>
+        <translation type="vanished">Asennus epäonnistui, levytilaa ei ollut riittävästi</translation>
     </message>
     <message>
         <source>No digital signature</source>
         <translation type="vanished">Ei digitaalista allekirjoitusta</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="148"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="962"/>
         <source>Invalid digital signature</source>
-        <translation>Virheellinen digitaalinen allekirjoitus</translation>
+        <translation type="vanished">Virheellinen digitaalinen allekirjoitus</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="947"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2006"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>Järjestelmänvalvoja on määrittänyt käytännöt estämään tämän paketin asentamisen</translation>
+        <translation type="vanished">Järjestelmänvalvoja on määrittänyt käytännöt estämään tämän paketin asentamisen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="168"/>
         <source>Installation Failed</source>
-        <translation>Asennus epäonnistui</translation>
+        <translation type="vanished">Asennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Rikkinäiset riippuvuudet, yritä asentaa sovellus yhteensopivuustilassa</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation>Yhteensopivuustilan asennus epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
-        <translation>Kohteen %1 asentaminen epäonnistui</translation>
+        <translation type="vanished">Kohteen %1 asentaminen epäonnistui</translation>
     </message>
     <message>
         <source>Unable to install - no digital signature</source>
@@ -183,248 +142,188 @@
         <translation type="vanished">Ota kehittäjätila käyttöön Ohjauspaneelissa ja yritä uudelleen. Hyväksy?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Peru</translation>
+        <translation type="vanished">Peru</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>Hyväksy</translation>
+        <translation type="vanished">Hyväksy</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1381"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation>Sama versio on asennettu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation>Uudempi versio asennettu: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation>Aiempi versio asennettu: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
-        <source>Installation failed</source>
-        <translation>Asennus epäonnistui</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
-        <source>Failed to install %1: no valid digital signature</source>
-        <translation>Asennus epäonnistui %1: ei kelvollista digitaalista allekirjoitusta</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1422"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta. Jatketaanko asennusta?</translation>
+        <translation type="vanished">Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta. Jatketaanko asennusta?</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1424"/>
         <source>Cancel</source>
-        <translation>Peru</translation>
+        <translation type="vanished">Peru</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1425"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation>Jatka</translation>
+        <translation type="vanished">Jatka</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1266"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1316"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1378"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
-        <translation>Ei voi asentaa</translation>
+        <translation type="vanished">Ei voi asentaa</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta</translation>
+        <translation type="vanished">Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="969"/>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="975"/>
         <source>Broken dependencies: %1</source>
-        <translation>Rikkoutuneet riippuvuudet: %1</translation>
+        <translation type="vanished">Rikkoutuneet riippuvuudet: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="158"/>
         <source>Authentication failed</source>
-        <translation>Todennus epäonnistui</translation>
+        <translation type="vanished">Todennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="896"/>
         <source>Unmatched package architecture</source>
-        <translation>Ei yhteensopiva pakettijärjestelmä</translation>
+        <translation type="vanished">Ei yhteensopiva pakettijärjestelmä</translation>
     </message>
 </context>
 <context>
     <name>FileChooseWidget</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="51"/>
         <source>Drag deb packages here</source>
-        <translation>Vedä deb-paketteja tänne</translation>
+        <translation type="vanished">Vedä deb-paketteja tänne</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/filechoosewidget.cpp" line="93"/>
         <source>Select File</source>
-        <translation>Valitse tiedosto</translation>
+        <translation type="vanished">Valitse tiedosto</translation>
     </message>
 </context>
 <context>
     <name>MultipleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation>Näytä tiedot</translation>
+        <translation type="vanished">Näytä tiedot</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Pudotus</translation>
+        <translation type="vanished">Pudotus</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="179"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Asenna</translation>
+        <translation type="vanished">Asenna</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="180"/>
         <source>Done</source>
         <comment>button</comment>
-        <translation>Valmis</translation>
+        <translation type="vanished">Valmis</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="182"/>
         <source>Back</source>
         <comment>button</comment>
-        <translation>Takaisin</translation>
+        <translation type="vanished">Takaisin</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
-        <source>Install %1 will remove: </source>
-        <translation>%1 asentaminen poistaa:</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>Pakettivaraston riippuvuudet</translation>
+        <translation type="vanished">Pakettivaraston riippuvuudet</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
         <source>Missing dependencies</source>
-        <translation>Puuttuvat riippuvuudet</translation>
+        <translation type="vanished">Puuttuvat riippuvuudet</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="629"/>
         <source>Installing dependencies: %1</source>
-        <translation>Riippuvuuksien asentaminen: %1</translation>
+        <translation type="vanished">Riippuvuuksien asentaminen: %1</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectItem</name>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="87"/>
         <source>Same version installed</source>
-        <translation>Sama versio on asennettu</translation>
+        <translation type="vanished">Sama versio on asennettu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="91"/>
         <source>Earlier version installed: %1</source>
-        <translation>Aiempi versio asennettu: %1</translation>
+        <translation type="vanished">Aiempi versio asennettu: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="96"/>
         <source>Later version installed: %1</source>
-        <translation>Uudempi versio asennettu: %1</translation>
+        <translation type="vanished">Uudempi versio asennettu: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="102"/>
         <source>Unmatched package architecture</source>
-        <translation>Ei yhteensopiva pakettijärjestelmä</translation>
+        <translation type="vanished">Ei yhteensopiva pakettijärjestelmä</translation>
     </message>
 </context>
 <context>
     <name>PackageSelectView</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Valitse kaikki</translation>
+        <translation type="vanished">Valitse kaikki</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
         <source>Install</source>
         <comment>button</comment>
-        <translation>Asenna</translation>
+        <translation type="vanished">Asenna</translation>
     </message>
 </context>
 <context>
     <name>PackagesListDelegate</name>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="62"/>
         <source>Installing</source>
-        <translation>Asentaa</translation>
+        <translation type="vanished">Asentaa</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="66"/>
         <source>Installed</source>
-        <translation>Asennettu</translation>
+        <translation type="vanished">Asennettu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="74"/>
         <source>Failed</source>
-        <translation>Epäonnistui</translation>
+        <translation type="vanished">Epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="70"/>
         <source>Waiting</source>
-        <translation>Odotetaan</translation>
+        <translation type="vanished">Odotetaan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="246"/>
         <source>Same version installed</source>
-        <translation>Sama versio on asennettu</translation>
+        <translation type="vanished">Sama versio on asennettu</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Later version installed: %1</source>
-        <translation>Uudempi versio asennettu: %1</translation>
+        <translation type="vanished">Uudempi versio asennettu: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="250"/>
         <source>Earlier version installed: %1</source>
-        <translation>Aiempi versio asennettu: %1</translation>
+        <translation type="vanished">Aiempi versio asennettu: %1</translation>
     </message>
 </context>
 <context>
     <name>PackagesListView</name>
     <message>
-        <location filename="../src/deb-installer/model/packagelistview.cpp" line="189"/>
         <source>Delete</source>
-        <translation>Poista</translation>
+        <translation type="vanished">Poista</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="64"/>
         <source>Collapse</source>
@@ -435,57 +334,26 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>Normaali</translation>
+        <translation type="vanished">Normaali</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>Tarkista digitaaliset allekirjoitukset, jos kehittäjätila on käytössä</translation>
+        <translation type="vanished">Tarkista digitaaliset allekirjoitukset, jos kehittäjätila on käytössä</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Mikäli haluat asentaa allekirjoittamattomia sovelluksia, siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus ja valitse asennettavat sovellustyypit.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Linglong ei ole asennettuna tähän tietokoneeseen, asenna se ensin</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
-        <translation>Ei voi asentaa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta ja sen asennus/käyttö on estetty. Siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovelluksen suojaus muuta asetuksia.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Peru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>Hyväksy</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
-        <source>Will remove: </source>
-        <translation>Poistetaan:</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -512,7 +380,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
@@ -540,7 +408,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished">Asenna yhteensopivuustilassa</translation>
+        <translation>Asenna yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -605,10 +473,6 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="539"/>
         <source>Confirm to install in compatibility mode</source>
         <translation>Vahvista asennus yhteensopivuustilassa</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Poistetaan asennusta %2 %1 yhteensopivuustilasta</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="946"/>
@@ -687,7 +551,6 @@
         <translation>Näytä tiedot</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="63"/>
         <source>Show dependencies</source>
         <translation>Näytä riippuvuudet</translation>
@@ -705,74 +568,52 @@
 <context>
     <name>Uab::UabPackageListModel</name>
     <message>
-        <location filename="../src/deb-installer/uab/uab_package_list_model.cpp" line="557"/>
         <source>Installation Failed</source>
-        <translation>Asennus epäonnistui</translation>
+        <translation type="vanished">Asennus epäonnistui</translation>
     </message>
 </context>
 <context>
     <name>UninstallConfirmPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Show related packages</source>
-        <translation>Näytä liittyvät paketit</translation>
+        <translation type="vanished">Näytä liittyvät paketit</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="17"/>
         <source>Collapse</source>
         <comment>button</comment>
-        <translation>Pudotus</translation>
+        <translation type="vanished">Pudotus</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="39"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation>Peru</translation>
+        <translation type="vanished">Peru</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="41"/>
         <source>Confirm</source>
-        <translation>Vahvista</translation>
+        <translation type="vanished">Vahvista</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="131"/>
         <source>Are you sure you want to uninstall %1?
 All dependencies will also be removed</source>
-        <translation>Haluatko varmasti poistaa %1?
+        <translation type="vanished">Haluatko varmasti poistaa %1?
 Kaikki riippuvuudet poistetaan myös</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="133"/>
         <source>Are you sure you want to uninstall %1?
 The system or other applications may not work properly</source>
-        <translation>Haluatko varmasti poistaa %1?
+        <translation type="vanished">Haluatko varmasti poistaa %1?
 Järjestelmä tai muut sovellukset eivät välttämättä toimi oikein</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation>Haluatko varmasti poistaa %1 asennuksen yhteensopivuustilassa? Myös kaikki riippuvuudet poistetaan</translation>
-    </message>
-</context>
-<context>
-    <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
-    <message>
-        <source>Install in compatible mode</source>
-        <translation type="vanished">Asenna yhteensopivuustilassa</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="48"/>
-        <location filename="../src/deb-installer/main.cpp" line="49"/>
         <source>Package Installer</source>
-        <translation>Asentaja</translation>
+        <translation type="vanished">Asentaja</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/main.cpp" line="50"/>
         <source>Package Installer helps users install and remove local packages, and supports bulk installation.</source>
-        <translation>Ohjelma-asentaja auttaa käyttäjiä asentamaan ja poistamaan ohjelmia.</translation>
+        <translation type="vanished">Ohjelma-asentaja auttaa käyttäjiä asentamaan ja poistamaan ohjelmia.</translation>
     </message>
 </context>
 </TS>
