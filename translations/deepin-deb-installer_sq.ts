@@ -380,7 +380,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>Po çinstalohet %1 që prej mënyrës përputhje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
@@ -408,7 +408,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
         <source>Compatible Mode Install</source>
-        <translation>Instalim Nën Mënyrën Përputhjes</translation>
+        <translation>Instalim Nën Mënyrën Përputhje</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
