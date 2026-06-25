@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.46) unstable; urgency=medium
+
+  * fix(compat): show compat title on same-name pkg judgment view
+  * chore: update version to 6.5.45
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 25 Jun 2026 22:04:24 +0800
+
 deepin-deb-installer (6.5.45) unstable; urgency=medium
 
   * fix(compat): check same-name pkg on right-click compat install
