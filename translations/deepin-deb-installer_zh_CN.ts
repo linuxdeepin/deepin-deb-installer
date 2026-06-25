@@ -771,8 +771,9 @@ All dependencies will also be removed</source>
 <context>
     <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
     <message>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="vanished">兼容模式安装</translation>
+        <translation>兼容模式安装</translation>
     </message>
 </context>
 <context>
