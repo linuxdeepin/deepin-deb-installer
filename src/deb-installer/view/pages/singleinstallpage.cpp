@@ -108,12 +108,18 @@ void SingleInstallPage::initUI()
     showPackageInfo();
     connect(m_packagesModel, &AbstractPackageListModel::dataChanged, this, [this]() { showPackageInfo(); });
 
-    // 右键菜单"兼容模式安装"入口（--compatible 强制兼容）：直接进入 checkbox 二次确认视图，跳过第一视图
+    // 右键菜单"兼容模式安装"入口（--compatible 强制兼容）：
+    // - 兼容环境无同名包(CompatibleNotInstalled)：直接进入 checkbox 二次确认视图，跳过第一视图
+    // - 兼容环境有同名包(CompatibleIntalled)：保持第一视图，显示"卸载/重新安装"按钮（与双击打开一致）
     // 双击 deb 自动识别为兼容的不受 s_forceCompatible 影响，仍走原第一视图
     // 注意：不能在构造函数中直接调用 showCompatConfirmView()，因为此时信号还未连接
     // 使用 QTimer::singleShot 延迟到事件循环处理，确保 showCompatConfirmView() 发出的信号能被 DebInstaller 捕获
     if (SingleInstallerApplication::s_forceCompatible && m_inCompatibleMode) {
-        QTimer::singleShot(0, this, [this]() { showCompatConfirmView(); });
+        const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
+        // 兼容环境已有同名包时不自动跳转确认视图，保留第一视图供用户选择卸载/重新安装
+        if (Pkg::CompatibleIntalled != dependsStat) {
+            QTimer::singleShot(0, this, [this]() { showCompatConfirmView(); });
+        }
     }
     qCDebug(appLog) << "UI initialized";
 }
