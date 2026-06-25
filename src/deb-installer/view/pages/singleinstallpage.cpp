@@ -116,9 +116,14 @@ void SingleInstallPage::initUI()
     // 使用 QTimer::singleShot 延迟到事件循环处理，确保 showCompatConfirmView() 发出的信号能被 DebInstaller 捕获
     if (SingleInstallerApplication::s_forceCompatible && m_inCompatibleMode) {
         const int dependsStat = index.data(DebListModel::PackageDependsStatusRole).toInt();
-        // 兼容环境已有同名包时不自动跳转确认视图，保留第一视图供用户选择卸载/重新安装
         if (Pkg::CompatibleIntalled != dependsStat) {
+            // 兼容环境无同名包：直接进入 checkbox 二次确认视图（showCompatConfirmView 内部会发出 titlebar 信号）
             QTimer::singleShot(0, this, [this]() { showCompatConfirmView(); });
+        } else {
+            // 兼容环境有同名包：保留第一视图供用户选择卸载/重新安装，
+            // 但 titlebar 仍需显示"兼容模式安装"（与主环境同名包判断界面区分）
+            // 注意：与 showCompatConfirmView() 同理，构造期信号尚未连接，必须延迟到事件循环发出
+            QTimer::singleShot(0, this, [this]() { Q_EMIT signalSetTitlebarText(tr("Compatible Mode Install")); });
         }
     }
     qCDebug(appLog) << "UI initialized";
