@@ -17,6 +17,8 @@
 #include <QApt/DebFile>
 #include <QApt/Transaction>
 
+#include <DConfig>
+
 PackageAnalyzer &PackageAnalyzer::instance()
 {
     static PackageAnalyzer analyzer;
@@ -98,8 +100,32 @@ void PackageAnalyzer::initBackend()
     qCInfo(appLog) << "Backend initialization process finished.";
 }
 
+bool PackageAnalyzer::isAutoUpdateBeforeInstallEnabled() const
+{
+#ifdef DTKCORE_CLASS_DConfigFile
+    Dtk::Core::DConfig *cfg = Dtk::Core::DConfig::create("deepin-deb-installer", "deepin-deb-installer.cache");
+    if (cfg && cfg->isValid()) {
+        bool enabled = cfg->value("autoUpdateBeforeInstall", true).toBool();
+        qCDebug(appLog) << "DConfig autoUpdateBeforeInstall:" << enabled;
+        cfg->deleteLater();
+        return enabled;
+    }
+    if (cfg)
+        cfg->deleteLater();
+#endif
+    // DConfig 不可用（如旧版 dtkcore 或 schema 未安装）时默认开启，保持原行为
+    return true;
+}
+
 void PackageAnalyzer::updatePackageCache()
 {
+    // DConfig 开关：默认开启。关闭时不发送 cacheUpdateStarted 信号，跳过 apt update。
+    if (!isAutoUpdateBeforeInstallEnabled()) {
+        qCInfo(appLog) << "Auto apt-update before install disabled by DConfig, skip cache update";
+        setCacheUpdateFinished(true);  // 仍标记完成，避免安装流程无限等待 isCacheUpdateFinished()
+        return;
+    }
+
     // 判断是否需要更新
     if (!shouldUpdateCache()) {
         qCInfo(appLog) << "Sources not changed, cache is still valid, skip update";

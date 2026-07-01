@@ -106,6 +106,9 @@ signals:
     void cacheUpdateFinished();
 
 private:
+    // 读取 DConfig 开关：是否允许安装前自动刷新 apt 缓存。默认 true（DConfig 不可用时也返回 true，保持原行为）
+    bool isAutoUpdateBeforeInstallEnabled() const;
+
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation) const;
     QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, int multiArchType) const;
 

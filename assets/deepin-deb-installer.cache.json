@@ -1,0 +1,19 @@
+{
+    "magic": "dsg.config.meta",
+    "version": "1.0",
+    "contents": {
+        "autoUpdateBeforeInstall": {
+            "value": true,
+            "serial": 0,
+            "flags": [
+                "global"
+            ],
+            "name": "Auto Update Before Install",
+            "name[zh_CN]": "安装前自动更新软件源",
+            "description": "Whether to refresh the apt package cache (apt update) before installing. When disabled, the installer skips refreshing the apt cache at startup.",
+            "description[zh_CN]": "安装前是否刷新 apt 软件包缓存（apt update）。关闭后，安装器启动时不再刷新 apt 缓存。",
+            "permissions": "readwrite",
+            "visibility": "private"
+        }
+    }
+}
