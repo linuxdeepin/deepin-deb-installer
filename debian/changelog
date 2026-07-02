@@ -1,3 +1,10 @@
+deepin-deb-installer (6.5.47) unstable; urgency=medium
+
+  * feat(dconfig): add switch to skip apt cache refresh before install
+  * chore: update version to 6.5.46
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 02 Jul 2026 14:07:13 +0800
+
 deepin-deb-installer (6.5.46) unstable; urgency=medium
 
   * fix(compat): show compat title on same-name pkg judgment view
