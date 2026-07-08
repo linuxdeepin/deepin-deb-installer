@@ -409,7 +409,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Varësi të dëmtuara</translation>
     </message>
 </context>
 <context>
@@ -747,8 +747,7 @@ Sistemi ose aplikacione të tjera mund të mos punojnë si duhet</translation>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation>Jeni i sigurt se doni të çinstalohet %1 që nga mënyra përputhje?
- Do hiqen gjithashtu krejt varësitë</translation>
+        <translation>Jeni i sigurt se doni të çinstalohet %1 që nga mënyra përputhje? Do hiqen gjithashtu krejt varësitë</translation>
     </message>
 </context>
 <context>
