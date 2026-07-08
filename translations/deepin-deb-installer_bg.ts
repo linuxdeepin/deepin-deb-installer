@@ -408,6 +408,11 @@
         <source>Earlier version installed: %1</source>
         <translation>Предишна версия е инсталирана: %1</translation>
     </message>
+    <message>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
+        <source>Broken dependencies</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PackagesListView</name>
@@ -421,8 +426,8 @@
     <name>QApplication</name>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="64"/>
         <source>Collapse</source>
         <comment>button</comment>
         <translation>Сриване</translation>
@@ -479,7 +484,7 @@
         <translation>Продължи</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="282"/>
+        <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>Ще премахне: </translation>
     </message>
@@ -487,118 +492,119 @@
 <context>
     <name>SingleInstallPage</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1016"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1027"/>
         <source>Collapse</source>
         <translation>Сриване</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="403"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1164"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1219"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1456"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="414"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1175"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1230"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1455"/>
         <source>Reinstall</source>
         <translation>Преинсталиране</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="713"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="764"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
         <source>Installing in compatibility mode %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="807"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="943"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>%1 was successfully installed to compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1224"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1461"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1235"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1460"/>
         <source>Later version installed: %1</source>
         <translation>По-нова версия е инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1225"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1462"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1236"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1461"/>
         <source>Downgrade</source>
         <translation>Намаляване</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1230"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1467"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1241"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1466"/>
         <source>Earlier version installed: %1</source>
         <translation>Предишна версия е инсталирана: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1265"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
         <source>Installing dependencies: %1</source>
         <translation>Инсталиране на зависимости: %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1536"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1535"/>
         <source>Failed to install %1</source>
         <translation>Неуспешно инсталиране на %1</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="231"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="242"/>
         <source>Version: </source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="395"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1256"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1267"/>
         <source>Install</source>
         <comment>button</comment>
         <translation>Инсталиране</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="399"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="410"/>
         <source>Remove</source>
         <comment>button</comment>
         <translation>Премахване</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="407"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="998"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="418"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1009"/>
         <source>OK</source>
         <comment>button</comment>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="411"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="422"/>
         <source>Back</source>
         <comment>button</comment>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="415"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="934"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="426"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="945"/>
         <source>Done</source>
         <comment>button</comment>
         <translation>Завършено</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="526"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="527"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="561"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="539"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -615,7 +621,7 @@
         <translation type="vanished">&apos;%2 е успешно инсталиран в режим на съвместимост с %1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="946"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="957"/>
         <source>Installed successfully</source>
         <translation>Инсталирането е успешно</translation>
     </message>
@@ -624,62 +630,62 @@
         <translation type="vanished">&apos;%2 е успешно премахнат от режим на съвместимост с %1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="969"/>
         <source>Uninstalled successfully</source>
         <translation>Деинсталирането е успешно</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="984"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="995"/>
         <source>Uninstall Failed</source>
         <translation>Деинсталирането е неуспешно</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1051"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1062"/>
         <source>Install %1 will remove: </source>
         <translation>Инсталирането на %1 ще премахне: </translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1072"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1083"/>
         <source>Dependencies in the repository</source>
         <translation>Зависимости в репозитория</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1079"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1090"/>
         <source>Missing dependencies</source>
         <translation>Липсващи зависимости</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1156"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
         <source>Compatible Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1158"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation type="unfinished">Отказ</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1231"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1242"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1467"/>
         <source>Update</source>
         <comment>button</comment>
         <translation>Обнови</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1004"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1542"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1015"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1541"/>
         <source>Invalid digital signature</source>
         <translation>Невалидна цифрова подпис</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="219"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="230"/>
         <source>Name: </source>
         <translation>Име:</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1218"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1455"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1229"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1454"/>
         <source>Same version installed</source>
         <translation>Същата версия е инсталирана</translation>
     </message>
@@ -687,16 +693,16 @@
 <context>
     <name>SingleInstallPage_Install</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="62"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="699"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="750"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="938"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="60"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="710"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="761"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="949"/>
         <source>Show details</source>
         <translation>Покажи подробности</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="63"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Show dependencies</source>
         <translation>Покажи зависимости</translation>
     </message>
@@ -704,8 +710,8 @@
 <context>
     <name>SingleInstallPage_Uninstall</name>
     <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="793"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="952"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="804"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="963"/>
         <source>Show details</source>
         <translation>Покажи подробности</translation>
     </message>
@@ -765,8 +771,9 @@ The system or other applications may not work properly</source>
 <context>
     <name>dfmplugin_debinstaller::DebInstallerMenuScene</name>
     <message>
+        <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation type="vanished">Инсталиране в съвместим режим</translation>
+        <translation>Инсталиране в съвместим режим</translation>
     </message>
 </context>
 <context>

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -269,7 +269,15 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         dependsStat == Pkg::DependsStatus::DependsVerifyFailed || dependsStat == Pkg::DependsStatus::ArchBreak ||
         dependsStat == Pkg::CompatibleIntalled || dependsStat == Pkg::CompatibleNotInstalled) {
         qCWarning(appLog) << "Dependency issue detected, status:" << dependsStat;
-        info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+        // 批量安装列表中，依赖关系不满足但可走兼容模式的包只显示简短提示；
+        // 详细的兼容模式引导保留在单包页面 / tooltip / 安装后端。
+        // 安装真正失败的包仍展示具体错误原因（避免被简短提示覆盖）。
+        if (dependsStat == Pkg::CompatibleNotInstalled &&
+            operate_stat != Pkg::PackageOperationStatus::Failed) {
+            info_str = tr("Broken dependencies");
+        } else {
+            info_str = index.data(DebListModel::PackageFailReasonRole).toString();
+        }
         forground.setColor(palette.color(colorGroup, DPalette::TextWarning));  // 安装失败或依赖错误
     }
 
