@@ -409,7 +409,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"/>
+        <translation>Zerwane zależności</translation>
     </message>
 </context>
 <context>
