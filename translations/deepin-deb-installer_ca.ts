@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ca">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;actualitza la memòria cau del paquet...</translation>
     </message>
 </context>
 <context>
@@ -156,33 +154,29 @@
         <translation>Ha fallat la instal·lació.</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">sistema actual</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%2 s&apos;ha instal·lat a %1. Si us plau, desinstal·leu aquest paquet abans d&apos;instal·lar-lo.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Dependències trencades. Proveu d&apos;instal·lar l&apos;aplicació en mode de compatibilitat.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
         <translation>Ha fallat instal·lar %1</translation>
+    </message>
+    <message>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">No es pot instal·lar. No té signatura digital.</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">Si us plau, aneu al Centre de control per habilitar el mode de desenvolupament i torneu-ho a intentar. Voleu continuar?</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Cancel·la</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>Continua</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
@@ -195,22 +189,32 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation type="unfinished">N&apos;hi ha instal·lada la mateixa versió.</translation>
+        <translation>N&apos;hi ha instal·lada la mateixa versió.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Darrera versió instal·lada: %1</translation>
+        <translation>Darrera versió instal·lada: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Versió instal·lada abans: %1</translation>
+        <translation>Versió instal·lada abans: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation>Dependències trencades. Proveu d&apos;instal·lar l&apos;aplicació en mode de compatibilitat.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
+        <source>Compatibility mode installation failed</source>
+        <translation>La instal·lació del mode de compatibilitat ha fallat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat la instal·lació.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
@@ -240,12 +244,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
         <translation>No es pot instal·lar</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Continua</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
@@ -411,7 +409,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependències trencades</translation>
     </message>
 </context>
 <context>
@@ -446,36 +444,15 @@
         <translation>Comproveu les signatures digitals si el mode de desenvolupador està habilitat.</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Per instal·lar aplicacions sense signar, aneu al Centre de seguretat &gt; Eines &gt; Seguretat de les aplicacions i seleccioneu els tipus d&apos;aplicacions que es poden instal·lar.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Centre de seguretat &gt; Eines &gt; Seguretat de les aplicacions</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>El sistema no ha instal·lat l&apos;entorn Linglong. Primer instal·leu-lo, si us plau.</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>No es pot instal·lar</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Aquest paquet no té una signatura digital vàlida i se n&apos;ha blocat la instal·lació / execució. Aneu al Centre de seguretat &gt; Eines &gt; Seguretat d&apos;aplicacions per canviar-ne la configuració.</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Cancel·la</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -484,9 +461,30 @@
         <translation>Continua</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Aquest paquet no té una signatura digital vàlida i se n&apos;ha blocat la instal·lació / execució. Aneu al Centre de seguretat &gt; Eines &gt; Seguretat d&apos;aplicacions per canviar-ne la configuració.</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>S&apos;eliminarà el següent:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>El sistema no ha instal·lat l&apos;entorn Linglong. Primer instal·leu-lo, si us plau.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>Per instal·lar aplicacions sense signar, aneu al Centre de seguretat &gt; Eines &gt; Seguretat de les aplicacions i seleccioneu els tipus d&apos;aplicacions que es poden instal·lar.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Centre de seguretat &gt; Eines &gt; Seguretat de les aplicacions</translation>
     </message>
 </context>
 <context>
@@ -508,17 +506,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;instal·la en mode de compatibilitat %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Es desinstal·la %1 des del mode de compatibilitat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 s&apos;ha instal·lat correctament en mode de compatibilitat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1235"/>
@@ -542,7 +540,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal·lació en mode compatible</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
@@ -595,39 +593,23 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si aquest programari és una versió antiga (ja adaptada per a una versió de sistema de llegat), podeu provar d&apos;instal·lar-lo en mode de compatibilitat.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="561"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation>El mode de compatibilitat d&apos;UOS V25 és una funció que permet continuar usant aplicacions de la versió V20 al sistema V25. Crea un entorn de compatibilitat i permet que el programari que originalment només podia executar-se al sistema V20 també funcioni correctament al V25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">S&apos;intenta instal·lar %2 en mode de compatibilitat %1.</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Es desinstal·la %2 del mode de compatibilitat %1.</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">S&apos;ha instal·lat %2 correctament en mode de compatibilitat %1</translation>
+        <translation>Confirmeu la instal·lació en mode de compatibilitat</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="957"/>
         <source>Installed successfully</source>
         <translation>Instal·lació correcta</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">%2 s&apos;ha desinstal·lat correctament del mode de compatibilitat %1.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="969"/>
@@ -657,13 +639,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal·lació compatible</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Cancel·la</translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1242"/>
@@ -765,7 +747,7 @@ Pot ser que el sistema o altres aplicacions no funcionin correctament.</translat
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Segur que voleu desinstal·lar %1 del mode de compatibilitat? També se&apos;n suprimiran totes les dependències.</translation>
     </message>
 </context>
 <context>
@@ -773,7 +755,7 @@ Pot ser que el sistema o altres aplicacions no funcionin correctament.</translat
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Instal·la en mode compatible</translation>
+        <translation>Instal·lació en mode de compatibilitat</translation>
     </message>
 </context>
 <context>
