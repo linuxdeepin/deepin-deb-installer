@@ -14,6 +14,19 @@
             "description[zh_CN]": "安装前是否刷新 apt 软件包缓存（apt update）。关闭后，安装器启动时不再刷新 apt 缓存。",
             "permissions": "readwrite",
             "visibility": "private"
+        },
+        "oneTimeUpdateOnFirstPackage": {
+            "value": true,
+            "serial": 0,
+            "flags": [
+                "global"
+            ],
+            "name": "One-time Update On First Launch",
+            "name[zh_CN]": "首次启动时一次性刷新软件源",
+            "description": "When true, force a single apt update on the first launch after install; auto-resets to false once that update completes (success or failure).",
+            "description[zh_CN]": "为 true 时，安装后首次启动将强制执行一次 apt update；该次 update 完成（无论成功或失败）后自动置为 false。",
+            "permissions": "readwrite",
+            "visibility": "private"
         }
     }
 }

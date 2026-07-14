@@ -100,21 +100,58 @@ void PackageAnalyzer::initBackend()
     qCInfo(appLog) << "Backend initialization process finished.";
 }
 
-bool PackageAnalyzer::isAutoUpdateBeforeInstallEnabled() const
+bool PackageAnalyzer::readDConfigBool(const QString &key, bool defaultValue) const
 {
 #ifdef DTKCORE_CLASS_DConfigFile
     Dtk::Core::DConfig *cfg = Dtk::Core::DConfig::create("deepin-deb-installer", "deepin-deb-installer.cache");
     if (cfg && cfg->isValid()) {
-        bool enabled = cfg->value("autoUpdateBeforeInstall", true).toBool();
-        qCDebug(appLog) << "DConfig autoUpdateBeforeInstall:" << enabled;
+        bool value = cfg->value(key, defaultValue).toBool();
         cfg->deleteLater();
-        return enabled;
+        return value;
     }
     if (cfg)
         cfg->deleteLater();
 #endif
-    // DConfig 不可用（如旧版 dtkcore 或 schema 未安装）时默认开启，保持原行为
-    return true;
+    return defaultValue;
+}
+
+bool PackageAnalyzer::writeDConfigBool(const QString &key, bool value)
+{
+#ifdef DTKCORE_CLASS_DConfigFile
+    Dtk::Core::DConfig *cfg = Dtk::Core::DConfig::create("deepin-deb-installer", "deepin-deb-installer.cache");
+    if (cfg && cfg->isValid()) {
+        cfg->setValue(key, value);
+        cfg->deleteLater();
+        return true;
+    }
+    if (cfg)
+        cfg->deleteLater();
+#endif
+    return false;
+}
+
+bool PackageAnalyzer::isAutoUpdateBeforeInstallEnabled() const
+{
+    bool enabled = readDConfigBool("autoUpdateBeforeInstall", true);
+    qCDebug(appLog) << "DConfig autoUpdateBeforeInstall:" << enabled;
+    return enabled;
+}
+
+void PackageAnalyzer::markOneTimeUpdateDone()
+{
+    if (writeDConfigBool("oneTimeUpdateOnFirstPackage", false)) {
+        qCInfo(appLog) << "One-time update done, DConfig oneTimeUpdateOnFirstPackage set to false";
+    } else {
+        qCWarning(appLog) << "DConfig unavailable, cannot persist oneTimeUpdateOnFirstPackage=false";
+    }
+}
+
+bool PackageAnalyzer::isOneTimeUpdateEnabled() const
+{
+    // DConfig 不可用时返回 false：无法持久化"已完成"状态，返回 true 会导致每次启动都强制 apt update
+    bool enabled = readDConfigBool("oneTimeUpdateOnFirstPackage", false);
+    qCDebug(appLog) << "DConfig oneTimeUpdateOnFirstPackage:" << enabled;
+    return enabled;
 }
 
 void PackageAnalyzer::updatePackageCache()
@@ -126,8 +163,10 @@ void PackageAnalyzer::updatePackageCache()
         return;
     }
 
-    // 判断是否需要更新
-    if (!shouldUpdateCache()) {
+    if (isOneTimeUpdateEnabled()) {
+        qCInfo(appLog) << "One-time forced apt update triggered (first launch), skip shouldUpdateCache";
+        m_oneTimeUpdateInProgress = true;  // 标记，在 setCacheUpdateFinished 中延迟置 key=false
+    } else if (!shouldUpdateCache()) {
         qCInfo(appLog) << "Sources not changed, cache is still valid, skip update";
         setCacheUpdateFinished(true);
         return;
@@ -148,6 +187,11 @@ void PackageAnalyzer::setCacheUpdateFinished(bool finished)
 {
     m_cacheUpdateFinished = finished;
     if (finished) {
+        // 一次性 update 真正完成后才持久化 key=false，避免崩溃导致标志位丢失
+        if (m_oneTimeUpdateInProgress) {
+            m_oneTimeUpdateInProgress = false;
+            markOneTimeUpdateDone();
+        }
         emit cacheUpdateFinished();
     }
 }

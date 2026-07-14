@@ -106,8 +106,18 @@ signals:
     void cacheUpdateFinished();
 
 private:
+    // 读取 DConfig bool 值，DConfig 不可用时返回 defaultValue
+    bool readDConfigBool(const QString &key, bool defaultValue) const;
+    // 写入 DConfig bool 值，成功返回 true
+    bool writeDConfigBool(const QString &key, bool value);
+
     // 读取 DConfig 开关：是否允许安装前自动刷新 apt 缓存。默认 true（DConfig 不可用时也返回 true，保持原行为）
     bool isAutoUpdateBeforeInstallEnabled() const;
+
+    // 将一次性 update 开关置 false（在 update 真正完成后调用，避免崩溃导致标志位丢失）
+    void markOneTimeUpdateDone();
+    // 读取一次性 update 开关，DConfig 不可用时返回 false（无法持久化完成状态，避免每次启动重复触发）
+    bool isOneTimeUpdateEnabled() const;
 
     QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation) const;
     QString resolvMultiArchAnnotation(const QString &annotation, const QString &debArch, int multiArchType) const;
@@ -130,6 +140,9 @@ private:
     int alreadyAnalyzed = 0;
     std::atomic_bool uiExited;
     std::atomic_bool m_cacheUpdateFinished{false};
+
+    // 标记当前 update 是否由一次性开关触发，用于在 setCacheUpdateFinished 中延迟置 key=false
+    bool m_oneTimeUpdateInProgress{false};
 };
 
 Q_DECLARE_METATYPE(QList<DebIr>);
