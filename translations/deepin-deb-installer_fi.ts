@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="fi">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -105,10 +103,6 @@
         <translation>%1 ei ole, valitse uudelleen</translation>
     </message>
     <message>
-        <source>Compatible Mode Install</source>
-        <translation type="vanished">Asenna yhteensopivuustilassa</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="478"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="958"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="1114"/>
@@ -160,16 +154,6 @@
         <translation>Asennus epäonnistui</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Rikkinäiset riippuvuudet, yritä asentaa sovellus yhteensopivuustilassa</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation>Yhteensopivuustilan asennus epäonnistui</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
         <translation>Kohteen %1 asentaminen epäonnistui</translation>
@@ -216,6 +200,16 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
         <translation>Aiempi versio asennettu: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation>Rikkinäiset riippuvuudet, yritä asentaa sovellus yhteensopivuustilassa</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
+        <source>Compatibility mode installation failed</source>
+        <translation>Yhteensopivuustilan asennus epäonnistui</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
@@ -415,7 +409,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Rikkoutuneet riippuvuudet</translation>
     </message>
 </context>
 <context>
@@ -450,30 +444,9 @@
         <translation>Tarkista digitaaliset allekirjoitukset, jos kehittäjätila on käytössä</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Mikäli haluat asentaa allekirjoittamattomia sovelluksia, siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus ja valitse asennettavat sovellustyypit.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Linglong ei ole asennettuna tähän tietokoneeseen, asenna se ensin</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>Ei voi asentaa</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta ja sen asennus/käyttö on estetty. Siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovelluksen suojaus muuta asetuksia.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
@@ -488,9 +461,30 @@
         <translation>Hyväksy</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Tällä paketilla ei ole kelvollista digitaalista allekirjoitusta ja sen asennus/käyttö on estetty. Siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovelluksen suojaus muuta asetuksia.</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>Poistetaan:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>Linglong ei ole asennettuna tähän tietokoneeseen, asenna se ensin</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>Mikäli haluat asentaa allekirjoittamattomia sovelluksia, siirry kohtaan Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus ja valitse asennettavat sovellustyypit.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Turvakeskus &gt; Työkalut &gt; Sovellusten suojaus</translation>
     </message>
 </context>
 <context>
@@ -517,7 +511,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Poistetaan yhteensopivuustilasta %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
@@ -546,7 +540,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished">Asenna yhteensopivuustilassa</translation>
+        <translation>Asenna yhteensopivuustilassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
@@ -611,10 +605,6 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
         <translation>Vahvista asennus yhteensopivuustilassa</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Poistetaan asennusta %2 %1 yhteensopivuustilasta</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="957"/>
