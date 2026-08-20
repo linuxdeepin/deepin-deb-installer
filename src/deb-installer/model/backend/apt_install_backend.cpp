@@ -527,6 +527,8 @@ void AptInstallBackend::slotDependsInstallTransactionFinished()
         qCDebug(appLog) << "Bumping install index due to failed dependency install";
         m_model->bumpInstallIndex();
     } else {
+        qCDebug(appLog) << "Dependency installation successful, invalidating depends status cache";
+        m_model->m_packagesManager->resetPackageDependsStatus(m_model->m_operatingStatusIndex);
         qCDebug(appLog) << "Dependency installation successful, installing next deb";
         // Dependencies already verified, no need to re-verify
         m_model->installNextDeb();

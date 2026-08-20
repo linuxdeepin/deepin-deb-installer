@@ -366,7 +366,7 @@ private:
      * @param annotation    注解
      * @return  package指针
      */
-    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString());
+    QApt::Package *packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation = QString(), bool resolveProvider = true);
 
     /**
      * @brief checkPackageArchValid 检测通过包名 \a packageName 获取的软件包 \a package 架构

@@ -1459,6 +1459,36 @@ void PackagesManager::packageCandidateChoose(QSet<QString> &choosed_set,
         if (!package)
             continue;
 
+        // packageWithArch 可能因"已安装提供者优先"返回虚包的提供者而非真实包。
+        // 依赖带版本约束时，需按 Debian policy 校验提供者的 Provides 版本：
+        // 1. 提供者的版本化 Provides 能满足约束且已安装，则依赖已满足，无需安装或升级；
+        // 2. 提供者不能满足约束时，回退选择仓库中的真实软件包（与 apt 行为一致），
+        //    避免把无新版本的提供者反复加入安装列表造成空安装循环。
+        if (package->name() != info.packageName() && !info.packageVersion().isEmpty()) {
+            const QString provideVersion = package->providesListEnhance().value(info.packageName());
+            const bool providerSatisfies =
+                    !provideVersion.isEmpty()
+                    && dependencyVersionMatch(Package::compareVersion(provideVersion, info.packageVersion()),
+                                              info.relationType());
+
+            if (providerSatisfies && !package->installedVersion().isEmpty()) {
+                qCInfo(appLog) << "Depend" << info.packageName() << info.packageVersion()
+                               << "satisfied by installed provider" << package->name()
+                               << "provides" << provideVersion << ", skip installing";
+                continue;
+            }
+
+            if (!providerSatisfies) {
+                Package *realPackage = packageWithArch(info.packageName(), debArch, info.multiArchAnnotation(), false);
+                if (realPackage && realPackage->name() == info.packageName()) {
+                    qCInfo(appLog) << "Provider" << package->name() << "cannot satisfy" << info.packageName()
+                                   << info.packageVersion() << "in candidate choose, using real package"
+                                   << realPackage->name() << realPackage->version();
+                    package = realPackage;
+                }
+            }
+        }
+
         const auto choosed_name = package->name() + resolvMultiArchAnnotation(QString(), package->architecture());
         if (choosed_set.contains(choosed_name))
             break;
@@ -2216,18 +2246,44 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     QString pkgRealVer = package->version();
     bool isVirtualPackage = false;
 
+    const RelationType relation = dependencyInfo.relationType();
+
 #ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
     if (package->name() != package_name) {
         auto pkgMap = package->providesListEnhance();
         auto iter = pkgMap.find(package_name);
         if (iter != pkgMap.end()) {
-            pkgRealVer = *iter;
-            isVirtualPackage = true;
+            // 依据 Debian policy 判定提供者能否满足依赖：
+            // 1. 依赖不带版本约束时，任意提供者均可满足；
+            // 2. 依赖带版本约束时，无版本号的 Provides 无法满足，
+            //    带版本号的 Provides 需版本符合关系要求。
+            const bool provideSatisfies = dependencyInfo.packageVersion().isEmpty()
+                    || (!iter->isEmpty()
+                        && dependencyVersionMatch(Package::compareVersion(*iter, dependencyInfo.packageVersion()), relation));
+
+            if (!provideSatisfies) {
+                // 提供者不满足版本约束（如兼容包的无版本号 Provides），
+                // 回退查找真实软件包（含仓库候选版本，跳过提供者匹配），交由后续流程判定其状态
+                Package *realPackage = packageWithArch(package_name, realArch, dependencyInfo.multiArchAnnotation(), false);
+                if (realPackage && realPackage->name() == package_name) {
+                    qCInfo(appLog) << "PackagesManager:"
+                            << "provider" << package->name() << "cannot satisfy" << package_name
+                            << dependencyInfo.packageVersion() << ", fall back to real package";
+                    package = realPackage;
+                    pkgRealVer = package->version();
+                } else {
+                    // 仓库中不存在真实软件包，只能依赖此提供者，按原逻辑处理
+                    pkgRealVer = *iter;
+                    isVirtualPackage = true;
+                }
+            } else {
+                pkgRealVer = *iter;
+                isVirtualPackage = true;
+            }
         }
     }
 #endif
 
-    const RelationType relation = dependencyInfo.relationType();
     QString installedVersion = package->installedVersion();
 
     if (!installedVersion.isEmpty()) {
@@ -2475,7 +2531,7 @@ bool PackagesManager::checkPackageArchValid(const QApt::Package *package, const 
     return archIsValidRet;
 }
 
-Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation)
+Package *PackagesManager::packageWithArch(const QString &packageName, const QString &sysArch, const QString &annotation, bool resolveProvider)
 {
     qCDebug(appLog) << "Getting package with arch for package:" << packageName;
     Backend *backend = PackageAnalyzer::instance().backendPtr();
@@ -2493,8 +2549,9 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
 
     if (package) {
         // 检查反向提供者：如果当前包未安装，但某个提供者已安装，优先使用已安装的提供者
+        // resolveProvider 为 false 时跳过（用于回退查找真实软件包的场景）
         QString installedVersion = package->installedVersion();
-        if (installedVersion.isEmpty()) {
+        if (resolveProvider && installedVersion.isEmpty()) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QString providedPackageName = package->name();
             providedPackageName.remove(QRegExp(":[^:]*$"));
@@ -2547,9 +2604,11 @@ Package *PackagesManager::packageWithArch(const QString &packageName, const QStr
     }
 
     // check virtual package providers
-    for (auto *virtualPackage : backend->availablePackages()) {
-        if (virtualPackage->name() != packageName && virtualPackage->providesList().contains(packageName)) {
-            return packageWithArch(virtualPackage->name(), sysArch, annotation);
+    if (resolveProvider) {
+        for (auto *virtualPackage : backend->availablePackages()) {
+            if (virtualPackage->name() != packageName && virtualPackage->providesList().contains(packageName)) {
+                return packageWithArch(virtualPackage->name(), sysArch, annotation);
+            }
         }
     }
 
