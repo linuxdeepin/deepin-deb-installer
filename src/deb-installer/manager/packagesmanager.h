@@ -285,6 +285,12 @@ public:
      */
     void resetPackageDependsStatus(const int index);
 
+    /**
+     * @brief invalidateStaleBreakStatus 清除缓存中状态为 break/CompatibleNotInstalled 的条目
+     * 在 apt 缓存更新完成后调用，确保陈旧的依赖判定被重新计算
+     */
+    void invalidateStaleBreakStatus();
+
     //// 依赖查找 获取等相关函数
 private:
     /**

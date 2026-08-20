@@ -65,6 +65,12 @@ private slots:
     void slotPackagesSelected(const QStringList &packages);
 
     /**
+     * @brief slotProcessPendingPackages 处理暂存的待安装包
+     * 在后端/缓存就绪后重新执行包选择流程
+     */
+    void slotProcessPendingPackages();
+
+    /**
      * @brief slotDdimSelected
      * @param ddimFiles 清单文件
      * 根据清单文件进行解析操作
@@ -370,6 +376,9 @@ private:
 
     bool m_packageAppending = false;
     int m_wineAuthStatus = -1;  // 记录依赖配置授权状态
+
+    QStringList m_pendingPackages;        // 暂存后端未就绪时的待处理包路径
+    bool m_packageAppendDeferred = false; // 防止重复连接 cacheUpdateFinished 信号
 };
 
 #endif  // DEBINSTALLER_H
