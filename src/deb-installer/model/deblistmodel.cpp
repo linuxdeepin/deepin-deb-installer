@@ -57,7 +57,7 @@ bool DebListModel::isDpkgRunning()
     proc.start("ps", QStringList() << "-e"
                << "-o"
                << "comm");
-    proc.waitForFinished();
+    proc.waitForFinished(3000);
 
     // 获取进程信息的数据
     const QString processOutput = proc.readAllStandardOutput();
@@ -820,9 +820,6 @@ void DebListModel::installDebs()
         return;
 
     Transaction *transaction = nullptr;
-
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
 
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
