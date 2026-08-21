@@ -1,3 +1,17 @@
+deepin-deb-installer (6.5.49) unstable; urgency=medium
+
+  * [skip CI] Translate deepin-deb-installer.ts in ca
+  * [skip CI] Translate deepin-deb-installer.ts in es
+  * [skip CI] Translate deepin-deb-installer.ts in fi
+  * [skip CI] Translate deepin-deb-installer.ts in pt_BR
+  * chore: Sync by
+    https://github.com/linuxdeepin/.github/commit/a300f8523d4876677112ed
+    ab6a0772f7ad112976
+  * fix(depends): fix install loop when provider cannot satisfy
+    versioned dep
+
+ -- liuzheng <liuzheng@uniontech.com>  Fri, 21 Aug 2026 14:56:49 +0800
+
 deepin-deb-installer (6.5.48) unstable; urgency=medium
 
   * feat(dconfig): force one apt update on first launch
