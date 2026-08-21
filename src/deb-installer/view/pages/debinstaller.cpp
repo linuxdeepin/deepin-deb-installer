@@ -649,6 +649,28 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
 {
     const QStringList &pkgRealPathList = pathTransform(packagesPathList);
     qCDebug(appLog) << "Packages selected:" << pkgRealPathList;
+    // 后端/缓存未就绪时暂存待处理包，避免依赖检查抢跑导致误判为 break 并永久缓存错误结果
+    if (!PackageAnalyzer::instance().isBackendReady() || !PackageAnalyzer::instance().isCacheUpdateFinished()) {
+        qCInfo(appLog) << "Backend/cache not ready, deferring package selection until cache update finished";
+        m_pendingPackages = pkgRealPathList;
+        if (!m_packageAppendDeferred) {
+            m_packageAppendDeferred = true;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished,
+                    this, &DebInstaller::slotProcessPendingPackages);
+#else
+            connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished, this, [this]() {
+                m_packageAppendDeferred = false;
+                if (!m_pendingPackages.isEmpty()) {
+                    QStringList pending = m_pendingPackages;
+                    m_pendingPackages.clear();
+                    slotPackagesSelected(pending);
+                }
+            }, Qt::SingleShotConnection);
+#endif
+        }
+        return;
+    }
     // 兼容模式下不允许追加新包
     const QModelIndex existIdx = m_fileListModel->index(0);
     if (existIdx.isValid()) {
@@ -675,6 +697,18 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
 
         // 开始添加包，将要添加的包传递到后端，添加包由后端处理
         m_fileListModel->slotAppendPackage(pkgRealPathList);
+    }
+}
+
+void DebInstaller::slotProcessPendingPackages()
+{
+    disconnect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished,
+               this, &DebInstaller::slotProcessPendingPackages);
+    m_packageAppendDeferred = false;
+    if (!m_pendingPackages.isEmpty()) {
+        QStringList pending = m_pendingPackages;
+        m_pendingPackages.clear();
+        slotPackagesSelected(pending);
     }
 }
 

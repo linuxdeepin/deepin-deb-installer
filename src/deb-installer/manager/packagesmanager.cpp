@@ -443,6 +443,11 @@ PackagesManager::PackagesManager(QObject *parent)
     connect(m_pAddPackageThread, &AddPackageThread::signalAppendFinished, this, &PackagesManager::slotAppendPackageFinished);
 
     getBlackApplications();
+
+    // 缓存更新完成后清除陈旧的 break/CompatibleNotInstalled 依赖状态，确保重新计算
+    connect(&PackageAnalyzer::instance(), &PackageAnalyzer::cacheUpdateFinished, this, [this]() {
+        invalidateStaleBreakStatus();
+    });
 }
 
 bool PackagesManager::isBackendReady()
@@ -1761,6 +1766,26 @@ void PackagesManager::resetPackageDependsStatus(const int index)
     m_packageMd5DependsStatus.remove(currentPackageMd5);  // 删除当前包的依赖状态（之后会重新获取此包的依赖状态）
 
     // we don't need reset m_markedDepends on installing
+}
+
+void PackagesManager::invalidateStaleBreakStatus()
+{
+    qCDebug(appLog) << "Invalidating stale break/compatible-not-installed cache entries";
+    QList<QByteArray> staleKeys;
+    for (auto it = m_packageMd5DependsStatus.begin(); it != m_packageMd5DependsStatus.end(); ++it) {
+        if (it.value().status == Pkg::DependsStatus::DependsBreak ||
+            it.value().status == Pkg::DependsStatus::CompatibleNotInstalled) {
+            staleKeys.append(it.key());
+        }
+    }
+    for (const auto &key : staleKeys) {
+        m_packageMd5DependsStatus.remove(key);
+    }
+    if (!staleKeys.isEmpty()) {
+        if (auto backend = PackageAnalyzer::instance().backendPtr()) {
+            backend->reloadCache();
+        }
+    }
 }
 
 /**
