@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -33,6 +33,7 @@ public:
         LinglongUab = 1 << 7,  // linglong app(lingyaps)
 
         AppCheck = 1 << 8,  // compatible appcheck
+        Reinstall = 1 << 9,  // reinstall same version installed package
     };
     Q_DECLARE_FLAGS(Commands, Command)
     Q_FLAG(Commands)

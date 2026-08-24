@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,6 +12,7 @@ static const QString kParamInstallConfig = "install_config";
 static const QString kParamInstallComaptible = "install_compatible";
 static const QString kParamInstallImmutable = "install_immutable";
 static const QString kParamInstallUab = "uab";
+static const QString kParamReinstall = "reinstall";
 
 static const QString kAptBin = "apt";
 static const QString kInstall = "install";
@@ -65,8 +66,9 @@ void InstallDebThread::setParam(const QStringList &arguments)
                                             {kParamInstallConfig, InstallConfig},
                                             {kParamInstallComaptible, Compatible},
                                             {kParamInstallImmutable, Immutable},
-                                            {kParamInstallUab, LinglongUab},
-                                            {kInstall, Install},
+                                             {kParamInstallUab, LinglongUab},
+                                             {kParamReinstall, Reinstall},
+                                             {kInstall, Install},
                                             {kRemove, Remove},
                                             {kCompCheck, AppCheck}};
 
@@ -367,6 +369,7 @@ void InstallDebThread::immutableProcess()
     static const QString kImmuEnvEnableWait = "DEEPIN_IMMUTABLE_CTL_WAIT_LOCK";
     static const QString kImmuYes = "-y";
     static const QString kImmuAllowDowngrades = "--allow-downgrades";
+    static const QString kImmuReinstall = "--reinstall";
 
     QStringList params;
 
@@ -391,13 +394,19 @@ void InstallDebThread::immutableProcess()
         }
 
         // Note: deepin-immutable-ctl actually use apt to install/uninstall. (params transport to deepin-immutable-ctl)
-        // e.g.: apt install [deb file] -y (--allow-downgrades)
+        // e.g.: apt install [deb file] -y (--allow-downgrades) (--reinstall)
         params << kInstall << debPath << kImmuYes;
 
         // FIXME: temporary code, check if current Immutable System need --allow-downgrades
         if (newImmutableVersion()) {
             qDebug() << "new immutable version, add --allow-downgrades";
             params << kImmuAllowDowngrades;
+        }
+
+        // apt skips when the same version is already installed, force reinstall
+        if (m_cmds.testFlag(Reinstall)) {
+            qDebug() << "flag Reinstall, add --reinstall";
+            params << kImmuReinstall;
         }
 
     } else if (m_cmds.testFlag(Remove)) {

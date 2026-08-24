@@ -2245,7 +2245,12 @@ bool DebListModel::installImmutablePackage()
 
     m_currentPackage = packagePtr(m_operatingIndex);
 
-    return m_immProcessor->install(m_currentPackage);
+    // apt skips when the same version is already installed, force reinstall
+    const int installStat = m_packagesManager->packageInstallStatus(m_operatingStatusIndex);
+    const bool reinstall = (Pkg::PackageInstallStatus::InstalledSameVersion == installStat);
+    qCDebug(appLog) << "Immutable package install status:" << installStat << "reinstall:" << reinstall;
+
+    return m_immProcessor->install(m_currentPackage, reinstall);
 }
 
 bool DebListModel::uninstallImmutablePackage()

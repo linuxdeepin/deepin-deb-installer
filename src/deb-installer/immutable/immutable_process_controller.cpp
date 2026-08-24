@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,6 +16,7 @@ namespace Immutable {
 static const QString kPkexecBin = "pkexec";
 static const QString kInstallProcessorBin = "deepin-deb-installer-dependsInstall";
 static const QString kParamImmutable = "--install_immutable";
+static const QString kParamReinstall = "--reinstall";
 static const QString kParamInstallConfig = "--install_config";
 static const QString kParamInstall = "--install";
 static const QString kParamRemove = "--remove";
@@ -41,7 +42,7 @@ bool ImmutableProcessController::isRunning() const
     return false;
 }
 
-bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package)
+bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package, bool reinstall)
 {
     qCDebug(appLog) << "install immutable package";
     if (!package || !package->isValid() || isRunning()) {
@@ -67,6 +68,10 @@ bool ImmutableProcessController::install(const Deb::DebPackage::Ptr &package)
     // but the first argument to pass to setProgram()
     // sa: Pty::start()
     QStringList params{kPkexecBin, kInstallProcessorBin, kParamImmutable, kParamInstall, m_currentPackage->filePath()};
+    if (reinstall) {
+        qCDebug(appLog) << "same version installed, add --reinstall";
+        params << kParamReinstall;
+    }
     if (m_currentPackage->containsTemplates()) {
         qCDebug(appLog) << "install config templates";
         params << kParamInstallConfig;

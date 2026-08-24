@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -26,7 +26,7 @@ public:
     [[nodiscard]] const Deb::DebPackage::Ptr &currentPackage() const;
 
     [[nodiscard]] bool isRunning() const;
-    [[nodiscard]] bool install(const Deb::DebPackage::Ptr &package);
+    [[nodiscard]] bool install(const Deb::DebPackage::Ptr &package, bool reinstall = false);
     [[nodiscard]] bool uninstall(const Deb::DebPackage::Ptr &package);
 
     [[nodiscard]] bool needTemplates() const;
