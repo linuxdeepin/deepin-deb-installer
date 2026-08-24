@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.50) unstable; urgency=medium
+
+  * fix(immutable): support reinstall when same version installed
+
+ -- liuzheng <liuzheng@uniontech.com>  Mon, 24 Aug 2026 13:16:57 +0800
+
 deepin-deb-installer (6.5.49) unstable; urgency=medium
 
   * [skip CI] Translate deepin-deb-installer.ts in ca
