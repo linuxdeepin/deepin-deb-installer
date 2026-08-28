@@ -35,7 +35,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation>جاري تحديث ذاكرة التخزين المؤقت للحزم...</translation>
     </message>
 </context>
 <context>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
         <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل التثبيت في وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
@@ -195,22 +195,22 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation type="unfinished">الإصدار نفسه مثبت</translation>
+        <translation>نفس الإصدار مثبت بالفعل</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">تم تثبيت الإصدار الأحدث: 1%</translation>
+        <translation>إصدار أحدث مثبت: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">تم تثبيت الإصدار السابق: 1%</translation>
+        <translation>إصدار أقدم مثبت: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل التثبيت</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
@@ -245,7 +245,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation type="unfinished">متابعة</translation>
+        <translation>متابعة</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
@@ -411,7 +411,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>تبعيات مكسورة</translation>
     </message>
 </context>
 <context>
@@ -508,17 +508,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation>جاري التثبيت في وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>جاري إزالة تثبيت %1 من وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>تم تثبيت %1 بنجاح في وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1235"/>
@@ -542,7 +542,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation>تثبيت وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
@@ -595,18 +595,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>إذا كان هذا البرنامج إصداراً أقدم (متكيف بالفعل مع إصدار نظام قديم)، يمكنك محاولة تثبيته في وضع التوافق.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="561"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation>وضع توافق UOS V25 هو ميزة تسمح لك بمتابعة استخدام تطبيقات إصدار V20 على نظام V25. يقوم بإنشاء بيئة توافق لك، مما يمكّن البرامج التي كانت تعمل في الأصل على نظام V20 فقط من العمل بشكل صحيح على نظام V25 أيضاً.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>تأكيد التثبيت في وضع التوافق</translation>
     </message>
     <message>
         <source>Trying to install %2 in %1 compatibility mode</source>
@@ -657,13 +657,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation>تثبيت متوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">إلغاء</translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1242"/>
@@ -764,7 +764,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation>هل أنت متأكد من إزالة تثبيت %1 من وضع التوافق؟ سيتم أيضاً إزالة جميع التبعيات</translation>
     </message>
 </context>
 <context>
