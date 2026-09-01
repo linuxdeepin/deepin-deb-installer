@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ar">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -156,33 +154,29 @@
         <translation>فشلت عملية التثبيت</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">النظام الحالية</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">تم تثبيت %2 في %1، يرجى إزالة الحزمة قبل إعادة تثبيتها</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation> 의존يات مكسورة،حاول تثبيت التطبيق في وضع التوافق</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation>فشل التثبيت في وضع التوافق</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
         <translation>فشل تثبيت 1%</translation>
+    </message>
+    <message>
+        <source>Unable to install - no digital signature</source>
+        <translation type="vanished">غير قادر على التثبيت - لا يوجد توقيع رقمي</translation>
+    </message>
+    <message>
+        <source>Please go to Control Center to enable developer mode and try again. Proceed?</source>
+        <translation type="vanished">الرجاء الانتقال إلى مركز التحكم لتمكين وضع المطور والمحاولة مرة أخرى. هل تريد المتابعة؟</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1321"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>إلغاء</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>متابعة</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1268"/>
@@ -206,6 +200,16 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
         <translation>إصدار أقدم مثبت: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation> 의존يات مكسورة،حاول تثبيت التطبيق في وضع التوافق</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
+        <source>Compatibility mode installation failed</source>
+        <translation>فشل التثبيت في وضع التوافق</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
@@ -240,12 +244,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2005"/>
         <source>Unable to install</source>
         <translation>غير قادر على التثبيت</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1322"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>متابعة</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1379"/>
@@ -446,30 +444,9 @@
         <translation>تحقق من التوقيعات الرقمية إذا تم تمكين وضع المطور</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>لتثبيت التطبيقات غير الموقعة، انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيقات، ومن ثم حدد أنواع التطبيقات التي يمكن تثبيتها.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>مركز الأمان &gt; أدوات &gt; أمان التطبيقات</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>لم يتم تثبيت بيئات Linglong في النظام، يرجى تثبيتها أولاً</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>غير قادر على التثبيت</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>لا تحتوي هذه الحزمة على توقيع رقمي صالح ولذا تم حظرها من تثبيتها و تشغيلها، لتغيير الإعدادات انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيقات .</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
@@ -484,9 +461,30 @@
         <translation>متابعة</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>لا تحتوي هذه الحزمة على توقيع رقمي صالح ولذا تم حظرها من تثبيتها و تشغيلها، لتغيير الإعدادات انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيقات .</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>سيتم إزالة: </translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>لم يتم تثبيت بيئات Linglong في النظام، يرجى تثبيتها أولاً</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>لتثبيت التطبيقات غير الموقعة، انتقل إلى مركز الأمان &gt; أدوات &gt; أمان التطبيقات، ومن ثم حدد أنواع التطبيقات التي يمكن تثبيتها.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>مركز الأمان &gt; أدوات &gt; أمان التطبيقات</translation>
     </message>
 </context>
 <context>
@@ -609,25 +607,9 @@
         <translation>تأكيد التثبيت في وضع التوافق</translation>
     </message>
     <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">يتم تثبيت %2 في وضع التوافق %1</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">إلغاء تثبيت %2 من وضع التوافق %1</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">%2 تم تثبيته بنجاح في وضع التوافق %1</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="957"/>
         <source>Installed successfully</source>
         <translation>تم التثبيت بنجاح</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">%2 تم إلغاء تثبيته بنجاح من وضع التوافق %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="969"/>
