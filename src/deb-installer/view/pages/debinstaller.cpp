@@ -321,11 +321,16 @@ QString DebInstaller::startInstallPackge(const QString &debPath)
         // wait install finished;
         QEventLoop loop;
         connect(m_fileListModel, &AbstractPackageListModel::signalWorkerFinished, &loop, &QEventLoop::quit);
+        connect(m_fileListModel, &AbstractPackageListModel::signalAuthCancel, &loop, &QEventLoop::quit);
         loop.exec();
 
-        message = m_fileListModel->lastProcessError();
-        if (message.isEmpty())
-            message = "install succeeded";
+        if (m_fileListModel->isWorkerPrepare()) {
+            message = "authorization cancelled";
+        } else {
+            message = m_fileListModel->lastProcessError();
+            if (message.isEmpty())
+                message = "install succeeded";
+        }
     }
 
     return message;
