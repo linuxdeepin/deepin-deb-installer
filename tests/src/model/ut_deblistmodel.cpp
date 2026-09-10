@@ -684,6 +684,39 @@ TEST_F(ut_DebListModel_test, deblistmodel_UT_initRowStatus)
     ASSERT_EQ(m_debListModel->m_packageOperateStatus.find("deb").value(), Pkg::PackageOperationStatus::Waiting);
 }
 
+TEST_F(ut_DebListModel_test, deblistmodel_UT_lastProcessError_no_record)
+{
+    EXPECT_EQ(QString("failed"), m_debListModel->lastProcessError());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_lastProcessError_success_without_transaction)
+{
+    const QByteArray md5("md5-lastProcessError-success");
+    m_debListModel->m_operatingPackageMd5 = md5;
+    m_debListModel->m_packageOperateStatus[md5] = Pkg::PackageOperationStatus::Success;
+
+    EXPECT_EQ(QString(), m_debListModel->lastProcessError());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_lastProcessError_failed_with_reason)
+{
+    const QByteArray md5("md5-lastProcessError-failed");
+    m_debListModel->m_operatingPackageMd5 = md5;
+    m_debListModel->m_packageOperateStatus[md5] = Pkg::PackageOperationStatus::Failed;
+    m_debListModel->m_packageFailReason[md5] = "depend not found";
+
+    EXPECT_EQ(QString("depend not found"), m_debListModel->lastProcessError());
+}
+
+TEST_F(ut_DebListModel_test, deblistmodel_UT_lastProcessError_failed_without_reason)
+{
+    const QByteArray md5("md5-lastProcessError-failed-noreason");
+    m_debListModel->m_operatingPackageMd5 = md5;
+    m_debListModel->m_packageOperateStatus[md5] = Pkg::PackageOperationStatus::Failed;
+
+    EXPECT_EQ(QString("failed"), m_debListModel->lastProcessError());
+}
+
 TEST_F(ut_DebListModel_test, deblistmodel_UT_checkSystemVersion_UosEnterprise)
 {
     stub.set(ADDR(Dtk::Core::DSysInfo, uosEditionType), model_uosEditionType_UosEnterprise);

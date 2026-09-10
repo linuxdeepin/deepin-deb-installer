@@ -650,6 +650,22 @@ QString DebListModel::lastProcessError()
         qCDebug(appLog) << "Returning error string from current transaction:" << m_currentTransaction->errorString();
         return m_currentTransaction->errorString();
     }
+
+    // The transaction is deleted right after a successful finish, before
+    // signalWorkerFinished wakes the DBus caller. Decide by the operating
+    // package's status instead of blindly reporting "failed".
+    const int operateStatus = m_packageOperateStatus.value(m_operatingPackageMd5, Pkg::PackageOperationStatus::Prepare);
+    if (Pkg::PackageOperationStatus::Success == operateStatus) {
+        qCDebug(appLog) << "Last operation succeeded, no process error.";
+        return QString();
+    }
+
+    const QString failReason = m_packageFailReason.value(m_operatingPackageMd5);
+    if (!failReason.isEmpty()) {
+        qCDebug(appLog) << "Returning recorded fail reason:" << failReason;
+        return failReason;
+    }
+
     qCDebug(appLog) << "No current transaction, returning 'failed'.";
     return "failed";
 }
