@@ -582,7 +582,8 @@ void AptInstallBackend::slotTransactionErrorOccurred()
         Q_EMIT m_model->signalLockForAuth(false);
         Q_EMIT m_model->signalAuthCancel();
         Q_EMIT m_model->signalEnableCloseButton(true);
-        m_model->m_workerStatus = AbstractPackageListModel::WorkerPrepare;
+        m_model->m_workerStatus = AbstractPackageListModel::WorkerFinished;
+        Q_EMIT m_model->signalWorkerFinished();
         return;
     }
 
