@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2024-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,7 @@
 #include "utils/ddlog.h"
 
 #include <QDebug>
+#include <QJsonArray>
 
 #include "compatible_backend.h"
 #include "process/Pty.h"
@@ -23,6 +24,30 @@ static const QString kParamInstallConfig = "--install_config";
 static const QString kParamInstall = "--install";
 static const QString kParamRemove = "--remove";
 static const QString kParamRootfs = "--rootfs";
+
+/**
+   @brief Search deepin-compatible-ctl's result JSON in the whole process output.
+
+   The result is a single JSON line such as
+   {"Code":0,"Msg":null,"Ext":{"Code":6,"Msg":["安装失败 ..."]}}, printed after all
+   install logs. PTY chunks split at arbitrary boundaries and the helper process
+   appends its own logs after it, so the last chunk must not be assumed to be the
+   pure JSON document: reassemble the output and search the result line backwards.
+ */
+static CompatibleRet::Ptr searchResultJson(const QStringList &outputList)
+{
+    static const int kMaxSearchLines = 64;
+    const QStringList lines = outputList.join(QString()).split('\n');
+    for (int i = lines.size() - 1, scanned = 0; i >= 0 && scanned < kMaxSearchLines; --i, ++scanned) {
+        const QString line = lines.at(i).trimmed();  // drop the trailing '\r' added by the PTY
+        if (!line.startsWith('{') || !line.contains("\"Code\""))
+            continue;
+        auto retPtr = CompatibleJsonParser::parseCommonField(line.toUtf8());
+        if (retPtr)
+            return retPtr;
+    }
+    return {};
+}
 
 // select current user (non-root)
 static const QString kEnvUser = "USER";
@@ -217,13 +242,24 @@ void CompatibleProcessController::onFinished(int exitCode, int exitStatus)
             } break;
         }
     } else {
-        // New version support json data result.
-        auto lastRetOutput = m_outputList.last().toUtf8();
-        auto retPtr = CompatibleJsonParser::parseCommonField(lastRetOutput);
-        if (retPtr && CompSuccess != retPtr->ext.code) {
-            qCWarning(appLog) << "Compatible install/uninstall failed" << lastRetOutput;
+        // New version deepin-compatible-ctl may exit with code 0 even when the
+        // operation failed; the real result is in the JSON line it prints last.
+        auto retPtr = searchResultJson(m_outputList);
+        if (retPtr && (CompSuccess != retPtr->code || CompSuccess != retPtr->ext.code)) {
+            QStringList details;
+            const QString rootMsg = retPtr->message.trimmed();
+            if (!rootMsg.isEmpty())
+                details << rootMsg;
+            const auto extMsgs = retPtr->ext.detailMessage.toArray();
+            for (const auto &msg : extMsgs) {
+                const QString text = msg.toString().trimmed();
+                if (!text.isEmpty())
+                    details << text;
+            }
+            qCWarning(appLog) << "Compatible install/uninstall failed, code:" << retPtr->code
+                              << "ext code:" << retPtr->ext.code << details.join(' ');
 
-            m_currentPackage->setError(Pkg::UnknownError, {});
+            m_currentPackage->setError(Pkg::UnknownError, details.join(' '));
             success = false;
         }
     }
