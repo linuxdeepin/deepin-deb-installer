@@ -384,8 +384,9 @@ QIcon Utils::packageIcon(Pkg::PackageType type)
 {
     qCDebug(appLog) << "Package icon, type:" << type;
     if (Pkg::Uab == type) {
-        // linglong uab package
-        static QIcon kUabIcon = QIcon::fromTheme("application/x-executable");
+        // linglong uab package, icon name follows the generic-icon declared
+        // for application/vnd.linyaps.uab in shared-mime-info
+        static QIcon kUabIcon = QIcon::fromTheme("universal-application-bundle");
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (kUabIcon.isNull()) {
             // using DDciIcon to support new svg version (dsvg use librsvg backend)
