@@ -132,7 +132,7 @@ void UninstallConfirmPage::setPackage(const QString &name)
     if (!m_requiredList.isEmpty()) {
         tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
     }
-    const QSize boundingSize = QSize(m_tips->width(), 340);
+    const QSize boundingSize = QSize(m_tips->minimumWidth(), 340);
     m_tips->setText(
         Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));  // 2020.0210修改中英文状态下描述输出自动换行
 }
@@ -174,8 +174,8 @@ void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
     m_infoWrapperWidget->layout()->setContentsMargins(0, 60, 0, 60);
     m_icon->setFixedSize(85, 85);
     m_icon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(m_icon->size()));
-    QString tips = tr("Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed").arg(m_packageName);
-    const QSize boundingSize = QSize(m_tips->width(), 340);
+    QString tips = tr("Are you sure you want to uninstall %1 from compatibility mode?\nAll dependencies will also be removed").arg(m_packageName);
+    const QSize boundingSize = QSize(m_tips->minimumWidth(), 340);
     m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips, boundingSize));
     qCDebug(appLog) << "Compatible info set";
 }
