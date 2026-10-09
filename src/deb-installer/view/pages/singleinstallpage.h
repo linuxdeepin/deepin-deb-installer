@@ -50,6 +50,11 @@ public:
     void setEnableButton(bool bEnable);
 
     /**
+     * @brief resetCompatConfirmView 重置兼容模式确认视图，用于 D-Bus 单实例复用时清除上轮遗留的复选框状态
+     */
+    void resetCompatConfirmView();
+
+    /**
      * @brief DealDependResult 根据依赖安装的进程标识，处理依赖安装的流程显示
      * @param authStatus  依赖安装的集成标识
      * @param dependName    安装的依赖名称
