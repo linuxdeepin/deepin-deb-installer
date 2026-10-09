@@ -1,3 +1,9 @@
+deepin-deb-installer (6.5.53) unstable; urgency=medium
+
+  * fix: replace over-wide x-executable mimetype with uab type
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Fri, 09 Oct 2026 21:16:31 +0800
+
 deepin-deb-installer (6.5.52) unstable; urgency=medium
 
   * fix: correct compatible install result misreport
