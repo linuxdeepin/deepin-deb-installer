@@ -746,8 +746,8 @@ Systemet eller andra program kanske inte fungerar korrekt</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation>Är du säker på att du vill avinstallera %1 från kompatibilitetsläget? Alla beroenden kommer också att tas bort</translation>
+        <source>Are you sure you want to uninstall %1 from compatibility mode?\nAll dependencies will also be removed</source>
+        <translation>Är du säker på att du vill avinstallera %1 från kompatibilitetsläget?\nAlla beroenden kommer också att tas bort</translation>
     </message>
 </context>
 <context>
