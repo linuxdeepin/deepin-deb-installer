@@ -1275,6 +1275,15 @@ void SingleInstallPage::showCompatConfirmView()
     Q_EMIT signalSetTitlebarText(compatTitle);
 }
 
+void SingleInstallPage::resetCompatConfirmView()
+{
+    if (!m_compatCheckBox->isVisible()) {
+        return;
+    }
+    qCDebug(appLog) << "Resetting compatible confirm view for D-Bus reuse";
+    showCompatConfirmView();
+}
+
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
     qCDebug(appLog) << "Set enable button";

@@ -660,6 +660,11 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
         const int existStat = existIdx.data(DebListModel::PackageDependsStatusRole).toInt();
         if (Pkg::CompatibleNotInstalled == existStat || Pkg::CompatibleIntalled == existStat) {
             qCDebug(appLog) << "In compatible mode, refusing to append new packages";
+            // D-Bus 单实例复用路径下，显式重置兼容模式确认视图，清除上轮遗留的复选框状态
+            SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+            if (singlePage) {
+                singlePage->resetCompatConfirmView();
+            }
             this->showNormal();
             this->activateWindow();
             return;
