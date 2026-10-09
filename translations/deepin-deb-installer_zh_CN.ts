@@ -768,8 +768,10 @@ The system or other applications may not work properly</source>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
-        <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation>您确定要从兼容模式卸载%1吗？所有依赖项也将被移除</translation>
+        <source>Are you sure you want to uninstall %1 from compatibility mode?
+All dependencies will also be removed</source>
+        <translation>您确定要从兼容模式卸载%1吗？
+所有依赖项也将被移除</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 from compatibility mode?
