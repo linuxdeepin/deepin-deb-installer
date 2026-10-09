@@ -56,6 +56,11 @@ public:
      */
     void DealDependResult(int authStatus, QString dependName);
 
+    /**
+     * @brief resetCompatConfirmView 重置兼容模式确认视图，将复选框及关联 UI 恢复为初始状态
+     */
+    void resetCompatConfirmView();
+
 public slots:
     /**
      * @brief uninstallCurrentPackage 显示卸载页面
