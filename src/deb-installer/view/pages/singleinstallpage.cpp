@@ -1275,6 +1275,12 @@ void SingleInstallPage::showCompatConfirmView()
     Q_EMIT signalSetTitlebarText(compatTitle);
 }
 
+void SingleInstallPage::resetCompatConfirmView()
+{
+    qCDebug(appLog) << "Reset compatible confirm view";
+    showCompatConfirmView();
+}
+
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
     qCDebug(appLog) << "Set enable button";

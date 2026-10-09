@@ -662,6 +662,10 @@ void DebInstaller::slotPackagesSelected(const QStringList &packagesPathList)
             qCDebug(appLog) << "In compatible mode, refusing to append new packages";
             this->showNormal();
             this->activateWindow();
+            SingleInstallPage *singlePage = qobject_cast<SingleInstallPage *>(m_lastPage);
+            if (singlePage) {
+                singlePage->resetCompatConfirmView();
+            }
             return;
         }
     }
