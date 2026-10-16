@@ -549,6 +549,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_compatCheckBox->setObjectName("CompatibleCheckBox");
     m_compatCheckBox->setText(tr("Confirm to install in compatibility mode"));
     m_compatCheckBox->setVisible(false);
+    m_compatCheckBox->setFocusPolicy(Qt::NoFocus);
     Utils::bindFontBySizeAndWeight(m_compatCheckBox, Utils::loadFontFamilyByType(Utils::SourceHanSansNormal), 8, QFont::DemiBold);
     m_compatCheckBox->setContentsMargins(3, 0, 3, 0);
     m_contentLayout->addWidget(m_compatCheckBox);
