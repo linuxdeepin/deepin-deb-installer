@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -12,7 +10,7 @@
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
 </context>
 <context>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation>Обновление кэша пакетов...</translation>
+        <translation>Обновление кэша пакетов…</translation>
     </message>
 </context>
 <context>
@@ -43,7 +41,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/ddimerrorpage.cpp" line="18"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
 </context>
 <context>
@@ -62,7 +60,7 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="759"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="883"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Установка других пакетов... Пожалуйста, откройте позже.</translation>
+        <translation>Установка других пакетов… Пожалуйста, откройте позже.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="764"/>
@@ -156,24 +154,6 @@
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <source>current system</source>
-        <translation type="vanished">текущая система</translation>
-    </message>
-    <message>
-        <source>%2 has been installed in %1, please uninstall this package before installing it</source>
-        <translation type="vanished">%2 уже установлен в %1, пожалуйста, удалите этот пакет перед установкой</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Нарушенные зависимости, попробуйте установить приложение в режиме совместимости</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
-        <source>Compatibility mode installation failed</source>
-        <translation>Ошибка установки в режиме совместимости</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="965"/>
         <source>Failed to install %1</source>
         <translation>Не удалось установить %1</translation>
@@ -204,27 +184,37 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2008"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="930"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Такая же версия уже установлена</translation>
+        <translation>Такая же версия уже установлена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="932"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Установлена более новая версия: %1</translation>
+        <translation>Установлена более новая версия: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="934"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Установлена более старая версия: %1</translation>
+        <translation>Установлена более старая версия: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="940"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation>Нарушенные зависимости, попробуйте установить приложение в режиме совместимости</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="943"/>
+        <source>Compatibility mode installation failed</source>
+        <translation>Ошибка установки в режиме совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1231"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка не удалась</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1272"/>
@@ -419,7 +409,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Нарушены зависимости</translation>
     </message>
 </context>
 <context>
@@ -454,30 +444,9 @@
         <translation>Проверять цифровые подписи, если включён режим разработчика</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
-        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation>Чтобы установить неподписанные приложения, перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений и выберите типы приложений, которые можно устанавливать.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Центр безопасности &gt; Инструменты &gt; Безопасность приложений</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>В системе не установлена среда Linglong, пожалуйста, сначала установите её</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>Невозможно установить</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Этот пакет не имеет действительной цифровой подписи и заблокирован для установки/запуска. Перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений, чтобы изменить настройки.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
@@ -492,9 +461,30 @@
         <translation>Продолжить</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Этот пакет не имеет действительной цифровой подписи и заблокирован для установки/запуска. Перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений, чтобы изменить настройки.</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>Будет удалено:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>В системе не установлена среда Linglong, пожалуйста, сначала установите её</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
+        <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
+        <translation>Чтобы установить неподписанные приложения, перейдите в Центр безопасности &gt; Инструменты &gt; Безопасность приложений и выберите типы приложений, которые можно устанавливать.</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Центр безопасности &gt; Инструменты &gt; Безопасность приложений</translation>
     </message>
 </context>
 <context>
@@ -516,17 +506,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка в режиме совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Удаление %1 из режима совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 был успешно установлен в режим совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1235"/>
@@ -550,7 +540,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка в совместимом режиме</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
@@ -566,10 +556,6 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="242"/>
         <source>Version: </source>
         <translation>Версия:</translation>
-    </message>
-    <message>
-        <source>Select a compatibility mode:</source>
-        <translation type="vanished">Выберите режим совместимости:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="406"/>
@@ -589,7 +575,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1009"/>
         <source>OK</source>
         <comment>button</comment>
-        <translation>ОК</translation>
+        <translation>Хорошо</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="422"/>
@@ -607,39 +593,23 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если это более старая версия программного обеспечения (уже адаптированная для устаревшей версии системы), вы можете попробовать установить ее в режиме совместимости.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="561"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим совместимости UOS V25 — это функция, которая позволяет вам продолжать использовать приложения версии V20 в системе V25. Она создаёт для вас среду совместимости, позволяя программному обеспечению, которое изначально могло работать только в системе V20, верно работать и в системе V25.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to install %2 in %1 compatibility mode</source>
-        <translation type="vanished">Попытка установки %2 в режиме совместимости %1</translation>
-    </message>
-    <message>
-        <source>Uninstalling %2 from %1 compatibility mode</source>
-        <translation type="vanished">Удаление %2 из режима совместимости %1</translation>
-    </message>
-    <message>
-        <source>%2 was successfully installed to %1 compatibility mode</source>
-        <translation type="vanished">%2 успешно установлен в режим совместимости %1</translation>
+        <translation>Подтвердите установку в режиме совместимости</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="957"/>
         <source>Installed successfully</source>
         <translation>Установка выполнена успешно</translation>
-    </message>
-    <message>
-        <source>%2 has been successfully uninstalled from %1 compatibility mode</source>
-        <translation type="vanished">%2 успешно удалён из режима совместимости %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="969"/>
@@ -669,13 +639,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1167"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Совместимая установка</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1169"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1242"/>
@@ -777,13 +747,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="177"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %2 
-from %1 compatibility mode?</source>
-        <translation type="vanished">Уверены, что хотите удалить %2
-из режима совместимости %1?</translation>
+        <translation>Уверены, что хотите удалить %1 из режима совместимости? Все зависимости также будут удалены</translation>
     </message>
 </context>
 <context>
