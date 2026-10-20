@@ -34,6 +34,7 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     m_tips->setMinimumHeight(120);
     m_tips->setMinimumWidth(440);
     m_tips->setAlignment(Qt::AlignCenter);
+    m_tips->installEventFilter(this);
 
     // cancel button settings
     m_cancelBtn->setText(tr("Cancel", "button"));
@@ -126,15 +127,29 @@ void UninstallConfirmPage::setPackage(const QString &name)
 {
     qCDebug(appLog) << "Setting package for uninstall confirmation:" << name;
     m_packageName = name;
-
-    // add tips
-    QString tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
-    if (!m_requiredList.isEmpty()) {
-        tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
+    updateTips();
+}
+void UninstallConfirmPage::updateTips()
+{
+    if (m_packageName.isEmpty()) {
+        return;
     }
+
+    QString tips;
+    if (!m_rootfs.isEmpty()) {
+        tips = tr("Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed")
+                   .arg(m_packageName);
+    } else {
+        tips = tr("Are you sure you want to uninstall %1?\nAll dependencies will also be removed");
+        if (!m_requiredList.isEmpty()) {
+            tips = tr("Are you sure you want to uninstall %1?\nThe system or other applications may not work properly");
+        }
+        tips = tips.arg(m_packageName);
+    }
+
     const QSize boundingSize = QSize(m_tips->width(), 340);
     m_tips->setText(
-        Utils::holdTextInRect(m_tips->font(), tips.arg(name), boundingSize));  // 2020.0210修改中英文状态下描述输出自动换行
+        Utils::holdTextInRect(m_tips->font(), tips, boundingSize));  // 2020.0210修改中英文状态下描述输出自动换行
 }
 void UninstallConfirmPage::setRequiredList(const QStringList &requiredList)
 {
@@ -174,9 +189,7 @@ void UninstallConfirmPage::setCompatibleInfo(const QString &rootfs)
     m_infoWrapperWidget->layout()->setContentsMargins(0, 60, 0, 60);
     m_icon->setFixedSize(85, 85);
     m_icon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(m_icon->size()));
-    QString tips = tr("Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed").arg(m_packageName);
-    const QSize boundingSize = QSize(m_tips->width(), 340);
-    m_tips->setText(Utils::holdTextInRect(m_tips->font(), tips, boundingSize));
+    updateTips();
     qCDebug(appLog) << "Compatible info set";
 }
 
@@ -186,6 +199,15 @@ void UninstallConfirmPage::showEvent(QShowEvent *e)
     // 每次展示时设置默认焦点
     m_confirmBtn->setFocus();
     QWidget::showEvent(e);
+}
+
+bool UninstallConfirmPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_tips
+        && (event->type() == QEvent::FontChange || event->type() == QEvent::Resize)) {
+        updateTips();
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 void UninstallConfirmPage::slotShowDetail()
