@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -54,6 +54,11 @@ protected:
      */
     void showEvent(QShowEvent *e) override;
 
+    /**
+       @brief 监听提示标签的字体与尺寸变化，重新计算截断文本
+     */
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private slots:
 
     /**
@@ -67,6 +72,8 @@ private slots:
     void slotHideDetail();
 
 private:
+    void updateTips();
+
     DLabel *m_icon = nullptr;
     DLabel *m_tips = nullptr;
     QWidget *m_infoWrapperWidget = nullptr;
