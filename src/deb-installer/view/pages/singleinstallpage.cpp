@@ -455,7 +455,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
     m_tipsLabel->setMinimumHeight(20);
-    m_tipsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_tipsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_contentLayout->addWidget(m_tipsLabel);
     m_contentLayout->addWidget(m_btnsFrame);
 
