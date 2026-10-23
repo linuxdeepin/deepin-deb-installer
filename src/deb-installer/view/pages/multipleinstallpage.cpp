@@ -235,7 +235,7 @@ void MultipleInstallPage::initUI()
     // adapt compact mode
     auto setBtnSizeMode = [btnsLayout]() {
         if (DGuiApplicationHelper::instance()->isCompactMode()) {
-            btnsLayout->setContentsMargins(0, 0, 0, 4);
+            btnsLayout->setContentsMargins(0, 0, 0, 0);
         } else {
             btnsLayout->setContentsMargins(0, 0, 0, 0);
         }

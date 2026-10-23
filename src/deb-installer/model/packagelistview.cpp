@@ -10,6 +10,8 @@
 #include <QPainter>
 #include <QShortcut>
 #include <QScroller>
+#include <QPainterPath>
+#include <QResizeEvent>
 
 PackagesListView::PackagesListView(QWidget *parent)
     : DListView(parent)
@@ -33,7 +35,7 @@ void PackagesListView::initUI()
     setSelectionMode(QListView::SingleSelection);                       //只允许单选
     setAutoScroll(true);                                                //允许自动滚动
     setMouseTracking(true);                                             //设置鼠标跟踪
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);                  //滚动条一直存在
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);                  //滚动条按需显示
 }
 
 /**
@@ -225,6 +227,20 @@ void PackagesListView::paintEvent(QPaintEvent *event)
     //获取currentIndex并保存，用于右键菜单的定位。
     m_currentIndex = this->currentIndex().row();
     DListView::paintEvent(event);
+}
+
+/**
+ * @brief PackagesListView::resizeEvent 窗口大小改变事件
+ * @param event
+ * 更新圆角裁剪区域，匹配 bgFrame 的圆角形状
+ */
+void PackagesListView::resizeEvent(QResizeEvent *event)
+{
+    DListView::resizeEvent(event);
+
+    QPainterPath clipPath;
+    clipPath.addRoundedRect(rect(), 8, 8);
+    setMask(clipPath.toFillPolygon().toPolygon());
 }
 
 /**
