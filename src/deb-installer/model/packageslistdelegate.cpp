@@ -163,11 +163,12 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     pkg_name_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6));
 
     name_rect.setHeight(pkg_name_font.pixelSize() + 7);
+    name_rect.setRight(200 - 4);
 
     painter->setFont(pkg_name_font);
     QFontMetrics fontMetric(pkg_name_font);
 
-    const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, 150);
+    const QString elided_pkg_name = fontMetric.elidedText(pkg_name, Qt::ElideRight, name_rect.width());
 
     if (option.state & DStyle::State_Enabled) {
         if (option.state & DStyle::State_Selected) {
@@ -186,7 +187,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     version_rect.setRight(option.rect.right() - 80);
     QFontMetrics versionFontMetric(pkg_name_font);
     const QString version = index.data(DebListModel::PackageVersionRole).toString();
-    const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, 195);
+    const QString version_str = versionFontMetric.elidedText(version, Qt::ElideRight, version_rect.width());
     painter->setPen(forground);
     QFont version_font = Utils::loadFontBySizeAndWeight(defaultFontFamily, 12, QFont::Light);
     version_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
@@ -213,6 +214,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QRect info_rect = option.rect;
     info_rect.setLeft(content_x);
     info_rect.setTop(name_rect.bottom() + 2);
+    info_rect.setRight(option.rect.right() - 10);
 
     //获取包的版本
     const int install_stat = index.data(DebListModel::PackageVersionStatusRole).toInt();
@@ -278,7 +280,7 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QFont info_font = Utils::loadFontBySizeAndWeight(normalFontFamily, 12, QFont::ExtraLight);
     info_font.setPixelSize(DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8));
     painter->setFont(info_font);
-    info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, 306);
+    info_str = painter->fontMetrics().elidedText(info_str, Qt::ElideRight, info_rect.width());
     painter->drawText(info_rect, info_str, Qt::AlignLeft | Qt::AlignTop);       //将提示绘制到item上
 
     painter->restore();
