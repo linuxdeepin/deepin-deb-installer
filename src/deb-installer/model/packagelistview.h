@@ -93,6 +93,13 @@ protected:
      * @param event
      */
     void paintEvent(QPaintEvent *event)override;
+
+    /**
+     * @brief resizeEvent 窗口大小改变事件
+     * @param event
+     * 更新圆角裁剪区域，匹配 bgFrame 的圆角形状
+     */
+    void resizeEvent(QResizeEvent *event) override;
     /**
      * @brief focusInEvent 焦点进入事件
      * @param event
