@@ -134,9 +134,9 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     lineRect.setX(content_x);
     int itemHeight = m_itemHeight;
     lineRect.setY(option.rect.y() + itemHeight - 1);
-    lineRect.setWidth(option.rect.width() - content_x - 10);
+    lineRect.setWidth(m_parentView->width() - content_x - 10);
     lineRect.setHeight(1);
-    auto fillColor = themeType == DGuiApplicationHelper::LightType ? QColor(0, 0, 0, 12) : QColor(255, 255, 255, 12);
+    auto fillColor = themeType == DGuiApplicationHelper::LightType ? QColor(0, 0, 0, 13) : QColor(255, 255, 255, 13);
     painter->fillRect(lineRect, fillColor);
 
     QRect bg_rect = option.rect;

@@ -10,6 +10,7 @@
 #include "utils/utils.h"
 
 #include <DLabel>
+#include <DPalette>
 
 #include <QApplication>
 #include <QPropertyAnimation>
@@ -18,7 +19,7 @@
 
 MultipleInstallPage::MultipleInstallPage(DebListModel *model, QWidget *parent)
     : QWidget(parent)
-    , m_appsListViewBgFrame(new DRoundBgFrame(this, 10, 0))
+    , m_appsListViewBgFrame(new DRoundBgFrame(this, 0, 0))
     , m_debListModel(model)
     , m_contentFrame(new QWidget(this))
     , m_processFrame(new QWidget(this))
@@ -157,6 +158,11 @@ void MultipleInstallPage::initUI()
 
     //设置焦点策略
     m_appsListView->setFocusPolicy(Qt::TabFocus);
+
+    // Set listview background transparent so DRoundBgFrame rounded corners are visible
+    DPalette listPa = m_appsListView->palette();
+    listPa.setColor(DPalette::Base, QColor(0, 0, 0, 0));
+    m_appsListView->setPalette(listPa);
     appsViewLayout->addSpacing(15);
     appsViewLayout->addWidget(m_appsListView);
     appsViewLayout->addSpacing(10);
@@ -235,7 +241,7 @@ void MultipleInstallPage::initUI()
     // adapt compact mode
     auto setBtnSizeMode = [btnsLayout]() {
         if (DGuiApplicationHelper::instance()->isCompactMode()) {
-            btnsLayout->setContentsMargins(0, 0, 0, 4);
+            btnsLayout->setContentsMargins(0, 0, 0, 0);
         } else {
             btnsLayout->setContentsMargins(0, 0, 0, 0);
         }
