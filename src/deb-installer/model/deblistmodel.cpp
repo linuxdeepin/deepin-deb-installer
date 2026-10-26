@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -821,9 +821,7 @@ void DebListModel::installDebs()
 
     Transaction *transaction = nullptr;
 
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
-
+    // depends status already reset by installNextDeb()
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
     if (dependsStat.isBreak() || dependsStat.isAuthCancel() || dependsStat.status == DebListModel::ArchBreak) {          //依赖不满足或者下载wine依赖时授权被取消
