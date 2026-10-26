@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QEvent>
 
 // 选中框最低高度（低字号下可能使得选中框显示不全）
 static const int s_MinimumBoxHeight = 32;
@@ -40,12 +41,11 @@ PackageSelectView::PackageSelectView(QWidget *parent)
 
     //设置列表控件
     packageListWidget->setFrameStyle(QFrame::NoFrame);
-    packageListWidget->setFixedSize(460, 186);
+    packageListWidget->setFixedWidth(460);
 
     //最终组装
     auto allLayout = new QVBoxLayout;
-    allLayout->addWidget(packageListWidget, 0, Qt::AlignTop);
-    allLayout->addStretch();
+    allLayout->addWidget(packageListWidget, 1);
     allLayout->addLayout(bottomLayout);
     setLayout(allLayout);
 
@@ -122,12 +122,34 @@ void PackageSelectView::flushDebList(const QList<DebIr> &selectInfos)
         selectItem->setDebIR(eachInfo);
 
         auto item = new QListWidgetItem(packageListWidget);
-        item->setSizeHint(QSize(48, 48));
+        item->setSizeHint(QSize(460, selectItem->sizeHint().height()));
         packageListWidget->addItem(item);
         packageListWidget->setItemWidget(item, selectItem);
 
         items.push_back(selectItem);
         connect(selectItem, &PackageSelectItem::checkStatusChanged, this, &PackageSelectView::checkSelect);
+        connect(selectItem, &PackageSelectItem::sizeChanged, this, [this, item, selectItem]() {
+            item->setSizeHint(QSize(460, selectItem->sizeHint().height()));
+        });
     }
     checkSelect();
+}
+
+void PackageSelectView::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::FontChange) {
+        updateItemHeights();
+    }
+}
+
+void PackageSelectView::updateItemHeights()
+{
+    for (int i = 0; i < packageListWidget->count(); ++i) {
+        auto listItem = packageListWidget->item(i);
+        auto widget = packageListWidget->itemWidget(listItem);
+        if (widget) {
+            listItem->setSizeHint(QSize(460, widget->sizeHint().height()));
+        }
+    }
 }

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,6 +13,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFrame>
+#include <QTimer>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
     : QWidget (parent)
@@ -31,7 +32,7 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     line->setMidLineWidth(1);
 
     auto nameVersionLayout = new QHBoxLayout;
-    nameVersionLayout->addWidget(nameLabel);
+    nameVersionLayout->addWidget(nameLabel, 1);
     nameVersionLayout->addWidget(versionLabel);
 
     auto infoLayout = new QVBoxLayout;
@@ -46,15 +47,22 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
 
     setLayout(allLayout);
 
+    nameLabel->installEventFilter(this);
+    versionLabel->installEventFilter(this);
+    descriptionLabel->installEventFilter(this);
+
     descriptionLabel->setFixedWidth(373);
 
     Dtk::Widget::DFontSizeManager::instance()->bind(nameLabel, Dtk::Widget::DFontSizeManager::T6, QFont::Medium);
     nameLabel->setForegroundRole(Dtk::Gui::DPalette::TextTitle);
+    nameLabel->setElideMode(Qt::ElideRight);
+    nameLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     Dtk::Widget::DFontSizeManager::instance()->bind(versionLabel, Dtk::Widget::DFontSizeManager::T6, QFont::Medium);
     versionLabel->setForegroundRole(Dtk::Gui::DPalette::TextTitle);
 
     Dtk::Widget::DFontSizeManager::instance()->bind(descriptionLabel, Dtk::Widget::DFontSizeManager::T8, QFont::Medium);
+    descriptionLabel->setElideMode(Qt::ElideRight);
 
     connect(checkBox, &QCheckBox::stateChanged, this, &PackageSelectItem::checkStatusChanged);
 }
@@ -109,4 +117,20 @@ bool PackageSelectItem::isEnabled()
 void PackageSelectItem::setChecked(bool checked)
 {
     checkBox->setChecked(checked);
+}
+
+QSize PackageSelectItem::sizeHint() const
+{
+    auto *lay = layout();
+    lay->invalidate();
+    lay->activate();
+    return QSize(460, lay->sizeHint().height());
+}
+
+bool PackageSelectItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::FontChange) {
+        QTimer::singleShot(0, this, [this]() { emit sizeChanged(); });
+    }
+    return QWidget::eventFilter(watched, event);
 }
