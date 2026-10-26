@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -62,7 +62,6 @@ SET_FORM_ACCESSIBLE(QFrame, m_w->objectName().isEmpty() ? "frame" : m_w->objectN
 SET_FORM_ACCESSIBLE(QWidget, m_w->objectName().isEmpty() ? "widget" : m_w->objectName())
 SET_BUTTON_ACCESSIBLE(QPushButton, m_w->text().isEmpty() ? "qpushbutton" : m_w->text())
 SET_SLIDER_ACCESSIBLE(QSlider, "qslider")
-SET_FORM_ACCESSIBLE(QMenu, "qmenu")
 // SET_LABEL_ACCESSIBLE(QLabel, m_w->text().isEmpty() ? "qlabel" : m_w->text())
 
 // Dtk控件
@@ -105,7 +104,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QWidget);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QPushButton);
     USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QSlider);
-    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QMenu);
     //    USE_ACCESSIBLE(QString(classname).replace("dccV20::", ""), QLabel);
 
     //  dtk 控件
