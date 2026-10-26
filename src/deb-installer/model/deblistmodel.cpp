@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -467,9 +467,9 @@ int DebListModel::checkDependsStatus(const QString &package_path)
 
 int DebListModel::checkDigitalSignature(const QString &package_path)
 {
-    // 分级管控可用时，交由分级管控进行签名验证
+    // 分级管控可用时，先做本地签名预检，失败则阻止安装
     if (HierarchicalVerify::instance()->isValid()) {
-        return Utils::VerifySuccess;
+        return Utils::Digital_Verify(package_path);
     }
 
     const auto stat = m_packagesManager->checkDependsStatus(package_path); //获取包的依赖状态
@@ -1246,9 +1246,24 @@ void DebListModel::checkSystemVersion()
 
 bool DebListModel::checkDigitalSignature()
 {
-    // 分级管控可用时，交由分级管控进行签名验证
+    // 分级管控可用时，先做本地签名预检，失败则阻止安装
     if (HierarchicalVerify::instance()->isValid()) {
-        return true;
+        int digitalSigntual = Utils::Digital_Verify(m_packagesManager->package(m_operatingIndex));
+        if (digitalSigntual == Utils::VerifySuccess) {
+            return true;
+        }
+        switch (digitalSigntual) {
+        case Utils::DebfileInexistence: //无签名文件
+            showNoDigitalErrWindow();
+            break;
+        case Utils::ExtractDebFail: //无有效的数字签名
+        case Utils::DebVerifyFail:
+        case Utils::OtherError: //其他原因造成的签名校验失败
+        default:
+            showDigitalErrWindow();
+            break;
+        }
+        return false;
     }
 
     const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex); //获取包的依赖状态
