@@ -42,6 +42,7 @@ public:
 
 private:
     bool installNextUab();
+    bool installAllUab();
 
     Q_SLOT void slotBackendProgressChanged(float progress);
     Q_SLOT void slotBackendProcessFinished(bool success);
@@ -56,6 +57,7 @@ private:
 
 private:
     int m_operatingIndex{-1};
+    bool m_batchMode{false};
     QList<UabPackage::Ptr> m_uabPkgList;
     UabProcessController *m_processor{nullptr};
 

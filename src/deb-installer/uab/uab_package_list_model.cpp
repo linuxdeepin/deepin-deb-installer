@@ -301,8 +301,9 @@ bool UabPackageListModel::slotInstallPackages()
         Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
 
         setWorkerStatus(WorkerProcessing);
-        qCDebug(appLog) << "Starting installation process";
-        installNextUab();
+        m_batchMode = true;
+        qCDebug(appLog) << "Starting batch installation process";
+        installAllUab();
         callRet = true;
     } while (false);
 
@@ -495,10 +496,89 @@ bool UabPackageListModel::installNextUab()
     return true;
 }
 
+
+bool UabPackageListModel::installAllUab()
+{
+    qCDebug(appLog) << "Installing all UAB packages in batch mode, count:" << rowCount();
+    m_operatingIndex = 0;
+
+    Q_EMIT signalCurrentProcessPackageIndex(m_operatingIndex);
+
+    m_processor->reset();
+
+    for (int i = 0; i < m_uabPkgList.size(); ++i) {
+        auto uabPtr = m_uabPkgList.value(i);
+        if (!uabPtr) {
+            qCWarning(appLog) << "Skipping null package at index:" << i;
+            continue;
+        }
+        if (Pkg::DependsOk != uabPtr->m_dependsStatus) {
+            qCWarning(appLog) << "Skipping dependency issue at index:" << i;
+            uabPtr->m_operationStatus = Pkg::Failed;
+            continue;
+        }
+
+        qCDebug(appLog) << "Marking package for batch install:" << uabPtr->info()->id << uabPtr->info()->version;
+
+        Pkg::PackageInstallStatus installStatus = uabPtr->installStatus();
+        if (Pkg::InstalledLaterVersion == installStatus) {
+            if (auto sameInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version)) {
+                const int ret = Utils::compareVersion(uabPtr->info()->version, sameInfoPtr->version);
+                if (ret == 0) {
+                    installStatus = Pkg::InstalledSameVersion;
+                } else if (ret < 0) {
+                    installStatus = Pkg::InstalledLaterVersion;
+                } else {
+                    installStatus = Pkg::InstalledEarlierVersion;
+                }
+            }
+        }
+
+        switch (installStatus) {
+            case Pkg::NotInstalled:
+                m_processor->markInstall(uabPtr);
+                break;
+            case Pkg::InstalledSameVersion: {
+                auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id, uabPtr->info()->version);
+                m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
+                m_processor->markInstall(uabPtr);
+            } break;
+            default: {
+                auto oldInfoPtr = Uab::UabBackend::instance()->findPackage(uabPtr->info()->id);
+                m_processor->markInstall(uabPtr);
+                m_processor->markUninstall(Uab::UabPackage::fromInfo(oldInfoPtr));
+            } break;
+        }
+    }
+
+    Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+
+    if (!m_processor->commitChanges()) {
+        qCWarning(appLog) << "Failed to commit batch changes";
+        for (auto uabPtr : m_uabPkgList) {
+            uabPtr->m_operationStatus = Pkg::Failed;
+        }
+        Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+        m_batchMode = false;
+        setWorkerStatus(WorkerFinished);
+        return false;
+    }
+
+    qCDebug(appLog) << "Batch installation process started successfully";
+    return true;
+}
+
 void UabPackageListModel::slotBackendProgressChanged(float progress)
 {
     qCDebug(appLog) << "Backend progress changed:" << progress;
     Q_ASSERT_X(rowCount() > 0, "check count", "row count invalid");
+
+    if (m_batchMode) {
+        qCDebug(appLog) << "Batch mode progress:" << progress;
+        Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(progress));
+        Q_EMIT signalWholeProgressChanged(static_cast<int>(progress));
+        return;
+    }
 
     const float base = kCompleteProgress / rowCount();
     const float wholeProgress = (m_operatingIndex + (progress / kCompleteProgress)) * base;
@@ -512,6 +592,28 @@ void UabPackageListModel::slotBackendProcessFinished(bool success)
 {
     qCDebug(appLog) << "Backend process finished with success:" << success;
     Q_ASSERT_X(rowCount() > 0, "check count", "row count invalid");
+
+    if (m_batchMode) {
+        qCDebug(appLog) << "Batch mode finished, updating all packages, success:" << success;
+        m_batchMode = false;
+        const bool installCommitted = m_processor->batchInstallCommitted();
+        for (int i = 0; i < m_uabPkgList.size(); ++i) {
+            m_operatingIndex = i;
+            if (success) {
+                setCurrentOperation(Pkg::Success);
+            } else if (installCommitted) {
+                qCDebug(appLog) << "Install batch committed, marking package as Success despite overall failure";
+                setCurrentOperation(Pkg::Success);
+            } else {
+                setCurrentOperation(Pkg::Failed);
+            }
+        }
+        Q_EMIT dataChanged(index(0), index(m_uabPkgList.size() - 1), {PackageOperateStatusRole});
+        Q_EMIT signalCurrentPacakgeProgressChanged(static_cast<int>(kCompleteProgress));
+        Q_EMIT signalWholeProgressChanged(static_cast<int>(kCompleteProgress));
+        setWorkerStatus(WorkerFinished);
+        return;
+    }
 
     // update installed status
     setCurrentOperation(success ? Pkg::Success : Pkg::Failed);

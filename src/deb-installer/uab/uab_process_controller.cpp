@@ -142,11 +142,21 @@ bool UabProcessController::commitChanges()
 
     m_procFlag = Processing;
     m_currentIndex = kInitedIndex;
-    qCDebug(appLog) << "Starting first process in list";
-    if (!nextProcess()) {
-        qCWarning(appLog) << "Failed to start first process";
-        m_procFlag = Error;
-        return false;
+
+    if (BackendCli == m_type) {
+        qCDebug(appLog) << "Starting batch process for BackendCli mode";
+        if (!startBatchProcess()) {
+            qCWarning(appLog) << "Failed to start batch process";
+            m_procFlag = Error;
+            return false;
+        }
+    } else {
+        qCDebug(appLog) << "Starting first process in list (DirectCli mode)";
+        if (!nextProcess()) {
+            qCWarning(appLog) << "Failed to start first process";
+            m_procFlag = Error;
+            return false;
+        }
     }
 
     Q_EMIT processStart();
@@ -291,14 +301,30 @@ void UabProcessController::onFinished(int exitCode, int exitStatus)
 
     // continue next process
     if (exitSuccess) {
-        qCDebug(appLog) << "Process completed successfully, updating backend";
-        // update uab backend
-        commitCurrentChangeToBackend();
-
-        qCDebug(appLog) << "Attempting to start next process";
-        // continue next process, if error occurred, terminate current install/uninstall.
-        if (nextProcess()) {
+        if (BackendCli == m_type) {
+            qCDebug(appLog) << "Batch process completed successfully, phase:" << m_batchPhase;
+            if (m_batchPhase == 0) {
+                m_batchInstallCommitted = true;
+                commitBatchToBackend(Installing);
+                if (startBatchUninstall()) {
+                    return;
+                }
+            } else {
+                commitBatchToBackend(Uninstalling);
+            }
+            m_procFlag = Finish;
+            Q_EMIT processFinished(true);
             return;
+        } else {
+            qCDebug(appLog) << "Process completed successfully, updating backend";
+            // update uab backend
+            commitCurrentChangeToBackend();
+
+            qCDebug(appLog) << "Attempting to start next process";
+            // continue next process, if error occurred, terminate current install/uninstall.
+            if (nextProcess()) {
+                return;
+            }
         }
     }
 
@@ -347,6 +373,120 @@ bool UabProcessController::nextProcess()
     }
 
     qCWarning(appLog) << "Invalid process type:" << currentProc.first << "for package:" << (currentProc.second ? currentProc.second->info()->id : "null");
+    return false;
+}
+
+
+bool UabProcessController::startBatchProcess()
+{
+    qCDebug(appLog) << "Starting batch process, procList size:" << m_procList.size();
+    m_batchPhase = 0;
+    m_batchInstallCommitted = false;
+
+    if (hasBatchEntries(Installing)) {
+        return startBatchInstall();
+    }
+
+    if (hasBatchEntries(Uninstalling)) {
+        return startBatchUninstall();
+    }
+
+    qCWarning(appLog) << "No batch entries to process";
+    m_procFlag = Finish;
+    Q_EMIT processFinished(true);
+    return true;
+}
+
+bool UabProcessController::startBatchInstall()
+{
+    qCDebug(appLog) << "Starting batch install";
+    m_batchPhase = 0;
+    m_procFlag.setFlag(Installing);
+
+    QStringList installFiles;
+    for (const auto &proc : m_procList) {
+        if (proc.first == Installing && proc.second && proc.second->isValid()) {
+            installFiles << proc.second->info()->filePath;
+        }
+    }
+
+    if (installFiles.isEmpty()) {
+        qCWarning(appLog) << "No install files to batch";
+        return false;
+    }
+
+    QStringList args = {kPkexecBin, kInstallProcessorBin, kParamUab, kParamInstall};
+    args << installFiles;
+    m_process->start(kPkexecBin, args, {}, 0, false);
+
+    const QString recordCommand = QString("command: %1 %2 %3 [%4 files]")
+                                      .arg(kInstallProcessorBin)
+                                      .arg(kParamUab)
+                                      .arg(kParamInstall)
+                                      .arg(installFiles.size());
+    Q_EMIT processOutput(recordCommand);
+    qCInfo(appLog) << "Batch install command:" << recordCommand;
+    return true;
+}
+
+bool UabProcessController::startBatchUninstall()
+{
+    qCDebug(appLog) << "Starting batch uninstall";
+    m_batchPhase = 1;
+    m_procFlag.setFlag(Installing, false);
+    m_procFlag.setFlag(Uninstalling);
+
+    QStringList uninstallIds;
+    for (const auto &proc : m_procList) {
+        if (proc.first == Uninstalling && proc.second && proc.second->isValid()) {
+            uninstallIds << QString("%1/%2").arg(proc.second->info()->id).arg(proc.second->info()->version);
+        }
+    }
+
+    if (uninstallIds.isEmpty()) {
+        qCDebug(appLog) << "No uninstall entries to batch";
+        return false;
+    }
+
+    QStringList args = {kPkexecBin, kInstallProcessorBin, kParamUab, kParamRemove};
+    args << uninstallIds;
+    m_process->start(kPkexecBin, args, {}, 0, false);
+
+    const QString recordCommand = QString("command: %1 %2 %3 [%4 packages]")
+                                      .arg(kInstallProcessorBin)
+                                      .arg(kParamUab)
+                                      .arg(kParamRemove)
+                                      .arg(uninstallIds.size());
+    Q_EMIT processOutput(recordCommand);
+    qCInfo(appLog) << "Batch uninstall command:" << recordCommand;
+    return true;
+}
+
+void UabProcessController::commitBatchToBackend(ProcFlag type)
+{
+    qCDebug(appLog) << "Committing batch to backend, type:" << type;
+    for (const auto &proc : m_procList) {
+        if (proc.first != type || !proc.second || !proc.second->isValid()) {
+            continue;
+        }
+        auto infoPtr = proc.second->info();
+        if (type == Installing) {
+            qCDebug(appLog) << "Committing installation for package:" << infoPtr->id;
+            Uab::UabBackend::instance()->packageInstalled(infoPtr);
+        } else if (type == Uninstalling) {
+            qCDebug(appLog) << "Committing uninstallation for package:" << infoPtr->id;
+            Uab::UabBackend::instance()->packageRemoved(infoPtr);
+        }
+    }
+}
+
+bool UabProcessController::hasBatchEntries(ProcFlag type) const
+{
+    for (const auto &proc : m_procList) {
+        if (proc.first == type) {
+            return true;
+        }
+    }
     return false;
 }
 

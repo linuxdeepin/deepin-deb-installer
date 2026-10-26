@@ -456,29 +456,52 @@ void InstallDebThread::uabProcessCli()
     static const QString kUabForce = "--force";  // Force install the application
     static const QString kUabPass = "-y";        // Automatically answer yes to all questions
 
-    QStringList params;
-
     if (m_cmds.testFlag(Install)) {
-        // e.g.: ll-cli install --json --force -y [uab file]
-        params << kUabInstall << kUabJson << kUabForce << kUabPass << m_listParam.first();
-        qDebug() << "flag Install, uabPath:" << m_listParam.first();
+        // e.g.: ll-cli install --json --force -y [uab file]  (per-file in loop)
+        for (const QString &uabPath : m_listParam) {
+            QStringList params;
+            params << kUabInstall << kUabJson << kUabForce << kUabPass << uabPath;
+            qDebug() << "flag Install, uabPath:" << uabPath;
+
+            m_proc->setProgram(kUabBin, params);
+            qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
+
+            m_proc->start();
+            m_proc->waitForFinished(-1);
+            m_proc->close();
+
+            qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
+
+            if (m_proc->exitCode() != 0) {
+                m_resultFlag = m_proc->exitCode();
+                break;
+            }
+        }
     } else if (m_cmds.testFlag(Remove)) {
-        // e.g.: ll-cli uninstall --json [id/version]
-        params << kUabUninstall << kUabJson << m_listParam.first();
-        qDebug() << "flag Remove, package name:" << m_listParam.first();
+        // e.g.: ll-cli uninstall --json [id/version]  (per-package in loop)
+        for (const QString &pkgName : m_listParam) {
+            QStringList params;
+            params << kUabUninstall << kUabJson << pkgName;
+            qDebug() << "flag Remove, package name:" << pkgName;
+
+            m_proc->setProgram(kUabBin, params);
+            qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
+
+            m_proc->start();
+            m_proc->waitForFinished(-1);
+            m_proc->close();
+
+            qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
+
+            if (m_proc->exitCode() != 0) {
+                m_resultFlag = m_proc->exitCode();
+                break;
+            }
+        }
     } else {
         qDebug() << "return, other unknow cmd:" << m_cmds;
         return;
     }
-
-    m_proc->setProgram(kUabBin, params);
-    qInfo() << "Exec:" << qPrintable(m_proc->program().join(' '));
-
-    m_proc->start();
-    m_proc->waitForFinished(-1);
-    m_proc->close();
-
-    qDebug() << "Exec finished:" << qPrintable(m_proc->program().join(' '));
 }
 
 /**

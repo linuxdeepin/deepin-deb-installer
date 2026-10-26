@@ -43,6 +43,7 @@ public:
     Q_FLAG(ProcFlags)
     [[nodiscard]] ProcFlags procFlag() const;
     [[nodiscard]] bool isRunning() const;
+    [[nodiscard]] bool batchInstallCommitted() const { return m_batchInstallCommitted; }
 
     bool reset();
     bool markInstall(const UabPackage::Ptr &installPtr);
@@ -65,6 +66,12 @@ private:
 
     bool nextProcess();
 
+    bool startBatchProcess();
+    bool startBatchInstall();
+    bool startBatchUninstall();
+    void commitBatchToBackend(ProcFlag type);
+    bool hasBatchEntries(ProcFlag type) const;
+
     bool installBackendCliImpl(const UabPackage::Ptr &installPtr);
     bool uninstallBackendCliImpl(const UabPackage::Ptr &uninstallPtr);
     bool installCliImpl(const UabPackage::Ptr &installPtr);
@@ -81,6 +88,8 @@ private:
 
     ProcFlags m_procFlag{Prepare};
     int m_currentIndex{-1};
+    int m_batchPhase{0};  // 0=install batch, 1=uninstall batch
+    bool m_batchInstallCommitted{false};
     QList<QPair<ProcFlag, UabPackage::Ptr>> m_procList;  // install/uninstall package list
 
     Q_DISABLE_COPY(UabProcessController)
