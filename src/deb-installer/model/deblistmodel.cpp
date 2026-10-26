@@ -1246,11 +1246,6 @@ void DebListModel::checkSystemVersion()
 
 bool DebListModel::checkDigitalSignature()
 {
-    // 分级管控可用时，交由分级管控进行签名验证
-    if (HierarchicalVerify::instance()->isValid()) {
-        return true;
-    }
-
     const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex); //获取包的依赖状态
     if (stat.isBreak() || stat.isAuthCancel())
         return true;
