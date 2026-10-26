@@ -11,6 +11,7 @@
 
 class QListWidget;
 class QCheckBox;
+class QEvent;
 class QPushButton;
 class PackageSelectItem;
 
@@ -33,9 +34,11 @@ public slots:
 
 protected:
     void showEvent(QShowEvent *e) override;
+    void changeEvent(QEvent *event) override;
 
 private:
     void clearDebList();
+    void updateItemHeights();
 
     QListWidget *packageListWidget;
     QCheckBox *selectAllBox;

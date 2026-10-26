@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,12 +19,17 @@ public:
     PackageSelectItem(QWidget *parent = nullptr);
 
     void setDebIR(const DebIr &ir);
+    QSize sizeHint() const override;
     bool isChecked();
     bool isEnabled();
     void setChecked(bool checked);
 
 signals:
     void checkStatusChanged(int state);
+    void sizeChanged();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     Dtk::Widget::DLabel *nameLabel;
