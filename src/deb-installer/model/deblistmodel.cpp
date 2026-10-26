@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -57,7 +57,7 @@ bool DebListModel::isDpkgRunning()
     proc.start("ps", QStringList() << "-e"
                << "-o"
                << "comm");
-    proc.waitForFinished();
+    proc.waitForFinished(5000);
 
     // 获取进程信息的数据
     const QString processOutput = proc.readAllStandardOutput();
@@ -363,11 +363,7 @@ void DebListModel::slotInstallPackages()
     // start first
     initRowStatus();                                                    //初始化包的操作状态
 
-    //检查当前应用是否在黑名单中
-    //非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature())
-        return;
-    installNextDeb();                                                   //开始安装
+    startDigitalVerifyAndInstall();                                     //开始签名验证与安装
 }
 
 
@@ -577,11 +573,7 @@ void DebListModel::bumpInstallIndex()
     // install next
     qInfo() << "DebListModel:" << "install next deb package";
 
-    //检查当前应用是否在黑名单中
-    //非开发者模式且数字签名验证失败
-    if (checkBlackListApplication() || !checkDigitalSignature())
-        return;
-    installNextDeb();                                                           //安装下一个包
+    startDigitalVerifyAndInstall();                                             //开始签名验证与安装下一个包
 }
 
 void DebListModel::slotTransactionErrorOccurred()
@@ -821,10 +813,7 @@ void DebListModel::installDebs()
 
     Transaction *transaction = nullptr;
 
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
-
-    // check available dependencies
+    // check available dependencies (already reset by installNextDeb)
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
     if (dependsStat.isBreak() || dependsStat.isAuthCancel() || dependsStat.status == DebListModel::ArchBreak) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
@@ -1242,6 +1231,90 @@ void DebListModel::checkSystemVersion()
     }
 
 #endif
+}
+
+void DebListModel::startDigitalVerifyAndInstall()
+{
+    // 黑名单检查（快速、缓存），留在主线程
+    if (checkBlackListApplication())
+        return;
+
+    // 分级管控可用时，直接安装，跳过 Digital_Verify
+    if (HierarchicalVerify::instance()->isValid()) {
+        installNextDeb();
+        return;
+    }
+
+    // 非分级管控：依赖状态检查（快速、缓存）
+    const auto stat = m_packagesManager->getPackageDependsStatus(m_operatingIndex);
+    if (stat.isBreak() || stat.isAuthCancel()) {
+        installNextDeb();
+        return;
+    }
+
+    // 将耗时的 Digital_Verify 移至后台线程，避免阻塞 GUI 主线程
+    const QString packagePath = m_packagesManager->package(m_operatingIndex);
+
+    if (m_digitalVerifyWatcher) {
+        m_digitalVerifyWatcher->deleteLater();
+    }
+    m_digitalVerifyWatcher = new QFutureWatcher<Utils::VerifyResultCode>(this);
+
+    connect(m_digitalVerifyWatcher, &QFutureWatcher<Utils::VerifyResultCode>::finished,
+            this, &DebListModel::onDigitalVerifyFinished);
+
+    m_digitalVerifyWatcher->setFuture(QtConcurrent::run(Utils::Digital_Verify, packagePath));
+}
+
+void DebListModel::onDigitalVerifyFinished()
+{
+    if (!m_digitalVerifyWatcher)
+        return;
+
+    const int digitalSigntual = m_digitalVerifyWatcher->result();
+    m_digitalVerifyWatcher->deleteLater();
+    m_digitalVerifyWatcher = nullptr;
+
+    SettingDialog dialog;
+    m_isDigitalVerify = dialog.isDigitalVerified();
+    qInfo() << "m_isDevelopMode:" << m_isDevelopMode << " /m_isDigitalVerify:" << m_isDigitalVerify << " /digitalSigntual:" << digitalSigntual;
+
+    if (m_isDevelopMode && !m_isDigitalVerify) { // 开发者模式且未设置验签功能
+        installNextDeb();
+        return;
+    } else if (m_isDevelopMode && m_isDigitalVerify) { // 开发者模式且设置验签功能
+        if (digitalSigntual == Utils::VerifySuccess) {
+            installNextDeb();
+            return;
+        } else {
+            ErrorCode code;
+            if (digitalSigntual == Utils::DebfileInexistence)
+                code = NoDigitalSignature;
+            else
+                code = DigitalSignatureError;
+            showDevelopDigitalErrWindow(code); // 弹出提示框
+            return;
+        }
+    } else { // 非开发者模式
+        switch (digitalSigntual) {
+        case Utils::VerifySuccess: // 签名验证成功
+            installNextDeb();
+            break;
+        case Utils::DebfileInexistence: // 无签名文件
+            showNoDigitalErrWindow();
+            break;
+        case Utils::ExtractDebFail: // 无有效的数字签名
+            showDigitalErrWindow();
+            break;
+        case Utils::DebVerifyFail:
+        case Utils::OtherError: // 其他原因造成的签名校验失败
+            showDigitalErrWindow();
+            break;
+        default: // 其他未知错误
+            qInfo() << "unknown mistake";
+            break;
+        }
+    }
 }
 
 bool DebListModel::checkDigitalSignature()

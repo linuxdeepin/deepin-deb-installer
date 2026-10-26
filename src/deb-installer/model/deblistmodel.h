@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -18,6 +18,7 @@
 
 #include <QAbstractListModel>
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QPointer>
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -602,6 +603,20 @@ private:
     void installNextDeb();
 
     /**
+     * @brief startDigitalVerifyAndInstall 异步启动数字签名验证与安装流程
+     *
+     * 将耗时的 Digital_Verify 移至后台线程执行，避免阻塞 GUI 主线程
+     */
+    void startDigitalVerifyAndInstall();
+
+    /**
+     * @brief onDigitalVerifyFinished 后台签名验证完成后的回调
+     *
+     * 在主线程处理验证结果并决定是否继续安装
+     */
+    void onDigitalVerifyFinished();
+
+    /**
      * @brief installDebs 安装单个包。
      */
     void installDebs();
@@ -810,6 +825,9 @@ private:
     QList<QByteArray> m_packageMd5 = {};
 
     AptConfigMessage *configWindow = nullptr;
+
+    // 后台数字签名验证监听器
+    QFutureWatcher<Utils::VerifyResultCode> *m_digitalVerifyWatcher = nullptr;
 
     // 当前安装是否存在分级管控签名验证失败
     bool m_hierarchicalVerifyError = false;

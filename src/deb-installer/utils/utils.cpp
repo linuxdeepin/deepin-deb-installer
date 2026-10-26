@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -152,7 +152,7 @@ Utils::VerifyResultCode Utils::Digital_Verify(const QString &filepath_name)
         QProcess proc;
         QString program = "/usr/bin/deepin-deb-verify";
         proc.start(program, {filepath_name});
-        proc.waitForFinished(-1);
+        proc.waitForFinished(30000);
         const QString output1 = proc.readAllStandardError();
         qInfo() << "签名校验结果：" << output1;
         for (const auto &item : output1.split('\n')) {
