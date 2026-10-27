@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 #define DEBLISTMODEL_H
 
 #include "manager/packagesmanager.h"
+#include "utils/utils.h"
 #include "process/Pty.h"
 
 #include <QApt/Backend>
@@ -18,6 +19,7 @@
 
 #include <QAbstractListModel>
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QPointer>
 #include <QDBusInterface>
 #include <QDBusReply>
@@ -638,6 +640,20 @@ private:
     bool checkDigitalSignature();
 
     /**
+     * @brief checkDigitalSignatureAsync 异步检查数字签名
+     * 同步执行前置检查（分级管控、依赖状态、开发者模式），
+     * 需要实际签名校验时通过 QtConcurrent::run 在后台线程执行
+     * Digital_Verify，校验完成后在 onDigitalVerifyFinished 中处理结果
+     */
+    void checkDigitalSignatureAsync();
+
+    /**
+     * @brief onDigitalVerifyFinished 异步签名校验完成后的回调
+     * 根据校验结果决定继续安装或弹出错误提示
+     */
+    void onDigitalVerifyFinished();
+
+    /**
      * @brief showNoDigitalErrWindow 弹出无数字签名的错误弹窗
      */
     void showNoDigitalErrWindow();
@@ -806,6 +822,9 @@ private:
     //部分系统版本无需签名验证，默认开发者模式
     bool m_isDevelopMode = true;
     bool m_isDigitalVerify = false;
+
+    // 异步数字签名校验的 FutureWatcher
+    QFutureWatcher<Utils::VerifyResultCode> *m_digitalVerifyWatcher = nullptr;
 
     QList<QByteArray> m_packageMd5 = {};
 
