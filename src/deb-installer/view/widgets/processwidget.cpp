@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,7 +32,7 @@ ProcessWidget::ProcessWidget(QWidget *parent)
     allLayer->addWidget(mainIcon, 0, Qt::AlignCenter);
     allLayer->addWidget(mainLabel, 0, Qt::AlignCenter);
     allLayer->addWidget(processBar, 0, Qt::AlignCenter);
-    //allLayer->addWidget(processTextLabel);
+    allLayer->addWidget(processTextLabel, 0, Qt::AlignCenter);
     allLayer->addStretch();
 
     setLayout(allLayer);
@@ -58,7 +58,6 @@ void ProcessWidget::setProgress(int current, int all)
     auto currentText = processText.arg(current).arg(all);
     processTextLabel->setText(currentText);
     processTextLabel->adjustSize();
-    processTextLabel->move((this->width() - processTextLabel->width()) / 2, processBar->y() + 30);
     processBar->setRange(0, all);
     processBar->setValue(current);
 }
