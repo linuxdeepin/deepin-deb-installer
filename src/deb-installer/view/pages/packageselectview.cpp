@@ -6,6 +6,7 @@
 #include "view/widgets/packageselectitem.h"
 
 #include <DFrame>
+#include "view/widgets/droundbgframe.h"
 
 #include <QListWidget>
 #include <QCheckBox>
@@ -19,6 +20,7 @@ static const int s_MinimumBoxHeight = 32;
 
 PackageSelectView::PackageSelectView(QWidget *parent)
     : QWidget(parent)
+    , listBgFrame(new DRoundBgFrame(this, 10, 0))
     , packageListWidget(new QListWidget)
     , selectAllBox(new QCheckBox(tr("Select all")))
     , installButton(new QPushButton(tr("Install", "button")))
@@ -35,7 +37,7 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     bottomLayout->addWidget(selectAllBox);
     bottomLayout->addWidget(installButton);
     bottomLayout->addWidget(new QWidget);  //占位用
-    bottomLayout->setContentsMargins(8, 0, 0, 20);
+    bottomLayout->setContentsMargins(10, 0, 10, 20);
     bottomLayout->setSpacing(0);
     installButton->setFixedWidth(120);
 
@@ -43,9 +45,19 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     packageListWidget->setFrameStyle(QFrame::NoFrame);
     packageListWidget->setFixedWidth(460);
 
+    //列表区域套用圆角背景，对齐旧路径 MultipleInstallPage
+    auto listLayout = new QVBoxLayout;
+    listLayout->setSpacing(0);
+    listLayout->setContentsMargins(0, 0, 0, 0);
+    listLayout->addSpacing(15);
+    listLayout->addWidget(packageListWidget);
+    listLayout->addSpacing(10);
+    listBgFrame->setLayout(listLayout);
+    listBgFrame->setFixedWidth(460);
+
     //最终组装
     auto allLayout = new QVBoxLayout;
-    allLayout->addWidget(packageListWidget, 1);
+    allLayout->addWidget(listBgFrame, 1);
     allLayout->addLayout(bottomLayout);
     setLayout(allLayout);
 

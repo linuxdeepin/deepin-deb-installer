@@ -12,8 +12,11 @@
 #include <QIcon>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QFrame>
+#include <QPainter>
+#include <QPaintEvent>
 #include <QTimer>
+
+#include <DGuiApplicationHelper>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
     : QWidget (parent)
@@ -25,12 +28,6 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     checkBox->setIcon(QIcon::fromTheme("application-x-deb"));
     checkBox->setIconSize(QSize(32, 32));
 
-    auto line = new QFrame;
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-    line->setLineWidth(0);
-    line->setMidLineWidth(1);
-
     auto nameVersionLayout = new QHBoxLayout;
     nameVersionLayout->addWidget(nameLabel, 1);
     nameVersionLayout->addWidget(versionLabel);
@@ -38,7 +35,6 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     auto infoLayout = new QVBoxLayout;
     infoLayout->addLayout(nameVersionLayout);
     infoLayout->addWidget(descriptionLabel);
-    infoLayout->addWidget(line);
 
     auto allLayout = new QHBoxLayout;
     allLayout->setMargin(0);
@@ -65,6 +61,29 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     descriptionLabel->setElideMode(Qt::ElideRight);
 
     connect(checkBox, &QCheckBox::stateChanged, this, &PackageSelectItem::checkStatusChanged);
+}
+
+void PackageSelectItem::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Draw divider line aligned with text content, 10px right margin.
+    // Mirrors old-path PackagesListDelegate divider (packageslistdelegate.cpp).
+    const int content_x = descriptionLabel->geometry().x();
+    QRect lineRect;
+    lineRect.setX(content_x);
+    lineRect.setY(rect().height() - 1);
+    lineRect.setWidth(rect().width() - content_x - 10);
+    lineRect.setHeight(1);
+
+    auto themeType = DGuiApplicationHelper::instance()->themeType();
+    auto fillColor = themeType == DGuiApplicationHelper::LightType
+                         ? QColor(0, 0, 0, 12)
+                         : QColor(255, 255, 255, 12);
+    painter.fillRect(lineRect, fillColor);
 }
 
 void PackageSelectItem::setDebIR(const DebIr &ir)

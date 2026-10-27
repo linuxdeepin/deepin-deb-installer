@@ -14,6 +14,7 @@ class QCheckBox;
 class QEvent;
 class QPushButton;
 class PackageSelectItem;
+class DRoundBgFrame;
 
 class PackageSelectView : public QWidget
 {
@@ -40,6 +41,7 @@ private:
     void clearDebList();
     void updateItemHeights();
 
+    DRoundBgFrame *listBgFrame;
     QListWidget *packageListWidget;
     QCheckBox *selectAllBox;
     QPushButton *installButton;
