@@ -6,6 +6,7 @@
 #include "view/widgets/packageselectitem.h"
 
 #include <DFrame>
+#include "view/widgets/droundbgframe.h"
 
 #include <QListWidget>
 #include <QCheckBox>
@@ -35,7 +36,7 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     bottomLayout->addWidget(selectAllBox);
     bottomLayout->addWidget(installButton);
     bottomLayout->addWidget(new QWidget);  //占位用
-    bottomLayout->setContentsMargins(8, 0, 0, 20);
+    bottomLayout->setContentsMargins(0, 0, 0, 20);
     bottomLayout->setSpacing(0);
     installButton->setFixedWidth(120);
 
@@ -44,8 +45,17 @@ PackageSelectView::PackageSelectView(QWidget *parent)
     packageListWidget->setFixedWidth(460);
 
     //最终组装
+    auto listBgFrame = new DRoundBgFrame(this, 10, 0);
+    listBgFrame->setFixedWidth(460);
+    auto listFrameLayout = new QVBoxLayout;
+    listFrameLayout->setContentsMargins(0, 0, 0, 0);
+    listFrameLayout->setSpacing(0);
+    listFrameLayout->addWidget(packageListWidget);
+    listBgFrame->setLayout(listFrameLayout);
+
     auto allLayout = new QVBoxLayout;
-    allLayout->addWidget(packageListWidget, 1);
+    allLayout->setContentsMargins(10, 0, 10, 0);
+    allLayout->addWidget(listBgFrame, 1);
     allLayout->addLayout(bottomLayout);
     setLayout(allLayout);
 
