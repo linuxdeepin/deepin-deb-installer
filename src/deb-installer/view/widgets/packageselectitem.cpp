@@ -12,8 +12,10 @@
 #include <QIcon>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QFrame>
 #include <QTimer>
+
+#include <QPainter>
+#include <DGuiApplicationHelper>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
     : QWidget (parent)
@@ -25,12 +27,6 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     checkBox->setIcon(QIcon::fromTheme("application-x-deb"));
     checkBox->setIconSize(QSize(32, 32));
 
-    auto line = new QFrame;
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-    line->setLineWidth(0);
-    line->setMidLineWidth(1);
-
     auto nameVersionLayout = new QHBoxLayout;
     nameVersionLayout->addWidget(nameLabel, 1);
     nameVersionLayout->addWidget(versionLabel);
@@ -38,7 +34,6 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     auto infoLayout = new QVBoxLayout;
     infoLayout->addLayout(nameVersionLayout);
     infoLayout->addWidget(descriptionLabel);
-    infoLayout->addWidget(line);
 
     auto allLayout = new QHBoxLayout;
     allLayout->setMargin(0);
@@ -125,6 +120,28 @@ QSize PackageSelectItem::sizeHint() const
     lay->invalidate();
     lay->activate();
     return QSize(460, lay->sizeHint().height());
+}
+
+
+void PackageSelectItem::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    const int content_x = 46;
+    QRect lineRect;
+    lineRect.setX(content_x);
+    lineRect.setY(height() - 1);
+    lineRect.setWidth(width() - content_x - 10);
+    lineRect.setHeight(1);
+
+    auto themeType = DGuiApplicationHelper::instance()->themeType();
+    auto fillColor = themeType == DGuiApplicationHelper::LightType
+                         ? QColor(0, 0, 0, 12)
+                         : QColor(255, 255, 255, 12);
+    painter.fillRect(lineRect, fillColor);
 }
 
 bool PackageSelectItem::eventFilter(QObject *watched, QEvent *event)
