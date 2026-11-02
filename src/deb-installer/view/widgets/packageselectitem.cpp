@@ -14,6 +14,7 @@
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QTimer>
+#include <QEvent>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
     : QWidget (parent)
