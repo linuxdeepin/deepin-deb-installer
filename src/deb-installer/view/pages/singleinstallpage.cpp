@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -322,7 +322,7 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     m_packageDescription->setAccessibleName("PackageDescription");
 
     m_tipsLabel->setMinimumHeight(fontinfosizetemp);                      //设置提示label的高度
-    m_tipsLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);           //提示居中显示
+    m_tipsLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);        //提示居中显示
 
     m_progressFrame->setObjectName("progressFrame");
     m_progressFrame->setAccessibleName("progressFrame");
@@ -449,14 +449,14 @@ void SingleInstallPage::initPkgInstallProcessView(int fontinfosize)
     //将进度条布局。提示布局。按钮布局添加到主布局中
     m_contentLayout->addWidget(m_infoControlButton);
     m_contentLayout->addWidget(m_installProcessView);
-    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_progressFrame);
 
     //添加 wine下载等待提示布局
     initInstallWineLoadingLayout();
     m_tipsLabel->setMinimumHeight(20);
-    m_tipsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_tipsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_contentLayout->addWidget(m_tipsLabel);
+    m_contentLayout->addStretch();
     m_contentLayout->addWidget(m_btnsFrame);
 
     // bug 139875  Tab Order要在布局之后设置才能生效
