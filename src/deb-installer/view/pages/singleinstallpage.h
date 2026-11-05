@@ -166,6 +166,11 @@ private:
     void showPackageInfo();
 
     /**
+     * @brief updatePackageIcon 使用控件级分数 DPR 渲染包图标，消除 Wayland 分数缩放下的锯齿
+     */
+    void updatePackageIcon();
+
+    /**
      * @brief setAuthConfirm 依赖下载授权确认后的界面处理函数
      * @param dependName
      */

@@ -30,12 +30,18 @@ signals:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
     Dtk::Widget::DLabel *nameLabel;
     Dtk::Widget::DLabel *versionLabel;
     Dtk::Widget::DLabel *descriptionLabel;
     QCheckBox *checkBox;
+
+    /**
+     * @brief updateCheckBoxIcon 使用控件级分数 DPR 渲染复选框图标，消除 Wayland 分数缩放下的锯齿
+     */
+    void updateCheckBoxIcon();
 };
 
 #endif // PACKAGESELECTITEM_H

@@ -83,12 +83,9 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
     split_line->setAccessibleName("SplitLine");
 
     //显示的大图标
-    QIcon icon_install = QIcon::fromTheme("di_icon_install");
-    m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));
+    updateIcons();
 
     //显示的分割线
-    QIcon icon_split_line = QIcon::fromTheme("di_split_line");
-    split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
     split_line->setFixedHeight(3);
 
     //fix bug:33999 change DButton to DCommandLinkButton for Activity color
@@ -148,6 +145,8 @@ void FileChooseWidget::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染图标
+    updateIcons();
     m_chooseFileBtn->setFocus();
 }
 
@@ -184,11 +183,22 @@ void FileChooseWidget::chooseFiles()
 
 void FileChooseWidget::themeChanged()
 {
+    updateIcons();
+}
+
+void FileChooseWidget::updateIcons()
+{
     //更新icon
     QIcon icon_install = QIcon::fromTheme("di_icon_install");
-    m_iconImage->setPixmap(icon_install.pixmap(QSize(160, 160)));
+    qreal dpr = m_iconImage->devicePixelRatioF();
+    QPixmap iconPix = icon_install.pixmap(QSize(160, 160) * dpr);
+    iconPix.setDevicePixelRatio(dpr);
+    m_iconImage->setPixmap(iconPix);
 
     //更新 分割线
     QIcon icon_split_line = QIcon::fromTheme("di_split_line");
-    split_line->setPixmap(icon_split_line.pixmap(QSize(220, 3)));
+    qreal lineDpr = split_line->devicePixelRatioF();
+    QPixmap linePix = icon_split_line.pixmap(QSize(220, 3) * lineDpr);
+    linePix.setDevicePixelRatio(lineDpr);
+    split_line->setPixmap(linePix);
 }

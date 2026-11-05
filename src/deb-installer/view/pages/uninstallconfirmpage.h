@@ -62,6 +62,10 @@ private slots:
     void slotHideDetail();
 
 private:
+    /**
+     * @brief updateIcon 使用控件级分数 DPR 渲染图标，消除 Wayland 分数缩放下的锯齿
+     */
+    void updateIcon();
     DLabel                  *m_icon                = nullptr;
     DLabel                  *m_tips                = nullptr;
     QWidget                 *m_infoWrapperWidget   = nullptr;

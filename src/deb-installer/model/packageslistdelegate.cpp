@@ -147,7 +147,11 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     const int x = 6;
     int y = bg_rect.y() + (m_itemHeight - 32) / 2;
 
-    icon.paint(painter, x, y, 32, 32);
+    // 使用 paint device 的分数 DPR 渲染图标，消除 Wayland 分数缩放下的锯齿
+    qreal dpr = painter->device()->devicePixelRatioF();
+    QPixmap iconPix = icon.pixmap(QSize(32, 32) * dpr);
+    iconPix.setDevicePixelRatio(dpr);
+    painter->drawPixmap(QRect(x, y, 32, 32), iconPix);
 
     // draw package name
     QRect name_rect = bg_rect;

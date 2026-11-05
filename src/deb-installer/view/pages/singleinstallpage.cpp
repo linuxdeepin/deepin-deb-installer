@@ -69,11 +69,9 @@ void SingleInstallPage::initUI()
     initPkgInstallProcessView(fontsize);        //初始化包安装过程进度显示布局
     initConnections();                          //链接信号和槽
 
-    const QIcon icon = QIcon::fromTheme("application-x-deb"); //获取icon
-    QPixmap iconPix = icon.pixmap(m_packageIcon->size()); //将Icon 转化为Pixmap
     m_itemInfoFrame->setVisible(true);
-    m_packageIcon->setPixmap(iconPix);
     m_upDown = true;                            //当前是收缩的
+    updatePackageIcon();
 
     showPackageInfo();
     connect(m_packagesModel, &DebListModel::dataChanged, this, [this](){
@@ -907,6 +905,15 @@ void SingleInstallPage::showPackageInfo()
     }
 }
 
+void SingleInstallPage::updatePackageIcon()
+{
+    const QIcon icon = QIcon::fromTheme("application-x-deb");
+    qreal dpr = m_packageIcon->devicePixelRatioF();
+    QPixmap iconPix = icon.pixmap(m_packageIcon->size() * dpr);
+    iconPix.setDevicePixelRatio(dpr);
+    m_packageIcon->setPixmap(iconPix);
+}
+
 void SingleInstallPage::setEnableButton(bool bEnable)
 {
     //After the uninstall authorization is canceled, hide the uninstall details and display the version status
@@ -953,6 +960,8 @@ void SingleInstallPage::showEvent(QShowEvent *e)
 {
     // 每次切换展示当前页面，复位焦点状态
     resetButtonFocus = true;
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染图标
+    updatePackageIcon();
     QWidget::showEvent(e);
 }
 
