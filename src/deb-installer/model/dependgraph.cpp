@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +11,7 @@ struct DependGraphNode {
     QString packagePath;
     QByteArray md5;
     QList<QApt::DependencyItem> depends;
+    QStringList provides;                          // 该包提供的虚包名列表
     std::vector<DependGraphNode *> dependsInGraph;
 };
 
@@ -19,23 +20,26 @@ DependGraph::~DependGraph()
     reset();
 }
 
-void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends)
+void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends, const QStringList &provides)
 {
     auto node = new DependGraphNode;
     node->packagePath = packagePath;
     node->packageName = packageName;
     node->depends = depends;
+    node->provides = provides;
     node->md5 = md5;
 
     //建立依赖关系图
     std::vector<DependGraphNode *> dependsInGraph;
 
     //1.搜索当前节点的潜在依赖关系
+    // 除了按包名精确匹配外，还检查现有节点的 provides 是否包含依赖名。
+    // 例如：A 依赖虚包 E，D 提供 E，则 A 应依赖 D（D 需先于 A 安装）。
     for (auto &eachDepend : depends) {
         for (auto &eachOrDepend : eachDepend) {
             auto pkgName = eachOrDepend.packageName();
             auto iter = std::find_if(nodes.begin(), nodes.end(), [pkgName](const auto & eachNode) {
-                return eachNode->packageName == pkgName;
+                return eachNode->packageName == pkgName || eachNode->provides.contains(pkgName);
             });
             if (iter != nodes.end()) {
                 dependsInGraph.push_back(*iter);
@@ -44,12 +48,15 @@ void DependGraph::addNode(const QString &packagePath, const QByteArray &md5, con
     }
 
     //2.为其他节点添加潜在依赖关系
+    // 除了按包名匹配外，还检查当前节点的 provides 是否匹配其他节点的依赖名。
+    // 例如：当前节点 D 提供 E，现有节点 A 依赖 E，则 A 应依赖 D。
     for (auto &eachNode : nodes) {
         bool finded = false;
         for (auto &eachDepends : eachNode->depends) {
             for (auto &eachOrDepend : eachDepends) {
-                if (eachOrDepend.packageName() == packageName) {
+                if (eachOrDepend.packageName() == packageName || provides.contains(eachOrDepend.packageName())) {
                     eachNode->dependsInGraph.push_back(node);
+                    finded = true;
                     break;
                 }
             }

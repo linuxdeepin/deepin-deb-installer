@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -62,6 +62,18 @@ public:
      * @return 是否符合多架构要求
      */
     static bool isArchMatches(QString sysArch, const QString &packageArch, const int multiArchType);
+
+    /**
+     * @brief parseDebFileProvides 解析 deb 文件的 Provides 字段，返回其提供的虚包名列表
+     *
+     * QApt 的 DebFile 没有直接获取 Provides 列表的接口，需通过 controlField("Provides")
+     * 手动解析。Provides 字段格式为逗号分隔的包名列表，每项可带版本约束，如：
+     *   "pkg1, pkg2 (= 1.0), pkg3 (>= 2.0)"
+     *
+     * @param debFile 要解析的 deb 文件
+     * @return 提供的虚包名列表（仅包名，不含版本约束）
+     */
+    static QStringList parseDebFileProvides(const QApt::DebFile &debFile);
 
     /**
      * @brief resolvMultiArchAnnotation 处理多架构问题
@@ -659,6 +671,39 @@ private:
     QMap<QString, DependencyInfo> m_dependsInfo; //所有依赖的信息
 
     DependGraph m_dependGraph; //依赖关系图计算器
+
+    /**
+     * @brief m_debProvidesMap 待安装 deb 文件提供的虚包映射（一对多）
+     *
+     * key   = 虚包名（Provides 字段中的包名）
+     * value = 提供该虚包的待安装 deb 包名集合
+     *
+     * 在 addPackage() 时通过 parseDebFileProvides() 解析每个 deb 文件的
+     * Provides 字段并填充此映射。在 checkDependsPackageStatus() 中，
+     * 当 packageWithArch() 因无 apt 缓存找不到虚包 provider 而返回 nullptr
+     * 时，优先查此映射，避免误报依赖缺失。
+     *
+     * 使用 QSet 支持一对多：批内多个包可提供同一虚包名，逐个检查版本
+     * 是否满足，找到任一匹配即返回 ok。
+     */
+    QHash<QString, QSet<QString>> m_debProvidesMap;
+
+    /**
+     * @brief m_batchPackageNames 当前批次待安装的所有 deb 包名集合
+     *
+     * 在 addPackage() 时填充，在 getPackageDependsStatus() 初始化 choosed_set
+     * 时将此集合中的包名全部加入，使依赖检查器知晓同批次待安装的包。
+     */
+    QSet<QString> m_batchPackageNames;
+
+    /**
+     * @brief m_batchPackageVersions 当前批次待安装 deb 包名 → 版本号映射
+     *
+     * 在 addPackage() 时填充，用于在 checkDependsPackageStatus() 中校验
+     * 同批次待安装包的实际版本是否满足依赖版本约束，避免仅比包名不比
+     * 版本而误判依赖满足。
+     */
+    QHash<QString, QString> m_batchPackageVersions;
 };
 
 #endif  // PACKAGESMANAGER_H

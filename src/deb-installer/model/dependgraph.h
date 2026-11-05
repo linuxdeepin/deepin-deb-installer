@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include <qapt/debfile.h>
 
 #include <vector>
@@ -18,7 +19,7 @@ public:
     DependGraph() = default;
     ~DependGraph();
 
-    void addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends);
+    void addNode(const QString &packagePath, const QByteArray &md5, const QString &packageName, const QList<QApt::DependencyItem> &depends, const QStringList &provides = QStringList());
     std::pair<QList<QString>, QList<QByteArray>> getBestInstallQueue() const;
 
     void reset();

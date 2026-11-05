@@ -18,6 +18,7 @@
 #include <QPair>
 #include <QSet>
 #include <QDir>
+#include <QFileInfo>
 #include <QtConcurrent>
 
 #include <fstream>
@@ -38,6 +39,50 @@ static const QString g_DeepinWineHelper = "deepin-wine-helper";
 bool archMultiSupport(const QString &arch)
 {
     return "native" == arch || "all" == arch || "any" == arch;
+}
+
+/**
+ * @brief parseDebFileProvides 解析 deb 文件的 Provides 字段，返回虚包名列表
+ *
+ * QApt 的 DebFile 没有直接获取 Provides 列表的接口，通过 controlField("Provides")
+ * 手动解析。Provides 字段格式为逗号分隔的包名列表，每项可带版本约束：
+ *   "pkg1, pkg2 (= 1.0), pkg3 (>= 2.0)"
+ * 本函数仅提取包名，忽略版本约束部分。
+ *
+ * @param debFile 要解析的 deb 文件
+ * @return 提供的虚包名列表（仅包名，不含版本约束）
+ */
+QStringList PackagesManager::parseDebFileProvides(const QApt::DebFile &debFile)
+{
+    QStringList providesList;
+    // DebFile::isValid() 为真并不保证 control 段可用，直接调用
+    // controlField() 可能触发 pkgTagParser::FindS 空指针解引用崩溃。
+    // 先做文件存在性 + packageName() 非空兜底，确保 control 段可安全读取。
+    if (!QFileInfo(debFile.filePath()).exists())
+        return providesList;
+    if (debFile.packageName().isEmpty())
+        return providesList;
+
+    QString providesField = debFile.controlField("Provides");
+    if (providesField.isEmpty())
+        return providesList;
+
+    // Provides 字段为逗号分隔的包名列表，每项可带版本约束
+    QStringList entries = providesField.split(QStringLiteral(","), Qt::SkipEmptyParts);
+    for (const QString &entry : entries) {
+        QString name = entry.trimmed();
+        // 去除版本约束部分，如 "pkg (= 1.0)" -> "pkg"
+        int parenIdx = name.indexOf(QLatin1Char('('));
+        if (parenIdx != -1)
+            name = name.left(parenIdx).trimmed();
+        // 去除可能的架构后缀，如 "pkg:amd64" -> "pkg"
+        int colonIdx = name.indexOf(QLatin1Char(':'));
+        if (colonIdx != -1)
+            name = name.left(colonIdx).trimmed();
+        if (!name.isEmpty())
+            providesList << name;
+    }
+    return providesList;
 }
 
 /**
@@ -198,6 +243,9 @@ PackageDependsStatus PackagesManager::checkDependsStatus(const QString &package_
         } else {
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
+            // 将同批次待安装的包名全部加入 choosed_set，使依赖检查器
+            // 知晓这些包即将被安装，避免将同批包误判为需要从 apt 仓库下载的依赖
+            choose_set.unite(m_batchPackageNames);
             QStringList dependList;
             // 依赖信息映射
             QHash<QString, DependencyInfo> dependInfoMap;
@@ -929,6 +977,9 @@ PackageDependsStatus PackagesManager::getPackageDependsStatus(const int index)
         } else {
             QSet<QString> choose_set;
             choose_set << debFile.packageName();
+            // 将同批次待安装的包名全部加入 choosed_set，使依赖检查器
+            // 知晓这些包即将被安装，避免将同批包误判为需要从 apt 仓库下载的依赖
+            choose_set.unite(m_batchPackageNames);
             QStringList dependList;
             QHash<QString, DependencyInfo> dependInfoMap;
             bool isWineApplication = false;             //判断是否是wine应用
@@ -1420,6 +1471,9 @@ void PackagesManager::reset()
     m_appendedPackagesMd5.clear();
     m_packageMd5.clear();
     m_dependGraph.reset();
+    m_debProvidesMap.clear();
+    m_batchPackageNames.clear();
+    m_batchPackageVersions.clear();
 
     //reloadCache必须要加
     PackageAnalyzer::instance().backendPtr()->reloadCache();
@@ -1474,6 +1528,21 @@ void PackagesManager::removePackage(const int index)
     m_dependsPackages.remove(md5); //删除指定包的依赖关系
 
     m_dependGraph.remove(md5); //从依赖关系图中删除对应节点
+
+    // 重建虚包映射和批次包名集合，确保已移除的包不再参与依赖检查
+    m_debProvidesMap.clear();
+    m_batchPackageNames.clear();
+    m_batchPackageVersions.clear();
+    for (const QString &path : m_preparedPackages) {
+        DebFile deb(path);
+        if (deb.isValid()) {
+            m_batchPackageNames << deb.packageName();
+            m_batchPackageVersions[deb.packageName()] = deb.version();
+            for (const QString &virtualName : parseDebFileProvides(deb)) {
+                m_debProvidesMap[virtualName].insert(deb.packageName());
+            }
+        }
+    }
 
     m_packageInstallStatus.clear();
 
@@ -1735,9 +1804,20 @@ void PackagesManager::addPackage(int validPkgCount, const QString &packagePath, 
     //加入md5集合
     m_appendedPackagesMd5 << packageMd5Sum;
 
+    // 解析当前 deb 文件的 Provides 字段，构建虚包映射
+    // m_debProvidesMap 为一对多，多个包可提供同一虚包名
+    QStringList provides = parseDebFileProvides(currentDebfile);
+    for (const QString &virtualName : provides) {
+        m_debProvidesMap[virtualName].insert(currentDebfile.packageName());
+    }
+
+    // 记录当前批次待安装的包名和版本，供 choosed_set 初始化及版本校验使用
+    m_batchPackageNames << currentDebfile.packageName();
+    m_batchPackageVersions[currentDebfile.packageName()] = currentDebfile.version();
+
     //使用依赖图计算安装顺序
     auto currentDebDepends = currentDebfile.depends();
-    m_dependGraph.addNode(packagePath, packageMd5Sum, currentDebfile.packageName(), currentDebDepends); //添加图节点
+    m_dependGraph.addNode(packagePath, packageMd5Sum, currentDebfile.packageName(), currentDebDepends, provides); //添加图节点
     auto installQueue = m_dependGraph.getBestInstallQueue(); //输出最佳安装顺序
     m_preparedPackages = installQueue.first;
     m_packageMd5 = installQueue.second;
@@ -1749,6 +1829,21 @@ void PackagesManager::addPackage(int validPkgCount, const QString &packagePath, 
     }
     if (indexRow == m_packageMd5.size()) { //error
         return;
+    }
+
+    // 重建索引后，此前已分析过的包可能因新加入的提供者/同批包而状态变化，
+    // 但 m_packageMd5DependsStatus 缓存短路会导致旧状态（如 _break）残留。
+    // 清掉非当前包、状态非 OK 的缓存并重算，确保“消费者先加入、提供者后加入”
+    // 的场景下消费者状态被刷新。
+    for (int i = 0; i < m_packageMd5.size(); ++i) {
+        if (i == indexRow)
+            continue;
+        const auto &md5 = m_packageMd5[i];
+        if (m_packageMd5DependsStatus.contains(md5)
+                && m_packageMd5DependsStatus[md5].status != DebListModel::DependsOk) {
+            m_packageMd5DependsStatus.remove(md5);
+            getPackageDependsStatus(i);
+        }
     }
 
     //需要在此之前刷新出正确的安装顺序
@@ -1912,6 +2007,37 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
     Package *package = packageWithArch(package_name, realArch, dependencyInfo.multiArchAnnotation());
 
     if (!package) {
+        // 当 packageWithArch() 因无 apt 缓存找不到虚包 provider 而返回 nullptr 时，
+        // 优先检查待安装的 deb 文件是否提供此虚包。若存在 provider 且其包名已在
+        // choosed_set 中（同批次待安装），且版本满足约束，则依赖满足，返回 ok。
+        // m_debProvidesMap 为一对多，逐个检查 provider；provider 必然在 choosed_set
+        // 中，不应走 available() 分支以免误入 apt 下载流程。校验 provider 的实际
+        // 版本是否满足依赖版本约束。
+        if (m_debProvidesMap.contains(package_name)) {
+            const RelationType relation = dependencyInfo.relationType();
+            const QSet<QString> &providers = m_debProvidesMap.value(package_name);
+            for (const QString &providerName : providers) {
+                if (!choosed_set.contains(providerName))
+                    continue;
+                // 校验本地 deb 包的实际版本是否满足依赖版本约束
+                const QString &providerVersion = m_batchPackageVersions.value(providerName);
+                if (!providerVersion.isEmpty()) {
+                    const int result = Package::compareVersion(providerVersion, dependencyInfo.packageVersion());
+                    if (!dependencyVersionMatch(result, relation)) {
+                        qWarning() << "PackagesManager:" << "virtual package" << package_name
+                                   << "provided by" << providerName << "version" << providerVersion
+                                   << "does not satisfy required" << dependencyInfo.packageVersion();
+                        continue;  // 版本不满足，尝试下一个 provider
+                    }
+                }
+                qInfo() << "PackagesManager:" << "virtual package" << package_name
+                        << "provided by pending deb package" << providerName;
+                m_dinfo.packageName = providerName + ":" + realArch;
+                m_dinfo.version = dependencyInfo.packageVersion();
+                return PackageDependsStatus::ok();
+            }
+        }
+
         qWarning() << "PackagesManager:" << "depends break because package" << package_name << "not available";
         isDependsExists = true;
         m_dinfo.packageName = package_name + ":" + realArch;
@@ -1977,6 +2103,21 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
 
         // is that already choosed?
         if (choosed_set.contains(package->name())) {
+            // 校验同批次本地 deb 包的实际版本是否满足依赖版本约束。
+            // apt 缓存中的可用版本已通过上方校验，但本地 deb 文件版本可能不同，
+            // 仅比包名不比版本会把版本不符的依赖误判为满足。
+            const QString &localVersion = m_batchPackageVersions.value(package->name());
+            if (!localVersion.isEmpty()) {
+                const int localResult = Package::compareVersion(localVersion, dependencyInfo.packageVersion());
+                if (!dependencyVersionMatch(localResult, relation)) {
+                    qWarning() << "PackagesManager:" << "depends break by batch package version mismatch"
+                               << package->name() << localVersion
+                               << "required" << dependencyInfo.packageVersion();
+                    m_dinfo.packageName = package->name() + ":" + package->architecture();
+                    m_dinfo.version = dependencyInfo.packageVersion();
+                    return PackageDependsStatus::_break(package->name());
+                }
+            }
             // 已有记录，返回之前排查的结果，而不是直接返回 Ok , 当前包名可能为虚包。
             if (m_loopErrorDeepends.contains(package->name())) {
                 return PackageDependsStatus(m_loopErrorDeepends.value(package->name()), package->name());
