@@ -32,6 +32,11 @@ private:
     Dtk::Widget::DLabel *errorMessageLabel;
     Dtk::Widget::DLabel *errorPicLabel;
     QPushButton *confimButton;
+
+    /**
+     * @brief updateErrorPixmap 使用控件级分数 DPR 渲染错误页图片，消除 Wayland 分数缩放下的锯齿
+     */
+    void updateErrorPixmap();
 };
 
 #endif // DDIMERRORPAGE_H

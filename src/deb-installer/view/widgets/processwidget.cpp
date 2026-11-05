@@ -40,7 +40,10 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 
 void ProcessWidget::setIcon(const QIcon &icon)
 {
-    mainIcon->setPixmap(icon.pixmap(64, 64));
+    qreal dpr = mainIcon->devicePixelRatioF();
+    QPixmap pix = icon.pixmap(QSize(64, 64) * dpr);
+    pix.setDevicePixelRatio(dpr);
+    mainIcon->setPixmap(pix);
 }
 
 void ProcessWidget::setMainText(const QString &text)

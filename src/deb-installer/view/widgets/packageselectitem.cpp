@@ -15,6 +15,7 @@
 #include <QFrame>
 #include <QTimer>
 #include <QEvent>
+#include <QShowEvent>
 
 PackageSelectItem::PackageSelectItem(QWidget *parent)
     : QWidget (parent)
@@ -23,8 +24,8 @@ PackageSelectItem::PackageSelectItem(QWidget *parent)
     , descriptionLabel(new Dtk::Widget::DLabel)
     , checkBox(new QCheckBox)
 {
-    checkBox->setIcon(QIcon::fromTheme("application-x-deb"));
     checkBox->setIconSize(QSize(32, 32));
+    updateCheckBoxIcon();
 
     auto line = new QFrame;
     line->setFrameShape(QFrame::HLine);
@@ -134,4 +135,23 @@ bool PackageSelectItem::eventFilter(QObject *watched, QEvent *event)
         QTimer::singleShot(0, this, [this]() { emit sizeChanged(); });
     }
     return QWidget::eventFilter(watched, event);
+}
+
+void PackageSelectItem::showEvent(QShowEvent *event)
+{
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染复选框图标
+    updateCheckBoxIcon();
+    QWidget::showEvent(event);
+}
+
+void PackageSelectItem::updateCheckBoxIcon()
+{
+    qreal dpr = checkBox->devicePixelRatioF();
+    QIcon source = QIcon::fromTheme(QStringLiteral("application-x-deb"));
+    QPixmap pix = source.pixmap(QSize(32, 32) * dpr);
+    pix.setDevicePixelRatio(dpr);
+
+    QIcon dprIcon;
+    dprIcon.addPixmap(pix);
+    checkBox->setIcon(dprIcon);
 }
