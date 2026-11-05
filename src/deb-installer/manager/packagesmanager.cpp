@@ -68,7 +68,7 @@ QStringList PackagesManager::parseDebFileProvides(const QApt::DebFile &debFile)
         return providesList;
 
     // Provides 字段为逗号分隔的包名列表，每项可带版本约束
-    QStringList entries = providesField.split(QStringLiteral(","), Qt::SkipEmptyParts);
+    QStringList entries = providesField.split(QStringLiteral(","));
     for (const QString &entry : entries) {
         QString name = entry.trimmed();
         // 去除版本约束部分，如 "pkg (= 1.0)" -> "pkg"
