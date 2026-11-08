@@ -58,7 +58,7 @@ void ProcessWidget::setProgress(int current, int all)
     auto currentText = processText.arg(current).arg(all);
     processTextLabel->setText(currentText);
     processTextLabel->adjustSize();
-    processTextLabel->move((this->width() - processTextLabel->width()) / 2, processBar->y() + 30);
+    processTextLabel->move((this->width() - processTextLabel->width()) / 2, processBar->y() + 20);
     processBar->setRange(0, all);
     processBar->setValue(current);
 }
