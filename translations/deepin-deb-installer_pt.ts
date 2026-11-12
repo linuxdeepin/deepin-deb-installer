@@ -464,7 +464,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1318"/>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
         <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation type="unfinished"/>
+        <translation>Este pacote não possui uma assinatura digital válida e a sua instalação/execução foi bloqueada. Aceda a Centro de Segurança &gt; Ferramentas &gt; Segurança de Aplicações para alterar as definições.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
@@ -474,17 +474,17 @@
     <message>
         <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
         <source>The system has not installed Linglong environment, please install it first</source>
-        <translation type="unfinished"/>
+        <translation>O sistema não tem o ambiente Linglong instalado, por favor instale-o primeiro</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="88"/>
         <source>To install unsigned apps, go to Security Center &gt; Tools &gt; App Security, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Para instalar aplicações não assinadas, aceda a Centro de Segurança &gt; Ferramentas &gt; Segurança de Aplicações e selecione os tipos de aplicações que podem ser instalados.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="90"/>
         <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation type="unfinished"/>
+        <translation>Centro de Segurança &gt; Ferramentas &gt; Segurança de Aplicações</translation>
     </message>
 </context>
 <context>
@@ -506,17 +506,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="724"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="775"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"/>
+        <translation>A instalar %1 em modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="818"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>A desinstalar %1 do modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="954"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"/>
+        <translation>%1 foi instalado com sucesso no modo de compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1235"/>
@@ -540,7 +540,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1274"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"/>
+        <translation>Instalação em Modo de Compatibilidade</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1353"/>
