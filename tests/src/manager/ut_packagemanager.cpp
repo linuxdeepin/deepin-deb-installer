@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -2184,3 +2184,61 @@ TEST_F(UT_packagesManager, PackageManager_UT_packageCandidateChoose_4)
 }
 
 
+
+// Test parseProvidesFieldWithVersion: basic name-only entries
+TEST_F(UT_packagesManager, PackageManager_UT_parseProvidesFieldWithVersion_namesOnly)
+{
+    QString field = "pkg1, pkg2, pkg3";
+    QMap<QString, QString> result = PackagesManager::parseProvidesFieldWithVersion(field);
+
+    EXPECT_EQ(3, result.size());
+    EXPECT_TRUE(result.contains("pkg1"));
+    EXPECT_TRUE(result.contains("pkg2"));
+    EXPECT_TRUE(result.contains("pkg3"));
+    EXPECT_EQ("", result.value("pkg1"));
+    EXPECT_EQ("", result.value("pkg2"));
+    EXPECT_EQ("", result.value("pkg3"));
+}
+
+// Test parseProvidesFieldWithVersion: entries with version constraints
+TEST_F(UT_packagesManager, PackageManager_UT_parseProvidesFieldWithVersion_withVersion)
+{
+    QString field = "python3-cffi-backend-api-max (= 9729), pkg2 (>= 2.0), pkg3 (<< 1.5)";
+    QMap<QString, QString> result = PackagesManager::parseProvidesFieldWithVersion(field);
+
+    EXPECT_EQ(3, result.size());
+    EXPECT_EQ("9729", result.value("python3-cffi-backend-api-max"));
+    EXPECT_EQ("2.0", result.value("pkg2"));
+    EXPECT_EQ("1.5", result.value("pkg3"));
+}
+
+// Test parseProvidesFieldWithVersion: empty input
+TEST_F(UT_packagesManager, PackageManager_UT_parseProvidesFieldWithVersion_empty)
+{
+    QMap<QString, QString> result = PackagesManager::parseProvidesFieldWithVersion("");
+    EXPECT_EQ(0, result.size());
+}
+
+// Test parseProvidesFieldWithVersion: architecture suffix stripping
+TEST_F(UT_packagesManager, PackageManager_UT_parseProvidesFieldWithVersion_archSuffix)
+{
+    QString field = "pkg:amd64 (= 1.0), pkg2:any";
+    QMap<QString, QString> result = PackagesManager::parseProvidesFieldWithVersion(field);
+
+    EXPECT_EQ(2, result.size());
+    EXPECT_EQ("1.0", result.value("pkg"));
+    EXPECT_EQ("", result.value("pkg2"));
+}
+
+// Test parseProvidesFieldWithVersion: mixed entries (some with version, some without)
+TEST_F(UT_packagesManager, PackageManager_UT_parseProvidesFieldWithVersion_mixed)
+{
+    QString field = "pkg1, pkg2 (= 1.0), pkg3, pkg4 (>= 3.2.1)";
+    QMap<QString, QString> result = PackagesManager::parseProvidesFieldWithVersion(field);
+
+    EXPECT_EQ(4, result.size());
+    EXPECT_EQ("", result.value("pkg1"));
+    EXPECT_EQ("1.0", result.value("pkg2"));
+    EXPECT_EQ("", result.value("pkg3"));
+    EXPECT_EQ("3.2.1", result.value("pkg4"));
+}

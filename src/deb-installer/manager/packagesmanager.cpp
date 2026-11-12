@@ -86,6 +86,68 @@ QStringList PackagesManager::parseDebFileProvides(const QApt::DebFile &debFile)
 }
 
 /**
+ * @brief parseProvidesFieldWithVersion 解析 Provides 字段，返回虚包名到版本的映射
+ *
+ * Provides 字段格式为逗号分隔的包名列表，每项可带版本约束：
+ *   "pkg1, pkg2 (= 1.0), pkg3 (>= 2.0)"
+ * 本函数提取包名和版本号（去除关系运算符），返回 QMap<包名, 版本>。
+ * 无版本约束的项版本为空字符串。
+ *
+ * @param providesField Provides 字段原始文本
+ * @return 虚包名到版本的映射
+ */
+QMap<QString, QString> PackagesManager::parseProvidesFieldWithVersion(const QString &providesField)
+{
+    QMap<QString, QString> providesMap;
+    if (providesField.isEmpty())
+        return providesMap;
+
+    QStringList entries = providesField.split(QStringLiteral(","));
+    for (const QString &entry : entries) {
+        QString trimmed = entry.trimmed();
+        if (trimmed.isEmpty())
+            continue;
+
+        QString name = trimmed;
+        QString version;
+
+        int parenIdx = name.indexOf(QLatin1Char('('));
+        if (parenIdx != -1) {
+            QString parenContent = name.mid(parenIdx + 1);
+            int closeParen = parenContent.indexOf(QLatin1Char(')'));
+            if (closeParen != -1)
+                parenContent = parenContent.left(closeParen);
+
+            parenContent = parenContent.trimmed();
+            // 去除关系运算符，提取纯版本号
+            static const QStringList ops = {
+                QStringLiteral(">="), QStringLiteral("<="),
+                QStringLiteral(">>"), QStringLiteral("<<"),
+                QStringLiteral("="),  QStringLiteral(">"),
+                QStringLiteral("<")
+            };
+            for (const QString &op : ops) {
+                if (parenContent.startsWith(op)) {
+                    parenContent = parenContent.mid(op.length()).trimmed();
+                    break;
+                }
+            }
+            version = parenContent;
+            name = name.left(parenIdx).trimmed();
+        }
+
+        // 去除可能的架构后缀，如 "pkg:amd64" -> "pkg"
+        int colonIdx = name.indexOf(QLatin1Char(':'));
+        if (colonIdx != -1)
+            name = name.left(colonIdx).trimmed();
+
+        if (!name.isEmpty())
+            providesMap.insert(name, version);
+    }
+    return providesMap;
+}
+
+/**
  * @brief isArchMatches 判断包的架构是否符合系统要求
  * @param sysArch       系统架构
  * @param packageArch   包的架构
@@ -655,9 +717,14 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
         }
     }
 #else
-    auto targetProvides = targetPackage->providesList().toSet();
-    auto installedProvides = installedPackage->providesList().toSet();
-    QSet<QString> canReplaceProvides = targetProvides.unite(installedProvides);
+    QMap<QString, QString> canReplaceProvides;
+    auto targetProvides = parseProvidesFieldWithVersion(targetPackage->controlField("Provides"));
+    auto installedProvides = parseProvidesFieldWithVersion(installedPackage->controlField("Provides"));
+    for (auto itr = installedProvides.begin(); itr != installedProvides.end(); ++itr) {
+        if (targetProvides.contains(itr.key())) {
+            canReplaceProvides.insert(itr.key(), targetProvides.value(itr.key()));
+        }
+    }
 #endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
     bool replaceable = false;
@@ -682,7 +749,6 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                 if (canReplaceProvides.contains(info.packageName())) {
                     containsInstalledProvides = true;
 
-#ifdef ENABLE_VIRTUAL_PACKAGE_ENHANCE
                     // check version match
                     QString version = canReplaceProvides.value(info.packageName());
                     if (!version.isEmpty()) {
@@ -692,7 +758,6 @@ bool PackagesManager::targetPackageCanReplace(QApt::Package *targetPackage, QApt
                             break;
                         }
                     }
-#endif // ENABLE_VIRTUAL_PACKAGE_ENHANCE
 
                     replaceable = true;
                     break;
@@ -2055,6 +2120,15 @@ const PackageDependsStatus PackagesManager::checkDependsPackageStatus(QSet<QStri
         auto iter = pkgMap.find(package_name);
         if (iter != pkgMap.end()) {
             pkgRealVer = *iter;
+            isVirtualPackage = true;
+        }
+    }
+#else
+    if (package->name() != package_name) {
+        auto pkgMap = parseProvidesFieldWithVersion(package->controlField("Provides"));
+        auto iter = pkgMap.find(package_name);
+        if (iter != pkgMap.end()) {
+            pkgRealVer = iter.value();
             isVirtualPackage = true;
         }
     }

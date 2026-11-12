@@ -76,6 +76,19 @@ public:
     static QStringList parseDebFileProvides(const QApt::DebFile &debFile);
 
     /**
+     * @brief parseProvidesFieldWithVersion 解析 Provides 字段，返回虚包名到版本的映射
+     *
+     * Provides 字段格式为逗号分隔的包名列表，每项可带版本约束：
+     *   "pkg1, pkg2 (= 1.0), pkg3 (>= 2.0)"
+     * 本函数提取包名和版本号（去除关系运算符），返回 QMap<包名, 版本>。
+     * 无版本约束的项版本为空字符串。
+     *
+     * @param providesField Provides 字段原始文本
+     * @return 虚包名到版本的映射
+     */
+    static QMap<QString, QString> parseProvidesFieldWithVersion(const QString &providesField);
+
+    /**
      * @brief resolvMultiArchAnnotation 处理多架构问题
      * @param annotation  当前control文件中的附加信息
      * @param debArch   deb包的架构
