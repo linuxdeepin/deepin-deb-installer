@@ -130,6 +130,36 @@ bool PackageAnalyzer::writeDConfigBool(const QString &key, bool value)
     return false;
 }
 
+qint64 PackageAnalyzer::readDConfigLongLong(const QString &key, qint64 defaultValue) const
+{
+#ifdef DTKCORE_CLASS_DConfigFile
+    Dtk::Core::DConfig *cfg = Dtk::Core::DConfig::create("deepin-deb-installer", "deepin-deb-installer.cache");
+    if (cfg && cfg->isValid()) {
+        qint64 value = cfg->value(key, defaultValue).toLongLong();
+        cfg->deleteLater();
+        return value;
+    }
+    if (cfg)
+        cfg->deleteLater();
+#endif
+    return defaultValue;
+}
+
+bool PackageAnalyzer::writeDConfigLongLong(const QString &key, qint64 value)
+{
+#ifdef DTKCORE_CLASS_DConfigFile
+    Dtk::Core::DConfig *cfg = Dtk::Core::DConfig::create("deepin-deb-installer", "deepin-deb-installer.cache");
+    if (cfg && cfg->isValid()) {
+        cfg->setValue(key, value);
+        cfg->deleteLater();
+        return true;
+    }
+    if (cfg)
+        cfg->deleteLater();
+#endif
+    return false;
+}
+
 bool PackageAnalyzer::isAutoUpdateBeforeInstallEnabled() const
 {
     bool enabled = readDConfigBool("autoUpdateBeforeInstall", true);
@@ -173,6 +203,7 @@ void PackageAnalyzer::updatePackageCache()
     }
 
     qCInfo(appLog) << "Package cache update started";
+    m_actualUpdateInProgress = true;  // 标记真正开始 apt update，setCacheUpdateFinished 据此决定是否写时间戳
     emit cacheUpdateStarted();
 }
 
@@ -191,6 +222,13 @@ void PackageAnalyzer::setCacheUpdateFinished(bool finished)
         if (m_oneTimeUpdateInProgress) {
             m_oneTimeUpdateInProgress = false;
             markOneTimeUpdateDone();
+        }
+        // 仅当真正执行了 apt update 时才记录完成时间戳，避免跳过路径误刷新冷却期
+        if (m_actualUpdateInProgress) {
+            m_actualUpdateInProgress = false;
+            if (!writeDConfigLongLong("lastCacheUpdateTime", QDateTime::currentSecsSinceEpoch())) {
+                qCWarning(appLog) << "DConfig unavailable, cannot persist lastCacheUpdateTime";
+            }
         }
         emit cacheUpdateFinished();
     }
@@ -249,6 +287,19 @@ QDateTime PackageAnalyzer::getCacheLastModified() const
 
 bool PackageAnalyzer::shouldUpdateCache() const
 {
+    // 冷却期检查：距离上次 apt update 完成不足 30 分钟时跳过，避免每次启动都重复触发
+    static const qint64 kCacheUpdateCooldownSecs = 1800;  // 30 分钟
+    qint64 lastUpdateTime = readDConfigLongLong("lastCacheUpdateTime", 0);
+    if (lastUpdateTime > 0) {
+        qint64 nowSecs = QDateTime::currentSecsSinceEpoch();
+        qint64 elapsed = nowSecs - lastUpdateTime;
+        if (elapsed < kCacheUpdateCooldownSecs) {
+            qCInfo(appLog) << "Cache update cooldown active, last update" << elapsed
+                           << "secs ago (<" << kCacheUpdateCooldownSecs << "secs), skip update";
+            return false;
+        }
+    }
+
     // 如果缓存文件不存在，需要更新
     QDateTime cacheTime = getCacheLastModified();
     if (!cacheTime.isValid()) {
