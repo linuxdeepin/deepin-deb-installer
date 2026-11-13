@@ -36,7 +36,8 @@ ColoredProgressBar::ColoredProgressBar(QWidget *parent)
 
 void ColoredProgressBar::themeChanged()
 {
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    DGuiApplicationHelper::ColorType themeType =
+        DGuiApplicationHelper::toColorType(DGuiApplicationHelper::instance()->applicationPalette());
     m_themeType = themeType;
     if (themeType == DGuiApplicationHelper::LightType) {
         threshmap.clear();
@@ -72,7 +73,8 @@ QList<int> ColoredProgressBar::thresholds() const
 
 void ColoredProgressBar::paintEvent(QPaintEvent *event)
 {
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    DGuiApplicationHelper::ColorType themeType =
+        DGuiApplicationHelper::toColorType(DGuiApplicationHelper::instance()->applicationPalette());
     if (themeType == DGuiApplicationHelper::LightType) {
         QProgressBar::paintEvent(event);
     } else if (themeType == DGuiApplicationHelper::DarkType) {

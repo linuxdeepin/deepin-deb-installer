@@ -121,8 +121,10 @@ void InstallProcessInfoView::paintEvent(QPaintEvent *event)
 
     DPalette pa = m_editor->palette();
 
-    // 获取当前的主题
-    DGuiApplicationHelper::ColorType themeType = DGuiApplicationHelper::instance()->themeType();
+    // Infer theme from applicationPalette() instead of themeType() which may
+    // return a stale value after a D-Bus theme switch on V25.
+    DGuiApplicationHelper::ColorType themeType =
+        DGuiApplicationHelper::toColorType(DGuiApplicationHelper::instance()->applicationPalette());
 
     if (themeType == DGuiApplicationHelper::LightType) {      //当前是浅色主题
         pa.setColor(DPalette::Text, QColor(96, 157, 200));

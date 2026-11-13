@@ -88,7 +88,8 @@ void PackagesListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         return;
     }
 
-    auto themeType = DGuiApplicationHelper::instance()->themeType();
+    DGuiApplicationHelper::ColorType themeType =
+        DGuiApplicationHelper::toColorType(DGuiApplicationHelper::instance()->applicationPalette());
 
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);

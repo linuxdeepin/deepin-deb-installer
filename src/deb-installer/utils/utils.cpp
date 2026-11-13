@@ -451,10 +451,10 @@ DPalette DebApplicationHelper::palette(const QWidget *widget, const QPalette &ba
     DPalette palette;
 
     do {
-        // 存在自定义palette时应该根据其自定义的palette获取对应色调的DPalette
-        const QPalette &wp = widget->palette();
-
-        palette = standardPalette(toColorType(wp));
+        // Use applicationPalette() for type inference instead of the widget's
+        // own palette. On V25, widget palettes may be stale after a D-Bus
+        // theme switch, whereas applicationPalette() is kept in sync by DTK.
+        palette = standardPalette(toColorType(applicationPalette()));
 
         // 关注控件palette改变的事件
         const_cast<QWidget *>(widget)->installEventFilter(const_cast<DebApplicationHelper *>(this));
