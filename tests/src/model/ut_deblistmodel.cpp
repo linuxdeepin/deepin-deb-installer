@@ -196,6 +196,16 @@ QApt::Transaction *model_backend_commitChanges()
     return nullptr;
 }
 
+bool model_backend_isBroken()
+{
+    return false;
+}
+
+QApt::Transaction *model_backend_installFile(const QApt::DebFile &)
+{
+    return nullptr;
+}
+
 QByteArray model_package_getPackageMd5(const int)
 {
     return "";
@@ -371,6 +381,8 @@ void ut_DebListModel_test::stubFunction()
     stub.set(ADDR(Backend, init), model_backend_init);
     stub.set(ADDR(Backend, architectures), model_backend_architectures);
     stub.set(ADDR(Backend, commitChanges), model_backend_commitChanges);
+    stub.set((bool(Backend::*)() const)ADDR(Backend, isBroken), model_backend_isBroken);
+    stub.set((QApt::Transaction *(Backend::*)(const QApt::DebFile &))ADDR(Backend, installFile), model_backend_installFile);
     stub.set(ADDR(Backend, reloadCache), model_backend_init);
 
     stub.set(ADDR(Transaction, run), model_transaction_run);

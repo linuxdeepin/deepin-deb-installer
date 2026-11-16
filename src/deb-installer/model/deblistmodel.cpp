@@ -852,29 +852,41 @@ void DebListModel::installDebs()
         const QStringList availableDepends = m_packagesManager->packageAvailableDepends(m_operatingIndex);
         qInfo() << QString("Prepare install package: %1 , install depends: ").arg(deb.packageName()) << availableDepends;
 
-        //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
-        for (auto const &p : availableDepends) {
-            if (p.contains(" not found")) {                             //依赖安装失败
-                refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
-                // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
-                m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
-                m_packageFailReason.insert(m_operatingPackageMd5, p);
-                emit signalAppendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
-                bumpInstallIndex();                                     //开始安装下一个包或结束安装
-
-                qWarning() << QString("Packge %1 install failed, not found depend package: %2").arg(deb.packageName()).arg(p);
+        // 先检查系统是否已存在破损包，若有则回退到 dpkg -i 安装，
+        // 避免标记残留在 backend pkgDepCache 中导致非预期包安装
+        if (backend->isBroken()) {
+            qWarning() << "DebListModel:" << "System has broken packages, fallback to dpkg install";
+            emit signalAppendOutputInfo(tr("系统存在破损包，依赖未安装，请运行 apt install -f 修复"));
+            transaction = backend->installFile(deb);
+            if (!transaction)
                 return;
-            }
-            backend->markPackageForInstall(p);                          //开始安装依赖包
-        }
-        // 打印待安装的软件包信息
-        printDependsChanges();
+            connect(transaction, &Transaction::progressChanged, this, &DebListModel::signalTransactionProgressChanged);
+            connect(transaction, &Transaction::finished, this, &DebListModel::slotTransactionFinished);
+        } else {
+            //获取到可用的依赖包并根据后端返回的结果判断依赖包的安装结果
+            for (auto const &p : availableDepends) {
+                if (p.contains(" not found")) {                             //依赖安装失败
+                    refreshOperatingPackageStatus(Failed);                  //刷新当前包的状态
+                    // 修改map存储的数据格式，将错误原因与错误代码与包绑定，而非与下标绑定
+                    m_packageFailCode.insert(m_operatingPackageMd5, DownloadDisallowedError);                       //记录错误代码与错误原因
+                    m_packageFailReason.insert(m_operatingPackageMd5, p);
+                    emit signalAppendOutputInfo(m_packagesManager->package(m_operatingIndex) + "\'s depend " + " " + p);  //输出错误原因
+                    bumpInstallIndex();                                     //开始安装下一个包或结束安装
 
-        transaction = backend->commitChanges();
-        if (!transaction)
-            return;
-        //依赖安装结果处理
-        connect(transaction, &Transaction::finished, this, &DebListModel::slotDependsInstallTransactionFinished);
+                    qWarning() << QString("Packge %1 install failed, not found depend package: %2").arg(deb.packageName()).arg(p);
+                    return;
+                }
+                backend->markPackageForInstall(p);                          //开始安装依赖包
+            }
+            // 打印待安装的软件包信息
+            printDependsChanges();
+
+            transaction = backend->commitChanges();
+            if (!transaction)
+                return;
+            //依赖安装结果处理
+            connect(transaction, &Transaction::finished, this, &DebListModel::slotDependsInstallTransactionFinished);
+        }
     } else {
         if (isDpkgRunning()) {
             qInfo() << "DebListModel:"
