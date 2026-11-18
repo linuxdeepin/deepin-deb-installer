@@ -27,6 +27,19 @@
             "description[zh_CN]": "为 true 时，安装后首次启动将强制执行一次 apt update；该次 update 完成（无论成功或失败）后自动置为 false。",
             "permissions": "readwrite",
             "visibility": "private"
+        },
+        "lastCacheUpdateTime": {
+            "value": 0,
+            "serial": 0,
+            "flags": [
+                "global"
+            ],
+            "name": "Last Cache Update Time",
+            "name[zh_CN]": "上次缓存更新时间",
+            "description": "Unix timestamp (seconds) of the last successful apt cache update. Used to enforce a 30-minute cooldown between cache updates.",
+            "description[zh_CN]": "上次成功更新 apt 缓存的 Unix 时间戳（秒）。用于在两次缓存更新之间强制 30 分钟冷却期。",
+            "permissions": "readwrite",
+            "visibility": "private"
         }
     }
 }

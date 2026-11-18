@@ -111,6 +111,11 @@ private:
     // 写入 DConfig bool 值，成功返回 true
     bool writeDConfigBool(const QString &key, bool value);
 
+    // 读取 DConfig 整数值（qint64），DConfig 不可用时返回 defaultValue
+    qint64 readDConfigLongLong(const QString &key, qint64 defaultValue) const;
+    // 写入 DConfig 整数值（qint64），成功返回 true
+    bool writeDConfigLongLong(const QString &key, qint64 value);
+
     // 读取 DConfig 开关：是否允许安装前自动刷新 apt 缓存。默认 true（DConfig 不可用时也返回 true，保持原行为）
     bool isAutoUpdateBeforeInstallEnabled() const;
 
@@ -143,6 +148,10 @@ private:
 
     // 标记当前 update 是否由一次性开关触发，用于在 setCacheUpdateFinished 中延迟置 key=false
     bool m_oneTimeUpdateInProgress{false};
+
+    // 标记当前是否真正执行了 apt update，仅在 updatePackageCache() 中 emit cacheUpdateStarted() 前置 true，
+    // 在 setCacheUpdateFinished() 中仅当为 true 时写入冷却期时间戳并复位，避免跳过路径误刷新冷却期
+    bool m_actualUpdateInProgress{false};
 };
 
 Q_DECLARE_METATYPE(QList<DebIr>);
