@@ -6,6 +6,7 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QShowEvent>
 #include <DProgressBar>
 #include <DLabel>
 #include <DFontSizeManager>
@@ -40,7 +41,23 @@ ProcessWidget::ProcessWidget(QWidget *parent)
 
 void ProcessWidget::setIcon(const QIcon &icon)
 {
-    mainIcon->setPixmap(icon.pixmap(64, 64));
+    m_sourceIcon = icon;
+    updateMainIcon();
+}
+
+void ProcessWidget::updateMainIcon()
+{
+    qreal dpr = mainIcon->devicePixelRatioF();
+    QPixmap pix = m_sourceIcon.pixmap(QSize(64, 64) * dpr);
+    pix.setDevicePixelRatio(dpr);
+    mainIcon->setPixmap(pix);
+}
+
+void ProcessWidget::showEvent(QShowEvent *event)
+{
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染图标
+    updateMainIcon();
+    QWidget::showEvent(event);
 }
 
 void ProcessWidget::setMainText(const QString &text)

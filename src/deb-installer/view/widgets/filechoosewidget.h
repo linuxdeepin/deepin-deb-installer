@@ -58,6 +58,10 @@ private slots:
      */
     void themeChanged();
 private:
+    /**
+     * @brief updateIcons 使用控件级分数 DPR 渲染图标和分割线，消除 Wayland 分数缩放下的锯齿
+     */
+    void updateIcons();
     ChooseFileButton    *m_chooseFileBtn    = nullptr;            //文件选择按钮
     
     DLabel              *split_line         = nullptr;                           //分割线

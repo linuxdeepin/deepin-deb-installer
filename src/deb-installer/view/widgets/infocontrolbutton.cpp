@@ -27,6 +27,7 @@
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QIcon>
+#include <QShowEvent>
 
 InfoControlButton::InfoControlButton(const QString &expandTips, const QString &shrinkTips, QWidget *parent)
     : QWidget(parent)
@@ -49,8 +50,7 @@ InfoControlButton::InfoControlButton(const QString &expandTips, const QString &s
     m_arrowIcon->setAlignment(Qt::AlignCenter);
 
     //设置展开收缩的图标
-    QIcon arrow_up = QIcon::fromTheme("di_arrow_up");
-    m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
+    updateArrowIcon();
 
     //设置图标的高度
     m_arrowIcon->setFixedHeight(8);
@@ -130,8 +130,7 @@ void InfoControlButton::onMouseRelease()
         centralLayout->addWidget(m_tipsText);   //添加提示
         //fix bug: 33999 keep tips in the middle when install details hidden
         centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
-        QIcon arrow_up = QIcon::fromTheme("di_arrow_up");       //设置图标为展开的图标
-        m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
+        updateArrowIcon();
         m_tipsText->setText(m_expandTips);                      //设置提示为展开的提示
     } else {                                                    //当前是展开状态
         centralLayout->setSpacing(0);
@@ -139,8 +138,7 @@ void InfoControlButton::onMouseRelease()
         //fix bug: 33999 keep tips in the middle when details show
         centralLayout->setAlignment(m_tipsText, Qt::AlignCenter);
         centralLayout->addWidget(m_arrowIcon);                  //添加图标
-        QIcon arrow_up = QIcon::fromTheme("di_arrow_down");     //设置图标为收缩的图标
-        m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
+        updateArrowIcon();
         m_tipsText->setText(m_shrinkTips);                      //设置提示为收缩的提示
     }
 }
@@ -166,11 +164,22 @@ void InfoControlButton::setShrinkTips(const QString text)
 
 void InfoControlButton::themeChanged()
 {
-    if (m_expand) {                                                 //当前是展开状态
-        QIcon arrow_down = QIcon::fromTheme("di_arrow_down");       //重新获取收缩的提示
-        m_arrowIcon->setPixmap(arrow_down.pixmap(QSize(25, 8)));
-    } else {                                                        //当前是收缩状态
-        QIcon arrow_up = QIcon::fromTheme("di_arrow_up");           //重新设置展开的提示
-        m_arrowIcon->setPixmap(arrow_up.pixmap(QSize(25, 8)));
-    }
+    updateArrowIcon();
+}
+
+void InfoControlButton::updateArrowIcon()
+{
+    QString iconName = m_expand ? QStringLiteral("di_arrow_down") : QStringLiteral("di_arrow_up");
+    QIcon icon = QIcon::fromTheme(iconName);
+    qreal dpr = m_arrowIcon->devicePixelRatioF();
+    QPixmap pix = icon.pixmap(QSize(25, 8) * dpr);
+    pix.setDevicePixelRatio(dpr);
+    m_arrowIcon->setPixmap(pix);
+}
+
+void InfoControlButton::showEvent(QShowEvent *e)
+{
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染箭头图标
+    updateArrowIcon();
+    QWidget::showEvent(e);
 }

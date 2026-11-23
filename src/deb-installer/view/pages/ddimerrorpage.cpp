@@ -23,8 +23,8 @@ DdimErrorPage::DdimErrorPage(QWidget *parent)
     allLayout->addWidget(confimButton, 0, Qt::AlignCenter | Qt::AlignBottom);
     setLayout(allLayout);
 
-    errorPicLabel->setScaledContents(true); //消除屏幕缩放锯齿
-    errorPicLabel->setPixmap(QPixmap(":/icons/deepin/builtin/light/icons/di_fail_96px.png"));
+    errorPicLabel->setFixedSize(96, 96);
+    updateErrorPixmap();
     auto picContentsMargins = errorPicLabel->contentsMargins();
     picContentsMargins.setBottom(10);
 
@@ -51,9 +51,20 @@ void DdimErrorPage::setErrorMessage(const QString &message)
     errorMessageLabel->setText(message);
 }
 
+void DdimErrorPage::updateErrorPixmap()
+{
+    qreal dpr = errorPicLabel->devicePixelRatioF();
+    QPixmap source(QStringLiteral(":/icons/deepin/builtin/light/icons/di_fail_96px.png"));
+    QPixmap pix = source.scaled(QSize(96, 96) * dpr, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pix.setDevicePixelRatio(dpr);
+    errorPicLabel->setPixmap(pix);
+}
+
 void DdimErrorPage::showEvent(QShowEvent *event)
 {
     // 每次展示时固定默认焦点，缩放后弹出也是
     confimButton->setFocus();
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染图片
+    updateErrorPixmap();
     QWidget::showEvent(event);
 }

@@ -19,11 +19,10 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     , m_confirmBtn(new DPushButton(this))
 {
     this->setAcceptDrops(false);
-    const QIcon icon = QIcon::fromTheme("application-x-deb");
 
     //set Icon size and location
     m_icon->setFixedSize(64, 64);
-    m_icon->setPixmap(icon.pixmap(64, 64));
+    updateIcon();
 
     //自动化测试
     m_icon->setObjectName("UninstallPageIcon");
@@ -122,6 +121,15 @@ UninstallConfirmPage::UninstallConfirmPage(QWidget *parent)
     connect(m_infoControl, &InfoControlButton::shrink, this, &UninstallConfirmPage::slotHideDetail);
 }
 
+void UninstallConfirmPage::updateIcon()
+{
+    const QIcon icon = QIcon::fromTheme("application-x-deb");
+    qreal dpr = m_icon->devicePixelRatioF();
+    QPixmap iconPix = icon.pixmap(QSize(64, 64) * dpr);
+    iconPix.setDevicePixelRatio(dpr);
+    m_icon->setPixmap(iconPix);
+}
+
 void UninstallConfirmPage::setPackage(const QString &name)
 {
     //add tips
@@ -151,6 +159,8 @@ void UninstallConfirmPage::showEvent(QShowEvent *e)
 {
     // 每次展示时设置默认焦点
     m_confirmBtn->setFocus();
+    // 首次显示时 window handle 已创建，用正确的分数 DPR 重新渲染图标
+    updateIcon();
     QWidget::showEvent(e);
 }
 

@@ -80,6 +80,11 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event) override;
 
+    /**
+     * @brief showEvent             首次显示时用正确的分数 DPR 重新渲染箭头图标
+     */
+    void showEvent(QShowEvent *e) override;
+
 private slots:
 
     /**
@@ -91,6 +96,11 @@ private slots:
      * @brief themeChanged          主题变化后，图标等的变化
      */
     void themeChanged();
+
+    /**
+     * @brief updateArrowIcon 使用控件级分数 DPR 渲染箭头图标，消除 Wayland 分数缩放下的锯齿
+     */
+    void updateArrowIcon();
 
 private:
     bool        m_expand        = false;                      // 当前是需要扩展还是收缩的标志位
