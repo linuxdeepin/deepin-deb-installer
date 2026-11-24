@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -474,7 +472,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
         <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation>Чтобы установить неподписанные приложения, перейдите в %1 и выберите типы приложений, которые можно устанавливать.</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
