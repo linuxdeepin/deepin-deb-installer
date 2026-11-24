@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,8 +19,8 @@
 #include <QTextStream>
 #include <QSettings>
 
-// 富文本链接模板 color: #0082FA
-const char WEBSITE_LINK_TEMPLATE[] = "<a href='%1' style='text-decoration: none; font-size:%2px; color: %3;'>%4</a>";
+// 富文本链接模板，仅指定主题色与去掉下划线；字号跟随控件字体，不写死 font-size
+const char WEBSITE_LINK_TEMPLATE[] = "<a href='%1' style='text-decoration: none; color: %2;'>%3</a>";
 
 /**
    @class ProceedLabel
@@ -46,6 +46,9 @@ ProceedLabel::ProceedLabel()
     setWordWrap(true);
     setContextMenuPolicy(Qt::NoContextMenu);
     setOpenExternalLinks(false);
+    // DLabel 依据 textFormat() 是否为 RichText 决定排版时调用 setHtml 还是 setPlainText，
+    // 保持 AutoText 时，主题切换触发的重新排版会把富文本按纯文本显示成 HTML 代码。
+    setTextFormat(Qt::RichText);
 
     updateText();
 
@@ -74,26 +77,21 @@ bool ProceedLabel::event(QEvent *e)
 }
 
 /**
-   @brief 更新提示的文件的颜色，Dark模式下，显示文字可能偏暗，如有必要，可通过如下代码调整亮度凸显效果。
-   @code
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        color = color.lighter(150 / color.lightness() * 100);
-    }
-   @endcode
+   @brief 更新提示文案中链接的颜色，使其跟随当前主题的高亮色。
+   @note 整句文案与链接文案均来自翻译，拼接到富文本前需要转义，避免译文中的 '<'、'&' 被当作标签解析。
  */
 void ProceedLabel::updateText()
 {
     qCDebug(appLog) << "Updating ProceedLabel text";
-    QString proceedNotify =
-        QObject::tr("To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can "
-                    "be installed.");
-    QString tmp = QObject::tr("Security Center > Tools > App Security");
-    QColor color = palette().color(QPalette::Highlight);
-    int pxSize = font().pixelSize();
+    // 链接文案由代码提供，%1 交由翻译决定其在整个句子中的位置
+    const QString linkText = QObject::tr("Security Center > Tools > App Security");
+    const QColor color = palette().color(QPalette::Active, QPalette::Highlight);
+    const QString link = QString(WEBSITE_LINK_TEMPLATE)
+                             .arg(QStringLiteral("#"), color.name(), linkText.toHtmlEscaped());
+    const QString proceedNotify =
+        QObject::tr("To install unsigned apps, go to %1, and select the app types that can be installed.");
 
-    proceedNotify =
-        proceedNotify.replace(tmp, QString(WEBSITE_LINK_TEMPLATE).arg("localtest.com").arg(pxSize).arg(color.name()).arg(tmp));
-    setText(proceedNotify);
+    setText(proceedNotify.toHtmlEscaped().arg(link));
     qCDebug(appLog) << "ProceedLabel text updated";
 }
 

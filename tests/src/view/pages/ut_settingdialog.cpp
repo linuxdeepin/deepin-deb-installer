@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,8 @@
 #include "../deb-installer/utils/hierarchicalverify.h"
 
 #include <DLabel>
+
+#include <QTextDocument>
 
 #include <stub.h>
 
@@ -33,7 +35,39 @@ TEST_F(UT_SettingDialog, createProceedDefenderSafetyLabel_Pass)
     DLabel *label = qobject_cast<DLabel *>(w);
     ASSERT_NE(label, nullptr);
 
-    EXPECT_TRUE(label->text().contains("href='localtest.com'"));
+    // DLabel 只有显式声明 RichText 才会在重新排版时使用 setHtml，AutoText 会被当成纯文本
+    EXPECT_EQ(label->textFormat(), Qt::RichText);
+    EXPECT_TRUE(label->text().contains("<a href='#"));
+    EXPECT_TRUE(label->text().contains("Security Center"));
+    delete w;
+}
+
+// 回归测试：主题切换会通过 PaletteChange 触发文案重新设置，重新排版后必须仍是富文本，
+// 否则界面会直接显示 <a href=...> 这段 HTML 代码
+TEST_F(UT_SettingDialog, paletteChanged_KeepsRichText_Pass)
+{
+    QWidget *w = SettingDialog::createProceedDefenderSafetyLabel(nullptr);
+    DLabel *label = qobject_cast<DLabel *>(w);
+    ASSERT_NE(label, nullptr);
+
+    // 换一个高亮色，确保 updateText() 里的 setText() 真正生效
+    QPalette palette = label->palette();
+    palette.setColor(QPalette::Highlight, QColor("#ff0000"));
+    label->setPalette(palette);
+
+    EXPECT_EQ(label->textFormat(), Qt::RichText);
+    EXPECT_TRUE(label->text().contains("<a href='#"));
+    EXPECT_TRUE(label->text().contains("#ff0000"));
+
+    // 触发一次绘制，DLabel 会在此过程中把文本重新灌入 QTextDocument
+    label->resize(600, 80);
+    label->grab();
+
+    const auto docs = label->findChildren<QTextDocument *>();
+    ASSERT_FALSE(docs.isEmpty());
+    EXPECT_FALSE(docs.first()->toPlainText().contains("<a href"));
+    EXPECT_TRUE(docs.first()->toPlainText().contains("Security Center"));
+
     delete w;
 }
 
