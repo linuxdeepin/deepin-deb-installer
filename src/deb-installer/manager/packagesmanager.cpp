@@ -8,6 +8,7 @@
 #include "AddPackageThread.h"
 #include "utils/utils.h"
 #include "utils/deb_package.h"
+#include "utils/qaptkeepmodecompat.h"
 #include "model/deblistmodel.h"
 #include "model/dependgraph.h"
 #include "model/packageanalyzer.h"
@@ -916,6 +917,12 @@ int PackagesManager::packageInstallStatus(const int index)
  */
 QStringList PackagesManager::removePackages(const QByteArray &md5) const
 {
+    // 确认弹窗和页面提示始终使用普通模式的卸载清单。
+    // keep 模式重算后的 m_markedDepends 可能为空，不能覆盖这里的结果。
+    if (m_normalRemovePackages.contains(md5)) {
+        return m_normalRemovePackages.value(md5);
+    }
+
     if (auto markedPtr = m_markedDepends.value(md5)) {
         return markedPtr->removePackages();
     }
@@ -1533,6 +1540,8 @@ void PackagesManager::reset()
     m_packageInstallStatus.clear();
     m_packageMd5DependsStatus.clear();  //修改依赖状态的存储结构，此处清空存储的依赖状态数据
     m_markedDepends.clear();
+    m_normalRemovePackages.clear();
+    m_keepMarkedDepends.clear();
     m_appendedPackagesMd5.clear();
     m_packageMd5.clear();
     m_dependGraph.reset();
@@ -1545,11 +1554,20 @@ void PackagesManager::reset()
     m_dependsPackages.clear();
 }
 
-void PackagesManager::resetPackageDependsStatus(const int index)
+void PackagesManager::resetPackageDependsStatus(const int index, bool reload)
 {
     // 查看此包是否已经存储依赖状态。
     //提前获取package 的md5
     auto currentPackageMd5 = m_packageMd5[index];
+    // keep 模式切换后需要强制重新标记，否则 refreshPackageMarkedInfo 会复用
+    // 检测阶段（非 keep 模式）算出的移除清单。
+    // 普通模式下，普通缓存保持原行为；只有缓存来自 keep 模式时才需要失效。
+    auto *backend = PackageAnalyzer::instance().backendPtr();
+    const bool keepMode = backend && QaptKeepModeCompat::keepMode(backend);
+    if (keepMode || m_keepMarkedDepends.contains(currentPackageMd5)) {
+        m_markedDepends.remove(currentPackageMd5);
+        m_keepMarkedDepends.remove(currentPackageMd5);
+    }
     if (!m_packageMd5DependsStatus.contains(currentPackageMd5)) {
         return;
     } else {
@@ -1559,11 +1577,12 @@ void PackagesManager::resetPackageDependsStatus(const int index)
             return;
     }
     // reload backend cache
-    //reloadCache必须要加
-    PackageAnalyzer::instance().backendPtr()->reloadCache();
+    // 安装路径必须 reload，确保依赖状态基于最新的系统状态（installNextDeb 每次都会刷新）；
+    // 批量预检期间系统状态不变，checkKeepModeForAll 只在开始前 reload 一次，
+    // 其余包传 reload=false 复用同一份 cache。
+    if (reload)
+        PackageAnalyzer::instance().backendPtr()->reloadCache();
     m_packageMd5DependsStatus.remove(currentPackageMd5);  //删除当前包的依赖状态（之后会重新获取此包的依赖状态）
-
-    // we don't need reset m_markedDepends on installing
 }
 
 /**
@@ -1588,6 +1607,8 @@ void PackagesManager::removePackage(const int index)
 
     m_appendedPackagesMd5.remove(md5);          //在判断是否重复的md5的集合中删除掉当前包的md5
     m_markedDepends.remove(md5);
+    m_normalRemovePackages.remove(md5);
+    m_keepMarkedDepends.remove(md5);
     m_packageMd5DependsStatus.remove(md5);      //删除指定包的依赖状态
     m_packageMd5.removeAt(index);                               //在索引map中删除指定的项
     m_dependsPackages.remove(md5); //删除指定包的依赖关系
@@ -2590,6 +2611,16 @@ void PackagesManager::refreshPackageMarkedInfo(const QByteArray &md5, const QStr
     markedPtr->setMarkedPackages(availableDepends);
 
     m_markedDepends.insert(md5, markedPtr);
+
+    // 只有普通模式的计算结果才能作为确认弹窗的卸载清单；keep 模式的结果
+    // 仅用于本次求解，不能覆盖普通模式缓存，否则重试时会跳过卸载确认。
+    auto *backend = PackageAnalyzer::instance().backendPtr();
+    if (backend && QaptKeepModeCompat::keepMode(backend)) {
+        m_keepMarkedDepends.insert(md5);
+    } else if (backend) {
+        m_keepMarkedDepends.remove(md5);
+        m_normalRemovePackages.insert(md5, markedPtr->removePackages());
+    }
 }
 
 bool PackagesManager::isBlackApplication(const QString &applicationName)

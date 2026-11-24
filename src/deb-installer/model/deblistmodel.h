@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -23,6 +23,7 @@
 #include <QDBusReply>
 #include <QProcess>
 #include <QKeyEvent>
+#include <QSet>
 
 DWIDGET_USE_NAMESPACE
 
@@ -160,6 +161,7 @@ public:
         DigitalSignatureError,         //数字签名校验失败
         ConfigAuthCancel        = 127, //配置安装授权被取消
         ApplocationProhibit     = 404, //当前包在黑名单中禁止安装
+        KeepModeFailed          = 405, //保留模式无解，无法在零卸载的前提下安装
     };
 
     /**
@@ -195,6 +197,12 @@ public:
      * @return 添加的包的列表
      */
     const QList<QString> preparedPackages() const;
+
+    /**
+     * @brief checkKeepModeForAll 对整批包做保留模式可行性预检
+     * @return true 表示整批都能得到零卸载方案
+     */
+    bool checkKeepModeForAll();
 
     /**
      * @brief first 获取添加的第一个包
@@ -766,6 +774,9 @@ private:
     //当前工作状态
     int m_workerStatus                  = 0;
 
+    // keep 模式失败后终止剩余批次
+    bool m_keepAbort                    = false;
+
     //当前正在操作的index
     int m_operatingIndex                = 0;
 
@@ -793,6 +804,9 @@ private:
 
     //FailReason , trans返回的详细错误信息
     QMap<QByteArray, QString> m_packageFailReason = {};
+
+    //依赖事务失败后已尝试回退 dpkg 安装的包（md5），每个包只回退一次
+    QSet<QByteArray> m_dependsFallbackTried;
 
     // 配置安装进程
     Konsole::Pty *m_procInstallConfig = {};

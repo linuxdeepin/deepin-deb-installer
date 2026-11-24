@@ -1,17 +1,19 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "singleinstallpage.h"
 #include "model/deblistmodel.h"
+#include "model/packageanalyzer.h"
+#include "view/widgets/removepackagesdialog.h"
 #include "view/widgets/workerprogress.h"
+#include "utils/qaptkeepmodecompat.h"
 #include "utils/utils.h"
 
 #include <QApplication>
 #include <QDebug>
 #include <QRegularExpression>
 #include <QTextLayout>
-#include <QTimer>
 #include <QVBoxLayout>
 #include <QFontMetrics>
 
@@ -544,6 +546,10 @@ void SingleInstallPage::slotReinstall()
     // 重装按钮点击后清除焦点
     m_reinstallButton->clearFocus();
 
+    // 有卸载计划时先让用户确认；取消则不改变界面
+    if (!confirmRemovePackages())
+        return;
+
     //隐藏不需要的按钮
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
@@ -574,6 +580,10 @@ void SingleInstallPage::slotInstall()
     // 安装按钮点击后清除焦点
     m_installButton->clearFocus();
 
+    // 有卸载计划时先让用户确认；取消则不改变界面
+    if (!confirmRemovePackages())
+        return;
+
     //隐藏按钮
     m_backButton->setVisible(false);
     m_installButton->setVisible(false);
@@ -596,6 +606,42 @@ void SingleInstallPage::slotInstall()
     m_packagesModel->slotInstallPackages();
 }
 
+bool SingleInstallPage::confirmRemovePackages()
+{
+    auto *backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend)
+        return true;
+
+    // 老 libqapt 没有 keep 接口：保持旧行为，不弹窗，直接走原安装流程
+    if (!QaptKeepModeCompat::available()) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return true;
+    }
+
+    const QStringList removePackages =
+            m_packagesModel->index(0).data(DebListModel::PackageRemoveDependsRole).toStringList();
+
+    if (removePackages.isEmpty()) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return true;
+    }
+
+    // 按包名去重
+    QStringList uniquePackages;
+    for (const QString &name : removePackages) {
+        if (!uniquePackages.contains(name))
+            uniquePackages << name;
+    }
+
+    const auto choice = RemovePackagesDialog::exec(this, m_pkgNameDescription, uniquePackages);
+    if (choice == RemovePackagesDialog::Cancel) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return false;
+    }
+
+    QaptKeepModeCompat::setKeepMode(backend, choice == RemovePackagesDialog::Keep);
+    return true;
+}
 
 void SingleInstallPage::slotUninstallCurrentPackage()
 {
@@ -699,6 +745,10 @@ void SingleInstallPage::slotOutputAvailable(const QString &output)
 
 void SingleInstallPage::slotWorkerFinished()
 {
+    // 安装/卸载结束后复位 keep 模式，避免影响后续操作
+    if (auto *backend = PackageAnalyzer::instance().backendPtr())
+        QaptKeepModeCompat::setKeepMode(backend, false);
+
     // 显示infoControlButton
     m_infoControlButton->setVisible(true);
 
@@ -921,6 +971,10 @@ void SingleInstallPage::setEnableButton(bool bEnable)
 
 void SingleInstallPage::afterGetAutherFalse()
 {
+    // 授权取消/失败后复位 keep 模式
+    if (auto *backend = PackageAnalyzer::instance().backendPtr())
+        QaptKeepModeCompat::setKeepMode(backend, false);
+
     // 取消授权/授权失败后，界面重绘，复位焦点
     resetButtonFocus = true;
 

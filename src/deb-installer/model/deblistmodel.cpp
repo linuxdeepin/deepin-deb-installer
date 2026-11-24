@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,7 @@
 #include "manager/packagesmanager.h"
 #include "manager/PackageDependsStatus.h"
 #include "packageanalyzer.h"
+#include "utils/qaptkeepmodecompat.h"
 #include "view/pages/AptConfigMessage.h"
 #include "view/pages/settingdialog.h"
 #include "utils/utils.h"
@@ -18,6 +19,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
+#include <QFileInfo>
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QSize>
@@ -63,8 +65,12 @@ bool DebListModel::isDpkgRunning()
     const QString processOutput = proc.readAllStandardOutput();
 
     // 查看进程信息中是否存在dpkg 存在说明已经正在安装其他包
-    if (processOutput.contains("dpkg"))
-        return true;   //更换判断的方式
+    // 只匹配真正的 dpkg 进程，避免 dpkg-query/dpkg-deb 等查询进程造成误判
+    const QStringList processList = processOutput.split('\n', QString::SkipEmptyParts);
+    for (const QString &process : processList) {
+        if (process.trimmed() == QLatin1String("dpkg"))
+            return true;   //更换判断的方式
+    }
 
     return false;
 }
@@ -122,6 +128,8 @@ const QString DebListModel::workerErrorString(const int errorCode, const QString
                                        "Authentication failed");
     case DebListModel::ErrorCode::ApplocationProhibit:
         return QApplication::translate("DebListModel", "The administrator has set policies to prevent installation of this package");
+    case DebListModel::KeepModeFailed:
+        return QApplication::translate("DebListModel", "无法保留软件并安装");
     default:
         break;
     }
@@ -258,6 +266,36 @@ const QList<QString> DebListModel::preparedPackages() const
     return m_packagesManager->m_preparedPackages;
 }
 
+bool DebListModel::checkKeepModeForAll()
+{
+    auto *backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend || !QaptKeepModeCompat::available())
+        return false;
+
+    QaptKeepModeCompat::setKeepMode(backend, true);
+
+    bool ok = true;
+    const int count = m_packagesManager->m_preparedPackages.size();
+    // 预检期间系统包状态不会变化，backend cache 只需要刷新一次
+    if (count > 0)
+        backend->reloadCache();
+
+    for (int i = 0; i < count; ++i) {
+        // 只清理该包的依赖/标记缓存，复用上面刷新过的 backend cache
+        m_packagesManager->resetPackageDependsStatus(i, false);
+        m_packagesManager->getPackageDependsStatus(i);
+
+        if (QaptKeepModeCompat::keepMode(backend)
+                && QaptKeepModeCompat::keepModeFailed(backend)) {
+            ok = false;
+            break;
+        }
+    }
+
+    QaptKeepModeCompat::setKeepMode(backend, false);
+    return ok;
+}
+
 
 QModelIndex DebListModel::first() const
 {
@@ -328,6 +366,11 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
     }
     case PackageRemoveDependsRole: {
         const QByteArray md5 = m_packagesManager->getPackageMd5(currentRow);
+        // keep 模式下这些包实际不会被删除，页面提示以 keep 结果为准；
+        // 确认弹窗在设置 keep 之前读取该角色，仍会拿到普通模式清单。
+        auto *backend = PackageAnalyzer::instance().backendPtr();
+        if (backend && QaptKeepModeCompat::keepMode(backend))
+            return QStringList();
         return m_packagesManager->removePackages(md5);
     }
     case Qt::SizeHintRole:                                          //设置当前index的大小
@@ -356,6 +399,8 @@ void DebListModel::slotInstallPackages()
         return;
 
     m_workerStatus = WorkerProcessing;                                  //刷新包安装器的工作状态
+    m_keepAbort = false;                                                //新一轮安装，清除批次终止标记
+    m_dependsFallbackTried.clear();                                     //新一轮安装，清空依赖回退记录
     m_operatingIndex = 0;                                               //初始化当前操作的index
     m_operatingStatusIndex = 0;
     m_operatingPackageMd5 = m_packageMd5[m_operatingIndex];
@@ -529,6 +574,8 @@ void DebListModel::slotTransactionStatusChanged(TransactionStatus transactionSta
 void DebListModel::reset()
 {
     m_workerStatus          = WorkerPrepare;                     //工作状态重置为准备态
+    m_keepAbort             = false;                            //清除批次终止标记
+    m_dependsFallbackTried.clear();                             //清除依赖回退记录
     m_operatingIndex        = 0;                               //当前操作的index置为0
     m_operatingPackageMd5   = nullptr;
     m_operatingStatusIndex  = 0;                         //当前操作状态的index置为0
@@ -537,6 +584,10 @@ void DebListModel::reset()
     m_packageFailCode.clear();                          //清空错误原因列表
     m_packageFailReason.clear();
     m_packagesManager->reset();                         //重置packageManager
+
+    // 复位 keep 模式，避免影响后续安装
+    if (auto *backend = PackageAnalyzer::instance().backendPtr())
+        QaptKeepModeCompat::setKeepMode(backend, false);
 
     m_hierarchicalVerifyError = false;                  // 复位分级管控安装状态
 }
@@ -555,6 +606,21 @@ void DebListModel::resetFileStatus()
 
 void DebListModel::bumpInstallIndex()
 {
+    // keep 模式失败：终止整批，不再继续安装剩余包
+    if (m_keepAbort) {
+        m_workerStatus = WorkerFinished;
+        emit signalWorkerFinished();
+        emit signalWorkerProgressChanged(100);
+        emit signalTransactionProgressChanged(100);
+
+        // 与正常结束路径保持一致，保留分级管控提示
+        if (m_hierarchicalVerifyError) {
+            showHierarchicalVerifyWindow();
+            m_hierarchicalVerifyError = false;
+        }
+        return;
+    }
+
     if (m_currentTransaction.isNull()) {
         qWarning() << "previous transaction not finished";
     }
@@ -763,6 +829,38 @@ void DebListModel::slotDependsInstallTransactionFinished()//依赖安装关系�
 
     // check current operate exit status to install or install next
     if (transExitStatus) {
+        auto *backend = PackageAnalyzer::instance().backendPtr();
+        const bool keepMode = backend && QaptKeepModeCompat::keepMode(backend);
+
+        // apt 事务在装完依赖后，还会尝试配置系统中所有“已解包未配置”的包
+        //（pkgDPkgPM::ExpandPendingCalls），其中任意一个配置失败都会让整个事务失败，
+        // 但此时本包的依赖可能已经装好了。保留模式下被保护但无法修复的包会留在这个
+        // 状态；这里先确认本包依赖是否真的满足，满足则换 dpkg 路径安装目标包，
+        // 每个包最多回退一次。
+        // 该回退只适用于保留模式；非 keep 的“卸载并安装”仍然保持原有失败处理。
+        if (keepMode && m_workerStatus == WorkerProcessing
+                && !m_dependsFallbackTried.contains(m_operatingPackageMd5)) {
+            m_dependsFallbackTried.insert(m_operatingPackageMd5);
+
+            // 依赖已满足时只安装目标包，不再走依赖事务
+            m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
+            const auto retryStatus = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+            if (retryStatus.status == DebListModel::DependsOk) {
+                const QString packagePath = m_packagesManager->package(m_operatingIndex);
+                qWarning() << "DebListModel:" << "depends transaction failed but dependencies are satisfied,"
+                           << "fallback to dpkg install for" << packagePath;
+                emit signalAppendOutputInfo(tr("Dependencies are installed, installing %1 directly")
+                                                .arg(QFileInfo(packagePath).fileName()));
+
+                // 清除本次失败记录，按未安装状态重新走一次
+                m_packageFailCode.remove(m_operatingPackageMd5);
+                m_packageFailReason.remove(m_operatingPackageMd5);
+                refreshOperatingPackageStatus(Prepare);
+
+                installNextDeb();
+                return;
+            }
+        }
         bumpInstallIndex();                                                     //依赖安装失败，直接安装下一个包
     } else {
         // 安装依赖前已对此包进行黑名单及验签校验，无需二次验证
@@ -821,11 +919,22 @@ void DebListModel::installDebs()
 
     Transaction *transaction = nullptr;
 
-    // reset package depends status
-    m_packagesManager->resetPackageDependsStatus(m_operatingStatusIndex);
-
+    // installNextDeb() 已经刷新过依赖状态和 backend cache，这里直接使用缓存结果，
+    // 避免重复 reloadCache() 阻塞 UI
     // check available dependencies
     const auto dependsStat = m_packagesManager->getPackageDependsStatus(m_operatingStatusIndex);
+
+    // keep 模式求解失败：没有可执行的零卸载计划，事务尚未提交，系统不会产生变更
+    if (QaptKeepModeCompat::keepMode(backend) && QaptKeepModeCompat::keepModeFailed(backend)) {
+        refreshOperatingPackageStatus(Failed);
+        m_packageFailCode.insert(m_operatingPackageMd5, KeepModeFailed);
+        m_packageFailReason.insert(m_operatingPackageMd5, tr("无法保留软件并安装"));
+        emit signalAppendOutputInfo(tr("Keep mode failed: no zero-removal plan"));
+        m_keepAbort = true;      // 批量下终止剩余包，避免部分安装继续扩大
+        bumpInstallIndex();
+        return;
+    }
+
     if (dependsStat.isBreak() || dependsStat.isAuthCancel() || dependsStat.status == DebListModel::ArchBreak) {          //依赖不满足或者下载wine依赖时授权被取消
         refreshOperatingPackageStatus(Failed);                          //刷新错误状态
 

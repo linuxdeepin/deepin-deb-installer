@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -126,7 +126,23 @@ private slots:
      */
     void slotDependPackages(DependsPair dependPackages, bool installWineDepends);
 
+    /**
+     * @brief slotInstallClicked 安装按钮点击：有卸载计划时先确认
+     */
+    void slotInstallClicked();
+
 private:
+
+    /**
+     * @brief confirmRemovePackages 汇总整批卸载计划并弹窗，按用户选择设置 keep 模式
+     * @return false 表示用户取消安装或保留不可行
+     */
+    bool confirmRemovePackages();
+
+    /**
+     * @brief showKeepModeFailed 显示“无法保留软件并安装”
+     */
+    void showKeepModeFailed();
 
     /**
      * @brief initUI 初始化界面布局

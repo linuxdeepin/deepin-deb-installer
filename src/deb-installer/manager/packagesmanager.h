@@ -15,6 +15,7 @@
 #include <QProcess>
 #include <QFuture>
 #include <QObject>
+#include <QSet>
 
 using namespace QApt;
 
@@ -358,8 +359,9 @@ public:
     /**
      * @brief resetPackageDependsStatus 重置指定安装包的状态
      * @param index 指定包的下标
+     * @param reload 是否重新加载 backend cache；批量预检只在开始前 reload 一次
      */
-    void resetPackageDependsStatus(const int index);
+    void resetPackageDependsStatus(const int index, bool reload = true);
 
 //// 依赖查找 获取等相关函数
 private:
@@ -609,6 +611,22 @@ private:
             If the status of other packages is not changed, the value is nullptr.
      */
     QMap<QByteArray, QSharedPointer<Deb::DebPackage>> m_markedDepends;
+
+    /**
+     * @brief m_normalRemovePackages 普通模式（非 keep）下的卸载清单
+     *
+     * keep 模式重算会覆盖 m_markedDepends，确认弹窗必须继续使用普通模式的
+     * 清单，否则鉴权取消后重试会看不到原本的卸载包而跳过确认。
+     */
+    QMap<QByteArray, QStringList> m_normalRemovePackages;
+
+    /**
+     * @brief m_keepMarkedDepends 记录 m_markedDepends 中由 keep 模式生成的结果
+     *
+     * 普通模式重算前需要先失效 keep 模式缓存；普通模式自己的缓存则保持
+     * 原行为，避免每次普通安装都强制重新解析 marked 信息。
+     */
+    QSet<QByteArray> m_keepMarkedDepends;
 
     /**
      * @brief m_packageInstallStatus 包安装状态的Map

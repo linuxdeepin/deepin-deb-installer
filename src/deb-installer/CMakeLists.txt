@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
+# SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -182,6 +182,7 @@ target_link_libraries(${APP_BIN_NAME}
     Qt5::DBus
     QApt
     Qt5::Concurrent
+    dl
     PolkitQt5-1::Agent
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
