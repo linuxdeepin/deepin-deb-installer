@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="zh_CN">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation>正在更新软件包缓存...</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -152,16 +150,6 @@
         <translation>安装失败</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>依赖关系不满足，请尝试使用兼容模式安装该应用</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
-        <source>Compatibility mode installation failed</source>
-        <translation>兼容模式安装失败</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="981"/>
         <source>Failed to install %1</source>
         <translation>%1安装失败</translation>
@@ -171,6 +159,12 @@
         <source>Cancel</source>
         <comment>button</comment>
         <translation>取 消</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>前 往</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1284"/>
@@ -196,9 +190,19 @@
         <translation>已安装较早的版本：%1</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation>依赖关系不满足，请尝试使用兼容模式安装该应用</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
+        <source>Compatibility mode installation failed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1247"/>
         <source>Installation failed</source>
-        <translation>安装失败</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1288"/>
@@ -228,12 +232,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2021"/>
         <source>Unable to install</source>
         <translation>无法安装</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation>前 往</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1395"/>
@@ -275,7 +273,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
         <source>Show details</source>
-        <translation>显示详细信息</translation>
+        <translation>显示卸载进程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="35"/>
@@ -399,7 +397,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation>依赖关系不满足</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -434,30 +432,9 @@
         <translation>开发者模式下，检测安装包的签名</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>安全中心-安全工具-应用安全</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
-        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation>如需安装未签名应用，前往%1设置允许安装的应用类型。</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>系统无玲珑环境，请先安装</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>无法安装</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>安装包没有有效的数字签名，已被禁止安装/运行，请前往安全中心-安全工具-应用安全进行调整。</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
@@ -472,9 +449,30 @@
         <translation>前 往</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>安装包没有有效的数字签名，已被禁止安装/运行，请前往安全中心-安全工具-应用安全进行调整。</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>将会卸载：</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>系统无玲珑环境，请先安装</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>安全中心-安全工具-应用安全</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
+        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -482,7 +480,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1028"/>
         <source>Collapse</source>
-        <translation>收起</translation>
+        <translation>收 起</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="414"/>
@@ -493,14 +491,20 @@
         <translation>重新安装</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="725"/>
+        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="776"/>
+        <source>Installing in compatibility mode %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="819"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation>正在从兼容模式卸载%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation>%1已成功安装到兼容模式</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1236"/>
@@ -524,7 +528,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1275"/>
         <source>Compatible Mode Install</source>
-        <translation>兼容模式安装</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -577,24 +581,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation>如该软件为旧版（已适配历史系统版本）应用，可尝试以兼容模式安装。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="562"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation>统信 UOS V25 兼容模式是一项让您能够在 V25 系统上继续使用 V20 版本应用程序的功能。为您创建了一个” 兼容环境”，让原本只能在 V20 系统上运行的软件，也能在 V25系统上正常工作。</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation>确认使用兼容模式安装软件包</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="725"/>
-        <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="776"/>
-        <source>Installing in compatibility mode %1</source>
-        <translation>正在使用兼容模式安装%1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -629,7 +627,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
         <source>Compatible Install</source>
-        <translation>兼容模式安装</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1170"/>
@@ -670,7 +668,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="762"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="950"/>
         <source>Show details</source>
-        <translation>显示详细信息</translation>
+        <translation>显示卸载进程</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
@@ -737,7 +735,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="140"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation>您确定要从兼容模式卸载%1吗？所有依赖项也将被移除</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -745,7 +743,7 @@ The system or other applications may not work properly</source>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>兼容模式安装</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
