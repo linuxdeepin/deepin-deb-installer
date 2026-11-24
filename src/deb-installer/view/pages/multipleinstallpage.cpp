@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,12 +6,17 @@
 #include "model/deblistmodel.h"
 #include "model/packagelistview.h"
 #include "model/packageslistdelegate.h"
+#include "model/packageanalyzer.h"
+#include "view/widgets/removepackagesdialog.h"
 #include "view/widgets/workerprogress.h"
+#include "utils/qaptkeepmodecompat.h"
 #include "utils/utils.h"
 
+#include <DDialog>
 #include <DLabel>
 
 #include <QApplication>
+#include <QIcon>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -320,11 +325,8 @@ void MultipleInstallPage::initConnections()
 
     connect(m_showDependsButton, &InfoControlButton::shrink, this, &MultipleInstallPage::slotHideDependsInfo);
 
-    //开始安装
-    connect(m_installButton, &DPushButton::clicked, m_debListModel, &DebListModel::slotInstallPackages);
-
-    //开始安装后隐藏安装按钮等
-    connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::slotHiddenCancelButton);
+    //开始安装：有卸载计划时先确认，再启动批量流程
+    connect(m_installButton, &DPushButton::clicked, this, &MultipleInstallPage::slotInstallClicked);
 
     //返回到文件选择窗口
     connect(m_backButton, &DPushButton::clicked, this, &MultipleInstallPage::signalBackToFileChooseWidget);
@@ -360,6 +362,9 @@ void MultipleInstallPage::initConnections()
 
 void MultipleInstallPage::slotWorkerFinshed()
 {
+    // 安装结束复位 keep 模式，避免影响后续操作
+    QaptKeepModeCompat::setKeepMode(PackageAnalyzer::instance().backendPtr(), false);
+
     //安装结束显示返回和确认按钮
     m_acceptButton->setVisible(true);
     m_backButton->setVisible(true);
@@ -368,6 +373,81 @@ void MultipleInstallPage::slotWorkerFinshed()
     m_processFrame->setVisible(false);                  //隐藏进度条
     //当前安装结束后，不允许调出右键菜单
     m_appsListView->setRightMenuShowStatus(false);      //安装结束不允许删除包
+}
+
+void MultipleInstallPage::slotInstallClicked()
+{
+    if (!confirmRemovePackages())
+        return;
+
+    slotHiddenCancelButton();
+    m_debListModel->slotInstallPackages();
+}
+
+bool MultipleInstallPage::confirmRemovePackages()
+{
+    auto *backend = PackageAnalyzer::instance().backendPtr();
+    if (!backend)
+        return true;
+
+    // 老 libqapt 没有 keep 接口：保持旧行为，不弹窗，直接走原批量流程
+    if (!QaptKeepModeCompat::available()) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return true;
+    }
+
+    // 汇总整批计划的卸载清单（按包名去重）
+    QStringList allPackages;
+    int targetCount = 0;
+    const int count = m_debListModel->getInstallFileSize();
+    for (int i = 0; i < count; ++i) {
+        const QModelIndex index = m_debListModel->index(i);
+        ++targetCount;
+        const QStringList removePackages =
+                index.data(DebListModel::PackageRemoveDependsRole).toStringList();
+        for (const QString &name : removePackages) {
+            if (!allPackages.contains(name))
+                allPackages << name;
+        }
+    }
+
+    if (allPackages.isEmpty()) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return true;
+    }
+
+    const auto choice = RemovePackagesDialog::exec(
+            this, tr("%1 个软件包").arg(targetCount), allPackages);
+    if (choice == RemovePackagesDialog::Cancel) {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+        return false;
+    }
+
+    if (choice == RemovePackagesDialog::Keep) {
+        // 整批预检：任何一个包没有零卸载方案，就在事务开始前终止
+        if (!m_debListModel->checkKeepModeForAll()) {
+            showKeepModeFailed();
+            QaptKeepModeCompat::setKeepMode(backend, false);
+            return false;
+        }
+
+        QaptKeepModeCompat::setKeepMode(backend, true);
+    } else {
+        QaptKeepModeCompat::setKeepMode(backend, false);
+    }
+
+    return true;
+}
+
+void MultipleInstallPage::showKeepModeFailed()
+{
+    DDialog dialog(this);
+    dialog.setModal(true);
+    dialog.setIcon(QIcon::fromTheme("di_popwarning"));
+    dialog.setTitle(tr("无法保留软件并安装"));
+    dialog.setMessage(tr("安装已终止，未执行安装或卸载。"));
+    dialog.addButton(tr("返回安装页"), true, DDialog::ButtonRecommend);
+    dialog.exec();
 }
 
 void MultipleInstallPage::slotOutputAvailable(const QString &output)
@@ -534,6 +614,9 @@ void MultipleInstallPage::setEnableButton(bool bEnable)
 
 void MultipleInstallPage::afterGetAutherFalse()
 {
+    // 授权取消/失败后复位 keep 模式
+    QaptKeepModeCompat::setKeepMode(PackageAnalyzer::instance().backendPtr(), false);
+
     m_processFrame->setVisible(false);          //隐藏进度条
     m_infoControlButton->setVisible(false);     //隐藏infoControlButton
     m_installButton->setVisible(true);          //显示安装按钮
