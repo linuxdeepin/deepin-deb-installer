@@ -417,8 +417,8 @@
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="82"/>
-        <source>To install unsigned apps, go to Security Center > Tools > App Security, and select the app types that can be installed.</source>
-        <translation>Pa instalar aplicaciones non firmadas, vaya a Center de Seguridad > Herramientas > Seguridad de Aplicación, y seleccione los tipos d'aplicación que pueden instalase.</translation>
+        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
+        <translation>Pa instalar aplicaciones non firmadas, vaya a %1, y seleccione los tipos d'aplicación que pueden instalase.</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="84"/>

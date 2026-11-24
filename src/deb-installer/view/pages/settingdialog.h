@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -26,7 +26,6 @@ public:
 
 protected:
     void showEvent(QShowEvent *e) override;
-    Q_SIGNAL void paletteChanged();
     Q_SLOT void switchHierarchicalNotify(bool valid);
 
 private:
