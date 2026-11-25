@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="hu">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -35,7 +33,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -152,16 +150,6 @@
         <translation>A telepítés sikertelen</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Hibás függőségek, próbálja meg kompatibilitási módban telepíteni az alkalmazást</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="981"/>
         <source>Failed to install %1</source>
         <translation>A %1 telepítése sikertelen</translation>
@@ -171,6 +159,12 @@
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Mégsem</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>Folytassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1284"/>
@@ -183,22 +177,32 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="946"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Ez a verzió már telepítve van</translation>
+        <translation>Ez a verzió már telepítve van</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="948"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Újabb verzió telepítve: %1</translation>
+        <translation>Újabb verzió telepítve: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Korábbi verzió telepítve: %1</translation>
+        <translation>Korábbi verzió telepítve: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation>Hibás függőségek, próbálja meg kompatibilitási módban telepíteni az alkalmazást</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
+        <source>Compatibility mode installation failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1247"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1288"/>
@@ -228,12 +232,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2021"/>
         <source>Unable to install</source>
         <translation>A telepítés nem lehetséges</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Folytassa</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1395"/>
@@ -304,7 +302,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>A telepített %1 eltávolítása:</translation>
+        <translation>A telepített %1 el lesz távolítva:</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
@@ -399,7 +397,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -434,36 +432,15 @@
         <translation>Ellenőrizze a digitális aláírásokat, ha a fejlesztői mód engedélyezett</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
-        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation>Aláíratlan alkalmazások telepítéséhez lépjen a %1 menüpontra, és válassza ki a telepíthető alkalmazástípusokat.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>A rendszer nem telepítette a Linglong környezetet, kérjük, először telepítse</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>A telepítés nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Ez a csomag nem rendelkezik érvényes digitális aláírással, és le van tiltva a telepítéstől/futtatástól. A beállítások módosításához lépjen a Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság menüpontra.</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Mégsem</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -472,9 +449,30 @@
         <translation>Folytassa</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation>Ez a csomag nem rendelkezik érvényes digitális aláírással, és le van tiltva a telepítéstől/futtatástól. A beállítások módosításához lépjen a Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság menüpontra.</translation>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
         <translation>El lesz távolítva:</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation>A rendszer nem telepítette a Linglong környezetet, kérjük, először telepítse</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation>Biztonsági Központ &gt; Eszközök &gt; Alkalmazásbiztonság</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
+        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -496,17 +494,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="725"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="776"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="819"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1236"/>
@@ -530,7 +528,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1275"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -583,18 +581,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="562"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -629,13 +627,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1170"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Mégsem</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1243"/>
@@ -737,7 +735,7 @@ A rendszer, illetve más alkalmazások esetleg nem megfelelően fognak működni
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="140"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -745,7 +743,7 @@ A rendszer, illetve más alkalmazások esetleg nem megfelelően fognak működni
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Telepítés kompatibilis módban</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

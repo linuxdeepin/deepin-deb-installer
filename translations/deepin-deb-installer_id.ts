@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="id">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="id">
 <context>
     <name>AptConfigMessage</name>
     <message>
@@ -20,22 +18,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>Memuat paket...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 telah dimuat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>Menginisialisasi...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -62,37 +60,37 @@
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="764"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="888"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Menginstal paket lain... Silakan buka nanti.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="769"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>Parsing gagal: Struktur file yang tidak sah ditemukan dalam file manifest!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="771"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>Parsing gagal: Nomor versi yang tidak sah ditemukan dalam file manifest!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="773"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>Tidak ada paket deb yang ditemukan. Silakan periksa folder.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="911"/>
         <source>The %1 package may be broken</source>
-        <translation>Paket %1 mungkin rusak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="920"/>
         <source>You can only install local %1 packages</source>
-        <translation>Anda hanya dapat menginstal paket %1 lokal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="929"/>
         <source>No permission to access this folder</source>
-        <translation>Tidak ada izin untuk mengakses folder ini</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="946"/>
@@ -152,16 +150,6 @@
         <translation>Pemasangan Gagal</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Tergantung pada dependensi yang rusak, coba instal aplikasi dalam mode kompatibilitas</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="981"/>
         <source>Failed to install %1</source>
         <translation>Gagal memasang %1</translation>
@@ -171,6 +159,12 @@
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation>Lanjutkan</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1284"/>
@@ -183,27 +177,37 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="946"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Versi sama terpasang</translation>
+        <translation>Versi sama terpasang</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="948"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Versi yang lebih baru terpasang: %1</translation>
+        <translation>Versi yang lebih baru terpasang: %1</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Versi sebelumnya terpasang: %1</translation>
+        <translation>Versi sebelumnya terpasang: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
+        <source>Compatibility mode installation failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1247"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1288"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>Gagal menginstal %1: tidak ada tanda tangan digital yang sah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1438"/>
@@ -228,12 +232,6 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2021"/>
         <source>Unable to install</source>
         <translation>Tidak dapat memasang</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Lanjutkan</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1395"/>
@@ -304,7 +302,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>Instal %1 akan menghapus: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
@@ -350,7 +348,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Pilih semua</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -399,7 +397,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -434,36 +432,15 @@
         <translation>Periksa tanda tangan digital jika mode pengembang diaktifkan</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Security Center &gt; Tools &gt; App Security</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
-        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation>Untuk menginstal aplikasi tanpa tanda tangan, pergi ke %1, dan pilih jenis aplikasi yang dapat diinstal.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Sistem belum menginstal linglong environment, silakan instal terlebih dahulu</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
         <source>Unable to install</source>
         <translation>Tidak dapat memasang</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Paket ini tidak memiliki tanda tangan digital yang sah dan telah diblokir untuk diinstal/menyala. Pergi ke Security Center &gt; Tools &gt; App Security untuk mengubah pengaturan.</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
@@ -472,9 +449,30 @@
         <translation>Lanjutkan</translation>
     </message>
     <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
-        <translation>Akan menghapus: </translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
+        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -496,17 +494,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="725"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="776"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="819"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1236"/>
@@ -530,7 +528,7 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1275"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
@@ -583,18 +581,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="562"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -614,7 +612,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
         <source>Install %1 will remove: </source>
-        <translation>Instal %1 akan menghapus: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1084"/>
@@ -629,13 +627,13 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1170"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1243"/>
@@ -737,7 +735,7 @@ Sistem atau aplikasi lain mungkin tidak berfungsi dengan baik</translation>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="140"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -745,7 +743,7 @@ Sistem atau aplikasi lain mungkin tidak berfungsi dengan baik</translation>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Instal dalam mode kompatibel</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

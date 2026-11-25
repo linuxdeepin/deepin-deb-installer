@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="da">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="da">
 <context>
     <name>AptConfigMessage</name>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="85"/>
         <source>Enter the number to configure: </source>
-        <translation>Indtast nummeret for at konfigurere: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/AptConfigMessage.cpp" line="90"/>
@@ -20,22 +18,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="18"/>
         <source>Loading packages...</source>
-        <translation>Indlæser pakker...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="19"/>
         <source>%1/%2 loaded</source>
-        <translation>%1/%2 indlæst</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="22"/>
         <source>Initializing...</source>
-        <translation>Initialiserer...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/backendprocesspage.cpp" line="39"/>
         <source>Updating package cache...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -56,43 +54,43 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="134"/>
         <source>Settings</source>
-        <translation>Indstillinger</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="764"/>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="888"/>
         <source>Installing other packages... Please open it later.</source>
-        <translation>Installerer andre pakker... Åbn den senere.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="769"/>
         <source>Parsing failed: An illegal file structure was found in the manifest file!</source>
-        <translation>Fejl i parsering: En ugyldig filstruktur blev fundet i manifestfilen!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="771"/>
         <source>Parsing failed: An illegal version number was found in the manifest file!</source>
-        <translation>Fejl i parsering: En ugyldig versionnummer blev fundet i manifestfilen!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="773"/>
         <source>No deb packages found. Please check the folder.</source>
-        <translation>Ingen deb-pakker fundet. Tjek mappen.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="911"/>
         <source>The %1 package may be broken</source>
-        <translation>Den %1-pakke kan være beskadiget</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="920"/>
         <source>You can only install local %1 packages</source>
-        <translation>Du kan kun installere lokale %1-pakker</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="929"/>
         <source>No permission to access this folder</source>
-        <translation>Ingen tilladelse til at tilgå denne mappe</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="946"/>
@@ -102,7 +100,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="955"/>
         <source>%1 does not exist, please reselect</source>
-        <translation>%1 findes ikke, venligst vælg omendeligt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/debinstaller.cpp" line="483"/>
@@ -137,14 +135,14 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="153"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="978"/>
         <source>Invalid digital signature</source>
-        <translation>Ugyldig digital signatur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="161"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="963"/>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="2022"/>
         <source>The administrator has set policies to prevent installation of this package</source>
-        <translation>Administratoren har sat politikker for at forhindre installation af denne pakke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="168"/>
@@ -152,25 +150,21 @@
         <translation>Installation mislykkedes</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
-        <source>Broken dependencies, try installing the app in compatibility mode</source>
-        <translation>Fejl i afhængigheder, prøv at installere appen i kompatibilitetsmode</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
-        <source>Compatibility mode installation failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="981"/>
         <source>Failed to install %1</source>
-        <translation>Fejl ved installation af %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1337"/>
         <source>Cancel</source>
         <comment>button</comment>
         <translation>Annuller</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
+        <source>Proceed</source>
+        <comment>button</comment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1284"/>
@@ -183,32 +177,42 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="946"/>
         <source>Same version installed</source>
-        <translation type="unfinished">Samme version installeret</translation>
+        <translation>Samme version installeret</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="948"/>
         <source>Later version installed: %1</source>
-        <translation type="unfinished">Nyere version installeret: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="950"/>
         <source>Earlier version installed: %1</source>
-        <translation type="unfinished">Tidligere version installeret: %1</translation>
+        <translation>Tidligere version installeret: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="956"/>
+        <source>Broken dependencies, try installing the app in compatibility mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="959"/>
+        <source>Compatibility mode installation failed</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1247"/>
         <source>Installation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1288"/>
         <source>Failed to install %1: no valid digital signature</source>
-        <translation>Fejl ved installation af %1: ingen gyldig digital signatur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1438"/>
         <source>This package does not have a valid digital signature. Continue with the installation?</source>
-        <translation>Denne pakke har ingen gyldig digital signatur. Vil du fortsætte med installationen?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1440"/>
@@ -219,7 +223,7 @@
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1441"/>
         <source>Continue</source>
         <comment>button</comment>
-        <translation>Fortsæt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1282"/>
@@ -230,15 +234,9 @@
         <translation>Kan ikke installere</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1338"/>
-        <source>Proceed</source>
-        <comment>button</comment>
-        <translation type="unfinished">Fortsæt</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1395"/>
         <source>This package does not have a valid digital signature</source>
-        <translation>Denne pakke har ingen gyldig digital signatur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="985"/>
@@ -249,7 +247,7 @@
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="158"/>
         <source>Authentication failed</source>
-        <translation>Autentificering mislykkedes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/deblistmodel.cpp" line="912"/>
@@ -304,22 +302,22 @@
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="545"/>
         <source>Install %1 will remove: </source>
-        <translation>Installation af %1 vil fjerne: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="563"/>
         <source>Dependencies in the repository</source>
-        <translation>Afhængigheder i repositoryet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="570"/>
         <source>Missing dependencies</source>
-        <translation>Mangler afhængigheder</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="629"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installerer afhængigheder: %1</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -337,7 +335,7 @@
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="96"/>
         <source>Later version installed: %1</source>
-        <translation>Nyere version installeret: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/packageselectitem.cpp" line="102"/>
@@ -350,7 +348,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="23"/>
         <source>Select all</source>
-        <translation>Vælg alt</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/packageselectview.cpp" line="24"/>
@@ -389,7 +387,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="248"/>
         <source>Later version installed: %1</source>
-        <translation>Nyere version installeret: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="250"/>
@@ -399,7 +397,7 @@
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="277"/>
         <source>Broken dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -426,27 +424,12 @@
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="9"/>
         <source>Basic</source>
-        <translation>Grundlæggende</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/setting_translation.cpp" line="10"/>
         <source>Check digital signatures if the developer mode is enabled</source>
-        <translation>Tjek digitale signaturer, hvis udviklermodus er aktiveret</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
-        <source>Security Center &gt; Tools &gt; App Security</source>
-        <translation>Sikkerhedscenter &gt; Verktøy &gt; App-sikkerhed</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
-        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation>For at installere unsigned apps, gå til %1, og vælg de app-typer, der kan installeres.</translation>
-    </message>
-    <message>
-        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
-        <source>The system has not installed Linglong environment, please install it first</source>
-        <translation>Systemet har ikke installeret Linglong miljø, venligst installer det først</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="47"/>
@@ -454,27 +437,42 @@
         <translation>Kan ikke installere</translation>
     </message>
     <message>
-        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
-        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
-        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
-        <translation>Denne pakke har ikke en gyldig digital signatur og er blevet blokeret fra installation/udførelse. Gå til Sikkerhedscenter &gt; Verktøy &gt; App-sikkerhed for at ændre indstillingerne.</translation>
-    </message>
-    <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="52"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Annuller</translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="53"/>
         <source>Proceed</source>
         <comment>button</comment>
-        <translation>Fortsæt</translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/model/deblistmodel.cpp" line="1334"/>
+        <location filename="../src/deb-installer/view/widgets/error_notify_dialog_helper.cpp" line="49"/>
+        <source>This package does not have a valid digital signature and has been blocked from installing/running. Go to Security Center &gt; Tools &gt; App Security to change the settings.</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/model/packageslistdelegate.cpp" line="290"/>
         <source>Will remove: </source>
-        <translation>Vil fjerne: </translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/uab/uab_package.cpp" line="54"/>
+        <source>The system has not installed Linglong environment, please install it first</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="87"/>
+        <source>Security Center &gt; Tools &gt; App Security</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
+        <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -496,29 +494,29 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="725"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="776"/>
         <source>Installing in compatibility mode %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="819"/>
         <source>Uninstalling %1 from compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="955"/>
         <source>%1 was successfully installed to compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1236"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1461"/>
         <source>Later version installed: %1</source>
-        <translation>Nyere version installeret: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1237"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1462"/>
         <source>Downgrade</source>
-        <translation>Nedgradering</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1242"/>
@@ -530,17 +528,17 @@
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="126"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1275"/>
         <source>Compatible Mode Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1354"/>
         <source>Installing dependencies: %1</source>
-        <translation>Installerer afhængigheder: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1536"/>
         <source>Failed to install %1</source>
-        <translation>Fejl i installation af %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="242"/>
@@ -583,18 +581,18 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="537"/>
         <source>If this software is an older version (already adapted for a legacy system version), you can try installing it in compatibility mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="538"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="562"/>
         <source>UOS V25 Compatibility Mode is a feature that allows you to continue using V20 version applications on the V25 system. It creates a compatibility environment for you, enabling software that originally could only run on the V20 system to work properly on the V25 system as well.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="550"/>
         <source>Confirm to install in compatibility mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="958"/>
@@ -614,41 +612,41 @@
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1063"/>
         <source>Install %1 will remove: </source>
-        <translation>Installering af %1 vil fjerne: </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1084"/>
         <source>Dependencies in the repository</source>
-        <translation>Afhængigheder i repositoryet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1091"/>
         <source>Missing dependencies</source>
-        <translation>Mangler afhængigheder</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1168"/>
         <source>Compatible Install</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1170"/>
         <source>Cancel</source>
         <comment>button</comment>
-        <translation type="unfinished">Annuller</translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1243"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1468"/>
         <source>Update</source>
         <comment>button</comment>
-        <translation>Opdater</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1016"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="1542"/>
         <source>Invalid digital signature</source>
-        <translation>Ugyldig digital signatur</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="230"/>
@@ -676,7 +674,7 @@
         <location filename="../src/deb-installer/view/pages/multipleinstallpage.cpp" line="32"/>
         <location filename="../src/deb-installer/view/pages/singleinstallpage.cpp" line="61"/>
         <source>Show dependencies</source>
-        <translation>Vis afhængigheder</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -737,7 +735,7 @@ Systemet og andre programmer virker måske ikke korrekt</translation>
     <message>
         <location filename="../src/deb-installer/view/pages/uninstallconfirmpage.cpp" line="140"/>
         <source>Are you sure you want to uninstall %1 from compatibility mode? All dependencies will also be removed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -745,7 +743,7 @@ Systemet og andre programmer virker måske ikke korrekt</translation>
     <message>
         <location filename="../src/dfmplugin-debinstaller/menu/debinstallermenuscene.cpp" line="70"/>
         <source>Install in compatible mode</source>
-        <translation>Installer i kompatibel tilstand</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
