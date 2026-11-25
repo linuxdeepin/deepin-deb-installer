@@ -472,7 +472,7 @@
     <message>
         <location filename="../src/deb-installer/view/pages/settingdialog.cpp" line="92"/>
         <source>To install unsigned apps, go to %1, and select the app types that can be installed.</source>
-        <translation type="unfinished"/>
+        <translation>Per instal·lar aplicacions no signades, aneu a %1 i seleccioneu els tipus d&apos;aplicacions que es poden instal·lar.</translation>
     </message>
 </context>
 <context>
